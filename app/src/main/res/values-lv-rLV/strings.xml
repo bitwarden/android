@@ -54,10 +54,10 @@
   <string name="my_vault">Mana glabātava</string>
   <string name="authenticator">Autentificētājs</string>
   <string name="name">Nosaukums</string>
-  <string name="send_name_required">"Send name (required)"</string>
+  <string name="send_name_required">"Send nosaukums (nepieciešams)"</string>
   <string name="no">Nē</string>
   <string name="notes">Piezīmes</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">Personiskas piezīmes</string>
   <string name="ok">Labi</string>
   <string name="password">Parole</string>
   <string name="save">Saglabāt</string>
@@ -103,6 +103,7 @@
   <string name="close">Aizvērt</string>
   <string name="continue_text">Turpināt</string>
   <string name="create_account">Izveidot kontu</string>
+  <string name="create_an_account">Izveidot kontu</string>
   <string name="creating_account">Tiek izveidots konts...</string>
   <string name="edit_item">Labot vienumu</string>
   <string name="enable_automatic_syncing">Iespējot automātisko sinhronizēšanu</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Glabātavas noildzes darbība</string>
   <string name="vault_timeout_log_out_confirmation">Atteikšanās noņems piekļuvi glabātavai un pieprasīs tiešsaistes pieteikšanos pēc noildzes laika. Vai tiešām izmantot šo iestatījumu?</string>
   <string name="logging_in">Notiek pieteikšanās...</string>
-  <string name="login_or_create_new_account">Jāpiesakās vai jāizveido jauns konts, lai piekļūtu drošajai glabātavai.</string>
+  <string name="login_to_bitwarden">Pieteikties Bitwarden</string>
   <string name="manage">Pārvaldīt</string>
   <string name="master_password_confirmation_val_message">Paroles apstiprinājums nav pareizs.</string>
   <string name="master_password_description">Galvenā parole ir parole, kas tiek izmantota, lai piekļūtu glabātavai. Ir ļoti svarīgi, ka tā netiek aizmirsta, jo tādā gadījumā to nav iespējams atgūt.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Pieteikšanās nav pieejama</string>
   <string name="no_two_step_available">Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildu nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</string>
   <string name="recovery_code_title">Atgūšanas kods</string>
-  <string name="remember_me">Atcerēties mani</string>
+  <string name="remember">Atcerēties</string>
+  <string name="remember_email">Atcerēties e-pasta adresi</string>
   <string name="send_verification_code_again">Sūtīt apstiprinājuma koda e-pastu vēlreiz</string>
   <string name="two_step_login_options">Divpakāpju pieteikšanās iespējas</string>
   <string name="use_another_two_step_method">Izmantot citu divpakāpju pieteikšanās veidu</string>
@@ -556,11 +558,11 @@ Nolasīšana notiks automātiski.</string>
   <string name="personal_ownership_submit_error">Uzņēmuma nosacījumi liedz saglabāt vienumus privātajā glabātavā. Ir jānorāda piederība apvienībai un jāizvēlas kāds no pieejamajiem krājumiem.</string>
   <string name="personal_ownership_policy_in_effect">Apvienības nosacījumi ietekmē Tavas īpašumtiesību iespējas.</string>
   <string name="send">Send</string>
-  <string name="send_details">Send Details</string>
+  <string name="send_details">Informācija par Send</string>
   <string name="all_sends">Visi Send</string>
   <string name="sends">Send vienumi</string>
   <string name="text">Teksts</string>
-  <string name="text_to_share">Text to share</string>
+  <string name="text_to_share">Kopīgojamais teksts</string>
   <string name="type_text">Teksts</string>
   <string name="hide_text_by_default">Piekļūstot Sūtījumam, pēc noklusējuma paslēpiet tekstu</string>
   <string name="type_file">Datne</string>
@@ -752,7 +754,7 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pieteikšanās mēģinājums no:
 %1$s
 Vai pārslēgties uz šo kontu?</string>
-  <string name="new_around_here">Jauns šeit?</string>
+  <string name="new_to_bitwarden">Bitwarden iepriekš nav izmantots?</string>
   <string name="get_master_passwordword_hint">Saņemt galvenās paroles norādi</string>
   <string name="logging_in_as_x_on_y">Piesakās %2$s kā %1$s</string>
   <string name="not_you">Tas neesi Tu?</string>
@@ -841,6 +843,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Ir jāuzstāda pieteikšanās ar ierīci Bitwarden lietotnes iestatījumos. Nepieciešama cita iespēja?</string>
   <string name="log_in_with_device">Pieteikties ar ierīci</string>
   <string name="logging_in_on">Piesakās</string>
+  <string name="logging_in_on_with_colon">Piesakās:</string>
   <string name="vault">Glabātava</string>
   <string name="appearance">Izskats</string>
   <string name="account_security">Konta drošība</string>
@@ -935,10 +938,12 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="self_hosted_server_url">Pašmitināta servera URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Darbība ar piekļuves atslēgu neizdevās, jo lietotāju nevarēja apliecināt.</string>
   <string name="user_verification_direction">Lietotāja apliecināšana</string>
-  <string name="creating_on">Izveido:</string>
+  <string name="create_account_on">Izveidot kontu</string>
+  <string name="create_account_on_with_colon">Izveidot kontu:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Jāseko uz e-pasta adresi %1$s nosūtītajām norādēm, lai turpinātu sava konta izveidošanu.</string>
   <string name="we_sent_an_email_to">Mēs nosūtījām e-pasta ziņojumu uz %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Turpinot Tu piekrīti pakalpojuma izmantošanas nosacījumiem un privātuma politikai</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Iestatīt paroli</string>
   <string name="unsubscribe">Atteikt abonēšanu</string>
   <string name="check_your_email">Jāpārbauda e-pasts</string>
@@ -1119,6 +1124,24 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="coachmark_3_of_3">3. no 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Jāpievieno tīmekļa adrese, lai izmantotu automātisko aizpildi, lai piekļūtu šim kontam.</string>
   <string name="mutual_tls">Savstarpējs TLS</string>
-  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="single_tap_passkey_creation">Piekļuves atslēgas izveidošana ar vienu piesitienu</string>
+  <string name="single_tap_passkey_authentication">Pieteikšanās ar piekļuves atslēgu ar vienu piesitienu</string>
+  <string name="learn_about_new_logins">Uzzināt par jauniem pieteikšanās vienumiem</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Mēs izrādīsim galvenās jaunu pieteikšanās vienumu pievienošanas iespējas.</string>
+  <string name="explore_the_generator">Izpētīt veidotāju</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Drošas pieteikšanās informācijas izveidošanas iepazīšana soli pa solim.</string>
+  <string name="import_client_certificate">Ievietot klienta sertifikātu</string>
+  <string name="enter_the_client_certificate_password_and_alias">Jāievada klienta sertifikāta parole un vēlamais aizstājvārds.</string>
+  <string name="alias">Aizstājvārds</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Veidotājs ir izmantojams, lai izveidotu drošas paroles, paroļu vārdkopas un lietotājvārdus. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Paroļu vārdkopas ir spēcīgas paroles, kuras bieži vien ir vieglāk atcerēties un rakstīt nekā nejaušas paroles. Tās ir noderīgas, lai pieteiktos kontos, kuros automātiskā aizpilde nav pieejama, piemēram, straumēšanas pakalpojumā tālrādī.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Neatkārtojami lietotājvārdi pievieno papildu drošības slāni un var palīdzēt, lai traucētu urķiem kontu atrašanā.</string>
+  <string name="coachmark_1_of_6">1 NO 6</string>
+  <string name="coachmark_2_of_6">2 NO 6</string>
+  <string name="coachmark_3_of_6">3 NO 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>

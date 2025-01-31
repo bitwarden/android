@@ -103,6 +103,7 @@
   <string name="close">மூடு</string>
   <string name="continue_text">தொடர்</string>
   <string name="create_account">கணக்கை உருவாக்கு</string>
+  <string name="create_an_account">Create an account</string>
   <string name="creating_account">கணக்கை உருவாக்குகிறது...</string>
   <string name="edit_item">உருப்படியைத் திருத்து</string>
   <string name="enable_automatic_syncing">தானியங்கு ஒத்திசைவை அனுமதி</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">பெட்டக நேரமுடிவு செயல்</string>
   <string name="vault_timeout_log_out_confirmation">வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையுமகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</string>
   <string name="logging_in">உள்நுழைகிறது...</string>
-  <string name="login_or_create_new_account">உங்கள் பாதுகாப்பான பெட்டகத்தை அணுக உள்நுழைக அ புதிய கணக்கை உருவாக்குக.</string>
+  <string name="login_to_bitwarden">Log in to Bitwarden</string>
   <string name="manage">நிர்வகி</string>
   <string name="master_password_confirmation_val_message">கடவுச்சொல் உறுதிப்படுத்தல் சரியானதல்ல.</string>
   <string name="master_password_description">உங்கள் பெட்டகத்தை அணுக நீங்கள் பயன்படுத்தும் கடவுச்சொல் பிரதான கடவுச்சொல். உங்கள் பிரதான கடவுச்சொல்லை நீங்கள் மறந்துவிடாதது மிகவும் முக்கியம். கடவுச்சொல்லை நீங்கள் மறந்துவிட்டால் அதை மீட்டெடுக்க வழி இல்லை.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">உள்நுழைவு கிடைக்கவில்லை</string>
   <string name="no_two_step_available">இக்கணக்கில் இரு-படி சரிபார்ப்பு இயக்கத்திலுள்ளது, எனினும், உள்ளமைக்கப்பட்ட இரு-படி வழங்குநர் எவையும் இச்சாதனத்தில் ஆதரிக்கப்படவில்லை. ஆதரிக்கப்பட்ட சாதனம் மற்றும்/அ சாதனங்களுக்கிடையே நன்றாக ஆதரிக்கப்படும் கூடுதல் (அங்கீகார செயலி போன்ற) வழங்குநர்களைப் பயன்படுத்தவும்.</string>
   <string name="recovery_code_title">மீட்புக் குறியீடு</string>
-  <string name="remember_me">என்னை நினைவிற்கொள்</string>
+  <string name="remember">Remember</string>
+  <string name="remember_email">Remember email</string>
   <string name="send_verification_code_again">சரிபார்ப்புக் குறியீடு மின்னஞ்சலை மீண்டும் அனுப்பு</string>
   <string name="two_step_login_options">இரு-படி உள்நுழைவு விருப்பங்கள்</string>
   <string name="use_another_two_step_method">மற்றொரு இரு-படி உள்நுழைவு முறையைப் பயன்படுத்து</string>
@@ -752,7 +754,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">இதிலிருந்து உள்நுழைவு முயற்சி:
 %1$s
 இக்கணக்கிற்கு மாற வேண்டுமா?</string>
-  <string name="new_around_here">இங்குப் புதிதா?</string>
+  <string name="new_to_bitwarden">New to Bitwarden?</string>
   <string name="get_master_passwordword_hint">பிரதான கடவுச்சொல் குறிப்பைப் பெறு</string>
   <string name="logging_in_as_x_on_y">%2$s இல் %1$s ஆக உள்நுழைகிறது</string>
   <string name="not_you">நீங்கள் இல்லையா?</string>
@@ -841,6 +843,7 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">சாதனத்துடன் உள்நுழை</string>
   <string name="logging_in_on">இதில் உள்நுழைகிறது</string>
+  <string name="logging_in_on_with_colon">Logging in on:</string>
   <string name="vault">பெட்டகம்</string>
   <string name="appearance">தோற்றம்</string>
   <string name="account_security">கணக்கு பாதுகாப்பு</string>
@@ -935,10 +938,12 @@
   <string name="self_hosted_server_url">Self-hosted server URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
   <string name="user_verification_direction">User verification</string>
-  <string name="creating_on">Creating on:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Follow the instructions in the email sent to %1$s to continue creating your account.</string>
+  <string name="create_account_on">Create account on</string>
+  <string name="create_account_on_with_colon">Create account on:</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Follow the instructions in the email sent to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> to continue creating your account.</string>
   <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Set password</string>
   <string name="unsubscribe">Unsubscribe</string>
   <string name="check_your_email">Check your email</string>
@@ -1113,12 +1118,30 @@
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-  <string name="coachmark_1_of_3">1 of 3</string>
-  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="coachmark_1_of_3">1 OF 3</string>
+  <string name="coachmark_2_of_3">2 OF 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="coachmark_3_of_3">3 OF 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Single tap passkey creation</string>
   <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="explore_the_generator">Explore the generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+  <string name="import_client_certificate">Import client certificate</string>
+  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+  <string name="coachmark_1_of_6">1 OF 6</string>
+  <string name="coachmark_2_of_6">2 OF 6</string>
+  <string name="coachmark_3_of_6">3 OF 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>

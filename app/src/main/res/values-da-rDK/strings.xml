@@ -103,6 +103,7 @@
   <string name="close">Luk</string>
   <string name="continue_text">Forsæt</string>
   <string name="create_account">Opret konto</string>
+  <string name="create_an_account">Opret en konto</string>
   <string name="creating_account">Opretter konto...</string>
   <string name="edit_item">Redigér emne</string>
   <string name="enable_automatic_syncing">Tillad automatisk synkning</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Boks-timeout handling</string>
   <string name="vault_timeout_log_out_confirmation">Udlogning vil fjerne al adgang til boksen og kræve onlinegodkendelse efter timeout-perioden. Sikker på, at denne indstilling skal anvendes?</string>
   <string name="logging_in">Logger ind...</string>
-  <string name="login_or_create_new_account">Log ind, eller opret en ny konto, for at tilgå den sikre boks.</string>
+  <string name="login_to_bitwarden">Log ind på Bitwarden</string>
   <string name="manage">Håndtér</string>
   <string name="master_password_confirmation_val_message">Adgangskodebekræftelse er forkert.</string>
   <string name="master_password_description">Hovedadgangskoden er den adgangskode, man benytter for at tilgå sin boks. Det er meget vigtigt, at man ikke glemmer sin hovedadgangskode, da der ikke er nogen måde, hvorpå koden kan genoprettes, dersom den glemmes.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Login utilgængelig</string>
   <string name="no_two_step_available">Denne konto har totrinsindlogning aktiveret, men ingen af de opsatte totrinsudbydere understøttes på denne enhed. Benyt en understøttet enhed og/eller tilføj yderligere udbydere med bedre understøttelse på tværs af enheder (såsom en godkender-app).</string>
   <string name="recovery_code_title">Gendannelseskode</string>
-  <string name="remember_me">Husk mig</string>
+  <string name="remember">Husk</string>
+  <string name="remember_email">Husk e-mail</string>
   <string name="send_verification_code_again">Send bekræftelseskodemail igen</string>
   <string name="two_step_login_options">Totrinsindlogningsindstillinger</string>
   <string name="use_another_two_step_method">Brug en anden totrinsindlogningsmetode</string>
@@ -752,7 +754,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Login-forsøg fra:
 %1$s
 Skift til denne konto?</string>
-  <string name="new_around_here">Ny her?</string>
+  <string name="new_to_bitwarden">Ny på Bitwarden?</string>
   <string name="get_master_passwordword_hint">Hent hovedadgangskodetip</string>
   <string name="logging_in_as_x_on_y">Logger ind som %1$s på %2$s</string>
   <string name="not_you">Ikke dig?</string>
@@ -841,6 +843,7 @@ Skift til denne konto?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Indlogning med enhed skal være opsat i indstillingerne i Bitwarden-appen. Behov for en anden mulighed?</string>
   <string name="log_in_with_device">Log ind med enhed</string>
   <string name="logging_in_on">Logger ind på</string>
+  <string name="logging_in_on_with_colon">Logger ind på:</string>
   <string name="vault">Boks</string>
   <string name="appearance">Udseende</string>
   <string name="account_security">Kontosikkerhed</string>
@@ -935,10 +938,12 @@ Skift til denne konto?</string>
   <string name="self_hosted_server_url">URL til selv-hostet server</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Adgangsnøglehandling mislykkedes, da brugeren ikke kunne bekræftes.</string>
   <string name="user_verification_direction">Brugerbekræftelse</string>
-  <string name="creating_on">Opretter den:</string>
+  <string name="create_account_on">Opret konto på</string>
+  <string name="create_account_on_with_colon">Opret konto på:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Følg vejledningen i e-mailen sendt til %1$s for at fortsætte med kontooprettelsen.</string>
   <string name="we_sent_an_email_to">Vi har sendt en e-mail til %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ved at fortsætte, accepterer du Vilkår for Tjeneste og Fortrolighedspolitik</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Opsæt adgangskode</string>
   <string name="unsubscribe">Afmeld</string>
   <string name="check_your_email">Tjek indbakken</string>
@@ -1113,12 +1118,30 @@ Skift til denne konto?</string>
   <string name="login_credentials">Login-legitimationsoplysninger</string>
   <string name="autofill_options">Autoudfyldningsindstillinger</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-  <string name="coachmark_1_of_3">1 of 3</string>
-  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="coachmark_1_of_3">1 OF 3</string>
+  <string name="coachmark_2_of_3">2 OF 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="coachmark_3_of_3">3 OF 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Gensidig TLS</string>
   <string name="single_tap_passkey_creation">Enkelt-tryk adgangsnøgleoprettelse</string>
   <string name="single_tap_passkey_authentication">Enkelt-tryk adgangsnøgleindlogning</string>
+  <string name="learn_about_new_logins">Læs om nye logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vi vil gennemgå de vigtigste funktioner for at tilføje et nyt login.</string>
+  <string name="explore_the_generator">Tjek generatoren ud</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Find ud af mere om generering af sikre loginoplysninger med en guidet tur.</string>
+  <string name="import_client_certificate">Importér klientcertifikat</string>
+  <string name="enter_the_client_certificate_password_and_alias">Angiv adgangskoden til klientcertifikat samt det ønskede alias herfor.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Brug generatoren til at oprette sikre adgangskoder, adgangssætninger og brugernavne. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Adgangssætninger er stærke adgangskoder, som ofte er lettere at huske og skrive end tilfældige adgangskoder. De er nyttige til indlogning på konti, hvor Autoudfyldning er utilgængelig, såsom en TV-streamingtjeneste.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unikke brugernavne tilføje et ekstra lag af sikkerhed og kan medvirke til at hindre hackere i at finde brugerkonti.</string>
+  <string name="coachmark_1_of_6">1 AF 6</string>
+  <string name="coachmark_2_of_6">2 AF 6</string>
+  <string name="coachmark_3_of_6">3 AF 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>

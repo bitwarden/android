@@ -103,6 +103,7 @@
   <string name="close">Zavrieť</string>
   <string name="continue_text">Pokračovať</string>
   <string name="create_account">Vytvoriť účet</string>
+  <string name="create_an_account">Vytvoriť účet</string>
   <string name="creating_account">Vytvára sa účet...</string>
   <string name="edit_item">Upraviť položku</string>
   <string name="enable_automatic_syncing">Zapnúť automatickú synchronizáciu</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Akcia pri vypršaní času pre trezor</string>
   <string name="vault_timeout_log_out_confirmation">Odhlásenie bude vyžadovať online prihlásenie po vypršaní časového limitu. Naozaj chcete použiť toto nastavenie?</string>
   <string name="logging_in">Prihlasovanie...</string>
-  <string name="login_or_create_new_account">Prihláste sa, alebo vytvorte nový účet pre prístup k vášmu bezpečnému trezoru.</string>
+  <string name="login_to_bitwarden">Prihlásiť sa do Bitwardenu</string>
   <string name="manage">Spravovať</string>
   <string name="master_password_confirmation_val_message">Potvrdenie hesla nie je správne.</string>
   <string name="master_password_description">Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Prihlásenie nedostupné</string>
   <string name="no_two_step_available">Tento účet má povolené dvojstupňové prihlásenie, ale žiadny z konfigurovaných poskytovateľov nie je podporovaný na tomto zariadení. Prosím, použite podporované zariadenie a/alebo pridajte poskytovateľa, ktorý je lepšie podporovaný na zariadeniach (napríklad overovaciu aplikáciu).</string>
   <string name="recovery_code_title">Záchranný kód</string>
-  <string name="remember_me">Zapamätať si ma</string>
+  <string name="remember">Zapamätať si</string>
+  <string name="remember_email">Zapamätať si e-mail</string>
   <string name="send_verification_code_again">Znovu zaslať overovací kód e-mailom</string>
   <string name="two_step_login_options">Možnosti dvojstupňového prihlásenia</string>
   <string name="use_another_two_step_method">Použiť inú dvojstupňovú metódu prihlásenia</string>
@@ -752,7 +754,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Pokus o prihlásenie z:
 %1$s
 Chcete prepnúť na tento účet?</string>
-  <string name="new_around_here">Ste tu nový?</string>
+  <string name="new_to_bitwarden">Ste noví na Bitwardene?</string>
   <string name="get_master_passwordword_hint">Získať nápoveď k hlavnému heslu</string>
   <string name="logging_in_as_x_on_y">Prihlasujete sa ako %1$s na %2$s</string>
   <string name="not_you">Nie ste to vy?</string>
@@ -841,6 +843,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Prihlásenie pomocou zariadenia musí byť nastavené v nastaveniach aplikácie Bitwarden. Potrebujete inú možnosť?</string>
   <string name="log_in_with_device">Prihlásiť pomocou zariadenia</string>
   <string name="logging_in_on">Prihlásenie na</string>
+  <string name="logging_in_on_with_colon">Prihlásenie na:</string>
   <string name="vault">Trezor</string>
   <string name="appearance">Vzhľad</string>
   <string name="account_security">Zabezpečenie účtu</string>
@@ -935,10 +938,12 @@ Chcete prepnúť na tento účet?</string>
   <string name="self_hosted_server_url">Adresa URL vlastného hostingu</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože používateľ sa nedá overiť.</string>
   <string name="user_verification_direction">Overenie používateľa</string>
-  <string name="creating_on">Vytvorené na:</string>
+  <string name="create_account_on">Vytvoriť účet na</string>
+  <string name="create_account_on_with_colon">Vytvoriť účet na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Na vytvorenie účtu postupujte podľa pokynov v e-maile zaslanom na %1$s.</string>
   <string name="we_sent_an_email_to">Poslali sme e-mail na adresu %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ak budete pokračovať, tak súhlasíte s Podmienkami používania a Zásadami ochrany osobných údajov</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Nastaviť heslo</string>
   <string name="unsubscribe">Odhlásiť sa z odberu</string>
   <string name="check_your_email">Skontrolujte si svoj e-mail</string>
@@ -1087,8 +1092,8 @@ Chcete prepnúť na tento účet?</string>
   <string name="copy_address">Kopírovať adresu</string>
   <string name="important_notice">Dôležité upozornenie</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden vám od februára 2025 pošle na e-mail vášho účtu kód na overenie prihlásenia z nových zariadení.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Máte spoľahlivý prístup k svojmu e-mailu, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
-  <string name="yes_i_can_reliably_access_my_email">Áno, mám spoľahlivý prístup k svojmu e-mailu</string>
+  <string name="do_you_have_reliable_access_to_your_email">Máte zaručený prístup k e-mailu, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
+  <string name="yes_i_can_reliably_access_my_email">Áno, mám zaručený prístup k e-mailu</string>
   <string name="biometrics_no_longer_supported_title">Biometrické údaje už nie sú v tomto zariadení podporované</string>
   <string name="biometrics_no_longer_supported">Boli ste odhlásení, pretože biometrické údaje vášho zariadenia nespĺňajú najnovšie bezpečnostné požiadavky. Pre aktualizáciu nastavenia sa prihláste ešte raz alebo sa obráťte na správcu, ktorý vám umožní prístup.</string>
   <string name="cxp_import">Import CXP</string>
@@ -1121,4 +1126,22 @@ Chcete prepnúť na tento účet?</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Vytvorenie prístupového kľúča jedným klepnutím</string>
   <string name="single_tap_passkey_authentication">Prihlásenie prístupovým kľúčom jedným klepnutím</string>
+  <string name="learn_about_new_logins">Viac o nových prihláseniach</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Prevedieme vás kľúčovými funkciami na pridanie nového prihlásenia.</string>
+  <string name="explore_the_generator">Preskúmajte generátor</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Ďalšie informácie o generovaní bezpečných prihlasovacích údajov získate pomocou prehliadky so sprievodcom.</string>
+  <string name="import_client_certificate">Import klientskeho certifikátu</string>
+  <string name="enter_the_client_certificate_password_and_alias">Zadajte heslo klientskeho certifikátu a požadovaný alias pre tento certifikát.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Pomocou generátora môžete vytvárať bezpečné heslá, prístupové frázy a používateľské mená. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Prístupové frázy sú silné heslá, ktoré sa často ľahšie pamätajú a zadávajú ako náhodné heslá. Sú užitočné pri prihlasovaní do účtov, kde nie je k dispozícii funkcia automatického vypĺňania, napríklad do streamovacej služby na televízore.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unikátne používateľské mená predstavujú ďalšiu úroveň zabezpečenia a môžu pomôcť zabrániť hackerom nájsť vaše účty.</string>
+  <string name="coachmark_1_of_6">1 Z 6</string>
+  <string name="coachmark_2_of_6">2 Z 6</string>
+  <string name="coachmark_3_of_6">3 Z 6</string>
+  <string name="coachmark_4_of_6">4 Z 6</string>
+  <string name="coachmark_5_of_6">5 Z 6</string>
+  <string name="coachmark_6_of_6">6 Z 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Tieto možností môžete použiť na úpravu hesla podľa požiadaviek účtu.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po uložení nového hesla do Bitwardenu ho nezabudnite aktualizovať na webovej stránke účtu. "</string>
 </resources>

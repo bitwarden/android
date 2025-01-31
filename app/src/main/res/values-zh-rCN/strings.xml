@@ -54,10 +54,10 @@
   <string name="my_vault">我的密码库</string>
   <string name="authenticator">身份验证器</string>
   <string name="name">名称</string>
-  <string name="send_name_required">"Send name (required)"</string>
+  <string name="send_name_required">"Send 名称（必填）"</string>
   <string name="no">否</string>
   <string name="notes">备注</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">私人备注</string>
   <string name="ok">好</string>
   <string name="password">密码</string>
   <string name="save">保存</string>
@@ -103,6 +103,7 @@
   <string name="close">关闭</string>
   <string name="continue_text">继续</string>
   <string name="create_account">创建账户</string>
+  <string name="create_an_account">创建账户</string>
   <string name="creating_account">正在创建账户...</string>
   <string name="edit_item">编辑项目</string>
   <string name="enable_automatic_syncing">开启自动同步</string>
@@ -136,10 +137,10 @@
   <string name="vault_timeout_action">密码库超时动作</string>
   <string name="vault_timeout_log_out_confirmation">超时后注销账户将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</string>
   <string name="logging_in">正在登录...</string>
-  <string name="login_or_create_new_account">登录或创建一个新账户以访问您的安全密码库。</string>
+  <string name="login_to_bitwarden">登录到 Bitwarden</string>
   <string name="manage">管理</string>
   <string name="master_password_confirmation_val_message">两次填写的密码不一致。</string>
-  <string name="master_password_description">主密码是您访问密码库的唯一密码。它非常重要，请您不要忘记。一旦忘记，无任何办法恢复此密码。</string>
+  <string name="master_password_description">主密码是用于访问您的密码库的密码。不要忘记您的主密码，这一点非常重要。一旦忘记，无任何办法恢复此密码。</string>
   <string name="master_password_hint">主密码提示（可选）</string>
   <string name="master_password_hint_description">主密码提示可以在您忘记密码时帮您回忆起来。</string>
   <string name="master_password_length_val_message_x">主密码长度必须至少为 %1$s 个字符。</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">登录不可用</string>
   <string name="no_two_step_available">此账户已设置两步登录，但此设备不支持任何已配置的两步提供程序。请使用受支持的设备和/或添加能更好支持跨设备使用的其他提供程序（例如验证器 App）</string>
   <string name="recovery_code_title">恢复代码</string>
-  <string name="remember_me">记住我</string>
+  <string name="remember">记住</string>
+  <string name="remember_email">记住电子邮箱</string>
   <string name="send_verification_code_again">再次发送验证码电子邮件</string>
   <string name="two_step_login_options">两步登录选项</string>
   <string name="use_another_two_step_method">使用其他两步登录方式</string>
@@ -320,7 +322,7 @@
   <string name="ssn">社会保障号码</string>
   <string name="state_province">州 / 省</string>
   <string name="title">称呼</string>
-  <string name="zip_postal_code">邮编 / 邮政代码</string>
+  <string name="zip_postal_code">邮政编码</string>
   <string name="address">地址</string>
   <string name="expiration">有效期</string>
   <string name="show_website_icons">显示网站图标</string>
@@ -556,15 +558,15 @@
   <string name="personal_ownership_submit_error">由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</string>
   <string name="personal_ownership_policy_in_effect">某个组织策略正影响您的所有权选项。</string>
   <string name="send">Send</string>
-  <string name="send_details">Send Details</string>
+  <string name="send_details">Send 详细信息</string>
   <string name="all_sends">所有的 Send</string>
   <string name="sends">Send</string>
   <string name="text">文本</string>
-  <string name="text_to_share">Text to share</string>
+  <string name="text_to_share">要分享的文本</string>
   <string name="type_text">文本</string>
   <string name="hide_text_by_default">访问此 Send 时，默认隐藏文本内容</string>
   <string name="type_file">文件</string>
-  <string name="type_file_info">您想要发送的文件。</string>
+  <string name="type_file_info">您想在此 Send 中附加的文件。</string>
   <string name="file_type_is_selected">已选择文件类型。</string>
   <string name="file_type_is_not_selected">未选择文件类型，点击进行选择。</string>
   <string name="text_type_is_selected">已选择文本类型。</string>
@@ -579,7 +581,7 @@
   <string name="maximum_access_count_reached">已达最大访问次数</string>
   <string name="current_access_count">当前访问次数</string>
   <string name="new_password">新密码</string>
-  <string name="password_info">可选。用户需要提供密码才能访问此 Send。</string>
+  <string name="password_info">需要这个密码才能查看此 Send。</string>
   <string name="remove_password">移除密码</string>
   <string name="are_you_sure_remove_send_password">确定要移除此密码吗？</string>
   <string name="removing_send_password">正在移除密码</string>
@@ -607,7 +609,7 @@
   <string name="add_this_authenticator_key_to_a_login">将此验证器密钥添加到现有登录，或创建一个新的登录。</string>
   <string name="send_disabled_warning">由于某个企业策略，您只能删除现有的 Send。</string>
   <string name="about_send">关于 Send</string>
-  <string name="hide_email">对收件人隐藏我的电子邮箱地址</string>
+  <string name="hide_email">对接收者隐藏我的电子邮箱地址</string>
   <string name="send_options_policy_in_effect">一个或多个组织策略正在影响您的 Send 设置。</string>
   <string name="send_file_premium_required">免费账户仅限于共享文本。要使用文件 Send，需要高级会员。</string>
   <string name="send_file_email_verification_required">您必须验证电子邮箱以使用文件 Send。您可以在网页版密码库中验证您的电子邮箱。</string>
@@ -752,7 +754,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">登录尝试来自：
 %1$s
 您想要切换到此账户吗？</string>
-  <string name="new_around_here">初来乍到吗？</string>
+  <string name="new_to_bitwarden">Bitwarden 新手吗？</string>
   <string name="get_master_passwordword_hint">获取主密码提示</string>
   <string name="logging_in_as_x_on_y">在 %2$s 上以 %1$s 身份登录</string>
   <string name="not_you">不是您吗？</string>
@@ -841,6 +843,7 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">必须在 Bitwarden App 的设置中启用设备登录。需要其他登录选项吗？</string>
   <string name="log_in_with_device">使用设备登录</string>
   <string name="logging_in_on">登录到</string>
+  <string name="logging_in_on_with_colon">登录到：</string>
   <string name="vault">密码库</string>
   <string name="appearance">外观</string>
   <string name="account_security">账户安全</string>
@@ -935,10 +938,12 @@
   <string name="self_hosted_server_url">自托管服务器 URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，通行密钥操作失败。</string>
   <string name="user_verification_direction">用户验证</string>
-  <string name="creating_on">创建到：</string>
+  <string name="create_account_on">创建账户至</string>
+  <string name="create_account_on_with_colon">创建账户至：</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">按照发送到 %1$s 的电子邮件中的说明继续创建您的账户。</string>
   <string name="we_sent_an_email_to">我们向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 发送了一封电子邮件。</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意<annotation link="termsOfService">服务条款</annotation>和<annotation link="privacyPolicy">隐私政策</annotation>。</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">设置密码</string>
   <string name="unsubscribe">取消订阅</string>
   <string name="check_your_email">检查您的电子邮箱</string>
@@ -1110,15 +1115,33 @@
   <string name="review_flow_launched">审核流程已发起！</string>
   <string name="copy_private_key">复制私钥</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 网页 App 上更改您的账户电子邮箱。</string>
-  <string name="login_credentials">登录凭证</string>
+  <string name="login_credentials">登录凭据</string>
   <string name="autofill_options">自动填充选项</string>
   <string name="use_this_button_to_generate_a_new_unique_password">使用此按钮生成新的唯一密码。</string>
   <string name="coachmark_1_of_3">1 / 3</string>
   <string name="coachmark_2_of_3">2 / 3</string>
-  <string name="you_ll_only_need_to_set_up_authenticator_key">您只需为需要使用代码进行双重身份验证的登录设置验证器密钥。该密钥将持续不断地生成可用于登录的六位数代码。</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">您只需为要求使用代码进行双重身份验证的登录设置验证器密钥。该密钥将持续不断地生成可用于登录的六位数代码。</string>
   <string name="coachmark_3_of_3">3 / 3</string>
-  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">您必须添加一个网址才能使用自动填充来访问此账户。</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">您必须添加一个网址才能使用自动填充来访问这个账户。</string>
   <string name="mutual_tls">双向 TLS</string>
-  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="single_tap_passkey_creation">单击创建通行密钥</string>
+  <string name="single_tap_passkey_authentication">单击使用通行密钥登录</string>
+  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="explore_the_generator">探索生成器</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">通过引导式教程，了解更多有关生成安全登录凭据的信息。</string>
+  <string name="import_client_certificate">导入客户端证书</string>
+  <string name="enter_the_client_certificate_password_and_alias">输入客户端证书密码和此证书所需的别名。</string>
+  <string name="alias">别名</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"使用生成器创建安全的密码、密码短语和用户名。 "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">密码短语是一种强密码，通常比随机密码更容易记忆和输入。它们有助于登录无法使用自动填充功能的账户，例如电视上的流媒体服务。</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">唯一的用户名增加了额外的安全性，有助于防止黑客轻易找到您的账户。</string>
+  <string name="coachmark_1_of_6">1 / 6</string>
+  <string name="coachmark_2_of_6">2 / 6</string>
+  <string name="coachmark_3_of_6">3 / 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>
