@@ -50,7 +50,7 @@ sealed class FlagKey<out T : Any> {
      *  Data object holding the key for syncing with the Bitwarden Authenticator app.
      */
     data object AuthenticatorSync : FlagKey<Boolean>() {
-        override val keyName: String = "enable-authenticator-sync-android"
+        override val keyName: String = "enable-pm-bwa-sync"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
