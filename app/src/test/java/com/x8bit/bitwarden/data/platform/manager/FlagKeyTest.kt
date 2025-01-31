@@ -12,71 +12,71 @@ class FlagKeyTest {
     fun `Feature flags have the correct key name set`() {
         assertEquals(
             FlagKey.AuthenticatorSync.keyName,
-            "enable-pm-bwa-sync"
+            "enable-pm-bwa-sync",
         )
         assertEquals(
             FlagKey.EmailVerification.keyName,
-            "email-verification"
+            "email-verification",
         )
         assertEquals(
             FlagKey.OnboardingCarousel.keyName,
-            "native-carousel-flow"
+            "native-carousel-flow",
         )
         assertEquals(
             FlagKey.OnboardingFlow.keyName,
-            "native-create-account-flow"
+            "native-create-account-flow",
         )
         assertEquals(
             FlagKey.ImportLoginsFlow.keyName,
-            "import-logins-flow"
+            "import-logins-flow",
         )
         assertEquals(
             FlagKey.SshKeyCipherItems.keyName,
-            "ssh-key-vault-item"
+            "ssh-key-vault-item",
         )
         assertEquals(
             FlagKey.VerifiedSsoDomainEndpoint.keyName,
-            "pm-12337-refactor-sso-details-endpoint"
+            "pm-12337-refactor-sso-details-endpoint",
         )
         assertEquals(
             FlagKey.CredentialExchangeProtocolImport.keyName,
-            "cxp-import-mobile"
+            "cxp-import-mobile",
         )
         assertEquals(
             FlagKey.CredentialExchangeProtocolExport.keyName,
-            "cxp-export-mobile"
+            "cxp-export-mobile",
         )
         assertEquals(
             FlagKey.AppReviewPrompt.keyName,
-            "app-review-prompt"
+            "app-review-prompt",
         )
         assertEquals(
             FlagKey.CipherKeyEncryption.keyName,
-            "cipher-key-encryption"
+            "cipher-key-encryption",
         )
         assertEquals(
             FlagKey.NewDeviceTemporaryDismiss.keyName,
-            "new-device-temporary-dismiss"
+            "new-device-temporary-dismiss",
         )
         assertEquals(
             FlagKey.NewDevicePermanentDismiss.keyName,
-            "new-device-permanent-dismiss"
+            "new-device-permanent-dismiss",
         )
         assertEquals(
             FlagKey.SingleTapPasskeyCreation.keyName,
-            "single-tap-passkey-creation"
+            "single-tap-passkey-creation",
         )
         assertEquals(
             FlagKey.SingleTapPasskeyAuthentication.keyName,
-            "single-tap-passkey-authentication"
+            "single-tap-passkey-authentication",
         )
         assertEquals(
             FlagKey.IgnoreEnvironmentCheck.keyName,
-            "ignore-environment-check"
+            "ignore-environment-check",
         )
         assertEquals(
             FlagKey.MutualTls.keyName,
-            "mutual-tls"
+            "mutual-tls",
         )
     }
 
@@ -100,7 +100,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyAuthentication,
             ).any {
                 it.defaultValue
-            }
+            },
         )
 
         assertTrue(FlagKey.CipherKeyEncryption.defaultValue)
@@ -127,7 +127,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyAuthentication,
             ).all {
                 it.isRemotelyConfigured
-            }
+            },
         )
 
         assertFalse(
@@ -136,7 +136,7 @@ class FlagKeyTest {
                 FlagKey.MutualTls,
             ).any {
                 it.isRemotelyConfigured
-            }
+            },
         )
     }
 }
