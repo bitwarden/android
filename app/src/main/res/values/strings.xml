@@ -1142,6 +1142,6 @@ Do you want to switch to this account?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>
