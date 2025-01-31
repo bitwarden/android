@@ -34,11 +34,11 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun VaultNoItems(
     addItemClickAction: () -> Unit,
     policyDisablesSend: Boolean,
+    message: String,
+    buttonText: String,
     modifier: Modifier = Modifier,
-    @DrawableRes vectorRes: Int = R.drawable.img_vault_items,
-    headerText: String = stringResource(id = R.string.save_and_protect_your_data),
-    message: String = stringResource(R.string.the_vault_protects_more_than_just_passwords),
-    buttonText: String = stringResource(R.string.new_login),
+    @DrawableRes vectorRes: Int? = null,
+    headerText: String? = null,
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -55,33 +55,37 @@ fun VaultNoItems(
 
         Spacer(modifier = Modifier.weight(1F))
 
-        Image(
-            painter = rememberVectorPainter(id = vectorRes),
-            contentDescription = null,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .size(100.dp),
-        )
+        vectorRes?.let {
+            Image(
+                painter = rememberVectorPainter(id = it),
+                contentDescription = null,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .size(100.dp),
+            )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+        headerText?.let {
+            Text(
+                textAlign = TextAlign.Center,
+                text = it,
+                style = BitwardenTheme.typography.titleMedium,
+                color = BitwardenTheme.colorScheme.text.primary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(Modifier.height(12.dp))
+        }
         Text(
             textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-            text = headerText,
-            style = BitwardenTheme.typography.titleMedium,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
-        Spacer(Modifier.height(12.dp))
-        Text(
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
             text = message,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -107,6 +111,12 @@ private fun VaultNoItems_preview() {
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {
             VaultNoItems(
+                vectorRes = R.drawable.img_vault_items,
+                headerText = stringResource(id = R.string.save_and_protect_your_data),
+                message = stringResource(
+                    R.string.the_vault_protects_more_than_just_passwords,
+                ),
+                buttonText = stringResource(R.string.new_login),
                 addItemClickAction = {},
                 policyDisablesSend = false,
             )
@@ -123,6 +133,10 @@ private fun VaultNoItemsPolicyDisabled_preview() {
             modifier = Modifier.background(BitwardenTheme.colorScheme.background.primary),
         ) {
             VaultNoItems(
+                message = stringResource(
+                    R.string.the_vault_protects_more_than_just_passwords,
+                ),
+                buttonText = stringResource(R.string.new_login),
                 addItemClickAction = {},
                 policyDisablesSend = true,
             )

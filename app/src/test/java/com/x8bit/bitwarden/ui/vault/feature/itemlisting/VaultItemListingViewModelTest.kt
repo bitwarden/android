@@ -25,8 +25,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -1706,8 +1706,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems`() =
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for Login ItemListingType`() =
         runTest {
             val dataState = DataState.Loaded(
                 data = VaultData(
@@ -1724,10 +1725,180 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
-                        header = R.string.save_and_protect_your_data.asText(),
-                        message = R.string.no_items.asText(),
+                        header = null,
+                        message = R.string.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.add_an_item.asText(),
+                        buttonText = R.string.new_login.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for Card ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Card,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_cards.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_card.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for Identity ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Identity,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Identity,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_identities.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_identity.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for SecureNote ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.SecureNote,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.SecureNote,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_notes.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_note.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for SendFile ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.SendFile,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_file_sends.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_file_send.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with empty items should update ViewState to NoItems content for SendText ItemListingType`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.SendText,
+                ),
+            )
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Send.SendText,
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_text_sends.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_text_send.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1752,10 +1923,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.NoItems(
-                        header = R.string.save_and_protect_your_data.asText(),
-                        message = R.string.no_items.asText(),
+                        header = null,
+                        message = R.string.no_logins.asText(),
                         shouldShowAddButton = true,
-                        buttonText = R.string.add_an_item.asText(),
+                        buttonText = R.string.new_login.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1824,16 +1995,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `vaultDataStateFlow Pending with trash data should update state to NoItems`() = runTest {
         mutableVaultDataStateFlow.tryEmit(
@@ -1852,10 +2024,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1936,10 +2108,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1965,10 +2137,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2050,10 +2222,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -2078,10 +2250,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.NoItems(
-                    header = R.string.save_and_protect_your_data.asText(),
-                    message = R.string.no_items.asText(),
+                    header = null,
+                    message = R.string.no_logins.asText(),
                     shouldShowAddButton = true,
-                    buttonText = R.string.add_an_item.asText(),
+                    buttonText = R.string.new_login.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
