@@ -14,10 +14,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -30,7 +27,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -128,7 +124,6 @@ private fun LanguageSelectionRow(
     modifier: Modifier = Modifier,
     resources: Resources = LocalContext.current.resources,
 ) {
-    var languageChangedDialogOption: String? by rememberSaveable { mutableStateOf(value = null) }
     BitwardenMultiSelectButton(
         label = stringResource(id = R.string.language),
         options = AppLanguage.entries.map { it.text() }.toImmutableList(),
@@ -137,19 +132,10 @@ private fun LanguageSelectionRow(
             onLanguageSelection(
                 AppLanguage.entries.first { selectedLanguage == it.text.toString(resources) },
             )
-            languageChangedDialogOption = selectedLanguage
         },
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
-
-    languageChangedDialogOption?.let {
-        BitwardenBasicDialog(
-            title = stringResource(id = R.string.language),
-            message = stringResource(id = R.string.language_change_x_description, it),
-            onDismissRequest = { languageChangedDialogOption = null },
-        )
-    }
 }
 
 @Composable
