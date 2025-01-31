@@ -88,7 +88,7 @@ sealed class FlagKey<out T : Any> {
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
