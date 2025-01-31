@@ -70,7 +70,7 @@ sealed class FlagKey<out T : Any> {
     data object OnboardingCarousel : FlagKey<Boolean>() {
         override val keyName: String = "native-carousel-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -79,7 +79,7 @@ sealed class FlagKey<out T : Any> {
     data object OnboardingFlow : FlagKey<Boolean>() {
         override val keyName: String = "native-create-account-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**

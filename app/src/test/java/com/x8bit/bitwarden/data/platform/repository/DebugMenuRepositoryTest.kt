@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -140,7 +139,7 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
 
             assertTrue(FlagKey.EmailVerification.isRemotelyConfigured)
-            assertFalse(FlagKey.OnboardingCarousel.isRemotelyConfigured)
+            assertTrue(FlagKey.OnboardingCarousel.isRemotelyConfigured)
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(FlagKey.EmailVerification, true)
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
