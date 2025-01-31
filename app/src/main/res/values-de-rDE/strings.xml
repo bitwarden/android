@@ -103,6 +103,7 @@
   <string name="close">Schließen</string>
   <string name="continue_text">Fortsetzen</string>
   <string name="create_account">Konto erstellen</string>
+  <string name="create_an_account">Ein Konto erstellen</string>
   <string name="creating_account">Konto wird erstellt ...</string>
   <string name="edit_item">Eintrag bearbeiten</string>
   <string name="enable_automatic_syncing">Automatische Synchronisierung zulassen</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Aktion bei Tresor-Timeout</string>
   <string name="vault_timeout_log_out_confirmation">Nach dem Ausloggen verlierest du jeglichen Zugriff auf deinen Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Bist du sicher, dass du diese Einstellung nutzen möchten?</string>
   <string name="logging_in">Anmeldung läuft...</string>
-  <string name="login_or_create_new_account">Melde dich an oder erstelle ein neues Konto, um auf deinen Tresor zuzugreifen.</string>
+  <string name="login_to_bitwarden">Bei Bitwarden anmelden</string>
   <string name="manage">Verwalten</string>
   <string name="master_password_confirmation_val_message">Passwortbestätigung ist nicht korrekt.</string>
   <string name="master_password_description">Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Anmeldung nicht verfügbar</string>
   <string name="no_two_step_available">Für dieses Konto ist eine aktive Zwei-Faktor-Authentifizierung eingerichtet, allerdings wird keiner der konfigurierten Zwei-Faktor-Anbieter von diesem Gerät unterstützt. Bitte nutze ein unterstütztes Gerät und / oder füge zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</string>
   <string name="recovery_code_title">Wiederherstellungscode</string>
-  <string name="remember_me">Angemeldet bleiben</string>
+  <string name="remember">Merken</string>
+  <string name="remember_email">E-Mail-Adresse merken</string>
   <string name="send_verification_code_again">E-Mail mit Bestätigungscode erneut versenden</string>
   <string name="two_step_login_options">Optionen für Zwei-Faktor-Authentifizierung</string>
   <string name="use_another_two_step_method">Verwende eine andere Zwei-Faktor Authentifizierungsmethode</string>
@@ -751,7 +753,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Anmeldeversuch von:
 %1$s
 Möchtest du zu diesem Konto wechseln?</string>
-  <string name="new_around_here">Neu hier?</string>
+  <string name="new_to_bitwarden">Neu bei Bitwarden?</string>
   <string name="get_master_passwordword_hint">Hinweis zum Master-Passwort erhalten</string>
   <string name="logging_in_as_x_on_y">Anmelden als %1$s auf %2$s</string>
   <string name="not_you">Nicht du?</string>
@@ -840,6 +842,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Die Anmeldung über ein Gerät muss in den Einstellungen der Bitwarden App eingerichtet werden. Benötigst du eine andere Option?</string>
   <string name="log_in_with_device">Mit Gerät anmelden</string>
   <string name="logging_in_on">Anmelden bei</string>
+  <string name="logging_in_on_with_colon">Anmelden bei:</string>
   <string name="vault">Tresor</string>
   <string name="appearance">Aussehen</string>
   <string name="account_security">Kontosicherheit</string>
@@ -934,10 +937,12 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="self_hosted_server_url">Selbst gehostete Server-URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
   <string name="user_verification_direction">Benutzer-Verifizierung</string>
-  <string name="creating_on">Erstellen auf:</string>
+  <string name="create_account_on">Konto erstellt am</string>
+  <string name="create_account_on_with_colon">Konto erstellt am:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Folge den Anweisungen in der an %1$s gesendeten E-Mail, um mit der Erstellung deines Kontos fortzufahren.</string>
   <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Passwort festlegen</string>
   <string name="unsubscribe">Deabonnieren</string>
   <string name="check_your_email">Überprüfe deine E-Mails</string>
@@ -1120,4 +1125,22 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
   <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
+  <string name="learn_about_new_logins">Erfahre mehr über neue Zugangsdaten</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Wir führen dich durch die wichtigsten Funktionen zum Hinzufügen neuer Zugangsdaten.</string>
+  <string name="explore_the_generator">Erkunde den Generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Erfahren mehr über die Erstellung sicherer Zugangsdaten mit einer geführten Tour.</string>
+  <string name="import_client_certificate">Client-Zertifikat importieren</string>
+  <string name="enter_the_client_certificate_password_and_alias">Gib das Client-Zertifikatspasswort und den gewünschten Alias für dieses Zertifikat ein.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Verwende den Generator, um sichere Passwörter, Passphrasen und Benutzernamen zu erstellen. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrasen sind starke Passwörter, die oft leichter zu merken und einzugeben sind als zufällige Passwörter. Sie sind hilfreich für die Anmeldung in Konten, bei denen Auto-Ausfüllen nicht verfügbar ist, wie ein Streaming-Service auf deinem TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Einzigartige Benutzernamen fügen eine zusätzliche Sicherheitsebene hinzu und können Hacker daran hindern, deine Konten zu finden.</string>
+  <string name="coachmark_1_of_6">1 von 6</string>
+  <string name="coachmark_2_of_6">2 von 6</string>
+  <string name="coachmark_3_of_6">3 von 6</string>
+  <string name="coachmark_4_of_6">4 von 6</string>
+  <string name="coachmark_5_of_6">5 von 6</string>
+  <string name="coachmark_6_of_6">6 von 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Verwende diese Optionen, um dein Passwort an die Anforderungen deines Kontos anzupassen.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Nachdem du dein neues Passwort in Bitwarden gespeichert hast, vergiss nicht, es auf deiner Konto-Website zu aktualisieren. "</string>
 </resources>

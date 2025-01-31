@@ -103,6 +103,7 @@
   <string name="close">Закрити</string>
   <string name="continue_text">Продовжити</string>
   <string name="create_account">Створити обліковий запис</string>
+  <string name="create_an_account">Створити обліковий запис</string>
   <string name="creating_account">Створення облікового запису...</string>
   <string name="edit_item">Редагування</string>
   <string name="enable_automatic_syncing">Дозволити автоматичну синхронізацію</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Дія після часу очікування сховища</string>
   <string name="vault_timeout_log_out_confirmation">Вихід скасує всі права доступу до вашого сховища і вимагатиме автентифікацію після завершення часу очікування. Ви дійсно хочете використати цей параметр?</string>
   <string name="logging_in">Вхід...</string>
-  <string name="login_or_create_new_account">Для доступу до сховища увійдіть в обліковий запис, або створіть новий.</string>
+  <string name="login_to_bitwarden">Увійти в Bitwarden</string>
   <string name="manage">Керування</string>
   <string name="master_password_confirmation_val_message">Підтвердження пароля неправильне.</string>
   <string name="master_password_description">Головний пароль використовується для доступу до вашого сховища. Дуже важливо, щоб ви запам\'ятали його. Якщо ви забудете головний пароль, його неможливо буде відновити.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Вхід недоступний</string>
   <string name="no_two_step_available">Цей обліковий запис має увімкнену двоетапну перевірку, однак жоден із налаштованих провайдерів не підтримується на цьому пристрої. Будь ласка, скористайтеся підтримуваним пристроєм або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму автентифікації).</string>
   <string name="recovery_code_title">Код відновлення</string>
-  <string name="remember_me">Запам\'ятати мене</string>
+  <string name="remember">Запам\'ятати</string>
+  <string name="remember_email">Запам\'ятати е-пошту</string>
   <string name="send_verification_code_again">Надіслати код підтвердження ще раз</string>
   <string name="two_step_login_options">Налаштування двоетапної перевірки</string>
   <string name="use_another_two_step_method">Інший спосіб двоетапної перевірки</string>
@@ -752,7 +754,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Спроба входу в систему з:
 %1$s
 Хочете перемкнутися на цей обліковий запис?</string>
-  <string name="new_around_here">Виконуєте вхід вперше?</string>
+  <string name="new_to_bitwarden">Вперше у Bitwarden?</string>
   <string name="get_master_passwordword_hint">Отримати підказку для головного пароля</string>
   <string name="logging_in_as_x_on_y">Вхід як %1$s на %2$s</string>
   <string name="not_you">Не ви?</string>
@@ -841,6 +843,7 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Потрібно увімкнути схвалення запитів на вхід у налаштуваннях програми Bitwarden. Потрібен інший варіант?</string>
   <string name="log_in_with_device">Увійти з пристроєм</string>
   <string name="logging_in_on">Увійти на</string>
+  <string name="logging_in_on_with_colon">Вхід на:</string>
   <string name="vault">Сховище</string>
   <string name="appearance">Вигляд</string>
   <string name="account_security">Безпека облікового запису</string>
@@ -931,14 +934,16 @@
   <string name="autofill_suggestion">Пропозиція автозаповнення</string>
   <string name="continue_to_complete_web_authn_verification">Продовжуйте, щоб завершити перевірку WebAuthn.</string>
   <string name="launch_web_authn">Запустити WebAuthn</string>
-  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двофакторної автентифікації WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двоетапної перевірки WebAuthn</string>
   <string name="self_hosted_server_url">URL-адреса власного сервера</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Не вдалося виконати операцію з ключем доступу, оскільки неможливо перевірити користувача.</string>
   <string name="user_verification_direction">Перевірка користувача</string>
-  <string name="creating_on">Створення на:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Дотримуйтесь інструкцій у повідомленні, надісланому на %1$s, щоб продовжити створення облікового запису.</string>
+  <string name="create_account_on">Створити обліковий запис на</string>
+  <string name="create_account_on_with_colon">Створити обліковий запис на:</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Дотримуйтесь інструкцій у повідомленні, надісланому на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, щоб продовжити створення облікового запису.</string>
   <string name="we_sent_an_email_to">Ми надіслали електронний лист на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продовжуючи, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Встановіть пароль</string>
   <string name="unsubscribe">Відписатися</string>
   <string name="check_your_email">Перевірте свою електронну пошту</string>
@@ -1115,10 +1120,28 @@
   <string name="use_this_button_to_generate_a_new_unique_password">Використовуйте цю кнопку, щоб згенерувати новий унікальний пароль.</string>
   <string name="coachmark_1_of_3">1 з 3</string>
   <string name="coachmark_2_of_3">2 з 3</string>
-  <string name="you_ll_only_need_to_set_up_authenticator_key">Вам потрібно налаштувати ключ авторизації лише для входів, які потребують двофакторної автентифікації за допомогою коду. Ключ буде постійно генерувати шестизначні коди, які ви можете використовувати, щоб увійти.</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Вам потрібно налаштувати ключ автентифікації лише для входів, які потребують двоетапної перевірки за допомогою коду. Ключ буде постійно генерувати шестизначні коди, які ви можете використовувати, щоб увійти.</string>
   <string name="coachmark_3_of_3">3 з 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Необхідно додати вебадресу, щоб використовувати автозаповнення для цього облікового запису.</string>
   <string name="mutual_tls">Взаємний TLS</string>
   <string name="single_tap_passkey_creation">Створення ключа доступу одним дотиком</string>
   <string name="single_tap_passkey_authentication">Вхід з ключем доступу одним дотиком</string>
+  <string name="learn_about_new_logins">Докладніше про нові записи</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ми ознайомимо вас з основними можливостями додавання нового запису.</string>
+  <string name="explore_the_generator">Explore the generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+  <string name="import_client_certificate">Import client certificate</string>
+  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+  <string name="coachmark_1_of_6">1 з 6</string>
+  <string name="coachmark_2_of_6">2 з 6</string>
+  <string name="coachmark_3_of_6">3 з 6</string>
+  <string name="coachmark_4_of_6">4 з 6</string>
+  <string name="coachmark_5_of_6">5 з 6</string>
+  <string name="coachmark_6_of_6">6 з 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>

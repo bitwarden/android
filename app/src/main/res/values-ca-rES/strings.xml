@@ -54,10 +54,10 @@
   <string name="my_vault">Caixa forta</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nom</string>
-  <string name="send_name_required">"Send name (required)"</string>
+  <string name="send_name_required">"Nom del Send (obligatori)"</string>
   <string name="no">No</string>
   <string name="notes">Notes</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">Notes privades</string>
   <string name="ok">D’acord</string>
   <string name="password">Contrasenya</string>
   <string name="save">Guarda</string>
@@ -85,7 +85,7 @@
   <string name="yes">Sí</string>
   <string name="account">Compte</string>
   <string name="account_created">El vostre compte s\'ha creat correctament. Ara ja podeu iniciar sessió.</string>
-  <string name="account_created_success">Your new account has been created!</string>
+  <string name="account_created_success">S\'ha creat el vostre compte nou!</string>
   <string name="add_an_item">Afegeix un element nou</string>
   <string name="app_extension">Extensió de l\'aplicació</string>
   <string name="autofill_accessibility_description">Utilitzeu el servei d\'accessibilitat de Bitwarden per omplir automàticament els inicis de sessió a través de les aplicacions i de la web.</string>
@@ -103,6 +103,7 @@
   <string name="close">Tanca</string>
   <string name="continue_text">Continua</string>
   <string name="create_account">Crea un compte</string>
+  <string name="create_an_account">Crea un compte</string>
   <string name="creating_account">S\'està creant el compte...</string>
   <string name="edit_item">Edita l\'element</string>
   <string name="enable_automatic_syncing">Habilita la sincronització automàtica</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Acció quan acabe el temps d\'espera de la caixa forta</string>
   <string name="vault_timeout_log_out_confirmation">En tancar la sessió s\'eliminarà tot l\'accés a la vostra caixa forta i es requerirà una autenticació en línia després del període de temps d\'espera. Esteu segur que voleu utilitzar aquesta configuració?</string>
   <string name="logging_in">S\'està iniciant sessió...</string>
-  <string name="login_or_create_new_account">Inicieu sessió o creeu un compte nou per accedir a la caixa forta.</string>
+  <string name="login_to_bitwarden">Inicia sessió a Bitwarden</string>
   <string name="manage">Administra</string>
   <string name="master_password_confirmation_val_message">La confirmació de la contrasenya no és correcta.</string>
   <string name="master_password_description">La contrasenya mestra és la clau que utilitzeu per accedir a la vostra caixa forta. És molt important que no la oblideu. No hi ha manera de recuperar-la en cas de perdre-la.</string>
@@ -196,7 +197,7 @@
   <string name="translations">Traduccions</string>
   <string name="items_for_uri">Elements per a %1$s</string>
   <string name="no_items_for_uri">No hi ha elements a la vostra caixa forta per a %1$s.</string>
-  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
+  <string name="no_items_for_vault">No hi ha cap element a la caixa forta que coincidisca amb \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
   <string name="bitwarden_autofill_service_overlay">Quan seleccioneu un camp d’entrada i vegeu una superposició d’emplenament automàtic de Bitwarden, podeu tocar-lo per iniciar el servei d’emplenament automàtic.</string>
   <string name="bitwarden_autofill_service_notification_content">Toqueu aquesta notificació per omplir automàticament un element des de la caixa forta.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Inici de sessió no disponible</string>
   <string name="no_two_step_available">Aquest compte té l\'inici de sessió en dues passes habilitat, però, cap dels proveïdors de dues passes configurats és compatible amb aquest dispositiu. Utilitzeu un dispositiu compatible i afegiu proveïdors addicionals que s\'adapten millor als dispositius (com ara una aplicació d\'autenticació).</string>
   <string name="recovery_code_title">Codi de recuperació</string>
-  <string name="remember_me">Recorda\'m</string>
+  <string name="remember">Recorda-ho</string>
+  <string name="remember_email">Recorda el correu electronic</string>
   <string name="send_verification_code_again">Envia el codi de verificació altra vegada</string>
   <string name="two_step_login_options">Opcions d\'inici de sessió en dues passes</string>
   <string name="use_another_two_step_method">Utilitzeu un altre mètode d\'inici de sessió en dues passes</string>
@@ -459,7 +461,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="copy_notes">Copia nota</string>
   <string name="exit">Tanca</string>
   <string name="exit_confirmation">Esteu segur que voleu tancar Bitwarden?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Sol·licita la contrasenya mestra en reiniciar l\'aplicació?</string>
   <string name="pin_require_master_password_restart">Voleu sol·licitar el desbloqueig amb la vostra contrasenya mestra quan es reinicie l’aplicació?</string>
   <string name="black">Negre</string>
   <string name="nord">Nord</string>
@@ -556,11 +558,11 @@ L\'escaneig es farà automàticament.</string>
   <string name="personal_ownership_submit_error">A causa d\'una política empresarial, no podeu guardar elements a la vostra caixa forta personal. Canvieu l\'opció Propietat en organització i trieu entre les col·leccions disponibles.</string>
   <string name="personal_ownership_policy_in_effect">Una política d’organització afecta les vostres opcions de propietat.</string>
   <string name="send">Send</string>
-  <string name="send_details">Send Details</string>
+  <string name="send_details">Detalls del Send</string>
   <string name="all_sends">Tots els Send</string>
   <string name="sends">Sends</string>
   <string name="text">Text</string>
-  <string name="text_to_share">Text to share</string>
+  <string name="text_to_share">Text a compartir</string>
   <string name="type_text">Text</string>
   <string name="hide_text_by_default">Quan accediu a Send, amaga el text per defecte</string>
   <string name="type_file">Fitxer</string>
@@ -622,7 +624,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="updating_password">S\'està actualitzant la contrasenya</string>
   <string name="update_password_error">Actualment no es pot actualitzar la contrasenya</string>
   <string name="remove_master_password">Suprimiu la contrasenya mestra</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s is using SSO with a self-hosted key server. A master password is no longer required to log in for members of this organization.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s està utilitzant SSO amb un servidor autoallotjat de claus. Ja no es requereix una contrasenya mestra d\'inici de sessió per als membres d\'aquesta organització.</string>
   <string name="remove_master_password_warning">%1$s utilitza SSO amb el xifratge gestionat pel client. Continuar suprimirà la vostra contrasenya mestra del vostre compte i requerirà SSO per iniciar la sessió.</string>
   <string name="remove_master_password_warning2">Si no voleu suprimir la vostra contrasenya mestra, podeu abandonar aquesta organització.</string>
   <string name="leave_organization">Abandona l\'organització</string>
@@ -752,7 +754,7 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Intent d\'inici de sessió des de:
 %1$s
 Voleu canviar a aquest compte?</string>
-  <string name="new_around_here">Nou per ací?</string>
+  <string name="new_to_bitwarden">Nou a Bitwarden?</string>
   <string name="get_master_passwordword_hint">Obteniu la pista de la contrasenya mestra</string>
   <string name="logging_in_as_x_on_y">Inici de sessió com a %1$s a %2$s</string>
   <string name="not_you">No sou vosaltres?</string>
@@ -841,6 +843,7 @@ Voleu canviar a aquest compte?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">L\'inici de sessió amb el dispositiu ha d\'estar activat a la configuració de l\'aplicació Bitwarden. Necessiteu una altra opció?</string>
   <string name="log_in_with_device">Inici de sessió amb dispositiu</string>
   <string name="logging_in_on">Inici de sessió en</string>
+  <string name="logging_in_on_with_colon">Inici de sessió en:</string>
   <string name="vault">Caixa forta</string>
   <string name="appearance">Aparença</string>
   <string name="account_security">Seguretat del compte</string>
@@ -935,21 +938,23 @@ Voleu canviar a aquest compte?</string>
   <string name="self_hosted_server_url">URL del servidor autoallotjat</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">L\'operació de la clau de pas ha fallat perquè no s\'ha pogut verificar l\'usuari.</string>
   <string name="user_verification_direction">Verificació d\'usuari</string>
-  <string name="creating_on">Creating on:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Follow the instructions in the email sent to %1$s to continue creating your account.</string>
+  <string name="create_account_on">Crea compte en</string>
+  <string name="create_account_on_with_colon">Crea compte en:</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Follow the instructions in the email sent to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> to continue creating your account.</string>
   <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-  <string name="set_password">Set password</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="set_password">Estableix contrasenya</string>
   <string name="unsubscribe">Anul·la subscripció</string>
   <string name="check_your_email">Comprova el correu</string>
   <string name="open_email_app">Obri l\'aplicació de correu</string>
   <string name="go_back">Torna arrere</string>
-  <string name="email_verified">Email verified</string>
+  <string name="email_verified">Correu electrònic verificat</string>
   <string name="no_email_go_back_to_edit_your_email_address">No email? <annotation link="goBack">Go back</annotation> to edit your email address.</string>
   <string name="or_log_in_you_may_already_have_an_account">Or <annotation link="logIn">log in</annotation>, you may already have an account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
-  <string name="security_prioritized">Security, prioritized</string>
+  <string name="security_prioritized">Seguretat, prioritzada</string>
   <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
   <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
   <string name="quick_and_easy_login">Quick and easy login</string>
@@ -1113,12 +1118,30 @@ Voleu canviar a aquest compte?</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-  <string name="coachmark_1_of_3">1 of 3</string>
-  <string name="coachmark_2_of_3">2 of 3</string>
+  <string name="coachmark_1_of_3">1 OF 3</string>
+  <string name="coachmark_2_of_3">2 OF 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-  <string name="coachmark_3_of_3">3 of 3</string>
+  <string name="coachmark_3_of_3">3 OF 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Single tap passkey creation</string>
   <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="explore_the_generator">Explore the generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
+  <string name="import_client_certificate">Import client certificate</string>
+  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+  <string name="coachmark_1_of_6">1 OF 6</string>
+  <string name="coachmark_2_of_6">2 OF 6</string>
+  <string name="coachmark_3_of_6">3 OF 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>
