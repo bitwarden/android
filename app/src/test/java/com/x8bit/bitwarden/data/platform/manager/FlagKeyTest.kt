@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
@@ -82,7 +81,7 @@ class FlagKeyTest {
 
     @Test
     fun `All feature flags have the correct default value set`() {
-        assertFalse(
+        assertTrue(
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
@@ -99,7 +98,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
             ).all {
-                it.defaultValue
+                !it.defaultValue
             },
         )
 
@@ -130,12 +129,12 @@ class FlagKeyTest {
             },
         )
 
-        assertFalse(
+        assertTrue(
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.MutualTls,
             ).all {
-                it.isRemotelyConfigured
+                !it.isRemotelyConfigured
             },
         )
     }
