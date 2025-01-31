@@ -13,7 +13,6 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -127,7 +126,7 @@ class DebugMenuRepositoryTest {
             val mockServerData = mockk<ConfigResponseJson>(relaxed = true) {
                 every { featureStates } returns mapOf(
                     FlagKey.EmailVerification.keyName to JsonPrimitive(true),
-                    FlagKey.OnboardingCarousel.keyName to JsonPrimitive(false),
+                    FlagKey.OnboardingCarousel.keyName to JsonPrimitive(true),
                     FlagKey.OnboardingFlow.keyName to JsonPrimitive(true),
                 )
             }
@@ -144,11 +143,11 @@ class DebugMenuRepositoryTest {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(FlagKey.EmailVerification, true)
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingCarousel,
-                    false,
+                    true,
                 )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
-                    false,
+                    true,
                 )
             }
 
@@ -157,7 +156,6 @@ class DebugMenuRepositoryTest {
                 awaitItem()
                 cancel()
             }
-            unmockkStatic(FlagKey.OnboardingFlow::class)
         }
 
     @Test
