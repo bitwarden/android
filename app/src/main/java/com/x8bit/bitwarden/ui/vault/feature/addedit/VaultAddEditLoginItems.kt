@@ -124,18 +124,33 @@ fun LazyListScope.vaultAddEditLoginItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
 
-    item(key = AddEditItemCoachMark.TOTP) {
+    coachMarkHighlightItem(
+        key = AddEditItemCoachMark.TOTP,
+        title = R.string.coachmark_2_of_3.asText(),
+        description = R.string.you_ll_only_need_to_set_up_authenticator_key.asText(),
+        onDismiss = onCoachMarkDismissed,
+        leftAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.back),
+                onActionClick = onPreviousCoachMark,
+            )
+        },
+        rightAction = {
+            CoachMarkActionText(
+                actionLabel = stringResource(R.string.next),
+                onActionClick = onNextCoachMark,
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    ) {
         TotpRow(
             totpKey = loginState.totp,
             canViewTotp = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
             onTotpSetupClick = onTotpSetupClick,
-            onPreviousCoachMark = onPreviousCoachMark,
-            onNextCoachMark = onNextCoachMark,
-            onCoachMarkDismissed = onCoachMarkDismissed,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 
@@ -534,84 +549,58 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
     }
 }
 
-@Suppress("LongMethod")
 @Composable
-private fun CoachMarkScope<AddEditItemCoachMark>.TotpRow(
+private fun TotpRow(
     totpKey: String?,
     canViewTotp: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
-    onPreviousCoachMark: () -> Unit,
-    onNextCoachMark: () -> Unit,
-    onCoachMarkDismissed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    CoachMarkHighlight(
-        key = AddEditItemCoachMark.TOTP,
-        title = stringResource(R.string.coachmark_2_of_3),
-        description = stringResource(R.string.you_ll_only_need_to_set_up_authenticator_key),
-        onDismiss = onCoachMarkDismissed,
-        leftAction = {
-            CoachMarkActionText(
-                actionLabel = stringResource(R.string.back),
-                onActionClick = onPreviousCoachMark,
+    if (totpKey != null) {
+        if (canViewTotp) {
+            BitwardenTextField(
+                label = stringResource(id = R.string.totp),
+                value = totpKey,
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+                actions = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_clear,
+                        contentDescription = stringResource(id = R.string.delete),
+                        onClick = loginItemTypeHandlers.onClearTotpKeyClick,
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_copy,
+                        contentDescription = stringResource(id = R.string.copy_totp),
+                        onClick = { loginItemTypeHandlers.onCopyTotpKeyClick(totpKey) },
+                    )
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_camera,
+                        contentDescription = stringResource(id = R.string.camera),
+                        onClick = onTotpSetupClick,
+                    )
+                },
+                textFieldTestTag = "LoginTotpEntry",
+                cardStyle = CardStyle.Full,
+                modifier = modifier.fillMaxWidth(),
             )
-        },
-        rightAction = {
-            CoachMarkActionText(
-                actionLabel = stringResource(R.string.next),
-                onActionClick = onNextCoachMark,
-            )
-        },
-        modifier = modifier,
-    ) {
-        if (totpKey != null) {
-            if (canViewTotp) {
-                BitwardenTextField(
-                    label = stringResource(id = R.string.totp),
-                    value = totpKey,
-                    onValueChange = {},
-                    readOnly = true,
-                    singleLine = true,
-                    actions = {
-                        BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_clear,
-                            contentDescription = stringResource(id = R.string.delete),
-                            onClick = loginItemTypeHandlers.onClearTotpKeyClick,
-                        )
-                        BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_totp),
-                            onClick = {
-                                loginItemTypeHandlers.onCopyTotpKeyClick(totpKey)
-                            },
-                        )
-                        BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_camera,
-                            contentDescription = stringResource(id = R.string.camera),
-                            onClick = onTotpSetupClick,
-                        )
-                    },
-                    textFieldTestTag = "LoginTotpEntry",
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                )
-            } else {
-                BitwardenTextField(
-                    label = stringResource(id = R.string.totp),
-                    value = totpKey,
-                    cardStyle = CardStyle.Full,
-                    textFieldTestTag = "LoginTotpEntry",
-                    onValueChange = {},
-                    readOnly = true,
-                    enabled = false,
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                )
-            }
         } else {
+            BitwardenTextField(
+                label = stringResource(id = R.string.totp),
+                value = totpKey,
+                cardStyle = CardStyle.Full,
+                textFieldTestTag = "LoginTotpEntry",
+                onValueChange = {},
+                readOnly = true,
+                enabled = false,
+                singleLine = true,
+                modifier = modifier.fillMaxWidth(),
+            )
+        }
+    } else {
+        Column(modifier = modifier) {
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenOutlinedButton(
                 label = stringResource(id = R.string.setup_totp),
