@@ -230,7 +230,6 @@ fun VaultData.toViewState(
                 ?.let { R.string.save_passkey_as_new_login.asText() }
                 ?: run {
                     when (itemListingType) {
-
                         VaultItemListingState.ItemListingType.Vault.Card -> {
                             R.string.new_card
                         }
