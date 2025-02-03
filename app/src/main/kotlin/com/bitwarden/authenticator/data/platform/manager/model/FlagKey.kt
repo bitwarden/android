@@ -45,7 +45,7 @@ sealed class FlagKey<out T : Any> {
      * Indicates whether syncing with the main Bitwarden password manager app should be enabled..
      */
     data object PasswordManagerSync : FlagKey<Boolean>() {
-        override val keyName: String = "enable-password-manager-sync-android"
+        override val keyName: String = "enable-pm-bwa-sync"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
