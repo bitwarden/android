@@ -72,7 +72,7 @@ class RetrofitsImpl(
                 baseClient
                     .newBuilder()
                     .addInterceptor(loggingInterceptor)
-                    .setSslSocketFactoryIfRequired(
+                    .setSslSocketFactory(
                         sslContext = sslManager.sslContext,
                         trustManagers = sslManager.trustManagers,
                     )
@@ -102,7 +102,7 @@ class RetrofitsImpl(
             .newBuilder()
             .authenticator(refreshAuthenticator)
             .addInterceptor(authTokenInterceptor)
-            .setSslSocketFactoryIfRequired(
+            .setSslSocketFactory(
                 sslContext = sslManager.sslContext,
                 trustManagers = sslManager.trustManagers,
             )
@@ -146,7 +146,7 @@ class RetrofitsImpl(
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
-                    .setSslSocketFactoryIfRequired(
+                    .setSslSocketFactory(
                         sslContext = sslManager.sslContext,
                         trustManagers = sslManager.trustManagers,
                     )
@@ -154,18 +154,14 @@ class RetrofitsImpl(
             )
             .build()
 
-    private fun OkHttpClient.Builder.setSslSocketFactoryIfRequired(
-        sslContext: SSLContext?,
+    private fun OkHttpClient.Builder.setSslSocketFactory(
+        sslContext: SSLContext,
         trustManagers: Array<TrustManager>,
     ): OkHttpClient.Builder =
-        if (sslContext != null && trustManagers.isNotEmpty()) {
-            sslSocketFactory(
-                sslContext.socketFactory,
-                trustManagers.first() as X509TrustManager,
-            )
-        } else {
-            this
-        }
+        sslSocketFactory(
+            sslContext.socketFactory,
+            trustManagers.first() as X509TrustManager,
+        )
 
     //endregion Helper properties and functions
 }

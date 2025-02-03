@@ -275,7 +275,7 @@ class RetrofitsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createStaticRetrofit should set sslSocketFactory when sslContext and trustManagers are provided`() =
+    fun `createStaticRetrofit should set sslSocketFactory`() =
         runTest {
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
@@ -300,35 +300,7 @@ class RetrofitsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `createStaticRetrofit should not set sslSocketFactory when sslContext and trustManagers are not provided`() =
-        runTest {
-            setupMockOkHttpClientBuilder()
-
-            // Verify behavior when sslContext and trustManagers are not provided
-            retrofits.createStaticRetrofit(isAuthenticated = false)
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
-            // Verify behavior when trustManagers is empty
-            every { mockSslManager.trustManagers } returns emptyArray()
-            retrofits.createStaticRetrofit(isAuthenticated = false)
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `authenticatedOkHttpClient should set sslSocketFactory when sslContext and trustManagers are provided`() =
+    fun `authenticatedOkHttpClient should set sslSocketFactory`() =
         runTest {
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
@@ -353,35 +325,7 @@ class RetrofitsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `authenticatedOkHttpClient should not set sslSocketFactory when sslContext and trustManagers are not provided`() =
-        runTest {
-            setupMockOkHttpClientBuilder()
-
-            retrofits.authenticatedApiRetrofit
-
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
-            // Verify behavior when trustManagers is empty
-            every { mockSslManager.trustManagers } returns emptyArray()
-            retrofits.authenticatedApiRetrofit
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unauthenticatedOkHttpClient should set sslSocketFactory when sslContext and trustManagers are provided`() =
+    fun `unauthenticatedOkHttpClient should set sslSocketFactory`() =
         runTest {
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
@@ -400,34 +344,6 @@ class RetrofitsTest {
                     .sslSocketFactory(
                         sslSocketFactory = mockSocketFactory,
                         trustManager = mockTrustManager,
-                    )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unauthenticatedOkHttpClient should not set sslSocketFactory when sslContext and trustManagers are not provided`() =
-        runTest {
-            setupMockOkHttpClientBuilder()
-
-            retrofits.unauthenticatedApiRetrofit
-
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
-            // Verify behavior when trustManagers is empty
-            every { mockSslManager.trustManagers } returns emptyArray()
-            retrofits.unauthenticatedApiRetrofit
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
                     )
             }
         }
