@@ -30,7 +30,7 @@ fun VaultItemListingEmpty(
         VaultNoItems(
             policyDisablesSend = policyDisablesSend,
             vectorRes = state.vectorRes,
-            headerText = state.header(),
+            headerText = state.header?.invoke(),
             message = state.message(),
             buttonText = state.buttonText(),
             modifier = modifier,

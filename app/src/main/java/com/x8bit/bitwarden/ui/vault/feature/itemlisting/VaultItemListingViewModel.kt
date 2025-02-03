@@ -1613,6 +1613,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 sendView.determineListingPredicate(listingType)
                             }
                             .toViewState(
+                                itemListingType = listingType,
                                 baseWebSendUrl = state.baseWebSendUrl,
                                 clock = clock,
                             )
@@ -1947,10 +1948,10 @@ data class VaultItemListingState(
          * Represents a state where the [VaultItemListingScreen] has no items to display.
          */
         data class NoItems(
-            val header: Text,
             val message: Text,
             val buttonText: Text,
-            @DrawableRes val vectorRes: Int = R.drawable.img_vault_items,
+            val header: Text? = null,
+            @DrawableRes val vectorRes: Int? = null,
             val shouldShowAddButton: Boolean,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
