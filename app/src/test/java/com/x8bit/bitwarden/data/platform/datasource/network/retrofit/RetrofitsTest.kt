@@ -277,7 +277,6 @@ class RetrofitsTest {
     @Test
     fun `createStaticRetrofit should set sslSocketFactory when sslContext and trustManagers are provided`() =
         runTest {
-            mockkConstructor(OkHttpClient.Builder::class)
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
             val mockSslContext = mockk<SSLContext> {
@@ -331,7 +330,6 @@ class RetrofitsTest {
     @Test
     fun `authenticatedOkHttpClient should set sslSocketFactory when sslContext and trustManagers are provided`() =
         runTest {
-            mockkConstructor(OkHttpClient.Builder::class)
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
             val mockSslContext = mockk<SSLContext> {
@@ -385,7 +383,6 @@ class RetrofitsTest {
     @Test
     fun `unauthenticatedOkHttpClient should set sslSocketFactory when sslContext and trustManagers are provided`() =
         runTest {
-            mockkConstructor(OkHttpClient.Builder::class)
             val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
             val mockSocketFactory = mockk<SSLSocketFactory>()
             val mockSslContext = mockk<SSLContext> {
