@@ -135,7 +135,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val resourceManager: ResourceManager = mockk {
         every { getString(R.string.folder_none) } returns "No Folder"
     }
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
@@ -2406,16 +2408,16 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `CopyTotpKeyClick should call setText on ClipboardManager`() {
             val viewModel = createAddVaultItemViewModel()
             val testKey = "TestKey"
-            every { clipboardManager.setText(text = testKey) } just runs
-
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
                     testKey,
                 ),
             )
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = testKey)
+                clipboardManager.setText(
+                    text = testKey,
+                    toastDescriptorOverride = R.string.authenticator_key.asText(),
+                )
             }
         }
 

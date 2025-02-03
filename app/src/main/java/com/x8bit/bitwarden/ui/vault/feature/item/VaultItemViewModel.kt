@@ -517,7 +517,10 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCopyNotesClick() {
         onContent { content ->
             val notes = content.common.notes.orEmpty()
-            clipboardManager.setText(text = notes)
+            clipboardManager.setText(
+                text = notes,
+                toastDescriptorOverride = R.string.notes.asText(),
+            )
         }
     }
 
@@ -583,7 +586,10 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onLoginContent
             }
-            clipboardManager.setText(text = password)
+            clipboardManager.setText(
+                text = password,
+                toastDescriptorOverride = R.string.password.asText(),
+            )
             organizationEventManager.trackEvent(
                 event = OrganizationEvent.CipherClientCopiedPassword(cipherId = state.vaultItemId),
             )
@@ -593,18 +599,27 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCopyTotpClick() {
         onLoginContent { _, login ->
             val code = login.totpCodeItemData?.verificationCode ?: return@onLoginContent
-            clipboardManager.setText(text = code)
+            clipboardManager.setText(
+                text = code,
+                toastDescriptorOverride = R.string.totp.asText(),
+            )
         }
     }
 
     private fun handleCopyUriClick(action: VaultItemAction.ItemType.Login.CopyUriClick) {
-        clipboardManager.setText(text = action.uri)
+        clipboardManager.setText(
+            text = action.uri,
+            toastDescriptorOverride = R.string.uri.asText(),
+        )
     }
 
     private fun handleCopyUsernameClick() {
         onLoginContent { _, login ->
             val username = requireNotNull(login.username)
-            clipboardManager.setText(text = username)
+            clipboardManager.setText(
+                text = username,
+                toastDescriptorOverride = R.string.username.asText(),
+            )
         }
     }
 
@@ -727,7 +742,10 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onCardContent
             }
-            clipboardManager.setText(text = number)
+            clipboardManager.setText(
+                text = number,
+                toastDescriptorOverride = R.string.number.asText(),
+            )
         }
     }
 
@@ -742,7 +760,10 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onCardContent
             }
-            clipboardManager.setText(text = securityCode)
+            clipboardManager.setText(
+                text = securityCode,
+                toastDescriptorOverride = R.string.security_code.asText(),
+            )
         }
     }
 
@@ -801,7 +822,10 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCopyPublicKeyClick() {
         onSshKeyContent { _, sshKey ->
-            clipboardManager.setText(text = sshKey.publicKey)
+            clipboardManager.setText(
+                text = sshKey.publicKey,
+                toastDescriptorOverride = R.string.public_key.asText(),
+            )
         }
     }
 
@@ -839,13 +863,19 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onSshKeyContent
             }
-            clipboardManager.setText(text = sshKey.privateKey)
+            clipboardManager.setText(
+                text = sshKey.privateKey,
+                toastDescriptorOverride = R.string.private_key.asText(),
+            )
         }
     }
 
     private fun handleCopyFingerprintClick() {
         onSshKeyContent { _, sshKey ->
-            clipboardManager.setText(text = sshKey.fingerprint)
+            clipboardManager.setText(
+                text = sshKey.fingerprint,
+                toastDescriptorOverride = R.string.fingerprint.asText(),
+            )
         }
     }
 
@@ -882,63 +912,90 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCopyIdentityNameClick() {
         onIdentityContent { _, identity ->
             val identityName = identity.identityName.orEmpty()
-            clipboardManager.setText(text = identityName)
+            clipboardManager.setText(
+                text = identityName,
+                toastDescriptorOverride = R.string.identity_name.asText(),
+            )
         }
     }
 
     private fun handleCopyIdentityUsernameClick() {
         onIdentityContent { _, identity ->
             val username = identity.username.orEmpty()
-            clipboardManager.setText(text = username)
+            clipboardManager.setText(
+                text = username,
+                toastDescriptorOverride = R.string.username.asText(),
+            )
         }
     }
 
     private fun handleCopyCompanyClick() {
         onIdentityContent { _, identity ->
             val company = identity.company.orEmpty()
-            clipboardManager.setText(text = company)
+            clipboardManager.setText(
+                text = company,
+                toastDescriptorOverride = R.string.company.asText(),
+            )
         }
     }
 
     private fun handleCopySsnClick() {
         onIdentityContent { _, identity ->
             val ssn = identity.ssn.orEmpty()
-            clipboardManager.setText(text = ssn)
+            clipboardManager.setText(
+                text = ssn,
+                toastDescriptorOverride = R.string.ssn.asText(),
+            )
         }
     }
 
     private fun handleCopyPassportNumberClick() {
         onIdentityContent { _, identity ->
             val passportNumber = identity.passportNumber.orEmpty()
-            clipboardManager.setText(text = passportNumber)
+            clipboardManager.setText(
+                text = passportNumber,
+                toastDescriptorOverride = R.string.passport_number.asText(),
+            )
         }
     }
 
     private fun handleCopyLicenseNumberClick() {
         onIdentityContent { _, identity ->
             val licenseNumber = identity.licenseNumber.orEmpty()
-            clipboardManager.setText(text = licenseNumber)
+            clipboardManager.setText(
+                text = licenseNumber,
+                toastDescriptorOverride = R.string.license_number.asText(),
+            )
         }
     }
 
     private fun handleCopyEmailClick() {
         onIdentityContent { _, identity ->
             val email = identity.email.orEmpty()
-            clipboardManager.setText(text = email)
+            clipboardManager.setText(
+                text = email,
+                toastDescriptorOverride = R.string.email.asText(),
+            )
         }
     }
 
     private fun handleCopyPhoneClick() {
         onIdentityContent { _, identity ->
             val phone = identity.phone.orEmpty()
-            clipboardManager.setText(text = phone)
+            clipboardManager.setText(
+                text = phone,
+                toastDescriptorOverride = R.string.phone.asText(),
+            )
         }
     }
 
     private fun handleCopyAddressClick() {
         onIdentityContent { _, identity ->
             val address = identity.address.orEmpty()
-            clipboardManager.setText(text = address)
+            clipboardManager.setText(
+                text = address,
+                toastDescriptorOverride = R.string.address.asText(),
+            )
         }
     }
 

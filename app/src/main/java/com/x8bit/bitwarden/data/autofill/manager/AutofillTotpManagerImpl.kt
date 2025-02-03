@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import java.time.Clock
 
 /**
@@ -34,7 +35,10 @@ class AutofillTotpManagerImpl(
         )
 
         if (totpResult is GenerateTotpResult.Success) {
-            clipboardManager.setText(text = totpResult.code)
+            clipboardManager.setText(
+                text = totpResult.code,
+                toastDescriptorOverride = R.string.verification_code_totp.asText(),
+            )
             Toast
                 .makeText(
                     context.applicationContext,
