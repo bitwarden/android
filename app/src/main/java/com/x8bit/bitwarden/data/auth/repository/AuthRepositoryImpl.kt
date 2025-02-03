@@ -1616,9 +1616,21 @@ class AuthRepositoryImpl(
                         orgIdentifier = orgIdentifier,
                     )
 
-                    is GetTokenResponseJson.Invalid -> LoginResult.Error(
-                        errorMessage = loginResponse.errorMessage,
-                    )
+                    is GetTokenResponseJson.Invalid -> {
+                        when (loginResponse.toInvalidType) {
+                            is GetTokenResponseJson.Invalid.InvalidType.NewDeviceVerification -> {
+                                LoginResult.NewDeviceVerification(
+                                    errorMessage = loginResponse.errorMessage,
+                                )
+                            }
+
+                            is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
+                                LoginResult.Error(
+                                    errorMessage = loginResponse.errorMessage,
+                                )
+                            }
+                        }
+                    }
                 }
             },
         )

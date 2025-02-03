@@ -378,14 +378,14 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `ssoCallbackResultFlow Success with same state with login UnofficialServerError should show loading dialog then show unofficial error when Bitwarden server is unofficial`() =
+    @Suppress("MaxLineLength")
+    fun `ssoCallbackResultFlow Success with same state with login NewDeviceVerification with message should update dialogState`() =
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
-            } returns LoginResult.UnofficialServerError
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
@@ -424,7 +424,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                            message = "new device verification required".asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),

@@ -321,6 +321,18 @@ class TwoFactorLoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.invalid_verification_code.asText(),
+                        ),
+                    )
+                }
+            }
+
             // NO-OP: Let the auth flow handle navigation after this.
             is LoginResult.Success -> Unit
             LoginResult.CertificateError -> {

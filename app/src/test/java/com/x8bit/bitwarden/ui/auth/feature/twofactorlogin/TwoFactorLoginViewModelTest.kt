@@ -781,6 +781,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `ContinueButtonClick login returns NewDeviceVerification with message should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = "new device verification required".asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss)
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+            coVerify {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            }
+        }
+
+    @Test
     fun `RememberMeToggle should update the state`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
