@@ -345,11 +345,13 @@ fun Modifier.cardBackground(
             CardStyle.Full -> BitwardenTheme.shapes.content
         }
     }
+    val isLtr = LocalLayoutDirection.current == LayoutDirection.Ltr
     return this
         .clip(shape = shape)
         .background(color = color, shape = shape)
         .bottomDivider(
-            paddingStart = cardStyle.dividerPadding,
+            paddingStart = if (isLtr) cardStyle.dividerPadding else 0.dp,
+            paddingEnd = if (isLtr) 0.dp else cardStyle.dividerPadding,
             enabled = cardStyle.hasDivider,
         )
 }
