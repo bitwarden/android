@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.coachmark
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -132,6 +133,14 @@ fun <T : Enum<T>> CoachMarkContainer(
                 }
             }
         }
+
+        // Consume system back event when the scrim is visible.
+        BackHandler(
+            enabled = state.isVisible.value,
+            onBack = {
+                // No-op
+            },
+        )
     }
 }
 
