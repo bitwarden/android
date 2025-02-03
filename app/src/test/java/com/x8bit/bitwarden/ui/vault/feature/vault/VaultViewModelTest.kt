@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
@@ -78,7 +79,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
-        every { setText(any<String>()) } just runs
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val policyManager: PolicyManager = mockk {
         every {
@@ -1382,7 +1383,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(notes)
+                clipboardManager.setText(
+                    text = notes,
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
             }
         }
 
@@ -1400,7 +1404,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(number)
+                clipboardManager.setText(
+                    text = number,
+                    toastDescriptorOverride = R.string.number.asText(),
+                )
             }
         }
 
@@ -1421,7 +1428,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(password)
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
@@ -1447,7 +1457,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 1) {
-                clipboardManager.setText(code)
+                clipboardManager.setText(
+                    text = code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
 
@@ -1469,7 +1482,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 0) {
-                clipboardManager.setText(text = any<String>())
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
             }
         }
 
@@ -1490,7 +1506,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(securityCode)
+                clipboardManager.setText(
+                    text = securityCode,
+                    toastDescriptorOverride = R.string.security_code.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
@@ -1511,7 +1530,10 @@ class VaultViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(username)
+                clipboardManager.setText(
+                    text = username,
+                    toastDescriptorOverride = R.string.username.asText(),
+                )
             }
         }
 
@@ -1661,7 +1683,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 1) {
-                clipboardManager.setText(password)
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )

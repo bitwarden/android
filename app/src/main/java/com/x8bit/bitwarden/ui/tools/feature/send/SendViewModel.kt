@@ -257,7 +257,10 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(action: SendAction.CopyClick) {
-        clipboardManager.setText(text = action.sendItem.shareUrl)
+        clipboardManager.setText(
+            text = action.sendItem.shareUrl,
+            toastDescriptorOverride = R.string.send_link.asText(),
+        )
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {

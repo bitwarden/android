@@ -106,7 +106,10 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(action: VerificationCodeAction.CopyClick) {
-        clipboardManager.setText(text = action.text)
+        clipboardManager.setText(
+            text = action.text,
+            toastDescriptorOverride = R.string.verification_code_totp.asText(),
+        )
     }
 
     private fun handleItemClick(action: VerificationCodeAction.ItemClick) {

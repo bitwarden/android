@@ -447,19 +447,28 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(action.notes)
+        clipboardManager.setText(
+            text = action.notes,
+            toastDescriptorOverride = R.string.notes.asText(),
+        )
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(action.number)
+        clipboardManager.setText(
+            text = action.number,
+            toastDescriptorOverride = R.string.number.asText(),
+        )
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(action.password)
+        clipboardManager.setText(
+            text = action.password,
+            toastDescriptorOverride = R.string.password.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
         )
@@ -468,7 +477,10 @@ class VaultViewModel @Inject constructor(
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(action.securityCode)
+        clipboardManager.setText(
+            text = action.securityCode,
+            toastDescriptorOverride = R.string.security_code.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
         )
@@ -486,7 +498,10 @@ class VaultViewModel @Inject constructor(
     private fun handleCopyUsernameClick(
         action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
     ) {
-        clipboardManager.setText(action.username)
+        clipboardManager.setText(
+            text = action.username,
+            toastDescriptorOverride = R.string.username.asText(),
+        )
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
@@ -535,7 +550,10 @@ class VaultViewModel @Inject constructor(
         when (val result = action.result) {
             is GenerateTotpResult.Error -> Unit
             is GenerateTotpResult.Success -> {
-                clipboardManager.setText(result.code)
+                clipboardManager.setText(
+                    text = result.code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
     }

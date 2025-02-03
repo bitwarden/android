@@ -29,20 +29,24 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
@@ -145,26 +149,34 @@ fun ManualCodeEntryScreen(
                 .verticalScroll(state = rememberScrollState())
                 .fillMaxSize(),
         ) {
-            Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 24.dp))
             Text(
                 text = stringResource(id = R.string.enter_key_manually),
                 style = BitwardenTheme.typography.titleMedium,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .standardHorizontalMargin()
+                    .fillMaxWidth()
                     .testTag("EnterKeyManuallyButton"),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            Text(
+                text = stringResource(id = R.string.once_the_key_is_successfully_entered),
+                style = BitwardenTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+
+            Spacer(modifier = Modifier.height(height = 24.dp))
             BitwardenTextField(
                 singleLine = false,
                 label = stringResource(id = R.string.authenticator_key_scanner),
                 value = state.code,
                 onValueChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            ManualCodeEntryAction.CodeTextChange(it),
-                        )
-                    }
+                    { viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange(it)) }
                 },
                 textFieldTestTag = "AddManualTOTPField",
                 cardStyle = CardStyle.Full,
@@ -173,8 +185,8 @@ fun ManualCodeEntryScreen(
                     .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenOutlinedButton(
+            Spacer(modifier = Modifier.height(height = 24.dp))
+            BitwardenFilledButton(
                 label = stringResource(id = R.string.add_totp),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
@@ -185,28 +197,9 @@ fun ManualCodeEntryScreen(
                     .testTag("AddManualTOTPButton"),
             )
 
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Text(
-                text = stringResource(id = R.string.once_the_key_is_successfully_entered),
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-
             Spacer(modifier = Modifier.height(height = 24.dp))
-            Text(
-                text = stringResource(id = R.string.cannot_add_authenticator_key),
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenClickableText(
-                label = stringResource(id = R.string.scan_qr_code),
-                onClick = remember(viewModel) {
+            ScanQrCodeText(
+                onScanClick = remember(viewModel) {
                     {
                         if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
                             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -215,8 +208,9 @@ fun ManualCodeEntryScreen(
                         }
                     }
                 },
-                style = BitwardenTheme.typography.bodyMedium,
-                modifier = Modifier.testTag("ScanQRCodeButton"),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))
@@ -241,4 +235,37 @@ private fun ManualCodeEntryDialogs(
 
         null -> Unit
     }
+}
+
+@Composable
+private fun ScanQrCodeText(
+    onScanClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scanQrCodeString = stringResource(id = R.string.scan_qr_code)
+    val annotatedLinkString = R.string
+        .cannot_add_authenticator_key_scan_qr_code
+        .toAnnotatedString {
+            when (it) {
+                "scanQrCode" -> onScanClick()
+            }
+        }
+    Text(
+        text = annotatedLinkString,
+        style = BitwardenTheme.typography.bodySmall,
+        color = BitwardenTheme.colorScheme.text.secondary,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = scanQrCodeString,
+                        action = {
+                            onScanClick()
+                            true
+                        },
+                    ),
+                )
+            },
+    )
 }

@@ -48,7 +48,10 @@ class BitwardenClipboardManagerImpl(
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
             val descriptor = toastDescriptorOverride
                 ?.let { context.resources.getString(R.string.value_has_been_copied, it) }
-                ?: context.resources.getString(R.string.copied_to_clipboard)
+                ?: context.resources.getString(
+                    R.string.value_has_been_copied,
+                    context.resources.getString(R.string.value),
+                )
             Toast.makeText(context, descriptor, Toast.LENGTH_SHORT).show()
         }
 
@@ -68,6 +71,14 @@ class BitwardenClipboardManagerImpl(
 
     override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: String?) {
         setText(text.toAnnotatedString(), isSensitive, toastDescriptorOverride)
+    }
+
+    override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: Text) {
+        setText(
+            text.toAnnotatedString(),
+            isSensitive,
+            toastDescriptorOverride.toString(context.resources),
+        )
     }
 
     override fun setText(text: Text, isSensitive: Boolean, toastDescriptorOverride: String?) {

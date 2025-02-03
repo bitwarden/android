@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -63,7 +64,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mutableCollectionsStateFlow =
         MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
 
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
     private val authRepo: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
     }
@@ -1752,12 +1755,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
             val notes = "Lots of notes"
-            every { clipboardManager.setText(text = notes) } just runs
 
             viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
 
             verify(exactly = 1) {
-                clipboardManager.setText(text = notes)
+                clipboardManager.setText(
+                    text = notes,
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
             }
         }
     }
@@ -1881,44 +1886,45 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on CopyPasswordClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                    totpCodeItemData = createTotpCodeData(),
-                )
-            } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value =
-                DataState.Loaded(data = createVerificationCodeItem())
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+        fun `on CopyPasswordClick should call setText on the ClipboardManager when re-prompt is not required`() =
+            runTest {
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = createTotpCodeData(),
+                    )
+                } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value =
+                    DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
-            every { clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD) } just runs
+                viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
 
-            viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
-
-            verify(exactly = 1) {
-                clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD)
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                    totpCodeItemData = createTotpCodeData(),
-                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = DEFAULT_LOGIN_PASSWORD,
+                        toastDescriptorOverride = R.string.password.asText(),
+                    )
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        totpCodeItemData = createTotpCodeData(),
+                    )
+                }
             }
-        }
 
         @Test
-        fun `on CopyTotpClick should call setText on the ClipboardManager`() {
-            every { clipboardManager.setText(text = "123456") } just runs
+        fun `on CopyTotpClick should call setText on the ClipboardManager`() = runTest {
             mutableVaultItemFlow.value = DataState.Loaded(
                 data = createMockCipherView(1),
             )
@@ -1930,22 +1936,27 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
 
             verify(exactly = 1) {
-                clipboardManager.setText(text = "123456")
+                clipboardManager.setText(
+                    text = "123456",
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
 
         @Test
-        fun `on CopyUriClick should call setText on ClipboardManager`() {
+        fun `on CopyUriClick should call setText on ClipboardManager`() = runTest {
             val uri = "uri"
-            every { clipboardManager.setText(text = uri) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(uri))
-
-            verify(exactly = 1) { clipboardManager.setText(text = uri) }
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = uri,
+                    toastDescriptorOverride = R.string.uri.asText(),
+                )
+            }
         }
 
         @Test
-        fun `on CopyUsernameClick should call setText on ClipboardManager`() {
+        fun `on CopyUsernameClick should call setText on ClipboardManager`() = runTest {
             every {
                 mockCipherView.toViewState(
                     previousState = null,
@@ -1957,7 +1968,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = createTotpCodeData(),
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
-            every { clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME) } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value =
                 DataState.Loaded(data = createVerificationCodeItem())
@@ -1966,7 +1976,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
 
             verify(exactly = 1) {
-                clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME)
+                clipboardManager.setText(
+                    text = DEFAULT_LOGIN_USERNAME,
+                    toastDescriptorOverride = R.string.username.asText(),
+                )
                 mockCipherView.toViewState(
                     previousState = null,
                     isPremiumUser = true,
@@ -2248,41 +2261,44 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on CopyNumberClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
+        fun `on CopyNumberClick should call setText on the ClipboardManager when re-prompt is not required`() =
+            runTest {
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
                 )
-            } returns createViewState(
-                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                type = DEFAULT_CARD_TYPE,
-            )
-            every { clipboardManager.setText(text = "12345436") } just runs
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
-            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
+                viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
 
-            verify(exactly = 1) {
-                clipboardManager.setText(text = "12345436")
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = "12345436",
+                        toastDescriptorOverride = R.string.number.asText(),
+                    )
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                }
             }
-        }
 
         @Test
         fun `on NumberVisibilityClick should show password dialog when re-prompt is required`() =
@@ -2331,47 +2347,47 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on NumberVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() {
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
+        fun `on NumberVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() =
+            runTest {
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
                 )
-            } returns createViewState(
-                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                type = DEFAULT_CARD_TYPE,
-            )
-            every { clipboardManager.setText(text = "12345436") } just runs
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
-            viewModel.trySendAction(
-                VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
-            )
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
+                )
 
-            verify(exactly = 1) {
-                organizationEventManager.trackEvent(
-                    event = OrganizationEvent.CipherClientToggledCardNumberVisible(
-                        cipherId = VAULT_ITEM_ID,
-                    ),
-                )
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                )
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientToggledCardNumberVisible(
+                            cipherId = VAULT_ITEM_ID,
+                        ),
+                    )
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                }
             }
-        }
 
         @Test
         fun `on CopySecurityCodeClick should show password dialog when re-prompt is required`() =
@@ -2420,41 +2436,44 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `on CopySecurityCodeClick should call setText on the ClipboardManager when re-prompt is not required`() {
-            every {
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
+        fun `on CopySecurityCodeClick should call setText on the ClipboardManager when re-prompt is not required`() =
+            runTest {
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
                 )
-            } returns createViewState(
-                common = DEFAULT_COMMON.copy(requiresReprompt = false),
-                type = DEFAULT_CARD_TYPE,
-            )
-            every { clipboardManager.setText(text = "987") } just runs
-            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
 
-            viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
+                viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
 
-            verify(exactly = 1) {
-                clipboardManager.setText(text = "987")
-                mockCipherView.toViewState(
-                    previousState = null,
-                    isPremiumUser = true,
-                    hasMasterPassword = true,
-                    totpCodeItemData = null,
-                    canDelete = true,
-                    canAssignToCollections = true,
-                    canEdit = true,
-                )
+                verify(exactly = 1) {
+                    clipboardManager.setText(
+                        text = "987",
+                        toastDescriptorOverride = R.string.security_code.asText(),
+                    )
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                    )
+                }
             }
-        }
 
         @Test
         fun `on CodeVisibilityClick should show password dialog when re-prompt is required`() =
@@ -2518,7 +2537,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
                 type = DEFAULT_CARD_TYPE,
             )
-            every { clipboardManager.setText(text = "987") } just runs
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
@@ -2561,7 +2579,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `on CopyPublicKeyClick should copy public key to clipboard`() = runTest {
-            every { clipboardManager.setText("mockPublicKey") } just runs
             every {
                 mockCipherView.toViewState(
                     previousState = null,
@@ -2580,7 +2597,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
 
             verify(exactly = 1) {
-                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.publicKey)
+                clipboardManager.setText(
+                    text = DEFAULT_SSH_KEY_TYPE.publicKey,
+                    toastDescriptorOverride = R.string.public_key.asText(),
+                )
             }
         }
 
@@ -2687,7 +2707,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `onPrivateKeyCopyClick should copy private key to clipboard when re-prompt is not required`() =
             runTest {
-                every { clipboardManager.setText("mockPrivateKey") } just runs
                 every {
                     mockCipherView.toViewState(
                         previousState = null,
@@ -2709,7 +2728,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
 
                 verify(exactly = 1) {
-                    clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.privateKey)
+                    clipboardManager.setText(
+                        text = DEFAULT_SSH_KEY_TYPE.privateKey,
+                        toastDescriptorOverride = R.string.private_key.asText(),
+                    )
                 }
             }
 
@@ -2717,7 +2739,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `onPrivateKeyCopyClick should show password dialog when re-prompt is required`() =
             runTest {
                 val sshKeyState = DEFAULT_STATE.copy(viewState = SSH_KEY_VIEW_STATE)
-                every { clipboardManager.setText("mockPrivateKey") } just runs
                 every {
                     mockCipherView.toViewState(
                         previousState = null,
@@ -2746,13 +2767,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewModel.stateFlow.value,
                 )
                 verify(exactly = 0) {
-                    clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.privateKey)
+                    clipboardManager.setText(
+                        text = DEFAULT_SSH_KEY_TYPE.privateKey,
+                        toastDescriptorOverride = R.string.private_key.asText(),
+                    )
                 }
             }
 
         @Test
         fun `on CopyFingerprintClick should copy fingerprint to clipboard`() = runTest {
-            every { clipboardManager.setText("mockFingerprint") } just runs
             every {
                 mockCipherView.toViewState(
                     previousState = null,
@@ -2771,7 +2794,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
 
             verify(exactly = 1) {
-                clipboardManager.setText(text = DEFAULT_SSH_KEY_TYPE.fingerprint)
+                clipboardManager.setText(
+                    text = DEFAULT_SSH_KEY_TYPE.fingerprint,
+                    toastDescriptorOverride = R.string.fingerprint.asText(),
+                )
             }
         }
     }
@@ -2807,12 +2833,12 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopyIdentityNameClick should copy fingerprint to clipboard`() =
             runTest {
                 val username = "the username"
-                every { clipboardManager.setText(text = username) } just runs
-
                 viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyUsernameClick)
-
                 verify(exactly = 1) {
-                    clipboardManager.setText(text = username)
+                    clipboardManager.setText(
+                        text = username,
+                        toastDescriptorOverride = R.string.username.asText(),
+                    )
                 }
             }
 
@@ -2820,96 +2846,94 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fun `on CopyUsernameClick should copy fingerprint to clipboard`() =
             runTest {
                 val identityName = "the identity name"
-                every { clipboardManager.setText(text = identityName) } just runs
-
                 viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyIdentityNameClick)
-
                 verify(exactly = 1) {
-                    clipboardManager.setText(text = identityName)
+                    clipboardManager.setText(
+                        text = identityName,
+                        toastDescriptorOverride = R.string.identity_name.asText(),
+                    )
                 }
             }
 
         @Test
         fun `on CopyCompanyClick should copy company to clipboard`() = runTest {
             val company = "the company name"
-            every { clipboardManager.setText(text = company) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyCompanyClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = company)
+                clipboardManager.setText(
+                    text = company,
+                    toastDescriptorOverride = R.string.company.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopySsnClick should copy SSN to clipboard`() = runTest {
             val ssn = "the SSN"
-            every { clipboardManager.setText(text = ssn) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopySsnClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = ssn)
+                clipboardManager.setText(
+                    text = ssn,
+                    toastDescriptorOverride = R.string.ssn.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopyPassportNumberClick should copy passport number to clipboard`() = runTest {
             val passportNumber = "the passport number"
-            every { clipboardManager.setText(text = passportNumber) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPassportNumberClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = passportNumber)
+                clipboardManager.setText(
+                    text = passportNumber,
+                    toastDescriptorOverride = R.string.passport_number.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopyLicenseNumberClick should copy license number to clipboard`() = runTest {
             val licenseNumber = "the license number"
-            every { clipboardManager.setText(text = licenseNumber) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyLicenseNumberClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = licenseNumber)
+                clipboardManager.setText(
+                    text = licenseNumber,
+                    toastDescriptorOverride = R.string.license_number.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopyEmailClick should copy email to clipboard`() = runTest {
             val email = "the email address"
-            every { clipboardManager.setText(text = email) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyEmailClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = email)
+                clipboardManager.setText(
+                    text = email, toastDescriptorOverride = R.string.email.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopyPhoneClick should copy phone to clipboard`() = runTest {
             val phone = "the phone number"
-            every { clipboardManager.setText(text = phone) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyPhoneClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = phone)
+                clipboardManager.setText(
+                    text = phone, toastDescriptorOverride = R.string.phone.asText(),
+                )
             }
         }
 
         @Test
         fun `on CopyAddressClick should copy address to clipboard`() = runTest {
             val address = "the address"
-            every { clipboardManager.setText(text = address) } just runs
-
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyAddressClick)
-
             verify(exactly = 1) {
-                clipboardManager.setText(text = address)
+                clipboardManager.setText(
+                    text = address,
+                    toastDescriptorOverride = R.string.address.asText(),
+                )
             }
         }
     }

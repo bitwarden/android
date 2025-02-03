@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -102,8 +103,8 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         fakePermissionManager.checkPermissionResult = true
 
         composeTestRule
-            .onNodeWithText("Scan QR Code")
-            .performClick()
+            .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR Code")
 
         verify {
             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -115,8 +116,8 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         fakePermissionManager.checkPermissionResult = false
 
         composeTestRule
-            .onNodeWithText("Scan QR Code")
-            .performClick()
+            .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR Code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")
@@ -191,8 +192,8 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
         fakePermissionManager.checkPermissionResult = false
 
         composeTestRule
-            .onNodeWithText("Scan QR Code")
-            .performClick()
+            .onNodeWithText(text = "Cannot add authenticator key? Scan QR Code")
+            .performCustomAccessibilityAction(label = "Scan QR Code")
 
         composeTestRule
             .onAllNodesWithText("Enable camera permission to use the scanner")
