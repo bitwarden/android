@@ -11,7 +11,7 @@ interface SslManager {
     /**
      * The SSL context to use for SSL connections.
      */
-    val sslContext: SSLContext?
+    val sslContext: SSLContext
 
     /**
      * The trust managers to use for SSL connections.

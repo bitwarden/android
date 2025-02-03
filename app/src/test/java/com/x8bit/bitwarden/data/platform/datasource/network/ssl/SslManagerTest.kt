@@ -73,35 +73,7 @@ class SslManagerTest {
     @Test
     fun `sslContext should be initialized with default TLS protocol`() {
         setupMockUri()
-        assertTrue(sslManager.sslContext?.protocol == "TLS")
-    }
-
-    @Test
-    fun `sslContext should return sslContext based on environment`() {
-        setupMockUri()
-        // Verify sslContext is not null when environment keyUri is valid
-        assertNotNull(sslManager.sslContext) {
-            "sslContext should not be null when keyUri is valid"
-        }
-
-        // Verify sslContext is null when environment keyUri is null
-
-        every {
-            mockEnvironment.environmentUrlData
-        } returns DEFAULT_ENV_URL_DATA.copy(keyUri = null)
-        assertNull(sslManager.sslContext) { "sslContext should be null when keyUri is null" }
-
-        // Verify sslContext is null when environment keyUri host is unknown
-        setupMockUri(authority = "UNKNOWN_HOST")
-        assertNull(sslManager.sslContext) { "sslContext should be null when host is unknown" }
-
-        // Verify sslContext is null when environment keyUri path is null
-        setupMockUri(path = null)
-        assertNull(sslManager.sslContext) { "sslContext should be null when keyUri path is null" }
-
-        // Verify sslContext is null when environment keyUri path is empty
-        setupMockUri(path = "/")
-        assertNull(sslManager.sslContext) { "sslContext should be null when keyUri path is empty" }
+        assertTrue(sslManager.sslContext.protocol == "TLS")
     }
 
     @Test

@@ -60,18 +60,16 @@ class SslManagerImpl(
             .apply { init(null as KeyStore?) }
             .trustManagers
 
-    override val sslContext: SSLContext?
-        get() = getKeyUri()?.run {
-            SSLContext
-                .getInstance("TLS")
-                .apply {
-                    init(
-                        arrayOf(X509ExtendedKeyManagerImpl()),
-                        trustManagers,
-                        null,
-                    )
-                }
-        }
+    override val sslContext: SSLContext
+        get() = SSLContext
+            .getInstance("TLS")
+            .apply {
+                init(
+                    arrayOf(X509ExtendedKeyManagerImpl()),
+                    trustManagers,
+                    null,
+                )
+            }
 
     private fun getKeyUri(): Uri? = environmentRepository
         .environment

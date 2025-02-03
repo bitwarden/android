@@ -59,7 +59,7 @@ class RetrofitsTest {
     private val json = Json
     private val server = MockWebServer()
     private val mockSslManager = mockk<SslManager> {
-        every { sslContext } returns null
+        every { sslContext } returns mockk()
         every { trustManagers } returns emptyArray()
     }
 
@@ -315,17 +315,6 @@ class RetrofitsTest {
                     )
             }
 
-            // Verify behavior when sslContext is null
-            every { mockSslManager.sslContext } returns null
-            retrofits.createStaticRetrofit(isAuthenticated = false)
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
             // Verify behavior when trustManagers is empty
             every { mockSslManager.trustManagers } returns emptyArray()
             retrofits.createStaticRetrofit(isAuthenticated = false)
@@ -372,18 +361,6 @@ class RetrofitsTest {
 
             retrofits.authenticatedApiRetrofit
 
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
-            // Verify behavior when sslContext is null
-            every { mockSslManager.sslContext } returns null
-
-            retrofits.authenticatedApiRetrofit
             verify(exactly = 0) {
                 anyConstructed<OkHttpClient.Builder>()
                     .sslSocketFactory(
@@ -446,18 +423,6 @@ class RetrofitsTest {
                     )
             }
 
-            // Verify behavior when sslContext is null
-            every { mockSslManager.sslContext } returns null
-
-            retrofits.unauthenticatedApiRetrofit
-            verify(exactly = 0) {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = any(),
-                        trustManager = any(),
-                    )
-            }
-
             // Verify behavior when trustManagers is empty
             every { mockSslManager.trustManagers } returns emptyArray()
             retrofits.unauthenticatedApiRetrofit
@@ -471,7 +436,7 @@ class RetrofitsTest {
         }
 
     private fun setupMockOkHttpClientBuilder(
-        sslContext: SSLContext? = null,
+        sslContext: SSLContext = mockk<SSLContext>(),
         trustManagers: Array<TrustManager> = emptyArray(),
     ) {
         mockkConstructor(OkHttpClient.Builder::class)
