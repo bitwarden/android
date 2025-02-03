@@ -656,6 +656,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
                         )
                     },
                     shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                    leftAction = null,
                 ) {
                     SegmentedButtonOptionContent(option = option)
                 }
