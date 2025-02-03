@@ -102,7 +102,7 @@ fun SettingsScreen(
                     cardStyle = Settings.entries.toListItemCardStyle(
                         index = index,
                         // Start padding, plus icon, plus spacing between text.
-                        dividerPadding = 54.dp,
+                        dividerPadding = 48.dp,
                     ),
                     iconVectorResource = settingEntry.vectorIconRes,
                     modifier = Modifier
@@ -206,7 +206,7 @@ private fun SettingsRows_preview() {
                     iconVectorResource = it.vectorIconRes,
                     cardStyle = Settings.entries.toListItemCardStyle(
                         index = index,
-                        dividerPadding = 54.dp,
+                        dividerPadding = 48.dp,
                     ),
                 )
             }
