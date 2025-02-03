@@ -247,7 +247,7 @@ private fun CompleteRegistrationContent(
             onValueChange = handler.onPasswordInputChange,
             showPasswordTestTag = "PasswordVisibilityToggle",
             imeAction = ImeAction.Next,
-            supportingTextContent = {
+            supportingContent = {
                 PasswordStrengthIndicator(
                     state = passwordStrengthState,
                     currentCharacterCount = passwordInput.length,
@@ -286,7 +286,7 @@ private fun CompleteRegistrationContent(
             ),
             value = passwordHintInput,
             onValueChange = handler.onPasswordHintChange,
-            supportingTextContent = {
+            supportingContent = {
                 Text(
                     text = stringResource(
                         id = R.string.bitwarden_cannot_recover_a_lost_or_forgotten_master_password

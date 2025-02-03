@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -92,19 +91,11 @@ fun CheckEmailScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            if (state.showNewOnboardingUi) {
-                CheckEmailContent(
-                    email = state.email,
-                    onOpenEmailAppClick = handler.onOpenEmailAppClick,
-                    onChangeEmailClick = handler.onChangeEmailClick,
-                )
-            } else {
-                CheckEmailLegacyContent(
-                    email = state.email,
-                    onOpenEmailAppClick = handler.onOpenEmailAppClick,
-                    onChangeEmailClick = handler.onChangeEmailClick,
-                )
-            }
+            CheckEmailContent(
+                email = state.email,
+                onOpenEmailAppClick = handler.onOpenEmailAppClick,
+                onChangeEmailClick = handler.onChangeEmailClick,
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -167,7 +158,9 @@ private fun CheckEmailContent(
         Spacer(modifier = Modifier.height(16.dp))
         @Suppress("MaxLineLength")
         Text(
-            text = stringResource(R.string.select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account),
+            text = stringResource(
+                R.string.select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account,
+            ),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Center,
@@ -196,99 +189,11 @@ private fun CheckEmailContent(
     }
 }
 
-@Suppress("LongMethod")
-@Composable
-private fun CheckEmailLegacyContent(
-    email: String,
-    onOpenEmailAppClick: () -> Unit,
-    onChangeEmailClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Image(
-            painter = rememberVectorPainter(id = R.drawable.email_check),
-            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-            contentDescription = null,
-            contentScale = ContentScale.FillHeight,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .height(112.dp)
-                .fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = stringResource(id = R.string.check_your_email),
-            textAlign = TextAlign.Center,
-            style = BitwardenTheme.typography.headlineSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .wrapContentHeight()
-                .fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        @Suppress("MaxLineLength")
-        val descriptionAnnotatedString =
-            R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account.toAnnotatedString(
-                args = arrayOf(email),
-                emphasisHighlightStyle = SpanStyle(
-                color = BitwardenTheme.colorScheme.text.primary,
-                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold,
-            ),
-        )
-        Text(
-            text = descriptionAnnotatedString,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .wrapContentHeight(),
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        BitwardenFilledButton(
-            label = stringResource(id = R.string.open_email_app),
-            onClick = onOpenEmailAppClick,
-            modifier = Modifier
-                .testTag("OpenEmailApp")
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-
-        BitwardenOutlinedButton(
-            label = stringResource(R.string.change_email_address),
-            onClick = onChangeEmailClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun CheckEmailScreenNewUi_preview() {
     BitwardenTheme {
         CheckEmailContent(
-            email = "email@fake.com",
-            onOpenEmailAppClick = { },
-            onChangeEmailClick = { },
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CheckEmailScreenLegacy_preview() {
-    BitwardenTheme {
-        CheckEmailLegacyContent(
             email = "email@fake.com",
             onOpenEmailAppClick = { },
             onChangeEmailClick = { },

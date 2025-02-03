@@ -1,7 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,10 +29,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -38,8 +38,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopy
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -61,8 +62,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param showPassword Whether or not password should be shown.
  * @param showPasswordChange Lambda that is called when user request show/hide be toggled.
  * @param onValueChange Callback that is triggered when the password changes.
- * @param supportingTextContent An optional supporting text composable will appear below the text
- * input.
+ * @param supportingContent An optional supporting content that will appear below the text input.
+ * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param modifier Modifier for the composable.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
@@ -77,6 +78,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
@@ -86,18 +91,21 @@ fun BitwardenPasswordField(
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
     onValueChange: (String) -> Unit,
-    supportingTextContent: @Composable (ColumnScope.() -> Unit)?,
+    supportingContent: @Composable (ColumnScope.() -> Unit)?,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     showPasswordTestTag: String? = null,
+    supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     passwordFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     val focusRequester = remember { FocusRequester() }
     var textFieldValueState by remember { mutableStateOf(TextFieldValue(text = value)) }
@@ -124,8 +132,11 @@ fun BitwardenPasswordField(
         Column(
             modifier = modifier
                 .defaultMinSize(minHeight = 60.dp)
-                .cardBackground(cardStyle = cardStyle)
-                .cardPadding(cardStyle = cardStyle, vertical = 6.dp)
+                .cardStyle(
+                    cardStyle = cardStyle,
+                    paddingTop = 6.dp,
+                    paddingBottom = 0.dp,
+                )
                 .tabNavigation()
                 .focusRequester(focusRequester = focusRequester),
         ) {
@@ -155,37 +166,46 @@ fun BitwardenPasswordField(
                 ),
                 keyboardActions = keyboardActions,
                 trailingIcon = {
-                    BitwardenStandardIconButton(
-                        modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
-                        vectorIconRes = if (showPassword) {
-                            R.drawable.ic_eye_slash
-                        } else {
-                            R.drawable.ic_eye
+                    BitwardenRowOfActions(
+                        modifier = Modifier.padding(paddingValues = actionsPadding),
+                        actions = {
+                            BitwardenStandardIconButton(
+                                modifier = Modifier.nullableTestTag(tag = showPasswordTestTag),
+                                vectorIconRes = if (showPassword) {
+                                    R.drawable.ic_eye_slash
+                                } else {
+                                    R.drawable.ic_eye
+                                },
+                                contentDescription = stringResource(
+                                    id = if (showPassword) R.string.hide else R.string.show,
+                                ),
+                                onClick = { showPasswordChange.invoke(!showPassword) },
+                            )
+                            actions?.invoke(this)
                         },
-                        contentDescription = stringResource(
-                            id = if (showPassword) R.string.hide else R.string.show,
-                        ),
-                        onClick = { showPasswordChange.invoke(!showPassword) },
                     )
                 },
                 modifier = Modifier
-                    .run { passwordFieldTestTag?.let { testTag(tag = it) } ?: this }
+                    .nullableTestTag(tag = passwordFieldTestTag)
                     .fillMaxWidth(),
             )
-            supportingTextContent?.let {
-                Spacer(modifier = Modifier.height(height = 8.dp))
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 12.dp))
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    content = it,
-                )
-                Spacer(modifier = Modifier.height(height = 6.dp))
-            }
+            supportingContent
+                ?.let { content ->
+                    Spacer(modifier = Modifier.height(height = 6.dp))
+                    BitwardenHorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp),
+                    )
+                    Column(
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .defaultMinSize(minHeight = 48.dp)
+                            .padding(paddingValues = supportingContentPadding),
+                        content = content,
+                    )
+                }
+                ?: Spacer(modifier = Modifier.height(height = 6.dp))
         }
     }
     if (autoFocus) {
@@ -218,6 +238,10 @@ fun BitwardenPasswordField(
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -226,6 +250,7 @@ fun BitwardenPasswordField(
     showPassword: Boolean,
     showPasswordChange: (Boolean) -> Unit,
     onValueChange: (String) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -237,7 +262,8 @@ fun BitwardenPasswordField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     passwordFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     BitwardenPasswordField(
         label = label,
@@ -249,7 +275,7 @@ fun BitwardenPasswordField(
         modifier = modifier,
         readOnly = readOnly,
         singleLine = singleLine,
-        supportingTextContent = supportingText?.let {
+        supportingContent = supportingText?.let {
             {
                 Text(
                     text = it,
@@ -266,6 +292,8 @@ fun BitwardenPasswordField(
         textToolbarType = textToolbarType,
         passwordFieldTestTag = passwordFieldTestTag,
         cardStyle = cardStyle,
+        actionsPadding = actionsPadding,
+        actions = actions,
     )
 }
 
@@ -283,8 +311,8 @@ fun BitwardenPasswordField(
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
- * @param supportingTextContent An optional supporting text composable will appear below the text
- * input.
+ * @param supportingContent An optional supporting content that will appear below the text input.
+ * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param showPasswordTestTag The test tag to be used on the show password button (testing tool).
  * @param autoFocus When set to true, the view will request focus after the first recomposition.
  * Setting this to true on multiple fields at once may have unexpected consequences.
@@ -295,17 +323,23 @@ fun BitwardenPasswordField(
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Composable
 fun BitwardenPasswordField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
+    supportingContent: @Composable (ColumnScope.() -> Unit)?,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     initialShowPassword: Boolean = false,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
-    supportingTextContent: @Composable (ColumnScope.() -> Unit)?,
+    supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
@@ -313,7 +347,8 @@ fun BitwardenPasswordField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     passwordFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(value = initialShowPassword) }
     BitwardenPasswordField(
@@ -326,7 +361,8 @@ fun BitwardenPasswordField(
         modifier = modifier,
         readOnly = readOnly,
         singleLine = singleLine,
-        supportingTextContent = supportingTextContent,
+        supportingContent = supportingContent,
+        supportingContentPadding = supportingContentPadding,
         autoFocus = autoFocus,
         keyboardType = keyboardType,
         imeAction = imeAction,
@@ -334,6 +370,8 @@ fun BitwardenPasswordField(
         textToolbarType = textToolbarType,
         passwordFieldTestTag = passwordFieldTestTag,
         cardStyle = cardStyle,
+        actionsPadding = actionsPadding,
+        actions = actions,
     )
 }
 
@@ -360,12 +398,17 @@ fun BitwardenPasswordField(
  * @param keyboardActions the callbacks of keyboard actions.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Composable
 fun BitwardenPasswordField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -377,7 +420,8 @@ fun BitwardenPasswordField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     textFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -397,6 +441,8 @@ fun BitwardenPasswordField(
         keyboardActions = keyboardActions,
         passwordFieldTestTag = textFieldTestTag,
         cardStyle = cardStyle,
+        actionsPadding = actionsPadding,
+        actions = actions,
     )
 }
 

@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -51,8 +50,7 @@ fun SendDeletionDateChooser(
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 60.dp)
-            .cardBackground(cardStyle = CardStyle.Full)
-            .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
+            .cardStyle(cardStyle = CardStyle.Full, paddingVertical = 0.dp),
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.deletion_date),
@@ -69,6 +67,7 @@ fun SendDeletionDateChooser(
                 }
             },
             insets = PaddingValues(top = 6.dp, bottom = 4.dp),
+            cardStyle = null,
         )
         AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
             Column {

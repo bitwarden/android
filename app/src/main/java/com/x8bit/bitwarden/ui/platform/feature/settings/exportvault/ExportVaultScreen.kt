@@ -236,7 +236,7 @@ private fun ExportVaultScreenContent(
                 onValueChange = onFilePasswordInputChanged,
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
-                supportingTextContent = {
+                supportingContent = {
                     PasswordStrengthIndicator(
                         state = state.passwordStrengthState,
                         currentCharacterCount = state.passwordInput.length,

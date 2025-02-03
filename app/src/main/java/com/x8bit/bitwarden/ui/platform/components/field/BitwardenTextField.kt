@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +34,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -39,8 +41,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
@@ -51,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTe
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -59,6 +62,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Component that allows the user to input text. This composable will manage the state of
  * the user's input.
+ *
  * @param label label for the text field.
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
@@ -66,7 +70,6 @@ import kotlinx.collections.immutable.toImmutableList
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param leadingIconResource the optional resource for the leading icon on the text field.
- * @param trailingIconContent the content for the trailing icon in the text field.
  * @param supportingText optional supporting text that will appear below the text input.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -80,16 +83,21 @@ import kotlinx.collections.immutable.toImmutableList
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actionsTestTag The test tag to use for the row of actions, or null if there is none.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Composable
 fun BitwardenTextField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     leadingIconResource: IconResource? = null,
-    trailingIconContent: (@Composable () -> Unit)? = null,
     supportingText: String? = null,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
@@ -103,7 +111,9 @@ fun BitwardenTextField(
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     autoCompleteOptions: ImmutableList<String> = persistentListOf(),
     textFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actionsTestTag: String? = null,
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     BitwardenTextField(
         modifier = modifier,
@@ -112,8 +122,7 @@ fun BitwardenTextField(
         onValueChange = onValueChange,
         placeholder = placeholder,
         leadingIconResource = leadingIconResource,
-        trailingIconContent = trailingIconContent,
-        supportingTextContent = supportingText?.let {
+        supportingContent = supportingText?.let {
             {
                 Text(
                     text = it,
@@ -136,22 +145,26 @@ fun BitwardenTextField(
         autoCompleteOptions = autoCompleteOptions,
         textFieldTestTag = textFieldTestTag,
         cardStyle = cardStyle,
+        actionsPadding = actionsPadding,
+        actionsTestTag = actionsTestTag,
+        actions = actions,
     )
 }
 
 /**
  * Component that allows the user to input text. This composable will manage the state of
  * the user's input.
+ *
  * @param label label for the text field.
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
  * @param onValueChange callback that is triggered when the input of the text field changes.
- * @param supportingTextContent An optional supporting text composable that will appear below the
+ * @param supportingContent An optional supporting content composable that will appear below the
  * text input.
+ * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param leadingIconResource the optional resource for the leading icon on the text field.
- * @param trailingIconContent the content for the trailing icon in the text field.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
@@ -164,6 +177,11 @@ fun BitwardenTextField(
  * @param textToolbarType The type of [TextToolbar] to use on the text field.
  * @param textFieldTestTag The optional test tag associated with the inner text field.
  * @param cardStyle Indicates the type of card style to be applied.
+ * @param actionsPadding Padding to be applied to the [actions] block.
+ * @param actionsTestTag The test tag to use for the row of actions, or null if there is none.
+ * @param actions A lambda containing the set of actions (usually icons or similar) to display
+ * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
+ * defining the layout of the actions.
  */
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
@@ -171,11 +189,12 @@ fun BitwardenTextField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
-    supportingTextContent: (@Composable ColumnScope.() -> Unit)?,
+    supportingContent: (@Composable ColumnScope.() -> Unit)?,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     placeholder: String? = null,
     leadingIconResource: IconResource? = null,
-    trailingIconContent: (@Composable () -> Unit)? = null,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     enabled: Boolean = true,
@@ -188,7 +207,9 @@ fun BitwardenTextField(
     textToolbarType: TextToolbarType = TextToolbarType.DEFAULT,
     autoCompleteOptions: ImmutableList<String> = persistentListOf(),
     textFieldTestTag: String? = null,
-    cardStyle: CardStyle? = null,
+    actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
+    actionsTestTag: String? = null,
+    actions: @Composable (RowScope.() -> Unit)? = null,
 ) {
     var widthPx by remember { mutableIntStateOf(0) }
     val focusRequester = remember { FocusRequester() }
@@ -229,8 +250,11 @@ fun BitwardenTextField(
                     .onGloballyPositioned { widthPx = it.size.width }
                     .onFocusEvent { focusState -> hasFocused = focusState.hasFocus }
                     .focusRequester(focusRequester)
-                    .cardBackground(cardStyle = cardStyle)
-                    .cardPadding(cardStyle = cardStyle, vertical = 6.dp)
+                    .cardStyle(
+                        cardStyle = cardStyle,
+                        paddingTop = 6.dp,
+                        paddingBottom = 0.dp,
+                    )
                     .fillMaxWidth(),
             ) {
                 TextField(
@@ -246,15 +270,7 @@ fun BitwardenTextField(
                             )
                         }
                     },
-                    trailingIcon = trailingIconContent,
-                    placeholder = placeholder?.let {
-                        {
-                            Text(
-                                text = it,
-                                style = textStyle,
-                            )
-                        }
-                    },
+                    placeholder = placeholder?.let { { Text(text = it, style = textStyle) } },
                     onValueChange = {
                         hasFocused = true
                         textFieldValueState = it
@@ -268,26 +284,39 @@ fun BitwardenTextField(
                     readOnly = readOnly,
                     textStyle = textStyle,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    trailingIcon = actions?.let {
+                        {
+                            BitwardenRowOfActions(
+                                actions = it,
+                                modifier = Modifier
+                                    .nullableTestTag(tag = actionsTestTag)
+                                    .padding(paddingValues = actionsPadding),
+                            )
+                        }
+                    },
                     isError = isError,
                     visualTransformation = visualTransformation,
                     modifier = Modifier
-                        .run { textFieldTestTag?.let { testTag(tag = it) } ?: this }
+                        .nullableTestTag(tag = textFieldTestTag)
                         .fillMaxWidth(),
                 )
-                supportingTextContent?.let {
-                    Spacer(modifier = Modifier.height(height = 8.dp))
-                    BitwardenHorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp),
-                    )
-                    Spacer(modifier = Modifier.height(height = 12.dp))
-                    Column(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        content = it,
-                    )
-                    Spacer(modifier = Modifier.height(height = 6.dp))
-                }
+                supportingContent
+                    ?.let { content ->
+                        Spacer(modifier = Modifier.height(height = 6.dp))
+                        BitwardenHorizontalDivider(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp),
+                        )
+                        Column(
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier
+                                .defaultMinSize(minHeight = 48.dp)
+                                .padding(paddingValues = supportingContentPadding),
+                            content = content,
+                        )
+                    }
+                    ?: Spacer(modifier = Modifier.height(height = 6.dp))
             }
             val filteredAutoCompleteList = autoCompleteOptions
                 .filter { option ->

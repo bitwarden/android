@@ -72,12 +72,12 @@ fun VaultContent(
                         .testTag("VerificationCodesFilter")
                         .standardHorizontalMargin(),
                 )
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
         if (state.favoriteItems.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.favorites),
                     supportingLabel = state.favoriteItems.count().toString(),
@@ -119,10 +119,12 @@ fun VaultContent(
                         .standardHorizontalMargin(),
                 )
             }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.types),
                 supportingLabel = state.itemTypesCount.toString(),
@@ -220,9 +222,12 @@ fun VaultContent(
             }
         }
 
+        item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
+        }
+
         if (state.folderItems.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.folders),
                     supportingLabel = state.folderItems.count().toString(),
@@ -250,11 +255,13 @@ fun VaultContent(
                         .standardHorizontalMargin(),
                 )
             }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         if (state.noFolderItems.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.folder_none),
                     supportingLabel = state.noFolderItems.count().toString(),
@@ -295,11 +302,13 @@ fun VaultContent(
                         .standardHorizontalMargin(),
                 )
             }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         if (state.collectionItems.isNotEmpty()) {
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.collections),
                     supportingLabel = state.collectionItems.count().toString(),
@@ -327,10 +336,12 @@ fun VaultContent(
                         .standardHorizontalMargin(),
                 )
             }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.trash),
                 supportingLabel = TRASH_TYPES_COUNT.toString(),

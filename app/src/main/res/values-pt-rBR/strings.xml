@@ -103,6 +103,7 @@
   <string name="close">Fechar</string>
   <string name="continue_text">Continuar</string>
   <string name="create_account">Criar Conta</string>
+  <string name="create_an_account">Criar uma conta</string>
   <string name="creating_account">Criando conta...</string>
   <string name="edit_item">Editar item</string>
   <string name="enable_automatic_syncing">Ativar Sincronização Automática</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Ação de tempo limite do cofre</string>
   <string name="vault_timeout_log_out_confirmation">Sair irá remover todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem certeza de que deseja usar esta configuração?</string>
   <string name="logging_in">Iniciando Sessão...</string>
-  <string name="login_or_create_new_account">Inicie a sessão ou crie uma nova conta para acessar seu cofre seguro.</string>
+  <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
   <string name="manage">Gerenciar</string>
   <string name="master_password_confirmation_val_message">A confirmação de senha não está correta.</string>
   <string name="master_password_description">A senha mestra é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestra. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Sessão Indisponível</string>
   <string name="no_two_step_available">Esta conta tem a verificação em duas etapas ativada, no entanto, nenhum dos provedores de verificação em duas etapas configurados são suportados por este dispositivo. Por favor, utilize um dispositivo suportado e/ou adicione provedores adicionais que são melhor suportados entre dispositivos (como um aplicativo de autenticação).</string>
   <string name="recovery_code_title">Código de Recuperação</string>
-  <string name="remember_me">Lembrar de mim</string>
+  <string name="remember">Lembrar</string>
+  <string name="remember_email">Lembrar e-mail</string>
   <string name="send_verification_code_again">Enviar e-mail do código de verificação novamente</string>
   <string name="two_step_login_options">Opções de Login em Duas Etapas</string>
   <string name="use_another_two_step_method">Usar outro método de login em duas etapas</string>
@@ -752,7 +754,7 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de login de:
 %1$s
 Você deseja mudar para esta conta?</string>
-  <string name="new_around_here">Novo por aqui?</string>
+  <string name="new_to_bitwarden">Novo no Bitwarden?</string>
   <string name="get_master_passwordword_hint">Obter dica da senha mestra</string>
   <string name="logging_in_as_x_on_y">Entrando como %1$s em %2$s</string>
   <string name="not_you">Não é você?</string>
@@ -841,6 +843,7 @@ Você deseja mudar para esta conta?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Fazer login com o dispositivo deve ser configurado nas configurações do aplicativo Bitwarden. Precisa de outra opção?</string>
   <string name="log_in_with_device">Fazer login com dispositivo</string>
   <string name="logging_in_on">Entrando em</string>
+  <string name="logging_in_on_with_colon">Entrando em:</string>
   <string name="vault">Cofre</string>
   <string name="appearance">Aparência</string>
   <string name="account_security">Segurança da conta</string>
@@ -935,10 +938,12 @@ Você deseja mudar para esta conta?</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da senha falhou porque o usuário não pôde ser verificado.</string>
   <string name="user_verification_direction">Verificação de usuário</string>
-  <string name="creating_on">Criando em:</string>
+  <string name="create_account_on">Criar conta em</string>
+  <string name="create_account_on_with_colon">Criar conta em:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções no e-mail enviado para %1$s para continuar a criar sua conta.</string>
   <string name="we_sent_an_email_to">Enviamos um e-mail para %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, você concorda com os Termos de Serviço e Política de Privacidade</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Definir senha</string>
   <string name="unsubscribe">Cancelar inscrição</string>
   <string name="check_your_email">Verifique seu e-mail</string>
@@ -1121,4 +1126,22 @@ Você deseja mudar para esta conta?</string>
   <string name="mutual_tls">TLS mútuo</string>
   <string name="single_tap_passkey_creation">Criação de senha com um toque</string>
   <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="learn_about_new_logins">Aprenda sobre novos logins</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Vamos guiá-lo através dos principais recursos para adicionar um novo login.</string>
+  <string name="explore_the_generator">Explore o gerador</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Saiba mais sobre gerar credenciais de login seguras com um passeio guiado.</string>
+  <string name="import_client_certificate">Importar certificado de cliente</string>
+  <string name="enter_the_client_certificate_password_and_alias">Digite a senha do certificado do cliente e o apelido desejado para este certificado.</string>
+  <string name="alias">Apelido</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use o gerador para criar senhas seguras, frases secretas e nomes de usuário. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">As frases-chave são senhas fortes que muitas vezes são mais fáceis de lembrar e digitar do que senhas aleatórias. Eles são úteis para fazer login em contas onde o AutoFill não está disponível, como um serviço de streaming na sua TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Os nomes de usuários exclusivos adicionam uma camada extra de segurança e podem ajudar a impedir que hackers encontrem suas contas.</string>
+  <string name="coachmark_1_of_6">1 de 6</string>
+  <string name="coachmark_2_of_6">2 de 6</string>
+  <string name="coachmark_3_of_6">3 de 6</string>
+  <string name="coachmark_4_of_6">4 OF 6</string>
+  <string name="coachmark_5_of_6">5 OF 6</string>
+  <string name="coachmark_6_of_6">6 OF 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>

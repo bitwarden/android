@@ -91,7 +91,7 @@
   <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade Bitwarden para preencher automaticamente as suas credenciais entre as aplicações e a web.</string>
   <string name="autofill_service">Serviço de preenchimento automático</string>
   <string name="set_bitwarden_as_passkey_manager_description">Defina o Bitwarden como o seu fornecedor de chaves de acesso nas definições do dispositivo.</string>
-  <string name="avoid_ambiguous_characters">Evitar caracteres ambíguos</string>
+  <string name="avoid_ambiguous_characters">Evitar carateres ambíguos</string>
   <string name="bitwarden_app_extension">Extensão da app Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão da aplicação Bitwarden. Saiba mais sobre a utilização da extensão da app Bitwarden ao navegar até ao ecrã \"Definições\".</string>
   <string name="bitwarden_app_extension_description">Utilize o Bitwarden no Safari e noutras aplicações para preencher automaticamente as suas credenciais.</string>
@@ -103,6 +103,7 @@
   <string name="close">Fechar</string>
   <string name="continue_text">Continuar</string>
   <string name="create_account">Criar conta</string>
+  <string name="create_an_account">Criar uma conta</string>
   <string name="creating_account">A criar conta...</string>
   <string name="edit_item">Editar item</string>
   <string name="enable_automatic_syncing">Permitir a sincronização automática</string>
@@ -136,15 +137,15 @@
   <string name="vault_timeout_action">Ação de tempo limite do cofre</string>
   <string name="vault_timeout_log_out_confirmation">Ao terminar sessão removerá todo o acesso ao seu cofre e requer autenticação online após o período de tempo limite. Tem a certeza de que pretende utilizar esta definição?</string>
   <string name="logging_in">A iniciar sessão...</string>
-  <string name="login_or_create_new_account">Inicie sessão ou crie uma nova conta para aceder ao seu cofre seguro.</string>
+  <string name="login_to_bitwarden">Iniciar sessão no Bitwarden</string>
   <string name="manage">Gerir</string>
   <string name="master_password_confirmation_val_message">A confirmação da palavra-passe não está correta.</string>
   <string name="master_password_description">A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não há forma de recuperar a palavra-passe no caso de a esquecer.</string>
   <string name="master_password_hint">Dica da palavra-passe mestra (opcional)</string>
   <string name="master_password_hint_description">Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela.</string>
-  <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s caracteres.</string>
+  <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s carateres.</string>
   <string name="min_numbers">Mínimo de números</string>
-  <string name="min_special">Mínimo de caracteres especiais</string>
+  <string name="min_special">Mínimo de carateres especiais</string>
   <string name="more_settings">Mais definições</string>
   <string name="must_log_in_main_app">Tem de iniciar sessão na app Bitwarden principal antes de poder utilizar a extensão.</string>
   <string name="never">Nunca</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Início de sessão indisponível</string>
   <string name="no_two_step_available">Esta conta tem a verificação de dois passos configurada, no entanto, nenhum dos fornecedores da verificação de dois passos configurada é suportado neste dispositivo. Utilize um dispositivo suportado e/ou adicione fornecedores adicionais que sejam mais bem suportados nos dispositivos (como uma aplicação de autenticação).</string>
   <string name="recovery_code_title">Código de recuperação</string>
-  <string name="remember_me">Memorizar</string>
+  <string name="remember">Memorizar</string>
+  <string name="remember_email">Memorizar e-mail</string>
   <string name="send_verification_code_again">Enviar e-mail com o código de verificação novamente</string>
   <string name="two_step_login_options">Opções de verificação de dois passos</string>
   <string name="use_another_two_step_method">Utilizar outro método de verificação de dois passos</string>
@@ -527,10 +529,10 @@ A leitura será efetuada automaticamente.</string>
   <string name="master_password_policy_in_effect">Uma ou mais políticas da organização exigem que a sua palavra-passe mestra cumpra os seguintes requisitos:</string>
   <string name="policy_in_effect_min_complexity">Pontuação mínima de complexidade de %1$s</string>
   <string name="policy_in_effect_min_length">Comprimento mínimo de %1$s</string>
-  <string name="policy_in_effect_uppercase">Contém um ou mais caracteres em maiúsculas</string>
-  <string name="policy_in_effect_lowercase">Contém um ou mais caracteres em minúsculas</string>
+  <string name="policy_in_effect_uppercase">Contém um ou mais carateres em maiúsculas</string>
+  <string name="policy_in_effect_lowercase">Contém um ou mais carateres em minúsculas</string>
   <string name="policy_in_effect_numbers">Contém um ou mais números</string>
-  <string name="policy_in_effect_special">Contém um ou mais dos seguintes caracteres especiais: %1$s</string>
+  <string name="policy_in_effect_special">Contém um ou mais dos seguintes carateres especiais: %1$s</string>
   <string name="master_password_policy_validation_title">Palavra-passe inválida</string>
   <string name="master_password_policy_validation_message">A palavra-passe não corresponde aos requisitos da organização. Verifique as informações da política e tente novamente.</string>
   <string name="loading">A carregar</string>
@@ -670,7 +672,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="uppercase_ato_z">Maiúsculas (A-Z)</string>
   <string name="lowercase_ato_z">Minúsculas (a-z)</string>
   <string name="numbers_zero_to_nine">Números (0-9)</string>
-  <string name="special_characters">Caracteres especiais (!@#$%^&amp;*)</string>
+  <string name="special_characters">Carateres especiais (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Toque para voltar atrás</string>
   <string name="password_is_visible_tap_to_hide">A palavra-passe está visível, toque para a ocultar.</string>
   <string name="password_is_not_visible_tap_to_show">A palavra-passe não está visível, toque para a mostrar.</string>
@@ -751,7 +753,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativa de início de sessão a partir de:
 %1$s
 Pretende mudar para esta conta?</string>
-  <string name="new_around_here">É novo por cá?</string>
+  <string name="new_to_bitwarden">Novo no Bitwarden?</string>
   <string name="get_master_passwordword_hint">Obter a dica da palavra-passe mestra</string>
   <string name="logging_in_as_x_on_y">A iniciar sessão como %1$s em %2$s</string>
   <string name="not_you">Utilizador incorreto?</string>
@@ -775,7 +777,7 @@ Pretende mudar para esta conta?</string>
   <string name="language_change_requires_app_restart">A alteração do idioma requer o reinício da aplicação</string>
   <string name="default_system">Predefinido (Sistema)</string>
   <string name="important">Importante</string>
-  <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">A sua palavra-passe mestra não pode ser recuperada se a esquecer! %1$s caracteres no mínimo.</string>
+  <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">A sua palavra-passe mestra não pode ser recuperada se a esquecer! %1$s carateres no mínimo.</string>
   <string name="weak_master_password">Palavra-passe mestra fraca</string>
   <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Foi identificada uma palavra-passe fraca. Utilize uma palavra-passe forte para proteger a sua conta. Tem a certeza de que pretende utilizar uma palavra-passe fraca?</string>
   <string name="weak">Fraca</string>
@@ -840,8 +842,9 @@ Pretende mudar para esta conta?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">O início de sessão com o dispositivo deve ser ativado nas definições da aplicação Bitwarden. Precisa de outra opção?</string>
   <string name="log_in_with_device">Iniciar sessão com o dispositivo</string>
   <string name="logging_in_on">A iniciar sessão em</string>
+  <string name="logging_in_on_with_colon">A iniciar sessão em:</string>
   <string name="vault">Cofre</string>
-  <string name="appearance">Aparência</string>
+  <string name="appearance">Aspeto</string>
   <string name="account_security">Segurança da conta</string>
   <string name="bitwarden_help_center">Centro de ajuda do Bitwarden</string>
   <string name="contact_bitwarden_support">Contactar o suporte do Bitwarden</string>
@@ -934,10 +937,12 @@ Pretende mudar para esta conta?</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
   <string name="user_verification_direction">Verificação do utilizador</string>
-  <string name="creating_on">A criar em:</string>
+  <string name="create_account_on">Criar conta em</string>
+  <string name="create_account_on_with_colon">Criar conta em:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para %1$s para continuar a criar a sua conta.</string>
   <string name="we_sent_an_email_to">Enviámos um e-mail para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar este interruptor, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
   <string name="set_password">Definir palavra-passe</string>
   <string name="unsubscribe">Anular subscrição</string>
   <string name="check_your_email">Verifique o seu e-mail</string>
@@ -961,10 +966,10 @@ Pretende mudar para esta conta?</string>
   <string name="passkey_removed">Chave de acesso removida</string>
   <string name="what_makes_a_password_strong">O que torna uma palavra-passe forte?</string>
   <string name="a_secure_memorable_password">Uma palavra-passe segura e memorizável</string>
-  <string name="the_longer_your_password_the_more_difficult_to_hack">Quanto mais longa for a sua palavra-passe, mais difícil será hackeá-la. O mínimo para a criação de uma conta é de 12 caracteres, mas se tiver 14 caracteres, o tempo para descobrir a sua palavra-passe seria de séculos!</string>
+  <string name="the_longer_your_password_the_more_difficult_to_hack">Quanto mais longa for a sua palavra-passe, mais difícil será hackeá-la. O mínimo para a criação de uma conta é de 12 carateres, mas se tiver 14 carateres, o tempo para descobrir a sua palavra-passe seria de séculos!</string>
   <string name="the_strongest_passwords_are_usually">As palavras-passe mais fortes são normalmente:</string>
-  <string name="twelve_or_more_characters">de 12 ou mais caracteres</string>
-  <string name="random_and_complex_using_numbers_and_special_characters">Aleatórias e complexas, com números e caracteres especiais</string>
+  <string name="twelve_or_more_characters">de 12 ou mais carateres</string>
+  <string name="random_and_complex_using_numbers_and_special_characters">Aleatórias e complexas, com números e carateres especiais</string>
   <string name="totally_different_from_your_other_passwords">Completamente diferentes das suas outras palavras-passe</string>
   <string name="use_the_generator_to_create_a_strong_unique_password">Utilize o gerador para criar uma palavra-passe forte e única</string>
   <string name="try_it_out">Experimentar</string>
@@ -995,7 +1000,7 @@ Pretende mudar para esta conta?</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não pode recuperar uma palavra-passe mestra perdida ou esquecida.</string>
   <string name="choose_your_master_password">Escolha a sua palavra-passe mestra</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma palavra-passe única e forte para manter as suas informações seguras.</string>
-  <string name="minimum_characters">%1$s caracteres</string>
+  <string name="minimum_characters">%1$s carateres</string>
   <string name="expired_link">Link expirado</string>
   <string name="please_restart_registration_or_try_logging_in">Por favor, reinicie o registo ou tente iniciar sessão. É possível que já tenha uma conta.</string>
   <string name="restart_registration">Reiniciar registo</string>
@@ -1011,7 +1016,7 @@ Pretende mudar para esta conta?</string>
   <string name="youre_all_set">Tudo a postos!</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao ligar ao serviço Duo. Utilize um método de verificação de dois passos diferente ou contacte o Duo para obter assistência.</string>
   <string name="master_password_hint_not_specified">Dica da palavra-passe mestra</string>
-  <string name="master_password_important_hint">Importante: A sua palavra-passe mestra não pode ser recuperada se a esquecer! 12 caracteres no mínimo.</string>
+  <string name="master_password_important_hint">Importante: A sua palavra-passe mestra não pode ser recuperada se a esquecer! 12 carateres no mínimo.</string>
   <string name="get_started">Começar</string>
   <string name="save_and_protect_your_data">Guarde e proteja os seus dados</string>
   <string name="the_vault_protects_more_than_just_passwords">O cofre protege mais do que apenas palavras-passe. Guarde aqui credenciais, IDs, cartões e notas de forma segura.</string>
@@ -1121,4 +1126,22 @@ Pretende mudar para esta conta?</string>
   <string name="mutual_tls">TLS mútuo</string>
   <string name="single_tap_passkey_creation">Criação de chaves de acesso com um único toque</string>
   <string name="single_tap_passkey_authentication">Início de sessão com chave de acesso de toque único</string>
+  <string name="learn_about_new_logins">Saiba mais sobre as novas credenciais</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Iremos explicar-lhe as principais características para adicionar uma nova credencial.</string>
+  <string name="explore_the_generator">Explore o gerador</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Saiba mais sobre como gerar credenciais de início de sessão seguras com uma visita guiada.</string>
+  <string name="import_client_certificate">Importar certificado de cliente</string>
+  <string name="enter_the_client_certificate_password_and_alias">Introduza a palavra-passe do certificado do cliente e o nome alternativo pretendido para este certificado.</string>
+  <string name="alias">Nome alternativo</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Utilize o gerador para criar palavras-passe, frases de acesso e nomes de utilizador seguros. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">As frases de acesso são palavras-passe fortes que são frequentemente mais fáceis de memorizar e de escrever do que as palavras-passe aleatórias. São úteis para iniciar sessão em contas onde o Preenchimento automático não está disponível, como um serviço de streaming na sua TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Os nomes de utilizador únicos acrescentam uma camada extra de segurança e podem ajudar a impedir que os hackers encontrem as suas contas.</string>
+  <string name="coachmark_1_of_6">1 DE 6</string>
+  <string name="coachmark_2_of_6">2 DE 6</string>
+  <string name="coachmark_3_of_6">3 DE 6</string>
+  <string name="coachmark_4_of_6">4 DE 6</string>
+  <string name="coachmark_5_of_6">5 DE 6</string>
+  <string name="coachmark_6_of_6">6 DE 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Utilize estas opções para ajustar a sua palavra-passe aos requisitos da sua conta.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Depois de guardar a sua nova palavra-passe no Bitwarden, não se esqueça de a atualizar no site da sua conta. "</string>
 </resources>

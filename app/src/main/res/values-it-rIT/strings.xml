@@ -54,10 +54,10 @@
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
   <string name="name">Nome</string>
-  <string name="send_name_required">"Send name (required)"</string>
+  <string name="send_name_required">"Nome per l'invio (richiesto)"</string>
   <string name="no">No</string>
   <string name="notes">Note</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">Note private</string>
   <string name="ok">OK</string>
   <string name="password">Password</string>
   <string name="save">Salva</string>
@@ -103,6 +103,7 @@
   <string name="close">Chiudi</string>
   <string name="continue_text">Continua</string>
   <string name="create_account">Crea un account</string>
+  <string name="create_an_account">Crea un account</string>
   <string name="creating_account">Creazione dell\'account in corso...</string>
   <string name="edit_item">Modifica l\'elemento</string>
   <string name="enable_automatic_syncing">Sincronizzazione automatica</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Azione programmata</string>
   <string name="vault_timeout_log_out_confirmation">Uscire rimuoverà tutti gli accessi alla tua cassaforte e richiede l\'autenticazione online dopo il periodo di timeout. Sei sicuro di voler usare questa opzione?</string>
   <string name="logging_in">Accesso in corso...</string>
-  <string name="login_or_create_new_account">Effettua l\'accesso o crea un nuovo account per entrare in una cassaforte sicura.</string>
+  <string name="login_to_bitwarden">Accedi a Bitwarden</string>
   <string name="manage">Gestisci</string>
   <string name="master_password_confirmation_val_message">Conferma correttamente la password</string>
   <string name="master_password_description">La password principale ti serve per accedere alla tua cassaforte. È molto importante non dimenticarla. Non possiamo aiutarti a recuperare questa password se la dimentichi.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Login non disponibile</string>
   <string name="no_two_step_available">L\'autenticazione a due fattori è abilitata, ma nessuno dei metodi configurati è supportato da questo dispositivo. Usa un altro dispositivo o aggiungi un metodo supportato su tutti i dispositivi (come un\'app di autenticazione).</string>
   <string name="recovery_code_title">Codice di recupero</string>
-  <string name="remember_me">Rimani connesso</string>
+  <string name="remember">Ricorda</string>
+  <string name="remember_email">Ricorda e-mail</string>
   <string name="send_verification_code_again">Invia email con codice di verifica di nuovo</string>
   <string name="two_step_login_options">Opzioni di autenticazione a due fattori</string>
   <string name="use_another_two_step_method">Usa un altro metodo di autenticazione a due fattori</string>
@@ -556,11 +558,11 @@ La scansione è automatica.</string>
   <string name="personal_ownership_submit_error">A causa di una politica aziendale, non puoi salvare elementi nella tua cassaforte personale. Cambia l\'opzione di proprietà in un\'organizzazione e scegli tra le raccolte disponibili.</string>
   <string name="personal_ownership_policy_in_effect">Una politica dell\'organizzazione sta influenzando le tue opzioni di proprietà.</string>
   <string name="send">Send</string>
-  <string name="send_details">Send Details</string>
+  <string name="send_details">Invia dettagli</string>
   <string name="all_sends">Tutti i Send</string>
   <string name="sends">Send</string>
   <string name="text">Testo</string>
-  <string name="text_to_share">Text to share</string>
+  <string name="text_to_share">Testo da condividere</string>
   <string name="type_text">Testo</string>
   <string name="hide_text_by_default">Nascondi il testo per impostazione predefinita</string>
   <string name="type_file">File</string>
@@ -751,7 +753,7 @@ La scansione è automatica.</string>
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Tentativo di accesso da:
 %1$s
 Vuoi passare a questo account?</string>
-  <string name="new_around_here">Non hai un account?</string>
+  <string name="new_to_bitwarden">Nuovo in Bitwarden?</string>
   <string name="get_master_passwordword_hint">Invia il suggerimento per la password principale</string>
   <string name="logging_in_as_x_on_y">Stai effettuando l\'accesso a %1$s su %2$s</string>
   <string name="not_you">Effettua l\'accesso a un altro account</string>
@@ -840,6 +842,7 @@ Vuoi passare a questo account?</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">L\'accesso con dispositivo deve essere abilitato nelle impostazioni dell\'app Bitwarden. Ti serve un\'altra opzione?</string>
   <string name="log_in_with_device">Accedi con dispositivo</string>
   <string name="logging_in_on">Server</string>
+  <string name="logging_in_on_with_colon">In accesso a:</string>
   <string name="vault">Cassaforte</string>
   <string name="appearance">Aspetto</string>
   <string name="account_security">Sicurezza dell\'account</string>
@@ -934,10 +937,12 @@ Vuoi passare a questo account?</string>
   <string name="self_hosted_server_url">URL del server self-hosted</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Verifica dell\'utente non riuscita. Azione annullata.</string>
   <string name="user_verification_direction">Verifica dell\'utente</string>
-  <string name="creating_on">Creazione in corso su:</string>
+  <string name="create_account_on">Crea account su</string>
+  <string name="create_account_on_with_colon">Crea account su:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Segui le istruzioni contenute nell\'email inviata a %1$s per proseguire con la creazione del tuo account.</string>
   <string name="we_sent_an_email_to">Abbiamo inviato una email a %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Continuando, accetti i Termini di servizio e l\'Informativa sulla privacy.</string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Imposta la password</string>
   <string name="unsubscribe">Annulla iscrizione</string>
   <string name="check_your_email">Controlla la casella di posta</string>
@@ -1118,6 +1123,24 @@ Vuoi passare a questo account?</string>
   <string name="coachmark_3_of_3">3 di 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Devi aggiungere un indirizzo web per usare l\'auto-riempimento per accedere a questo account.</string>
   <string name="mutual_tls">TLS reciproco</string>
-  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="single_tap_passkey_creation">Creazione chiavi d\'accesso a tocco singolo</string>
+  <string name="single_tap_passkey_authentication">Accesso con chiavi d\'accesso a singolo tocco</string>
+  <string name="learn_about_new_logins">Scopri sui nuovi accessi</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ti guideremo attraverso le funzioni chiave per aggiungere un nuovo accesso.</string>
+  <string name="explore_the_generator">Esplora il generatore</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Scopri di più sulla generazione di credenziali di accesso sicure con un tour guidato.</string>
+  <string name="import_client_certificate">Importa certificato client</string>
+  <string name="enter_the_client_certificate_password_and_alias">Inserire la parola d\'accesso del certificato client, e l\'alias desiderato per questo certificato.</string>
+  <string name="alias">Alias</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Usa il generatore per creare parole d'accesso sicure, espressioni d'accesso e nomi utente. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Le espressioni d\'accesso sono parole d\'accesso forti che sono spesso più facili da ricordare e digitare rispetto alle parole d\'accesso casuali. Sono utili per accedere ad account dove AutoFill non è disponibile, come un servizio di streaming sulla TV.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">I nomi utente unici aggiungono un ulteriore livello di sicurezza e possono aiutare a impedire agli hacker di trovare i tuoi account.</string>
+  <string name="coachmark_1_of_6">1 DI 6</string>
+  <string name="coachmark_2_of_6">2 DI 6</string>
+  <string name="coachmark_3_of_6">3 DI 6</string>
+  <string name="coachmark_4_of_6">4 DI 6</string>
+  <string name="coachmark_5_of_6">5 DI 6</string>
+  <string name="coachmark_6_of_6">6 DI 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua parola d\'accesso alle specifiche del tuo account.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Dopo aver salvato la tua nuova parola d'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account. "</string>
 </resources>

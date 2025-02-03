@@ -35,8 +35,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.cardBackground
-import com.x8bit.bitwarden.ui.platform.base.util.cardPadding
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
@@ -172,11 +171,7 @@ fun AddSendContent(
                                 .fillMaxWidth()
                                 .standardHorizontalMargin()
                                 .defaultMinSize(minHeight = 60.dp)
-                                .cardBackground(cardStyle = CardStyle.Full)
-                                .padding(
-                                    horizontal = 16.dp,
-                                    vertical = 12.dp,
-                                )
+                                .cardStyle(cardStyle = CardStyle.Full, paddingHorizontal = 16.dp)
                                 .testTag(tag = "SendCurrentFileNameLabel"),
                             text = it,
                             color = BitwardenTheme.colorScheme.text.primary,
@@ -216,11 +211,7 @@ fun AddSendContent(
                             .fillMaxWidth()
                             .standardHorizontalMargin()
                             .defaultMinSize(minHeight = 60.dp)
-                            .cardBackground(cardStyle = CardStyle.Full)
-                            .padding(
-                                horizontal = 16.dp,
-                                vertical = 12.dp,
-                            ),
+                            .cardStyle(cardStyle = CardStyle.Full, paddingHorizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
@@ -275,8 +266,7 @@ fun AddSendContent(
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .defaultMinSize(minHeight = 60.dp)
-                    .cardBackground(cardStyle = CardStyle.Full)
-                    .cardPadding(cardStyle = CardStyle.Full, vertical = 0.dp),
+                    .cardStyle(cardStyle = CardStyle.Full, paddingVertical = 0.dp),
             ) {
                 AddSendCustomDateChooser(
                     modifier = Modifier
@@ -381,7 +371,7 @@ private fun AddSendOptions(
         Column {
             BitwardenStepper(
                 label = stringResource(id = R.string.maximum_access_count),
-                supportingTextContent = {
+                supportingContent = {
                     Text(
                         text = stringResource(id = R.string.maximum_access_count_info),
                         style = BitwardenTheme.typography.bodySmall,

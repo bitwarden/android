@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param text The label for the row as a [String].
  * @param onConfirmClick The callback when the confirm button of the dialog is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The modifier to be applied to the layout.
  * @param description An optional description label to be displayed below the [text].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
@@ -32,12 +33,12 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * user clicks this item.
  * @param dialogDismissButtonText The text on the dismiss button of the dialog displayed when the
  * user clicks this item.
- * @param cardStyle Indicates the type of card style to be applied.
  */
 @Composable
 fun BitwardenExternalLinkRow(
     text: String,
     onConfirmClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     description: String? = null,
     withDivider: Boolean = true,
@@ -45,7 +46,6 @@ fun BitwardenExternalLinkRow(
     dialogMessage: String,
     dialogConfirmButtonText: String = stringResource(id = R.string.continue_text),
     dialogDismissButtonText: String = stringResource(id = R.string.cancel),
-    cardStyle: CardStyle? = null,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
@@ -89,6 +89,7 @@ private fun BitwardenExternalLinkRow_preview() {
             onConfirmClick = { },
             dialogTitle = "",
             dialogMessage = "",
+            cardStyle = CardStyle.Full,
         )
     }
 }

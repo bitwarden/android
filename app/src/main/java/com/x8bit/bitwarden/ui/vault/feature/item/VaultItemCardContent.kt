@@ -17,9 +17,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
@@ -88,7 +87,7 @@ fun VaultItemCardContent(
         }
         cardState.number?.let { numberData ->
             item {
-                BitwardenPasswordFieldWithActions(
+                BitwardenPasswordField(
                     label = stringResource(id = R.string.number),
                     value = numberData.number,
                     onValueChange = {},
@@ -162,7 +161,7 @@ fun VaultItemCardContent(
 
         cardState.securityCode?.let { securityCodeData ->
             item {
-                BitwardenPasswordFieldWithActions(
+                BitwardenPasswordField(
                     label = stringResource(id = R.string.security_code),
                     value = securityCodeData.code,
                     onValueChange = {},
@@ -203,7 +202,7 @@ fun VaultItemCardContent(
                         .padding(horizontal = 16.dp),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextFieldWithActions(
+                BitwardenTextField(
                     label = stringResource(id = R.string.notes),
                     value = notes,
                     onValueChange = { },

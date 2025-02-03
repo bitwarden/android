@@ -7,9 +7,7 @@ import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -45,7 +43,7 @@ fun CustomField(
 
         is VaultItemState.ViewState.Content.Common.Custom.HiddenField -> {
             if (customField.isCopyable) {
-                BitwardenPasswordFieldWithActions(
+                BitwardenPasswordField(
                     label = customField.name,
                     value = customField.value,
                     showPasswordChange = { onShowHiddenFieldClick(customField, it) },
@@ -99,7 +97,7 @@ fun CustomField(
         }
 
         is VaultItemState.ViewState.Content.Common.Custom.TextField -> {
-            BitwardenTextFieldWithActions(
+            BitwardenTextField(
                 label = customField.name,
                 value = customField.value,
                 onValueChange = { },

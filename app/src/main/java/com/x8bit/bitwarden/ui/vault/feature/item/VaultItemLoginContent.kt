@@ -22,9 +22,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -313,7 +312,7 @@ private fun NotesField(
     onCopyAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = stringResource(id = R.string.notes),
         value = notes,
         onValueChange = { },
@@ -343,7 +342,7 @@ private fun PasswordField(
     modifier: Modifier = Modifier,
 ) {
     if (passwordData.canViewPassword) {
-        BitwardenPasswordFieldWithActions(
+        BitwardenPasswordField(
             label = stringResource(id = R.string.password),
             value = passwordData.password,
             showPasswordChange = { onShowPasswordClick(it) },
@@ -414,7 +413,7 @@ private fun TotpField(
     modifier: Modifier = Modifier,
 ) {
     if (enabled) {
-        BitwardenTextFieldWithActions(
+        BitwardenTextField(
             label = stringResource(id = R.string.verification_code_totp),
             value = totpCodeItemData.verificationCode
                 .chunked(AUTH_CODE_SPACING_INTERVAL)
@@ -462,7 +461,7 @@ private fun UriField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = stringResource(id = R.string.uri),
         value = uriData.uri,
         onValueChange = { },
@@ -499,7 +498,7 @@ private fun UsernameField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextFieldWithActions(
+    BitwardenTextField(
         label = stringResource(id = R.string.username),
         value = username,
         onValueChange = { },

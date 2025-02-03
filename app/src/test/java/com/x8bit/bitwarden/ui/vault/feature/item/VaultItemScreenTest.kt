@@ -565,7 +565,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
                 composeTestRule
                     .onNodeWithTextAfterScroll(hiddenField.name)
-                    .onSiblings()
+                    .onChildren()
                     .filterToOne(hasContentDescription("Copy"))
                     .assertIsDisplayed()
 
@@ -606,7 +606,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
                 composeTestRule
                     .onNodeWithTextAfterScroll(hiddenField.name)
-                    .onSiblings()
+                    .onChildren()
                     .filterToOne(hasContentDescription("Copy"))
                     .performClick()
 
@@ -640,7 +640,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
                 composeTestRule
                     .onNodeWithTextAfterScroll(textField.name)
-                    .onSiblings()
+                    .onChildren()
                     .filterToOne(hasContentDescription("Copy"))
                     .performClick()
 
@@ -674,7 +674,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
                 composeTestRule
                     .onNodeWithTextAfterScroll(textField.name)
-                    .onSiblings()
+                    .onChildren()
                     .filterToOne(hasContentDescription("Copy"))
                     .assertIsDisplayed()
 
@@ -1479,7 +1479,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(username)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Copy username"))
             .performClick()
 
@@ -1507,7 +1507,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(passwordData.password)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Check known data breaches for this password"))
             .performClick()
 
@@ -1550,7 +1550,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(passwordData.password)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Copy password"))
             .performClick()
 
@@ -1719,7 +1719,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Launch"))
             .assertIsDisplayed()
 
@@ -1755,7 +1755,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Copy"))
             .assertIsDisplayed()
 
@@ -1789,7 +1789,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Launch"))
             .performClick()
 
@@ -1817,7 +1817,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(uriData.uri)
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("Copy"))
             .performClick()
 

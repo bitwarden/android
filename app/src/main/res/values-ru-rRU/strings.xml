@@ -57,7 +57,7 @@
   <string name="send_name_required">"Название Send (требуется)"</string>
   <string name="no">Нет</string>
   <string name="notes">Заметки</string>
-  <string name="private_notes">Личные заметки</string>
+  <string name="private_notes">Приватные заметки</string>
   <string name="ok">OK</string>
   <string name="password">Пароль</string>
   <string name="save">Сохранить</string>
@@ -103,6 +103,7 @@
   <string name="close">Закрыть</string>
   <string name="continue_text">Продолжить</string>
   <string name="create_account">Создать аккаунт</string>
+  <string name="create_an_account">Создать аккаунт</string>
   <string name="creating_account">Создание аккаунта...</string>
   <string name="edit_item">Изменение элемента</string>
   <string name="enable_automatic_syncing">Разрешить автоматическую синхронизацию</string>
@@ -136,7 +137,7 @@
   <string name="vault_timeout_action">Действие по тайм-ауту хранилища</string>
   <string name="vault_timeout_log_out_confirmation">По истечении тайм-аута будет выполнен выход, что приведет к отмене всех прав доступа к вашему хранилищу и потребует онлайн-аутентификации. Вы уверены, что хотите использовать этот параметр?</string>
   <string name="logging_in">Вход...</string>
-  <string name="login_or_create_new_account">Войдите или создайте новый аккаунт для доступа к вашему защищенному хранилищу.</string>
+  <string name="login_to_bitwarden">Войдите на Bitwarden</string>
   <string name="manage">Управление</string>
   <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
   <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
@@ -224,7 +225,8 @@
   <string name="login_unavailable">Вход недоступен</string>
   <string name="no_two_step_available">У этой учетной записи включена двухэтапная аутентификация, однако ни один из настроенных вариантов не поддерживается на этом устройстве. Используйте поддерживаемое устройство и/или добавьте другие варианты, которые поддерживаются на большинстве устройств (например, приложение-аутентификатор).</string>
   <string name="recovery_code_title">Код восстановления</string>
-  <string name="remember_me">Запомнить меня</string>
+  <string name="remember">Запомнить</string>
+  <string name="remember_email">Запомнить email</string>
   <string name="send_verification_code_again">Отправить код подтверждения еще раз</string>
   <string name="two_step_login_options">Настройки двухэтапной аутентификации</string>
   <string name="use_another_two_step_method">Использовать другой метод двухэтапной аутентификации</string>
@@ -579,7 +581,7 @@
   <string name="maximum_access_count_reached">Достигнут максимум обращений</string>
   <string name="current_access_count">Текущих обращений</string>
   <string name="new_password">Новый пароль</string>
-  <string name="password_info">По возможности запрашивать у пользователей пароль для доступа к этой Send.</string>
+  <string name="password_info">Требовать этот пароль для просмотра Send.</string>
   <string name="remove_password">Удалить пароль</string>
   <string name="are_you_sure_remove_send_password">Вы уверены, что хотите удалить пароль?</string>
   <string name="removing_send_password">Удаление пароля</string>
@@ -752,7 +754,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Попытка авторизации с:
 %1$s
 Хотите переключиться на этот аккаунт?</string>
-  <string name="new_around_here">Вы здесь впервые?</string>
+  <string name="new_to_bitwarden">Впервые на Bitwarden?</string>
   <string name="get_master_passwordword_hint">Получить подсказку к мастер-паролю</string>
   <string name="logging_in_as_x_on_y">Войти как %1$s на %2$s</string>
   <string name="not_you">Не вы?</string>
@@ -841,6 +843,7 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Вход с устройства должен быть настроен в мобильном приложении Bitwarden. Нужен другой вариант?</string>
   <string name="log_in_with_device">Войти с помощью устройства</string>
   <string name="logging_in_on">Войти на</string>
+  <string name="logging_in_on_with_colon">Войти на:</string>
   <string name="vault">Хранилище</string>
   <string name="appearance">Внешний вид</string>
   <string name="account_security">Безопасность аккаунта</string>
@@ -937,10 +940,12 @@
   <string name="self_hosted_server_url">URL собственного сервера</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Операция с Passkey не удалась, поскольку не удалось верифицировать пользователя.</string>
   <string name="user_verification_direction">Верификация пользователя</string>
-  <string name="creating_on">Создано:</string>
+  <string name="create_account_on">Создать аккаунт на</string>
+  <string name="create_account_on_with_colon">Создать аккаунт на:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям в письме, отправленном на %1$s, чтобы продолжить создание аккаунта.</string>
   <string name="we_sent_an_email_to">Мы отправили письмо <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
   <string name="set_password">Задать пароль</string>
   <string name="unsubscribe">Отписаться</string>
   <string name="check_your_email">Проверьте свою почту</string>
@@ -1089,7 +1094,7 @@
   <string name="copy_address">Скопировать адрес</string>
   <string name="important_notice">Важное уведомление</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Начиная с февраля 2025 года Bitwarden будет отправлять код на электронную почту вашего аккаунта для подтверждения авторизации с новых устройств.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Есть ли у вас надежный доступ к электронной почте <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
+  <string name="do_you_have_reliable_access_to_your_email">Есть ли у вас надежный доступ к электронной почте <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
   <string name="yes_i_can_reliably_access_my_email">Да, я имею надежный доступ к своей электронной почте</string>
   <string name="biometrics_no_longer_supported_title">Биометрия больше не поддерживается на этом устройстве</string>
   <string name="biometrics_no_longer_supported">Вы были деавторизованы, поскольку биометрические данные вашего устройства не соответствуют последним требованиям безопасности. Чтобы обновить настройки, авторизуйтесь еще раз или обратитесь к администратору для получения доступа.</string>
@@ -1115,12 +1120,30 @@
   <string name="login_credentials">Данные для авторизации</string>
   <string name="autofill_options">Параметры автозаполнения</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Используйте эту кнопку для генерации нового уникального пароля.</string>
-  <string name="coachmark_1_of_3">1 из 3</string>
-  <string name="coachmark_2_of_3">2 из 3</string>
+  <string name="coachmark_1_of_3">1 ИЗ 3</string>
+  <string name="coachmark_2_of_3">2 ИЗ 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">Вам нужно настроить ключ аутентификатора только для логинов, которые требуют двухфакторной аутентификации с помощью кода. Ключ будет постоянно генерировать шестизначные коды, которые можно использовать для авторизации.</string>
-  <string name="coachmark_3_of_3">3 из 3</string>
+  <string name="coachmark_3_of_3">3 ИЗ 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Вы должны добавить веб-адрес, чтобы использовать автозаполнение для доступа к этому аккаунту.</string>
   <string name="mutual_tls">Взаимный TLS</string>
   <string name="single_tap_passkey_creation">Создание passkey одним касанием</string>
   <string name="single_tap_passkey_authentication">Авторизация с passkey одним касанием</string>
+  <string name="learn_about_new_logins">Узнайте о новых логинах</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Мы расскажем вам о ключевых функциях добавления нового логина.</string>
+  <string name="explore_the_generator">Исследуйте генератор</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Узнайте больше о создании надежных учетных данных, просмотрев гид.</string>
+  <string name="import_client_certificate">Импорт клиентского сертификата</string>
+  <string name="enter_the_client_certificate_password_and_alias">Введите пароль клиентского сертификата и его название.</string>
+  <string name="alias">Название</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Используйте генератор для создания надежных паролей, парольных фраз и имен пользователей. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Парольные фразы - это надежные пароли, которые зачастую легче запомнить и ввести, чем случайные пароли. Они полезны для входа в аккаунты, в которых автозаполнение недоступно, например в стриминговый сервис на телевизоре.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Уникальные имена пользователей обеспечивают дополнительный уровень безопасности и могут предотвратить поиск ваших аккаунтов хакерами.</string>
+  <string name="coachmark_1_of_6">1 ИЗ 6</string>
+  <string name="coachmark_2_of_6">2 ИЗ 6</string>
+  <string name="coachmark_3_of_6">3 ИЗ 6</string>
+  <string name="coachmark_4_of_6">4 ИЗ 6</string>
+  <string name="coachmark_5_of_6">5 ИЗ 6</string>
+  <string name="coachmark_6_of_6">6 ИЗ 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Используйте эти параметры, чтобы настроить пароль в соответствии с требованиями вашего аккаунта.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"После того как вы сохраните новый пароль в Bitwarden, не забудьте обновить его на сайте вашего аккаунта. "</string>
 </resources>
