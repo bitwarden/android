@@ -54,6 +54,7 @@
   <string name="my_vault">My vault</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">Name</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Notes</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Thank you</string>
   <string name="tools">Tools</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Use fingerprint to unlock</string>
   <string name="username">Username</string>
   <string name="validation_field_required">The %1$s field is required.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tap the Bitwarden icon in the menu to launch the extension.</string>
   <string name="extension_turn_on">To turn on Bitwarden in Safari and other apps, tap the \"more\" icon on the bottom row of the menu.</string>
   <string name="favorite">Favorite</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Fingerprint</string>
   <string name="generate_password">Generate password</string>
   <string name="get_password_hint">Get your master password hint</string>
@@ -240,7 +243,7 @@
   <string name="unable_to_open_file">Your device cannot open this type of file.</string>
   <string name="downloading">Downloading...</string>
   <string name="attachment_large_warning">This attachment is %1$s in size. Are you sure you want to download it onto your device?</string>
-  <string name="authenticator_key">Authenticator key (TOTP)</string>
+  <string name="authenticator_key">Authenticator key</string>
   <string name="verification_code_totp">Verification code (TOTP)</string>
   <string name="authenticator_key_added">Authenticator key added.</string>
   <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
@@ -356,6 +359,7 @@ Scanning will happen automatically.</string>
   <string name="select_type_field">What type of custom field do you want to add?</string>
   <string name="remove">Remove</string>
   <string name="new_uri">New URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Base domain</string>
   <string name="default_text">Default</string>
@@ -396,6 +400,7 @@ Scanning will happen automatically.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Checking password...</string>
   <string name="check_password">Check if password has been exposed.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">This password has been exposed %1$s time(s) in data breaches. You should change it.</string>
   <string name="password_safe">This password was not found in any known data breaches. It should be safe to use.</string>
   <string name="identity_name">Identity name</string>
@@ -691,6 +696,7 @@ Scanning will happen automatically.</string>
   <string name="enter_key_manually">Enter key manually</string>
   <string name="add_totp">Add TOTP</string>
   <string name="setup_totp">Set up TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Once the key is successfully entered,
 select Add TOTP to store the key safely</string>
   <string name="never_lock_warning">Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</string>

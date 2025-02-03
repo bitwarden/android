@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
@@ -27,12 +28,10 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 fun LazyListScope.collectionItemsSelector(
     collectionList: List<VaultCollection>?,
     onCollectionSelect: (VaultCollection) -> Unit,
-    isCollectionsTitleVisible: Boolean = true,
+    isCollectionsTitleVisible: Boolean = false,
 ) {
-
     if (isCollectionsTitleVisible) {
         item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.collections),
                 modifier = Modifier
@@ -52,7 +51,16 @@ fun LazyListScope.collectionItemsSelector(
                 onCheckedChange = { _ ->
                     onCollectionSelect(it)
                 },
-                cardStyle = collectionList.toListItemCardStyle(index = index),
+                cardStyle = if (isCollectionsTitleVisible) {
+                    // The header is present so display all collections as a single card.
+                    collectionList.toListItemCardStyle(index = index)
+                } else if (collectionList.size == 1 || index == collectionList.size - 1) {
+                    // No header, and this is the last item.
+                    CardStyle.Bottom
+                } else {
+                    // No header, and this is not the last item.
+                    CardStyle.Middle()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("CollectionItemCell")

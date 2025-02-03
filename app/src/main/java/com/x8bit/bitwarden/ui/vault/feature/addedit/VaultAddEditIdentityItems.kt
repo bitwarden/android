@@ -21,7 +21,6 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
@@ -36,23 +35,9 @@ import kotlinx.collections.immutable.toImmutableList
 fun LazyListScope.vaultAddEditIdentityItems(
     commonState: VaultAddEditState.ViewState.Content.Common,
     identityState: VaultAddEditState.ViewState.Content.ItemType.Identity,
-    isAddItemMode: Boolean,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
 ) {
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            label = stringResource(id = R.string.name),
-            value = commonState.name,
-            onValueChange = commonTypeHandlers.onNameTextChange,
-            textFieldTestTag = "ItemNameEntry",
-            cardStyle = CardStyle.Full,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
     item {
         Spacer(modifier = Modifier.height(8.dp))
         TitleMultiSelectButton(
@@ -280,43 +265,14 @@ fun LazyListScope.vaultAddEditIdentityItems(
         Spacer(modifier = Modifier.height(height = 8.dp))
     }
     item {
-        BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.folder),
-            options = commonState
-                .availableFolders
-                .map { it.name }
-                .toImmutableList(),
-            selectedOption = commonState.selectedFolder?.name,
-            onOptionSelected = { selectedFolderName ->
-                commonTypeHandlers.onFolderSelected(
-                    commonState
-                        .availableFolders
-                        .first { it.name == selectedFolderName },
-                )
-            },
+        BitwardenTextField(
+            singleLine = false,
+            label = stringResource(id = R.string.notes),
+            value = commonState.notes,
+            onValueChange = commonTypeHandlers.onNotesTextChange,
+            textFieldTestTag = "ItemNotesEntry",
             cardStyle = CardStyle.Full,
             modifier = Modifier
-                .testTag("FolderPicker")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(height = 8.dp))
-        BitwardenSwitch(
-            label = stringResource(
-                id = R.string.favorite,
-            ),
-            isChecked = commonState.favorite,
-            onCheckedChange = commonTypeHandlers.onToggleFavorite,
-            cardStyle = if (commonState.isUnlockWithPasswordEnabled) {
-                CardStyle.Top()
-            } else {
-                CardStyle.Full
-            },
-            modifier = Modifier
-                .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
@@ -324,6 +280,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
 
     if (commonState.isUnlockWithPasswordEnabled) {
         item {
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.password_prompt),
                 isChecked = commonState.masterPasswordReprompt,
@@ -338,39 +295,13 @@ fun LazyListScope.vaultAddEditIdentityItems(
                         contentColor = BitwardenTheme.colorScheme.icon.secondary,
                     )
                 },
-                cardStyle = CardStyle.Bottom,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("MasterPasswordRepromptToggle")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
         }
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(height = 16.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.notes),
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .padding(horizontal = 16.dp),
-        )
-        Spacer(modifier = Modifier.height(height = 8.dp))
-    }
-
-    item {
-        BitwardenTextField(
-            singleLine = false,
-            label = stringResource(id = R.string.notes),
-            value = commonState.notes,
-            onValueChange = commonTypeHandlers.onNotesTextChange,
-            textFieldTestTag = "ItemNotesEntry",
-            cardStyle = CardStyle.Full,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
     }
 
     item {
@@ -427,49 +358,6 @@ fun LazyListScope.vaultAddEditIdentityItems(
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
-    }
-
-    if (isAddItemMode && commonState.hasOrganizations) {
-        item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.ownership),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
-
-        item {
-            BitwardenMultiSelectButton(
-                label = stringResource(id = R.string.who_owns_this_item),
-                options = commonState
-                    .availableOwners
-                    .map { it.name }
-                    .toImmutableList(),
-                selectedOption = commonState.selectedOwner?.name,
-                onOptionSelected = { selectedOwnerName ->
-                    commonTypeHandlers.onOwnerSelected(
-                        commonState
-                            .availableOwners
-                            .first { it.name == selectedOwnerName },
-                    )
-                },
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .testTag("ItemOwnershipPicker")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
-        if (commonState.selectedOwnerId != null) {
-            collectionItemsSelector(
-                collectionList = commonState.selectedOwner?.collections,
-                onCollectionSelect = commonTypeHandlers.onCollectionSelect,
-            )
-        }
     }
 }
 
