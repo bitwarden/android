@@ -142,6 +142,15 @@ fun Modifier.bottomDivider(
     alpha: Float = 1f,
 ): Modifier = drawWithCache {
     onDrawWithContent {
+        val (startX, endX) = when (layoutDirection) {
+            LayoutDirection.Ltr -> {
+                paddingStart.toPx() to (size.width - paddingEnd.toPx())
+            }
+
+            LayoutDirection.Rtl -> {
+                (size.width - paddingEnd.toPx()) to paddingStart.toPx()
+            }
+        }
         drawContent()
         if (enabled) {
             drawLine(
@@ -149,11 +158,11 @@ fun Modifier.bottomDivider(
                 color = color,
                 strokeWidth = thickness.toPx(),
                 start = Offset(
-                    x = paddingStart.toPx(),
+                    x = startX,
                     y = size.height - thickness.toPx() / 2,
                 ),
                 end = Offset(
-                    x = size.width - paddingEnd.toPx(),
+                    x = endX,
                     y = size.height - thickness.toPx() / 2,
                 ),
             )
