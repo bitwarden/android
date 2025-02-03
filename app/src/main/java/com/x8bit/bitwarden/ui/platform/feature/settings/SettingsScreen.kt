@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -98,7 +99,12 @@ fun SettingsScreen(
                         key = settingEntry,
                         defaultValue = 0,
                     ),
-                    cardStyle = Settings.entries.toListItemCardStyle(index = index),
+                    cardStyle = Settings.entries.toListItemCardStyle(
+                        index = index,
+                        // Start padding, plus icon, plus spacing between text.
+                        dividerPadding = 54.dp,
+                    ),
+                    iconVectorResource = settingEntry.vectorIconRes,
                     modifier = Modifier
                         .testTag(tag = settingEntry.testTag)
                         .standardHorizontalMargin()
@@ -115,28 +121,40 @@ private fun SettingsRow(
     onClick: () -> Unit,
     notificationCount: Int,
     cardStyle: CardStyle?,
+    @DrawableRes iconVectorResource: Int,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
+            .fillMaxWidth()
             .defaultMinSize(minHeight = 60.dp)
             .cardStyle(
                 cardStyle = cardStyle,
                 onClick = onClick,
-                paddingStart = 16.dp,
+                paddingStart = 12.dp,
                 paddingEnd = 12.dp,
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            modifier = Modifier
-                .padding(end = 16.dp)
-                .weight(weight = 1f),
-            text = text(),
-            style = BitwardenTheme.typography.bodyLarge,
-            color = BitwardenTheme.colorScheme.text.primary,
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painter = rememberVectorPainter(iconVectorResource),
+                contentDescription = null,
+                tint = BitwardenTheme.colorScheme.icon.primary,
+                modifier = Modifier.size(24.dp),
+            )
+            Spacer(Modifier.width(12.dp))
+            Text(
+                modifier = Modifier
+                    .padding(end = 16.dp),
+                text = text(),
+                style = BitwardenTheme.typography.bodyLarge,
+                color = BitwardenTheme.colorScheme.text.primary,
+            )
+        }
         TrailingContent(notificationCount = notificationCount)
     }
 }
@@ -185,7 +203,11 @@ private fun SettingsRows_preview() {
                     text = it.text,
                     onClick = { },
                     notificationCount = index % 3,
-                    cardStyle = Settings.entries.toListItemCardStyle(index = index),
+                    iconVectorResource = it.vectorIconRes,
+                    cardStyle = Settings.entries.toListItemCardStyle(
+                        index = index,
+                        dividerPadding = 54.dp,
+                    ),
                 )
             }
         }
