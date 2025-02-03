@@ -86,7 +86,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithText(
-                text = "Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.",
+                text = "Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.",
             )
             .performScrollTo()
             .assertExists()

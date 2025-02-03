@@ -374,19 +374,19 @@ Scanning will happen automatically.</string>
   <string name="bitwarden_autofill_accessibility_service_description2">The accessibility service may be helpful to use when apps do not support the standard autofill service.</string>
   <string name="date_password_updated">Password updated</string>
   <string name="date_updated">Updated</string>
-  <string name="autofill_activated">AutoFill activated!</string>
-  <string name="must_log_in_main_app_autofill">You must log into the main Bitwarden app before you can use AutoFill.</string>
+  <string name="autofill_activated">Autofill activated!</string>
+  <string name="must_log_in_main_app_autofill">You must log into the main Bitwarden app before you can use Autofill.</string>
   <string name="autofill_setup">Your logins are now easily accessible right from your keyboard while logging into apps and websites.</string>
-  <string name="autofill_setup2">We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</string>
+  <string name="autofill_setup2">We recommend disabling any other Autofill apps under Settings if you do not plan to use them.</string>
   <string name="bitwarden_autofill_description">Access your vault directly from your keyboard to quickly autofill passwords.</string>
   <string name="autofill_turn_on">To set up password autofill on your device, follow these instructions:</string>
   <string name="autofill_turn_on1">1. Go to the iOS \"Settings\" app</string>
   <string name="autofill_turn_on2">2. Tap \"Passwords\"</string>
-  <string name="autofill_turn_on3">3. Tap \"AutoFill Passwords\"</string>
-  <string name="autofill_turn_on4">4. Turn on AutoFill</string>
+  <string name="autofill_turn_on3">3. Tap \"Autofill Passwords\"</string>
+  <string name="autofill_turn_on4">4. Turn on Autofill</string>
   <string name="autofill_turn_on5">5. Select \"Bitwarden\"</string>
   <string name="password_autofill">Password autofill</string>
-  <string name="bitwarden_autofill_alert2">The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the \"Settings\" screen.</string>
+  <string name="bitwarden_autofill_alert2">The easiest way to add new logins to your vault is by using the Bitwarden Password Autofill extension. Learn more about using the Bitwarden Password Autofill extension by navigating to the \"Settings\" screen.</string>
   <string name="invalid_email">Invalid email address.</string>
   <string name="cards">Cards</string>
   <string name="identities">Identities</string>
@@ -910,7 +910,7 @@ Do you want to switch to this account?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -979,7 +979,7 @@ Do you want to switch to this account?</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1134,7 +1134,7 @@ Do you want to switch to this account?</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1142,6 @@ Do you want to switch to this account?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
 </resources>
