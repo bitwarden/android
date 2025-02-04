@@ -312,7 +312,10 @@ class EnvironmentViewModel @Inject constructor(
         when (val result = action.result) {
             is ImportPrivateKeyResult.Success -> {
                 mutableStateFlow.update { state ->
-                    state.copy(keyAlias = result.alias)
+                    state.copy(
+                        keyAlias = result.alias,
+                        keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+                    )
                 }
             }
 
