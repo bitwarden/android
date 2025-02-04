@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -68,6 +70,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         },
     )
 
+    var isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
     LazyColumn(modifier = modifier, state = lazyListState) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -203,9 +206,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         when (state.type) {
             is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                 vaultAddEditLoginItems(
-                    commonState = state.common,
                     loginState = state.type,
-                    commonActionHandler = commonTypeHandlers,
                     loginItemTypeHandlers = loginItemTypeHandlers,
                     onTotpSetupClick = {
                         if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
@@ -224,18 +225,14 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
             is VaultAddEditState.ViewState.Content.ItemType.Card -> {
                 vaultAddEditCardItems(
-                    commonState = state.common,
                     cardState = state.type,
-                    commonHandlers = commonTypeHandlers,
                     cardHandlers = cardItemTypeHandlers,
                 )
             }
 
             is VaultAddEditState.ViewState.Content.ItemType.Identity -> {
                 vaultAddEditIdentityItems(
-                    commonState = state.common,
                     identityState = state.type,
-                    commonTypeHandlers = commonTypeHandlers,
                     identityItemTypeHandlers = identityItemTypeHandlers,
                 )
             }
@@ -249,13 +246,21 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
             is VaultAddEditState.ViewState.Content.ItemType.SshKey -> {
                 vaultAddEditSshKeyItems(
-                    commonState = state.common,
                     sshKeyState = state.type,
-                    commonTypeHandlers = commonTypeHandlers,
                     sshKeyTypeHandlers = sshKeyItemTypeHandlers,
                 )
             }
         }
+
+        vaultAddEditAdditionalOptions(
+            itemType = state.type,
+            commonState = state.common,
+            commonTypeHandlers = commonTypeHandlers,
+            isAdditionalOptionsExpanded = isAdditionalOptionsExpanded.value,
+            onAdditionalOptionsClick = {
+                isAdditionalOptionsExpanded.value = !isAdditionalOptionsExpanded.value
+            },
+        )
 
         item {
             Spacer(modifier = Modifier.height(height = 16.dp))
