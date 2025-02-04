@@ -793,7 +793,6 @@ Do you want to switch to this account?</string>
   <string name="no_pending_requests">No pending requests</string>
   <string name="enable_camer_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
   <string name="language">Language</string>
-  <string name="language_description">Change the application\'s language</string>
   <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
   <string name="language_change_requires_app_restart">Language change requires app restart</string>
   <string name="default_system">Default (System)</string>

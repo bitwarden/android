@@ -54,9 +54,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     @Test
     fun `on language row click should display language selection dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Language. Change the application's language",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Language")
             .performScrollTo()
             .performClick()
         composeTestRule
@@ -69,9 +67,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     fun `on language selection dialog item click should send LanguageChange and show dialog`() {
         // Clicking the Language row shows the language selection dialog
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Language. Change the application's language",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Language")
             .performScrollTo()
             .performClick()
         // Selecting a language dismisses this dialog and displays the confirmation
@@ -107,9 +103,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     @Test
     fun `on language selection dialog cancel click should dismiss dialog`() {
         composeTestRule
-            .onNodeWithContentDescription(
-                label = "Default (System). Language. Change the application's language",
-            )
+            .onNodeWithContentDescription(label = "Default (System). Language")
             .performScrollTo()
             .performClick()
         composeTestRule
