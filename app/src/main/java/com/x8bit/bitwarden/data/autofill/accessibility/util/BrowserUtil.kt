@@ -196,11 +196,6 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     ),
     Browser(packageName = "org.ungoogled.chromium.extensions.stable", urlFieldId = "url_bar"),
     Browser(packageName = "org.ungoogled.chromium.stable", urlFieldId = "url_bar"),
-    Browser(
-        packageName = "us.spotco.fennec_dos",
-        // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
-    ),
 
     // [Section B] Entries only present here
     // TODO: Test the compatibility of these with Autofill Framework
