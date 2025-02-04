@@ -348,7 +348,7 @@ private fun ModalAppBar(
         },
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.select),
+                label = stringResource(id = R.string.save),
                 onClick = onSelectClick,
                 modifier = Modifier.testTag("SelectButton"),
             )
