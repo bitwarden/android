@@ -185,6 +185,8 @@ private fun BitwardenCoachMarkContainer_preview() {
                         key = Foo.Bar,
                         title = "1 of 3",
                         description = "Use this button to generate a new unique password.",
+                        onDismiss = null,
+                        leftAction = null,
                         rightAction = {
                             BitwardenClickableText(
                                 label = "Next",
@@ -211,6 +213,7 @@ private fun BitwardenCoachMarkContainer_preview() {
                     title = "Foo",
                     description = "Baz",
                     shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                    onDismiss = null,
                     leftAction = {
                         BitwardenClickableText(
                             label = "Back",

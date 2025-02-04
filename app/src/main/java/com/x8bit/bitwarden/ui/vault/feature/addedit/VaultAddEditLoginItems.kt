@@ -398,6 +398,7 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
                 ),
                 shape = CoachMarkHighlightShape.Oval,
                 onDismiss = onCoachMarkDismissed,
+                leftAction = null,
                 rightAction = {
                     CoachMarkActionText(
                         actionLabel = stringResource(R.string.next),

@@ -53,10 +53,10 @@ interface CoachMarkScope<T : Enum<T>> {
         title: String,
         description: String,
         modifier: Modifier = Modifier,
-        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.RoundedRectangle(),
-        onDismiss: (() -> Unit)? = null,
-        leftAction: (@Composable RowScope.() -> Unit)? = null,
-        rightAction: (@Composable RowScope.() -> Unit)? = null,
+        shape: CoachMarkHighlightShape,
+        onDismiss: (() -> Unit)?,
+        leftAction: (@Composable RowScope.() -> Unit)?,
+        rightAction: (@Composable RowScope.() -> Unit)?,
         anchorContent: @Composable () -> Unit,
     )
 
