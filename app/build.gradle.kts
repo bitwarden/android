@@ -325,6 +325,7 @@ kover {
                     "*_*Factory\$*",
                     "*.Hilt_*",
                     "*_HiltModules",
+                    "*_HiltModules*",
                     "*_HiltModules\$*",
                     "*_Impl",
                     "*_Impl\$*",
