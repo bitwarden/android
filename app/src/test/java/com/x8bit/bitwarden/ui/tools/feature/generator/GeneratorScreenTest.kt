@@ -88,7 +88,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .assertIsDisplayed()
     }
 
@@ -105,7 +105,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .assertIsDisplayed()
     }
 
@@ -127,7 +127,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on select click should send SelectClick`() {
+    fun `on save click should send SelectClick`() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
@@ -135,7 +135,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .performClick()
 
         verify {
