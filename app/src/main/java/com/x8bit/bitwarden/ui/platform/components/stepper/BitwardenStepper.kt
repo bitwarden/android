@@ -115,7 +115,7 @@ fun BitwardenStepper(
     BitwardenTextField(
         label = label,
         value = clampedValue?.toString().orEmpty(),
-        actionsTestTag = stepperActionsTestTag,
+        textFieldTestTag = "StepperValueLabel",
         actions = {
             BitwardenFilledIconButton(
                 vectorIconRes = R.drawable.ic_minus,
