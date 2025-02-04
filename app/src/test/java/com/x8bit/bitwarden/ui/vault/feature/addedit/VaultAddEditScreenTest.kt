@@ -2302,6 +2302,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking New Custom Field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
@@ -2564,6 +2569,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .performTouchInput {
@@ -2583,6 +2593,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `re-prompt toggle should display according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsDisplayed()
@@ -2598,6 +2613,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
@@ -2615,6 +2635,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
@@ -2721,6 +2746,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking New Custom Field button should allow creation of Text type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
@@ -2757,6 +2787,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking New Custom Field button should not display linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
             .performClick()
@@ -2774,6 +2809,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking New Custom Field button should allow creation of Boolean type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
@@ -2810,6 +2850,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking New Custom Field button should allow creation of Hidden type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll(text = "New custom field")
@@ -2863,6 +2908,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 ),
             )
         }
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Hidden item")
             .assertExists()
@@ -2882,6 +2931,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking and changing the custom text field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("TestText")
             .performTextClearance()
@@ -2898,6 +2952,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll("TestHidden")
@@ -2917,6 +2976,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("TestBoolean")
             .performClick()
@@ -2933,6 +2997,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking custom field edit icon and Edit option sends a CustomFieldValueChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
@@ -2974,6 +3043,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking custom field edit icon and Remove option sends a CustomFieldActionSelect remove action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
             .onFirst()
@@ -3002,6 +3076,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking custom field edit icon and Move down option sends a CustomFieldActionSelect move down action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
             .onFirst()
@@ -3029,6 +3108,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking custom field edit icon and Move Up options sends a CustomFieldActionSelect move up action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
