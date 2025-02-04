@@ -586,7 +586,10 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = initialState)
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
             viewModel.eventFlow.test {
-                assertEquals(VaultUnlockEvent.Fido2CredentialAssertionError, awaitItem())
+                assertEquals(
+                    VaultUnlockEvent.Fido2CredentialAssertionError("".asText()),
+                    awaitItem(),
+                )
             }
         }
 

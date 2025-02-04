@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
@@ -116,7 +117,7 @@ class Fido2CompletionManagerTest {
             fido2CompletionManager
                 .completeFido2Registration(
                     Fido2RegisterCredentialResult.Success(
-                        registrationResponse = "registrationResponse",
+                        responseJson = "registrationResponse",
                     ),
                 )
 
@@ -129,7 +130,7 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2Registration(Fido2RegisterCredentialResult.Error)
+                .completeFido2Registration(Fido2RegisterCredentialResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
@@ -162,7 +163,7 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2Assertion(Fido2CredentialAssertionResult.Error)
+                .completeFido2Assertion(Fido2CredentialAssertionResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialException(any(), any())

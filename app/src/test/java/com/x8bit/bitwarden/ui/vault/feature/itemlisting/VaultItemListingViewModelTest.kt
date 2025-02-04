@@ -2594,7 +2594,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
         runTest {
-            val mockResult = Fido2RegisterCredentialResult.Error
+            val mockResult = Fido2RegisterCredentialResult.Error("".asText())
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
@@ -2621,7 +2621,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
         runTest {
             val mockResult = Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -2673,12 +2673,18 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createMockFido2CreateCredentialRequest(number = 1),
             )
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick(
+                    "".asText(),
+                ),
+            )
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error,
+                        result = Fido2RegisterCredentialResult.Error(
+                            "".asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -2705,11 +2711,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick("".asText()),
+            )
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Assertion(
-                        result = Fido2CredentialAssertionResult.Error,
+                        result = Fido2CredentialAssertionResult.Error("".asText()),
                     ),
                     awaitItem(),
                 )
@@ -2723,7 +2731,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance = null
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick("".asText()),
+            )
             assertEquals(
                 VaultItemListingState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
@@ -3511,7 +3521,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -3549,7 +3559,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -3607,7 +3617,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()

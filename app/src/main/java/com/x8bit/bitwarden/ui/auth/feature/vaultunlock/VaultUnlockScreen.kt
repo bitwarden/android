@@ -118,9 +118,9 @@ fun VaultUnlockScreen(
                 )
             }
 
-            VaultUnlockEvent.Fido2CredentialAssertionError -> {
+            is VaultUnlockEvent.Fido2CredentialAssertionError -> {
                 fido2CompletionManager.completeFido2Assertion(
-                    result = Fido2CredentialAssertionResult.Error,
+                    result = Fido2CredentialAssertionResult.Error(event.message),
                 )
             }
 

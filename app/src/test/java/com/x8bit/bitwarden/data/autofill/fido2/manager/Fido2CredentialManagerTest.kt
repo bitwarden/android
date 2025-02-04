@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAssertionResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import io.mockk.coEvery
@@ -341,7 +342,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error,
+                Fido2RegisterCredentialResult.Error("".asText()),
                 result,
             )
         }
@@ -365,7 +366,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error,
+                Fido2RegisterCredentialResult.Error("".asText()),
                 result,
             )
         }
@@ -390,7 +391,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error,
+                Fido2RegisterCredentialResult.Error("".asText()),
                 result,
             )
         }
@@ -433,7 +434,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error,
+                Fido2RegisterCredentialResult.Error("".asText()),
                 result,
             )
         }
@@ -466,7 +467,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2RegisterCredentialResult.Error,
+            Fido2RegisterCredentialResult.Error("".asText()),
             result,
         )
     }
@@ -665,7 +666,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error,
+            Fido2CredentialAssertionResult.Error("".asText()),
             result,
         )
     }
@@ -750,7 +751,7 @@ class Fido2CredentialManagerTest {
             }
 
             assertEquals(
-                Fido2CredentialAssertionResult.Error,
+                Fido2CredentialAssertionResult.Error("".asText()),
                 authResult,
             )
         }
@@ -780,7 +781,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error,
+            Fido2CredentialAssertionResult.Error("".asText()),
             result,
         )
     }
@@ -804,7 +805,7 @@ class Fido2CredentialManagerTest {
         )
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error,
+            Fido2CredentialAssertionResult.Error("".asText()),
             result,
         )
 

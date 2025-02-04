@@ -181,7 +181,12 @@ class VaultUnlockViewModel @Inject constructor(
             }
 
             state.fido2CredentialAssertionRequest != null -> {
-                sendEvent(VaultUnlockEvent.Fido2CredentialAssertionError)
+                sendEvent(
+                    VaultUnlockEvent.Fido2CredentialAssertionError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                )
             }
 
             else -> Unit
@@ -522,7 +527,7 @@ sealed class VaultUnlockEvent {
     /**
      * Completes the FIDO2 credential assertion request with an error response.
      */
-    data object Fido2CredentialAssertionError : VaultUnlockEvent()
+    data class Fido2CredentialAssertionError(val message: Text) : VaultUnlockEvent()
 }
 
 /**

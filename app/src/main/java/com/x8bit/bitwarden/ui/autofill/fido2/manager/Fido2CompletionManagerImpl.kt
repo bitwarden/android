@@ -49,7 +49,7 @@ class Fido2CompletionManagerImpl(
                         .setCreateCredentialResponse(
                             intent = intent,
                             response = CreatePublicKeyCredentialResponse(
-                                registrationResponseJson = result.registrationResponse,
+                                registrationResponseJson = result.responseJson,
                             ),
                         )
                 }
@@ -71,7 +71,7 @@ class Fido2CompletionManagerImpl(
         activity.also {
             val intent = Intent()
             when (result) {
-                Fido2CredentialAssertionResult.Error -> {
+                is Fido2CredentialAssertionResult.Error -> {
                     PendingIntentHandler
                         .setGetCredentialException(
                             intent = intent,

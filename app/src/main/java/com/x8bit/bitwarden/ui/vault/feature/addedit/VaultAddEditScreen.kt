@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -131,7 +132,9 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.CompleteFido2Registration -> {
-                fido2CompletionManager.completeFido2Registration(event.result)
+                fido2CompletionManager.completeFido2Registration(
+                    result = event.result,
+                )
             }
 
             is VaultAddEditEvent.Fido2UserVerification -> {
@@ -187,7 +190,11 @@ fun VaultAddEditScreen(
             { viewModel.trySendAction(VaultAddEditAction.Common.InitialAutofillDialogDismissed) }
         },
         onFido2ErrorDismiss = remember(viewModel) {
-            { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
+            { errorMessage ->
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.Fido2ErrorDialogDismissed(message = errorMessage),
+                )
+            }
         },
         onConfirmOverwriteExistingPasskey = remember(viewModel) {
             {
@@ -414,7 +421,7 @@ private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
-    onFido2ErrorDismiss: () -> Unit,
+    onFido2ErrorDismiss: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
@@ -449,7 +456,7 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = stringResource(id = R.string.an_error_has_occurred),
                 message = dialogState.message(),
-                onDismissRequest = onFido2ErrorDismiss,
+                onDismissRequest = { onFido2ErrorDismiss(dialogState.message) },
             )
         }
 

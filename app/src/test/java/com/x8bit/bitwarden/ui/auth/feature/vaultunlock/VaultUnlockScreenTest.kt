@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -136,10 +137,10 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on Fido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
-        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError)
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError("".asText()))
         verify(exactly = 1) {
             fido2CompletionManager.completeFido2Assertion(
-                result = Fido2CredentialAssertionResult.Error,
+                result = Fido2CredentialAssertionResult.Error("".asText()),
             )
         }
     }

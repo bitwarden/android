@@ -200,7 +200,7 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultItemListingsAction.DismissDialogClick -> handleDismissDialogClick()
             is VaultItemListingsAction.DismissFido2ErrorDialogClick -> {
-                handleDismissFido2ErrorDialogClick()
+                handleDismissFido2ErrorDialogClick(action)
             }
 
             is VaultItemListingsAction.MasterPasswordFido2VerificationSubmit -> {
@@ -835,13 +835,17 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
     }
 
-    private fun handleDismissFido2ErrorDialogClick() {
+    private fun handleDismissFido2ErrorDialogClick(
+        action: VaultItemListingsAction.DismissFido2ErrorDialogClick,
+    ) {
         clearDialogState()
         when {
             state.fido2CreateCredentialRequest != null -> {
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error,
+                        result = Fido2RegisterCredentialResult.Error(
+                            action.message,
+                        ),
                     ),
                 )
             }
@@ -849,7 +853,9 @@ class VaultItemListingViewModel @Inject constructor(
             state.fido2CredentialAssertionRequest != null -> {
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2Assertion(
-                        result = Fido2CredentialAssertionResult.Error,
+                        result = Fido2CredentialAssertionResult.Error(
+                            message = action.message,
+                        ),
                     ),
                 )
             }
@@ -2333,7 +2339,9 @@ sealed class VaultItemListingsAction {
     /**
      * Click to dismiss the FIDO 2 creation error dialog.
      */
-    data object DismissFido2ErrorDialogClick : VaultItemListingsAction()
+    data class DismissFido2ErrorDialogClick(
+        val message: Text,
+    ) : VaultItemListingsAction()
 
     /**
      * Click to submit the master password for FIDO 2 verification.

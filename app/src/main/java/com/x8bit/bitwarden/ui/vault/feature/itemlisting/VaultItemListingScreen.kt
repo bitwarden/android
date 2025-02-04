@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -188,9 +189,9 @@ fun VaultItemListingScreen(
             { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
         },
         onDismissFido2ErrorDialog = remember(viewModel) {
-            {
+            { errorMessage ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2ErrorDialogClick,
+                    VaultItemListingsAction.DismissFido2ErrorDialogClick(message = errorMessage),
                 )
             }
         },
@@ -280,7 +281,7 @@ fun VaultItemListingScreen(
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
     onDismissRequest: () -> Unit,
-    onDismissFido2ErrorDialog: () -> Unit,
+    onDismissFido2ErrorDialog: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
     onRetryFido2PasswordVerification: (cipherId: String) -> Unit,
@@ -304,7 +305,7 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
-            onDismissRequest = onDismissFido2ErrorDialog,
+            onDismissRequest = { onDismissFido2ErrorDialog(dialogState.message) },
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
