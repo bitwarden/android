@@ -139,6 +139,7 @@ private fun LanguageSelectionRow(
             )
             languageChangedDialogOption = selectedLanguage
         },
+        supportingText = stringResource(id = R.string.language_description),
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
