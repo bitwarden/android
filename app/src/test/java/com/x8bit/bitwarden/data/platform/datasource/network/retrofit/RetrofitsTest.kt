@@ -59,8 +59,8 @@ class RetrofitsTest {
     private val json = Json
     private val server = MockWebServer()
     private val mockSslManager = mockk<SslManager> {
-        every { sslContext } returns mockk()
-        every { trustManagers } returns emptyArray()
+        every { sslContext } returns mockk(relaxed = true)
+        every { trustManagers } returns arrayOf(mockk<X509TrustManager>(relaxed = true))
     }
 
     private val retrofits = RetrofitsImpl(

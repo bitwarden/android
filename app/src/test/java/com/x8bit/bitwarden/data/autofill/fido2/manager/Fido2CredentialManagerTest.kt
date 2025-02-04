@@ -37,7 +37,6 @@ import io.mockk.slot
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -519,7 +518,7 @@ class Fido2CredentialManagerTest {
             assertEquals(
                 AuthenticateFido2CredentialRequest(
                     userId = "activeUserId",
-                    origin = DEFAULT_ORIGIN,
+                    origin = DEFAULT_WEB_ORIGIN,
                     requestJson = """{"publicKey": ${mockRequest.requestJson}}""",
                     clientData = ClientData.DefaultWithCustomHash(mockRequest.clientDataHash!!),
                     selectedCipherView = mockCipherView,
@@ -569,14 +568,7 @@ class Fido2CredentialManagerTest {
             assertEquals(
                 AuthenticateFido2CredentialRequest(
                     userId = "activeUserId",
-                    origin = Origin.Android(
-                        UnverifiedAssetLink(
-                            packageName = DEFAULT_PACKAGE_NAME,
-                            sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
-                            host = DEFAULT_HOST,
-                            assetLinkUrl = mockRequest.origin!!,
-                        ),
-                    ),
+                    origin = DEFAULT_WEB_ORIGIN,
                     requestJson = """{"publicKey": ${mockRequest.requestJson}}""",
                     clientData = ClientData.DefaultWithExtraData(
                         androidPackageName = "android:apk-key-hash:$DEFAULT_APP_SIGNATURE",
@@ -627,8 +619,8 @@ class Fido2CredentialManagerTest {
                     UnverifiedAssetLink(
                         DEFAULT_PACKAGE_NAME,
                         DEFAULT_CERT_FINGERPRINT,
-                        mockAssertionOptions.relyingPartyId!!,
-                        "https://${mockAssertionOptions.relyingPartyId}",
+                        "https://${mockAssertionOptions.relyingPartyId!!}",
+                        null,
                     ),
                 ),
                 requestCaptureSlot.captured.origin,
@@ -818,7 +810,7 @@ private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
 private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
 private const val DEFAULT_HOST = "bitwarden.com"
-private val DEFAULT_ORIGIN = Origin.Android(
+private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
     UnverifiedAssetLink(
         packageName = DEFAULT_PACKAGE_NAME,
         sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
@@ -826,6 +818,7 @@ private val DEFAULT_ORIGIN = Origin.Android(
         assetLinkUrl = "bitwarden.com",
     ),
 )
+private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")
 private const val DEFAULT_ALLOW_LIST = """
 {
   "apps": [
