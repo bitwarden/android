@@ -127,7 +127,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on save click should send SelectClick`() {
+    fun `on save click should send SaveClick`() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
@@ -139,7 +139,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(GeneratorAction.SelectClick)
+            viewModel.trySendAction(GeneratorAction.SaveClick)
         }
     }
 

@@ -303,7 +303,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SelectClick should emit the NavigateBack event with GeneratorResult`() = runTest {
+    fun `SaveClick should emit the NavigateBack event with GeneratorResult`() = runTest {
         turbineScope {
             val viewModel = createViewModel(state = initialUsernameModeState)
             val eventTurbine = viewModel
@@ -313,7 +313,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .generatorResultFlow
                 .testIn(backgroundScope)
 
-            viewModel.trySendAction(GeneratorAction.SelectClick)
+            viewModel.trySendAction(GeneratorAction.SaveClick)
 
             assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
             assertEquals(
