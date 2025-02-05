@@ -271,6 +271,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun resendVerificationCodeEmail(): ResendEmailResult
 
     /**
+     * Resend the email with the new device verification code.
+     */
+    suspend fun resendNewDeviceOtp(): ResendEmailResult
+
+    /**
      * Switches to the account corresponding to the given [userId] if possible.
      */
     fun switchAccount(userId: String): SwitchAccountResult

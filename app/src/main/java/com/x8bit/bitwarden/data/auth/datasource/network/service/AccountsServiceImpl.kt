@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMaster
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendNewDeviceOtpRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
@@ -112,6 +113,11 @@ class AccountsServiceImpl(
     override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
         unauthenticatedAccountsApi
             .resendVerificationCodeEmail(body = body)
+            .toResult()
+
+    override suspend fun resendNewDeviceOtp(body: ResendNewDeviceOtpRequestJson): Result<Unit> =
+        unauthenticatedAccountsApi
+            .resendNewDeviceOtp(body = body)
             .toResult()
 
     override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> =

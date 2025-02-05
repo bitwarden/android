@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequ
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendNewDeviceOtpRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
@@ -223,6 +224,11 @@ class AuthRepositoryImpl(
      * The information necessary to resend the verification code email for two-factor login.
      */
     private var resendEmailRequestJson: ResendEmailRequestJson? = null
+
+    /**
+     * The information necessary to resend the verification code email for new devices.
+     */
+    private var resendNewDeviceOtpRequestJson: ResendNewDeviceOtpRequestJson? = null
 
     private var organizationIdentifier: String? = null
 
@@ -780,6 +786,16 @@ class AuthRepositoryImpl(
         resendEmailRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
+                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onSuccess = { ResendEmailResult.Success },
+                )
+            }
+            ?: ResendEmailResult.Error(message = null)
+
+    override suspend fun resendNewDeviceOtp(): ResendEmailResult =
+        resendNewDeviceOtpRequestJson
+            ?.let { jsonRequest ->
+                accountsService.resendNewDeviceOtp(body = jsonRequest).fold(
                     onFailure = { ResendEmailResult.Error(message = it.message) },
                     onSuccess = { ResendEmailResult.Success },
                 )
@@ -1394,6 +1410,7 @@ class AuthRepositoryImpl(
                 // the notice needs to appear again
                 NewDeviceNoticeDisplayStatus.HAS_SEEN ->
                     newDeviceNoticeState.shouldDisplayNoticeIfSeen
+
                 NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
                 // the user never needs to see the notice again
                 NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false
@@ -1781,6 +1798,7 @@ class AuthRepositoryImpl(
         twoFactorResponse = null
         resendEmailRequestJson = null
         twoFactorDeviceData = null
+        resendNewDeviceOtpRequestJson = null
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()
@@ -1825,6 +1843,10 @@ class AuthRepositoryImpl(
     ): LoginResult {
         newDeviceVerification = true
         identityTokenAuthModel = authModel
+        resendNewDeviceOtpRequestJson = ResendNewDeviceOtpRequestJson(
+            email = email,
+            passwordHash = authModel.password,
+        )
 
         return LoginResult.NewDeviceVerification(error)
     }

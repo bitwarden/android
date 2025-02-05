@@ -482,7 +482,11 @@ class TwoFactorLoginViewModel @Inject constructor(
 
         // Resend the email notification.
         viewModelScope.launch {
-            val result = authRepository.resendVerificationCodeEmail()
+            val result = if (!authRepository.newDeviceVerification) {
+                authRepository.resendVerificationCodeEmail()
+            } else {
+                authRepository.resendNewDeviceOtp()
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
