@@ -3675,9 +3675,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `TooltipClick should emit NavigateToToolTipUri`() = runTest {
             viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAddEditAction.Common.TooltipClick)
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.TooltipClick(
+                        VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
+                    ),
+                )
                 assertEquals(
-                    VaultAddEditEvent.NavigateToTooltipUri,
+                    VaultAddEditEvent.NavigateToTooltipUri(
+                        VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
+                    ),
                     awaitItem(),
                 )
             }

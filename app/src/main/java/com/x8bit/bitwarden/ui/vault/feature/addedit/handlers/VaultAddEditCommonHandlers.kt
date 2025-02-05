@@ -32,7 +32,7 @@ data class VaultAddEditCommonHandlers(
     val onToggleMasterPasswordReprompt: (Boolean) -> Unit,
     val onNotesTextChange: (String) -> Unit,
     val onOwnerSelected: (VaultAddEditState.Owner) -> Unit,
-    val onTooltipClick: () -> Unit,
+    val onTooltipClick: (VaultAddEditState.TooltipType) -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
@@ -83,9 +83,9 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.OwnershipChange(newOwnership),
                     )
                 },
-                onTooltipClick = {
+                onTooltipClick = { tooltipType ->
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.TooltipClick,
+                        VaultAddEditAction.Common.TooltipClick(tooltipType),
                     )
                 },
                 onAddNewCustomFieldClick = { newCustomFieldType, name ->

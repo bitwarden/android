@@ -206,6 +206,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         when (state.type) {
             is VaultAddEditState.ViewState.Content.ItemType.Login -> {
                 vaultAddEditLoginItems(
+                    commonActionHandler = commonTypeHandlers,
                     loginState = state.type,
                     loginItemTypeHandlers = loginItemTypeHandlers,
                     onTotpSetupClick = {

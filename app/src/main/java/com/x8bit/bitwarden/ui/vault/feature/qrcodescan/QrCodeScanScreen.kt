@@ -13,9 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,8 +41,10 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,9 +54,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
@@ -87,7 +86,7 @@ fun QrCodeScanScreen(
 
     val context = LocalContext.current
 
-    val onEnterCodeManuallyClick = remember(viewModel) {
+    val onEnterKeyManuallyClick = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
     }
 
@@ -135,11 +134,11 @@ fun QrCodeScanScreen(
 
             if (LocalConfiguration.current.isPortrait) {
                 PortraitQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    onEnterKeyManuallyClick = onEnterKeyManuallyClick,
                 )
             } else {
                 LandscapeQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                    onEnterKeyManuallyClick = onEnterKeyManuallyClick,
                 )
             }
         }
@@ -148,7 +147,7 @@ fun QrCodeScanScreen(
 
 @Composable
 private fun PortraitQRCodeContent(
-    onEnterCodeManuallyClick: () -> Unit,
+    onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -178,8 +177,8 @@ private fun PortraitQRCodeContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
 
-            BottomClickableText(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+            EnterKeyManuallyText(
+                onEnterKeyManuallyClick = onEnterKeyManuallyClick,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -188,7 +187,7 @@ private fun PortraitQRCodeContent(
 
 @Composable
 private fun LandscapeQRCodeContent(
-    onEnterCodeManuallyClick: () -> Unit,
+    onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -218,8 +217,8 @@ private fun LandscapeQRCodeContent(
                 style = BitwardenTheme.typography.bodySmall,
             )
 
-            BottomClickableText(
-                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+            EnterKeyManuallyText(
+                onEnterKeyManuallyClick = onEnterKeyManuallyClick,
             )
         }
     }
@@ -403,28 +402,33 @@ private fun QrCodeSquare(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun BottomClickableText(
-    onEnterCodeManuallyClick: () -> Unit,
+private fun EnterKeyManuallyText(
+    onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    FlowRow(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        Text(
-            modifier = Modifier.padding(vertical = 4.dp),
-            text = stringResource(id = R.string.cannot_scan_qr_code),
-            color = Color.White,
-            style = BitwardenTheme.typography.bodyMedium,
-        )
-        BitwardenClickableText(
-            label = stringResource(id = R.string.enter_key_manually),
-            style = BitwardenTheme.typography.labelLarge,
-            innerPadding = PaddingValues(vertical = 4.dp, horizontal = 12.dp),
-            onClick = onEnterCodeManuallyClick,
-            modifier = Modifier.testTag("EnterKeyManuallyButton"),
-        )
+    val enterKeyManuallyString = stringResource(R.string.enter_key_manually)
+    val annotatedLinkString = R.string.cannot_scan_qr_code_enter_key_manually.toAnnotatedString {
+        when (it) {
+            "enterKeyManually" -> onEnterKeyManuallyClick()
+        }
     }
+    Text(
+        text = annotatedLinkString,
+        style = BitwardenTheme.typography.bodySmall,
+        color = Color.White,
+        textAlign = TextAlign.Center,
+        modifier = modifier
+            .semantics {
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = enterKeyManuallyString,
+                        action = {
+                            onEnterKeyManuallyClick()
+                            true
+                        },
+                    ),
+                )
+            },
+    )
 }

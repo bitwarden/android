@@ -272,7 +272,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleAddNewCustomFieldClick(action)
             }
 
-            is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick()
+            is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick(action)
             is VaultAddEditAction.Common.CustomFieldActionSelect -> {
                 handleCustomFieldActionSelected(action)
             }
@@ -903,8 +903,10 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleTooltipClick() {
-        sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
+    private fun handleTooltipClick(
+        action: VaultAddEditAction.Common.TooltipClick,
+    ) {
+        sendEvent(VaultAddEditEvent.NavigateToTooltipUri(action.type))
     }
 
     @Suppress("MaxLineLength")
@@ -2116,6 +2118,14 @@ data class VaultAddEditState(
     }
 
     /**
+     * Represents the different tooltip types for the [VaultAddEditScreen].
+     */
+    enum class TooltipType {
+        AUTHENTICATOR_KEY_HELP,
+        MASTER_PASSWORD_REPROMPT,
+    }
+
+    /**
      * Represents the specific view states for the [VaultAddEditScreen].
      */
     sealed class ViewState : Parcelable {
@@ -2608,7 +2618,9 @@ sealed class VaultAddEditEvent {
     /**
      * Navigate the user to the tooltip URI.
      */
-    data object NavigateToTooltipUri : VaultAddEditEvent()
+    data class NavigateToTooltipUri(
+        val tooltipType: VaultAddEditState.TooltipType,
+    ) : VaultAddEditEvent()
 
     /**
      * Navigate to the QR code scan screen.
@@ -2782,7 +2794,9 @@ sealed class VaultAddEditAction {
         /**
          * Represents the action to open tooltip
          */
-        data object TooltipClick : Common()
+        data class TooltipClick(
+            val type: VaultAddEditState.TooltipType,
+        ) : Common()
 
         /**
          * The user has selected a collection.

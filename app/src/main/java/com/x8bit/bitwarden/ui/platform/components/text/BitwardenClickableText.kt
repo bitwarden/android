@@ -47,6 +47,8 @@ fun BitwardenClickableText(
     cornerSize: Dp = 28.dp,
     color: Color = BitwardenTheme.colorScheme.text.interaction,
 ) {
+    val color = if (isEnabled) color else BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier

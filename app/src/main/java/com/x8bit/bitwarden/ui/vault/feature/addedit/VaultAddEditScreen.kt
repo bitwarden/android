@@ -125,9 +125,19 @@ fun VaultAddEditScreen(
             VaultAddEditEvent.NavigateBack -> onNavigateBack.invoke()
 
             is VaultAddEditEvent.NavigateToTooltipUri -> {
-                intentManager.launchUri(
-                    "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
-                )
+                when (event.tooltipType) {
+                    VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP -> {
+                        intentManager.launchUri(
+                            "https://bitwarden.com/help/integrated-authenticator".toUri(),
+                        )
+                    }
+                    VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT -> {
+                        intentManager.launchUri(
+                            "https://bitwarden.com/help/managing-items/#protect-individual-items"
+                                .toUri(),
+                        )
+                    }
+                }
             }
 
             is VaultAddEditEvent.CompleteFido2Registration -> {

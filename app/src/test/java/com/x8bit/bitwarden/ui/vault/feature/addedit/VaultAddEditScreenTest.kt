@@ -145,11 +145,29 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToTooltipUri Event should invoke IntentManager`() {
-        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToTooltipUri)
+    fun `on NavigateToTooltipUri Event for master password reprompt should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.NavigateToTooltipUri(
+                VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
+            ),
+        )
         verify {
             intentManager.launchUri(
                 "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToTooltipUri Event for authenticator key help should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(
+            VaultAddEditEvent.NavigateToTooltipUri(
+                VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP,
+            ),
+        )
+        verify {
+            intentManager.launchUri(
+                "https://bitwarden.com/help/integrated-authenticator".toUri(),
             )
         }
     }
@@ -1020,10 +1038,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
-
-        composeTestRule
-            .onNodeWithText("Authenticator key")
-            .assertDoesNotExist()
     }
 
     @Suppress("MaxLineLength")
@@ -1090,13 +1104,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_Login state SetupTOTP button should be present based on state`() {
+    fun `in ItemType_Login state Set up authenticator key button should always be present`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1104,8 +1118,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Set up TOTP")
-            .assertIsNotDisplayed()
+            .onNodeWithText(text = "Set up authenticator key")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
@@ -1114,7 +1128,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         fakePermissionManager.checkPermissionResult = true
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1131,7 +1145,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         fakePermissionManager.getPermissionsResult = true
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1145,12 +1159,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking Set up TOTP button with a negative result should send false`() {
+    fun `in ItemType_Login state clicking Set up authenticator key button with a negative result should send false`() {
         fakePermissionManager.checkPermissionResult = false
         fakePermissionManager.getPermissionsResult = false
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1164,7 +1178,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state the SetupTOTP button should be visible but disabled based on state`() {
+    fun `in ItemType_Login state the SetupAuthenticatorKey button should be visible but disabled based on state`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
                 copy(
@@ -1175,7 +1189,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .assertIsDisplayed()
             .assertIsNotEnabled()
     }
@@ -1193,13 +1207,28 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Authenticator key")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .assertIsDisplayed()
             .assertIsNotEnabled()
 
         composeTestRule.assertScrollableNodeDoesNotExist("Delete")
         composeTestRule.assertScrollableNodeDoesNotExist("Copy TOTP")
         composeTestRule.assertScrollableNodeDoesNotExist("Camera")
+    }
+
+    @Test
+    fun `Clicking the Authenticator key tooltip button should send TooltipClick action`() {
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.TooltipClick(
+                    VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP,
+                ),
+            )
+        }
     }
 
     @Test
@@ -2647,7 +2676,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.TooltipClick,
+                VaultAddEditAction.Common.TooltipClick(
+                    VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
+                ),
             )
         }
     }
