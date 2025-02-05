@@ -32,8 +32,8 @@ body:
   - type: dropdown
     id: operation-type
     attributes:
-      label: Operation Type
-      description: What operation were you trying to perform?
+      label: Passkey Action
+      description: What passkey related action were you trying to perform?
       options:
         - Creating new passkey (Registration)
         - Signing in (Authentication)
