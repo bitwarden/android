@@ -39,7 +39,7 @@ fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest
         packageName = systemRequest.callingAppInfo.packageName,
         signingInfo = systemRequest.callingAppInfo.signingInfo,
         origin = systemRequest.callingAppInfo.origin,
-        isUserVerified = systemRequest.biometricPromptResult?.isSuccessful ?: false,
+        isUserVerified = systemRequest.biometricPromptResult?.isSuccessful,
     )
 }
 
@@ -69,7 +69,6 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
         ?: return null
 
     val isUserVerified = systemRequest.biometricPromptResult?.isSuccessful
-        ?: false
 
     return Fido2CredentialAssertionRequest(
         userId = userId,
