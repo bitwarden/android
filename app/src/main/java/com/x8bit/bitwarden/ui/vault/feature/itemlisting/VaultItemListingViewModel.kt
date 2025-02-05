@@ -83,6 +83,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.Clock
 import javax.inject.Inject
 
@@ -311,6 +312,9 @@ class VaultItemListingViewModel @Inject constructor(
         getCipherViewOrNull(action.cipherViewId)
             ?.let { registerFido2Credential(it) }
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("Cipher view not found while overwriting existing passkey.")
                 showFido2ErrorDialog()
                 return
             }
@@ -318,6 +322,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleUserVerificationLockOut() {
         fido2CredentialManager.isUserVerified = false
+        Timber.tag("PASSKEY").e("FIDO2 user verification locked out.")
         showFido2ErrorDialog()
     }
 
@@ -330,6 +335,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleUserVerificationFail() {
         fido2CredentialManager.isUserVerified = false
+        Timber.tag("PASSKEY").e("FIDO2 user verification failed.")
         showFido2ErrorDialog()
     }
 
@@ -351,6 +357,9 @@ class VaultItemListingViewModel @Inject constructor(
         val selectedCipherId = action
             .selectedCipherId
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("Cipher view ID not found while user verification not supported.")
                 showFido2ErrorDialog()
                 return
             }
@@ -360,6 +369,9 @@ class VaultItemListingViewModel @Inject constructor(
             .value
             ?.activeAccount
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("Active account not found while user verification not supported.")
                 showFido2ErrorDialog()
                 return
             }
@@ -483,6 +495,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleDismissFido2VerificationDialogClick() {
+        Timber.tag("PASSKEY").i("Dismissing FIDO 2 verification dialog.")
         showFido2ErrorDialog()
     }
 
@@ -603,6 +616,9 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleFido2RegistrationRequestReceive(action: VaultItemListingsAction.ItemClick) {
         val cipherView = getCipherViewOrNull(action.id)
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("handleFido2RegistrationRequestReceive called but cipherView is null.")
                 showFido2ErrorDialog()
                 return
             }
@@ -627,6 +643,9 @@ class VaultItemListingViewModel @Inject constructor(
                 // This scenario should not occur because `isFido2Creation` is false when
                 // `fido2CredentialRequest` is null. We show the FIDO 2 error dialog to inform
                 // the user and terminate the flow just in case it does occur.
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("registerFido2Credential called but fido2CredentialRequest is null.")
                 showFido2ErrorDialog()
                 return
             }
@@ -656,6 +675,9 @@ class VaultItemListingViewModel @Inject constructor(
         val attestationOptions = fido2CredentialManager
             .getPasskeyAttestationOptionsOrNull(credentialRequest.requestJson)
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("performUserVerificationIfRequired called but attestationOptions is null.")
                 showFido2ErrorDialog()
                 return
             }
@@ -693,6 +715,9 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         val activeUserId = authRepository.activeUserId
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("registerFido2CredentialToCipher called but activeUserId is null.")
                 showFido2ErrorDialog()
                 return
             }
@@ -716,6 +741,7 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         val activeUserId = authRepository.activeUserId
             ?: run {
+                Timber.tag("PASSKEY").wtf("authenticateFido2Credential called with no active user.")
                 showFido2ErrorDialog()
                 return
             }
@@ -861,6 +887,9 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             else -> {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("handleDismissFido2ErrorDialogClick but no FIDO2 request found.")
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
@@ -1202,6 +1231,7 @@ class VaultItemListingViewModel @Inject constructor(
 
         when (action.result) {
             ValidatePasswordResult.Error -> {
+                Timber.tag("PASSKEY").e("FIDO2 password verification failed.")
                 showFido2ErrorDialog()
             }
 
@@ -1230,6 +1260,7 @@ class VaultItemListingViewModel @Inject constructor(
 
         when (action.result) {
             ValidatePinResult.Error -> {
+                Timber.tag("PASSKEY").e("FIDO2 pin verification failed.")
                 showFido2ErrorDialog()
             }
 
@@ -1260,6 +1291,7 @@ class VaultItemListingViewModel @Inject constructor(
                 it.copy(dialogState = errorDialogState)
             }
         } else {
+            Timber.tag("PASSKEY").e("FIDO2 user verification attempts exceeded.")
             showFido2ErrorDialog()
         }
     }
@@ -1270,6 +1302,9 @@ class VaultItemListingViewModel @Inject constructor(
 
         val cipherView = getCipherViewOrNull(cipherId = selectedCipherId)
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("handleValidAuthentication called but no cipher view found.")
                 showFido2ErrorDialog()
                 return
             }
@@ -1302,7 +1337,12 @@ class VaultItemListingViewModel @Inject constructor(
                             )
                         }
                 }
-            ?: showFido2ErrorDialog()
+            ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("continueFido2Operations called but no FIDO2 request found.")
+                showFido2ErrorDialog()
+            }
     }
     //endregion VaultItemListing Handlers
 
@@ -1332,6 +1372,10 @@ class VaultItemListingViewModel @Inject constructor(
                     )
                     ?.relyingPartyId
                     ?: run {
+                        @Suppress("MaxLineLength")
+                        Timber
+                            .tag("PASSKEY")
+                            .wtf("vaultLoadedReceive called with GetCredentialsRequest but assertionOptions or relyingPartyId are null.")
                         showFido2ErrorDialog()
                         return
                     }
@@ -1406,6 +1450,10 @@ class VaultItemListingViewModel @Inject constructor(
             val options = fido2CredentialManager
                 .getPasskeyAttestationOptionsOrNull(requestJson = action.request.requestJson)
                 ?: run {
+                    @Suppress("MaxLineLength")
+                    Timber
+                        .tag("PASSKEY")
+                        .wtf("handleFido2RegisterCredentialRequestReceive called but no FIDO2 request found.")
                     showFido2ErrorDialog()
                     return@launch
                 }
@@ -1473,6 +1521,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             Fido2ValidateOriginResult.Error.Unknown -> {
+                Timber.tag("PASSKEY").e("FIDO2 origin validation failed with unknown error.")
                 R.string.generic_error_message
             }
         }
@@ -1504,11 +1553,17 @@ class VaultItemListingViewModel @Inject constructor(
             .orEmpty()
             .filter { it.isActiveWithFido2Credentials }
         if (request.cipherId.isNullOrEmpty()) {
+            Timber
+                .tag("PASSKEY")
+                .wtf("handleFido2AssertionDataReceive called with null or empty cipherId.")
             showFido2ErrorDialog()
         } else {
             val selectedCipher = ciphers
                 .find { it.id == request.cipherId }
                 ?: run {
+                    Timber
+                        .tag("PASSKEY")
+                        .e("handleFido2AssertionDataReceive called but no matching cipher found.")
                     showFido2ErrorDialog()
                     return
                 }
@@ -1540,12 +1595,19 @@ class VaultItemListingViewModel @Inject constructor(
         val assertionOptions = fido2CredentialManager
             .getPasskeyAssertionOptionsOrNull(request.requestJson)
             ?: run {
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("verifyUserAndAuthenticateCredential called but assertOptions are null.")
                 showFido2ErrorDialog()
                 return
             }
 
         val relyingPartyId = assertionOptions.relyingPartyId
             ?: run {
+                @Suppress("MaxLineLength")
+                Timber
+                    .tag("PASSKEY")
+                    .wtf("verifyUserAndAuthenticateCredential called but assertOptions relyingPartyId is null.")
                 showFido2ErrorDialog()
                 return
             }

@@ -123,7 +123,10 @@ class Fido2OriginManagerImpl(
             }
             .fold(
                 onSuccess = { it },
-                onFailure = { Fido2ValidateOriginResult.Error.Unknown },
+                onFailure = {
+                    Timber.tag("PASSKEY").e(it, "Failed to validate privileged app.")
+                    Fido2ValidateOriginResult.Error.Unknown
+                },
             )
 
     /**
