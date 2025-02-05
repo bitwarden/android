@@ -99,9 +99,7 @@ class SslManagerImpl(
         override fun getServerAliases(
             alias: String?,
             issuers: Array<out Principal>?,
-        ): Array<String> {
-            return arrayOf()
-        }
+        ): Array<String> = arrayOf()
 
         override fun getClientAliases(
             keyType: String?,
@@ -112,9 +110,7 @@ class SslManagerImpl(
             alias: String?,
             issuers: Array<out Principal>?,
             socket: Socket?,
-        ): String {
-            return ""
-        }
+        ): String = ""
         //endregion Unused server side methods
     }
 }
