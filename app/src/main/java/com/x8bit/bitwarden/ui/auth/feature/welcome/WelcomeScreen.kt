@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -161,7 +162,8 @@ private fun WelcomeScreenContent(
             onClick = onCreateAccountClick,
             modifier = Modifier
                 .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag("ChooseAccountCreationButton"),
         )
 
         BitwardenOutlinedButton(
@@ -169,7 +171,8 @@ private fun WelcomeScreenContent(
             onClick = onLoginClick,
             modifier = Modifier
                 .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .testTag("ChooseLoginButton"),
         )
 
         Spacer(modifier = Modifier.height(32.dp))
