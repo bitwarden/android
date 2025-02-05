@@ -1170,4 +1170,7 @@ Do you want to switch to this account?</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
   <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+    <string name="copy_passkey_logs">Copy passkey logs</string>
+  <string name="passkey_logs">Passkey logs</string>
+  <string name="error_copying_logs">Error copying logs</string>
 </resources>

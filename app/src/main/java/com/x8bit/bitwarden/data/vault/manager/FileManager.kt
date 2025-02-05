@@ -49,4 +49,14 @@ interface FileManager {
      * reference.
      */
     suspend fun writeUriToCache(fileUri: Uri): Result<File>
+
+    /**
+     * Writes [data] to a file on disk.
+     */
+    suspend fun writeToFile(parent: String?, fileName: String, data: String)
+
+    /**
+     * Reads the contents of a file on disk.
+     */
+    suspend fun readFromFile(parent: String?, fileName: String): Result<String>
 }

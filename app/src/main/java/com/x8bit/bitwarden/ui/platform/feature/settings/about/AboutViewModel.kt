@@ -19,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Year
@@ -29,6 +30,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the about screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -58,6 +60,7 @@ class AboutViewModel @Inject constructor(
         is AboutAction.SubmitCrashLogsClick -> handleSubmitCrashLogsClick(action)
         AboutAction.VersionClick -> handleVersionClick()
         AboutAction.WebVaultClick -> handleWebVaultClick()
+        AboutAction.CopyPasskeyLogsClick -> handleCopyPasskeyLogsClick()
     }
 
     private fun handleBackClick() {
@@ -131,6 +134,24 @@ class AboutViewModel @Inject constructor(
         )
     }
 
+    private fun handleCopyPasskeyLogsClick() {
+        viewModelScope.launch {
+            logsManager
+                .getPasskeyLogs()
+                .fold(
+                    onSuccess = { logs ->
+                        clipboardManager.setText(
+                            text = logs,
+                            toastDescriptorOverride = R.string.passkey_logs.asText(),
+                        )
+                    },
+                    onFailure = {
+                        sendEvent(AboutEvent.ShowToast(R.string.error_copying_logs.asText()))
+                    },
+                )
+        }
+    }
+
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**
@@ -201,6 +222,11 @@ sealed class AboutEvent {
      * Navigates to rate the app.
      */
     data object NavigateToRateApp : AboutEvent()
+
+    /**
+     * Show a toast.
+     */
+    data class ShowToast(val text: Text) : AboutEvent()
 }
 
 /**
@@ -253,4 +279,9 @@ sealed class AboutAction {
      * User clicked the web vault row.
      */
     data object WebVaultClick : AboutAction()
+
+    /**
+     * User clicked the copy passkey logs row.
+     */
+    data object CopyPasskeyLogsClick : AboutAction()
 }

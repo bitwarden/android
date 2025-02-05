@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.sdkAgnosticTransferTo
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
@@ -12,6 +14,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.FileWriter
 import java.util.UUID
 
 /**
@@ -154,4 +157,44 @@ class FileManagerImpl(
                 File(context.filesDir, tempFileName)
             }
         }
+
+    @Suppress("TooGenericExceptionCaught")
+    override suspend fun writeToFile(parent: String?, fileName: String, data: String) {
+        withContext(dispatcherManager.io) {
+            try {
+                context.getExternalFilesDir(parent)
+                    ?.let { logDir ->
+                        val file = File("${logDir.path}/$fileName")
+                        if (!file.exists()) {
+                            file.createNewFile()
+                        }
+                        FileWriter(File(logDir, fileName), true).use {
+                            it.write(data)
+                            it.flush()
+                        }
+                    }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    override suspend fun readFromFile(parent: String?, fileName: String): Result<String> {
+        return withContext(dispatcherManager.io) {
+            try {
+                context.getExternalFilesDir(parent)
+                    ?.let { logDir ->
+                        val file = File("${logDir.path}/$fileName")
+                        if (!file.exists()) {
+                            return@withContext "Log file does not exist".asSuccess()
+                        }
+                        file.readText().asSuccess()
+                    }
+                    ?: "Shared storage currently unavailable".asSuccess()
+            } catch (e: Exception) {
+                e.asFailure()
+            }
+        }
+    }
 }

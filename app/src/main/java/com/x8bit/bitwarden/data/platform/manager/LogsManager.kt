@@ -21,4 +21,9 @@ interface LogsManager {
      * Tracks the current user data.
      */
     fun setUserData(userId: String?, environmentType: Environment.Type)
+
+    /**
+     * Gets the passkey logs.
+     */
+    suspend fun getPasskeyLogs(): Result<String>
 }

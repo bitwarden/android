@@ -1495,41 +1495,11 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleFido2OriginValidationFail(error: Fido2ValidateOriginResult.Error) {
-        val messageResId = when (error) {
-            Fido2ValidateOriginResult.Error.ApplicationNotFound -> {
-                R.string.passkey_operation_failed_because_app_not_found_in_asset_links
-            }
-
-            Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified -> {
-                R.string.passkey_operation_failed_because_app_could_not_be_verified
-            }
-
-            Fido2ValidateOriginResult.Error.AssetLinkNotFound -> {
-                R.string.passkey_operation_failed_because_of_missing_asset_links
-            }
-
-            Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed -> {
-                R.string.passkey_operation_failed_because_browser_is_not_privileged
-            }
-
-            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp -> {
-                R.string.passkeys_not_supported_for_this_app
-            }
-
-            Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound -> {
-                R.string.passkey_operation_failed_because_browser_signature_does_not_match
-            }
-
-            Fido2ValidateOriginResult.Error.Unknown -> {
-                Timber.tag("PASSKEY").e("FIDO2 origin validation failed with unknown error.")
-                R.string.generic_error_message
-            }
-        }
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = messageResId.asText(),
+                    message = error.messageResId.asText(),
                 ),
             )
         }
