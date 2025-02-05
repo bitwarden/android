@@ -46,7 +46,6 @@ fun BitwardenStepper(
     isIncrementEnabled: Boolean = true,
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
-    stepperActionsTestTag: String? = null,
 ) {
     BitwardenStepper(
         modifier = modifier,
@@ -67,7 +66,6 @@ fun BitwardenStepper(
         isIncrementEnabled = isIncrementEnabled,
         isDecrementEnabled = isDecrementEnabled,
         textFieldReadOnly = textFieldReadOnly,
-        stepperActionsTestTag = stepperActionsTestTag,
         cardStyle = cardStyle,
     )
 }
@@ -104,7 +102,6 @@ fun BitwardenStepper(
     isIncrementEnabled: Boolean = true,
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
-    stepperActionsTestTag: String? = null,
 ) {
     val clampedValue = value?.coerceIn(range)
     if (clampedValue != value && clampedValue != null) {

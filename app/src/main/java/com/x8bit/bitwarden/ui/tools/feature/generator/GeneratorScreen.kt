@@ -1011,9 +1011,8 @@ private fun PassphraseNumWordsCounterItem(
         value = numWords.coerceIn(minimumValue = minValue, maximumValue = maxValue),
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
-        stepperActionsTestTag = "NumberOfWordsStepper",
         cardStyle = CardStyle.Full,
-        modifier = modifier.testTag(tag = "NumberOfWordsLabel"),
+        modifier = modifier.testTag(tag = "NumberOfWordsStepper"),
     )
 }
 
