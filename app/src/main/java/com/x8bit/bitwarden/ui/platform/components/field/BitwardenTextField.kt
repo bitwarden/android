@@ -292,10 +292,10 @@ fun BitwardenTextField(
                         {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(text = it)
-                                val size by animateDpAsState(
-                                    targetValue = if (!isFocused) 16.dp else 12.dp,
-                                )
                                 tooltip?.let {
+                                    val size by animateDpAsState(
+                                        targetValue = if (!isFocused) 16.dp else 12.dp,
+                                    )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     BitwardenStandardIconButton(
                                         vectorIconRes = R.drawable.ic_question_circle_small,
