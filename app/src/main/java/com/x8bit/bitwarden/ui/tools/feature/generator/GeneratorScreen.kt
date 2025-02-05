@@ -234,8 +234,8 @@ fun GeneratorScreen(
                             onCloseClick = remember(viewModel) {
                                 { viewModel.trySendAction(GeneratorAction.CloseClick) }
                             },
-                            onSelectClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.SelectClick) }
+                            onSaveClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.SaveClick) }
                             },
                         )
                     }
@@ -333,7 +333,7 @@ private fun ModalAppBar(
     generatorMode: GeneratorMode.Modal,
     scrollBehavior: TopAppBarScrollBehavior,
     onCloseClick: () -> Unit,
-    onSelectClick: () -> Unit,
+    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTopAppBar(
@@ -348,9 +348,9 @@ private fun ModalAppBar(
         },
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.select),
-                onClick = onSelectClick,
-                modifier = Modifier.testTag("SelectButton"),
+                label = stringResource(id = R.string.save),
+                onClick = onSaveClick,
+                modifier = Modifier.testTag("SaveButton"),
             )
         },
         modifier = modifier,
