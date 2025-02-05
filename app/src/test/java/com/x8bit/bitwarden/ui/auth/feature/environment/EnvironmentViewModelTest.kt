@@ -497,7 +497,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `ImportKeyResultReceive should update key alias on success`() = runTest {
+    fun `ImportKeyResultReceive should update key alias and key host on success`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(
             EnvironmentAction.Internal.ImportKeyResultReceive(
@@ -505,7 +505,10 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            DEFAULT_STATE.copy(keyAlias = "mockAlias"),
+            DEFAULT_STATE.copy(
+                keyAlias = "mockAlias",
+                keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -568,7 +571,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SetCertificateInfoResultReceive should clear the dialog import the key and send ImportKeyResultReceive`() =
+    fun `SetCertificateInfoResultReceive should clear the dialog update key alias and key host after successful import`() =
         runTest {
             val viewModel = createViewModel()
             val mockUri = mockk<Uri>()
@@ -597,7 +600,11 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 ),
             )
             assertEquals(
-                DEFAULT_STATE.copy(dialog = null, keyAlias = "mockAlias"),
+                DEFAULT_STATE.copy(
+                    dialog = null,
+                    keyAlias = "mockAlias",
+                    keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+                ),
                 viewModel.stateFlow.value,
             )
 
