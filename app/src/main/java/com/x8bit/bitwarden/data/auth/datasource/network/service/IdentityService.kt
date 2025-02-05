@@ -46,6 +46,7 @@ interface IdentityService {
         authModel: IdentityTokenAuthModel,
         captchaToken: String?,
         twoFactorData: TwoFactorDataModel? = null,
+        newDeviceOtp: String? = null,
     ): Result<GetTokenResponseJson>
 
     /**

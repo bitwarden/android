@@ -148,6 +148,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val showWelcomeCarousel: Boolean
 
     /**
+     * Is this a New Device Validation flow
+     */
+    var newDeviceVerification: Boolean
+
+    /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
      */
     fun clearPendingAccountDeletion()
@@ -228,6 +233,19 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         ssoRedirectUri: String,
         captchaToken: String?,
         organizationIdentifier: String,
+    ): LoginResult
+
+    /**
+     * Repeat the previous login attempt but this time with New Device OTP
+     * information. Password is included if available to unlock the vault after
+     * authentication. Updated access token will be reflected in [authStateFlow].
+     */
+    suspend fun login(
+        email: String,
+        password: String?,
+        newDeviceOtp: String,
+        captchaToken: String?,
+        orgIdentifier: String?,
     ): LoginResult
 
     /**

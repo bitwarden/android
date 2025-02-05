@@ -567,17 +567,27 @@ class TwoFactorLoginViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.email,
-                password = state.password,
-                twoFactorData = TwoFactorDataModel(
-                    code = code,
-                    method = state.authMethod.value.toString(),
-                    remember = state.isRememberEnabled,
-                ),
-                captchaToken = state.captchaToken,
-                orgIdentifier = state.orgIdentifier,
-            )
+            val result = if (authRepository.newDeviceVerification) {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    newDeviceOtp = code,
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            } else {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    twoFactorData = TwoFactorDataModel(
+                        code = code,
+                        method = state.authMethod.value.toString(),
+                        remember = state.isRememberEnabled,
+                    ),
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveLoginResult(
                     loginResult = result,

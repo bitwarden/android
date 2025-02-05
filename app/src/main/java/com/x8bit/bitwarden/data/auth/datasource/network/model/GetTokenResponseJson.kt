@@ -115,6 +115,7 @@ sealed class GetTokenResponseJson {
              * Represents an invalid response indicating that a new device verification is required.
              */
             data object NewDeviceVerification : InvalidType()
+
             /**
              * Represents generic invalid response
              */

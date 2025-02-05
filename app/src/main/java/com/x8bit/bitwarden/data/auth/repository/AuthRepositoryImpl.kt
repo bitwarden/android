@@ -232,6 +232,8 @@ class AuthRepositoryImpl(
      */
     private var passwordsToCheckMap = mutableMapOf<String, String>()
 
+    override var newDeviceVerification: Boolean = false
+
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
@@ -676,6 +678,26 @@ class AuthRepositoryImpl(
                 password = password,
                 authModel = it,
                 twoFactorData = twoFactorData,
+                captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
+                deviceData = twoFactorDeviceData,
+                orgIdentifier = orgIdentifier,
+            )
+        }
+        ?: LoginResult.Error(errorMessage = null)
+
+    override suspend fun login(
+        email: String,
+        password: String?,
+        newDeviceOtp: String,
+        captchaToken: String?,
+        orgIdentifier: String?,
+    ): LoginResult = identityTokenAuthModel
+        ?.let {
+            loginCommon(
+                email = email,
+                password = password,
+                authModel = it,
+                newDeviceOtp = newDeviceOtp,
                 captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
                 deviceData = twoFactorDeviceData,
                 orgIdentifier = orgIdentifier,
@@ -1577,6 +1599,7 @@ class AuthRepositoryImpl(
         deviceData: DeviceDataModel? = null,
         orgIdentifier: String? = null,
         captchaToken: String?,
+        newDeviceOtp: String? = null,
     ): LoginResult = identityService
         .getToken(
             uniqueAppId = authDiskSource.uniqueAppId,
@@ -1584,6 +1607,7 @@ class AuthRepositoryImpl(
             authModel = authModel,
             twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),
             captchaToken = captchaToken,
+            newDeviceOtp = newDeviceOtp,
         )
         .fold(
             onFailure = { throwable ->
@@ -1592,6 +1616,7 @@ class AuthRepositoryImpl(
                     configDiskSource.serverConfig?.isOfficialBitwardenServer == false -> {
                         LoginResult.UnofficialServerError
                     }
+
                     else -> LoginResult.Error(errorMessage = null)
                 }
             },
@@ -1618,11 +1643,12 @@ class AuthRepositoryImpl(
 
                     is GetTokenResponseJson.Invalid -> {
                         when (loginResponse.toInvalidType) {
-                            is GetTokenResponseJson.Invalid.InvalidType.NewDeviceVerification -> {
-                                LoginResult.NewDeviceVerification(
-                                    errorMessage = loginResponse.errorMessage,
+                            is GetTokenResponseJson.Invalid.InvalidType.NewDeviceVerification ->
+                                handleLoginCommonNewDeviceVerification(
+                                    email = email,
+                                    authModel = authModel,
+                                    error = loginResponse.errorMessage,
                                 )
-                            }
 
                             is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
                                 LoginResult.Error(
@@ -1759,6 +1785,7 @@ class AuthRepositoryImpl(
         settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()
         hasPendingAccountAddition = false
+        newDeviceVerification = false
         LoginResult.Success
     }
 
@@ -1785,6 +1812,21 @@ class AuthRepositoryImpl(
         // If this error was received, it also means any cached two-factor token is invalid.
         authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
         return LoginResult.TwoFactorRequired
+    }
+
+    /**
+     * A helper method that processes the
+     * [GetTokenResponseJson.Invalid.InvalidType.NewDeviceVerification] when logging in.
+     */
+    private fun handleLoginCommonNewDeviceVerification(
+        email: String,
+        authModel: IdentityTokenAuthModel,
+        error: String?,
+    ): LoginResult {
+        newDeviceVerification = true
+        identityTokenAuthModel = authModel
+
+        return LoginResult.NewDeviceVerification(error)
     }
 
     /**

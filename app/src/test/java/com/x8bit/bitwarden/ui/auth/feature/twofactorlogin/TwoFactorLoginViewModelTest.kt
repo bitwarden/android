@@ -54,7 +54,15 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
-        coEvery { login(any(), any(), any(), any(), any()) } returns LoginResult.Success
+        coEvery {
+            login(
+                email = any(),
+                password = any(),
+                twoFactorData = any(),
+                captchaToken = any(),
+                orgIdentifier = any(),
+            )
+        } returns LoginResult.Success
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
