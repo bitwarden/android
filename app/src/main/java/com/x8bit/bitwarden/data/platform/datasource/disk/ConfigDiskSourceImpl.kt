@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private const val SERVER_CONFIGURATIONS = "serverConfigurations"
