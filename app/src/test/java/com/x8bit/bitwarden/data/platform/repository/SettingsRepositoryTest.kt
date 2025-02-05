@@ -807,18 +807,6 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun `clearBiometricsKey should remove the stored biometrics key`() {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        fakeAuthDiskSource.storeUserBiometricUnlockKey(userId = USER_ID, "fake key")
-        fakeAuthDiskSource.storeUserBiometricInitVector(userId = USER_ID, byteArrayOf(1))
-
-        settingsRepository.clearBiometricsKey()
-
-        fakeAuthDiskSource.assertBiometricsKey(userId = USER_ID, biometricsKey = null)
-        fakeAuthDiskSource.assertBiometricInitVector(userId = USER_ID, iv = null)
-    }
-
-    @Test
     fun `setupBiometricsKey with missing user state should return BiometricsKeyResult Error`() =
         runTest {
             val cipher = mockk<Cipher>()

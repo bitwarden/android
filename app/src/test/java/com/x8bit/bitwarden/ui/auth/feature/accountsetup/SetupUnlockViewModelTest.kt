@@ -153,7 +153,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey and update the state`() {
         val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { settingsRepository.clearBiometricsKey() } just runs
+        every { biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
         val viewModel = createViewModel(initialState)
         assertEquals(initialState, viewModel.stateFlow.value)
 
@@ -164,7 +164,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            settingsRepository.clearBiometricsKey()
+            biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
         }
     }
 

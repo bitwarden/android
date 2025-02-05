@@ -497,6 +497,8 @@ Scanning will happen automatically.</string>
   <string name="login_expired">Your login session has expired.</string>
   <string name="biometrics_direction">Biometric verification</string>
   <string name="biometrics">Biometrics</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden needs attention - See \"Autofill Accessibility Service\" from Bitwarden settings</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. On the Android App Settings screen for Bitwarden, go to the \"Display over other apps\" options (under Advanced) and tap the toggle to allow overlay support.</string>

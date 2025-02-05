@@ -318,7 +318,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithBiometricToggleDisabled() {
-        settingsRepository.clearBiometricsKey()
+        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
         validateVaultTimeoutAction()
     }

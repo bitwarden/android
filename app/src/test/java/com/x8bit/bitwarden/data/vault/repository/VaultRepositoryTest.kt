@@ -134,6 +134,7 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import javax.crypto.BadPaddingException
 import javax.crypto.Cipher
 
 @Suppress("LargeClass")
@@ -1241,6 +1242,32 @@ class VaultRepositoryTest {
                     biometricsKey = encryptedBytes.toString(Charsets.ISO_8859_1),
                 )
                 assertBiometricInitVector(userId = userId, iv = initVector)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with failure to decode biometrics key should return BiometricDecodingError`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val privateKey = "mockPrivateKey-1"
+            val biometricsKey = "asdf1234"
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val initVector = byteArrayOf(2, 2)
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } throws BadPaddingException()
+            }
+            fakeAuthDiskSource.apply {
+                storeUserBiometricInitVector(userId = userId, iv = initVector)
+                storeUserBiometricUnlockKey(userId = userId, biometricsKey = biometricsKey)
+                storePrivateKey(userId = userId, privateKey = privateKey)
+            }
+
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
+
+            assertEquals(VaultUnlockResult.BiometricDecodingError, result)
+            coVerify(exactly = 0) {
+                vaultSdkSource.derivePinProtectedUserKey(any(), any())
             }
         }
 
