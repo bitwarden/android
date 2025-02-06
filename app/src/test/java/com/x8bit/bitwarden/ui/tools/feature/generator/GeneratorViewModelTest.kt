@@ -2258,15 +2258,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `StartExploreGeneratorTour action calls first time action manager markCoachMarkTourCompleted called and show coach mark event sent`() =
         runTest {
-        val viewModel = createViewModel()
+            val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
                 assertEquals(GeneratorEvent.StartCoachMarkTour, awaitItem())
             }
-        verify(exactly = 1) {
-            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+            verify(exactly = 1) {
+                firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+            }
         }
-    }
     //region Helper Functions
 
     @Suppress("LongParameterList")

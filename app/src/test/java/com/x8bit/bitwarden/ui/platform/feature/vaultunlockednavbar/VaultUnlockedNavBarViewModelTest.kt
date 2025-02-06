@@ -248,6 +248,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
     @Suppress("MaxLineLength")
     @Test
     fun `on init with SendShortcut special circumstance should navigate to the send screen with shortcut event`() =
