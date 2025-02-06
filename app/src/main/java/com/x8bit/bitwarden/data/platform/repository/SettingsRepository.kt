@@ -232,11 +232,6 @@ interface SettingsRepository {
     fun storePullToRefreshEnabled(isPullToRefreshEnabled: Boolean)
 
     /**
-     * Clears any previously stored encrypted user key used with biometrics for the current user.
-     */
-    fun clearBiometricsKey()
-
-    /**
      * Stores the encrypted user key for biometrics, allowing it to be used to unlock the current
      * user's vault.
      */

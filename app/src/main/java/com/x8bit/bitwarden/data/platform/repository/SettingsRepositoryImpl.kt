@@ -510,12 +510,6 @@ class SettingsRepositoryImpl(
             )
     }
 
-    override fun clearBiometricsKey() {
-        val userId = activeUserId ?: return
-        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = null)
-        authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
-    }
-
     override fun storeUnlockPin(
         pin: String,
         shouldRequireMasterPasswordOnRestart: Boolean,

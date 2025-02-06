@@ -1088,6 +1088,7 @@ class AuthRepositoryImpl(
                     }
 
                     is VaultUnlockResult.AuthenticationError,
+                    VaultUnlockResult.BiometricDecodingError,
                     VaultUnlockResult.InvalidStateError,
                     VaultUnlockResult.GenericError,
                         -> {

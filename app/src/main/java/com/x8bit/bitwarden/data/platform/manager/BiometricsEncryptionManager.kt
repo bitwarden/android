@@ -14,6 +14,11 @@ interface BiometricsEncryptionManager {
     ): Cipher?
 
     /**
+     * Clears the data associated with the users biometrics.
+     */
+    fun clearBiometrics(userId: String)
+
+    /**
      * Gets the [Cipher] built from a keystore, or creates one if it doesn't already exist.
      */
     fun getOrCreateCipher(

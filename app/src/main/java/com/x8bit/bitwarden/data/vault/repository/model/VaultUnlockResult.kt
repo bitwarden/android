@@ -18,6 +18,11 @@ sealed class VaultUnlockResult {
     ) : VaultUnlockResult(), VaultUnlockError
 
     /**
+     * Unable to decode biometrics key.
+     */
+    data object BiometricDecodingError : VaultUnlockResult(), VaultUnlockError
+
+    /**
      * Unable to access user state information.
      */
     data object InvalidStateError : VaultUnlockResult(), VaultUnlockError

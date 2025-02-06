@@ -25,9 +25,11 @@ class LoginResultExtensionsTest {
     fun `VaultUnlockResult with no message value are mapped to LoginResult with null error message`() {
         val invalidStateResult = VaultUnlockResult.InvalidStateError.toLoginErrorResult()
         val genericErrorResult = VaultUnlockResult.GenericError.toLoginErrorResult()
+        val biometricErrorResult = VaultUnlockResult.BiometricDecodingError.toLoginErrorResult()
         val expectedResult = LoginResult.Error(errorMessage = null)
 
         assertEquals(expectedResult, invalidStateResult)
         assertEquals(expectedResult, genericErrorResult)
+        assertEquals(expectedResult, biometricErrorResult)
     }
 }
