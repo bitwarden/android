@@ -1366,6 +1366,10 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
         state.fido2GetCredentialsRequest
             ?.let { fido2GetCredentialsRequest ->
+                @Suppress("MaxLineLength")
+                Timber
+                    .tag("PASSKEY")
+                    .d("vaultLoadedReceive called with GetCredentialsRequest=$fido2GetCredentialsRequest")
                 val relyingPartyId = fido2CredentialManager
                     .getPasskeyAssertionOptionsOrNull(
                         requestJson = fido2GetCredentialsRequest.option.requestJson,
