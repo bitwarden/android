@@ -54,6 +54,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
+        coEvery { resendNewDeviceOtp() } returns ResendEmailResult.Success
         coEvery {
             login(
                 email = any(),
@@ -87,6 +88,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun tearDown() {
+        every { authRepository.newDeviceVerification } returns false
         unmockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
@@ -1062,6 +1064,108 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
                         ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `when AuthRepository newDeviceOtp is true ContinueButtonClick should call the login method with newDeviceOtp`() {
+        val code = " code"
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            codeInput = code,
+        )
+        val localAuthRepository: AuthRepository = mockk {
+            every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
+            every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+            every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
+            every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
+            every { webAuthResultFlow } returns mutableWebAuthResultFlow
+            every { newDeviceVerification } returns true
+            coEvery {
+                login(
+                    email = any(),
+                    password = any(),
+                    newDeviceOtp = any(),
+                    captchaToken = any(),
+                    orgIdentifier = any(),
+                )
+            } returns LoginResult.Success
+        }
+
+        val localViewModel =
+            TwoFactorLoginViewModel(
+                authRepository = localAuthRepository,
+                environmentRepository = environmentRepository,
+                resourceManager = resourceManager,
+                savedStateHandle = SavedStateHandle().also {
+                    it["state"] = initialState
+                },
+            )
+
+        localViewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+        assertEquals(
+            initialState.copy(
+                password = DEFAULT_PASSWORD,
+                email = DEFAULT_EMAIL_ADDRESS,
+                isContinueButtonEnabled = false,
+            ),
+            localViewModel.stateFlow.value,
+        )
+        coVerify(exactly = 1) {
+            localAuthRepository.login(
+                email = DEFAULT_STATE.email,
+                password = DEFAULT_STATE.password,
+                newDeviceOtp = code.trim(),
+                captchaToken = DEFAULT_STATE.captchaToken,
+                orgIdentifier = DEFAULT_STATE.orgIdentifier,
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with newDeviceVerification true should call ResendNewDeviceOtp`() =
+        runTest {
+            coEvery { authRepository.newDeviceVerification } returns true
+            val initialState = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.EMAIL,
+            )
+            val viewModel = createViewModel(state = initialState)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    TwoFactorLoginAction.ResendEmailClick,
+                )
+                awaitItem()
+
+                coVerify(exactly = 1) {
+                    authRepository.resendNewDeviceOtp()
+                }
+                coVerify(exactly = 0) {
+                    authRepository.resendVerificationCodeEmail()
+                }
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with ResendEmailResult Success should ShowToast`() =
+        runTest {
+            every { authRepository.newDeviceVerification } returns true
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                        resendEmailResult = ResendEmailResult.Success,
+                        isUserInitiated = true,
+                    ),
+                )
+                assertEquals(
+                    TwoFactorLoginEvent.ShowToast(
+                        message = R.string.verification_email_sent.asText(),
                     ),
                     awaitItem(),
                 )
