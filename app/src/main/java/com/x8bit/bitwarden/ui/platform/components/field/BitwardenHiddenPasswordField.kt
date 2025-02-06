@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -36,21 +37,23 @@ fun BitwardenHiddenPasswordField(
     passwordFieldTestTag: String? = null,
 ) {
     CompositionLocalProvider(value = LocalTextToolbar provides BitwardenEmptyTextToolbar) {
-        TextField(
-            modifier = modifier
-                .cardStyle(cardStyle = cardStyle, paddingVertical = 6.dp)
-                .nullableTestTag(tag = passwordFieldTestTag),
-            textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-            label = label?.let { { Text(text = it) } },
-            value = value,
-            onValueChange = { },
-            visualTransformation = PasswordVisualTransformation(),
-            singleLine = true,
-            enabled = false,
-            readOnly = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            colors = bitwardenTextFieldColors(),
-        )
+        IncognitoInput {
+            TextField(
+                modifier = modifier
+                    .cardStyle(cardStyle = cardStyle, paddingVertical = 6.dp)
+                    .nullableTestTag(tag = passwordFieldTestTag),
+                textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+                label = label?.let { { Text(text = it) } },
+                value = value,
+                onValueChange = { },
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                enabled = false,
+                readOnly = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                colors = bitwardenTextFieldColors(),
+            )
+        }
     }
 }
 

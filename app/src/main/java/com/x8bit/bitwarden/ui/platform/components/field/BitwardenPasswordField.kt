@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -140,55 +141,57 @@ fun BitwardenPasswordField(
                 .tabNavigation()
                 .focusRequester(focusRequester = focusRequester),
         ) {
-            TextField(
-                colors = bitwardenTextFieldColors(),
-                textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-                label = label?.let { { Text(text = it) } },
-                value = textFieldValue,
-                onValueChange = {
-                    textFieldValueState = it
-                    val stringChangedSinceLastInvocation = lastTextValue != it.text
-                    lastTextValue = it.text
-                    if (stringChangedSinceLastInvocation) {
-                        onValueChange(it.text)
-                    }
-                },
-                visualTransformation = when {
-                    !showPassword -> PasswordVisualTransformation()
-                    readOnly -> nonLetterColorVisualTransformation()
-                    else -> VisualTransformation.None
-                },
-                singleLine = singleLine,
-                readOnly = readOnly,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = imeAction,
-                ),
-                keyboardActions = keyboardActions,
-                trailingIcon = {
-                    BitwardenRowOfActions(
-                        modifier = Modifier.padding(paddingValues = actionsPadding),
-                        actions = {
-                            BitwardenStandardIconButton(
-                                modifier = Modifier.nullableTestTag(tag = showPasswordTestTag),
-                                vectorIconRes = if (showPassword) {
-                                    R.drawable.ic_eye_slash
-                                } else {
-                                    R.drawable.ic_eye
-                                },
-                                contentDescription = stringResource(
-                                    id = if (showPassword) R.string.hide else R.string.show,
-                                ),
-                                onClick = { showPasswordChange.invoke(!showPassword) },
-                            )
-                            actions?.invoke(this)
-                        },
-                    )
-                },
-                modifier = Modifier
-                    .nullableTestTag(tag = passwordFieldTestTag)
-                    .fillMaxWidth(),
-            )
+            IncognitoInput {
+                TextField(
+                    colors = bitwardenTextFieldColors(),
+                    textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+                    label = label?.let { { Text(text = it) } },
+                    value = textFieldValue,
+                    onValueChange = {
+                        textFieldValueState = it
+                        val stringChangedSinceLastInvocation = lastTextValue != it.text
+                        lastTextValue = it.text
+                        if (stringChangedSinceLastInvocation) {
+                            onValueChange(it.text)
+                        }
+                    },
+                    visualTransformation = when {
+                        !showPassword -> PasswordVisualTransformation()
+                        readOnly -> nonLetterColorVisualTransformation()
+                        else -> VisualTransformation.None
+                    },
+                    singleLine = singleLine,
+                    readOnly = readOnly,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = keyboardType,
+                        imeAction = imeAction,
+                    ),
+                    keyboardActions = keyboardActions,
+                    trailingIcon = {
+                        BitwardenRowOfActions(
+                            modifier = Modifier.padding(paddingValues = actionsPadding),
+                            actions = {
+                                BitwardenStandardIconButton(
+                                    modifier = Modifier.nullableTestTag(tag = showPasswordTestTag),
+                                    vectorIconRes = if (showPassword) {
+                                        R.drawable.ic_eye_slash
+                                    } else {
+                                        R.drawable.ic_eye
+                                    },
+                                    contentDescription = stringResource(
+                                        id = if (showPassword) R.string.hide else R.string.show,
+                                    ),
+                                    onClick = { showPasswordChange.invoke(!showPassword) },
+                                )
+                                actions?.invoke(this)
+                            },
+                        )
+                    },
+                    modifier = Modifier
+                        .nullableTestTag(tag = passwordFieldTestTag)
+                        .fillMaxWidth(),
+                )
+            }
             supportingContent
                 ?.let { content ->
                     Spacer(modifier = Modifier.height(height = 6.dp))
