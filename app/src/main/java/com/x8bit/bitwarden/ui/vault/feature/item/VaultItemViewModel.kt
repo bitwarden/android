@@ -1124,7 +1124,6 @@ class VaultItemViewModel @Inject constructor(
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
         )
-
         ?: VaultItemState.ViewState.Error(message = errorText)
 
     private fun handleValidatePasswordReceive(
@@ -1451,6 +1450,7 @@ data class VaultItemState(
              * @property canDelete Indicates if the cipher can be deleted.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
+             * @property favorite Indicates that the cipher is favoried.
              */
             @Parcelize
             data class Common(
@@ -1466,6 +1466,7 @@ data class VaultItemState(
                 val canDelete: Boolean,
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
+                val favorite: Boolean,
             ) : Parcelable {
 
                 /**

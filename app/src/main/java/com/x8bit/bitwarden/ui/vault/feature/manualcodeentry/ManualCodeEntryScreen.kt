@@ -29,9 +29,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,7 +36,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -47,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
@@ -198,8 +195,11 @@ fun ManualCodeEntryScreen(
             )
 
             Spacer(modifier = Modifier.height(height = 24.dp))
-            ScanQrCodeText(
-                onScanClick = remember(viewModel) {
+            BitwardenHyperTextLink(
+                annotatedResId = R.string.cannot_add_authenticator_key_scan_qr_code,
+                annotationKey = "scanQrCode",
+                accessibilityString = stringResource(id = R.string.scan_qr_code),
+                onClick = remember(viewModel) {
                     {
                         if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
                             viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
@@ -235,37 +235,4 @@ private fun ManualCodeEntryDialogs(
 
         null -> Unit
     }
-}
-
-@Composable
-private fun ScanQrCodeText(
-    onScanClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val scanQrCodeString = stringResource(id = R.string.scan_qr_code)
-    val annotatedLinkString = R.string
-        .cannot_add_authenticator_key_scan_qr_code
-        .toAnnotatedString {
-            when (it) {
-                "scanQrCode" -> onScanClick()
-            }
-        }
-    Text(
-        text = annotatedLinkString,
-        style = BitwardenTheme.typography.bodySmall,
-        color = BitwardenTheme.colorScheme.text.secondary,
-        textAlign = TextAlign.Center,
-        modifier = modifier
-            .semantics {
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = scanQrCodeString,
-                        action = {
-                            onScanClick()
-                            true
-                        },
-                    ),
-                )
-            },
-    )
 }

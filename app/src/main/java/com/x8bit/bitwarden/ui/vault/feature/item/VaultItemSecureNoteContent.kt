@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 
 /**
@@ -38,26 +40,11 @@ fun VaultItemSecureNoteContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.item_information),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
-
-        item {
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
+            Spacer(modifier = Modifier.height(height = 12.dp))
+            ItemNameField(
                 value = commonState.name,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
+                isFavorite = commonState.favorite,
                 textFieldTestTag = "ItemNameEntry",
-                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -66,14 +53,6 @@ fun VaultItemSecureNoteContent(
 
         commonState.notes?.let { notes ->
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.notes),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.notes),

@@ -3318,6 +3318,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canDelete = true,
                 canAssignToCollections = true,
                 canEdit = true,
+                favorite = false,
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

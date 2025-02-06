@@ -191,6 +191,7 @@
   <string name="set_pin">Set PIN</string>
   <string name="set_pin_direction">Enter a 4 digit PIN code to unlock the app with.</string>
   <string name="item_information">Item information</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">Item saved</string>
   <string name="submitting">Submitting...</string>
   <string name="syncing">Syncing...</string>
@@ -418,6 +419,7 @@ Scanning will happen automatically.</string>
   <string name="identity_name">Identity name</string>
   <string name="value">Value</string>
   <string name="password_history">Password history</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Types</string>
   <string name="no_passwords_to_list">No passwords to list.</string>
   <string name="no_items_to_list">There are no items to list.</string>

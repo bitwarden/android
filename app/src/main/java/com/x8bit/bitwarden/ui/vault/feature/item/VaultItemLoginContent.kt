@@ -1,21 +1,19 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -27,7 +25,12 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -52,7 +55,7 @@ fun VaultItemLoginContent(
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.item_information),
+                label = stringResource(id = R.string.item_details),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
@@ -61,14 +64,10 @@ fun VaultItemLoginContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         item {
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
+            ItemNameField(
                 value = commonState.name,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
+                isFavorite = commonState.favorite,
                 textFieldTestTag = "LoginItemNameEntry",
-                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -95,7 +94,8 @@ fun VaultItemLoginContent(
                     username = username,
                     onCopyUsernameClick = vaultLoginItemTypeHandlers.onCopyUsernameClick,
                     cardStyle = loginItemState
-                        .passwordData?.let { CardStyle.Top(dividerPadding = 0.dp) }
+                        .passwordData
+                        ?.let { CardStyle.Top(dividerPadding = 0.dp) }
                         ?: CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -112,7 +112,8 @@ fun VaultItemLoginContent(
                     onCheckForBreachClick = vaultLoginItemTypeHandlers.onCheckForBreachClick,
                     onCopyPasswordClick = vaultLoginItemTypeHandlers.onCopyPasswordClick,
                     cardStyle = loginItemState
-                        .username?.let { CardStyle.Bottom }
+                        .username
+                        ?.let { CardStyle.Bottom }
                         ?: CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -125,7 +126,7 @@ fun VaultItemLoginContent(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Fido2CredentialField(
-                    creationDate = creationDate.invoke(),
+                    creationDate = creationDate(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
@@ -177,7 +178,7 @@ fun VaultItemLoginContent(
             item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -259,6 +260,7 @@ fun VaultItemLoginContent(
 
         loginItemState.passwordRevisionDate?.let { revisionDate ->
             item {
+                Spacer(modifier = Modifier.height(height = 4.dp))
                 VaultItemUpdateText(
                     header = "${stringResource(id = R.string.date_password_updated)}: ",
                     text = revisionDate,
@@ -272,11 +274,16 @@ fun VaultItemLoginContent(
 
         loginItemState.passwordHistoryCount?.let { passwordHistoryCount ->
             item {
-                PasswordHistoryCount(
-                    passwordHistoryCount = passwordHistoryCount,
-                    onPasswordHistoryClick = vaultLoginItemTypeHandlers.onPasswordHistoryClick,
+                Spacer(modifier = Modifier.height(height = 4.dp))
+                BitwardenHyperTextLink(
+                    annotatedResId = R.string.password_history_count,
+                    args = arrayOf(passwordHistoryCount.toString()),
+                    annotationKey = "passwordHistory",
+                    accessibilityString = stringResource(id = R.string.password_history),
+                    onClick = vaultLoginItemTypeHandlers.onPasswordHistoryClick,
+                    style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .wrapContentWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 12.dp),
                 )
@@ -352,18 +359,23 @@ private fun PasswordField(
             singleLine = false,
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_check_mark,
-                    contentDescription = stringResource(
-                        id = R.string.check_known_data_breaches_for_this_password,
-                    ),
-                    onClick = onCheckForBreachClick,
-                    modifier = Modifier.testTag(tag = "LoginCheckPasswordButton"),
-                )
-                BitwardenStandardIconButton(
                     vectorIconRes = R.drawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_password),
                     onClick = onCopyPasswordClick,
                     modifier = Modifier.testTag(tag = "LoginCopyPasswordButton"),
+                )
+            },
+            supportingContentPadding = PaddingValues(),
+            supportingContent = {
+                BitwardenClickableText(
+                    label = stringResource(id = R.string.check_password_for_data_breaches),
+                    style = BitwardenTheme.typography.labelMedium,
+                    onClick = onCheckForBreachClick,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(tag = "LoginCheckPasswordButton"),
                 )
             },
             showPasswordTestTag = "LoginViewPasswordButton",
@@ -383,29 +395,6 @@ private fun PasswordField(
 }
 
 @Composable
-private fun PasswordHistoryCount(
-    passwordHistoryCount: Int,
-    onPasswordHistoryClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        modifier = modifier.semantics(mergeDescendants = true) { },
-    ) {
-        Text(
-            text = "${stringResource(id = R.string.password_history)}: ",
-            style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.secondary,
-        )
-        Text(
-            text = passwordHistoryCount.toString(),
-            style = BitwardenTheme.typography.bodySmall,
-            color = BitwardenTheme.colorScheme.text.interaction,
-            modifier = Modifier.clickable(onClick = onPasswordHistoryClick),
-        )
-    }
-}
-
-@Composable
 private fun TotpField(
     totpCodeItemData: TotpCodeItemData,
     enabled: Boolean,
@@ -414,7 +403,7 @@ private fun TotpField(
 ) {
     if (enabled) {
         BitwardenTextField(
-            label = stringResource(id = R.string.verification_code_totp),
+            label = stringResource(id = R.string.authenticator_key),
             value = totpCodeItemData.verificationCode
                 .chunked(AUTH_CODE_SPACING_INTERVAL)
                 .joinToString(" "),
@@ -440,7 +429,7 @@ private fun TotpField(
         )
     } else {
         BitwardenTextField(
-            label = stringResource(id = R.string.verification_code_totp),
+            label = stringResource(id = R.string.authenticator_key),
             value = "",
             supportingText = stringResource(id = R.string.premium_subscription_required),
             enabled = false,
@@ -462,7 +451,7 @@ private fun UriField(
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextField(
-        label = stringResource(id = R.string.uri),
+        label = stringResource(id = R.string.website_uri),
         value = uriData.uri,
         onValueChange = { },
         readOnly = true,
