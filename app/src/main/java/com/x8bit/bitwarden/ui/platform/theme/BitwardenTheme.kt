@@ -18,6 +18,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
@@ -125,8 +126,7 @@ fun BitwardenTheme(
                 defaultColorScheme = materialColorScheme,
             ),
             typography = bitwardenTypography.toMaterialTypography(),
-            content = content,
-        )
+        ) { IncognitoInput { content() } }
     }
 }
 

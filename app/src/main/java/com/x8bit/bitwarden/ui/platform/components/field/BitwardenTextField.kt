@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -49,7 +48,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
-import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -185,7 +183,6 @@ fun BitwardenTextField(
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  * defining the layout of the actions.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun BitwardenTextField(
@@ -260,53 +257,49 @@ fun BitwardenTextField(
                     )
                     .fillMaxWidth(),
             ) {
-                // Workaround to force Incognito keyboard usage. Original workaround provided
-                // by Google can be found here: https://issuetracker.google.com/issues/359257538
-                IncognitoInput {
-                    TextField(
-                        colors = bitwardenTextFieldColors(),
-                        enabled = enabled,
-                        label = label?.let { { Text(text = it) } },
-                        value = textFieldValue,
-                        leadingIcon = leadingIconResource?.let { iconResource ->
-                            {
-                                Icon(
-                                    painter = iconResource.iconPainter,
-                                    contentDescription = iconResource.contentDescription,
-                                )
-                            }
-                        },
-                        placeholder = placeholder?.let { { Text(text = it, style = textStyle) } },
-                        onValueChange = {
-                            hasFocused = true
-                            textFieldValueState = it
-                            val stringChangedSinceLastInvocation = lastTextValue != it.text
-                            lastTextValue = it.text
-                            if (stringChangedSinceLastInvocation) {
-                                onValueChange(it.text)
-                            }
-                        },
-                        singleLine = singleLine,
-                        readOnly = readOnly,
-                        textStyle = textStyle,
-                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-                        trailingIcon = actions?.let {
-                            {
-                                BitwardenRowOfActions(
-                                    actions = it,
-                                    modifier = Modifier
-                                        .nullableTestTag(tag = actionsTestTag)
-                                        .padding(paddingValues = actionsPadding),
-                                )
-                            }
-                        },
-                        isError = isError,
-                        visualTransformation = visualTransformation,
-                        modifier = Modifier
-                            .nullableTestTag(tag = textFieldTestTag)
-                            .fillMaxWidth(),
-                    )
-                }
+                TextField(
+                    colors = bitwardenTextFieldColors(),
+                    enabled = enabled,
+                    label = label?.let { { Text(text = it) } },
+                    value = textFieldValue,
+                    leadingIcon = leadingIconResource?.let { iconResource ->
+                        {
+                            Icon(
+                                painter = iconResource.iconPainter,
+                                contentDescription = iconResource.contentDescription,
+                            )
+                        }
+                    },
+                    placeholder = placeholder?.let { { Text(text = it, style = textStyle) } },
+                    onValueChange = {
+                        hasFocused = true
+                        textFieldValueState = it
+                        val stringChangedSinceLastInvocation = lastTextValue != it.text
+                        lastTextValue = it.text
+                        if (stringChangedSinceLastInvocation) {
+                            onValueChange(it.text)
+                        }
+                    },
+                    singleLine = singleLine,
+                    readOnly = readOnly,
+                    textStyle = textStyle,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
+                    trailingIcon = actions?.let {
+                        {
+                            BitwardenRowOfActions(
+                                actions = it,
+                                modifier = Modifier
+                                    .nullableTestTag(tag = actionsTestTag)
+                                    .padding(paddingValues = actionsPadding),
+                            )
+                        }
+                    },
+                    isError = isError,
+                    visualTransformation = visualTransformation,
+                    modifier = Modifier
+                        .nullableTestTag(tag = textFieldTestTag)
+                        .fillMaxWidth(),
+                )
                 supportingContent
                     ?.let { content ->
                         Spacer(modifier = Modifier.height(height = 6.dp))
