@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,9 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -43,11 +39,11 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
@@ -324,43 +320,14 @@ private fun AddSendOptions(
     addSendHandlers: AddSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
-    Row(
+    BitwardenExpandingHeader(
+        isExpanded = isExpanded,
+        onClick = { isExpanded = !isExpanded },
         modifier = Modifier
-            .testTag("SendShowHideOptionsButton")
-            .fillMaxWidth()
-            .clickable(
-                onClickLabel = if (isExpanded) {
-                    stringResource(id = R.string.options_expanded)
-                } else {
-                    stringResource(id = R.string.options_collapsed)
-                },
-                onClick = { isExpanded = !isExpanded },
-            )
-            .minimumInteractiveComponentSize()
-            .padding(top = 16.dp, bottom = 8.dp)
+            .testTag(tag = "SendShowHideOptionsButton")
             .standardHorizontalMargin()
-            .padding(horizontal = 16.dp)
-            .semantics(mergeDescendants = true) {},
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(id = R.string.additional_options),
-            color = BitwardenTheme.colorScheme.text.interaction,
-            style = BitwardenTheme.typography.labelLarge,
-            modifier = Modifier.padding(end = 8.dp),
-        )
-        Icon(
-            painter = rememberVectorPainter(
-                if (isExpanded) {
-                    R.drawable.ic_chevron_up_small
-                } else {
-                    R.drawable.ic_chevron_down_small
-                },
-            ),
-            contentDescription = null,
-            tint = BitwardenTheme.colorScheme.icon.secondary,
-        )
-    }
+            .fillMaxWidth(),
+    )
     // Hide all content if not expanded:
     AnimatedVisibility(
         visible = isExpanded,

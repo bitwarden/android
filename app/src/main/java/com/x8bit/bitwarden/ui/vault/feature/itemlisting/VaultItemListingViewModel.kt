@@ -487,7 +487,10 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleCopySendUrlClick(action: ListingItemOverflowAction.SendAction.CopyUrlClick) {
-        clipboardManager.setText(text = action.sendUrl)
+        clipboardManager.setText(
+            text = action.sendUrl,
+            toastDescriptorOverride = R.string.send_link.asText(),
+        )
     }
 
     private fun handleDeleteSendClick(action: ListingItemOverflowAction.SendAction.DeleteClick) {
@@ -757,19 +760,28 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(action.notes)
+        clipboardManager.setText(
+            text = action.notes,
+            toastDescriptorOverride = R.string.notes.asText(),
+        )
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(action.number)
+        clipboardManager.setText(
+            text = action.number,
+            toastDescriptorOverride = R.string.number.asText(),
+        )
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(action.password)
+        clipboardManager.setText(
+            text = action.password,
+            toastDescriptorOverride = R.string.password.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
         )
@@ -778,7 +790,10 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(action.securityCode)
+        clipboardManager.setText(
+            text = action.securityCode,
+            toastDescriptorOverride = R.string.security_code.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
         )
@@ -796,7 +811,10 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleCopyUsernameClick(
         action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
     ) {
-        clipboardManager.setText(action.username)
+        clipboardManager.setText(
+            text = action.username,
+            toastDescriptorOverride = R.string.username.asText(),
+        )
     }
 
     private fun handleEditCipherClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
@@ -1064,7 +1082,10 @@ class VaultItemListingViewModel @Inject constructor(
         when (val result = action.result) {
             is GenerateTotpResult.Error -> Unit
             is GenerateTotpResult.Success -> {
-                clipboardManager.setText(result.code)
+                clipboardManager.setText(
+                    text = result.code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
     }
@@ -1592,6 +1613,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 sendView.determineListingPredicate(listingType)
                             }
                             .toViewState(
+                                itemListingType = listingType,
                                 baseWebSendUrl = state.baseWebSendUrl,
                                 clock = clock,
                             )
@@ -1926,10 +1948,10 @@ data class VaultItemListingState(
          * Represents a state where the [VaultItemListingScreen] has no items to display.
          */
         data class NoItems(
-            val header: Text,
             val message: Text,
             val buttonText: Text,
-            @DrawableRes val vectorRes: Int = R.drawable.img_vault_items,
+            val header: Text? = null,
+            @DrawableRes val vectorRes: Int? = null,
             val shouldShowAddButton: Boolean,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true

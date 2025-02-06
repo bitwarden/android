@@ -234,8 +234,8 @@ fun GeneratorScreen(
                             onCloseClick = remember(viewModel) {
                                 { viewModel.trySendAction(GeneratorAction.CloseClick) }
                             },
-                            onSelectClick = remember(viewModel) {
-                                { viewModel.trySendAction(GeneratorAction.SelectClick) }
+                            onSaveClick = remember(viewModel) {
+                                { viewModel.trySendAction(GeneratorAction.SaveClick) }
                             },
                         )
                     }
@@ -333,7 +333,7 @@ private fun ModalAppBar(
     generatorMode: GeneratorMode.Modal,
     scrollBehavior: TopAppBarScrollBehavior,
     onCloseClick: () -> Unit,
-    onSelectClick: () -> Unit,
+    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTopAppBar(
@@ -348,9 +348,9 @@ private fun ModalAppBar(
         },
         actions = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.select),
-                onClick = onSelectClick,
-                modifier = Modifier.testTag("SelectButton"),
+                label = stringResource(id = R.string.save),
+                onClick = onSaveClick,
+                modifier = Modifier.testTag("SaveButton"),
             )
         },
         modifier = modifier,
@@ -656,6 +656,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
                         )
                     },
                     shape = CoachMarkHighlightShape.RoundedRectangle(radius = 50f),
+                    leftAction = null,
                 ) {
                     SegmentedButtonOptionContent(option = option)
                 }
@@ -1011,9 +1012,8 @@ private fun PassphraseNumWordsCounterItem(
         value = numWords.coerceIn(minimumValue = minValue, maximumValue = maxValue),
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
-        stepperActionsTestTag = "NumberOfWordsStepper",
         cardStyle = CardStyle.Full,
-        modifier = modifier.testTag(tag = "NumberOfWordsLabel"),
+        modifier = modifier.testTag(tag = "NumberOfWordsStepper"),
     )
 }
 

@@ -24,7 +24,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationRe
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 /**

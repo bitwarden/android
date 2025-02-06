@@ -357,6 +357,12 @@ private fun VaultScreenScaffold(
                         )
                     }
                     VaultNoItems(
+                        vectorRes = R.drawable.img_vault_items,
+                        headerText = stringResource(id = R.string.save_and_protect_your_data),
+                        message = stringResource(
+                            R.string.the_vault_protects_more_than_just_passwords,
+                        ),
+                        buttonText = stringResource(R.string.new_login),
                         policyDisablesSend = false,
                         addItemClickAction = vaultHandlers.addItemClickAction,
                         modifier = Modifier.fillMaxSize(),

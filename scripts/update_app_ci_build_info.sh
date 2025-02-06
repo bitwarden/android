@@ -8,7 +8,7 @@
 
 if [ $# -ne 5 ]; then
     echo "Usage: $0 <repository> <branch> <commit_hash> <ci_run_number> <ci_run_attempt>"
-    echo "E.g: $0 bitwarden/android main abc123 123 1"
+    echo "E.g: ./scripts/$0 bitwarden/android main abc123 123 1"
     exit 1
 fi
 
@@ -20,7 +20,7 @@ commit_hash=$3
 ci_run_number=$4
 ci_run_attempt=$5
 
-ci_build_info_file="../ci.properties"
+ci_build_info_file="ci.properties"
 git_source="${repository}/${branch}@${commit_hash}"
 ci_run_source="${repository}/actions/runs/${ci_run_number}/attempts/${ci_run_attempt}"
 emoji_brick="\\ud83e\\uddf1" # 🧱

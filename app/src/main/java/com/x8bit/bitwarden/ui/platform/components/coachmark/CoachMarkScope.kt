@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.coachmark
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -53,10 +52,10 @@ interface CoachMarkScope<T : Enum<T>> {
         title: String,
         description: String,
         modifier: Modifier = Modifier,
-        shape: CoachMarkHighlightShape = CoachMarkHighlightShape.RoundedRectangle(),
-        onDismiss: (() -> Unit)? = null,
-        leftAction: (@Composable RowScope.() -> Unit)? = null,
-        rightAction: (@Composable RowScope.() -> Unit)? = null,
+        shape: CoachMarkHighlightShape,
+        onDismiss: (() -> Unit)?,
+        leftAction: (@Composable RowScope.() -> Unit)?,
+        rightAction: (@Composable RowScope.() -> Unit)?,
         anchorContent: @Composable () -> Unit,
     )
 

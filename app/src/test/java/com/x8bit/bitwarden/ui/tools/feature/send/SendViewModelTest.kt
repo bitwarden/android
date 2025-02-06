@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
@@ -39,7 +40,9 @@ class SendViewModelTest : BaseViewModelTest() {
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
     private val mutableSendDataFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
     private val environmentRepo: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
     }
@@ -238,18 +241,18 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CopyClick should call setText on the ClipboardManager`() {
+    fun `CopyClick should call setText on the ClipboardManager`() = runTest {
         val viewModel = createViewModel()
         val testUrl = "www.test.com/"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { shareUrl } returns testUrl
         }
-        every { clipboardManager.setText(testUrl) } just runs
-
         viewModel.trySendAction(SendAction.CopyClick(sendItem))
-
         verify(exactly = 1) {
-            clipboardManager.setText(testUrl)
+            clipboardManager.setText(
+                text = testUrl,
+                toastDescriptorOverride = R.string.send_link.asText(),
+            )
         }
     }
 

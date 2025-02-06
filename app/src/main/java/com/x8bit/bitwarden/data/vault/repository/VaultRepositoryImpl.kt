@@ -114,6 +114,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import javax.crypto.Cipher
@@ -555,9 +556,13 @@ class VaultRepositoryImpl(
                 initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                     decryptedUserKey = iv
                         ?.let {
-                            cipher
-                                .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
-                                .decodeToString()
+                            try {
+                                cipher
+                                    .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
+                                    .decodeToString()
+                            } catch (_: GeneralSecurityException) {
+                                return VaultUnlockResult.BiometricDecodingError
+                            }
                         }
                         ?: biometricsKey,
                 ),

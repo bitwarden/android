@@ -193,6 +193,22 @@ fun VaultData.toViewState(
                         R.string.no_items_trash
                     }
 
+                    VaultItemListingState.ItemListingType.Vault.Card -> {
+                        R.string.no_cards
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Identity -> {
+                        R.string.no_identities
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Login -> {
+                        R.string.no_logins
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.SecureNote -> {
+                        R.string.no_notes
+                    }
+
                     else -> R.string.no_items
                 }
                     .asText()
@@ -207,16 +223,35 @@ fun VaultData.toViewState(
         }
         VaultItemListingState.ViewState.NoItems(
             header = totpData
-                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") }
-                ?: R.string.save_and_protect_your_data.asText(),
+                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") },
             message = message,
             shouldShowAddButton = shouldShowAddButton,
             buttonText = fido2CreationData
                 ?.let { R.string.save_passkey_as_new_login.asText() }
-                ?: R.string.add_an_item.asText(),
+                ?: run {
+                    when (itemListingType) {
+                        VaultItemListingState.ItemListingType.Vault.Card -> {
+                            R.string.new_card
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.Identity -> {
+                            R.string.new_identity
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.Login -> {
+                            R.string.new_login
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.SecureNote -> {
+                            R.string.new_note
+                        }
+
+                        else -> R.string.new_item
+                    }
+                        .asText()
+                },
             vectorRes = totpData
-                ?.let { R.drawable.img_folder_question }
-                ?: R.drawable.img_vault_items,
+                ?.let { R.drawable.img_folder_question },
         )
     }
 }
@@ -225,6 +260,7 @@ fun VaultData.toViewState(
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
 fun List<SendView>.toViewState(
+    itemListingType: VaultItemListingState.ItemListingType.Send,
     baseWebSendUrl: String,
     clock: Clock,
 ): VaultItemListingState.ViewState =
@@ -239,10 +275,17 @@ fun List<SendView>.toViewState(
         )
     } else {
         VaultItemListingState.ViewState.NoItems(
-            header = R.string.save_and_protect_your_data.asText(),
-            message = R.string.no_items.asText(),
+            message = when (itemListingType) {
+                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.no_file_sends
+                VaultItemListingState.ItemListingType.Send.SendText -> R.string.no_text_sends
+            }
+                .asText(),
             shouldShowAddButton = true,
-            buttonText = R.string.add_an_item.asText(),
+            buttonText = when (itemListingType) {
+                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.new_file_send
+                VaultItemListingState.ItemListingType.Send.SendText -> R.string.new_text_send
+            }
+                .asText(),
         )
     }
 

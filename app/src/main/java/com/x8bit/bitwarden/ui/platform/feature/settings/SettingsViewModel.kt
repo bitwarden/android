@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -194,30 +195,37 @@ sealed class SettingsAction {
  */
 enum class Settings(
     val text: Text,
+    @DrawableRes val vectorIconRes: Int,
     val testTag: String,
 ) {
     ACCOUNT_SECURITY(
         text = R.string.account_security.asText(),
+        vectorIconRes = R.drawable.ic_locked,
         testTag = "AccountSecuritySettingsButton",
     ),
     AUTO_FILL(
         text = R.string.autofill.asText(),
+        vectorIconRes = R.drawable.ic_check_mark,
         testTag = "AutofillSettingsButton",
     ),
     VAULT(
         text = R.string.vault.asText(),
+        vectorIconRes = R.drawable.ic_vault,
         testTag = "VaultSettingsButton",
     ),
     APPEARANCE(
         text = R.string.appearance.asText(),
+        vectorIconRes = R.drawable.ic_paintbrush,
         testTag = "AppearanceSettingsButton",
     ),
     OTHER(
         text = R.string.other.asText(),
+        vectorIconRes = R.drawable.ic_filter,
         testTag = "OtherSettingsButton",
     ),
     ABOUT(
         text = R.string.about.asText(),
+        vectorIconRes = R.drawable.ic_info_circle,
         testTag = "AboutSettingsButton",
     ),
 }

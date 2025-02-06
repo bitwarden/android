@@ -65,6 +65,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -1095,7 +1097,10 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginCopyTotpKeyText(
         action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
-        clipboardManager.setText(text = action.totpKey)
+        clipboardManager.setText(
+            text = action.totpKey,
+            toastDescriptorOverride = R.string.authenticator_key.asText(),
+        )
     }
 
     private fun handleLoginClearTotpKey() {
@@ -2206,6 +2211,11 @@ data class VaultAddEditState(
                 abstract val itemTypeOption: ItemTypeOption
 
                 /**
+                 * A list of all the linked field types supported by this [ItemType].
+                 */
+                abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+
+                /**
                  * Represents the login item information.
                  *
                  * @property username The username required for the login item.
@@ -2237,6 +2247,12 @@ data class VaultAddEditState(
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
 
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.PASSWORD,
+                            VaultLinkedFieldType.USERNAME,
+                        )
+
                     /**
                      * Indicates whether the passkey can or cannot be removed.
                      */
@@ -2263,6 +2279,16 @@ data class VaultAddEditState(
                     val securityCode: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.CARD
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.CARDHOLDER_NAME,
+                            VaultLinkedFieldType.EXPIRATION_MONTH,
+                            VaultLinkedFieldType.EXPIRATION_YEAR,
+                            VaultLinkedFieldType.SECURITY_CODE,
+                            VaultLinkedFieldType.BRAND,
+                            VaultLinkedFieldType.NUMBER,
+                        )
                 }
 
                 /**
@@ -2308,8 +2334,30 @@ data class VaultAddEditState(
                     val zip: String = "",
                     val country: String = "",
                 ) : ItemType() {
-
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.IDENTITY
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.TITLE,
+                            VaultLinkedFieldType.MIDDLE_NAME,
+                            VaultLinkedFieldType.ADDRESS_1,
+                            VaultLinkedFieldType.ADDRESS_2,
+                            VaultLinkedFieldType.ADDRESS_3,
+                            VaultLinkedFieldType.CITY,
+                            VaultLinkedFieldType.STATE,
+                            VaultLinkedFieldType.POSTAL_CODE,
+                            VaultLinkedFieldType.COUNTRY,
+                            VaultLinkedFieldType.COMPANY,
+                            VaultLinkedFieldType.EMAIL,
+                            VaultLinkedFieldType.PHONE,
+                            VaultLinkedFieldType.SSN,
+                            VaultLinkedFieldType.IDENTITY_USERNAME,
+                            VaultLinkedFieldType.PASSPORT_NUMBER,
+                            VaultLinkedFieldType.LICENSE_NUMBER,
+                            VaultLinkedFieldType.FIRST_NAME,
+                            VaultLinkedFieldType.LAST_NAME,
+                            VaultLinkedFieldType.FULL_NAME,
+                        )
                 }
 
                 /**
@@ -2318,6 +2366,8 @@ data class VaultAddEditState(
                 @Parcelize
                 data object SecureNotes : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SECURE_NOTES
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
                 }
 
                 /**
@@ -2337,6 +2387,8 @@ data class VaultAddEditState(
                     val showFingerprint: Boolean = false,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
                 }
             }
 

@@ -36,7 +36,7 @@ fun VaultAddEditUriItem(
     var shouldShowMatchDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextField(
-        label = stringResource(id = R.string.uri),
+        label = stringResource(id = R.string.website_uri),
         value = uriItem.uri.orEmpty(),
         onValueChange = { onUriValueChange(uriItem.copy(uri = it)) },
         actions = {
