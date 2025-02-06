@@ -180,7 +180,7 @@ sealed class FlagKey<out T : Any> {
     data object MutualTls : FlagKey<Boolean>() {
         override val keyName: String = "mutual-tls"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
