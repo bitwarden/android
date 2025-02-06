@@ -301,6 +301,7 @@ Scanning will happen automatically.</string>
   <string name="number">Number</string>
   <string name="security_code">Security code</string>
   <string name="type_card">Card</string>
+  <string name="type_collection">Collection</string>
   <string name="type_identity">Identity</string>
   <string name="type_login">Login</string>
   <string name="type_secure_note">Secure note</string>

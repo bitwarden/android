@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -170,7 +171,7 @@ class VaultViewModel @Inject constructor(
 
     override fun handleAction(action: VaultAction) {
         when (action) {
-            is VaultAction.AddItemClick -> handleAddItemClick()
+            is VaultAction.AddItemClick -> handleAddItemClick(action)
             is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
             is VaultAction.CollectionClick -> handleCollectionItemClick(action)
@@ -203,6 +204,16 @@ class VaultViewModel @Inject constructor(
             VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
             VaultAction.LifecycleResumed -> handleLifecycleResumed()
+            VaultAction.SelectAddItemType -> handleSelectAddItemType()
+        }
+    }
+
+    //region VaultAction Handlers
+    private fun handleSelectAddItemType() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType,
+            )
         }
     }
 
@@ -253,9 +264,8 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    //region VaultAction Handlers
-    private fun handleAddItemClick() {
-        sendEvent(VaultEvent.NavigateToAddItemScreen)
+    private fun handleAddItemClick(action: VaultAction.AddItemClick) {
+        sendEvent(VaultEvent.NavigateToAddItemScreen(type = action.type))
     }
 
     private fun handleCardClick() {
@@ -1075,6 +1085,12 @@ data class VaultState(
         data object Syncing : DialogState()
 
         /**
+         * Represents a dialog for selecting a vault item type to add.
+         */
+        @Parcelize
+        data object SelectVaultAddItemType : DialogState()
+
+        /**
          * Represents an error dialog with the given [title] and [message].
          */
         @Parcelize
@@ -1097,7 +1113,9 @@ sealed class VaultEvent {
     /**
      * Navigate to the Add Item screen.
      */
-    data object NavigateToAddItemScreen : VaultEvent()
+    data class NavigateToAddItemScreen(
+        val type: VaultItemCipherType,
+    ) : VaultEvent()
 
     /**
      * Navigate to the item details screen.
@@ -1171,7 +1189,7 @@ sealed class VaultAction {
      * Click the add an item button.
      * This can either be the floating action button or actual add an item button.
      */
-    data object AddItemClick : VaultAction()
+    data class AddItemClick(val type: VaultItemCipherType) : VaultAction()
 
     /**
      * Click the search icon.
@@ -1325,6 +1343,11 @@ sealed class VaultAction {
      * The lifecycle of the VaultScreen has entered a resumed state.
      */
     data object LifecycleResumed : VaultAction()
+
+    /**
+     * User has clicked button to bring up the add item selection dialog.
+     */
+    data object SelectAddItemType : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.

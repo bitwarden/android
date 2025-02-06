@@ -13,12 +13,14 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddE
 private const val ADD_TYPE: String = "add"
 private const val EDIT_TYPE: String = "edit"
 private const val EDIT_ITEM_ID: String = "folder_edit_id"
+private const val PARENT_FOLDER_NAME: String = "parent_folder_name"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "folder_add_edit_item"
 private const val ADD_EDIT_ITEM_TYPE: String = "folder_add_edit_type"
 
 private const val ADD_EDIT_ITEM_ROUTE: String =
-    "$ADD_EDIT_ITEM_PREFIX/{$ADD_EDIT_ITEM_TYPE}?$EDIT_ITEM_ID={$EDIT_ITEM_ID}"
+    "$ADD_EDIT_ITEM_PREFIX/{$ADD_EDIT_ITEM_TYPE}" +
+        "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}&$PARENT_FOLDER_NAME={$PARENT_FOLDER_NAME}"
 
 /**
  * Class to retrieve folder add & edit arguments from the [SavedStateHandle].
@@ -26,6 +28,7 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 @OmitFromCoverage
 data class FolderAddEditArgs(
     val folderAddEditType: FolderAddEditType,
+    val parentFolderName: String?,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         folderAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
@@ -33,6 +36,7 @@ data class FolderAddEditArgs(
             EDIT_TYPE -> FolderAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
             else -> throw IllegalStateException("Unknown FolderAddEditType.")
         },
+        parentFolderName = savedStateHandle[PARENT_FOLDER_NAME],
     )
 }
 
@@ -58,11 +62,17 @@ fun NavGraphBuilder.folderAddEditDestination(
  */
 fun NavController.navigateToFolderAddEdit(
     folderAddEditType: FolderAddEditType,
+    parentFolderName: String? = null,
     navOptions: NavOptions? = null,
 ) {
     navigate(
         route = "$ADD_EDIT_ITEM_PREFIX/${folderAddEditType.toTypeString()}" +
-            "?$EDIT_ITEM_ID=${folderAddEditType.toIdOrNull()}",
+            "?$EDIT_ITEM_ID=${folderAddEditType.toIdOrNull()}" +
+            parentFolderName
+                ?.let {
+                    "&$PARENT_FOLDER_NAME=$parentFolderName"
+                }
+                .orEmpty(),
         navOptions = navOptions,
     )
 }

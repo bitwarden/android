@@ -39,14 +39,15 @@ class FolderAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val folderAddEditType = FolderAddEditArgs(savedStateHandle).folderAddEditType
+            val folderAddEditArgs = FolderAddEditArgs(savedStateHandle)
             FolderAddEditState(
-                folderAddEditType = folderAddEditType,
-                viewState = when (folderAddEditType) {
+                folderAddEditType = folderAddEditArgs.folderAddEditType,
+                viewState = when (folderAddEditArgs.folderAddEditType) {
                     is FolderAddEditType.AddItem -> FolderAddEditState.ViewState.Content("")
                     is FolderAddEditType.EditItem -> FolderAddEditState.ViewState.Loading
                 },
                 dialog = null,
+                parentFolderName = folderAddEditArgs.parentFolderName?.takeUnless { it.isEmpty() },
             )
         },
 ) {
@@ -111,7 +112,9 @@ class FolderAddEditViewModel @Inject constructor(
                 FolderAddEditType.AddItem -> {
                     val result = vaultRepository.createFolder(
                         FolderView(
-                            name = content.folderName,
+                            name = state.parentFolderName?.let {
+                                "$it/"
+                            }.orEmpty() + content.folderName,
                             id = folderAddEditType.folderId,
                             revisionDate = DateTime.now(),
                         ),
@@ -327,6 +330,7 @@ data class FolderAddEditState(
     val folderAddEditType: FolderAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val parentFolderName: String?,
 ) : Parcelable {
 
     /**

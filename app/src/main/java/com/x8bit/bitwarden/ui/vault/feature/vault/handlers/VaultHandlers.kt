@@ -6,13 +6,15 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultViewModel
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * A collection of handler functions for managing actions within the context of the vault screen.
  */
 data class VaultHandlers(
     val vaultFilterTypeSelect: (VaultFilterType) -> Unit,
-    val addItemClickAction: () -> Unit,
+    val selectAddItemTypeClickAction: () -> Unit,
+    val addItemClickAction: (VaultItemCipherType) -> Unit,
     val searchIconClickAction: () -> Unit,
     val accountLockClickAction: (AccountSummary) -> Unit,
     val accountLogoutClickAction: (AccountSummary) -> Unit,
@@ -49,7 +51,10 @@ data class VaultHandlers(
                 vaultFilterTypeSelect = {
                     viewModel.trySendAction(VaultAction.VaultFilterTypeSelect(it))
                 },
-                addItemClickAction = { viewModel.trySendAction(VaultAction.AddItemClick) },
+                selectAddItemTypeClickAction = {
+                    viewModel.trySendAction(VaultAction.SelectAddItemType)
+                },
+                addItemClickAction = { viewModel.trySendAction(VaultAction.AddItemClick(it)) },
                 searchIconClickAction = { viewModel.trySendAction(VaultAction.SearchIconClick) },
                 accountLockClickAction = {
                     viewModel.trySendAction(VaultAction.LockAccountClick(it))

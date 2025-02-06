@@ -40,6 +40,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
 ) {
     composableWithStayTransitions(
         route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
@@ -60,6 +61,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
             onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
             onNavigateToImportLogins = onNavigateToImportLogins,
+            onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         )
     }
 }

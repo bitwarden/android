@@ -149,6 +149,9 @@ private fun VaultItemCipherType.toTypeString(): String =
         VaultItemCipherType.IDENTITY -> IDENTITY
         VaultItemCipherType.SECURE_NOTE -> SECURE_NOTE
         VaultItemCipherType.SSH_KEY -> SSH_KEY
+        else -> error(
+            "AddEdit screen not yet implemented for: $this",
+        )
     }
 
 private fun String.toVaultItemCipherType(): VaultItemCipherType =

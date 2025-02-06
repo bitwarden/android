@@ -63,8 +63,10 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -80,7 +82,9 @@ private const val APP_REVIEW_DELAY = 3000L
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (
+        vaultItemCipherType: VaultItemCipherType,
+    ) -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
@@ -88,6 +92,7 @@ fun VaultScreen(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
@@ -122,7 +127,13 @@ fun VaultScreen(
     }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
+            is VaultEvent.NavigateToAddItemScreen -> {
+                if (event.type == VaultItemCipherType.FOLDER) {
+                    onNavigateToAddFolderScreen(null)
+                } else {
+                    onNavigateToVaultAddItemScreen(event.type)
+                }
+            }
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
 
@@ -297,7 +308,7 @@ private fun VaultScreenScaffold(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = vaultHandlers.addItemClickAction,
+                    onClick = vaultHandlers.selectAddItemTypeClickAction,
                     painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
@@ -364,7 +375,9 @@ private fun VaultScreenScaffold(
                         ),
                         buttonText = stringResource(R.string.new_login),
                         policyDisablesSend = false,
-                        addItemClickAction = vaultHandlers.addItemClickAction,
+                        addItemClickAction = {
+                            vaultHandlers.addItemClickAction(VaultItemCipherType.LOGIN)
+                        },
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -393,6 +406,14 @@ private fun VaultDialogs(
             title = dialogState.title(),
             message = dialogState.message(),
             onDismissRequest = vaultHandlers.dialogDismiss,
+        )
+
+        VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
+            onOptionSelected = {
+                vaultHandlers.addItemClickAction(it)
+            },
+            onDismissRequest = vaultHandlers.dialogDismiss,
+            shouldDismissOnSelection = true,
         )
 
         null -> Unit

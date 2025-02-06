@@ -29,4 +29,9 @@ enum class VaultItemCipherType {
      * A SSH key cipher.
      */
     SSH_KEY,
+
+    /**
+     * A cipher item folder
+     */
+    FOLDER,
 }
