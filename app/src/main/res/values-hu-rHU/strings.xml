@@ -54,6 +54,7 @@
   <string name="my_vault">Saját széf</string>
   <string name="authenticator">Hitelesítő</string>
   <string name="name">Név</string>
+  <string name="item_name_required">Elem név (kötelező)</string>
   <string name="send_name_required">"Send név (kötelező)"</string>
   <string name="no">Nem</string>
   <string name="notes">Jegyzetek</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Köszönjük!</string>
   <string name="tools">Eszközök</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Webhely (URI)</string>
   <string name="use_fingerprint_to_unlock">Ujjlenyomat használata feloldáshoz</string>
   <string name="username">Felhasználónév</string>
   <string name="validation_field_required">%1$s mező megadása kötelező.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Koppintás a Bitwarden ikonra a menüben a bővítmény elindításához.</string>
   <string name="extension_turn_on">A Safariban és más alkalmazásban a Bitwarden bekapcsolásához koppintsunk az \"egyéb\" ikonra a menü alsó sorában.</string>
   <string name="favorite">Kedvenc</string>
+  <string name="unfavorite">Nem kedvenc</string>
   <string name="fingerprint">Ujjlenyomat</string>
   <string name="generate_password">Jelszó generálása</string>
   <string name="get_password_hint">Kérj mesterjelszó emlékeztetőt</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Nincsenek kedvencek a széfedben.</string>
   <string name="no_items">Nincsenek elemek a széfben.</string>
   <string name="no_items_tap">Ehhez a webhelyhez vagy alkalmazáshoz nincs elem a széfben. Koppintás létrehozható egy.</string>
+  <string name="no_cards">Nincsenek kártyák a széfben.</string>
+  <string name="new_card">Új kártya</string>
+  <string name="no_logins">Nincsenek bejelentkezések a széfben.</string>
+  <string name="no_identities">Nincsenek kedvencek a széfben.</string>
+  <string name="new_identity">Új személyazonosság</string>
+  <string name="no_notes">Nincsenek jegyzetek a széfben.</string>
+  <string name="new_note">Új jegyzet</string>
+  <string name="new_item">Új elem</string>
+  <string name="no_text_sends">Nincsenek szöveges Send elemek a széfben.</string>
+  <string name="no_file_sends">Nincsenek fájl Send elemek a széfben.</string>
+  <string name="new_text_send">Új szöveges Send elem</string>
+  <string name="new_file_send">Új fájl Send elem</string>
   <string name="no_username">Nincs felhasználónév</string>
   <string name="no_username_password_configured">Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</string>
   <string name="ok_got_it">Ok, megvan!</string>
@@ -355,6 +370,7 @@
   <string name="select_type_field">Milyen típusú egyéni mező legyen hozzáadva?</string>
   <string name="remove">Eltávolítás</string>
   <string name="new_uri">Új URI</string>
+  <string name="add_website">Webhely hozzáadása</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Alap domain</string>
   <string name="default_text">Alapértelmezett</string>
@@ -395,6 +411,7 @@
   <string name="ur_is">URI elemek</string>
   <string name="checking_password">A jelszó ellenőrzése folyamatban van...</string>
   <string name="check_password">Ellenőrizzük, hogy a jelszó kiszivárgott-e.</string>
+  <string name="check_password_for_data_breaches">A jelszó ellenőrzése, hogy nem történt-e adatszivárgás</string>
   <string name="password_exposed">Ez a jelszó %1$s alkalommal jelent meg az adatszivárgásban. Változtassuk meg.</string>
   <string name="password_safe">Ez a jelszó nem érintett egyetlen ismert adatszivárgásban sem. Biztonságos a használata.</string>
   <string name="identity_name">Azonosság név</string>
@@ -479,6 +496,8 @@
   <string name="login_expired">A bejelentkezési munkamenet lejárt.</string>
   <string name="biometrics_direction">Biometrikus ellenőrzés</string>
   <string name="biometrics">Biometria</string>
+  <string name="biometrics_failed">A biometria nem sikerült.</string>
+  <string name="biometrics_decoding_failure">Jelentkezzünk be a mesterjelszóval vagy a PIN kóddal, majd engedélyezzük újra a biometrikus bejelentkezést a Beállításokban.</string>
   <string name="use_biometrics_to_unlock">Biometria használata a feloldáshoz</string>
   <string name="accessibility_overlay_permission_alert">A Bitwarden figyelmet igényel - Információ az \"Automatikus kitöltés elérési szolgáltatás\" elemnél a Bitwarden beállításaiban</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Az Android Alkalmazás beállítások képernyőn a \"Megjelenítés más alkalmazások felett\" opcióknál (a Bővített alatt) koppintsunk az átfedés támogatást engedélyező váltóra.</string>
@@ -684,12 +703,14 @@
   <string name="verification_codes">Hitelesítő kód</string>
   <string name="premium_subscription_required">Prémium előfizetés szükséges</string>
   <string name="cannot_add_authenticator_key">Nem lehet hozzáadni a hitelesítő kulcsot.</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Nem lehet hozzáadni hitelesítő kulcsot? <annotation link="scanQrCode">QR-kód beolvasása</annotation></string>
   <string name="scan_qr_code">QR kód beolvasása</string>
   <string name="cannot_scan_qr_code">Nem sikerül beolvasni a QR kódot?</string>
   <string name="authenticator_key_scanner">Hitelesítő kulcs</string>
   <string name="enter_key_manually">Kód megadása manuálisan</string>
   <string name="add_totp">TOTP hozzáadása</string>
   <string name="setup_totp">TOTP beállítása</string>
+  <string name="set_up_authenticator_key">Hitelesítő kulcs beüzemelése</string>
   <string name="once_the_key_is_successfully_entered">A kulcs sikeres megadása után válasszuk ki a 
 TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
   <string name="never_lock_warning">Ha a zárolási lehetőségeket \"Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</string>
@@ -942,7 +963,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Kövessük %1$s címre küldött emailben található utasításokat a fiók létrehozásának folytatásához.</string>
   <string name="we_sent_an_email_to">Egy email került kiküldésre: %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">A folytatással elfogadjuk a Használati feltételeket és az Adatvédelmi szabályokat</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">A kapcsoló aktiválásával elfogadjuk az <annotation link="termsOfService">Általános Szerződési Feltételeket</annotation> és az <annotation link="privacyPolicy">Adatvédelmi irányelveket</annotation>.</string>
   <string name="set_password">Jelszó beállítása</string>
   <string name="unsubscribe">Leiratkozás</string>
   <string name="check_your_email">Email cím postaláda ellenőrzése</string>
@@ -1143,4 +1164,5 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="coachmark_6_of_6">6/6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Ezekkel az opciókkal állíthatjuk be a jelszót a fiók követelményeihez.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Miután elmentettük az új jelszót a Bitwardenbe, ne felejtsük el frissíteni azt a fiók webhelyén. "</string>
+  <string name="link">Hivatkozás</string>
 </resources>

@@ -54,6 +54,7 @@
   <string name="my_vault">Моят трезор</string>
   <string name="authenticator">Удостоверител</string>
   <string name="name">Име</string>
+  <string name="item_name_required">Име на елемента (задължително)</string>
   <string name="send_name_required">"Име на Изпращането (задължително)"</string>
   <string name="no">Не</string>
   <string name="notes">Бележки</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Благодарим ви!</string>
   <string name="tools">Инструменти</string>
   <string name="uri">Адрес</string>
+  <string name="website_uri">Уеб сайт (адрес)</string>
   <string name="use_fingerprint_to_unlock">Отключване с пръстов отпечатък</string>
   <string name="username">Потребителско име</string>
   <string name="validation_field_required">Полето %1$s е задължително.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Докоснете иконата на Битуорден в менюто, за да пуснете приставката.</string>
   <string name="extension_turn_on">Докоснете иконата за допълнителни (more) в долния ред на менюто, за да достъпите Битуорден.</string>
   <string name="favorite">Любими</string>
+  <string name="unfavorite">Премахване от любимите</string>
   <string name="fingerprint">Отпечатък</string>
   <string name="generate_password">Генериране на парола</string>
   <string name="get_password_hint">Получаване на подсказка за главната парола</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Няма любими записи в трезора.</string>
   <string name="no_items">Няма записи в трезора.</string>
   <string name="no_items_tap">Няма записи в трезора за този сайт или програма. Натиснете, за да добавите.</string>
+  <string name="no_cards">Няма карти в трезора.</string>
+  <string name="new_card">Нова карта</string>
+  <string name="no_logins">Няма елементи за вписване в трезора.</string>
+  <string name="no_identities">Няма самоличности в трезора.</string>
+  <string name="new_identity">Нова самоличност</string>
+  <string name="no_notes">Няма бележки в трезора.</string>
+  <string name="new_note">Нова бележка</string>
+  <string name="new_item">Нов елемент</string>
+  <string name="no_text_sends">Няма текстови Изпращания в трезора.</string>
+  <string name="no_file_sends">Няма файлови Изпращания в трезора.</string>
+  <string name="new_text_send">Ново текстово Изпращане</string>
+  <string name="new_file_send">Ново файлово Изпращане</string>
   <string name="no_username">Няма потребителско име</string>
   <string name="no_username_password_configured">Името или паролата липсват в този запис за вход.</string>
   <string name="ok_got_it">Добре, разбрах!</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">Вид на допълнителното поле.</string>
   <string name="remove">Премахване</string>
   <string name="new_uri">Нов адрес</string>
+  <string name="add_website">Добавяне на уеб сайт</string>
   <string name="uri_position">Адрес %1$s</string>
   <string name="base_domain">Основен домейн</string>
   <string name="default_text">Стандартно</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">Адреси</string>
   <string name="checking_password">Проверка на паролата…</string>
   <string name="check_password">Проверка дали паролата е разкрита.</string>
+  <string name="check_password_for_data_breaches">Проверка дали паролата е засегната от пробиви</string>
   <string name="password_exposed">Паролата е била разкрита поне %1$s път/и в пробиви. Непременно я сменете.</string>
   <string name="password_safe">Паролата не е била разкрита в известните пробиви. Засега ползването ѝ изглежда безопасно.</string>
   <string name="identity_name">Име на самоличността</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">Сесията ви изтече.</string>
   <string name="biometrics_direction">Потвърждаване с биометрични данни.</string>
   <string name="biometrics">Биометрични данни</string>
+  <string name="biometrics_failed">Неуспешно удостоверяване чрез биометрични данни</string>
+  <string name="biometrics_decoding_failure">Впишете се с главната си парола или ПИН, а след това включете вписването чрез биометрични данни в Настройките.</string>
   <string name="use_biometrics_to_unlock">Отключване с биометрични данни</string>
   <string name="accessibility_overlay_permission_alert">Битуорден има нужда от внимание. Отворете „Услуга за автоматично дописване“ в настройките му.</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Отворете настройките за приложения на Android за Битуорден. В раздела „Advanced“ (Допълнителни/За напреднали) изберете „Display over other apps“ (Показване върху другите приложения) и превключете конфигурацията, за да позволите на Битуорден да се появява върху другите приложения.</string>
@@ -685,12 +704,14 @@
   <string name="verification_codes">Кодове за потвърждаване</string>
   <string name="premium_subscription_required">Изисква се платен абонамент</string>
   <string name="cannot_add_authenticator_key">Не можете да добавите удостоверителен ключ?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Не можете да добавите удостоверителен ключ? <annotation link="scanQrCode">Сканирайте QR кода</annotation></string>
   <string name="scan_qr_code">Сканиране на QR код</string>
   <string name="cannot_scan_qr_code">Не можете да сканирате QR кода?</string>
   <string name="authenticator_key_scanner">Ключ за удостоверяване</string>
   <string name="enter_key_manually">Ръчно въвеждане на кода</string>
   <string name="add_totp">Добавяне на TOTP</string>
   <string name="setup_totp">Настройка на TOTP</string>
+  <string name="set_up_authenticator_key">Настройване на удостоверителен ключ</string>
   <string name="once_the_key_is_successfully_entered">След като ключът бъде въведен успешно,
 изберете „Добавяне на код за потвърждаване“, за да запазите ключа</string>
   <string name="never_lock_warning">Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</string>
@@ -943,7 +964,7 @@
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следвайте инструкциите в е-писмото изпратено до %1$s, за да продължите с регистрацията.</string>
   <string name="we_sent_an_email_to">Изпратихме е-писмо до %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ако продължите, Вие се съгласявате с Условията за ползване и Политиката за поверителност</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активирайки това, Вие се съгласявате с <annotation link="termsOfService">Условията за ползване</annotation> и <annotation link="privacyPolicy">Политиката за поверителност</annotation></string>
   <string name="set_password">Задайте парола</string>
   <string name="unsubscribe">Отписване</string>
   <string name="check_your_email">Проверете е-пощата си</string>
@@ -1144,4 +1165,5 @@
   <string name="coachmark_6_of_6">6 ОТ 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Използвайте тези опции, за да настроите паролата според изискванията на акаунта си.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"След като запазите новата си парола в Битуорден, не забравяйте да я обновите в уеб сайта на акаунта си. "</string>
+  <string name="link">Връзка</string>
 </resources>

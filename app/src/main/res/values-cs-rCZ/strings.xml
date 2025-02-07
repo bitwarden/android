@@ -54,6 +54,7 @@
   <string name="my_vault">Můj trezor</string>
   <string name="authenticator">Ověřovací aplikace</string>
   <string name="name">Název</string>
+  <string name="item_name_required">Název položky (povinné)</string>
   <string name="send_name_required">"Název Send (vyžadován)"</string>
   <string name="no">Ne</string>
   <string name="notes">Poznámky</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Poděkování</string>
   <string name="tools">Nástroje</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Webová stránka (URI)</string>
   <string name="use_fingerprint_to_unlock">Pro odemknutí použít otisk prstu</string>
   <string name="username">Uživatelské jméno</string>
   <string name="validation_field_required">Pole %1$s je povinné.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</string>
   <string name="extension_turn_on">Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu \"Další\" v dolní části menu.</string>
   <string name="favorite">Oblíbené</string>
+  <string name="unfavorite">Odebrat z oblíbených</string>
   <string name="fingerprint">Otisk prstu</string>
   <string name="generate_password">Vygenerovat heslo</string>
   <string name="get_password_hint">Získat nápovědu pro hlavní heslo</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Žádné oblíbené přihlašovací údaje.</string>
   <string name="no_items">Žádné položky.</string>
   <string name="no_items_tap">Pro tuto stránku neexistují žádné položky. Klepněte pro jejich přidání.</string>
+  <string name="no_cards">Žádné karty ve Vašem trezoru.</string>
+  <string name="new_card">Nová karta</string>
+  <string name="no_logins">Žádné přihlašovací údaje ve Vašem trezoru.</string>
+  <string name="no_identities">Žádné identity ve Vašem trezoru.</string>
+  <string name="new_identity">Nová identita</string>
+  <string name="no_notes">Žádné poznámky ve Vašem trezoru.</string>
+  <string name="new_note">Nová poznámka</string>
+  <string name="new_item">Nová položka</string>
+  <string name="no_text_sends">Žádné textové Sends ve Vašem trezoru.</string>
+  <string name="no_file_sends">Žádné Sends se soubory ve Vašem trezoru.</string>
+  <string name="new_text_send">Odeslat textový Send</string>
+  <string name="new_file_send">Odeslat Send se soubory</string>
   <string name="no_username">Žádné uživatelské jméno</string>
   <string name="no_username_password_configured">Tyto přihlašovací údaje nemají nastavené uživatelské jméno nebo heslo.</string>
   <string name="ok_got_it">OK, rozumím!</string>
@@ -326,7 +341,7 @@ Načtení proběhne automaticky.</string>
   <string name="address">Adresa</string>
   <string name="expiration">Expirace</string>
   <string name="show_website_icons">Zobrazit ikony webových stránek</string>
-  <string name="show_website_icons_description">Zobrazí rozeznatelný obrázek vedle každého přihlášení.</string>
+  <string name="show_website_icons_description">Zobrazí rozeznatelný obrázek vedle každého přihlášení</string>
   <string name="icons_url">URL serveru ikon</string>
   <string name="autofill_with_bitwarden">Automatické vyplňování aplikací Bitwarden</string>
   <string name="vault_is_locked">Trezor je uzamčený</string>
@@ -356,6 +371,7 @@ Načtení proběhne automaticky.</string>
   <string name="select_type_field">Jaký typ vlastního pole chcete přidat?</string>
   <string name="remove">Odebrat</string>
   <string name="new_uri">Nová URI</string>
+  <string name="add_website">Přidat webovou stránku</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Základní doména</string>
   <string name="default_text">Výchozí</string>
@@ -383,7 +399,7 @@ Načtení proběhne automaticky.</string>
   <string name="autofill_turn_on1">1. Přejděte do aplikace \"Nastavení\" v iOS</string>
   <string name="autofill_turn_on2">2. Klepněte na \"Hesla\" &gt; \"Volby hesla\"</string>
   <string name="autofill_turn_on3">3. Zapněte přepínač u položky \"Automatické vyplnění hesel\"</string>
-  <string name="autofill_turn_on4">4. Najděte sekci \"Povolit vyplňování z:\"</string>
+  <string name="autofill_turn_on4">4. Zapněte \"Automatické vyplnění\"</string>
   <string name="autofill_turn_on5">5. Zvolte \"Bitwarden\"</string>
   <string name="password_autofill">Automatické vyplňování hesel</string>
   <string name="bitwarden_autofill_alert2">Nejjednodušší způsob, jak přidat nové přihlašovací údaje do trezoru, je pomocí rozšíření automatického vyplňování Bitwardenu. Další informace o používání rozšíření automatického vyplňování Bitwardenu naleznete na obrazovce Nastavení.</string>
@@ -396,6 +412,7 @@ Načtení proběhne automaticky.</string>
   <string name="ur_is">URI</string>
   <string name="checking_password">Kontrolování hesla...</string>
   <string name="check_password">Zkontrolujte, zda nedošlo k úniku hesla.</string>
+  <string name="check_password_for_data_breaches">Kontrola hesla pro případ narušení bezpečnosti dat</string>
   <string name="password_exposed">K úniku tohoto hesla došlo celkem %1$sx. Měli byste jej změnit.</string>
   <string name="password_safe">V žádném ze známých případů nedošlo k úniku tohoto hesla. Mělo by být bezpečné používat jej i nadále.</string>
   <string name="identity_name">Název identity</string>
@@ -455,7 +472,7 @@ Načtení proběhne automaticky.</string>
   <string name="default_uri_match_detection">Výchozí zjišťování shody URI</string>
   <string name="default_uri_match_detection_description">Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování.</string>
   <string name="theme">Motiv</string>
-  <string name="theme_description">Změna barevného motivu aplikace.</string>
+  <string name="theme_description">Změní barevný motiv aplikace.</string>
   <string name="theme_default">Výchozí (Systémový)</string>
   <string name="default_dark_theme">Výchozí tmavý motiv</string>
   <string name="copy_notes">Kopírovat poznámku</string>
@@ -480,6 +497,8 @@ Načtení proběhne automaticky.</string>
   <string name="login_expired">Platnost přihlášení vypršela.</string>
   <string name="biometrics_direction">Použít biometrii k ověření</string>
   <string name="biometrics">Biometrie</string>
+  <string name="biometrics_failed">Biometrika selhala</string>
+  <string name="biometrics_decoding_failure">Přihlaste se pomocí hlavního hesla nebo PINu a poté znovu zapněte biometrické přihlášení v Nastavení.</string>
   <string name="use_biometrics_to_unlock">Použít biometrii k odemknutí</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden vyžaduje pozornost - zkontrolujte \"Službu automatického vyplňování\" v nastavení Bitwardenu</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. V nastavení Android aplikace Bitwarden přejděte v části Rozšířená nastavení do \"Zobrazit přes ostatní aplikace\"  a povolte zobrazení přes jiné aplikace.</string>
@@ -581,7 +600,7 @@ Načtení proběhne automaticky.</string>
   <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
   <string name="current_access_count">Aktuální počet přístupů</string>
   <string name="new_password">Nové heslo</string>
-  <string name="password_info">Volitelně bude vyžadovat heslo pro přístup k tomuto Send.</string>
+  <string name="password_info">Vyžadovat totot heslo pro přístup k tomuto Send.</string>
   <string name="remove_password">Odebrat heslo</string>
   <string name="are_you_sure_remove_send_password">Opravdu chcete odebrat heslo?</string>
   <string name="removing_send_password">Odebírání hesla</string>
@@ -685,12 +704,14 @@ Načtení proběhne automaticky.</string>
   <string name="verification_codes">Ověřovací kódy</string>
   <string name="premium_subscription_required">Je vyžadováno předplatné Premium</string>
   <string name="cannot_add_authenticator_key">Nelze přidat ověřovací klíč?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Nelze přidat ověřovací klíč? <annotation link="scanQrCode">Naskenovat QR kód</annotation></string>
   <string name="scan_qr_code">Naskenovat QR kód</string>
   <string name="cannot_scan_qr_code">Nelze naskenovat QR kód?</string>
   <string name="authenticator_key_scanner">Autentizační klíč</string>
   <string name="enter_key_manually">Zadat klíč ručně</string>
   <string name="add_totp">Přidat TOTP</string>
   <string name="setup_totp">Nastavit TOTP</string>
+  <string name="set_up_authenticator_key">Nastavit ověřovací klíč</string>
   <string name="once_the_key_is_successfully_entered">Jakmile je klíč úspěšně zadán, zvolte \"Přidat TOTP\" pro bezpečné uložení klíče</string>
   <string name="never_lock_warning">Nastavení zámku na \"Nikdy\" ponechá Váš trezor k dispozici komukoli s přístupem k Vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby Vaše zařízení bylo náležitě chráněno.</string>
   <string name="environment_page_urls_error">Jedna nebo více zadaných URL jsou neplatné. Zkontrolujte je a opakujte akci znovu.</string>
@@ -909,7 +930,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Získejte okamžitý přístup ke svým heslům a přístupovým klíčům!</string>
   <string name="set_up_auto_fill_description_long">Pro nastavení automatického vyplňování hesla a správy přístupových klíčů nastavte Bitwarden jako preferovaného poskytovatele v nastavení iOS.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Přejděte do nastavení &gt; Hesla &gt; Volby hesla</string>
-  <string name="second_dot_turn_on_auto_fill">2. Zapněte volbu \"Automatické vyplňování hesel a přístupových klíčů\"</string>
+  <string name="second_dot_turn_on_auto_fill">2. Zapněte Automatické vyplňování</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. V sekci \"Používat hesla a přístupové klíče z:\" zvolte \"Bitwarden\"</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Váš přístupový klíč bude uložen do Vašeho trezoru na Bitwardenu</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Váš přístupový klíč bude pro %1$s uložen do Vašeho trezoru na Bitwardenu</string>
@@ -939,10 +960,10 @@ Chcete se přepnout na tento účet?</string>
   <string name="user_verification_direction">Ověření uživatele</string>
   <string name="create_account_on">Vytvořit účet na</string>
   <string name="create_account_on_with_colon">Vytvořit účet na:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Postupujte podle instrukcí zaslaných na e-mail %1$s, abyste mohli pokračovat ve vytváření účtu.</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Postupujte podle instrukcí zaslaných na e-mail <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, abyste mohli pokračovat ve vytváření účtu.</string>
   <string name="we_sent_an_email_to">Poslali jsme e-mail na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Zapnutím tohoto spínače souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
   <string name="set_password">Nastavit heslo</string>
   <string name="unsubscribe">Odhlásit odběr</string>
   <string name="check_your_email">Zkontrolujte Váš e-mail</string>
@@ -1117,10 +1138,10 @@ Chcete se přepnout na tento účet?</string>
   <string name="login_credentials">Přihlašovací údaje</string>
   <string name="autofill_options">Volby automatického vyplňování</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Použijte toto tlačítko pro vytvoření nového jedinečného hesla.</string>
-  <string name="coachmark_1_of_3">1 ze 3</string>
-  <string name="coachmark_2_of_3">2 ze 3</string>
+  <string name="coachmark_1_of_3">1 Z 3</string>
+  <string name="coachmark_2_of_3">2 Z 3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">Budete jen muset nastavit Authenticator pro přihlášení, která vyžadují dvoufaktorové ověření s kódem. Klíč průběžně generuje šestimístné kódy, které můžete použít pro přihlášení.</string>
-  <string name="coachmark_3_of_3">3 ze 3</string>
+  <string name="coachmark_3_of_3">3 Z 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Pro přístup k tomuto účtu musíte přidat webovou adresu pro automatické vyplnění.</string>
   <string name="mutual_tls">Vzájemné TLS</string>
   <string name="single_tap_passkey_creation">Vytvoření přístupového hesla jedním klepnutím</string>
@@ -1143,4 +1164,5 @@ Chcete se přepnout na tento účet?</string>
   <string name="coachmark_6_of_6">6 Z 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Použijte tyto volby k úpravě hesla podle požadavků Vašeho účtu.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po uložení nového hesla do Bitwardenu ho nezapomeňte aktualizovat na stránkách Vašeho účtu. "</string>
+  <string name="link">Odkaz</string>
 </resources>

@@ -54,6 +54,7 @@
   <string name="my_vault">Η κρύπτη μου</string>
   <string name="authenticator">Αυθεντικοποιητής</string>
   <string name="name">Όνομα</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Όχι</string>
   <string name="notes">Σημειώσεις</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Ευχαριστούμε</string>
   <string name="tools">Εργαλεία</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Χρήση δακτυλικού αποτυπώματος για ξεκλείδωμα</string>
   <string name="username">Όνομα χρήστη</string>
   <string name="validation_field_required">Το πεδίο %1$s είναι υποχρεωτικό.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Πατήστε στο εικονίδιο Bitwarden στο μενού για εκκίνηση της επέκτασης.</string>
   <string name="extension_turn_on">Για να ενεργοποιήσετε το Bitwarden στο Safari και σε άλλες εφαρμογές, πατήστε στο εικονίδιο \"Περισσότερα\" στην κάτω σειρά του μενού.</string>
   <string name="favorite">Αγαπημένο</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Δακτυλικό αποτύπωμα</string>
   <string name="generate_password">Παραγωγή κωδικού</string>
   <string name="get_password_hint">Λήψη υπόδειξης κύριου κωδικού</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Δεν υπάρχουν αγαπημένα στη κρύπτη σας.</string>
   <string name="no_items">Δεν υπάρχουν στοιχεία στο vault σας.</string>
   <string name="no_items_tap">Δεν υπάρχουν στοιχεία στο vault σας για αυτήν την ιστοσελίδα/εφαρμογή. Πατήστε για προσθήκη.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">Χωρίς Όνομα Χρήστη</string>
   <string name="no_username_password_configured">Αυτή η σύνδεση δεν έχει ρυθμιστεί με όνομα χρήστη ή κωδικό.</string>
   <string name="ok_got_it">Εντάξει, κατάλαβα!</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">Τι τύπος προσαρμοσμένου πεδίου είναι αυτό που θέλετε να προσθέσετε;</string>
   <string name="remove">Διαγραφή</string>
   <string name="new_uri">Νέο URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Βασικός τομέας</string>
   <string name="default_text">Προεπιλογή</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">URIs</string>
   <string name="checking_password">Έλεγχος κωδικού...</string>
   <string name="check_password">Ελέγξτε εάν ο κωδικός σας έχει εκτεθεί.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Ο κωδικός αυτός έχει εκτεθεί %1$s φορά (ες) σε διαρροές δεδομένων. Πρέπει να τον αλλάξετε.</string>
   <string name="password_safe">Ο κωδικός αυτός δεν βρέθηκε σε γνωστές διαρροές δεδομένων. Είναι ασφαλής για χρήση.</string>
   <string name="identity_name">Όνομα ταυτότητας</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">Η περίοδος σύνδεσης σας έχει λήξει.</string>
   <string name="biometrics_direction">Βιομετρική επαλήθευση</string>
   <string name="biometrics">Βιομετρική</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Χρήση βιομετρικών για ξεκλείδωμα</string>
   <string name="accessibility_overlay_permission_alert">Το Bitwarden χρειάζεται προσοχή - Ανατρέξτε στην ενότητα \"Υπηρεσία προσβασιμότητας αυτόματης συμπλήρωσης\" από τις ρυθμίσεις Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Στις Ρυθμίσεις του Bitwarden για Android , μεταβείτε στην ενότητα \"Εμφάνιση από άλλες εφαρμογές\" (Για προχωρημένους) και πατήστε το διακόπτη για να ενεργοποιήσετε την υποστήριξη επικάλυψης.</string>
@@ -685,12 +704,14 @@
   <string name="verification_codes">Κωδικοί Επαλήθευσης</string>
   <string name="premium_subscription_required">Απαιτείται συνδρομή Premium</string>
   <string name="cannot_add_authenticator_key">Αδυναμία προσθήκης κλειδιού ταυτοποίησης;</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Σάρωση κωδικού QR</string>
   <string name="cannot_scan_qr_code">Αδυναμία σάρωσης κωδικού QR;</string>
   <string name="authenticator_key_scanner">Κλειδί επαλήθευσης</string>
   <string name="enter_key_manually">Χειροκίνητη Εισαγωγή Κλειδιού</string>
   <string name="add_totp">Προσθήκη TOTP</string>
   <string name="setup_totp">Ρύθμιση TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Μόλις το κλειδί εισαχθεί με επιτυχία,
 επιλέξτε Προσθήκη TOTP για να αποθηκεύσετε το κλειδί με ασφάλεια</string>
   <string name="never_lock_warning">Ρυθμίζοντας τις επιλογές κλειδώματος σε “Ποτέ” κρατά τη κρύπτη σας διαθέσιμη σε οποιονδήποτε με πρόσβαση στη συσκευή σας. Εάν χρησιμοποιείτε αυτήν την επιλογή, θα πρέπει να διασφαλίσετε ότι διατηρείτε τη συσκευή σας σωστά προστατευμένη.</string>
@@ -1134,7 +1155,7 @@
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1163,7 @@
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>
