@@ -43,7 +43,6 @@ data class FolderAddEditArgs(
 /**
  * Add the folder add & edit screen to the nav graph.
  */
-@Suppress("LongParameterList")
 fun NavGraphBuilder.folderAddEditDestination(
     onNavigateBack: () -> Unit,
 ) {
@@ -51,6 +50,14 @@ fun NavGraphBuilder.folderAddEditDestination(
         route = ADD_EDIT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
+            navArgument(EDIT_ITEM_ID) {
+                nullable = true
+                type = NavType.StringType
+            },
+            navArgument(PARENT_FOLDER_NAME) {
+                nullable = true
+                type = NavType.StringType
+            },
         ),
     ) {
         FolderAddEditScreen(onNavigateBack = onNavigateBack)

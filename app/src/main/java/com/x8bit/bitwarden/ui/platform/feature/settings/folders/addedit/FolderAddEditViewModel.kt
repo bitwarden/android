@@ -112,9 +112,13 @@ class FolderAddEditViewModel @Inject constructor(
                 FolderAddEditType.AddItem -> {
                     val result = vaultRepository.createFolder(
                         FolderView(
-                            name = state.parentFolderName?.let {
-                                "$it/"
-                            }.orEmpty() + content.folderName,
+                            name = state
+                                .parentFolderName
+                                ?.let {
+                                    "$it/"
+                                }
+                                .orEmpty() +
+                                content.folderName,
                             id = folderAddEditType.folderId,
                             revisionDate = DateTime.now(),
                         ),
