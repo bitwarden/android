@@ -90,7 +90,7 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-    if: success() && (github.event_name == 'push' || github.event_name == 'pull_request')
+    if: success()
 
     steps:
       - name: Download test artifacts
