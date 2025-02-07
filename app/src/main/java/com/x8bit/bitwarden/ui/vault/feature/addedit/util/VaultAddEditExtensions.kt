@@ -21,8 +21,7 @@ val SELECT_TEXT: Text
  */
 fun VaultItemCipherType.toItemType(): VaultAddEditState.ViewState.Content.ItemType =
     when (this) {
-        VaultItemCipherType.LOGIN,
-            -> VaultAddEditState.ViewState.Content.ItemType.Login()
+        VaultItemCipherType.LOGIN -> VaultAddEditState.ViewState.Content.ItemType.Login()
         VaultItemCipherType.CARD -> VaultAddEditState.ViewState.Content.ItemType.Card()
         VaultItemCipherType.IDENTITY -> VaultAddEditState.ViewState.Content.ItemType.Identity()
         VaultItemCipherType.SECURE_NOTE -> VaultAddEditState.ViewState.Content.ItemType.SecureNotes
