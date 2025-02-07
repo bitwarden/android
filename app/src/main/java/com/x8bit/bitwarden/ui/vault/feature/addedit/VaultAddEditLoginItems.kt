@@ -396,7 +396,9 @@ private fun TotpRow(
                 innerPadding = PaddingValues(all = 16.dp),
                 isEnabled = canViewTotp,
                 cornerSize = 0.dp,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("SetupTotpButton")
             )
         },
         textFieldTestTag = "LoginTotpEntry",
