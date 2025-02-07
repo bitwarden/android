@@ -75,11 +75,7 @@ fun NavController.navigateToFolderAddEdit(
     navigate(
         route = "$ADD_EDIT_ITEM_PREFIX/${folderAddEditType.toTypeString()}" +
             "?$EDIT_ITEM_ID=${folderAddEditType.toIdOrNull()}" +
-            parentFolderName
-                ?.let {
-                    "&$PARENT_FOLDER_NAME=$parentFolderName"
-                }
-                .orEmpty(),
+            "&$PARENT_FOLDER_NAME=$parentFolderName",
         navOptions = navOptions,
     )
 }
