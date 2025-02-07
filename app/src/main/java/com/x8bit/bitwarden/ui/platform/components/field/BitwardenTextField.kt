@@ -348,7 +348,7 @@ fun BitwardenTextField(
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
                         .fillMaxWidth(),
-                    )
+                )
                 supportingContent
                     ?.let { content ->
                         Spacer(modifier = Modifier.height(height = 6.dp))
