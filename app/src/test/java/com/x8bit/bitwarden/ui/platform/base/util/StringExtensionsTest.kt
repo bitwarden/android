@@ -141,4 +141,68 @@ class StringExtensionsTest {
         val result = "áéíóů".removeDiacritics()
         assertEquals("aeiou", result)
     }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should prefix https when URI is valid and no scheme`() {
+        val uri = "example.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is empty string`() {
+        val uri = ""
+        assertNull(uri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is whitespace string`() {
+        val uri = " "
+        assertNull(uri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is invalid`() {
+        val invalidUri = "invalid uri"
+        assertNull(invalidUri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return URI unchanged when scheme is http`() {
+        val uri = "http://example.com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return URI unchanged when scheme is https`() {
+        val uri = "https://example.com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull with long valid URI without scheme`() {
+        val uri = "longexamplewithlots.of.subdomains.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when uri contains special characters`() {
+        val uri = "example-special!@#$%^&*()_+{}[].com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertNull(actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should prefix URI when it contains numbers and letters`() {
+        val uri = "example1234567890.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(expected, actual)
+    }
 }

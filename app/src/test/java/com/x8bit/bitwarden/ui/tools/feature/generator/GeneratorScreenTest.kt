@@ -1773,4 +1773,5 @@ private val DEFAULT_STATE = GeneratorState(
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
     shouldShowCoachMarkTour = false,
+    shouldShowAnonAddySelfHostServerUrlField = true,
 )

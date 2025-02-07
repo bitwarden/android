@@ -12,11 +12,13 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -80,6 +82,7 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
     private val reviewPromptManager: ReviewPromptManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val generatorMode = GeneratorArgs(savedStateHandle).type
@@ -109,6 +112,9 @@ class GeneratorViewModel @Inject constructor(
                 .any(),
             website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
             shouldShowCoachMarkTour = false,
+            shouldShowAnonAddySelfHostServerUrlField = featureFlagManager.getFeatureFlag(
+                FlagKey.AnonAddySelfHostAlias,
+            ),
         )
     },
 ) {
@@ -131,6 +137,17 @@ class GeneratorViewModel @Inject constructor(
             .map { shouldShowCoachMarkTour ->
                 GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive(
                     shouldShowCoachMarkTour = shouldShowCoachMarkTour,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.AnonAddySelfHostAlias)
+            .map { shouldShowAnonAddySelfHostServerUrlField ->
+                GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive(
+                    shouldShowAnonAddySelfHostServerUrlField =
+                        shouldShowAnonAddySelfHostServerUrlField,
                 )
             }
             .onEach(::sendAction)
@@ -267,6 +284,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.ShouldShowGeneratorCoachMarkValueChangeReceive -> {
                 handleShouldShowCoachMarkValueChange(action)
+            }
+
+            is GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive -> {
+                handleShouldShowAnonAddySelfHostValueChange(action)
             }
         }
     }
@@ -459,9 +480,11 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is ForwardedEmailAlias -> {
+                val shouldShowAnonAddySelfHostField =
+                    featureFlagManager.getFeatureFlag(FlagKey.AnonAddySelfHostAlias)
                 val mappedServiceType = options
                     ?.serviceType
-                    ?.toServiceType(options)
+                    ?.toServiceType(options, shouldShowAnonAddySelfHostField)
                     ?: type.selectedServiceType
 
                 GeneratorState.MainType.Username(
@@ -547,6 +570,8 @@ class GeneratorViewModel @Inject constructor(
                 serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.ANON_ADDY,
                 anonAddyApiAccessToken = forwardedEmailAlias.selectedServiceType.apiAccessToken,
                 anonAddyDomainName = forwardedEmailAlias.selectedServiceType.domainName,
+                anonAddySelfHostServerUrl =
+                    forwardedEmailAlias.selectedServiceType.selfHostServerUrl,
             )
 
             is DuckDuckGo -> options.copy(
@@ -624,6 +649,7 @@ class GeneratorViewModel @Inject constructor(
             fastMailApiKey = "",
             anonAddyApiAccessToken = "",
             anonAddyDomainName = "",
+            anonAddySelfHostServerUrl = "",
             forwardEmailApiAccessToken = "",
             forwardEmailDomainName = "",
             emailWebsite = "",
@@ -1079,6 +1105,7 @@ class GeneratorViewModel @Inject constructor(
                     selectedServiceType = AddyIo(
                         apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
                         domainName = options.anonAddyDomainName.orEmpty(),
+                        selfHostServerUrl = options.anonAddySelfHostServerUrl.orEmpty(),
                     ),
                 )
             }
@@ -1155,6 +1182,17 @@ class GeneratorViewModel @Inject constructor(
                 -> {
                 handleAddyIoDomainNameTextChange(action)
             }
+
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .AddyIo
+            .SelfHostServerUrlChange,
+                -> {
+                handleAddyIoSelfHostServerUrlChange(action)
+            }
         }
     }
 
@@ -1185,6 +1223,31 @@ class GeneratorViewModel @Inject constructor(
         updateAddyIoServiceType { addyIoServiceType ->
             val newDomain = action.domain
             addyIoServiceType.copy(domainName = newDomain)
+        }
+    }
+
+    private fun handleShouldShowAnonAddySelfHostValueChange(
+        action: GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowAnonAddySelfHostServerUrlField =
+                    action.shouldShowAnonAddySelfHostServerUrlField,
+            )
+        }
+    }
+
+    private fun handleAddyIoSelfHostServerUrlChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .AddyIo
+        .SelfHostServerUrlChange,
+    ) {
+        updateAddyIoServiceType { addyIoServiceType ->
+            addyIoServiceType.copy(selfHostServerUrl = action.url)
         }
     }
 
@@ -1472,10 +1535,16 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private suspend fun generateForwardedEmailAlias(alias: ForwardedEmailAlias) {
-        val request = alias.selectedServiceType?.toUsernameGeneratorRequest(state.website) ?: run {
-            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
-            return
-        }
+        val request = alias
+            .selectedServiceType
+            ?.toUsernameGeneratorRequest(
+                website = state.website,
+                allowAddyIoSelfHostUrl = state.shouldShowAnonAddySelfHostServerUrlField,
+            )
+            ?: run {
+                mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+                return
+            }
         val result = generatorRepository.generateForwardedServiceUsername(request)
         sendAction(GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult(result))
     }
@@ -1772,6 +1841,7 @@ data class GeneratorState(
     val website: String? = null,
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
     private val shouldShowCoachMarkTour: Boolean,
+    val shouldShowAnonAddySelfHostServerUrlField: Boolean,
 ) : Parcelable {
 
     /**
@@ -2092,15 +2162,22 @@ data class GeneratorState(
                          *
                          * @property apiAccessToken The token used for generation.
                          * @property domainName The domain name used for generation.
+                         * @property shouldShowSelfHostServerUrlField Whether to show the self host
+                         * server
                          */
                         @Parcelize
                         data class AddyIo(
                             val apiAccessToken: String = "",
                             val domainName: String = "",
-                            val baseUrl: String = "https://app.addy.io",
+                            internal val selfHostServerUrl: String = "",
                         ) : ServiceType(), Parcelable {
                             override val displayStringResId: Int
                                 get() = ServiceTypeOption.ADDY_IO.labelRes
+
+                            @Suppress("UndocumentedPublicClass")
+                            companion object {
+                                const val DEFAULT_ADDY_IO_URL = "https://app.addy.io"
+                            }
                         }
 
                         /**
@@ -2434,6 +2511,13 @@ sealed class GeneratorAction {
                          * @property domain The new domain text.
                          */
                         data class DomainTextChange(val domain: String) : AddyIo()
+
+                        /**
+                         * Fired when the self host server url input text is changed.
+                         *
+                         * @property url The new self host server url text.
+                         */
+                        data class SelfHostServerUrlChange(val url: String) : AddyIo()
                     }
 
                     /**
@@ -2616,6 +2700,13 @@ sealed class GeneratorAction {
          */
         data class ShouldShowGeneratorCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
+        ) : Internal()
+
+        /**
+         * The value for the shouldShowAnonAddySelfHostServerUrlField feature flag has changed.
+         */
+        data class ShouldShowAnonAddySelfHostValueChangeReceive(
+            val shouldShowAnonAddySelfHostServerUrlField: Boolean,
         ) : Internal()
     }
 }

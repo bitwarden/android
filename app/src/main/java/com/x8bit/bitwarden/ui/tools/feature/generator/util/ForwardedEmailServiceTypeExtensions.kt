@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
  */
 fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
     options: UsernameGenerationOptions,
+    shouldShowAnonAddySelfHostField: Boolean,
 ): ForwardedEmailAlias.ServiceType? {
     this ?: return null
     return when (this) {
@@ -38,6 +39,7 @@ fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
             AddyIo(
                 apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
                 domainName = options.anonAddyDomainName.orEmpty(),
+                selfHostServerUrl = options.anonAddySelfHostServerUrl.orEmpty(),
             )
         }
 

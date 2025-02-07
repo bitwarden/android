@@ -527,6 +527,8 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                         plusAddressedEmailHandlers = plusAddressedEmailHandlers,
                         catchAllEmailHandlers = catchAllEmailHandlers,
                         randomWordHandlers = randomWordHandlers,
+                        shouldShowSelfHostServerUrlField =
+                            state.shouldShowAnonAddySelfHostServerUrlField,
                     )
                 }
             }
@@ -1088,6 +1090,7 @@ private fun UsernameTypeItems(
     plusAddressedEmailHandlers: PlusAddressedEmailHandlers,
     catchAllEmailHandlers: CatchAllEmailHandlers,
     randomWordHandlers: RandomWordHandlers,
+    shouldShowSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1112,6 +1115,7 @@ private fun UsernameTypeItems(
                 ForwardedEmailAliasTypeContent(
                     usernameTypeState = selectedType,
                     forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
+                    shouldShowSelfHostServerUrlField = shouldShowSelfHostServerUrlField,
                 )
             }
 
@@ -1172,6 +1176,7 @@ private fun UsernameOptionsItem(
 private fun ForwardedEmailAliasTypeContent(
     usernameTypeState: GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias,
     forwardedEmailAliasHandlers: ForwardedEmailAliasHandlers,
+    shouldShowSelfHostServerUrlField: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -1213,6 +1218,21 @@ private fun ForwardedEmailAliasTypeContent(
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
+
+                if (shouldShowSelfHostServerUrlField) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    BitwardenTextField(
+                        label = stringResource(id = R.string.self_host_server_url),
+                        value = usernameTypeState.selectedServiceType.selfHostServerUrl,
+                        onValueChange = forwardedEmailAliasHandlers.onAddyIoSelfHostServerUrlChange,
+                        textFieldTestTag = "AnonAddySelfHostUrlEntry",
+                        cardStyle = CardStyle.Full,
+                        modifier = Modifier
+                            .standardHorizontalMargin()
+                            .fillMaxWidth(),
+                    )
+                }
             }
 
             is ServiceType.DuckDuckGo -> {

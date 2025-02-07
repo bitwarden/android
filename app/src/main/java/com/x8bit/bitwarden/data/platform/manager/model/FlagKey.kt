@@ -42,6 +42,7 @@ sealed class FlagKey<out T : Any> {
                 MutualTls,
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
+                AnonAddySelfHostAlias,
             )
         }
     }
@@ -197,6 +198,16 @@ sealed class FlagKey<out T : Any> {
      */
     data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-passkey-authentication"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable AnonAddy (addy.io) self host alias
+     * generation.
+     */
+    data object AnonAddySelfHostAlias : FlagKey<Boolean>() {
+        override val keyName: String = "anon-addy-self-host-alias"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

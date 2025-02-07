@@ -9,16 +9,24 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
  * Converts a [ServiceType] to a [UsernameGeneratorRequest.Forwarded].
  */
 @Suppress("LongMethod")
-fun ServiceType.toUsernameGeneratorRequest(website: String?): UsernameGeneratorRequest.Forwarded? {
+fun ServiceType.toUsernameGeneratorRequest(
+    website: String?,
+    allowAddyIoSelfHostUrl: Boolean,
+): UsernameGeneratorRequest.Forwarded? {
     return when (this) {
         is ServiceType.AddyIo -> {
             val accessToken = this.apiAccessToken.orNullIfBlank() ?: return null
             val domain = this.domainName.orNullIfBlank() ?: return null
+            val baseUrl = if (allowAddyIoSelfHostUrl && selfHostServerUrl.isNotBlank()) {
+                selfHostServerUrl
+            } else {
+                ServiceType.AddyIo.DEFAULT_ADDY_IO_URL
+            }
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.AddyIo(
                     apiToken = accessToken,
                     domain = domain,
-                    baseUrl = this.baseUrl,
+                    baseUrl = baseUrl,
                 ),
                 website = website,
             )

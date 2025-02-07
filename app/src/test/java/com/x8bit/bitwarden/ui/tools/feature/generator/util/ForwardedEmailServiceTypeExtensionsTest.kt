@@ -31,7 +31,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
                 val expected = createMockForwardedEmailAliasServiceType(it)
                 assertEquals(
                     expected,
-                    it.toServiceType(options),
+                    it.toServiceType(options, true),
                 )
             }
     }
