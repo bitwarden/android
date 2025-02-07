@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJso
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals

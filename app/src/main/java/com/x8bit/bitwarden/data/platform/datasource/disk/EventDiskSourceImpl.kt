@@ -6,7 +6,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEv
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 /**

@@ -5,7 +5,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private const val PASSWORD_GENERATION_OPTIONS_KEY = "passwordGenerationOptions"

@@ -13,8 +13,8 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.VaultClient
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.sdk.VaultClient
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment

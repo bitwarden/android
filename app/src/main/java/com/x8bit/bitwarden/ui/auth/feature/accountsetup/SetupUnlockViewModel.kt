@@ -132,7 +132,7 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithBiometricToggleDisabled() {
-        settingsRepository.clearBiometricsKey()
+        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
     }
 

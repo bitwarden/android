@@ -330,6 +330,19 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
+            VaultUnlockResult.BiometricDecodingError -> {
+                biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+                mutableStateFlow.update {
+                    it.copy(
+                        isBiometricsValid = false,
+                        dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                            title = R.string.biometrics_failed.asText(),
+                            message = R.string.biometrics_decoding_failure.asText(),
+                        ),
+                    )
+                }
+            }
+
             VaultUnlockResult.GenericError,
             VaultUnlockResult.InvalidStateError,
                 -> {
@@ -381,6 +394,7 @@ class VaultUnlockViewModel @Inject constructor(
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
             it.copy(
+                userId = userState.activeUserId,
                 initials = activeAccountSummary.initials,
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,

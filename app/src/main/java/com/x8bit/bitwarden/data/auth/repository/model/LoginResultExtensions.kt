@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
  */
 fun VaultUnlockError.toLoginErrorResult(): LoginResult.Error = when (this) {
     is VaultUnlockResult.AuthenticationError -> LoginResult.Error(this.message)
+    VaultUnlockResult.BiometricDecodingError,
     VaultUnlockResult.GenericError,
     VaultUnlockResult.InvalidStateError,
         -> LoginResult.Error(errorMessage = null)

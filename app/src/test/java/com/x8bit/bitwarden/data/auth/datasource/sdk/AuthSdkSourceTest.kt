@@ -8,8 +8,8 @@ import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.AuthClient
+import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.PlatformClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager

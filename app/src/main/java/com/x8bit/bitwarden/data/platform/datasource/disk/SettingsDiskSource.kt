@@ -394,8 +394,8 @@ interface SettingsDiskSource {
     fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?>
 
     /**
-    * Stores the given [screenData] as the screen to resume to identified by [userId].
-    */
+     * Stores the given [screenData] as the screen to resume to identified by [userId].
+     */
     fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?)
 
     /**
