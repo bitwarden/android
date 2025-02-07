@@ -402,7 +402,6 @@ private fun VaultItemListingDialogs(
                 onDismissRequest = onDismissRequest,
                 selectedOption = selectionVaultItemType,
                 onOptionSelected = onVaultItemTypeSelected,
-                shouldDismissOnSelection = true,
             )
         }
 

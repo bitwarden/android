@@ -414,7 +414,6 @@ private fun VaultDialogs(
                 vaultHandlers.addItemClickAction(it)
             },
             onDismissRequest = vaultHandlers.dialogDismiss,
-            shouldDismissOnSelection = true,
         )
 
         null -> Unit

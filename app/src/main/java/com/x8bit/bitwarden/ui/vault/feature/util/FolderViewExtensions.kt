@@ -68,4 +68,4 @@ fun List<FolderView>.getFilteredFolders(folderName: String? = null): List<Folder
  * folder name we receive is often nested, and we want to extract just the relevant name for
  * display to the user.
  */
-fun String.toFolderDisplayName(): String = this.split("/").last()
+fun String.toFolderDisplayName(): String = this.split(FOLDER_DIVIDER).last()
