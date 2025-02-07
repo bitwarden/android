@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * clicked.
  * @property onClearFido2CredentialClick Handles the action when the clear Fido2 credential button
  * is clicked.
+ * @property onAuthenticatorHelpToolTipClick Handles the action when the authenticator help tooltip
+ * is clicked.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
