@@ -3,11 +3,13 @@ package com.x8bit.bitwarden.ui.vault.components
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Reusable dialog for making selections between supported [VaultItemCipherType]s
@@ -17,21 +19,23 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
  * @param selectedOption The currently selected item, if null will assign the selected item to
  * the default type.
  * @param shouldDismissOnSelection Whether or not to call [onDismissRequest] when a selection is
- * made.
+ * made. Default value is set to true.
  * @param excludedOptions List of [VaultItemCipherType] to exclude from the presented list.
  */
 @Composable
 fun VaultItemSelectionDialog(
-    onOptionSelected: (option: VaultItemCipherType) -> Unit,
+    onOptionSelected: (option: CreateVaultItemType) -> Unit,
     onDismissRequest: () -> Unit,
-    selectedOption: VaultItemCipherType? = null,
-    shouldDismissOnSelection: Boolean = false,
+    selectedOption: CreateVaultItemType? = null,
+    shouldDismissOnSelection: Boolean = true,
     // TODO: PM-TBD possibly remove SSH_KEY as default exclusion once added SSH_KEY is enabled.
-    excludedOptions: List<VaultItemCipherType> = listOf(VaultItemCipherType.SSH_KEY),
+    excludedOptions: ImmutableList<CreateVaultItemType> = persistentListOf(
+        CreateVaultItemType.SSH_KEY,
+    ),
 ) {
     val selectedOptionOrDefault =
         selectedOption ?: VaultItemCipherType.LOGIN
-    val supportedEntries = VaultItemCipherType
+    val supportedEntries = CreateVaultItemType
         .entries
         .filterNot { excludedOptions.contains(it) }
     BitwardenSelectionDialog(
@@ -40,7 +44,7 @@ fun VaultItemSelectionDialog(
     ) {
         supportedEntries.forEach {
             BitwardenSelectionRow(
-                text = it.selectionTitle,
+                text = it.selectionText.asText(),
                 onClick = {
                     if (shouldDismissOnSelection) {
                         onDismissRequest()
@@ -52,13 +56,3 @@ fun VaultItemSelectionDialog(
         }
     }
 }
-
-private val VaultItemCipherType.selectionTitle: Text
-    get() = when (this) {
-        VaultItemCipherType.LOGIN -> R.string.log_in_noun.asText()
-        VaultItemCipherType.CARD -> R.string.type_card.asText()
-        VaultItemCipherType.IDENTITY -> R.string.type_identity.asText()
-        VaultItemCipherType.SECURE_NOTE -> R.string.type_secure_note.asText()
-        VaultItemCipherType.SSH_KEY -> R.string.type_ssh_key.asText()
-        VaultItemCipherType.FOLDER -> R.string.folder.asText()
-    }

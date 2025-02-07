@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -1158,10 +1159,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `AddItemClick should emit NavigateToAddItemScreen with correct type`() = runTest {
         val viewModel = createViewModel()
-        val cipherType = VaultItemCipherType.CARD
+        val cipherType = CreateVaultItemType.CARD
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.AddItemClick(cipherType))
-            assertEquals(VaultEvent.NavigateToAddItemScreen(cipherType), awaitItem())
+            assertEquals(VaultEvent.NavigateToAddItemScreen(VaultItemCipherType.CARD), awaitItem())
         }
     }
 

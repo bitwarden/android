@@ -64,6 +64,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -128,11 +129,7 @@ fun VaultScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultEvent.NavigateToAddItemScreen -> {
-                if (event.type == VaultItemCipherType.FOLDER) {
-                    onNavigateToAddFolderScreen(null)
-                } else {
-                    onNavigateToVaultAddItemScreen(event.type)
-                }
+                onNavigateToVaultAddItemScreen(event.type)
             }
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
@@ -165,6 +162,10 @@ fun VaultScreen(
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
             VaultEvent.PromptForAppReview -> {
                 launchPrompt.invoke()
+            }
+
+            VaultEvent.NavigateToAddFolder -> {
+                onNavigateToAddFolderScreen(null)
             }
         }
     }
@@ -376,7 +377,7 @@ private fun VaultScreenScaffold(
                         buttonText = stringResource(R.string.new_login),
                         policyDisablesSend = false,
                         addItemClickAction = {
-                            vaultHandlers.addItemClickAction(VaultItemCipherType.LOGIN)
+                            vaultHandlers.addItemClickAction(CreateVaultItemType.LOGIN)
                         },
                         modifier = Modifier.fillMaxSize(),
                     )

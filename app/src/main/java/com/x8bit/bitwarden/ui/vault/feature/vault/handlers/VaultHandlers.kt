@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.handlers
 
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultViewModel
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * A collection of handler functions for managing actions within the context of the vault screen.
@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 data class VaultHandlers(
     val vaultFilterTypeSelect: (VaultFilterType) -> Unit,
     val selectAddItemTypeClickAction: () -> Unit,
-    val addItemClickAction: (VaultItemCipherType) -> Unit,
+    val addItemClickAction: (CreateVaultItemType) -> Unit,
     val searchIconClickAction: () -> Unit,
     val accountLockClickAction: (AccountSummary) -> Unit,
     val accountLogoutClickAction: (AccountSummary) -> Unit,

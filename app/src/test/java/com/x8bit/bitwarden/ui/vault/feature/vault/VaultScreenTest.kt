@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -678,7 +679,7 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("New login")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(VaultAction.AddItemClick(VaultItemCipherType.LOGIN)) }
+        verify { viewModel.trySendAction(VaultAction.AddItemClick(CreateVaultItemType.LOGIN)) }
     }
 
     @Test
@@ -1324,13 +1325,9 @@ class VaultScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `NavigateToAddItemScreen event calls onNavigateToAddFolder callback when cipher item type is FOLDER`() {
-        mutableEventFlow.tryEmit(
-            VaultEvent.NavigateToAddItemScreen(VaultItemCipherType.FOLDER),
-        )
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAddFolder)
         assertTrue(onNavigateToAddFolderCalled)
-        assertNull(
-            onNavigateToAddFolderParentFolderName,
-        )
+        assertNull(onNavigateToAddFolderParentFolderName)
     }
 
     @Test
@@ -1368,7 +1365,7 @@ class VaultScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultAction.DialogDismiss)
             viewModel.trySendAction(
                 VaultAction.AddItemClick(
-                    VaultItemCipherType.CARD,
+                    CreateVaultItemType.CARD,
                 ),
             )
         }

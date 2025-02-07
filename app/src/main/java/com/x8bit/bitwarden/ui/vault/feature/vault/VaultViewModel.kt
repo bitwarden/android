@@ -37,6 +37,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -66,7 +68,7 @@ import javax.inject.Inject
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -265,7 +267,30 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleAddItemClick(action: VaultAction.AddItemClick) {
-        sendEvent(VaultEvent.NavigateToAddItemScreen(type = action.type))
+        when (val vaultItemType = action.type) {
+            CreateVaultItemType.LOGIN,
+            CreateVaultItemType.CARD,
+            CreateVaultItemType.IDENTITY,
+            CreateVaultItemType.SECURE_NOTE,
+            CreateVaultItemType.SSH_KEY,
+                -> {
+                vaultItemType
+                    .toVaultItemCipherTypeOrNull()
+                    ?.let {
+                        sendEvent(
+                            VaultEvent.NavigateToAddItemScreen(
+                                type = it,
+                            ),
+                        )
+                    }
+            }
+
+            CreateVaultItemType.FOLDER -> {
+                sendEvent(
+                    VaultEvent.NavigateToAddFolder,
+                )
+            }
+        }
     }
 
     private fun handleCardClick() {
@@ -1174,6 +1199,11 @@ sealed class VaultEvent {
      * Show a snackbar with the given [data].
      */
     data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
+
+    /**
+     * Navigate to the add folder screen
+     */
+    data object NavigateToAddFolder : VaultEvent()
 }
 
 /**
@@ -1189,7 +1219,7 @@ sealed class VaultAction {
      * Click the add an item button.
      * This can either be the floating action button or actual add an item button.
      */
-    data class AddItemClick(val type: VaultItemCipherType) : VaultAction()
+    data class AddItemClick(val type: CreateVaultItemType) : VaultAction()
 
     /**
      * Click the search icon.

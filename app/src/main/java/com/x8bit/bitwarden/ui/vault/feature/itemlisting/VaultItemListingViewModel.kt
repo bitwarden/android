@@ -63,6 +63,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
@@ -543,26 +545,33 @@ class VaultItemListingViewModel @Inject constructor(
         }
         (state.itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
             ?.let { folder ->
-                val event = when (val vaultItemType = action.itemType) {
-                    VaultItemCipherType.LOGIN,
-                    VaultItemCipherType.CARD,
-                    VaultItemCipherType.IDENTITY,
-                    VaultItemCipherType.SECURE_NOTE,
-                    VaultItemCipherType.SSH_KEY,
+                when (val vaultItemType = action.itemType) {
+                    CreateVaultItemType.LOGIN,
+                    CreateVaultItemType.CARD,
+                    CreateVaultItemType.IDENTITY,
+                    CreateVaultItemType.SECURE_NOTE,
+                    CreateVaultItemType.SSH_KEY,
                         -> {
-                        VaultItemListingEvent.NavigateToAddVaultItem(
-                            vaultItemCipherType = vaultItemType,
-                            selectedFolderId = folder.folderId,
-                        )
+                        vaultItemType
+                            .toVaultItemCipherTypeOrNull()
+                            ?.let {
+                                sendEvent(
+                                    VaultItemListingEvent.NavigateToAddVaultItem(
+                                        vaultItemCipherType = it,
+                                        selectedFolderId = folder.folderId,
+                                    ),
+                                )
+                            }
                     }
 
-                    VaultItemCipherType.FOLDER -> {
-                        VaultItemListingEvent.NavigateToAddFolder(
-                            parentFolderName = folder.fullyQualifiedName,
+                    CreateVaultItemType.FOLDER -> {
+                        sendEvent(
+                            VaultItemListingEvent.NavigateToAddFolder(
+                                parentFolderName = folder.fullyQualifiedName,
+                            ),
                         )
                     }
                 }
-                sendEvent(event)
             }
     }
 
@@ -1802,7 +1811,7 @@ data class VaultItemListingState(
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
     val policyDisablesSend: Boolean,
-    val selectedVaultItemType: VaultItemCipherType?,
+    val selectedVaultItemType: CreateVaultItemType?,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val totpData: TotpData? = null,
@@ -2556,7 +2565,7 @@ sealed class VaultItemListingsAction {
      * Indicated a selection was made to add a new item to the vault.
      */
     data class ItemToAddToFolderSelected(
-        val itemType: VaultItemCipherType,
+        val itemType: CreateVaultItemType,
     ) : VaultItemListingsAction()
 
     /**

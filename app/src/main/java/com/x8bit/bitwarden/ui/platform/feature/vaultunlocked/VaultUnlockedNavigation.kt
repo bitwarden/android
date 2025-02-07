@@ -91,7 +91,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
-                    FolderAddEditType.AddItem,
+                    folderAddEditType = FolderAddEditType.AddItem,
                     parentFolderName = it,
                 )
             },

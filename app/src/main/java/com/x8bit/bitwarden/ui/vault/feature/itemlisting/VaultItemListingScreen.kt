@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -116,13 +117,11 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
-                if (event.vaultItemCipherType != VaultItemCipherType.FOLDER) {
-                    onNavigateToVaultAddItemScreen(
-                        event.vaultItemCipherType,
-                        event.selectedFolderId,
-                        event.selectedCollectionId,
-                    )
-                }
+                onNavigateToVaultAddItemScreen(
+                    event.vaultItemCipherType,
+                    event.selectedFolderId,
+                    event.selectedCollectionId,
+                )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
@@ -307,8 +306,8 @@ private fun VaultItemListingDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String, cipherId: String) -> Unit,
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
-    selectionVaultItemType: VaultItemCipherType?,
-    onVaultItemTypeSelected: (VaultItemCipherType) -> Unit,
+    selectionVaultItemType: CreateVaultItemType?,
+    onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(

@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -2164,7 +2165,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick)
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemToAddToFolderSelected(
-                    VaultItemCipherType.CARD,
+                    CreateVaultItemType.CARD,
                 ),
             )
         }

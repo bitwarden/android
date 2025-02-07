@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -1017,7 +1018,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemToAddToFolderSelected(
-                    itemType = VaultItemCipherType.FOLDER,
+                    itemType = CreateVaultItemType.FOLDER,
                 ),
             )
             assertEquals(
@@ -1033,18 +1034,19 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemToAddToFolderSelected sends NavigateToAddFolder for any other selection`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                vaultItemListingType = VaultItemListingType.Folder(""),
+                vaultItemListingType = VaultItemListingType.Folder("id"),
             ),
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemToAddToFolderSelected(
-                    itemType = VaultItemCipherType.CARD,
+                    itemType = CreateVaultItemType.CARD,
                 ),
             )
             assertEquals(
                 VaultItemListingEvent.NavigateToAddVaultItem(
                     vaultItemCipherType = VaultItemCipherType.CARD,
+                    selectedFolderId = "id",
                 ),
                 awaitItem(),
             )
