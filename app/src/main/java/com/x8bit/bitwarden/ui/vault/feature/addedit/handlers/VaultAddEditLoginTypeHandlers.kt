@@ -44,6 +44,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onClearFido2CredentialClick: () -> Unit,
     val onStartLoginCoachMarkTour: () -> Unit,
     val onDismissLearnAboutLoginsCard: () -> Unit,
+    val onAuthenticatorHelpToolTipClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -102,6 +103,11 @@ data class VaultAddEditLoginTypeHandlers(
                 },
                 onAddNewUriClick = {
                     viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.AddNewUriClick)
+                },
+                onAuthenticatorHelpToolTipClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
+                    )
                 },
                 onCopyTotpKeyClick = { totpKey ->
                     viewModel.trySendAction(

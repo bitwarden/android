@@ -145,12 +145,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToTooltipUri Event for master password reprompt should invoke IntentManager`() {
-        mutableEventFlow.tryEmit(
-            VaultAddEditEvent.NavigateToTooltipUri(
-                VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
-            ),
-        )
+    fun `on NavigateToTooltipUri Event should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToTooltipUri)
         verify {
             intentManager.launchUri(
                 "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
@@ -159,12 +155,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on NavigateToTooltipUri Event for authenticator key help should invoke IntentManager`() {
-        mutableEventFlow.tryEmit(
-            VaultAddEditEvent.NavigateToTooltipUri(
-                VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP,
-            ),
-        )
+    fun `on NavigateToAuthenticatorKeyTooltipUri Event should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri)
         verify {
             intentManager.launchUri(
                 "https://bitwarden.com/help/integrated-authenticator".toUri(),
@@ -1217,16 +1209,14 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Clicking the Authenticator key tooltip button should send TooltipClick action`() {
+    fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.TooltipClick(
-                    VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP,
-                ),
+                VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
             )
         }
     }
@@ -2676,9 +2666,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.TooltipClick(
-                    VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
-                ),
+                VaultAddEditAction.Common.TooltipClick,
             )
         }
     }

@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme.colorScheme
 
 /**
  * Represents a Bitwarden-styled clickable text.
@@ -45,17 +45,15 @@ fun BitwardenClickableText(
     innerPadding: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
     isEnabled: Boolean = true,
     cornerSize: Dp = 28.dp,
-    color: Color = BitwardenTheme.colorScheme.text.interaction,
+    color: Color = colorScheme.text.interaction,
 ) {
-    val color = if (isEnabled) color else BitwardenTheme.colorScheme.filledButton.foregroundDisabled
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
             .clip(shape = RoundedCornerShape(size = cornerSize))
             .clickable(
-                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
+                indication = ripple(color = colorScheme.background.pressed),
                 interactionSource = remember { MutableInteractionSource() },
                 enabled = isEnabled,
                 onClick = onClick,
@@ -66,7 +64,7 @@ fun BitwardenClickableText(
             Icon(
                 painter = leadingIcon,
                 contentDescription = null,
-                tint = color,
+                tint = if (isEnabled) color else colorScheme.filledButton.foregroundDisabled,
                 modifier = Modifier.size(size = 16.dp),
             )
             Spacer(modifier = Modifier.width(width = 8.dp))

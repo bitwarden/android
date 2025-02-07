@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -283,8 +282,6 @@ fun BitwardenTextField(
                         )
                     },
             ) {
-                var isFocused by remember { mutableStateOf(false) }
-
                 TextField(
                     colors = bitwardenTextFieldColors(),
                     enabled = enabled,
@@ -294,9 +291,14 @@ fun BitwardenTextField(
                                 Text(text = it)
                                 tooltip?.let {
                                     val size by animateDpAsState(
-                                        targetValue = if (!isFocused) 16.dp else 12.dp,
+                                        targetValue = if (textFieldValue.text.isEmpty()) {
+                                            16.dp
+                                        } else {
+                                            12.dp
+                                        },
+                                        label = "${it.contentDescription}_animation",
                                     )
-                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Spacer(modifier = Modifier.width(16.dp))
                                     BitwardenStandardIconButton(
                                         vectorIconRes = R.drawable.ic_question_circle_small,
                                         contentDescription = it.contentDescription,
@@ -345,10 +347,7 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
-                        .fillMaxWidth()
-                        .onFocusChanged { focusState ->
-                            isFocused = focusState.isFocused
-                        },
+                        .fillMaxWidth(),
                     )
                 supportingContent
                     ?.let { content ->

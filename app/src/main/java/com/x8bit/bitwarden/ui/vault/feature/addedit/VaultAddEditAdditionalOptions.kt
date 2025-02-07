@@ -85,11 +85,7 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                                 contentDescription = stringResource(
                                     id = R.string.master_password_re_prompt_help,
                                 ),
-                                onClick = {
-                                    commonTypeHandlers.onTooltipClick(
-                                        VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
-                                    )
-                                },
+                                onClick = commonTypeHandlers.onTooltipClick,
                                 contentColor = BitwardenTheme.colorScheme.icon.secondary,
                             )
                         },

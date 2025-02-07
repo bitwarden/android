@@ -2422,6 +2422,19 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `Authenticator TooltipCLick emits NavigateToAuthenticatorKeyTooltipUri`() = runTest {
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
+                )
+                assertEquals(
+                    VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri,
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
         fun `ClearTotpKeyClick call should clear the totp code`() {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
@@ -3675,15 +3688,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `TooltipClick should emit NavigateToToolTipUri`() = runTest {
             viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    VaultAddEditAction.Common.TooltipClick(
-                        VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
-                    ),
-                )
+                viewModel.trySendAction(VaultAddEditAction.Common.TooltipClick)
                 assertEquals(
-                    VaultAddEditEvent.NavigateToTooltipUri(
-                        VaultAddEditState.TooltipType.MASTER_PASSWORD_REPROMPT,
-                    ),
+                    VaultAddEditEvent.NavigateToTooltipUri,
                     awaitItem(),
                 )
             }

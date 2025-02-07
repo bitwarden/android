@@ -272,7 +272,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleAddNewCustomFieldClick(action)
             }
 
-            is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick(action)
+            is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick()
             is VaultAddEditAction.Common.CustomFieldActionSelect -> {
                 handleCustomFieldActionSelected(action)
             }
@@ -903,10 +903,8 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleTooltipClick(
-        action: VaultAddEditAction.Common.TooltipClick,
-    ) {
-        sendEvent(VaultAddEditEvent.NavigateToTooltipUri(action.type))
+    private fun handleTooltipClick() {
+        sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
     }
 
     @Suppress("MaxLineLength")
@@ -992,6 +990,10 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins -> {
                 handleStartLearnAboutLogins()
+            }
+
+            VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick -> {
+                handleAuthenticatorHelpToolTipClick()
             }
         }
     }
@@ -1825,6 +1827,10 @@ class VaultAddEditViewModel @Inject constructor(
 
         getRequestAndRegisterCredential()
     }
+
+    private fun handleAuthenticatorHelpToolTipClick() {
+        sendEvent(VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri)
+    }
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -2115,14 +2121,6 @@ data class VaultAddEditState(
         IDENTITY(R.string.type_identity),
         SECURE_NOTES(R.string.type_secure_note),
         SSH_KEYS(R.string.type_ssh_key),
-    }
-
-    /**
-     * Represents the different tooltip types for the [VaultAddEditScreen].
-     */
-    enum class TooltipType {
-        AUTHENTICATOR_KEY_HELP,
-        MASTER_PASSWORD_REPROMPT,
     }
 
     /**
@@ -2618,9 +2616,7 @@ sealed class VaultAddEditEvent {
     /**
      * Navigate the user to the tooltip URI.
      */
-    data class NavigateToTooltipUri(
-        val tooltipType: VaultAddEditState.TooltipType,
-    ) : VaultAddEditEvent()
+    data object NavigateToTooltipUri : VaultAddEditEvent()
 
     /**
      * Navigate to the QR code scan screen.
@@ -2661,6 +2657,11 @@ sealed class VaultAddEditEvent {
      * Start the coach mark guided tour of the add login content.
      */
     data object StartAddLoginItemCoachMarkTour : VaultAddEditEvent()
+
+    /**
+     * Navigate the user to the tooltip URI for Authenticator key help.
+     */
+    data object NavigateToAuthenticatorKeyTooltipUri : VaultAddEditEvent()
 }
 
 /**
@@ -2794,9 +2795,7 @@ sealed class VaultAddEditAction {
         /**
          * Represents the action to open tooltip
          */
-        data class TooltipClick(
-            val type: VaultAddEditState.TooltipType,
-        ) : Common()
+        data object TooltipClick : Common()
 
         /**
          * The user has selected a collection.
@@ -2983,6 +2982,11 @@ sealed class VaultAddEditAction {
              * User has dismissed the learn about logins card.
              */
             data object LearnAboutLoginsDismissed : LoginType()
+
+            /**
+             * User has clicked the call to action on the authenticator help tooltip.
+             */
+            data object AuthenticatorHelpToolTipClick : LoginType()
         }
 
         /**

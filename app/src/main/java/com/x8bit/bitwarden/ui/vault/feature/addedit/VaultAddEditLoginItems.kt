@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 
 /**
@@ -45,7 +44,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTy
 @Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.vaultAddEditLoginItems(
     coachMarkScope: CoachMarkScope<AddEditItemCoachMark>,
-    commonActionHandler: VaultAddEditCommonHandlers,
     loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
@@ -131,7 +129,6 @@ fun LazyListScope.vaultAddEditLoginItems(
         TotpRow(
             totpKey = loginState.totp,
             canViewTotp = loginState.canViewPassword,
-            commonActionHandler = commonActionHandler,
             loginItemTypeHandlers = loginItemTypeHandlers,
             onTotpSetupClick = onTotpSetupClick,
             modifier = Modifier.fillMaxWidth(),
@@ -361,7 +358,6 @@ private fun CoachMarkScope<AddEditItemCoachMark>.PasswordRow(
 private fun TotpRow(
     totpKey: String?,
     canViewTotp: Boolean,
-    commonActionHandler: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -373,7 +369,7 @@ private fun TotpRow(
         readOnly = true,
         singleLine = true,
         actions = {
-            if (totpKey != null) {
+            totpKey?.let {
                 BitwardenStandardIconButton(
                     vectorIconRes = R.drawable.ic_clear,
                     contentDescription = stringResource(id = R.string.delete),
@@ -387,11 +383,7 @@ private fun TotpRow(
             }
         },
         tooltip = TooltipData(
-            onClick = {
-                commonActionHandler.onTooltipClick(
-                    VaultAddEditState.TooltipType.AUTHENTICATOR_KEY_HELP,
-                )
-            },
+            onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
             contentDescription = stringResource(id = R.string.authenticator_key_help),
         ),
         supportingContentPadding = PaddingValues(),
