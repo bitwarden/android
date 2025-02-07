@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -282,6 +283,8 @@ fun BitwardenTextField(
                         )
                     },
             ) {
+                var focused by remember { mutableStateOf(false) }
+
                 TextField(
                     colors = bitwardenTextFieldColors(),
                     enabled = enabled,
@@ -290,12 +293,13 @@ fun BitwardenTextField(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(text = it)
                                 tooltip?.let {
+                                    val targetSize = if (textFieldValue.text.isEmpty() || focused) {
+                                        16.dp
+                                    } else {
+                                        12.dp
+                                    }
                                     val size by animateDpAsState(
-                                        targetValue = if (textFieldValue.text.isEmpty()) {
-                                            16.dp
-                                        } else {
-                                            12.dp
-                                        },
+                                        targetValue = targetSize,
                                         label = "${it.contentDescription}_animation",
                                     )
                                     Spacer(modifier = Modifier.width(16.dp))
@@ -347,7 +351,10 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            focused = focusState.isFocused
+                        },
                 )
                 supportingContent
                     ?.let { content ->

@@ -398,7 +398,7 @@ private fun TotpRow(
                 cornerSize = 0.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("SetupTotpButton")
+                    .testTag("SetupTotpButton"),
             )
         },
         textFieldTestTag = "LoginTotpEntry",
