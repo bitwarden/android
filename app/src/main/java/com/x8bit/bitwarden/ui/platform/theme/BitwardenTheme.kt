@@ -126,7 +126,7 @@ fun BitwardenTheme(
                 defaultColorScheme = materialColorScheme,
             ),
             typography = bitwardenTypography.toMaterialTypography(),
-        ) { IncognitoInput { content() } }
+        ) { IncognitoInput(content = content) }
     }
 }
 

@@ -42,5 +42,6 @@ object NoPersonalizedLearningInterceptor : PlatformTextInputInterceptor {
 fun IncognitoInput(content: @Composable () -> Unit) {
     InterceptPlatformTextInput(
         interceptor = NoPersonalizedLearningInterceptor,
-    ) { content() }
+        content = content,
+    )
 }
