@@ -108,7 +108,8 @@ class SetupAutoFillViewModel @Inject constructor(
         if (state.isInitialSetup) {
             updateOnboardingStatusToNextStep()
         } else {
-            sendEvent(SetupAutoFillEvent.NavigateBack)
+            //sendEvent(SetupAutoFillEvent.NavigateBack)
+            sendEvent(SetupAutoFillEvent.NavigateToAutofillSettings)
         }
     }
 
