@@ -438,7 +438,7 @@ private fun AddAccountItem(
 
         Text(
             text = stringResource(id = R.string.add_account),
-            style = BitwardenTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.interaction,
         )
     }

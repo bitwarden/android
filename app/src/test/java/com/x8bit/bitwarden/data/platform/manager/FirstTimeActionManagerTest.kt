@@ -349,13 +349,13 @@ class FirstTimeActionManagerTest {
     fun `shouldShowGeneratorCoachMarkFlow updates when onboarding feature value changes`() =
         runTest {
             firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-            // Null will be mapped to false
+                // Null will be mapped to false
                 assertFalse(awaitItem())
                 mutableOnboardingFeatureFlow.update { true }
-            // Take the value from disk.
+                // Take the value from disk.
                 assertTrue(awaitItem())
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test

@@ -118,7 +118,7 @@ class AppearanceScreenTest : BaseComposeTest() {
         composeTestRule.onRoot().printToLog("Brian")
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme.",
+                label = "Default (System). Theme. Change the application's color theme",
             )
             .performScrollTo()
             .performClick()
@@ -132,7 +132,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     fun `on theme selection dialog item click should send ThemeChange`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme.",
+                label = "Default (System). Theme. Change the application's color theme",
             )
             .performScrollTo()
             .performClick()
@@ -155,7 +155,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     fun `on theme selection dialog cancel click should dismiss dialog`() {
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Default (System). Theme. Change the application's color theme.",
+                label = "Default (System). Theme. Change the application's color theme",
             )
             .performScrollTo()
             .performClick()

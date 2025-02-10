@@ -432,7 +432,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-            every { settingsRepository.clearBiometricsKey() } just runs
+            every {
+                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+            } just runs
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
 
@@ -443,7 +445,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             verify(exactly = 1) {
-                settingsRepository.clearBiometricsKey()
+                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
             }
         }
 
@@ -456,7 +458,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 isUnlockWithBiometricsEnabled = true,
             )
             every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-            every { settingsRepository.clearBiometricsKey() } just runs
+            every {
+                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
+            } just runs
             every { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT } just runs
             val viewModel = createViewModel(initialState)
             assertEquals(initialState, viewModel.stateFlow.value)
@@ -471,7 +475,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
             verify(exactly = 1) {
-                settingsRepository.clearBiometricsKey()
+                biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
                 settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT
             }
         }
@@ -863,8 +867,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 private val CIPHER = mockk<Cipher>()
 private const val FINGERPRINT: String = "fingerprint"
 
+private const val DEFAULT_USER_ID: String = "activeUserId"
 private val DEFAULT_USER_STATE = UserState(
-    activeUserId = "activeUserId",
+    activeUserId = DEFAULT_USER_ID,
     accounts = listOf(
         UserState.Account(
             userId = "activeUserId",
@@ -895,7 +900,7 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
-    userId = DEFAULT_USER_STATE.activeUserId,
+    userId = DEFAULT_USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
     vaultTimeoutPolicyMinutes = null,

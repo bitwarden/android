@@ -141,7 +141,7 @@ class GeneratorViewModel @Inject constructor(
         when (action) {
             is GeneratorAction.PasswordHistoryClick -> handlePasswordHistoryClick()
             is GeneratorAction.CloseClick -> handleCloseClick()
-            is GeneratorAction.SelectClick -> handleSelectClick()
+            is GeneratorAction.SaveClick -> handleSaveClick()
             is GeneratorAction.RegenerateClick -> handleRegenerationClick()
             is GeneratorAction.CopyClick -> handleCopyClick()
             is GeneratorAction.MainTypeOptionSelect -> handleMainTypeOptionSelect(action)
@@ -283,7 +283,7 @@ class GeneratorViewModel @Inject constructor(
         sendEvent(GeneratorEvent.NavigateBack)
     }
 
-    private fun handleSelectClick() {
+    private fun handleSaveClick() {
         when (state.selectedType) {
             is GeneratorState.MainType.Passphrase,
             is GeneratorState.MainType.Password,
@@ -2202,7 +2202,7 @@ sealed class GeneratorAction {
     /**
      * Indicates the user has selected a generated string from the modal generator
      */
-    data object SelectClick : GeneratorAction()
+    data object SaveClick : GeneratorAction()
 
     /**
      * Indicates the user has clicked the close button.

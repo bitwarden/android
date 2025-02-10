@@ -65,8 +65,8 @@ fun ComposeContentTestRule.assertNoDialogExists() {
 }
 
 /**
-* Asserts that no popup currently exists.
-*/
+ * Asserts that no popup currently exists.
+ */
 fun ComposeContentTestRule.assertNoPopupExists() {
     this
         .onNode(isPopup())
