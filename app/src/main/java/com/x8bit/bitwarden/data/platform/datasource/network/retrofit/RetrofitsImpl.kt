@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthToke
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -14,6 +15,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import timber.log.Timber
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 /**
  * Primary implementation of [Retrofits].
@@ -24,6 +28,7 @@ class RetrofitsImpl(
     headersInterceptor: HeadersInterceptor,
     refreshAuthenticator: RefreshAuthenticator,
     json: Json,
+    private val sslManager: SslManager,
 ) : Retrofits {
     //region Authenticated Retrofits
 
@@ -67,6 +72,10 @@ class RetrofitsImpl(
                 baseClient
                     .newBuilder()
                     .addInterceptor(loggingInterceptor)
+                    .setSslSocketFactory(
+                        sslContext = sslManager.sslContext,
+                        trustManagers = sslManager.trustManagers,
+                    )
                     .build(),
             )
             .build()
@@ -93,6 +102,10 @@ class RetrofitsImpl(
             .newBuilder()
             .authenticator(refreshAuthenticator)
             .addInterceptor(authTokenInterceptor)
+            .setSslSocketFactory(
+                sslContext = sslManager.sslContext,
+                trustManagers = sslManager.trustManagers,
+            )
             .build()
     }
 
@@ -133,9 +146,22 @@ class RetrofitsImpl(
                     .newBuilder()
                     .addInterceptor(baseUrlInterceptor)
                     .addInterceptor(loggingInterceptor)
+                    .setSslSocketFactory(
+                        sslContext = sslManager.sslContext,
+                        trustManagers = sslManager.trustManagers,
+                    )
                     .build(),
             )
             .build()
+
+    private fun OkHttpClient.Builder.setSslSocketFactory(
+        sslContext: SSLContext,
+        trustManagers: Array<TrustManager>,
+    ): OkHttpClient.Builder =
+        sslSocketFactory(
+            sslContext.socketFactory,
+            trustManagers.first() as X509TrustManager,
+        )
 
     //endregion Helper properties and functions
 }
