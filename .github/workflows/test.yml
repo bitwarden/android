@@ -90,17 +90,19 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-    if: success() && (github.event_name == 'push' || github.event_name == 'pull_request')
+    if: success()
 
     steps:
       - name: Download test artifacts
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         with:
           name: test-reports
 
       - name: Upload to codecov.io
         id: upload-to-codecov
         uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         continue-on-error: true
         with:
           os: linux
@@ -108,7 +110,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: Comment PR if tests failed
-        if: steps.upload-to-codecov.outcome == 'failure'
+        if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
         env:
             PR_NUMBER: ${{ github.event.number }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
