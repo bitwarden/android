@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.item
+package com.x8bit.bitwarden.ui.vault.feature.item.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
