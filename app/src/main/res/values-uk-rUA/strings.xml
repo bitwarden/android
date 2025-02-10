@@ -54,6 +54,7 @@
   <string name="my_vault">Моє сховище</string>
   <string name="authenticator">Автентифікатор</string>
   <string name="name">Назва</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Назва відправлення (обов'язково)"</string>
   <string name="no">Ні</string>
   <string name="notes">Нотатки</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Дякуємо</string>
   <string name="tools">Інструменти</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Розблокуйте відбитком пальця</string>
   <string name="username">Ім\'я користувача</string>
   <string name="validation_field_required">Поле %1$s є обов\'язковим.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Торкніться піктограми Bitwarden у меню, щоб запустити розширення.</string>
   <string name="extension_turn_on">Щоб увімкнути Bitwarden у Safari та інших програмах, торкніться піктограми \"Ще\" в нижньому рядку меню.</string>
   <string name="favorite">Обране</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Відбиток пальця</string>
   <string name="generate_password">Генерувати пароль</string>
   <string name="get_password_hint">Отримати підказку для головного пароля</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">У вашому сховищі немає обраного.</string>
   <string name="no_items">У вашому сховищі немає записів.</string>
   <string name="no_items_tap">У вашому сховищі немає записів для цього вебсайту/програми. Торкніться, щоб додати.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">Без імені користувача</string>
   <string name="no_username_password_configured">Цей запис не має імені користувача або пароля.</string>
   <string name="ok_got_it">Гаразд, зрозуміло!</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">Який тип власного поля ви хочете додати?</string>
   <string name="remove">Вилучити</string>
   <string name="new_uri">Новий URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Основний домен</string>
   <string name="default_text">Типово</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">URL-адреси</string>
   <string name="checking_password">Перевірка паролів...</string>
   <string name="check_password">Перевірити чи пароль було викрито.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Цей пароль було викрито %1$s разів з витоком даних. Вам слід його змінити.</string>
   <string name="password_safe">Цей пароль не було знайдено у жодних відомих витоках даних. Його можна безпечно використовувати.</string>
   <string name="identity_name">Назва посвідчення</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">Тривалість вашого сеансу завершилась.</string>
   <string name="biometrics_direction">Біометрична перевірка</string>
   <string name="biometrics">біометрією</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden потребує вашої уваги. Перегляньте розділ \"Служба доступності автозаповнення\" в налаштуваннях Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. У налаштуваннях Android для Bitwarden перейдіть до \"Накладання інших програм\" (розділ Розширені) і змініть положення перемикача для активації накладання.</string>
@@ -685,12 +704,14 @@
   <string name="verification_codes">Коди підтвердження</string>
   <string name="premium_subscription_required">Необхідна передплата преміум</string>
   <string name="cannot_add_authenticator_key">Не вдається додати ключ автентифікації?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Сканувати QR-код</string>
   <string name="cannot_scan_qr_code">Не вдається сканувати QR-код?</string>
   <string name="authenticator_key_scanner">Ключ автентифікації</string>
   <string name="enter_key_manually">Введіть ключ вручну</string>
   <string name="add_totp">Додати TOTP</string>
   <string name="setup_totp">Налаштувати TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Після успішного введення ключа виберіть
 Додати TOTP для надійного збереження ключа</string>
   <string name="never_lock_warning">Встановивши параметр блокування \"Ніколи\", ви залишаєте своє сховище відкритим будь-кому, хто зможе отримати доступ до вашого пристрою. Користуючись цим параметром, ви маєте бути впевненими в тому, що ваш пристрій надійно захищений.</string>
@@ -943,7 +964,7 @@
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Дотримуйтесь інструкцій у повідомленні, надісланому на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, щоб продовжити створення облікового запису.</string>
   <string name="we_sent_an_email_to">Ми надіслали електронний лист на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продовжуючи, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активуючи цей перемикач, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
   <string name="set_password">Встановіть пароль</string>
   <string name="unsubscribe">Відписатися</string>
   <string name="check_your_email">Перевірте свою електронну пошту</string>
@@ -1128,13 +1149,13 @@
   <string name="single_tap_passkey_authentication">Вхід з ключем доступу одним дотиком</string>
   <string name="learn_about_new_logins">Докладніше про нові записи</string>
   <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Ми ознайомимо вас з основними можливостями додавання нового запису.</string>
-  <string name="explore_the_generator">Explore the generator</string>
-  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
-  <string name="import_client_certificate">Import client certificate</string>
-  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
-  <string name="alias">Alias</string>
-  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="explore_the_generator">Ознайомитися з генератором</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Дізнайтеся про те, як генерувати надійні облікові дані для входу, пройшовши ознайомлення.</string>
+  <string name="import_client_certificate">Імпортувати сертифікат клієнта</string>
+  <string name="enter_the_client_certificate_password_and_alias">Введіть пароль сертифіката клієнта і бажаний псевдонім для нього.</string>
+  <string name="alias">Псевдонім</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Використовуйте генератор для створення надійних паролів, парольних фраз та імен користувачів. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Парольні фрази – це надійні паролі, які легше запам\'ятовуються і вводяться, порівняно з випадковими паролями. Їх доцільно використовувати для входу в облікові записи, де автозаповнення недоступне, як-от служби потокової трансляції на телевізорі.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 з 6</string>
   <string name="coachmark_2_of_6">2 з 6</string>
@@ -1142,6 +1163,7 @@
   <string name="coachmark_4_of_6">4 з 6</string>
   <string name="coachmark_5_of_6">5 з 6</string>
   <string name="coachmark_6_of_6">6 з 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

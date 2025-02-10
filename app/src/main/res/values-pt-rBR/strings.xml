@@ -54,6 +54,7 @@
   <string name="my_vault">Meu cofre</string>
   <string name="authenticator">Autenticação</string>
   <string name="name">Nome</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Não</string>
   <string name="notes">Notas</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Obrigado</string>
   <string name="tools">Ferramentas</string>
   <string name="uri">URL</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Usar a impressão digital para desbloquear</string>
   <string name="username">Nome de Usuário</string>
   <string name="validation_field_required">O campo %1$s é necessário.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Toque no ícone do Bitwarden no menu para iniciar a extensão.</string>
   <string name="extension_turn_on">Para ativar o Bitwarden no Safari e outros aplicativos, toque no ícone \"Mais\" no menu inferior.</string>
   <string name="favorite">Favorito</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Impressão digital</string>
   <string name="generate_password">Gerar Senha</string>
   <string name="get_password_hint">Obter sua dica de senha mestra</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Não existem favoritos no seu cofre.</string>
   <string name="no_items">Não existem itens no seu cofre.</string>
   <string name="no_items_tap">Não existem itens no seu cofre para este site. Toque para adicionar um.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">Sem Nome de Usuário</string>
   <string name="no_username_password_configured">Esta credencial não tem um nome de usuário ou senha configurados.</string>
   <string name="ok_got_it">Ok, entendi!</string>
@@ -356,6 +371,7 @@ A leitura será feita automaticamente.</string>
   <string name="select_type_field">Que tipo de campo personalizado você deseja adicionar?</string>
   <string name="remove">Remover</string>
   <string name="new_uri">Novo URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Domínio de base</string>
   <string name="default_text">Padrão</string>
@@ -396,6 +412,7 @@ A leitura será feita automaticamente.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Verificando a senha...</string>
   <string name="check_password">Verifique se a senha foi exposta.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Esta senha foi exposta %1$s vez(es) em brechas de dados. Você deve alterá-la.</string>
   <string name="password_safe">Esta senha não foi encontrada em brechas de dados conhecidas. Deve ser segura para se usar.</string>
   <string name="identity_name">Nome de Identidade</string>
@@ -480,6 +497,8 @@ A leitura será feita automaticamente.</string>
   <string name="login_expired">A sua sessão expirou.</string>
   <string name="biometrics_direction">Verificação biométrica</string>
   <string name="biometrics">Biometria</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Usar biometria para desbloquear</string>
   <string name="accessibility_overlay_permission_alert">O Bitwarden precisa de atenção - Veja o \"Serviço de Acessibilidade de Autopreenchimento\" nas Configurações do Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Na tela Configurações do Aplicativo Android para o Bitwarden, vá para a opção de \"Sobrepor a outros aplicativos\" (em Avançado) e toque no botão para habilitar o suporte à sobreposição.</string>
@@ -685,12 +704,14 @@ A leitura será feita automaticamente.</string>
   <string name="verification_codes">Códigos de Verificação</string>
   <string name="premium_subscription_required">Necessário assinatura Premium</string>
   <string name="cannot_add_authenticator_key">Não foi possível adicionar chave de autenticação?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Escanear QR Code</string>
   <string name="cannot_scan_qr_code">Não foi possível escanear o QR Code?</string>
   <string name="authenticator_key_scanner">Chave de Autenticação</string>
   <string name="enter_key_manually">Insira manualmente a chave</string>
   <string name="add_totp">Adicionar TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Assim que a chave for inserida corretamente,
 selecione Adicionar TOTP para armazenar a chave de forma segura</string>
   <string name="never_lock_warning">Definir suas opções de bloqueio para \"Nunca\" mantém o cofre disponível para qualquer pessoa com acesso ao seu dispositivo. Se usar esta opção, você deverá garantir que manterá seu dispositivo devidamente protegido.</string>
@@ -1142,6 +1163,7 @@ Você deseja mudar para esta conta?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

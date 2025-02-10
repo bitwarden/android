@@ -54,6 +54,7 @@
   <string name="my_vault">ตู้เซฟของฉัน</string>
   <string name="authenticator">การยืนยันตัวตน</string>
   <string name="name">ชื่อ</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">ไม่ใช่</string>
   <string name="notes">หมายเหตุ</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">ขอบคุณ</string>
   <string name="tools">เครื่องมือ</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">ใช้ลายนิ้วมือเพื่อปลดล็อก</string>
   <string name="username">ชื่อผู้ใช้</string>
   <string name="validation_field_required">เขตข้อมูล %1$s จำเป็นต้องระบุ</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tap the bitwarden icon in the menu to launch the extension.</string>
   <string name="extension_turn_on">To turn on bitwarden in Safari and other apps, tap the \"more\" icon on the bottom row of the menu.</string>
   <string name="favorite">รายการโปรด</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">ลายนิ้วมือ</string>
   <string name="generate_password">สร้างรหัสผ่าน</string>
   <string name="get_password_hint">รับคำใบ้เกี่ยวกับรหัสผ่านหลักของคุณ</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">ไม่มีรายการโปรดในห้องนิรภัยของคุณ</string>
   <string name="no_items">ไม่มีรายการในห้องนิรภัยของคุณ</string>
   <string name="no_items_tap">ไม่มีรายการอยู่ในห้องนิรภัยของคุณสำหรับเว็บไซต์นี้ แตะเพื่อเพิ่ม</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">การเข้าสู่ระบบนี้ไม่มีการตั้งค่าชื่อผู้ใช้หรือรหัสผ่าน</string>
   <string name="ok_got_it">ตกลง, เข้าใจแล้ว</string>
@@ -326,7 +341,7 @@ Scanning will happen automatically.</string>
   <string name="address">ที่อยู่</string>
   <string name="expiration">วันหมดอายุ</string>
   <string name="show_website_icons">Show website icons</string>
-  <string name="show_website_icons_description">Show a recognizable image next to each login.</string>
+  <string name="show_website_icons_description">Show a recognizable image next to each login</string>
   <string name="icons_url">URL ของเซิร์ฟเวอร์ไอคอน</string>
   <string name="autofill_with_bitwarden">Auto-fill with bitwarden</string>
   <string name="vault_is_locked">ห้องนิรภัยถูกล็อก</string>
@@ -356,6 +371,7 @@ Scanning will happen automatically.</string>
   <string name="select_type_field">คุณต้องการเพิ่มเขตข้อมูลแบบกำหนดเองชนิดใด</string>
   <string name="remove">เอาออก</string>
   <string name="new_uri">URI ใหม่</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">โดเมนพื้นฐาน</string>
   <string name="default_text">ค่าเริ่มต้น</string>
@@ -377,16 +393,16 @@ Scanning will happen automatically.</string>
   <string name="autofill_activated">กรอกข้อมูลอัตโนมัติเปิดใช้งานแล้ว!</string>
   <string name="must_log_in_main_app_autofill">คุณต้องเข้าสู่แอปพลิเคชัน Bitwarden หลักก่อนที่คุณจะสามารถใช้ส่วนขยาย</string>
   <string name="autofill_setup">Your logins are now easily accessable right from your keyboard while logging into apps and websites.</string>
-  <string name="autofill_setup2">We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</string>
+  <string name="autofill_setup2">We recommend disabling any other Autofill apps under Settings if you do not plan to use them.</string>
   <string name="bitwarden_autofill_description">Access your vault directly from your keyboard to quickly autofill passwords.</string>
   <string name="autofill_turn_on">To set up password autofill on your device, follow these instructions:</string>
   <string name="autofill_turn_on1">1. Go to the iOS \"Settings\" app</string>
   <string name="autofill_turn_on2">2. Tap \"Passwords\"</string>
-  <string name="autofill_turn_on3">3. Tap \"AutoFill Passwords\"</string>
-  <string name="autofill_turn_on4">4. Turn on AutoFill</string>
+  <string name="autofill_turn_on3">3. Tap \"Autofill Passwords\"</string>
+  <string name="autofill_turn_on4">4. Turn on Autofill</string>
   <string name="autofill_turn_on5">5. Select \"Bitwarden\"</string>
   <string name="password_autofill">กรอกรหัสผ่านอัตโนมัติ</string>
-  <string name="bitwarden_autofill_alert2">The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the \"Settings\" screen.</string>
+  <string name="bitwarden_autofill_alert2">The easiest way to add new logins to your vault is by using the Bitwarden Password Autofill extension. Learn more about using the Bitwarden Password Autofill extension by navigating to the \"Settings\" screen.</string>
   <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง</string>
   <string name="cards">บัตร</string>
   <string name="identities">Identities</string>
@@ -396,6 +412,7 @@ Scanning will happen automatically.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">กำลังเช็กรหัสผ่าน...</string>
   <string name="check_password">ตรวจสอบว่ารหัสผ่านถูกเปิดเผยหรือไม่</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">รหัสผ่านนี้ถูกเปิดเผย %1$s ครั้ง คุณควรเปลี่ยนรหัสผ่าน</string>
   <string name="password_safe">This password was not found in any known data breaches. It should be safe to use.</string>
   <string name="identity_name">Identity name</string>
@@ -455,7 +472,7 @@ Scanning will happen automatically.</string>
   <string name="default_uri_match_detection">Default URI match detection</string>
   <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as autofill.</string>
   <string name="theme">ธีม</string>
-  <string name="theme_description">Change the application\'s color theme.</string>
+  <string name="theme_description">Change the application\'s color theme</string>
   <string name="theme_default">Default (System)</string>
   <string name="default_dark_theme">Default dark theme</string>
   <string name="copy_notes">Copy note</string>
@@ -480,6 +497,8 @@ Scanning will happen automatically.</string>
   <string name="login_expired">Your login session has expired.</string>
   <string name="biometrics_direction">Biometric verification</string>
   <string name="biometrics">ไบโอเมทริกซ์</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden needs attention - See \"Autofill Accessibility Service\" from Bitwarden settings</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. On the Android App Settings screen for Bitwarden, go to the \"Display over other apps\" options (under Advanced) and tap the toggle to allow overlay support.</string>
@@ -685,12 +704,14 @@ Scanning will happen automatically.</string>
   <string name="verification_codes">Verification codes</string>
   <string name="premium_subscription_required">Premium subscription required</string>
   <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Scan QR Code</string>
   <string name="cannot_scan_qr_code">Cannot scan QR Code?</string>
   <string name="authenticator_key_scanner">Authenticator key</string>
   <string name="enter_key_manually">Enter key manually</string>
   <string name="add_totp">Add TOTP</string>
   <string name="setup_totp">Set up TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Once the key is successfully entered,
 select Add TOTP to store the key safely</string>
   <string name="never_lock_warning">Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</string>
@@ -910,7 +931,7 @@ Do you want to switch to this account?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -979,7 +1000,7 @@ Do you want to switch to this account?</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1134,7 +1155,7 @@ Do you want to switch to this account?</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1163,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

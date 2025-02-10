@@ -54,6 +54,7 @@
   <string name="my_vault">O meu cofre</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nome</string>
+  <string name="item_name_required">Nome do item (obrigatório)</string>
   <string name="send_name_required">"Nome do Send (obrigatório)"</string>
   <string name="no">Não</string>
   <string name="notes">Notas</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Obrigado</string>
   <string name="tools">Ferramentas</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Site (URI)</string>
   <string name="use_fingerprint_to_unlock">Utilizar a impressão digital para desbloquear</string>
   <string name="username">Nome de utilizador</string>
   <string name="validation_field_required">O campo %1$s é obrigatório.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Toque no ícone do Bitwarden no menu para iniciar a extensão.</string>
   <string name="extension_turn_on">Para ativar o Bitwarden no Safari e noutras aplicações, toque no ícone \"mais\" na linha inferior do menu.</string>
   <string name="favorite">Adicionar aos favoritos</string>
+  <string name="unfavorite">Remover dos favoritos</string>
   <string name="fingerprint">Impressão digital</string>
   <string name="generate_password">Gerar palavra-passe</string>
   <string name="get_password_hint">Obter a dica da sua palavra-passe mestra</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Não existem favoritos no seu cofre.</string>
   <string name="no_items">Não existem itens no seu cofre.</string>
   <string name="no_items_tap">Não existem itens no seu cofre para este site/app. Toque para adicionar um.</string>
+  <string name="no_cards">Não existem cartões no seu cofre.</string>
+  <string name="new_card">Novo cartão</string>
+  <string name="no_logins">Não existem credenciais no seu cofre.</string>
+  <string name="no_identities">Não existem identidades no seu cofre.</string>
+  <string name="new_identity">Nova identidade</string>
+  <string name="no_notes">Não existem notas no seu cofre.</string>
+  <string name="new_note">Nova nota</string>
+  <string name="new_item">Novo item</string>
+  <string name="no_text_sends">Não existem Sends de texto no seu cofre.</string>
+  <string name="no_file_sends">Não existem Sends de ficheiro no seu cofre.</string>
+  <string name="new_text_send">Novo Send de texto</string>
+  <string name="new_file_send">Novo Send de ficheiro</string>
   <string name="no_username">Sem nome de utilizador</string>
   <string name="no_username_password_configured">Esta credencial não tem um nome de utilizador ou palavra-passe configurados.</string>
   <string name="ok_got_it">Ok, percebido!</string>
@@ -165,8 +180,8 @@
   <string name="password_hint_alert">Enviámos-lhe um e-mail com a dica da sua palavra-passe mestra.</string>
   <string name="password_override_alert">Tem a certeza de que pretende substituir a palavra-passe atual?</string>
   <string name="push_notification_alert">O Bitwarden mantém o seu cofre sincronizado automaticamente através de notificações push. Para obter a melhor experiência possível, selecione \"Permitir\" na seguinte mensagem quando lhe for pedido para permitir notificações push.</string>
-  <string name="rate_the_app">Avaliar a app</string>
-  <string name="rate_the_app_description">Por favor, considere ajudar-nos com uma boa avaliação!</string>
+  <string name="rate_the_app">Classificar a app</string>
+  <string name="rate_the_app_description">Por favor, considere ajudar-nos com uma boa classificação!</string>
   <string name="regenerate_password">Regenerar palavra-passe</string>
   <string name="retype_master_password">Reintroduza a palavra-passe mestra</string>
   <string name="retype_master_password_required">Reintroduzir palavra-passe mestra (obrigatório)</string>
@@ -356,6 +371,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="select_type_field">Que tipo de campo personalizado pretende adicionar?</string>
   <string name="remove">Remover</string>
   <string name="new_uri">Novo URI</string>
+  <string name="add_website">Adicionar site</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Domínio de base</string>
   <string name="default_text">Predefinido</string>
@@ -382,8 +398,8 @@ A leitura será efetuada automaticamente.</string>
   <string name="autofill_turn_on">Para configurar o preenchimento automático de palavras-passe no seu dispositivo, siga estas instruções:</string>
   <string name="autofill_turn_on1">1. Vá às Definições do iOS</string>
   <string name="autofill_turn_on2">2. Toque em \"Palavras-passe e contas\"</string>
-  <string name="autofill_turn_on3">3. Toque em \"Autopreenchimento de palavras-passe\"</string>
-  <string name="autofill_turn_on4">4. Ative o Autopreenchimento</string>
+  <string name="autofill_turn_on3">3. Toque em \"Preenchimento automático de palavras-passe\"</string>
+  <string name="autofill_turn_on4">4. Ative o Preenchimento automático</string>
   <string name="autofill_turn_on5">5. Selecione o Bitwarden</string>
   <string name="password_autofill">Preenchimento automático de palavras-passe</string>
   <string name="bitwarden_autofill_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é utilizando a extensão de preenchimento automático de palavras-passe do Bitwarden. Saiba mais sobre como utilizar a extensão de preenchimento automático de palavras-passe do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
@@ -396,6 +412,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">A verificar palavra-passe...</string>
   <string name="check_password">Verificar se a palavra-passe foi exposta.</string>
+  <string name="check_password_for_data_breaches">Verificar a palavra-passe para detetar violações de dados</string>
   <string name="password_exposed">Esta palavra-passe foi exposta %1$s vez(es) em violações de dados. Deve alterá-la.</string>
   <string name="password_safe">Esta palavra-passe não foi encontrada em nenhuma violação de dados conhecida. A sua utilização deve ser segura.</string>
   <string name="identity_name">Nome da identidade</string>
@@ -480,6 +497,8 @@ A leitura será efetuada automaticamente.</string>
   <string name="login_expired">A sua sessão expirou.</string>
   <string name="biometrics_direction">Verificação biométrica</string>
   <string name="biometrics">Biometria</string>
+  <string name="biometrics_failed">Falha na biometria</string>
+  <string name="biometrics_decoding_failure">Inicie sessão com a sua palavra-passe mestra ou PIN e volte a ativar o início de sessão biométrico nas Definições.</string>
   <string name="use_biometrics_to_unlock">Utilizar a biometria para desbloquear</string>
   <string name="accessibility_overlay_permission_alert">O Bitwarden precisa de atenção - Veja o \"Serviço de acessibilidade de preenchimento automático\" nas definições do Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. No ecrã Definições do Android, selecione \"Sobrepor a outras aplicações\" (em \"Avançadas\") para o Bitwarden e toque na opção para ativar o suporte à sobreposição.</string>
@@ -685,12 +704,14 @@ A leitura será efetuada automaticamente.</string>
   <string name="verification_codes">Códigos de verificação</string>
   <string name="premium_subscription_required">É necessária uma subscrição Premium</string>
   <string name="cannot_add_authenticator_key">Não é possível adicionar uma chave de autenticação?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Não é possível adicionar uma chave de autenticação? <annotation link="scanQrCode">Ler código QR</annotation></string>
   <string name="scan_qr_code">Ler código QR</string>
   <string name="cannot_scan_qr_code">Não consegue ler o código QR?</string>
   <string name="authenticator_key_scanner">Chave de autenticação</string>
   <string name="enter_key_manually">Introduzir a chave manualmente</string>
   <string name="add_totp">Adicionar TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
+  <string name="set_up_authenticator_key">Configurar a chave de autenticação</string>
   <string name="once_the_key_is_successfully_entered">Assim que a chave for introduzida com sucesso, selecione Adicionar TOTP para guardar a chave em segurança</string>
   <string name="never_lock_warning">Ao definir as suas opções de bloqueio para \"Nunca\" mantém o seu cofre disponível para qualquer pessoa que tenha acesso ao seu dispositivo. Se utilizar esta opção, deve assegurar-se de que mantém o seu dispositivo devidamente protegido.</string>
   <string name="environment_page_urls_error">Um ou mais URLs introduzidos são inválidos. Por favor, reveja-o e tente guardar novamente.</string>
@@ -878,7 +899,7 @@ Pretende mudar para esta conta?</string>
   <string name="privacy_policy_description_long">Consulte a nossa política de privacidade em bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explore mais funcionalidades da sua conta Bitwarden na aplicação Web.</string>
   <string name="learn_about_organizations_description_long">O Bitwarden permite-lhe partilhar os seus itens do cofre com outras pessoas através da utilização de uma organização. Saiba mais no site bitwarden.com.</string>
-  <string name="rate_app_description_long">Ajude outras pessoas a descobrir se o Bitwarden lhes é adequado. Visite a loja de aplicações e deixe uma avaliação agora.</string>
+  <string name="rate_app_description_long">Ajude outras pessoas a descobrir se o Bitwarden lhes é adequado. Visite a loja de aplicações e deixe uma classificação agora.</string>
   <string name="default_dark_theme_description_long">Escolha o tema escuro a utilizar quando o modo escuro do seu dispositivo estiver a ser utilizado</string>
   <string name="created_xy">Criada a %1$s, %2$s</string>
   <string name="too_many_attempts">Demasiadas tentativas</string>
@@ -939,7 +960,7 @@ Pretende mudar para esta conta?</string>
   <string name="user_verification_direction">Verificação do utilizador</string>
   <string name="create_account_on">Criar conta em</string>
   <string name="create_account_on_with_colon">Criar conta em:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para %1$s para continuar a criar a sua conta.</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> para continuar a criar a sua conta.</string>
   <string name="we_sent_an_email_to">Enviámos um e-mail para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
   <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar este interruptor, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
@@ -1142,6 +1163,7 @@ Pretende mudar para esta conta?</string>
   <string name="coachmark_4_of_6">4 DE 6</string>
   <string name="coachmark_5_of_6">5 DE 6</string>
   <string name="coachmark_6_of_6">6 DE 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Utilize estas opções para ajustar a sua palavra-passe aos requisitos da sua conta.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Utilize estas opções para ajustar a sua palavra-passe consoante os requisitos do site da sua conta.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Depois de guardar a sua nova palavra-passe no Bitwarden, não se esqueça de a atualizar no site da sua conta. "</string>
+  <string name="link">Link</string>
 </resources>
