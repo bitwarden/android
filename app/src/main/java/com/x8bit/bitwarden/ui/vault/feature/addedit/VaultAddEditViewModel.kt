@@ -991,6 +991,10 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins -> {
                 handleStartLearnAboutLogins()
             }
+
+            VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick -> {
+                handleAuthenticatorHelpToolTipClick()
+            }
         }
     }
 
@@ -1823,6 +1827,10 @@ class VaultAddEditViewModel @Inject constructor(
 
         getRequestAndRegisterCredential()
     }
+
+    private fun handleAuthenticatorHelpToolTipClick() {
+        sendEvent(VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri)
+    }
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -2649,6 +2657,11 @@ sealed class VaultAddEditEvent {
      * Start the coach mark guided tour of the add login content.
      */
     data object StartAddLoginItemCoachMarkTour : VaultAddEditEvent()
+
+    /**
+     * Navigate the user to the tooltip URI for Authenticator key help.
+     */
+    data object NavigateToAuthenticatorKeyTooltipUri : VaultAddEditEvent()
 }
 
 /**
@@ -2969,6 +2982,11 @@ sealed class VaultAddEditAction {
              * User has dismissed the learn about logins card.
              */
             data object LearnAboutLoginsDismissed : LoginType()
+
+            /**
+             * User has clicked the call to action on the authenticator help tooltip.
+             */
+            data object AuthenticatorHelpToolTipClick : LoginType()
         }
 
         /**

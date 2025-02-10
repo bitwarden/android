@@ -130,6 +130,12 @@ fun VaultAddEditScreen(
                 )
             }
 
+            is VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri -> {
+                intentManager.launchUri(
+                    "https://bitwarden.com/help/integrated-authenticator".toUri(),
+                )
+            }
+
             is VaultAddEditEvent.CompleteFido2Registration -> {
                 fido2CompletionManager.completeFido2Registration(event.result)
             }

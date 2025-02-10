@@ -64,7 +64,11 @@ fun BitwardenClickableText(
             Icon(
                 painter = leadingIcon,
                 contentDescription = null,
-                tint = color,
+                tint = if (isEnabled) {
+                    color
+                } else {
+                    BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                },
                 modifier = Modifier.size(size = 16.dp),
             )
             Spacer(modifier = Modifier.width(width = 8.dp))
