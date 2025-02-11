@@ -134,6 +134,7 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.MutualTls to true,
     FlagKey.SingleTapPasskeyCreation to true,
     FlagKey.SingleTapPasskeyAuthentication to true,
+    FlagKey.AnonAddySelfHostAlias to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -153,6 +154,7 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.MutualTls to false,
     FlagKey.SingleTapPasskeyCreation to false,
     FlagKey.SingleTapPasskeyAuthentication to false,
+    FlagKey.AnonAddySelfHostAlias to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(
