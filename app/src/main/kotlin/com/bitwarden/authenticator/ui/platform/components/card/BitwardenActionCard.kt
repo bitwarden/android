@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 
 /**
  * A reusable card for displaying actions to the user.
@@ -40,56 +41,55 @@ fun BitwardenActionCard(
     modifier: Modifier = Modifier,
     trailingContent: (@Composable BoxScope.() -> Unit)? = null,
 ) {
-    Card(
-        onClick = onCardClicked,
-        shape = RoundedCornerShape(size = 16.dp),
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
-        ),
-        elevation = CardDefaults.elevatedCardElevation(),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+    AuthenticatorTheme {
+        Card(
+            onClick = onCardClicked,
+            shape = RoundedCornerShape(size = 16.dp),
+            modifier = modifier,
+            elevation = CardDefaults.elevatedCardElevation(),
         ) {
-            Icon(
-                painter = actionIcon,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+            Row(
                 modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 16.dp,
-                    )
-                    .size(24.dp),
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier
-                    .weight(weight = 1f)
-                    .padding(top = 16.dp, bottom = 16.dp),
+                    .fillMaxWidth(),
             ) {
-                Text(
-                    text = titleText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                Icon(
+                    painter = actionIcon,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier
+                        .padding(
+                            start = 16.dp,
+                            top = 16.dp,
+                        )
+                        .size(24.dp),
                 )
-                Text(
-                    text = actionText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = callToActionText,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            Box {
-                trailingContent?.invoke(this)
+                Spacer(modifier = Modifier.width(16.dp))
+                Column(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(top = 16.dp, bottom = 16.dp),
+                ) {
+                    Text(
+                        text = titleText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Text(
+                        text = actionText,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = callToActionText,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Box {
+                    trailingContent?.invoke(this)
+                }
             }
         }
     }
