@@ -4448,7 +4448,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             fido2CreateCredentialRequest = null,
             isPremium = true,
             isRefreshing = false,
-            selectedVaultItemType = null,
         )
 }
 

@@ -142,7 +142,6 @@ class VaultItemListingViewModel @Inject constructor(
             fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
-            selectedVaultItemType = null,
         )
     },
 ) {
@@ -538,11 +537,6 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleItemToAddToFolderSelected(
         action: VaultItemListingsAction.ItemToAddToFolderSelected,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                selectedVaultItemType = action.itemType,
-            )
-        }
         (state.itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
             ?.let { folder ->
                 when (val vaultItemType = action.itemType) {
@@ -1811,7 +1805,6 @@ data class VaultItemListingState(
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
     val policyDisablesSend: Boolean,
-    val selectedVaultItemType: CreateVaultItemType?,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val totpData: TotpData? = null,

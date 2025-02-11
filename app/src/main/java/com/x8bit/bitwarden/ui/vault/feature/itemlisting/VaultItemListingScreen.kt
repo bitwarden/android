@@ -268,7 +268,6 @@ fun VaultItemListingScreen(
                 )
             }
         },
-        selectionVaultItemType = state.selectedVaultItemType,
         onVaultItemTypeSelected = remember(viewModel) {
             {
                 viewModel.trySendAction(
@@ -306,7 +305,6 @@ private fun VaultItemListingDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String, cipherId: String) -> Unit,
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
-    selectionVaultItemType: CreateVaultItemType?,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
 ) {
     when (dialogState) {
@@ -400,7 +398,6 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.VaultItemTypeSelection -> {
             VaultItemSelectionDialog(
                 onDismissRequest = onDismissRequest,
-                selectedOption = selectionVaultItemType,
                 onOptionSelected = onVaultItemTypeSelected,
             )
         }
