@@ -124,6 +124,7 @@ class FlagKeyTest {
                 FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
+                FlagKey.MutualTls,
             ).all {
                 it.isRemotelyConfigured
             },
@@ -132,7 +133,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
-                FlagKey.MutualTls,
             ).all {
                 !it.isRemotelyConfigured
             },

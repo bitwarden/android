@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
  * Represents URLs for various Bitwarden domains.
  *
  * @property base The overall base URL.
+ * @property keyUri A Uri containing the alias and host of the key used for mutual TLS.
  * @property api Separate base URL for the "/api" domain (if applicable).
  * @property identity Separate base URL for the "/identity" domain (if applicable).
  * @property icon Separate base URL for the icon domain (if applicable).
@@ -18,6 +19,9 @@ import kotlinx.serialization.Serializable
 data class EnvironmentUrlDataJson(
     @SerialName("base")
     val base: String,
+
+    @SerialName("keyUri")
+    val keyUri: String? = null,
 
     @SerialName("api")
     val api: String? = null,
@@ -51,6 +55,7 @@ data class EnvironmentUrlDataJson(
          */
         val DEFAULT_LEGACY_US: EnvironmentUrlDataJson = EnvironmentUrlDataJson(
             base = "https://vault.bitwarden.com",
+            keyUri = null,
             api = "https://api.bitwarden.com",
             identity = "https://identity.bitwarden.com",
             icon = "https://icons.bitwarden.net",
@@ -71,6 +76,7 @@ data class EnvironmentUrlDataJson(
          */
         val DEFAULT_LEGACY_EU: EnvironmentUrlDataJson = EnvironmentUrlDataJson(
             base = "https://vault.bitwarden.eu",
+            keyUri = null,
             api = "https://api.bitwarden.eu",
             identity = "https://identity.bitwarden.eu",
             icon = "https://icons.bitwarden.eu",

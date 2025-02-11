@@ -49,11 +49,12 @@
   <string name="account_already_added">Account già aggiunto</string>
   <string name="switch_to_already_added_account_confirmation">Vuoi passare a questo account?</string>
   <string name="master_password">Password principale</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Password principale (obbligatoria)</string>
   <string name="more">Altro</string>
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
   <string name="name">Nome</string>
+  <string name="item_name_required">Nome dell\'elemento (obbligatorio)</string>
   <string name="send_name_required">"Nome per l'invio (richiesto)"</string>
   <string name="no">No</string>
   <string name="notes">Note</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Grazie</string>
   <string name="tools">Strumenti</string>
   <string name="uri">URL</string>
+  <string name="website_uri">Sito web (URI)</string>
   <string name="use_fingerprint_to_unlock">Usa l\'impronta digitale per sbloccare</string>
   <string name="username">Nome utente</string>
   <string name="validation_field_required">Compila il campo \"%1$s\"</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tocca l\'icona di Bitwarden nel menu per avviare l\'estensione.</string>
   <string name="extension_turn_on">Per attivare Bitwarden su Safari e altre app, clicca l\'icona \"altro\" sull\'ultima riga del menu.</string>
   <string name="favorite">Segna come importante</string>
+  <string name="unfavorite">Non preferito</string>
   <string name="fingerprint">Impronta digitale</string>
   <string name="generate_password">Genera password</string>
   <string name="get_password_hint">Invia il suggerimento per la password principale</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Nessun elemento importante</string>
   <string name="no_items">Nessun elemento</string>
   <string name="no_items_tap">Nessun elemento per questo sito web o app. Tocca per aggiungerne uno.</string>
+  <string name="no_cards">Non ci sono carte nella tua cassaforte.</string>
+  <string name="new_card">Nuova carta</string>
+  <string name="no_logins">Non ci sono accessi nella tua cassaforte.</string>
+  <string name="no_identities">Non ci sono identità nella tua cassaforte.</string>
+  <string name="new_identity">Nuova identità</string>
+  <string name="no_notes">Non ci sono note nella tua cassaforte.</string>
+  <string name="new_note">Nuova nota</string>
+  <string name="new_item">Nuovo elemento</string>
+  <string name="no_text_sends">Non ci sono messaggi inviati nella tua cassaforte.</string>
+  <string name="no_file_sends">Non ci sono file Send nella tua cassaforte.</string>
+  <string name="new_text_send">Nuovo testo Send</string>
+  <string name="new_file_send">Nuovo file Send</string>
   <string name="no_username">Nessun nome utente</string>
   <string name="no_username_password_configured">Questo login non contiene un nome utente o password.</string>
   <string name="ok_got_it">OK</string>
@@ -169,7 +184,7 @@
   <string name="rate_the_app_description">Aiutaci lasciando una buona recensione!</string>
   <string name="regenerate_password">Rigenera password</string>
   <string name="retype_master_password">Conferma la password principale</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Ridigita la password principale (obbligatorio)</string>
   <string name="search_vault">Cerca nella cassaforte</string>
   <string name="security">Sicurezza</string>
   <string name="select">Seleziona</string>
@@ -197,8 +212,8 @@
   <string name="translations">Traduzioni</string>
   <string name="items_for_uri">Elementi per %1$s</string>
   <string name="no_items_for_uri">Nessun elemento per %1$s</string>
-  <string name="no_items_for_vault">There are no items in your vault that match “%1$s”</string>
-  <string name="search_for_a_login_or_add_a_new_login">Search for a login or add a new login</string>
+  <string name="no_items_for_vault">Nessun elemento nella cassaforte corrispondente a \"%1$s\"</string>
+  <string name="search_for_a_login_or_add_a_new_login">Cerca un login o aggiungi un nuovo login</string>
   <string name="bitwarden_autofill_service_overlay">Quando selezioni un campo di login e vedi un pop-up di riempimento automatico di Bitwarden, puoi cliccarlo per aprire il servizio di riempimento automatico.</string>
   <string name="bitwarden_autofill_service_notification_content">Clicca questa notifica per riempire automaticamente un login dalla tua cassaforte.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Apri impostazioni di accessibilità</string>
@@ -356,6 +371,7 @@ La scansione è automatica.</string>
   <string name="select_type_field">Tipo di campo personalizzato</string>
   <string name="remove">Rimuovi</string>
   <string name="new_uri">Aggiungi un URL</string>
+  <string name="add_website">Aggiungi sito web</string>
   <string name="uri_position">URL %1$s</string>
   <string name="base_domain">Dominio di base</string>
   <string name="default_text">Predefinito</string>
@@ -386,7 +402,7 @@ La scansione è automatica.</string>
   <string name="autofill_turn_on4">4. Attiva il riempimento automatico</string>
   <string name="autofill_turn_on5">5. Seleziona \"Bitwarden\"</string>
   <string name="password_autofill">Riempimento automatico password</string>
-  <string name="bitwarden_autofill_alert2">Il modo più semplice per aggiungere nuovi login alla tua cassaforte è usare l\'estensione di riempimento automatico di Bitwarden. Scopri di più su come usare l\'estensione di riempimento automatico di Bitwarden nelle impostazioni.</string>
+  <string name="bitwarden_autofill_alert2">Puoi aggiungere facilmente nuovi login alla cassaforte con l\'estensione per browser di Bitwarden. Scopri di più su come usare il riempimento automatico nelle impostazioni dell\'applicazione.</string>
   <string name="invalid_email">Inserisci un indirizzo email valido</string>
   <string name="cards">Carte</string>
   <string name="identities">Identità</string>
@@ -396,6 +412,7 @@ La scansione è automatica.</string>
   <string name="ur_is">URL</string>
   <string name="checking_password">Controllo password...</string>
   <string name="check_password">Verifica se la password è stata esposta.</string>
+  <string name="check_password_for_data_breaches">Controlla la parola d\'accesso per le violazioni dei dati</string>
   <string name="password_exposed">Questa password è stata esposta %1$s volta/e nelle violazioni di dati note. Cambiala con una più sicura.</string>
   <string name="password_safe">Questa password non è stata trovata in alcuna violazione di dati nota</string>
   <string name="identity_name">Nome dell\'identità</string>
@@ -461,7 +478,7 @@ La scansione è automatica.</string>
   <string name="copy_notes">Copia le note</string>
   <string name="exit">Chiudi</string>
   <string name="exit_confirmation">Sei sicuro di voler chiudere Bitwarden?</string>
-  <string name="require_master_password_on_app_restart">Require master password on app restart?</string>
+  <string name="require_master_password_on_app_restart">Richiedi la password principale al riavvio dell\'app?</string>
   <string name="pin_require_master_password_restart">Vuoi richiedere lo sblocco con la password principale quando l\'app viene riavviata?</string>
   <string name="black">Nero</string>
   <string name="nord">Nord</string>
@@ -480,6 +497,8 @@ La scansione è automatica.</string>
   <string name="login_expired">La tua sessione è scaduta.</string>
   <string name="biometrics_direction">Autenticazione biometrica</string>
   <string name="biometrics">Biometria</string>
+  <string name="biometrics_failed">Autenticazione biometrica fallita</string>
+  <string name="biometrics_decoding_failure">Effettua l\'accesso con la tua parola d\'accesso principale o il PIN e riabilita l\'accesso biometrico nelle impostazioni.</string>
   <string name="use_biometrics_to_unlock">Sblocca con la biometria</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden richiede la tua attenzione - Vedi \"Servizio di accessibilità di riempimento automatico\" dalle impostazioni di Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Nelle Impostazioni di Android per Bitwarden, vai alle opzioni \"Mostra sopra altre app\" (sotto \"Avanzate\") e abilita il supporto della sovrapposizione.</string>
@@ -606,7 +625,7 @@ La scansione è automatica.</string>
   <string name="thirty_days">30 giorni</string>
   <string name="custom">Personalizzata</string>
   <string name="share_on_save">Condividi il Send dopo il salvataggio</string>
-  <string name="add_this_authenticator_key_to_a_login">Add this authenticator key to an existing login, or create a new login.</string>
+  <string name="add_this_authenticator_key_to_a_login">Aggiungi questa chiave di autenticazione a un login esistente o crea un nuovo login.</string>
   <string name="send_disabled_warning">A causa di una politica aziendale, puoi eliminare solo Send esistenti.</string>
   <string name="about_send">Informazioni sui Send</string>
   <string name="hide_email">Nascondi l\'indirizzo email</string>
@@ -685,12 +704,14 @@ La scansione è automatica.</string>
   <string name="verification_codes">Codici di verifica</string>
   <string name="premium_subscription_required">Passa a un abbonamento Premium</string>
   <string name="cannot_add_authenticator_key">Non riesci a inserire la chiave 2FA?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Impossibile aggiungere la chiave di autenticazione? <annotation link="scanQrCode">Scansiona il codice QR</annotation></string>
   <string name="scan_qr_code">Scansiona il codice QR</string>
   <string name="cannot_scan_qr_code">Non riesci a scansionare il codice QR?</string>
   <string name="authenticator_key_scanner">Chiave 2FA</string>
   <string name="enter_key_manually">Inserisci manualmente la chiave</string>
   <string name="add_totp">Salva</string>
   <string name="setup_totp">Imposta TOTP</string>
+  <string name="set_up_authenticator_key">Imposta la chiave di autenticazione</string>
   <string name="once_the_key_is_successfully_entered">Inserisci la chiave e tocca \"Salva\" per salvare la chiave in modo sicuro.</string>
   <string name="never_lock_warning">Sei sicuro di voler usare l\'opzione \"Mai\"? Impostare le opzioni di blocco su \"Mai\" salverà la chiave di crittografia della cassaforte sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il tuo dispositivo adeguatamente protetto.</string>
   <string name="environment_page_urls_error">Inserisci degli URL validi</string>
@@ -942,7 +963,7 @@ Vuoi passare a questo account?</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Segui le istruzioni contenute nell\'email inviata a %1$s per proseguire con la creazione del tuo account.</string>
   <string name="we_sent_an_email_to">Abbiamo inviato una email a %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Continuando, accetti i Termini di servizio e l\'Informativa sulla privacy.</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Attivando questo switch, accetti i <annotation link="termsOfService">Termini di Servizio</annotation> e <annotation link="privacyPolicy">Politica di riservatezza</annotation></string>
   <string name="set_password">Imposta la password</string>
   <string name="unsubscribe">Annulla iscrizione</string>
   <string name="check_your_email">Controlla la casella di posta</string>
@@ -953,7 +974,7 @@ Vuoi passare a questo account?</string>
   <string name="or_log_in_you_may_already_have_an_account">Oppure effettua l\'accesso se potresti avere già un account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Ricevi email da Bitwarden per annunci, consigli e opportunità di ricerca. Disiscriviti in qualsiasi momento.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Ottieni consigli, annunci e opportunità di ricerca da Bitwarden nella tua casella di posta. Disiscriviti in qualsiasi momento.</string>
-  <string name="security_prioritized">Security, prioritized</string>
+  <string name="security_prioritized">Sicurezza come priorità</string>
   <string name="welcome_message_1">Salva login, carte e identità nella tua cassaforte sicura. Bitwarden usa la crittografia end-to-end e zero-knowledge per proteggere ciò che è importante.</string>
   <string name="welcome_message_2">Imposta lo sblocco biometrico e il riempimento automatico per accedere ai tuoi account senza digitare una sola lettera.</string>
   <string name="quick_and_easy_login">Accesso facile e veloce</string>
@@ -964,7 +985,7 @@ Vuoi passare a questo account?</string>
   <string name="remove_passkey">Rimuovi la passkey</string>
   <string name="passkey_removed">Passkey rimossa</string>
   <string name="what_makes_a_password_strong">Cosa rende forte una password?</string>
-  <string name="a_secure_memorable_password">A secure, memorable password</string>
+  <string name="a_secure_memorable_password">Una password sicura e memorizzabile</string>
   <string name="the_longer_your_password_the_more_difficult_to_hack">Più la password è lunga, più è difficile indovinarla. Il minimo per la creazione dell\'account è 12 caratteri, ma se è lunga almeno 14 caratteri, il tempo necessario per indovinarla può essere superiore a centinaia di anni.</string>
   <string name="the_strongest_passwords_are_usually">Le password forti sono solitamente:</string>
   <string name="twelve_or_more_characters">Composte da almeno 12 caratteri</string>
@@ -980,8 +1001,8 @@ Vuoi passare a questo account?</string>
   <string name="confirm">Conferma</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Imposta la biometria o scegli un codice PIN per accedere rapidamente alla tua cassaforte e riempire automaticamente i tuoi login.</string>
   <string name="never_lose_access_to_your_vault">Non perdere l\'accesso alla cassaforte</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
-  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Il modo migliore per assicurarti di accedere sempre alla tua cassaforte è quello di impostare le salvaguardie fin dall\'inizio.</string>
+  <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Uno dei modi migliori per creare una password sicura e memorizzabile è utilizzare una passphrase. \nEcco come:</string>
   <string name="create_a_hint">Crea un suggerimento</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Il tuo suggerimento ti verrà inviato via email quando richiesto.</string>
   <string name="write_your_password_down">Appunta la password</string>
@@ -1005,115 +1026,115 @@ Vuoi passare a questo account?</string>
   <string name="restart_registration">Riprova la registrazione</string>
   <string name="authenticator_sync">Sync Authenticator</string>
   <string name="allow_bitwarden_authenticator_syncing">Permetti il sync di Bitwarden Authenticator</string>
-  <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
+  <string name="there_was_an_issue_validating_the_registration_token">Si è verificato un errore durante la convalida del token di registrazione.</string>
   <string name="turn_on_autofill">Attiva il riempimento automatico</string>
   <string name="use_autofill_to_log_into_your_accounts">Usa il riempimento automatico per accedere ai tuoi account con un solo tocco.</string>
   <string name="turn_on_later">Attiva più tardi</string>
   <string name="turn_on_autofill_later">Attivare il riempimento automatico più tardi?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni.</string>
-  <string name="what_bitwarden_has_to_offer">You can now explore everything Bitwarden has to offer and start managing your passwords securely.</string>
-  <string name="youre_all_set">You\'re all set!</string>
-  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
-  <string name="master_password_hint_not_specified">Master password hint</string>
-  <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
-  <string name="get_started">Get started</string>
+  <string name="what_bitwarden_has_to_offer">Ora puoi esplorare tutto ciò che Bitwarden ha da offrire e iniziare a gestire le tue password in modo sicuro.</string>
+  <string name="youre_all_set">È tutto pronto!</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Errore di connessione con il servizio Duo. Utilizza un metodo di login in due passaggi diverso o contatta Duo per assistenza.</string>
+  <string name="master_password_hint_not_specified">Suggerimento per la password principale</string>
+  <string name="master_password_important_hint">La tua password principale non può essere recuperata se la dimentichi! Almeno 12 caratteri.</string>
+  <string name="get_started">Inizia</string>
   <string name="save_and_protect_your_data">Salva e proteggi i tuoi dati</string>
   <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge non solo le password ma anche i login, le identità, le carte e le note in modo sicuro.</string>
   <string name="new_login">Aggiungi un elemento</string>
-  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
-  <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
-  <string name="import_saved_logins">Import saved logins</string>
-  <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
-  <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
-  <string name="import_logins_later">Import logins later</string>
-  <string name="import_logins_later_dialog_title">Import logins later?</string>
-  <string name="do_you_have_a_computer_available">Do you have a computer available?</string>
-  <string name="the_following_instructions_will_guide_you_through_importing_logins">The following instructions will guide you through importing logins from your desktop or laptop computer</string>
-  <string name="import_logins">Import Logins</string>
-  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
-  <string name="give_your_vault_a_head_start">Give your vault a head start</string>
-  <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
-  <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Condividi file e dati in modo sicuro con chiunque, su qualsiasi piattaforma. Le tue informazioni rimarranno crittografate end-to-end limitando l\'esposizione.</string>
+  <string name="send_sensitive_information_safely">Invia informazioni sensibili, in modo sicuro</string>
+  <string name="import_saved_logins">Importa login salvati</string>
+  <string name="use_a_computer_to_import_logins">Usa un computer per importare i login da un gestore di password esistente</string>
+  <string name="you_can_return_to_complete_this_step_anytime_from_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni della Cassaforte.</string>
+  <string name="import_logins_later">Importa i login più tardi</string>
+  <string name="import_logins_later_dialog_title">Importare i login più tardi?</string>
+  <string name="do_you_have_a_computer_available">Hai un computer disponibile?</string>
+  <string name="the_following_instructions_will_guide_you_through_importing_logins">Le seguenti istruzioni ti guideranno nell\'importazione di login dal tuo desktop o computer portatile</string>
+  <string name="import_logins">Importa Login</string>
+  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Dal tuo computer, segui queste istruzioni per esportare le password salvate dal tuo browser o da un altro gestore di password. Quindi, importale in modo sicuro su Bitwarden.</string>
+  <string name="give_your_vault_a_head_start">Dai un vantaggio alla tua cassaforte</string>
+  <string name="class_3_biometrics_description">Lo sblocca con la biometria richiede una autenticazione biometrica sicura e potrebbe non essere compatibile con tutte le opzioni biometriche di questo dispositivo.</string>
+  <string name="class_2_biometrics_description">Lo sblocco con dati biometrici richiede una autenticazione biometrica sicura e potrebbe non essere compatibile con tutte le opzioni biometriche di questo dispositivo.</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
   <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
-  <string name="step_1_of_3">Step 1 of 3</string>
-  <string name="export_your_saved_logins">Export your saved logins</string>
-  <string name="delete_this_file_after_import_is_complete">You’ll delete this file after import is complete.</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
-  <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
-  <string name="step_2_of_3">Step 2 of 3</string>
-  <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
-  <string name="step_3_of_3">Step 3 of 3</string>
-  <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
+  <string name="step_1_of_3">Fase 1 di 3</string>
+  <string name="export_your_saved_logins">Esporta i tuoi login salvati</string>
+  <string name="delete_this_file_after_import_is_complete">Eliminerai questo file dopo aver completato l\'importazione.</string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">Sul tuo computer, apri una nuova scheda del browser e <annotation emphasis="bold">vai a <annotation arg="0">%1$s</annotation></annotation></string>
+  <string name="log_in_to_the_bitwarden_web_app">Accedi all\'app web Bitwarden.</string>
+  <string name="step_2_of_3">Fase 2 di 3</string>
+  <string name="log_in_to_bitwarden">Accedi a Bitwarden</string>
+  <string name="step_3_of_3">Fase 3 di 3</string>
+  <string name="import_logins_to_bitwarden">Importa login in Bitwarden</string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Nella navigazione Bitwarden, <annotation emphasis="bold">trova l\'opzione Strumenti</annotation> e <annotation emphasis="bold">seleziona Importa dati.</annotation></string>
   <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
   <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
-  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
-  <string name="syncing_logins_loading_message">Syncing logins...</string>
+  <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Questo non è un server Bitwarden riconosciuto. Potrebbe essere necessario controllare con il tuo provider o aggiornare il server.</string>
+  <string name="syncing_logins_loading_message">Sincronizzazione dei login...</string>
   <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
-  <string name="download_the_browser_extension">Download the browser extension</string>
-  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
-  <string name="use_the_web_app">Use the web app</string>
-  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Log in at bitwarden.com to easily manage your account and update settings.</string>
-  <string name="autofill_passwords">Autofill passwords</string>
-  <string name="set_up_autofill_on_all_your_devices">Set up autofill on all your devices to login with a single tap anywhere.</string>
-  <string name="import_successful">Import Successful!</string>
-  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Manage your logins from anywhere with Bitwarden tools for web and desktop.</string>
-  <string name="bitwarden_tools">Bitwarden Tools</string>
-  <string name="got_it">Got it</string>
-  <string name="no_logins_were_imported">No logins were imported</string>
-  <string name="import_error">Import error</string>
-  <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
-  <string name="logins_imported">Logins imported</string>
-  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
-  <string name="type_ssh_key">SSH key</string>
-  <string name="public_key">Public key</string>
-  <string name="private_key">Private key</string>
-  <string name="ssh_keys">SSH keys</string>
-  <string name="copy_public_key">Copy public key</string>
-  <string name="copy_fingerprint">Copy fingerprint</string>
-  <string name="enable_notifications">Enable notifications</string>
-  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+  <string name="download_the_browser_extension">Scarica l\'estensione del browser</string>
+  <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vai su bitwarden.com/download per integrare Bitwarden nel tuo browser preferito e avere un\'esperienza senza interruzioni.</string>
+  <string name="use_the_web_app">Usa l\'app web</string>
+  <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">Accedi su bitwarden.com per gestire facilmente il tuo account e aggiornare le impostazioni.</string>
+  <string name="autofill_passwords">Riempimento automatico password</string>
+  <string name="set_up_autofill_on_all_your_devices">Imposta il riempimento automatico su tutti i tuoi dispositivi per accedere con un solo tocco ovunque.</string>
+  <string name="import_successful">Importazione effettuata con successo!</string>
+  <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">Gestisci i tuoi login da qualsiasi luogo con gli strumenti Bitwarden per web e desktop.</string>
+  <string name="bitwarden_tools">Strumenti Bitwarden</string>
+  <string name="got_it">Capito</string>
+  <string name="no_logins_were_imported">Nessun login importato</string>
+  <string name="import_error">Errore di importazione</string>
+  <string name="verified_sso_domain_verified">Endpoint di Dominio SSO Verificato</string>
+  <string name="logins_imported">Login importati</string>
+  <string name="remember_to_delete_your_imported_password_file_from_your_computer">Ricordati di eliminare il file delle password importate dal tuo computer</string>
+  <string name="type_ssh_key">Chiave SSH</string>
+  <string name="public_key">Chiave pubblica</string>
+  <string name="private_key">Chiave privata</string>
+  <string name="ssh_keys">Chiavi SSH</string>
+  <string name="copy_public_key">Copia chiave pubblica</string>
+  <string name="copy_fingerprint">Copia impronta</string>
+  <string name="enable_notifications">Abilita le notifiche</string>
+  <string name="log_in_quickly_and_easily_across_devices">Accedi rapidamente e facilmente su più dispositivi</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
-  <string name="skip_for_now">Skip for now</string>
-  <string name="done_text">Done</string>
-  <string name="page_number_x_of_y">%1$s of %2$s</string>
-  <string name="copy_identity_name">Copy identity name</string>
-  <string name="copy_company">Copy company</string>
+  <string name="skip_for_now">Salta per ora</string>
+  <string name="done_text">Fatto</string>
+  <string name="page_number_x_of_y">%1$s di %2$s</string>
+  <string name="copy_identity_name">Copia nome identità</string>
+  <string name="copy_company">Copia azienda</string>
   <string name="copy_ssn">Copy social security number</string>
-  <string name="copy_passport_number">Copy passport number</string>
-  <string name="copy_license_number">Copy license number</string>
-  <string name="copy_email">Copy email</string>
-  <string name="copy_phone">Copy phone number</string>
-  <string name="copy_address">Copy address</string>
-  <string name="important_notice">Important notice</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden will send a code to your account email to verify logins from new devices starting in February 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Do you have reliable access to your email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Yes, I can reliably access my email</string>
-  <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
-  <string name="biometrics_no_longer_supported">You’ve been logged out because your device’s biometrics don’t meet the latest security requirements. To update settings, log in once again or contact your administrator for access.</string>
-  <string name="cxp_import">CXP Import</string>
-  <string name="cxp_export">CXP Export</string>
-  <string name="set_up_two_step_login">Set up two-step login</string>
+  <string name="copy_passport_number">Copia numero passaporto</string>
+  <string name="copy_license_number">Copia numero licenza</string>
+  <string name="copy_email">Copia email</string>
+  <string name="copy_phone">Copia numero di telefono</string>
+  <string name="copy_address">Copia indirizzo</string>
+  <string name="important_notice">Avviso importante</string>
+  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden invierà un codice all\'email del tuo account per verificare gli accessi da nuovi dispositivi a partire da febbraio 2025.</string>
+  <string name="do_you_have_reliable_access_to_your_email">Hai accesso affidabile alla tua email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
+  <string name="yes_i_can_reliably_access_my_email">Sì, riesco ad accedere in modo affidabile alla mia email</string>
+  <string name="biometrics_no_longer_supported_title">I dati biometrici non sono più supportati su questo dispositivo</string>
+  <string name="biometrics_no_longer_supported">Sei stato disconnesso perché la biometria del tuo dispositivo non soddisfa gli ultimi requisiti di sicurezza. Per aggiornare le impostazioni, effettuare nuovamente il login o contatta l\'amministratore per accedere.</string>
+  <string name="cxp_import">Importazione CXP</string>
+  <string name="cxp_export">Esportazione CXP</string>
+  <string name="set_up_two_step_login">Imposta accesso in due passaggi</string>
   <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">You can set up two-step login as an alternative way to protect your account or change your email to one you can access.</string>
-  <string name="turn_on_two_step_login">Turn on two-step login</string>
-  <string name="change_account_email">Change account email</string>
-  <string name="choose_three_or_four_random_words">Choose three or four random words</string>
+  <string name="turn_on_two_step_login">Attiva accesso in due passaggi</string>
+  <string name="change_account_email">Cambia l\'email dell\'account</string>
+  <string name="choose_three_or_four_random_words">Scegli tre o quattro parole casuali</string>
   <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
-  <string name="combine_those_words_together">Combine those words together</string>
+  <string name="combine_those_words_together">Combina queste parole insieme</string>
   <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
-  <string name="make_it_yours">Make it yours</string>
+  <string name="make_it_yours">Rendilo tuo</string>
   <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
-  <string name="need_some_inspiration">"Need some inspiration?"</string>
-  <string name="check_out_the_passphrase_generator">"Check out the passphrase generator"</string>
-  <string name="copied_to_clipboard">Copied to clipboard.</string>
+  <string name="need_some_inspiration">"Hai bisogno di ispirazione?"</string>
+  <string name="check_out_the_passphrase_generator">"Controlla il generatore di passphrase"</string>
+  <string name="copied_to_clipboard">Copiato negli appunti.</string>
   <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
   <string name="review_flow_launched">Review flow launched!</string>
-  <string name="copy_private_key">Copy private key</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">You can change your account email on the Bitwarden web app.</string>
+  <string name="copy_private_key">Copia chiave privata</string>
+  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Puoi modificare l\'email del tuo account sull\'app web Bitwarden.</string>
   <string name="login_credentials">Credenziali di accesso</string>
   <string name="autofill_options">Opzioni di auto-compilazione</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Usa questo pulsante per generare una nuova parola d\'accesso univoca.</string>
@@ -1143,4 +1164,5 @@ Vuoi passare a questo account?</string>
   <string name="coachmark_6_of_6">6 DI 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua parola d\'accesso alle specifiche del tuo account.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Dopo aver salvato la tua nuova parola d'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account. "</string>
+  <string name="link">Link</string>
 </resources>

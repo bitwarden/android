@@ -54,6 +54,7 @@
   <string name="my_vault">내 보관함</string>
   <string name="authenticator">인증기</string>
   <string name="name">이름</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">아니오</string>
   <string name="notes">메모</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">감사합니다</string>
   <string name="tools">도구</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">지문으로 잠금 해제</string>
   <string name="username">사용자 이름</string>
   <string name="validation_field_required">%1$s 필드는 반드시 입력해야 합니다.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">확장 프로그램을 실행하려면 메뉴에서 Bitwarden 아이콘을 누르세요.</string>
   <string name="extension_turn_on">Safari 및 다른 앱에서 Bitwarden을 사용 설정하려면 메뉴의 아래쪽 줄에서 \"기타\" 아이콘을 누르세요.</string>
   <string name="favorite">즐겨찾기</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">지문</string>
   <string name="generate_password">비밀번호 생성</string>
   <string name="get_password_hint">마스터 비밀번호 힌트 얻기</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">보관함에 추가한 즐겨찾기가 없습니다.</string>
   <string name="no_items">보관함에 추가한 항목이 없습니다.</string>
   <string name="no_items_tap">보관함에 이 웹사이트에 대한 항목이 없습니다. 추가하려면 누르세요.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">이 로그인에는 사용자 이름 또는 비밀번호가 등록되어 있지 않습니다.</string>
   <string name="ok_got_it">네, 알겠습니다!</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">어떤 유형의 사용자 지정 필드를 추가하시겠습니까?</string>
   <string name="remove">제거</string>
   <string name="new_uri">새 URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">기본 도메인</string>
   <string name="default_text">기본값</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">URI</string>
   <string name="checking_password">비밀번호 확인 중...</string>
   <string name="check_password">비밀번호가 노출되었는지 확인합니다.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">이 비밀번호는 데이터 유출에 %1$s회 노출되었습니다. 비밀번호를 변경하는 것이 좋습니다.</string>
   <string name="password_safe">이 비밀번호는 데이터 유출 목록에 없습니다. 사용하기에 안전한 비밀번호입니다.</string>
   <string name="identity_name">ID 이름</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">로그인 세션이 만료되었습니다.</string>
   <string name="biometrics_direction">인증하기 위해 생체 인식을 사용하세요.</string>
   <string name="biometrics">생체 인식</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">잠금 해제에 생체 인식 사용</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden에 권한이 필요합니다 - Bitwarden 설정의 \"자동 입력 접근성 서비스\"를 확인해 주세요.</string>
   <string name="bitwarden_autofill_service_overlay_permission">Bitwarden의 Android 앱 설정 화면에 있는 (고급 아래에 위치) \"다른 앱 위에 표시\"에 들어간 뒤 토글을 눌러 오버레이 지원을 활성화해 주세요.</string>
@@ -685,12 +704,14 @@
   <string name="verification_codes">인증 코드</string>
   <string name="premium_subscription_required">프리미엄 구독이 필요합니다</string>
   <string name="cannot_add_authenticator_key">인증 키를 추가할 수 없습니다.</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">QR 코드 스캔</string>
   <string name="cannot_scan_qr_code">QR 코드를 스캔할 수 없나요?</string>
   <string name="authenticator_key_scanner">인증 키</string>
   <string name="enter_key_manually">수동으로 Api 키 입력</string>
   <string name="add_totp">TOTP 추가</string>
   <string name="setup_totp">TOTP 설정하기</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">키가 첫 번째로 입력되었다면
 키를 안전히 저장하기 위해 TOTP를 추가하세요.</string>
   <string name="never_lock_warning">Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</string>
@@ -910,7 +931,7 @@
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -979,7 +1000,7 @@
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1134,7 +1155,7 @@
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1163,7 @@
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

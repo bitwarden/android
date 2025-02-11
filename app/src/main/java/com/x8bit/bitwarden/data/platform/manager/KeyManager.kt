@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ImportPrivateKeyResult
+import androidx.annotation.WorkerThread
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 
@@ -29,7 +30,10 @@ interface KeyManager {
 
     /**
      * Retrieve the certificate chain for the selected mTLS key.
+     *
+     * Must be called from a background thread to prevent possible deadlocks on the main thread.
      */
+    @WorkerThread
     fun getMutualTlsCertificateChain(
         alias: String,
         host: MutualTlsKeyHost,

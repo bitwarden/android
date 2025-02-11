@@ -21,6 +21,9 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -41,24 +44,10 @@ fun VaultItemCardContent(
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.item_information),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
-        item {
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
+            ItemNameField(
                 value = commonState.name,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
+                isFavorite = commonState.favorite,
                 textFieldTestTag = "CardItemNameEntry",
-                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -78,6 +67,7 @@ fun VaultItemCardContent(
                         .propertyList
                         .toListItemCardStyle(
                             index = cardState.propertyList.indexOf(element = cardholderName),
+                            dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -109,6 +99,7 @@ fun VaultItemCardContent(
                         .propertyList
                         .toListItemCardStyle(
                             index = cardState.propertyList.indexOf(element = numberData),
+                            dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -130,6 +121,7 @@ fun VaultItemCardContent(
                         .propertyList
                         .toListItemCardStyle(
                             index = cardState.propertyList.indexOf(element = cardState.brand),
+                            dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -151,6 +143,7 @@ fun VaultItemCardContent(
                         .propertyList
                         .toListItemCardStyle(
                             index = cardState.propertyList.indexOf(element = expiration),
+                            dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -183,6 +176,7 @@ fun VaultItemCardContent(
                         .propertyList
                         .toListItemCardStyle(
                             index = cardState.propertyList.indexOf(element = securityCodeData),
+                            dividerPadding = 0.dp,
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -203,7 +197,7 @@ fun VaultItemCardContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = R.string.additional_options),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,

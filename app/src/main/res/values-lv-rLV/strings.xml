@@ -54,6 +54,7 @@
   <string name="my_vault">Mana glabātava</string>
   <string name="authenticator">Autentificētājs</string>
   <string name="name">Nosaukums</string>
+  <string name="item_name_required">Vienuma nosaukums (nepieciešams)</string>
   <string name="send_name_required">"Send nosaukums (nepieciešams)"</string>
   <string name="no">Nē</string>
   <string name="notes">Piezīmes</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Paldies!</string>
   <string name="tools">Rīki</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Tīmekļvietne (URI)</string>
   <string name="use_fingerprint_to_unlock">Izmantot pirkstu nospiedumu, lai atslēgtu</string>
   <string name="username">Lietotājvārds</string>
   <string name="validation_field_required">%1$s lauks ir nepieciešams.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Piesist Bitwarden ikonai izvēlne, lai palaistu paplašinājumu.</string>
   <string name="extension_turn_on">Lai ieslēgtu Bitwarden Safari un citās lietotnēs, jāpiesit \"vairāk\" ikonai izvēlnes apakšējā rindā.</string>
   <string name="favorite">Izlasē</string>
+  <string name="unfavorite">Izņemt no izlases</string>
   <string name="fingerprint">Pirkstu nospiedums</string>
   <string name="generate_password">Veidot paroli</string>
   <string name="get_password_hint">Saņemt galvenās paroles norādi</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Glabātavas izlasē nav vienumu.</string>
   <string name="no_items">Glabātavā nav vienumu.</string>
   <string name="no_items_tap">Glabātāvā nav vienumu, ko izmantot šajā tīmekļvietnē/lietotnē. Piesist, lai pievienotu.</string>
+  <string name="no_cards">Glabātavā nav karšu.</string>
+  <string name="new_card">Jauna karte</string>
+  <string name="no_logins">Glabātavā nav pieteikšanās vienumu.</string>
+  <string name="no_identities">Glabātavā nav identitāšu.</string>
+  <string name="new_identity">Jauna identitāte</string>
+  <string name="no_notes">Glabātavā nav piezīmju.</string>
+  <string name="new_note">Jauna piezīme</string>
+  <string name="new_item">Jauns vienums</string>
+  <string name="no_text_sends">Glabātavā nav teksta Send vienumu.</string>
+  <string name="no_file_sends">Glabātavā nav datņu Send vienumu.</string>
+  <string name="new_text_send">Jauns teksta Send</string>
+  <string name="new_file_send">Jauns datnes Send</string>
   <string name="no_username">Nav lietotājvārda</string>
   <string name="no_username_password_configured">Šajā pieteikšanās vienumā nav norādīts lietotājvārds vai parole.</string>
   <string name="ok_got_it">Labi, sapratu!</string>
@@ -356,6 +371,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="select_type_field">Kāda veida pielāgoto lauku vēlies pievienot?</string>
   <string name="remove">Noņemt</string>
   <string name="new_uri">Jauns URI</string>
+  <string name="add_website">Pievient tīmekļvietni</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Pamata domēns</string>
   <string name="default_text">Noklusējums</string>
@@ -396,6 +412,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="ur_is">URI</string>
   <string name="checking_password">Tiek pārbaudīta parole...</string>
   <string name="check_password">Pārbaudīt, vai parole ir bijusi nopludināta.</string>
+  <string name="check_password_for_data_breaches">Pārbaudīt, vai parole ir datu noplūdēs</string>
   <string name="password_exposed">Šī parole datu noplūdēs ir atklāta %1$s reizi(es). To vajadzētu nomainīt.</string>
   <string name="password_safe">Šī parole netika atrasta nevienā zināmā datu noplūdē. Tai vajadzētu būt droši izmantojamai.</string>
   <string name="identity_name">Identitātes nosaukums</string>
@@ -480,6 +497,8 @@ Nolasīšana notiks automātiski.</string>
   <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
   <string name="biometrics_direction">Apstiprināšana ar biometriju</string>
   <string name="biometrics">Biometrija</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Izmantot biometriju, lai atslēgtu</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden ir nepieciešams pievērst uzmanību - skatīt \"Automātiskās aizpildes pieejamības pakalpojums\" Bitwarden iestatījumos.</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Android lietotņu iestatījumu sadaļā, kas attiecas uz Bitwarden, jāritina līdz \"Papildu\", jāatver \"Rādīt pāri citām lietotnēm\" un jāpiesit slēdzim, lai iespējotu pārklāšanās atbalstu.</string>
@@ -685,12 +704,14 @@ Nolasīšana notiks automātiski.</string>
   <string name="verification_codes">Apstiprinājuma kodi</string>
   <string name="premium_subscription_required">Nepieciešams Premium abonements</string>
   <string name="cannot_add_authenticator_key">Nevar pievienot autentificētāja atslēgu?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Nevar pievienot autentificētāja atslēgu? <annotation link="scanQrCode">Nolasīt kvadrātkodu</annotation></string>
   <string name="scan_qr_code">Nolasīt kvadrātkodu</string>
   <string name="cannot_scan_qr_code">Nevar nolasīt kvadrātkodu?</string>
   <string name="authenticator_key_scanner">Autentificētāja atslēga</string>
   <string name="enter_key_manually">Ievadīt atslēgu pašrocīgi</string>
   <string name="add_totp">Pievienot TOTP</string>
   <string name="setup_totp">Uzstādīt TOTP</string>
+  <string name="set_up_authenticator_key">Iestatīt autentificētāja atslēgu</string>
   <string name="once_the_key_is_successfully_entered">Tiklīdz atslēga ir veiksmīgi ievadīta,
 jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="never_lock_warning">Aizslēgšanas iespējas iestatīšana uz \"Nekad\" padara glabātavu pieejamu ikvienam, kam ir piekļuve ierīcei. Ja šis iestatījums tiek izmantots, jānodrošina, ka ierīce ir pienācīgi aizsargāta.</string>
@@ -943,7 +964,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Jāseko uz e-pasta adresi %1$s nosūtītajām norādēm, lai turpinātu sava konta izveidošanu.</string>
   <string name="we_sent_an_email_to">Mēs nosūtījām e-pasta ziņojumu uz %1$s.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Turpinot Tu piekrīti pakalpojuma izmantošanas nosacījumiem un privātuma politikai</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ar šī slēdža ieslēgšanu tiek piekrists <annotation link="termsOfService">Pakalpojuma izmantošanas nosacījumiem</annotation> un <annotation link="privacyPolicy">Privātuma politikai</annotation></string>
   <string name="set_password">Iestatīt paroli</string>
   <string name="unsubscribe">Atteikt abonēšanu</string>
   <string name="check_your_email">Jāpārbauda e-pasts</string>
@@ -1142,6 +1163,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Saite</string>
 </resources>

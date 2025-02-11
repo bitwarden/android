@@ -13,9 +13,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.font.FontWeight
 import androidx.core.text.getSpans
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.spanStyleOf
 
 /**
  * Creates an [AnnotatedString] from a string resource allowing for optional arguments
@@ -153,22 +153,23 @@ private fun Annotation.isArgAnnotation(): Boolean =
 val bitwardenDefaultSpanStyle: SpanStyle
     @Composable
     @ReadOnlyComposable
-    get() = SpanStyle(
+    get() = spanStyleOf(
         color = BitwardenTheme.colorScheme.text.primary,
-        fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-        fontFamily = BitwardenTheme.typography.bodyMedium.fontFamily,
+        textStyle = BitwardenTheme.typography.labelMedium,
     )
 
 val bitwardenBoldSpanStyle: SpanStyle
     @Composable
     @ReadOnlyComposable
-    get() = bitwardenDefaultSpanStyle.copy(
-        fontWeight = FontWeight.Bold,
+    get() = spanStyleOf(
+        color = BitwardenTheme.colorScheme.text.primary,
+        textStyle = BitwardenTheme.typography.bodyMediumEmphasis,
     )
 
 val bitwardenClickableTextSpanStyle: SpanStyle
     @Composable
     @ReadOnlyComposable
-    get() = bitwardenBoldSpanStyle.copy(
+    get() = spanStyleOf(
         color = BitwardenTheme.colorScheme.text.interaction,
+        textStyle = BitwardenTheme.typography.labelMedium,
     )

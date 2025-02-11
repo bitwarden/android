@@ -19,6 +19,7 @@ data class BitwardenTypography(
     val titleSmall: TextStyle,
     val bodyLarge: TextStyle,
     val bodyMedium: TextStyle,
+    val bodyMediumEmphasis: TextStyle,
     val bodySmall: TextStyle,
     val labelLarge: TextStyle,
     val labelMedium: TextStyle,

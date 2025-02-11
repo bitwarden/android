@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.vault.feature.item
+package com.x8bit.bitwarden.ui.vault.feature.item.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 
 /**
  * Custom Field UI common for all item types.

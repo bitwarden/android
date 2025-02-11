@@ -256,7 +256,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 mutableStateFlow.update { it.copy(viewState = typeState) }
 
                 composeTestRule
-                    .onNodeWithTextAfterScroll("Name")
+                    .onNodeWithTextAfterScroll("Item name (required)")
                     .assertTextContains("cipher")
 
                 mutableStateFlow.update { currentState ->
@@ -264,9 +264,38 @@ class VaultItemScreenTest : BaseComposeTest() {
                 }
 
                 composeTestRule
-                    .onNodeWithTextAfterScroll("Name")
+                    .onNodeWithTextAfterScroll("Item name (required)")
                     .assertTextContains("Test Name")
             }
+    }
+
+    @Test
+    fun `favorite icon should be displayed according to state`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        favorite = false,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Unfavorite")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        favorite = true,
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithContentDescription(label = "Favorite")
+            .assertIsDisplayed()
     }
 
     @Test
@@ -715,7 +744,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertTextEquals("Password", "••••••••")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Check known data breaches for this password")
+            .onNodeWithTextAfterScroll("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Copy password")
@@ -743,7 +772,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertTextEquals("Password", "p@ssw0rd")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Check known data breaches for this password")
+            .onNodeWithTextAfterScroll("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Copy password")
@@ -1506,9 +1535,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(passwordData.password)
-            .onChildren()
-            .filterToOne(hasContentDescription("Check known data breaches for this password"))
+            .onNodeWithTextAfterScroll(text = "Check password for data breaches")
             .performClick()
 
         verify {
@@ -1639,7 +1666,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
+        composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
         // There are 2 because of the pull-to-refresh
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
@@ -1656,7 +1683,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
+        composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
         // There are 2 because of the pull-to-refresh
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
@@ -1674,7 +1701,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithTextAfterScroll("Verification code (TOTP)")
+        composeTestRule.onNodeWithTextAfterScroll("Authenticator key")
         // Only pull-to-refresh remains
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
 
@@ -1838,8 +1865,9 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
-        composeTestRule.onNodeWithTextAfterScroll("5")
-        composeTestRule.onNodeWithText("5").performClick()
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
@@ -1918,7 +1946,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     fun `in login state, uris should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
         composeTestRule.onNodeWithTextAfterScroll("AUTOFILL OPTIONS").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("URI").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Website (URI)").assertIsDisplayed()
         composeTestRule.onNodeWithTextAfterScroll("www.example.com").assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1926,7 +1954,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.assertScrollableNodeDoesNotExist("AUTOFILL OPTIONS")
-        composeTestRule.assertScrollableNodeDoesNotExist("URI")
+        composeTestRule.assertScrollableNodeDoesNotExist("Website (URI)")
         composeTestRule.assertScrollableNodeDoesNotExist("www.example.com")
     }
 
@@ -1947,15 +1975,13 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in login state, password history should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("Password history: ").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("1").assertIsDisplayed()
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(passwordHistoryCount = null) }
         }
 
-        composeTestRule.assertScrollableNodeDoesNotExist("Password history: ")
-        composeTestRule.assertScrollableNodeDoesNotExist("1")
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
     }
     //endregion login
 
@@ -2481,6 +2507,8 @@ class VaultItemScreenTest : BaseComposeTest() {
             )
         }
 
+        // First scroll past the security code field to avoid clicking the fab
+        composeTestRule.onNodeWithTextAfterScroll("Updated: ")
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll("Copy security code")
             .performClick()
@@ -2718,6 +2746,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canDelete = true,
         canAssignToCollections = true,
         canEdit = true,
+        favorite = false,
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -2802,6 +2831,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canDelete = true,
         canAssignToCollections = true,
         canEdit = true,
+        favorite = false,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

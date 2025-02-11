@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.data.platform.manager
 import android.content.Context
 import android.security.KeyChain
 import android.security.KeyChainException
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import timber.log.Timber
 import java.io.IOException
 import java.security.KeyStore

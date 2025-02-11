@@ -20,6 +20,9 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 
@@ -38,24 +41,10 @@ fun VaultItemIdentityContent(
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.item_information),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
-        item {
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
+            ItemNameField(
                 value = commonState.name,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
+                isFavorite = commonState.favorite,
                 textFieldTestTag = "ItemNameEntry",
-                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -255,7 +244,7 @@ fun VaultItemIdentityContent(
             item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()

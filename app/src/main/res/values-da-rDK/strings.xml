@@ -54,6 +54,7 @@
   <string name="my_vault">Min boks</string>
   <string name="authenticator">Godkender</string>
   <string name="name">Navn</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send navn (obligatorisk)"</string>
   <string name="no">Nej</string>
   <string name="notes">Notater</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Tak</string>
   <string name="tools">Værktøjer</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Brug fingeraftryk til oplåsning</string>
   <string name="username">Brugernavn</string>
   <string name="validation_field_required">Feltet %1$s er obligatorisk.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tryk på Bitwarden-ikonet i menuen for at starte udvidelsen.</string>
   <string name="extension_turn_on">For at aktivere Bitwarden i Safari og andre apps, tryk på ikonet \"mere\" på nederste række i menuen.</string>
   <string name="favorite">Favorit</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Fingeraftryk</string>
   <string name="generate_password">Generér adgangskode</string>
   <string name="get_password_hint">Hent dit hovedadgangskodetip</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Der er ingen favoritter i boksen.</string>
   <string name="no_items">Der er ingen emner i boksen.</string>
   <string name="no_items_tap">Der er ingen emner i boksen til webstedet/appen. Tryk for at tilføje emne.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">Intet Brugernavn</string>
   <string name="no_username_password_configured">Dette login har intet brugernavn eller adgangskode opsat.</string>
   <string name="ok_got_it">OK, forstået!</string>
@@ -356,6 +371,7 @@ Skanning vil ske automatisk.</string>
   <string name="select_type_field">Hvilken type tilpasset felt ønskes tilføjet?</string>
   <string name="remove">Fjern</string>
   <string name="new_uri">Ny URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Basisdomæne</string>
   <string name="default_text">Standard</string>
@@ -374,19 +390,19 @@ Skanning vil ske automatisk.</string>
   <string name="bitwarden_autofill_accessibility_service_description2">Tilgængelighedstjenesten kan være nyttigt at bruge, når apps ikke understøtter den almindelige autoudfyldningstjeneste.</string>
   <string name="date_password_updated">Adgangskode opdateret</string>
   <string name="date_updated">Opdateret</string>
-  <string name="autofill_activated">Autoudfyldning aktiveret!</string>
-  <string name="must_log_in_main_app_autofill">Udvidelsen kan først bruges efter indlogning på den primære Bitwarden-app.</string>
+  <string name="autofill_activated">Autoudfyld aktiveret!</string>
+  <string name="must_log_in_main_app_autofill">Du skal logge ind på den primære Bitwarden-app, før du kan bruge Autoudfyld.</string>
   <string name="autofill_setup">Logins kan nu nemt tilgås direkte fra tastaturet, når der logges ind på apps og websteder.</string>
-  <string name="autofill_setup2">Vi anbefaler, at andre Autoudfyld-apps deaktiveres under Indstillinger, hvis det ikke er planen at bruge dem.</string>
+  <string name="autofill_setup2">Vi anbefaler, at du deaktiverer andre Autoudfyld-apps under Indstillinger, hvis du ikke har planer om at bruge dem.</string>
   <string name="bitwarden_autofill_description">Få adgang til boksen direkte fra tastaturet for hurtigt at autoudfylde adgangskoder.</string>
   <string name="autofill_turn_on">Følg denne vejledning for at aktivere autoudfyldning af adgangskoder på enheden:</string>
   <string name="autofill_turn_on1">1. Gå til iOS-appen \"Indstillinger\"</string>
   <string name="autofill_turn_on2">2. Tryk på \"Adgangskoder\"</string>
   <string name="autofill_turn_on3">3. Tryk på \"Autoudfyld adgangskoder\"</string>
-  <string name="autofill_turn_on4">4. Slå Autoudfyld til</string>
+  <string name="autofill_turn_on4">4. Aktivér Autoudfyld</string>
   <string name="autofill_turn_on5">5. Vælg \"Bitwarden\"</string>
   <string name="password_autofill">Adgangskodeautoudfyldning</string>
-  <string name="bitwarden_autofill_alert2">Den letteste måde at tilføje nye logins til boksen er ved at bruge Bitwardens Adgangskode Autoudfyldning-udvidelse. Læs mere om brugen af Bitwarden Adgangskode Autoudfyldnig-udvidelsen ved at gå til skærmbilledet \"Indstillinger\".</string>
+  <string name="bitwarden_autofill_alert2">Den letteste måde at tilføje nye logins til din boks er ved at bruge Bitwarden adgangskode Autoudfyld udvidelsen. Få mere at vide om brugen af Bitwarden adgangskode Autoudfyld udvidelsen ved at navigere til skærmbilledet \"Indstillinger\".</string>
   <string name="invalid_email">Ugyldig e-mailadresse.</string>
   <string name="cards">Kort</string>
   <string name="identities">Identiteter</string>
@@ -396,6 +412,7 @@ Skanning vil ske automatisk.</string>
   <string name="ur_is">URI\'er</string>
   <string name="checking_password">Tjekker adgangskode...</string>
   <string name="check_password">Tjek om adgangskoden er blevet afsløret.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Denne adgangskode er blevet afsløret %1$s gang(e) i datalæk, hvorfor den straks bør skiftes.</string>
   <string name="password_safe">Denne adgangskode er ikke fundet i nogen kendte datalæk. Den burde være sikker at bruge.</string>
   <string name="identity_name">Identitetsnavn</string>
@@ -480,6 +497,8 @@ Skanning vil ske automatisk.</string>
   <string name="login_expired">Login-sessionen er udløbet.</string>
   <string name="biometrics_direction">Biometrisk bekræftelse</string>
   <string name="biometrics">Biometri</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Benyt biometri til oplåsning</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden kræver opmærksomhed - se \"Autoudfyld-tilgængelighedstjeneste\" i Bitwarden-indstillinger</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. På Android app-indstillingsskærmen for Bitwarden, gå til indstillingen \"Vis oven på andre apps\" (under Avanceret) og tryk på knappen for at aktivere overlejringsunderstøttelse.</string>
@@ -685,12 +704,14 @@ Skanning vil ske automatisk.</string>
   <string name="verification_codes">Bekræftelseskoder</string>
   <string name="premium_subscription_required">Premium-abonnement kræves</string>
   <string name="cannot_add_authenticator_key">Kan ikke tilføje godkendelsesnøgle?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Skan QR-kode</string>
   <string name="cannot_scan_qr_code">Kan ikke skanne QR-kode?</string>
   <string name="authenticator_key_scanner">Godkendelsesnøgle</string>
   <string name="enter_key_manually">Angiv nøgle manuelt</string>
   <string name="add_totp">Tilføj TOTP</string>
   <string name="setup_totp">Opsæt TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Når nøglen er angivet,
 vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="never_lock_warning">Sættes låseindstillingen til “Aldrig”, er boksen tilgængelig for alle med adgang til enheden. Bruges denne mulighed, så vær sikker på, at enheden er ordentligt sikret.</string>
@@ -1142,6 +1163,7 @@ Skift til denne konto?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

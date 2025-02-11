@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager
 import android.content.Context
 import android.security.KeyChain
 import android.security.KeyChainException
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import io.mockk.every

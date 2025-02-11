@@ -210,7 +210,7 @@ enum class Settings(
     ),
     VAULT(
         text = R.string.vault.asText(),
-        vectorIconRes = R.drawable.ic_vault,
+        vectorIconRes = R.drawable.ic_vault_thin,
         testTag = "VaultSettingsButton",
     ),
     APPEARANCE(
