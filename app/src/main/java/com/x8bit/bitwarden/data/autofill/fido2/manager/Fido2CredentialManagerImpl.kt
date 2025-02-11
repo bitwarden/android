@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKe
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 /**
  * Primary implementation of [Fido2CredentialManager].
@@ -123,8 +124,14 @@ class Fido2CredentialManagerImpl(
         try {
             json.decodeFromString<PasskeyAttestationOptions>(requestJson)
         } catch (_: SerializationException) {
+            Timber
+                .tag("PASSKEY")
+                .e("Failed to decode passkey attestation options: $requestJson")
             null
         } catch (_: IllegalArgumentException) {
+            Timber
+                .tag("PASSKEY")
+                .e("Failed to decode passkey attestation options: $requestJson")
             null
         }
 
@@ -133,9 +140,15 @@ class Fido2CredentialManagerImpl(
     ): PasskeyAssertionOptions? =
         try {
             json.decodeFromString<PasskeyAssertionOptions>(requestJson)
-        } catch (_: SerializationException) {
+        } catch (e: SerializationException) {
+            Timber
+                .tag("PASSKEY")
+                .e(e, "Failed to decode passkey assertion options: $e")
             null
-        } catch (_: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
+            Timber
+                .tag("PASSKEY")
+                .e(e, "Failed to decode passkey assertion options: $e")
             null
         }
 
@@ -207,6 +220,9 @@ class Fido2CredentialManagerImpl(
                     .fold(
                         onSuccess = { Fido2CredentialAssertionResult.Success(it) },
                         onFailure = {
+                            Timber
+                                .tag("PASSKEY")
+                                .e(it, "Failed to authenticate FIDO2 credential.")
                             Fido2CredentialAssertionResult.Error(
                                 R.string.passkey_authentication_failed_due_to_an_internal_error
                                     .asText(),
