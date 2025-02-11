@@ -1830,6 +1830,9 @@ class AuthRepositoryImpl(
 
         // If this error was received, it also means any cached two-factor token is invalid.
         authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
+
+        // We should ensure newDeviceVerification is false before navigating
+        newDeviceVerification = false
         return LoginResult.TwoFactorRequired
     }
 
