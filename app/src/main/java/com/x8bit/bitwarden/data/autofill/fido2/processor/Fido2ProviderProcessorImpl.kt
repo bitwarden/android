@@ -86,10 +86,13 @@ class Fido2ProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
-        @Suppress("MaxLineLength")
         Timber
             .tag("PASSKEY")
-            .d("processCreateCredentialRequest received from package ${request.callingAppInfo?.packageName} with bundle: ${request.candidateQueryData}")
+            .d(
+                "processCreateCredentialRequest received from package %s with bundle: %s",
+                request.callingAppInfo?.packageName,
+                request.candidateQueryData,
+            )
         val userId = authRepository.activeUserId
         if (userId == null) {
             callback.onError(CreateCredentialUnknownException("Active user is required."))
@@ -114,10 +117,13 @@ class Fido2ProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
     ) {
-        @Suppress("MaxLineLength")
         Timber
             .tag("PASSKEY")
-            .d("processGetCredentialRequest received from package ${request.callingAppInfo?.packageName} with bundle: ${request.beginGetCredentialOptions.first().candidateQueryData}")
+            .d(
+                "processGetCredentialRequest received from package %s with bundle: %s",
+                request.callingAppInfo?.packageName,
+                request.beginGetCredentialOptions.first().candidateQueryData,
+            )
         // If the user is not logged in, return an error.
         val userState = authRepository.userStateFlow.value
         if (userState == null) {
