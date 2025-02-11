@@ -139,11 +139,12 @@ class Fido2CompletionManagerImpl(
                     )
             }
 
-            Fido2GetCredentialsResult.Error,
-                -> {
+            is Fido2GetCredentialsResult.Error -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,
-                    GetCredentialUnknownException(),
+                    GetCredentialUnknownException(
+                        errorMessage = result.message.toString(activity.resources),
+                    ),
                 )
             }
         }

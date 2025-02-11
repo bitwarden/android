@@ -124,9 +124,9 @@ fun VaultUnlockScreen(
                 )
             }
 
-            VaultUnlockEvent.Fido2GetCredentialsError -> {
+            is VaultUnlockEvent.Fido2GetCredentialsError -> {
                 fido2CompletionManager.completeFido2GetCredentialRequest(
-                    result = Fido2GetCredentialsResult.Error,
+                    result = Fido2GetCredentialsResult.Error(message = event.message),
                 )
             }
         }

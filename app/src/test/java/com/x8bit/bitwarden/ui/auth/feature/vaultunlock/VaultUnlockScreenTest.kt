@@ -18,6 +18,7 @@ import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
@@ -126,10 +127,16 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on Fido2GetCredentialsError should call completeFido2GetCredentialRequest on fido2CompletionManager`() {
-        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2GetCredentialsError)
+        mutableEventFlow.tryEmit(
+            VaultUnlockEvent.Fido2GetCredentialsError(
+                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            ),
+        )
         verify(exactly = 1) {
             fido2CompletionManager.completeFido2GetCredentialRequest(
-                result = Fido2GetCredentialsResult.Error,
+                result = Fido2GetCredentialsResult.Error(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
             )
         }
     }

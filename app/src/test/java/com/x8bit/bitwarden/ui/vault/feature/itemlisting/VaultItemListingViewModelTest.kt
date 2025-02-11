@@ -2737,7 +2737,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    message = "".asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )

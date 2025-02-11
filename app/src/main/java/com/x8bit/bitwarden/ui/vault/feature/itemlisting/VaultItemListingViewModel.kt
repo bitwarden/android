@@ -886,6 +886,16 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
 
+            state.fido2GetCredentialsRequest != null -> {
+                sendEvent(
+                    VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
+                        result = Fido2GetCredentialsResult.Error(
+                            message = action.message,
+                        ),
+                    ),
+                )
+            }
+
             else -> {
                 Timber
                     .tag("PASSKEY")
@@ -894,7 +904,7 @@ class VaultItemListingViewModel @Inject constructor(
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            message = action.message,
                         ),
                     )
                 }

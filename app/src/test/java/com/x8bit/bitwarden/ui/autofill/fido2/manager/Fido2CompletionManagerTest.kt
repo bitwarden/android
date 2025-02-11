@@ -41,6 +41,7 @@ class Fido2CompletionManagerTest {
 
     private val mockActivity = mockk<Activity> {
         every { packageName } returns "packageName"
+        every { resources } returns mockk(relaxed = true)
         every { setResult(Activity.RESULT_OK, any()) } just runs
         every { finish() } just runs
     }
@@ -292,8 +293,13 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2GetCredentials should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2GetCredentialRequest(Fido2GetCredentialsResult.Error)
+                .completeFido2GetCredentialRequest(
+                    Fido2GetCredentialsResult.Error(
+                        "".asText(),
+                    ),
+                )
             verifyActivityResultIsSetAndFinishedAfter {
+                mockActivity.resources
                 PendingIntentHandler.setGetCredentialException(any(), any())
             }
         }

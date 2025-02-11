@@ -177,7 +177,12 @@ class VaultUnlockViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
         when {
             state.fido2GetCredentialsRequest != null -> {
-                sendEvent(VaultUnlockEvent.Fido2GetCredentialsError)
+                sendEvent(
+                    VaultUnlockEvent.Fido2GetCredentialsError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                )
             }
 
             state.fido2CredentialAssertionRequest != null -> {
@@ -522,7 +527,7 @@ sealed class VaultUnlockEvent {
     /**
      * Completes the FIDO2 get credentials request with an error response.
      */
-    data object Fido2GetCredentialsError : VaultUnlockEvent()
+    data class Fido2GetCredentialsError(val message: Text) : VaultUnlockEvent()
 
     /**
      * Completes the FIDO2 credential assertion request with an error response.
