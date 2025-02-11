@@ -62,7 +62,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
                 availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
                 codeInput = "",
-                displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
+                displayEmail = authRepository.twoFactorResponse?.twoFactorDisplayEmail
+                    ?: args.emailAddress,
                 dialogState = null,
                 isContinueButtonEnabled = authRepository
                     .twoFactorResponse
@@ -73,6 +74,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 email = args.emailAddress,
                 password = args.password,
                 orgIdentifier = args.orgIdentifier,
+                isNewDeviceVerification = authRepository.newDeviceVerification,
             )
         },
 ) {
@@ -613,6 +615,7 @@ data class TwoFactorLoginState(
     val displayEmail: String,
     val isContinueButtonEnabled: Boolean,
     val isRememberEnabled: Boolean,
+    val isNewDeviceVerification: Boolean,
     // Internal
     val captchaToken: String?,
     val email: String,

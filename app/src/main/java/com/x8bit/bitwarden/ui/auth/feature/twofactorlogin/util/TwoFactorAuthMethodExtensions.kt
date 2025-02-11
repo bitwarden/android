@@ -118,5 +118,6 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
 val TwoFactorAuthMethod.imageRes: Int?
     get() = when (this) {
         TwoFactorAuthMethod.YUBI_KEY -> R.drawable.yubi_key
+        TwoFactorAuthMethod.EMAIL -> R.drawable.img_new_device_verification
         else -> null
     }

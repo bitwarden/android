@@ -54,6 +54,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
+        every { newDeviceVerification } returns false
         coEvery { resendNewDeviceOtp() } returns ResendEmailResult.Success
         coEvery {
             login(
@@ -1222,4 +1223,5 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     email = DEFAULT_EMAIL_ADDRESS,
     password = DEFAULT_PASSWORD,
     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+    isNewDeviceVerification = false,
 )
