@@ -97,6 +97,7 @@ class FlagKeyTest {
                 FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
+                FlagKey.SimpleLoginSelfHostAlias,
             ).all {
                 !it.defaultValue
             },
@@ -125,6 +126,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.MutualTls,
+                FlagKey.SimpleLoginSelfHostAlias,
             ).all {
                 it.isRemotelyConfigured
             },

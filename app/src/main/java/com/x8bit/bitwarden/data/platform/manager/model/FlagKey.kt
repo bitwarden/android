@@ -42,6 +42,7 @@ sealed class FlagKey<out T : Any> {
                 MutualTls,
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
+                SimpleLoginSelfHostAlias,
             )
         }
     }
@@ -197,6 +198,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-passkey-authentication"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable SimpleLogin self-host alias generation.
+     */
+    data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
+        override val keyName: String = "simple-login-self-host-alias"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
