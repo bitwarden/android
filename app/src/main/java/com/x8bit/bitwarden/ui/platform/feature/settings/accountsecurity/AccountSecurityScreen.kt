@@ -258,19 +258,21 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenUnlockWithPinSwitch(
-                isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
-                isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
-                onUnlockWithPinToggleAction = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
-                },
-                cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .testTag("UnlockWithPinSwitch")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
+            if (!state.removeUnlockWithPinPolicyEnabled || state.isUnlockWithPinEnabled) {
+                Spacer(modifier = Modifier.height(height = 8.dp))
+                BitwardenUnlockWithPinSwitch(
+                    isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
+                    isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
+                    onUnlockWithPinToggleAction = remember(viewModel) {
+                        { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
+                    },
+                    cardStyle = CardStyle.Full,
+                    modifier = Modifier
+                        .testTag("UnlockWithPinSwitch")
+                        .fillMaxWidth()
+                        .standardHorizontalMargin(),
+                )
+            }
             Spacer(Modifier.height(16.dp))
             if (state.shouldShowEnableAuthenticatorSync) {
                 SyncWithAuthenticatorRow(
