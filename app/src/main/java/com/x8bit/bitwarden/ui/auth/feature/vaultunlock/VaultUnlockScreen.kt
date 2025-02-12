@@ -269,7 +269,7 @@ fun VaultUnlockScreen(
                         },
                     ),
                     supportingText = state.vaultUnlockType.unlockScreenMessage(),
-                    textFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
+                    passwordFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
                     cardStyle = CardStyle.Top(hasDivider = false),
                     modifier = Modifier
                         .standardHorizontalMargin()
