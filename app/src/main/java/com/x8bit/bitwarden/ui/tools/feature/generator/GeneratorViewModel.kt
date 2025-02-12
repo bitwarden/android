@@ -484,7 +484,7 @@ class GeneratorViewModel @Inject constructor(
                     featureFlagManager.getFeatureFlag(FlagKey.AnonAddySelfHostAlias)
                 val mappedServiceType = options
                     ?.serviceType
-                    ?.toServiceType(options, shouldShowAnonAddySelfHostField)
+                    ?.toServiceType(options)
                     ?: type.selectedServiceType
 
                 GeneratorState.MainType.Username(
@@ -2162,8 +2162,6 @@ data class GeneratorState(
                          *
                          * @property apiAccessToken The token used for generation.
                          * @property domainName The domain name used for generation.
-                         * @property shouldShowSelfHostServerUrlField Whether to show the self host
-                         * server
                          */
                         @Parcelize
                         data class AddyIo(
