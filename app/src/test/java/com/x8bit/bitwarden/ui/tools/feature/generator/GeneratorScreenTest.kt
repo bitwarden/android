@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -1122,6 +1123,84 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newServerUrl = "https://addyio.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .AddyIo
+                    .SelfHostServerUrlChange(
+                        url = newServerUrl,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, self host server url field should show based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = true,
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate Disabling the feature flag
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertIsNotDisplayed()
     }
 
     //endregion Addy.Io Service Type Tests

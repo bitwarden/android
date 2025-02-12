@@ -38,11 +38,52 @@ internal class ServiceTypeExtensionsTest {
     }
 
     @Test
-    fun `toUsernameGeneratorRequest for AddyIo returns correct request`() {
+    fun `toUsernameGeneratorRequest for AddyIo with selfHostServerUrl returns correct request`() {
         val addyIoServiceType = ServiceType.AddyIo(
             apiAccessToken = "testToken",
             domainName = "test.com",
             selfHostServerUrl = "http://test.com",
+        )
+        val website = "bitwarden.com"
+
+        assertEquals(
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.AddyIo(
+                    apiToken = "testToken",
+                    domain = "test.com",
+                    baseUrl = "http://test.com",
+                ),
+                website = website,
+            ),
+            addyIoServiceType.toUsernameGeneratorRequest(
+                website = website,
+                allowAddyIoSelfHostUrl = true,
+            ),
+        )
+
+        // Verify the correct request is returned when allowAddyIoSelfHostUrl is false
+        assertEquals(
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.AddyIo(
+                    apiToken = "testToken",
+                    domain = "test.com",
+                    baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
+                ),
+                website = website,
+            ),
+            addyIoServiceType.toUsernameGeneratorRequest(
+                website = website,
+                allowAddyIoSelfHostUrl = false,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUsernameGeneratorRequest for AddyIo without selfHostServerUrl returns correct request`() {
+        val addyIoServiceType = ServiceType.AddyIo(
+            apiAccessToken = "testToken",
+            domainName = "test.com",
         )
         val website = "bitwarden.com"
         val request = addyIoServiceType.toUsernameGeneratorRequest(
@@ -55,7 +96,7 @@ internal class ServiceTypeExtensionsTest {
                 service = ForwarderServiceType.AddyIo(
                     apiToken = "testToken",
                     domain = "test.com",
-                    baseUrl = "http://test.com",
+                    baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
                 ),
                 website = website,
             ),
