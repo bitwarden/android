@@ -114,9 +114,9 @@ class AccountSecurityViewModel @Inject constructor(
 
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
-            .map { _ ->
+            .map { policies ->
                 AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive(
-                    removeUnlockWithPinPolicyEnabled = true,
+                    removeUnlockWithPinPolicyEnabled = policies.isNotEmpty(),
                 )
             }
             .onEach(::sendAction)
