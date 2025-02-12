@@ -26,6 +26,7 @@
     <string name="new_device_temporary_dismiss">New device notice temporary dismiss</string>
     <string name="ignore_environment_check">Ignore environment check</string>">
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
+    <string name="anon_addy_self_hosted_aliases">AnonAddy self-hosted aliases</string>
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
     <!-- /Debug Menu -->
 </resources>

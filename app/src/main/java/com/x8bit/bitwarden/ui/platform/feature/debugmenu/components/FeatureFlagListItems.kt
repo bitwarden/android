@@ -41,6 +41,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
+    FlagKey.AnonAddySelfHostAlias,
     FlagKey.SimpleLoginSelfHostAlias,
         -> BooleanFlagItem(
         label = flagKey.getDisplayLabel(),
@@ -98,5 +99,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
     FlagKey.SingleTapPasskeyAuthentication ->
         stringResource(R.string.single_tap_passkey_authentication)
+    FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
 }
