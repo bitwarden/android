@@ -74,7 +74,7 @@ jobs:
 
       - name: Build and test
         run: |
-          bundle exec fastlane check
+          bundle exec fastlane checkAuthenticator
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@1e68e06f1dbfde0e4cefc87efeba9e4643565303 # v5.1.2
