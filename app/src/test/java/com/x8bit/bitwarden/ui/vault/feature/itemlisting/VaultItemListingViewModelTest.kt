@@ -471,7 +471,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -502,8 +502,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message = R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3017,7 +3016,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -3068,8 +3067,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message = R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3191,8 +3189,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
+                    message =
+                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3233,8 +3232,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
+                    message =
+                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3513,7 +3513,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_is_locked_out.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3579,7 +3579,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3617,7 +3618,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3949,8 +3951,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message =
+                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3979,7 +3982,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4120,8 +4123,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message =
+                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -4149,7 +4153,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4298,7 +4302,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_user_verification_was_cancelled
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4365,7 +4369,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )

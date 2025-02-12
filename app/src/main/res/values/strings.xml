@@ -1190,7 +1190,10 @@ Do you want to switch to this account?</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
   <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
-  <string name="copy_passkey_logs">Copy passkey logs</string>
-  <string name="passkey_logs">Passkey logs</string>
-  <string name="error_copying_logs">Error copying logs</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

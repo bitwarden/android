@@ -583,19 +583,22 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Test
     fun `on DismissDialog should emit Fido2CredentialAssertionError when state has Fido2CredentialAssertionRequest`() =
         runTest {
-            // val initialState = DEFAULT_STATE.copy(
-            //    fido2CredentialAssertionRequest = createMockFido2CredentialAssertionRequest(
-            //        number = 1,
-            //    ),
-            // )
-            // val viewModel = createViewModel(state = initialState)
-            // viewModel.trySendAction(VaultUnlockAction.DismissDialog)
-            // viewModel.eventFlow.test {
-            //    assertEquals(
-            //        VaultUnlockEvent.Fido2CredentialAssertionError("".asText()),
-            //        awaitItem(),
-            //    )
-            // }
+            val initialState = DEFAULT_STATE.copy(
+                fido2CredentialAssertionRequest = createMockFido2CredentialAssertionRequest(
+                    number = 1,
+                ),
+            )
+            val viewModel = createViewModel(state = initialState)
+            viewModel.trySendAction(VaultUnlockAction.DismissDialog)
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultUnlockEvent.Fido2CredentialAssertionError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
         }
 
     @Test

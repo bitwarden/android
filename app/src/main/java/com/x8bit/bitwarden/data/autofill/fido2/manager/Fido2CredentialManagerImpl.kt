@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2Credenti
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -123,15 +124,11 @@ class Fido2CredentialManagerImpl(
     ): PasskeyAttestationOptions? =
         try {
             json.decodeFromString<PasskeyAttestationOptions>(requestJson)
-        } catch (_: SerializationException) {
-            Timber
-                .tag("PASSKEY")
-                .e("Failed to decode passkey attestation options: $requestJson")
+        } catch (e: SerializationException) {
+            Timber.e(e, "Failed to decode passkey attestation options.")
             null
-        } catch (_: IllegalArgumentException) {
-            Timber
-                .tag("PASSKEY")
-                .e("Failed to decode passkey attestation options: $requestJson")
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Failed to decode passkey attestation options.")
             null
         }
 
@@ -141,14 +138,10 @@ class Fido2CredentialManagerImpl(
         try {
             json.decodeFromString<PasskeyAssertionOptions>(requestJson)
         } catch (e: SerializationException) {
-            Timber
-                .tag("PASSKEY")
-                .e(e, "Failed to decode passkey assertion options: $e")
+            Timber.e(e, "Failed to decode passkey assertion options: $e")
             null
         } catch (e: IllegalArgumentException) {
-            Timber
-                .tag("PASSKEY")
-                .e(e, "Failed to decode passkey assertion options: $e")
+            Timber.e(e, "Failed to decode passkey assertion options: $e")
             null
         }
 
@@ -220,9 +213,7 @@ class Fido2CredentialManagerImpl(
                     .fold(
                         onSuccess = { Fido2CredentialAssertionResult.Success(it) },
                         onFailure = {
-                            Timber
-                                .tag("PASSKEY")
-                                .e(it, "Failed to authenticate FIDO2 credential.")
+                            Timber.e(it, "Failed to authenticate FIDO2 credential.")
                             Fido2CredentialAssertionResult.Error(
                                 R.string.passkey_authentication_failed_due_to_an_internal_error
                                     .asText(),
@@ -239,20 +230,13 @@ class Fido2CredentialManagerImpl(
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
         getPasskeyAssertionOptionsOrNull(requestJson)
             ?.relyingPartyId
-            ?.prefixWithHttpsIfNecessary()
+            ?.prefixHttpsIfNecessaryOrNull()
 
     private fun getOriginUrlFromAttestationOptionsOrNull(requestJson: String) =
         getPasskeyAttestationOptionsOrNull(requestJson)
             ?.relyingParty
             ?.id
-            ?.prefixWithHttpsIfNecessary()
-
-    private fun String.prefixWithHttpsIfNecessary(): String =
-        if (!this.startsWith(HTTPS)) {
-            "$HTTPS$this"
-        } else {
-            this
-        }
+            ?.prefixHttpsIfNecessaryOrNull()
 }
 
 private const val MAX_AUTHENTICATION_ATTEMPTS = 5

@@ -68,7 +68,6 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
@@ -258,15 +257,9 @@ object PlatformManagerModule {
     fun provideLogsManager(
         legacyAppCenterMigrator: LegacyAppCenterMigrator,
         settingsRepository: SettingsRepository,
-        clock: Clock,
-        fileManager: FileManager,
-        dispatcherManager: DispatcherManager,
     ): LogsManager = LogsManagerImpl(
         settingsRepository = settingsRepository,
         legacyAppCenterMigrator = legacyAppCenterMigrator,
-        fileManager = fileManager,
-        clock = clock,
-        dispatcherManager = dispatcherManager,
     )
 
     @Provides

@@ -13,7 +13,6 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
-import timber.log.Timber
 
 /**
  * Checks if this [Intent] contains a [Fido2CreateCredentialRequest] related to an ongoing FIDO 2
@@ -34,7 +33,7 @@ fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest
     val userId = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
-    val request = Fido2CreateCredentialRequest(
+    return Fido2CreateCredentialRequest(
         userId = userId,
         requestJson = createPublicKeyRequest.requestJson,
         packageName = systemRequest.callingAppInfo.packageName,
@@ -42,11 +41,6 @@ fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest
         origin = systemRequest.callingAppInfo.origin,
         isUserVerified = systemRequest.biometricPromptResult?.isSuccessful,
     )
-
-    Timber
-        .tag("PASSKEY")
-        .d("getFido2CreateCredentialRequestOrNull returned request: $request")
-    return request
 }
 
 /**
@@ -76,7 +70,7 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
 
     val isUserVerified = systemRequest.biometricPromptResult?.isSuccessful
 
-    val request = Fido2CredentialAssertionRequest(
+    return Fido2CredentialAssertionRequest(
         userId = userId,
         cipherId = cipherId,
         credentialId = credentialId,
@@ -87,10 +81,6 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
         origin = systemRequest.callingAppInfo.origin,
         isUserVerified = isUserVerified,
     )
-    Timber
-        .tag("PASSKEY")
-        .d("getFido2AssertionRequestOrNull returned request: $request")
-    return request
 }
 
 /**
@@ -116,7 +106,7 @@ fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
     val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
-    val request = Fido2GetCredentialsRequest(
+    return Fido2GetCredentialsRequest(
         candidateQueryData = option.candidateQueryData,
         id = option.id,
         userId = userId,
@@ -126,8 +116,4 @@ fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
         signingInfo = callingAppInfo.signingInfo,
         origin = callingAppInfo.origin,
     )
-    Timber
-        .tag("PASSKEY")
-        .d("getFido2GetCredentialsRequestOrNull returned request: $request")
-    return request
 }

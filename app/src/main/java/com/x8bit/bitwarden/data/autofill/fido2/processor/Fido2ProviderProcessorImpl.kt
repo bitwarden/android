@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 import javax.crypto.Cipher
@@ -86,13 +85,6 @@ class Fido2ProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
-        Timber
-            .tag("PASSKEY")
-            .d(
-                "processCreateCredentialRequest received from package %s with bundle: %s",
-                request.callingAppInfo?.packageName,
-                request.candidateQueryData,
-            )
         val userId = authRepository.activeUserId
         if (userId == null) {
             callback.onError(CreateCredentialUnknownException("Active user is required."))
@@ -117,13 +109,6 @@ class Fido2ProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
     ) {
-        Timber
-            .tag("PASSKEY")
-            .d(
-                "processGetCredentialRequest received from package %s with bundle: %s",
-                request.callingAppInfo?.packageName,
-                request.beginGetCredentialOptions.first().candidateQueryData,
-            )
         // If the user is not logged in, return an error.
         val userState = authRepository.userStateFlow.value
         if (userState == null) {

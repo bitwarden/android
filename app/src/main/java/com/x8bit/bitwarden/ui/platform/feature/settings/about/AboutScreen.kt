@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,10 +55,8 @@ fun AboutScreen(
     onNavigateBack: () -> Unit,
     viewModel: AboutViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
-    context: Context = LocalContext.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val resources = context.resources
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is AboutEvent.NavigateToWebVault -> {
@@ -91,10 +86,6 @@ fun AboutScreen(
                     uri =
                         "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
                 )
-            }
-
-            is AboutEvent.ShowToast -> {
-                Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -143,9 +134,6 @@ fun AboutScreen(
             onWebVaultClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.WebVaultClick) }
             },
-            onCopyPasskeyLogsClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.CopyPasskeyLogsClick) }
-            },
         )
     }
 }
@@ -162,7 +150,6 @@ private fun ContentColumn(
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
     onVersionClick: () -> Unit,
     onWebVaultClick: () -> Unit,
-    onCopyPasskeyLogsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -258,27 +245,11 @@ private fun ContentColumn(
         CopyRow(
             text = state.version,
             onClick = onVersionClick,
-            cardStyle = if (state.isSubmitCrashLogsEnabled) {
-                CardStyle.Middle()
-            } else {
-                CardStyle.Bottom
-            },
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth()
                 .testTag("CopyAboutInfoRow"),
         )
-        if (state.isSubmitCrashLogsEnabled) {
-            CopyRow(
-                text = R.string.copy_passkey_logs.asText(),
-                onClick = onCopyPasskeyLogsClick,
-                cardStyle = CardStyle.Bottom,
-                modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth()
-                    .testTag("CopyPasskeyLogsRow"),
-            )
-        }
         Box(
             modifier = Modifier
                 .defaultMinSize(minHeight = 60.dp)
@@ -300,14 +271,13 @@ private fun ContentColumn(
 private fun CopyRow(
     text: Text,
     onClick: () -> Unit,
-    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     BitwardenTextRow(
         text = text(),
         onClick = onClick,
         withDivider = false,
-        cardStyle = cardStyle,
+        cardStyle = CardStyle.Bottom,
         modifier = modifier,
     ) {
         Icon(
@@ -326,7 +296,6 @@ private fun CopyRow_preview() {
         CopyRow(
             text = "Copyable Text".asText(),
             onClick = { },
-            cardStyle = CardStyle.Full,
         )
     }
 }
