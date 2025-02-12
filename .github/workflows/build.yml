@@ -221,7 +221,7 @@ jobs:
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: com.bitwarden.authenticator.aab
-          path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab
+          path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
           if-no-files-found: error
 
       - name: Upload release .apk artifact
@@ -229,19 +229,19 @@ jobs:
         uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: com.bitwarden.authenticator.apk
-          path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator-release.apk
+          path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
           if-no-files-found: error
 
       - name: Create checksum file for Release AAB
         if: ${{ matrix.variant == 'aab' }}
         run: |
-          sha256sum "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab" \
+          sha256sum "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab" \
             > ./authenticator-android-aab-sha256.txt
 
       - name: Create checksum for release .apk artifact
         if: ${{ matrix.variant == 'apk' }}
         run: |
-          sha256sum "authenticator/build/outputs/apk/release/com.bitwarden.authenticator-release.apk" \
+          sha256sum "authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk" \
             > ./authenticator-android-apk-sha256.txt
 
       - name: Upload .apk SHA file for release

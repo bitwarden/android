@@ -1,4 +1,6 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import com.google.protobuf.gradle.proto
+import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -54,6 +56,7 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix = ".dev"
             manifestPlaceholders["targetBitwardenAppId"] = "com.x8bit.bitwarden.dev"
             buildConfigField(
                 type = "com.bitwarden.authenticatorbridge.manager.model.AuthenticatorBridgeConnectionType",
@@ -80,6 +83,32 @@ android {
             )
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
+    }
+    applicationVariants.all {
+        val bundlesDir = "${layout.buildDirectory.get()}/outputs/bundle"
+        outputs
+            .mapNotNull { it as? BaseVariantOutputImpl }
+            .forEach { output ->
+                // Set the APK output filename.
+                output.outputFileName = "$applicationId.apk"
+
+                val variantName = name
+                val renameTaskName = "rename${variantName.capitalize()}AabFiles"
+                tasks.register(renameTaskName) {
+                    group = "build"
+                    description = "Renames the bundle files for $variantName variant"
+                    doLast {
+                        renameFile(
+                            "$bundlesDir/$variantName/$namespace-${buildType.name}.aab",
+                            "$applicationId.aab",
+                        )
+                    }
+                }
+                // Force renaming task to execute after the variant is built.
+                tasks
+                    .getByName("bundle${variantName.capitalize()}")
+                    .finalizedBy(renameTaskName)
+            }
     }
     compileOptions {
         sourceCompatibility(libs.versions.jvmTarget.get())
@@ -283,5 +312,20 @@ tasks {
     }
     getByName("sonar") {
         dependsOn("check")
+    }
+}
+
+private fun renameFile(path: String, newName: String) {
+    val originalFile = File(path)
+    if (!originalFile.exists()) {
+        println("File $originalFile does not exist!")
+        return
+    }
+
+    val newFile = File(originalFile.parentFile, newName)
+    if (originalFile.renameTo(newFile)) {
+        println("Renamed $originalFile to $newFile")
+    } else {
+        throw RuntimeException("Failed to rename $originalFile to $newFile")
     }
 }
