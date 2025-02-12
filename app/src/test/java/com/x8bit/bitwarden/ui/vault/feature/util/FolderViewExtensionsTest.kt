@@ -63,16 +63,19 @@ class FolderViewExtensionsTest {
     fun `toFolderDisplayName should return the correct name`() {
         val folderName = "Folder/test/2"
 
-        val folderList: List<FolderView> = listOf(
-            FolderView("2", "Folder/test", clock.instant()),
-            FolderView("3", "test/", clock.instant()),
-            FolderView("4", folderName, clock.instant()),
-            FolderView("5", "Folder", clock.instant()),
-        )
-
         assertEquals(
             "2",
-            folderName.toFolderDisplayName(folderList),
+            folderName.toFolderDisplayName(),
+        )
+    }
+
+    @Test
+    fun `toFolderDisplayName should return folder name unchanged if there are no sub folders`() {
+        val folderName = "test"
+
+        assertEquals(
+            folderName,
+            folderName.toFolderDisplayName(),
         )
     }
 }

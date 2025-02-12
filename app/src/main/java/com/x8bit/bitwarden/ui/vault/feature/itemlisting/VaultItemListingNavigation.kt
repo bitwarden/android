@@ -69,6 +69,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
         selectedFolderId: String?,
         selectedCollectionId: String?,
     ) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     internalVaultItemListingDestination(
@@ -81,12 +82,14 @@ fun NavGraphBuilder.vaultItemListingDestination(
         onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
         onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
         onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
+        onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
     )
 }
 
 /**
  * Add the [VaultItemListingScreen] to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
@@ -96,6 +99,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
         selectedFolderId: String?,
         selectedCollectionId: String?,
     ) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     composableWithStayTransitions(
@@ -115,6 +119,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
+            onNavigateToAddFolder = onNavigateToAddFolderScreen,
             onNavigateToVaultItemListing = {},
             onNavigateToAddSendItem = {},
             onNavigateToEditSendItem = {},
@@ -137,6 +142,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateToAddSendItem = onNavigateToAddSendItem,
         onNavigateToEditSendItem = onNavigateToEditSendItem,
         onNavigateToVaultAddItemScreen = { _, _, _ -> },
+        onNavigateToAddFolderScreen = { _ -> },
         onNavigateToVaultItemScreen = { },
         onNavigateToVaultEditItemScreen = { },
         onNavigateToVaultItemListing = { },
@@ -159,6 +165,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
         selectedFolderId: String?,
         selectedCollectionId: String?,
     ) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -190,6 +197,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
             onNavigateToEditSendItem = onNavigateToEditSendItem,
             onNavigateToVaultItemListing = onNavigateToVaultItemListing,
             onNavigateToSearch = onNavigateToSearch,
+            onNavigateToAddFolder = onNavigateToAddFolderScreen,
         )
     }
 }

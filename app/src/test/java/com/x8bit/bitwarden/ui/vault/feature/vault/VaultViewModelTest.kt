@@ -41,10 +41,12 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.coEvery
 import io.mockk.every
@@ -1155,11 +1157,12 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddItemClick should emit NavigateToAddItemScreen`() = runTest {
+    fun `AddItemClick should emit NavigateToAddItemScreen with correct type`() = runTest {
         val viewModel = createViewModel()
+        val cipherType = CreateVaultItemType.CARD
         viewModel.eventFlow.test {
-            viewModel.trySendAction(VaultAction.AddItemClick)
-            assertEquals(VaultEvent.NavigateToAddItemScreen, awaitItem())
+            viewModel.trySendAction(VaultAction.AddItemClick(cipherType))
+            assertEquals(VaultEvent.NavigateToAddItemScreen(VaultItemCipherType.CARD), awaitItem())
         }
     }
 
@@ -1907,6 +1910,19 @@ class VaultViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `SelectAddItemType action should set dialog state to SelectVaultAddItemType`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.SelectAddItemType)
+        val expectedState = DEFAULT_STATE.copy(
+            dialog = VaultState.DialogState.SelectVaultAddItemType,
+        )
+        assertEquals(
+            expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

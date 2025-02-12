@@ -37,6 +37,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -48,6 +50,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,7 +68,7 @@ import javax.inject.Inject
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -170,7 +173,7 @@ class VaultViewModel @Inject constructor(
 
     override fun handleAction(action: VaultAction) {
         when (action) {
-            is VaultAction.AddItemClick -> handleAddItemClick()
+            is VaultAction.AddItemClick -> handleAddItemClick(action)
             is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
             is VaultAction.CollectionClick -> handleCollectionItemClick(action)
@@ -203,6 +206,16 @@ class VaultViewModel @Inject constructor(
             VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
             VaultAction.LifecycleResumed -> handleLifecycleResumed()
+            VaultAction.SelectAddItemType -> handleSelectAddItemType()
+        }
+    }
+
+    //region VaultAction Handlers
+    private fun handleSelectAddItemType() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType,
+            )
         }
     }
 
@@ -253,9 +266,31 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    //region VaultAction Handlers
-    private fun handleAddItemClick() {
-        sendEvent(VaultEvent.NavigateToAddItemScreen)
+    private fun handleAddItemClick(action: VaultAction.AddItemClick) {
+        when (val vaultItemType = action.type) {
+            CreateVaultItemType.LOGIN,
+            CreateVaultItemType.CARD,
+            CreateVaultItemType.IDENTITY,
+            CreateVaultItemType.SECURE_NOTE,
+            CreateVaultItemType.SSH_KEY,
+                -> {
+                vaultItemType
+                    .toVaultItemCipherTypeOrNull()
+                    ?.let {
+                        sendEvent(
+                            VaultEvent.NavigateToAddItemScreen(
+                                type = it,
+                            ),
+                        )
+                    }
+            }
+
+            CreateVaultItemType.FOLDER -> {
+                sendEvent(
+                    VaultEvent.NavigateToAddFolder,
+                )
+            }
+        }
     }
 
     private fun handleCardClick() {
@@ -1075,6 +1110,12 @@ data class VaultState(
         data object Syncing : DialogState()
 
         /**
+         * Represents a dialog for selecting a vault item type to add.
+         */
+        @Parcelize
+        data object SelectVaultAddItemType : DialogState()
+
+        /**
          * Represents an error dialog with the given [title] and [message].
          */
         @Parcelize
@@ -1097,7 +1138,9 @@ sealed class VaultEvent {
     /**
      * Navigate to the Add Item screen.
      */
-    data object NavigateToAddItemScreen : VaultEvent()
+    data class NavigateToAddItemScreen(
+        val type: VaultItemCipherType,
+    ) : VaultEvent()
 
     /**
      * Navigate to the item details screen.
@@ -1156,6 +1199,11 @@ sealed class VaultEvent {
      * Show a snackbar with the given [data].
      */
     data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
+
+    /**
+     * Navigate to the add folder screen
+     */
+    data object NavigateToAddFolder : VaultEvent()
 }
 
 /**
@@ -1171,7 +1219,7 @@ sealed class VaultAction {
      * Click the add an item button.
      * This can either be the floating action button or actual add an item button.
      */
-    data object AddItemClick : VaultAction()
+    data class AddItemClick(val type: CreateVaultItemType) : VaultAction()
 
     /**
      * Click the search icon.
@@ -1325,6 +1373,11 @@ sealed class VaultAction {
      * The lifecycle of the VaultScreen has entered a resumed state.
      */
     data object LifecycleResumed : VaultAction()
+
+    /**
+     * User has clicked button to bring up the add item selection dialog.
+     */
+    data object SelectAddItemType : VaultAction()
 
     /**
      * Models actions that the [VaultViewModel] itself might send.

@@ -51,6 +51,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -74,6 +76,7 @@ fun VaultItemListingScreen(
         selectedFolderId: String?,
         selectedCollectionId: String?,
     ) -> Unit,
+    onNavigateToAddFolder: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -179,6 +182,10 @@ fun VaultItemListingScreen(
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
+
+            is VaultItemListingEvent.NavigateToAddFolder -> {
+                onNavigateToAddFolder(event.parentFolderName)
+            }
         }
     }
 
@@ -261,6 +268,15 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onVaultItemTypeSelected = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ItemToAddToFolderSelected(
+                        itemType = it,
+                    ),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -289,6 +305,7 @@ private fun VaultItemListingDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String, cipherId: String) -> Unit,
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -375,6 +392,13 @@ private fun VaultItemListingDialogs(
                 onDismissRequest = {
                     onRetryPinSetUpFido2Verification(dialogState.selectedCipherId)
                 },
+            )
+        }
+
+        is VaultItemListingState.DialogState.VaultItemTypeSelection -> {
+            VaultItemSelectionDialog(
+                onDismissRequest = onDismissRequest,
+                onOptionSelected = onVaultItemTypeSelected,
             )
         }
 
