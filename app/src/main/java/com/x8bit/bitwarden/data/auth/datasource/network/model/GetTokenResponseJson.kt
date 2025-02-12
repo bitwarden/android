@@ -122,7 +122,7 @@ sealed class GetTokenResponseJson {
             data object GenericInvalid : InvalidType()
         }
 
-        val toInvalidType: InvalidType
+        val invalidType: InvalidType
             get() = if (errorMessage?.lowercase() == "new device verification required") {
                 InvalidType.NewDeviceVerification
             } else {

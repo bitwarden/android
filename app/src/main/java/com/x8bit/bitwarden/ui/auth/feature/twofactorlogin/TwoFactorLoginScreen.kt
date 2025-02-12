@@ -130,12 +130,11 @@ fun TwoFactorLoginScreen(
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    val title =
-        if (state.isNewDeviceVerification) {
-            R.string.verify_your_identity.asText()
-        } else {
-            state.authMethod.title
-        }
+    val title = if (state.isNewDeviceVerification) {
+        R.string.verify_your_identity.asText()
+    } else {
+        state.authMethod.title
+    }
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
@@ -246,11 +245,11 @@ private fun TwoFactorLoginScreenContent(
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = if (state.isNewDeviceVerification) {
-                R.string.enter_verification_code_new_device.asText(state.displayEmail)()
+                R.string.enter_verification_code_new_device.asText(state.displayEmail).invoke()
             } else {
                 state.authMethod.description(
                     state.displayEmail,
-                )()
+                ).invoke()
             },
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,

@@ -162,7 +162,9 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = loginResult.errorMessage?.asText()
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
                                 ?: R.string.login_sso_error.asText(),
                         ),
                     )

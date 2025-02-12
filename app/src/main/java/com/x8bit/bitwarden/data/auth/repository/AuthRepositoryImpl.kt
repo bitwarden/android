@@ -1660,7 +1660,7 @@ class AuthRepositoryImpl(
                     )
 
                     is GetTokenResponseJson.Invalid -> {
-                        when (loginResponse.toInvalidType) {
+                        when (loginResponse.invalidType) {
                             is GetTokenResponseJson.Invalid.InvalidType.NewDeviceVerification ->
                                 handleLoginCommonNewDeviceVerification(
                                     email = email,
