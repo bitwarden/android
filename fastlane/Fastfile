@@ -82,7 +82,7 @@ platform :android do
   end
 
   desc "Assemble and sign release APK"
-  lane :builAuthenticatordRelease do |options|
+  lane :buildAuthenticatordRelease do |options|
     gradle(
       task: "assemble",
       build_type: "Release",
