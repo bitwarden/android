@@ -242,6 +242,28 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `unlock with pin toggle should be displayed according to state`() {
+        val toggleText = "Unlock with PIN code"
+        composeTestRule.onNodeWithText(toggleText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = true,
+            )
+        }
+        composeTestRule.onNodeWithText(toggleText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+        composeTestRule.onNodeWithText(toggleText).assertDoesNotExist()
+    }
+
+    @Test
     fun `on unlock with pin toggle when enabled should send UnlockWithPinToggle Disabled`() {
         mutableStateFlow.update {
             it.copy(isUnlockWithPinEnabled = true)
@@ -1541,4 +1563,5 @@ private val DEFAULT_STATE = AccountSecurityState(
     vaultTimeoutPolicyMinutes = null,
     vaultTimeoutPolicyAction = null,
     shouldShowUnlockActionCard = false,
+    removeUnlockWithPinPolicyEnabled = false,
 )
