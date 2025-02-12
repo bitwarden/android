@@ -19,7 +19,7 @@ platform :android do
 
   desc "Runs tests"
   lane :check do
-    gradle(tasks: ["testDebug", "lintDebug", "detekt","koverXmlReportDebug"])
+    gradle(tasks: ["authenticator:testDebug", "authenticator:lintDebug", "authenticator:detekt","authenticator:koverXmlReportDebug"])
   end
 
   desc "Apply build version information"
@@ -133,6 +133,7 @@ platform :android do
   desc "Publish release to Google Play Store"
   lane :publishReleaseToGooglePlayStore do |options|
     upload_to_play_store(
+      package_name: "com.bitwarden.authenticator",
       json_key: options[:serviceCredentialsFile],
       track: "internal",
       aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",

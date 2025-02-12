@@ -1,4 +1,4 @@
-name: Crowdin Sync
+name: Crowdin Sync - Authenticator
 
 on:
   workflow_dispatch:

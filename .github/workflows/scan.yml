@@ -1,4 +1,4 @@
-name: Scan
+name: Scan Authenticator
 
 on:
   workflow_dispatch:
