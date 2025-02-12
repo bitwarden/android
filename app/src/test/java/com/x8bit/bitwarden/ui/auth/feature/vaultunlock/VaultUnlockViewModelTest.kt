@@ -1105,6 +1105,37 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on BiometricsUnlockSuccess should disable biometrics and display error dialog on unlockVaultWithBiometrics BiometricDecodingError`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
+        )
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+        } returns VaultUnlockResult.BiometricDecodingError
+        every { encryptionManager.clearBiometrics(userId = USER_ID) } just runs
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+
+        assertEquals(
+            initialState.copy(
+                isBiometricsValid = false,
+                dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                    title = R.string.biometrics_failed.asText(),
+                    message = R.string.biometrics_decoding_failure.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify(exactly = 1) {
+            encryptionManager.clearBiometrics(userId = USER_ID)
+            vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on BiometricsUnlockSuccess should display error dialog on unlockVaultWithBiometrics InvalidStateError`() {
         val initialState = DEFAULT_STATE.copy(isBiometricEnabled = true)
         mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(

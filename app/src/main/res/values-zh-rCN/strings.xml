@@ -54,10 +54,11 @@
   <string name="my_vault">我的密码库</string>
   <string name="authenticator">身份验证器</string>
   <string name="name">名称</string>
+  <string name="item_name_required">项目名称 （必填）</string>
   <string name="send_name_required">"Send 名称（必填）"</string>
   <string name="no">否</string>
   <string name="notes">备注</string>
-  <string name="private_notes">私人备注</string>
+  <string name="private_notes">私密备注</string>
   <string name="ok">好</string>
   <string name="password">密码</string>
   <string name="save">保存</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">谢谢</string>
   <string name="tools">工具</string>
   <string name="uri">URI</string>
+  <string name="website_uri">网站 (URI)</string>
   <string name="use_fingerprint_to_unlock">使用指纹解锁</string>
   <string name="username">用户名</string>
   <string name="validation_field_required">必须填写 %1$s 字段。</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">在菜单中点击 Bitwarden 图标来启动扩展。</string>
   <string name="extension_turn_on">要在 Safari 和其他 App 中打开 Bitwarden ，请在菜单底部点击「更多」图标。</string>
   <string name="favorite">收藏</string>
+  <string name="unfavorite">取消收藏</string>
   <string name="fingerprint">指纹</string>
   <string name="generate_password">生成密码</string>
   <string name="get_password_hint">获取主密码提示</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">您的密码库中没有任何收藏。</string>
   <string name="no_items">您的密码库中没有任何项目。</string>
   <string name="no_items_tap">您的密码库中没有此网站/App 的登录项目。点击添加一个。</string>
+  <string name="no_cards">您的密码库中没有支付卡。</string>
+  <string name="new_card">新增支付卡</string>
+  <string name="no_logins">您的密码库中没有登录信息。</string>
+  <string name="no_identities">您的密码库中没有身份信息。</string>
+  <string name="new_identity">新增身份</string>
+  <string name="no_notes">您的密码库中没有笔记。</string>
+  <string name="new_note">新增笔记</string>
+  <string name="new_item">新增项目</string>
+  <string name="no_text_sends">您的密码库中没有文本 Send。</string>
+  <string name="no_file_sends">您的密码库中没有文件 Send。</string>
+  <string name="new_text_send">新增文本 Send</string>
+  <string name="new_file_send">新增文件 Send</string>
   <string name="no_username">无用户名</string>
   <string name="no_username_password_configured">此登录没有已配置的用户名或者密码。</string>
   <string name="ok_got_it">好的，我知道了！</string>
@@ -240,7 +255,7 @@
   <string name="unable_to_open_file">您的设备无法打开这种类型的文件。</string>
   <string name="downloading">正在下载……</string>
   <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
-  <string name="authenticator_key">验证器密钥 (TOTP)</string>
+  <string name="authenticator_key">验证器密钥</string>
   <string name="verification_code_totp">验证码 (TOTP)</string>
   <string name="authenticator_key_added">已添加验证器密钥。</string>
   <string name="authenticator_key_read_error">无法读取验证器密钥。</string>
@@ -326,7 +341,7 @@
   <string name="address">地址</string>
   <string name="expiration">有效期</string>
   <string name="show_website_icons">显示网站图标</string>
-  <string name="show_website_icons_description">在每个登录项目旁边显示一个可识别的图像。</string>
+  <string name="show_website_icons_description">在每个登录项目旁边显示一个可识别的图像</string>
   <string name="icons_url">图标服务器 URL</string>
   <string name="autofill_with_bitwarden">使用 Bitwarden 自动填充</string>
   <string name="vault_is_locked">密码库已锁定</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">您想添加的自定义字段的类型是？</string>
   <string name="remove">移除</string>
   <string name="new_uri">新增 URI</string>
+  <string name="add_website">添加网站</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">基础域</string>
   <string name="default_text">默认</string>
@@ -375,7 +391,7 @@
   <string name="date_password_updated">密码更新于</string>
   <string name="date_updated">更新于</string>
   <string name="autofill_activated">自动填充已激活！</string>
-  <string name="must_log_in_main_app_autofill">您必须先登录 Bitwarden 主应用程序，才能使用自动填充。</string>
+  <string name="must_log_in_main_app_autofill">您必须先登录主 Bitwarden App，才能使用自动填充。</string>
   <string name="autofill_setup">现在，当登录 App 和网站时，您可以通过键盘轻松访问您的登录信息。</string>
   <string name="autofill_setup2">我们建议您在「设置」里关闭其它您不再使用的自动填充 App 。</string>
   <string name="bitwarden_autofill_description">从键盘直接访问密码库以快速自动填充密码。</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">URI</string>
   <string name="checking_password">正在检查密码......</string>
   <string name="check_password">检查密码是否已经被公开。</string>
+  <string name="check_password_for_data_breaches">检查数据泄露中的密码</string>
   <string name="password_exposed">此密码在泄露数据中已被公开 %1$s 次。请立即修改。</string>
   <string name="password_safe">没有在已知的数据泄露中发现此密码，它暂时比较安全。</string>
   <string name="identity_name">身份名称</string>
@@ -455,7 +472,7 @@
   <string name="default_uri_match_detection">默认的 URI 匹配检测方式</string>
   <string name="default_uri_match_detection_description">选择在执行诸如自动填充之类的操作时对登录进行 URI 匹配检测的默认方式。</string>
   <string name="theme">主题</string>
-  <string name="theme_description">更改应用程序的颜色主题。</string>
+  <string name="theme_description">更改 App 的颜色主题</string>
   <string name="theme_default">默认（系统）</string>
   <string name="default_dark_theme">默认深色主题</string>
   <string name="copy_notes">复制备注</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">您的登录会话已过期。</string>
   <string name="biometrics_direction">生物识别验证</string>
   <string name="biometrics">生物识别</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">使用生物识别解锁</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden 需要注意 - 请在 Bitwarden 设置中查看「自动填充无障碍服务」</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. 在 Android App 设置界面找到 Bitwarden，进入「显示在其他应用上方」选项（在「高级」下），然后点击切换开关以启用叠加层支持。</string>
@@ -684,13 +703,15 @@
   <string name="totp">TOTP</string>
   <string name="verification_codes">验证码</string>
   <string name="premium_subscription_required">需要高级版订阅</string>
-  <string name="cannot_add_authenticator_key">无法添加验证器密钥？</string>
+  <string name="cannot_add_authenticator_key">无法添加验证器密钥吗？</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">无法添加验证器密钥吗？<annotation link="scanQrCode">扫描二维码</annotation></string>
   <string name="scan_qr_code">扫描二维码</string>
   <string name="cannot_scan_qr_code">无法扫描二维码吗？</string>
   <string name="authenticator_key_scanner">验证器密钥</string>
   <string name="enter_key_manually">手动输入密钥</string>
   <string name="add_totp">添加 TOTP</string>
   <string name="setup_totp">设置 TOTP</string>
+  <string name="set_up_authenticator_key">设置验证器密钥</string>
   <string name="once_the_key_is_successfully_entered">成功输入密钥后，
 选择「添加 TOTP」即可安全地存储密钥</string>
   <string name="never_lock_warning">将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</string>
@@ -940,10 +961,10 @@
   <string name="user_verification_direction">用户验证</string>
   <string name="create_account_on">创建账户至</string>
   <string name="create_account_on_with_colon">创建账户至：</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">按照发送到 %1$s 的电子邮件中的说明继续创建您的账户。</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">按照发送到 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 的电子邮件中的说明继续创建您的账户。</string>
   <string name="we_sent_an_email_to">我们向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 发送了一封电子邮件。</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意<annotation link="termsOfService">服务条款</annotation>和<annotation link="privacyPolicy">隐私政策</annotation>。</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">激活此开关，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
   <string name="set_password">设置密码</string>
   <string name="unsubscribe">取消订阅</string>
   <string name="check_your_email">检查您的电子邮箱</string>
@@ -1019,7 +1040,7 @@
   <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
   <string name="get_started">开始使用</string>
   <string name="save_and_protect_your_data">保存和保护您的数据</string>
-  <string name="the_vault_protects_more_than_just_passwords">密码库保护的不仅仅是密码。这里安全地存储登录、ID、支付卡和笔记。</string>
+  <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护您的密码，还可以安全地存储登录信息、ID、支付卡和笔记。</string>
   <string name="new_login">新增登录</string>
   <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上安全地与任何人共享文件和数据。您的信息将在限制曝光的同时保持端到端加密。</string>
   <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
@@ -1126,8 +1147,8 @@
   <string name="mutual_tls">双向 TLS</string>
   <string name="single_tap_passkey_creation">单击创建通行密钥</string>
   <string name="single_tap_passkey_authentication">单击使用通行密钥登录</string>
-  <string name="learn_about_new_logins">Learn about new logins</string>
-  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
+  <string name="learn_about_new_logins">了解新的登录</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">我们将通过主要功能引导您了解如何添加新的登录。</string>
   <string name="explore_the_generator">探索生成器</string>
   <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">通过引导式教程，了解更多有关生成安全登录凭据的信息。</string>
   <string name="import_client_certificate">导入客户端证书</string>
@@ -1139,9 +1160,10 @@
   <string name="coachmark_1_of_6">1 / 6</string>
   <string name="coachmark_2_of_6">2 / 6</string>
   <string name="coachmark_3_of_6">3 / 6</string>
-  <string name="coachmark_4_of_6">4 OF 6</string>
-  <string name="coachmark_5_of_6">5 OF 6</string>
-  <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
-  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="coachmark_4_of_6">4 / 6</string>
+  <string name="coachmark_5_of_6">5 / 6</string>
+  <string name="coachmark_6_of_6">6 / 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">使用这些选项来调整您的密码，以使其符合您的账户网站的要求。</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"将新密码保存到 Bitwarden 后，不要忘记在您的账户网站上更新它。 "</string>
+  <string name="link">Link</string>
 </resources>

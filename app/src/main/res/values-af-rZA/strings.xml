@@ -54,6 +54,7 @@
   <string name="my_vault">My kluis</string>
   <string name="authenticator">Waarmerker</string>
   <string name="name">Naam</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Nee</string>
   <string name="notes">Notas</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Dankie</string>
   <string name="tools">Nutsmiddels</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Gebruik vingerafdruk vir ontgrendeling</string>
   <string name="username">Gebruikersnaam</string>
   <string name="validation_field_required">Die %1$s veld word vereis.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tik op die Bitwarden-ikoon in die kieslys om die uitbreiding te lanseer.</string>
   <string name="extension_turn_on">D.m.v. die “meer”-piktogram op die onderste ry van die kieslys kan u Bitwarden in Safari en ander toeps aktiveer.</string>
   <string name="favorite">Gunsteling</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Vingerafdruk</string>
   <string name="generate_password">Genereer wagwoord</string>
   <string name="get_password_hint">Kry u hoofwagwoordwenk</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Daar is geen gunstelinge in u kluis nie.</string>
   <string name="no_items">Daar is geen items in u kluis nie.</string>
   <string name="no_items_tap">Daar is geen items in u kluis vir hierdie webwerf/toep nie. Tik om een toe te voeg.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Hierdie aantekening bevat geen gebruikersnaam of wagwoord nie.</string>
   <string name="ok_got_it">Goed, het dit!</string>
@@ -356,6 +371,7 @@ Skandering gebeur outomaties.</string>
   <string name="select_type_field">Welke tipe aangepaste veld wil u toevoeg?</string>
   <string name="remove">Verwyder</string>
   <string name="new_uri">Nuwe URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Basisdomein</string>
   <string name="default_text">Verstek</string>
@@ -396,6 +412,7 @@ Skandering gebeur outomaties.</string>
   <string name="ur_is">URI’s</string>
   <string name="checking_password">Gaan tans wagwoord na…</string>
   <string name="check_password">Gaan na of wagwoord blootgestel is.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Hierdie wagwoord is %1$s keer in databreuke blootgestel. U behoort dit te verander.</string>
   <string name="password_safe">Hierdie wagwoord is in geen bekende databreuke gevind nie. Dit behoort veilig vir gebruik te wees.</string>
   <string name="identity_name">Identiteitnaam</string>
@@ -480,6 +497,8 @@ Skandering gebeur outomaties.</string>
   <string name="login_expired">U aantekensessie het verstryk.</string>
   <string name="biometrics_direction">Biometriese waarmerking</string>
   <string name="biometrics">Biometrie</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Gebruik biometrie vir ontgrendeling</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden kort aandag - Sien “Outovul toeganklikheidsdienste” in Bitwarden Instellings</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Op die Android-toepinstellingskerm vir Bitwarden, gaan na die “Gee weer oor ander toeps”-opsie (onder gevorderd) en tokkel die skakelaar om dit te aktiveer.</string>
@@ -685,12 +704,14 @@ Skandering gebeur outomaties.</string>
   <string name="verification_codes">Bevestigingskodes</string>
   <string name="premium_subscription_required">Premie-intekening word vereis</string>
   <string name="cannot_add_authenticator_key">Kan nie waarmerksleutel toevoeg nie?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Skandeer QR-kode</string>
   <string name="cannot_scan_qr_code">Kan nie QR-kode skandeer nie?</string>
   <string name="authenticator_key_scanner">Waarmerksleutel</string>
   <string name="enter_key_manually">Voer sleutel handmatig in</string>
   <string name="add_totp">Voeg TOTP toe</string>
   <string name="setup_totp">Stel TOTP op</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Sodra u die sleutel reg ingevoer het,
 kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
   <string name="never_lock_warning">Deur u vergrendelopsies na “Nooit” te stel, is u kluis beskikbaar aan enigeen met toegang tot u toestel. Indien u hierdie opsie gebruik moet u seker maak dat u u toestel voldoende beskerm.</string>
@@ -910,7 +931,7 @@ Wil u na die rekening omskakel?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -979,7 +1000,7 @@ Wil u na die rekening omskakel?</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1134,7 +1155,7 @@ Wil u na die rekening omskakel?</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1163,7 @@ Wil u na die rekening omskakel?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

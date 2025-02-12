@@ -54,6 +54,7 @@
   <string name="my_vault">ನನ್ನ ವಾಲ್ಟ್</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">ಹೆಸರು</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">ಇಲ್ಲ</string>
   <string name="notes">ಟಿಪ್ಪಣಿಗಳು</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">ಧನ್ಯವಾದಗಳು</string>
   <string name="tools">ಉಪಕರಣ</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ಫಿಂಗರ್ಪ್ರಿಂಟ್ ಬಳಸಿ</string>
   <string name="username">ಬಳಕೆದಾರ ಹೆಸರು</string>
   <string name="validation_field_required">%1$s ಕ್ಷೇತ್ರದ ಅಗತ್ಯವಿದೆ.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">ವಿಸ್ತರಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಮೆನುವಿನಲ್ಲಿರುವ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <string name="extension_turn_on">ಸಫಾರಿ ಮತ್ತು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅನ್ನು ಆನ್ ಮಾಡಲು, ಮೆನುವಿನ ಕೆಳಗಿನ ಸಾಲಿನಲ್ಲಿರುವ \"ಇನ್ನಷ್ಟು\" ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
   <string name="favorite">ಮೆಚ್ಚಿನ</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">ಫಿಂಗರ್‌ಪ್ರಿಂಟ್</string>
   <string name="generate_password">ಪಾಸ್ವರ್ಡ್ ರಚಿಸಿ</string>
   <string name="get_password_hint">ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವನ್ನು ಪಡೆಯಿರಿ</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಮೆಚ್ಚಿನವುಗಳಿಲ್ಲ.</string>
   <string name="no_items">ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</string>
   <string name="no_items_tap">ಈ ವೆಬ್‌ಸೈಟ್ / ಅಪ್ಲಿಕೇಶನ್‌ಗಾಗಿ ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ. ಒಂದನ್ನು ಸೇರಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">ಈ ಲಾಗಿನ್ ಬಳಕೆದಾರಹೆಸರು ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿಲ್ಲ.</string>
   <string name="ok_got_it">ಸರಿ, ಅರ್ಥವಾಯಿತು</string>
@@ -326,7 +341,7 @@ Scanning will happen automatically.</string>
   <string name="address">ವಿಳಾಸ</string>
   <string name="expiration">ಮುಕ್ತಾಯ</string>
   <string name="show_website_icons">Show website icons</string>
-  <string name="show_website_icons_description">Show a recognizable image next to each login.</string>
+  <string name="show_website_icons_description">Show a recognizable image next to each login</string>
   <string name="icons_url">ಚಿಹ್ನೆಗಳು ಸರ್ವರ್ URL</string>
   <string name="autofill_with_bitwarden">ಬಿಟ್‌ವಾರ್ಡೆನ್‌ನೊಂದಿಗೆ ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಿ</string>
   <string name="vault_is_locked">ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ</string>
@@ -356,6 +371,7 @@ Scanning will happen automatically.</string>
   <string name="select_type_field">ನೀವು ಯಾವ ರೀತಿಯ ಕಸ್ಟಮ್ ಕ್ಷೇತ್ರವನ್ನು ಸೇರಿಸಲು ಬಯಸುತ್ತೀರಿ?</string>
   <string name="remove">ತೆಗೆ</string>
   <string name="new_uri">ಹೊಸ ಯುಆರ್ಐ</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">ಯುಆರ್ಐ %1$s</string>
   <string name="base_domain">ಮೂಲ ಡೊಮೇನ್</string>
   <string name="default_text">ಡಿಫಾಲ್ಟ್</string>
@@ -377,7 +393,7 @@ Scanning will happen automatically.</string>
   <string name="autofill_activated">ಆಟೋಫಿಲ್ ಸಕ್ರಿಯಗೊಂಡಿದೆ!</string>
   <string name="must_log_in_main_app_autofill">ನೀವು ಆಟೋಫಿಲ್ ಬಳಸುವ ಮೊದಲು ಮುಖ್ಯ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಲಾಗ್ ಇನ್ ಆಗಬೇಕು.</string>
   <string name="autofill_setup">ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ಸೈಟ್‌ಗಳಿಗೆ ಲಾಗ್ ಇನ್ ಆಗುವಾಗ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ನಿಮ್ಮ ಕೀಬೋರ್ಡ್‌ನಿಂದ ಸುಲಭವಾಗಿ ಪ್ರವೇಶಿಸಬಹುದು.</string>
-  <string name="autofill_setup2">We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</string>
+  <string name="autofill_setup2">We recommend disabling any other Autofill apps under Settings if you do not plan to use them.</string>
   <string name="bitwarden_autofill_description">ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ತ್ವರಿತವಾಗಿ ಸ್ವಯಂ ತುಂಬಲು ನಿಮ್ಮ ಕೀಲಿಮಣೆಯಿಂದ ನೇರವಾಗಿ ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಿ.</string>
   <string name="autofill_turn_on">ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಸ್ವಯಂಚಾಲಿತ ಭರ್ತಿ ಮಾಡಲು, ಈ ಸೂಚನೆಗಳನ್ನು ಅನುಸರಿಸಿ:</string>
   <string name="autofill_turn_on1">1. ಐಒಎಸ್ \"ಸೆಟ್ಟಿಂಗ್ಸ್\" ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಹೋಗಿ</string>
@@ -396,6 +412,7 @@ Scanning will happen automatically.</string>
   <string name="ur_is">ಯುಆರ್ಐಗಳು</string>
   <string name="checking_password">ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸುತ್ತಿದೆ…</string>
   <string name="check_password">ಪಾಸ್ವರ್ಡ್ ಬಹಿರಂಗಗೊಂಡಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">ಡೇಟಾ ಪಾಸ್‌ಗಳಲ್ಲಿ ಈ ಪಾಸ್‌ವರ್ಡ್ %1$s ಸಮಯ (ಗಳು) ಅನ್ನು ಬಹಿರಂಗಪಡಿಸಲಾಗಿದೆ. ನೀವು ಅದನ್ನು ಬದಲಾಯಿಸಬೇಕು.</string>
   <string name="password_safe">ತಿಳಿದಿರುವ ಯಾವುದೇ ಡೇಟಾ ಉಲ್ಲಂಘನೆಗಳಲ್ಲಿ ಈ ಪಾಸ್‌ವರ್ಡ್ ಕಂಡುಬಂದಿಲ್ಲ. ಅದನ್ನು ಬಳಸಲು ಸುರಕ್ಷಿತವಾಗಿರಬೇಕು.</string>
   <string name="identity_name">ಹೆಸರು ಗುರುತು</string>
@@ -480,6 +497,8 @@ Scanning will happen automatically.</string>
   <string name="login_expired">ನಿಮ್ಮ ಲಾಗಿನ್ ಸೆಷನ್ ಅವಧಿ ಮೀರಿದೆ.</string>
   <string name="biometrics_direction">ಬಯೋಮೆಟ್ರಿಕ್ ಪರಿಶೀಲನೆ</string>
   <string name="biometrics">ಬಯೋಮೆಟ್ರಿಕ್</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">ಅನ್ಲಾಕ್ ಮಾಡಲು ಬಯೋಮೆಟ್ರಿಕ್ಸ್ ಬಳಸಿ</string>
   <string name="accessibility_overlay_permission_alert">ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗೆ ಗಮನ ಬೇಕು - ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ \"ಸ್ವಯಂ-ಭರ್ತಿ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ\" ನೋಡಿ</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗಾಗಿ ಆಂಡ್ರಾಯ್ಡ್ ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಪರದೆಯಲ್ಲಿ, \"ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳ ಮೇಲೆ ಪ್ರದರ್ಶಿಸು\" ಆಯ್ಕೆಗಳಿಗೆ (ಸುಧಾರಿತ ಅಡಿಯಲ್ಲಿ) ಹೋಗಿ ಮತ್ತು ಓವರ್‌ಲೇ ಬೆಂಬಲವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಟಾಗಲ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
@@ -685,12 +704,14 @@ Scanning will happen automatically.</string>
   <string name="verification_codes">Verification codes</string>
   <string name="premium_subscription_required">Premium subscription required</string>
   <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Scan QR Code</string>
   <string name="cannot_scan_qr_code">Cannot scan QR Code?</string>
   <string name="authenticator_key_scanner">Authenticator key</string>
   <string name="enter_key_manually">Enter key manually</string>
   <string name="add_totp">Add TOTP</string>
   <string name="setup_totp">Set up TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Once the key is successfully entered,
 select Add TOTP to store the key safely</string>
   <string name="never_lock_warning">Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</string>
@@ -910,7 +931,7 @@ Do you want to switch to this account?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -979,7 +1000,7 @@ Do you want to switch to this account?</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1134,7 +1155,7 @@ Do you want to switch to this account?</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1142,6 +1163,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

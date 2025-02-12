@@ -54,10 +54,11 @@
   <string name="my_vault">Moj trezor</string>
   <string name="authenticator">Autentikator</string>
   <string name="name">Naziv</string>
-  <string name="send_name_required">"Send name (required)"</string>
+  <string name="item_name_required">Naziv stavke (obavezno)</string>
+  <string name="send_name_required">"Naziv Senda (obavezno)"</string>
   <string name="no">Ne</string>
   <string name="notes">Bilješke</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">Privatne napomene</string>
   <string name="ok">U redu</string>
   <string name="password">Lozinka</string>
   <string name="save">Spremi</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Hvala!</string>
   <string name="tools">Alati</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Web stranica (URI)</string>
   <string name="use_fingerprint_to_unlock">Koristi otisak prsta za otključavanje</string>
   <string name="username">Korisničko ime</string>
   <string name="validation_field_required">Polje %1$s je obavezno.</string>
@@ -103,7 +105,7 @@
   <string name="close">Zatvori</string>
   <string name="continue_text">Nastavi</string>
   <string name="create_account">Stvori račun</string>
-  <string name="create_an_account">Create an account</string>
+  <string name="create_an_account">Stvori račun</string>
   <string name="creating_account">Stvaranje računa...</string>
   <string name="edit_item">Uredi stavku</string>
   <string name="enable_automatic_syncing">Omogući automatsku sinkronizaciju</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Dodirni Bitwarden ikonu u izborniku za pokretanje proširenja.</string>
   <string name="extension_turn_on">Za uključiti Bitwardena u Safariju i drugim aplikacijama, dodirnite ikonu „Više” u donjem retku izbornika.</string>
   <string name="favorite">Favorit</string>
+  <string name="unfavorite">Ukloni iz favorita</string>
   <string name="fingerprint">Otisak prsta</string>
   <string name="generate_password">Generiraj lozinku</string>
   <string name="get_password_hint">Slanje podsjetnika glavne lozinke</string>
@@ -137,7 +140,7 @@
   <string name="vault_timeout_action">Nakon isteka trezora</string>
   <string name="vault_timeout_log_out_confirmation">Odjava će ukloniti pristup tvojem trezoru i zahtijeva mrežnu potvrdu identiteta nakon isteka vremenske neaktivnosti. Sigurno želiš koristiti ovu postavku?</string>
   <string name="logging_in">Prijava...</string>
-  <string name="login_to_bitwarden">Log in to Bitwarden</string>
+  <string name="login_to_bitwarden">Prijavi se u Bitwarden</string>
   <string name="manage">Upravljanje</string>
   <string name="master_password_confirmation_val_message">Potvrda lozinke nije točna.</string>
   <string name="master_password_description">Glavnu lozinku koristiš za pristup svom trezoru. Vrlo je važno da ne zaboraviš glavnu lozinku. Ne postoji način za oporavak lozinke u slučaju da ju zaboraviš.</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">U tvom trezoru nema favorita.</string>
   <string name="no_items">U tvom trezoru nema stavki.</string>
   <string name="no_items_tap">U tvom trezoru nema stavki za ovu web stranicu. Dodirni za dodavanje.</string>
+  <string name="no_cards">U tvom trezoru nema kartica.</string>
+  <string name="new_card">Nova kartica</string>
+  <string name="no_logins">U tvom trezoru nema prijava.</string>
+  <string name="no_identities">U tvom trezoru nema identiteta.</string>
+  <string name="new_identity">Novi identitet</string>
+  <string name="no_notes">U tvom trezoru nema bilješki.</string>
+  <string name="new_note">Nova bilješka</string>
+  <string name="new_item">Nova stavka</string>
+  <string name="no_text_sends">U tvom trezoru nema tekst Sendova.</string>
+  <string name="no_file_sends">U tvom trezoru nema datotečnih Sendova.</string>
+  <string name="new_text_send">Novi tekstualni Send</string>
+  <string name="new_file_send">Novi datotečni Send</string>
   <string name="no_username">Nema korisničkog imena</string>
   <string name="no_username_password_configured">Ova prijava nema definirano korisničko ime ili lozinku.</string>
   <string name="ok_got_it">U redu, razumijem!</string>
@@ -225,8 +240,8 @@
   <string name="login_unavailable">Prijava nije dostupna</string>
   <string name="no_two_step_available">Ovaj račun ima omogućenu prijavu dvostrukom autentifikacijom, međutim ovaj uređaj ne podržava niti jednog konfiguriranog pružatelja prijave dvostrukom autentifikacijom. Koristi podržani uređaj i/ili dodaj dodatne pružatelje prijave dvostrukom autentifikacijom, bolje podržane na svim uređajima (npr. autentifikatorska aplikacija).</string>
   <string name="recovery_code_title">Kôd za oporavak</string>
-  <string name="remember">Remember</string>
-  <string name="remember_email">Remember email</string>
+  <string name="remember">Zapamti</string>
+  <string name="remember_email">Zapamti adresu e-pošte</string>
   <string name="send_verification_code_again">Ponovno slanje kontrolnog koda e-poštom</string>
   <string name="two_step_login_options">Mogućnosti prijave dvostrukom autentifikacijom</string>
   <string name="use_another_two_step_method">Koristiti drugi način prijave dvostrukom autentifikacijom</string>
@@ -355,6 +370,7 @@
   <string name="select_type_field">Koju vrstu prilagođenog polja želiš dodati?</string>
   <string name="remove">Ukloni</string>
   <string name="new_uri">Novi URI</string>
+  <string name="add_website">Dodaj web stranicu</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Primarna domena</string>
   <string name="default_text">Zadano</string>
@@ -395,6 +411,7 @@
   <string name="ur_is">URI</string>
   <string name="checking_password">Provjera lozinke...</string>
   <string name="check_password">Provjeri je li lozinka bila ukradena.</string>
+  <string name="check_password_for_data_breaches">Provjeri je li lozinka procurila</string>
   <string name="password_exposed">Ova lozinka je otkrivena %1$s put(a) prilikom krađe podataka. Trebalo bi ju promijeniti.</string>
   <string name="password_safe">Lozinka nije pronađena niti u jednoj krađi podataka. Sigurna je za korištenje.</string>
   <string name="identity_name">Ime identiteta</string>
@@ -479,6 +496,8 @@
   <string name="login_expired">Sesija je istekla.</string>
   <string name="biometrics_direction">Biometrijska autentifikacija</string>
   <string name="biometrics">biometrijom</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden zahtijeva radnju - pogledajte „Usluga auto-ispune kroz pristupačnost” u Bitwarden postavkama</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. U postavkama aplikacije uključi „Prikaz iznad drugih aplikacija” za omogućavanje podrške za preklapanje.</string>
@@ -557,11 +576,11 @@
   <string name="personal_ownership_submit_error">Pravila tvrtke onemogućuju spremanje stavki u osobni trezor. Promijeni vlasništvo stavke na tvrtku i odaberi dostupnu Zbirku.</string>
   <string name="personal_ownership_policy_in_effect">Pravila organizacije utječu na tvoje mogućnosti vlasništva.</string>
   <string name="send">Send</string>
-  <string name="send_details">Send Details</string>
+  <string name="send_details">Detalji Senda</string>
   <string name="all_sends">Svi Sendovi</string>
   <string name="sends">Sendovi</string>
   <string name="text">Tekst</string>
-  <string name="text_to_share">Text to share</string>
+  <string name="text_to_share">Dijeljeni tekst</string>
   <string name="type_text">Tekst</string>
   <string name="hide_text_by_default">Zadano sakrij tekst pri pristupanju Sendu</string>
   <string name="type_file">Datoteka</string>
@@ -684,12 +703,14 @@
   <string name="verification_codes">Kodovi za provjeru</string>
   <string name="premium_subscription_required">Potrebna Premium pretplata</string>
   <string name="cannot_add_authenticator_key">Nije moguće dodati ključ za provjeru autentičnosti?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Nije moguće dodati ključ autentifikatora?<annotation link="scanQrCode">Skeniraj QR kôd</annotation></string>
   <string name="scan_qr_code">Očitaj QR kôd</string>
   <string name="cannot_scan_qr_code">Nije moguće očitati QR kôd?</string>
   <string name="authenticator_key_scanner">Ključ za provjeru autentičnosti</string>
   <string name="enter_key_manually">Ručno unesi ključ</string>
   <string name="add_totp">Dodaj TOTP</string>
   <string name="setup_totp">Namjesti TOTP</string>
+  <string name="set_up_authenticator_key">Podesi ključ autentifikatora</string>
   <string name="once_the_key_is_successfully_entered">Jednom kada je ključ uspješno unesen, odaberi „Dodaj TOTP” za sigurno spremanje ključa</string>
   <string name="never_lock_warning">Postavljanje zaključavanja na „Nikad” čini tvoj trezor dostupnim svima koji imaju pristupom tvom uređaju. Ako koristiš ovu mogućnost, pobrini se da je uređaj dostatno zaštićen.</string>
   <string name="environment_page_urls_error">Jedan ili više unesenih URL-ova nije ispravn. Molimo provjeri uneseni URL.</string>
@@ -752,7 +773,7 @@
   <string name="login_attempt_from_x_do_you_want_to_switch_to_this_account">Zahtjev za prijavu od:
 %1$s
 Želiš li se prebaciti na ovaj račun?</string>
-  <string name="new_to_bitwarden">New to Bitwarden?</string>
+  <string name="new_to_bitwarden">Novi u Bitwardenu?</string>
   <string name="get_master_passwordword_hint">Slanje podsjetnika glavne lozinke</string>
   <string name="logging_in_as_x_on_y">Prijava kao %1$s na %2$s</string>
   <string name="not_you">Nisi ti?</string>
@@ -841,7 +862,7 @@
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Prijava uređajem mora biti namještena u postavka Bitwarden mobilne aplikacije. Trebaš drugu opciju?</string>
   <string name="log_in_with_device">Prijava uređajem</string>
   <string name="logging_in_on">Prijava na</string>
-  <string name="logging_in_on_with_colon">Logging in on:</string>
+  <string name="logging_in_on_with_colon">Prijava na:</string>
   <string name="vault">Trezor</string>
   <string name="appearance">Izgled</string>
   <string name="account_security">Sigurnost računa</string>
@@ -936,12 +957,12 @@
   <string name="self_hosted_server_url">URL vlastitog poslužitelja</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacija pristupnog ključa nije uspjela jer nije bilo moguće provjeriti korisnika.</string>
   <string name="user_verification_direction">Provjera korisnika</string>
-  <string name="create_account_on">Create account on</string>
-  <string name="create_account_on_with_colon">Create account on:</string>
+  <string name="create_account_on">Stvaranje računa na</string>
+  <string name="create_account_on_with_colon">Stvaranje računa na:</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Za nastavak stvaranja svog računa, prati upute poslane na %1$s.</string>
   <string name="we_sent_an_email_to">e-pošta poslana na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Nastavkom, slažeš se s <annotation link="termsOfService">Uvjetima usluge</annotation> i <annotation link="privacyPolicy">Politikom privatnosti</annotation></string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Aktiviranjem ovog prekidača pristaješ na <annotation link="termsOfService">Uvjete korištenja</annotation> i <annotation link="privacyPolicy">Politiku privatnosti</annotation></string>
   <string name="set_password">Postavi lozinku</string>
   <string name="unsubscribe">Poništi pretplatu</string>
   <string name="check_your_email">Provjeri svoju e-poštu</string>
@@ -1114,33 +1135,34 @@
   <string name="review_flow_launched">Pokrenut tok pregleda!</string>
   <string name="copy_private_key">Kopiraj privatni ključ</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">e-poštu svog računa možeš promijeniti u Bitwarden web aplikaciji.</string>
-  <string name="login_credentials">Login Credentials</string>
-  <string name="autofill_options">Autofill Options</string>
-  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
-  <string name="coachmark_1_of_3">1 OF 3</string>
-  <string name="coachmark_2_of_3">2 OF 3</string>
-  <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
-  <string name="coachmark_3_of_3">3 OF 3</string>
-  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
+  <string name="login_credentials">Vjerodajnice za prijavu</string>
+  <string name="autofill_options">Postavke auto-ispune</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Koristi ovu tipku za generiranje nove, jedinstvene lozinke.</string>
+  <string name="coachmark_1_of_3">1 od 3</string>
+  <string name="coachmark_2_of_3">2 od 3</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Ključ autentifikatora trebaš postaviti samo za prijave koje zahtijevaju dvostruku autentifikaciju pomoću kôda. Ključ će kontinuirano generirati šesteroznamenkaste kodove koje možeš koristiti za prijavu.</string>
+  <string name="coachmark_3_of_3">3 od 3</string>
+  <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Moraš dodati web adresu za auto-ispunu za pristup ovom računu.</string>
   <string name="mutual_tls">Mutual TLS</string>
-  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
-  <string name="learn_about_new_logins">Learn about new logins</string>
-  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
-  <string name="explore_the_generator">Explore the generator</string>
-  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
-  <string name="import_client_certificate">Import client certificate</string>
-  <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
-  <string name="alias">Alias</string>
-  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
-  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
-  <string name="coachmark_1_of_6">1 OF 6</string>
-  <string name="coachmark_2_of_6">2 OF 6</string>
-  <string name="coachmark_3_of_6">3 OF 6</string>
-  <string name="coachmark_4_of_6">4 OF 6</string>
-  <string name="coachmark_5_of_6">5 OF 6</string>
-  <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
-  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="single_tap_passkey_creation">Stvaranje pristupnog ključa jednim dodirom</string>
+  <string name="single_tap_passkey_authentication">Prijava jednim dodirom pristupnim ključem</string>
+  <string name="learn_about_new_logins">Više o novom načinu prijave</string>
+  <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">Provest ćemo te kroz ključne značajke za dodavanje nove prijave.</string>
+  <string name="explore_the_generator">Istraži generator</string>
+  <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Saznaj više o generiranju sigurnih vjerodajnica za prijavu uz vođeni obilazak.</string>
+  <string name="import_client_certificate">Uvezi klijentski certifikat</string>
+  <string name="enter_the_client_certificate_password_and_alias">Unesi lozinku klijentskog certifikata i željeni alias za ovaj certifikat.</string>
+  <string name="alias">Alisas</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Koristi generator za stvaranje sigurnih lozinki, fraznih lozinki i korisničkih imena. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Frazne lozinke su jake lozinke koje je često lakše zapamtiti i upisati nego nasumične lozinke. Korisne su za prijavu na račune gdje automatsko popunjavanje nije dostupno, poput usluge strujanja na TV-u.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Jedinstvena korisnička imena dodaju dodatni sloj sigurnosti i mogu spriječiti hakere da pronađu tvoje račune.</string>
+  <string name="coachmark_1_of_6">1 od 6</string>
+  <string name="coachmark_2_of_6">2 od 6</string>
+  <string name="coachmark_3_of_6">3 od 6</string>
+  <string name="coachmark_4_of_6">4 od 6</string>
+  <string name="coachmark_5_of_6">5 od 6</string>
+  <string name="coachmark_6_of_6">6 od 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Koristi ove opcije za prilagodbu lozinke prema zahtjevima web stranice.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Nakon što spremiš svoju novu lozinku na Bitwarden, ne zaboravi ju ažurirati na web stranici. "</string>
+  <string name="link">Veza</string>
 </resources>

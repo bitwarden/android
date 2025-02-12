@@ -54,6 +54,7 @@
   <string name="my_vault">Мој Сеф</string>
   <string name="authenticator">Аутентификатор</string>
   <string name="name">Име</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Назив пошиљке (неопходно)"</string>
   <string name="no">Не</string>
   <string name="notes">Белешке</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Хвала</string>
   <string name="tools">Алатке</string>
   <string name="uri">УРЛ</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Користи отисак прста за откључавање</string>
   <string name="username">Корисничко име</string>
   <string name="validation_field_required">Поље %1$s је обавезно.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Додирните икону Bitwarden у менију да бисте покренули додатак.</string>
   <string name="extension_turn_on">Да би омогућили Bitwarden у Safari и другим апликацијама, додирните икону „више“ у доњем реду менија.</string>
   <string name="favorite">Омиљено</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Отисак прста</string>
   <string name="generate_password">Генерисање лозинке</string>
   <string name="get_password_hint">Добити савет за Вашу Главну Лозинку</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">У вашем сефу нема омиљених.</string>
   <string name="no_items">У вашем сефу нема ставки.</string>
   <string name="no_items_tap">У вашем сефу нема ставке за ову веб локацију/апликацију. Додирните да бисте додали једну.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">Нема корисничког имена</string>
   <string name="no_username_password_configured">Ова пријава нема конфигурисано корисничко име или лозинку.</string>
   <string name="ok_got_it">У реду, схватам!</string>
@@ -356,6 +371,7 @@
   <string name="select_type_field">Какву врсту прилагођеног поља желите да додате?</string>
   <string name="remove">Уклони</string>
   <string name="new_uri">Нови УРЛ</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">УРЛ %1$s</string>
   <string name="base_domain">Главни домен</string>
   <string name="default_text">Подразумевано</string>
@@ -396,6 +412,7 @@
   <string name="ur_is">УРЛ</string>
   <string name="checking_password">Проверавање лозинке...</string>
   <string name="check_password">Проверите да ли је лозинка изложена.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Ова лозинка је изложена %1$s пута. Требали би да је промените.</string>
   <string name="password_safe">Ова лозинка није никада изложена. Треба да је сигурна за употребу.</string>
   <string name="identity_name">Име идентитета</string>
@@ -480,6 +497,8 @@
   <string name="login_expired">Ваша сесија је истекла.</string>
   <string name="biometrics_direction">Биометријска провера</string>
   <string name="biometrics">Биометријом</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Користи биометријско откључавање</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden треба пажњу - Ићи на „Сервис приступачности ауто-пуњења“ из подешавања Bitwarden-а</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. На екрану подешавања Андроид апликације за Bitwarden, идите на напредну опцију „Прикажите преко других апликација“ и додирните прекидач да бисте омогућили подршку за преклапање.</string>
@@ -685,12 +704,14 @@
   <string name="verification_codes">Верификациони кодови</string>
   <string name="premium_subscription_required">Premium претплата је потребна</string>
   <string name="cannot_add_authenticator_key">Не може да се дода верификациони код?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Скенирај QR код</string>
   <string name="cannot_scan_qr_code">Не мигу да скенирам QR код?</string>
   <string name="authenticator_key_scanner">Кључ аутентификатора</string>
   <string name="enter_key_manually">Унесите кључ ручно</string>
   <string name="add_totp">Додати ТОТП</string>
   <string name="setup_totp">Подесити ТОТП</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Када се кључ успешно унесе,
 одабрати Додати ТОТП да би сигурносно сачували кључ</string>
   <string name="never_lock_warning">Постављањем опција закључавања на „Никад“, ваш сеф остаје доступан свима који имају приступ вашем уређају. Ако користите ову опцију, требало би да будете сигурни да ћете свој уређај правилно заштитити.</string>
@@ -943,7 +964,7 @@
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Прати упутства из Е-поште који су послата на %1$s да наставиш са прављењем налога.</string>
   <string name="we_sent_an_email_to">Послали смо Е-пошту на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ако наставите, слажете се са Услови коришћења услуге и Политике приватности</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активирањем ове опције, прихватате <annotation link="termsOfService">Услове коришћења</annotation> и <annotation link="privacyPolicy">Политику приватности</annotation></string>
   <string name="set_password">Поставити лозинку</string>
   <string name="unsubscribe">Одјави се</string>
   <string name="check_your_email">Погледај своје пријемно сандуче у Е-пошти</string>
@@ -1133,15 +1154,16 @@
   <string name="import_client_certificate">Увезите сертификат клијента</string>
   <string name="enter_the_client_certificate_password_and_alias">Унесите лозинку за ертификата клијента и жељени псеудоним знадимак овај сертификат.</string>
   <string name="alias">Надимак</string>
-  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
-  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
-  <string name="coachmark_1_of_6">1 OF 6</string>
-  <string name="coachmark_2_of_6">2 OF 6</string>
-  <string name="coachmark_3_of_6">3 OF 6</string>
-  <string name="coachmark_4_of_6">4 OF 6</string>
-  <string name="coachmark_5_of_6">5 OF 6</string>
-  <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
-  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Користите генератор да би сте направили сигурне лозинке, фразе и корисничка имена. "</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Фразе су јаке лозинке које је често лакше запамтити и уписивати од насумичних лозинки. Оне су корисне за пријављивање за налоге где аутоматско попуњавање није доступно, као што су услуге стриминга на вашем ТВ-у.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Јединствена корисничка имена чине додатни слој заштите и помажу у спречавању хакера од проналажења ваших налога.</string>
+  <string name="coachmark_1_of_6">1 ОД 6</string>
+  <string name="coachmark_2_of_6">2 ОД 6</string>
+  <string name="coachmark_3_of_6">3 ОД 6</string>
+  <string name="coachmark_4_of_6">4 ОД 6</string>
+  <string name="coachmark_5_of_6">5 ОД 6</string>
+  <string name="coachmark_6_of_6">6 ОД 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Користите ове опције да би сте прилагодили лозинку захтевима вашег налога.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Након што сачувате вашу нову лозинку у Bitwarden, не заборавите да је обновите на налогу веб сајта. "</string>
+  <string name="link">Link</string>
 </resources>

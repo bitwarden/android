@@ -50,8 +50,10 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -63,6 +65,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -77,6 +80,8 @@ class VaultScreenTest : BaseComposeTest() {
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
     private var onNavigateToSearchScreen = false
+    private var onNavigateToAddFolderCalled = false
+    private var onNavigateToAddFolderParentFolderName: String? = null
     private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
     private val appReviewManager: AppReviewManager = mockk {
@@ -104,6 +109,10 @@ class VaultScreenTest : BaseComposeTest() {
                 onNavigateToImportLogins = {
                     onNavigateToImportLoginsCalled = true
                     assertEquals(SnackbarRelay.MY_VAULT_RELAY, it)
+                },
+                onNavigateToAddFolderScreen = { folderName ->
+                    onNavigateToAddFolderCalled = true
+                    onNavigateToAddFolderParentFolderName = folderName
                 },
                 exitManager = exitManager,
                 intentManager = intentManager,
@@ -657,10 +666,10 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `floating action button click should send AddItemClick action`() {
+    fun `floating action button click should send SelectAddItemType action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
         composeTestRule.onNodeWithContentDescription("Add Item").performClick()
-        verify { viewModel.trySendAction(VaultAction.AddItemClick) }
+        verify { viewModel.trySendAction(VaultAction.SelectAddItemType) }
     }
 
     @Test
@@ -670,12 +679,14 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("New login")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(VaultAction.AddItemClick) }
+        verify { viewModel.trySendAction(VaultAction.AddItemClick(CreateVaultItemType.LOGIN)) }
     }
 
     @Test
     fun `NavigateToAddItemScreen event should call onNavigateToVaultAddItemScreen`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToAddItemScreen)
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToAddItemScreen(type = VaultItemCipherType.LOGIN),
+        )
         assertTrue(onNavigateToVaultAddItemScreenCalled)
     }
 
@@ -1309,6 +1320,55 @@ class VaultScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultEvent.PromptForAppReview)
         dispatcher.advanceTimeByAndRunCurrent(4000L)
         verify(exactly = 1) { appReviewManager.promptForReview() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `NavigateToAddItemScreen event calls onNavigateToAddFolder callback when cipher item type is FOLDER`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAddFolder)
+        assertTrue(onNavigateToAddFolderCalled)
+        assertNull(onNavigateToAddFolderParentFolderName)
+    }
+
+    @Test
+    fun `SelectVaultAddItemType dialog state show vault item type selection dialog`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Type")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `when option is selected in SelectVaultAddItemType dialog add item action is sent`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+            viewModel.trySendAction(
+                VaultAction.AddItemClick(
+                    CreateVaultItemType.CARD,
+                ),
+            )
+        }
     }
 }
 

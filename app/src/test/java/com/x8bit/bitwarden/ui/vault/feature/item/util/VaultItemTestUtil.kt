@@ -173,6 +173,7 @@ fun createCommonContent(
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            favorite = false,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -219,6 +220,7 @@ fun createCommonContent(
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            favorite = false,
         )
     }
 

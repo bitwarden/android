@@ -89,6 +89,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToVaultEditItemScreen = {
                 navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
             },
+            onNavigateToAddFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    folderAddEditType = FolderAddEditType.AddItem,
+                    parentFolderName = it,
+                )
+            },
         )
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
@@ -119,6 +125,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
             onNavigateToImportLogins = {
                 navController.navigateToImportLoginsScreen(snackbarRelay = it)
+            },
+            onNavigateToAddFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    folderAddEditType = FolderAddEditType.AddItem,
+                    parentFolderName = it,
+                )
             },
         )
         deleteAccountDestination(

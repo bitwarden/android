@@ -54,6 +54,7 @@
   <string name="my_vault">Kutxa Gotorra</string>
   <string name="authenticator">Autentifikatzailea</string>
   <string name="name">Izena</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Ez</string>
   <string name="notes">Oharrak</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Eskerrik asko</string>
   <string name="tools">Tresnak</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Erabili hatz-marka desblokeatzeko</string>
   <string name="username">Erabiltzaile izena</string>
   <string name="validation_field_required">%1$s ezinbestekoa da.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Sakatu Bitwarden ikonoa menuan, gehigarria abiarazteko.</string>
   <string name="extension_turn_on">Safari-n eta beste aplikazio batzuetan Bitwarden aktibatzeko, sakatu \"gehiago\" ikonoa menuaren beheko lerroan.</string>
   <string name="favorite">Gogokoa</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Hatz-marka</string>
   <string name="generate_password">Sortu pasahitza</string>
   <string name="get_password_hint">Jaso zure pasahitz nagusiaren pista</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Kutxa gotorrean ez dago gogokorik.</string>
   <string name="no_items">Kutxa gotorrean ez dago elementurik.</string>
   <string name="no_items_tap">Kutxa gotorrean ez dago elementurik webgune/aplikazio honentzat. Sakatu bat gehitzeko.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Saio hasiera honek ez du ezarritako erabiltzaile izen edo pasahitzik.</string>
   <string name="ok_got_it">Ongi, aurrera!</string>
@@ -355,6 +370,7 @@
   <string name="select_type_field">Zein eremu pertsonalizatu mota gehitu nahi duzu?</string>
   <string name="remove">Ezabatu</string>
   <string name="new_uri">URI berria</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Oinarrizko domeinua</string>
   <string name="default_text">Lehenetsia</string>
@@ -395,6 +411,7 @@
   <string name="ur_is">URI-ak</string>
   <string name="checking_password">Pasahitza egiaztatzen...</string>
   <string name="check_password">Egiaztatu pasahitza konprometituta dagoen.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Pasahitz hau %1$s aldiz datu-iragazketetan aurkitu da. Aldatu egin beharko zenuke.</string>
   <string name="password_safe">Pasahitz hau ez da inongo datu-filtrazio ezagunetan aurkitu. Erabiltzea segurua izan beharko luke.</string>
   <string name="identity_name">Identitate izena</string>
@@ -479,6 +496,8 @@
   <string name="login_expired">Saioa amaitu da.</string>
   <string name="biometrics_direction">Autentifikazio biometrikoa</string>
   <string name="biometrics">Biometriak</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Erabili biometria desblokeatzeko</string>
   <string name="accessibility_overlay_permission_alert">Bitwardenek laguntza behar du - Kontsultatu Bitwarden ezarpenetan \"automatikoki betetzeko erabilerraztasun zerbitzua\"</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Bitwarden aplikazioko Androiden konfigurazioa pantailan, joan \"Erakutsi beste aplikazio batzuetan\" aukerara (Aurreratua) eta gaitu gainjartzea.</string>
@@ -684,12 +703,14 @@
   <string name="verification_codes">Egiaztatze-kodeak</string>
   <string name="premium_subscription_required">Premium harpidetza beharrezkoa da</string>
   <string name="cannot_add_authenticator_key">Ezin duzu autentifikazio-gakoa gehitu?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Eskaneatu QR kodea</string>
   <string name="cannot_scan_qr_code">Ezin duzu QR kodea eskaneatu?</string>
   <string name="authenticator_key_scanner">Autentifikazio gakoa</string>
   <string name="enter_key_manually">Sartu kodea eskuz</string>
   <string name="add_totp">Gehitu TOTP-a</string>
   <string name="setup_totp">TOTP-a konfiguratu</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Gakoa ondo sartzen duzunean, sakatu Gehitu TOTP-a gakoa modu seguruan gordetzeko</string>
   <string name="never_lock_warning">Zure blokeo aukerak \"inoiz ez\" bezala ezartzen badituzu, gailura sarbidea duen edonork izango du kutxa gotorra eskuragarri. Aukera hau erabiltzen baduzu, gailua behar bezala babestuta duzula ziurtatu behar duzu.</string>
   <string name="environment_page_urls_error">Sartutako URL batek edo gehiagok ez dute balio. Mesedez, berrikusi eta saiatu berriro gordetzen.</string>
@@ -908,7 +929,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -977,7 +998,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1132,7 +1153,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1140,6 +1161,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

@@ -1088,6 +1088,7 @@ class AuthRepositoryImpl(
                     }
 
                     is VaultUnlockResult.AuthenticationError,
+                    VaultUnlockResult.BiometricDecodingError,
                     VaultUnlockResult.InvalidStateError,
                     VaultUnlockResult.GenericError,
                         -> {
@@ -1372,6 +1373,7 @@ class AuthRepositoryImpl(
                 // the notice needs to appear again
                 NewDeviceNoticeDisplayStatus.HAS_SEEN ->
                     newDeviceNoticeState.shouldDisplayNoticeIfSeen
+
                 NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
                 // the user never needs to see the notice again
                 NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false
@@ -1592,6 +1594,7 @@ class AuthRepositoryImpl(
                     configDiskSource.serverConfig?.isOfficialBitwardenServer == false -> {
                         LoginResult.UnofficialServerError
                     }
+
                     else -> LoginResult.Error(errorMessage = null)
                 }
             },

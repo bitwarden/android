@@ -30,7 +30,7 @@ private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
 private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 
 /**
- * Transforms [VaultData] into [VaultState.ViewState].
+ * Transforms [VaultData] into [VaultItemState.ViewState].
  */
 @Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun CipherView.toViewState(
@@ -74,7 +74,7 @@ fun CipherView.toViewState(
                             url = requireNotNull(it.url),
                             isLargeFile = try {
                                 requireNotNull(it.size).toLong() >= 10485760
-                            } catch (exception: NumberFormatException) {
+                            } catch (_: NumberFormatException) {
                                 false
                             },
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
@@ -85,6 +85,7 @@ fun CipherView.toViewState(
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
+            favorite = this.favorite,
         ),
         type = when (type) {
             CipherType.LOGIN -> {

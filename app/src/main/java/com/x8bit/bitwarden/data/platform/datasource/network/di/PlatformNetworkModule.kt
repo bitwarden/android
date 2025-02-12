@@ -14,6 +14,10 @@ import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
+import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.KeyManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,11 +76,23 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
+    fun provideSslManager(
+        keyManager: KeyManager,
+        environmentRepository: EnvironmentRepository,
+    ): SslManager =
+        SslManagerImpl(
+            keyManager = keyManager,
+            environmentRepository = environmentRepository,
+        )
+
+    @Provides
+    @Singleton
     fun provideRetrofits(
         authTokenInterceptor: AuthTokenInterceptor,
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
+        sslManager: SslManager,
         json: Json,
     ): Retrofits =
         RetrofitsImpl(
@@ -84,6 +100,7 @@ object PlatformNetworkModule {
             baseUrlInterceptors = baseUrlInterceptors,
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
+            sslManager = sslManager,
             json = json,
         )
 

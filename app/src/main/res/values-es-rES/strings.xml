@@ -54,6 +54,7 @@
   <string name="my_vault">Mi caja fuerte</string>
   <string name="authenticator">Autenticador</string>
   <string name="name">Nombre</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">No</string>
   <string name="notes">Notas</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Gracias</string>
   <string name="tools">Herramientas</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Usar huella dactilar para desbloquear</string>
   <string name="username">Usuario</string>
   <string name="validation_field_required">El campo %1$s es obligatorio.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Pulsa en el icono de Bitwarden del menú para iniciar la extensión.</string>
   <string name="extension_turn_on">Para activar Bitwarden en Safari y otras aplicaciones, pulsa en el icono \"más\" de la última fila del menú.</string>
   <string name="favorite">Favorito</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Huella dactilar</string>
   <string name="generate_password">Generar contraseña</string>
   <string name="get_password_hint">Obtener pista de la contraseña maestra</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">No hay favoritos en tu caja fuerte.</string>
   <string name="no_items">No hay elementos en tu caja fuerte.</string>
   <string name="no_items_tap">No hay elementos en tu caja fuerte para este sitio web o aplicación. Pulsa para añadir uno.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Esta entrada no tiene usuario y contraseña configurados.</string>
   <string name="ok_got_it">¡Entendido!</string>
@@ -356,6 +371,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="select_type_field">¿Que tipo de campo personalizado quieres añadir?</string>
   <string name="remove">Eliminar</string>
   <string name="new_uri">Nueva URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Dominio base</string>
   <string name="default_text">Por defecto</string>
@@ -396,6 +412,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Comprobando contraseña...</string>
   <string name="check_password">Comprobar si la contraseña ha sido comprometida.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Esta contraseña ha sido expuesta %1$s veces(s) en filtraciones de datos. Debería cambiarla.</string>
   <string name="password_safe">Esta contraseña no fue encontrada en ninguna filtración de datos conocida. Debería poder utilizarla de forma segura.</string>
   <string name="identity_name">Nombre de la identidad</string>
@@ -480,6 +497,8 @@ El escaneo se realizará automáticamente.</string>
   <string name="login_expired">Su sesión ha expirado.</string>
   <string name="biometrics_direction">Verificación biométrica</string>
   <string name="biometrics">biometría</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Utilizar biometría para desbloquear</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden necesita atención - Ver \"Servicio de Accesibilidad Auto-rellenar\" desde los ajustes de Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. En la pantalla de configuración de la aplicación Android Bitwarden, selecciona \"Mostrar sobre otras aplicaciones\" (en \"Avanzado\") y toca el interruptor para habilitar el soporte de superposición.</string>
@@ -685,12 +704,14 @@ El escaneo se realizará automáticamente.</string>
   <string name="verification_codes">Códigos de verificación</string>
   <string name="premium_subscription_required">Se requiere una Suscripción Premium</string>
   <string name="cannot_add_authenticator_key">¿No se puede agregar la clave del autenticador?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Escanear código QR</string>
   <string name="cannot_scan_qr_code">¿No se puede escanear el código QR?</string>
   <string name="authenticator_key_scanner">Clave de Autenticador</string>
   <string name="enter_key_manually">Introducir Clave manualmente</string>
   <string name="add_totp">Añadir TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Una vez que la clave haya sido ingresada con éxito,
 seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="never_lock_warning">Configurar las opciones de bloqueo a \"Nunca\" mantiene la caja fuerte disponible para cualquier persona con acceso a su dispositivo. Si utiliza esta opción, debe asegurarse de que mantiene su dispositivo debidamente protegido.</string>
@@ -980,7 +1001,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1135,7 +1156,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1143,6 +1164,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

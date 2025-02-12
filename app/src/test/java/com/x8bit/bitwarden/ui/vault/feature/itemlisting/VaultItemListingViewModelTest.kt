@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -966,24 +967,23 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `AddVaultItemClick inside a folder should emit NavigateToAddVaultItem with a selected folder id`() =
-        runTest {
-            val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+    fun `AddVaultItemClick inside a folder should show item selection dialog state`() {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+            ),
+        )
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = "id",
                 ),
             )
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
-                assertEquals(
-                    VaultItemListingEvent.NavigateToAddVaultItem(
-                        VaultItemCipherType.LOGIN,
-                        selectedFolderId = "id",
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
+                .copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
@@ -1005,6 +1005,51 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
+        }
+    }
+
+    @Test
+    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for folder selection`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder(""),
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemToAddToFolderSelected(
+                    itemType = CreateVaultItemType.FOLDER,
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddFolder(
+                    parentFolderName = "",
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for any other selection`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder("id"),
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemToAddToFolderSelected(
+                    itemType = CreateVaultItemType.CARD,
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                    selectedFolderId = "id",
+                ),
+                awaitItem(),
+            )
         }
     }
 

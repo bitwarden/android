@@ -21,6 +21,9 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 
@@ -50,14 +53,10 @@ fun VaultItemSshKeyContent(
         }
 
         item {
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
+            ItemNameField(
                 value = commonState.name,
-                onValueChange = { },
-                readOnly = true,
-                singleLine = false,
+                isFavorite = commonState.favorite,
                 textFieldTestTag = "SshKeyItemNameEntry",
-                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
@@ -141,7 +140,7 @@ fun VaultItemSshKeyContent(
             item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()

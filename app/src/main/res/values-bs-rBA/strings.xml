@@ -54,6 +54,7 @@
   <string name="my_vault">Moj trezor</string>
   <string name="authenticator">Aplikacija za autentifikaciju</string>
   <string name="name">Ime</string>
+  <string name="item_name_required">Item name (required)</string>
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Ne</string>
   <string name="notes">Bilješke</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Hvala Vam</string>
   <string name="tools">Alati</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Otključajte pomoću otiska prsta</string>
   <string name="username">Korisničko ime</string>
   <string name="validation_field_required">Polje %1$s je obavezno.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Dodirnite Bitwarden ikonu u meniju da biste pokrenuli dodatak.</string>
   <string name="extension_turn_on">Da biste uključili Bitwarden u Safari-ju i drugim aplikacijama, dodirnite ikonu „više“ u donjem redu menija.</string>
   <string name="favorite">Omiljene</string>
+  <string name="unfavorite">Unfavorite</string>
   <string name="fingerprint">Otisak prsta</string>
   <string name="generate_password">Generišite lozinku</string>
   <string name="get_password_hint">Dobijte nagoveštaj glavne lozinke</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Nema omiljenih u Vašem trezoru.</string>
   <string name="no_items">Nema stavki u Vašem trezoru.</string>
   <string name="no_items_tap">Nema stavki u Vašem trezoru za ovaj vebsajt/aplikaciju. Dodirnite da biste dodali stavku.</string>
+  <string name="no_cards">There are no cards in your vault.</string>
+  <string name="new_card">New card</string>
+  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="new_identity">New identity</string>
+  <string name="no_notes">There are no notes in your vault.</string>
+  <string name="new_note">New note</string>
+  <string name="new_item">New item</string>
+  <string name="no_text_sends">There are no text Sends in your vault.</string>
+  <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="new_text_send">New text Send</string>
+  <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Ova prijava nema konfigurisano korisničko ime ili lozinku.</string>
   <string name="ok_got_it">U redu, shvatam!</string>
@@ -356,6 +371,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="select_type_field">Kakvu vrstu prilagođenog polja želite da dodate?</string>
   <string name="remove">Uklonite</string>
   <string name="new_uri">Novi URI</string>
+  <string name="add_website">Add website</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Osnovni domen</string>
   <string name="default_text">Zadano</string>
@@ -396,6 +412,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="ur_is">URLs</string>
   <string name="checking_password">Provjeravanje vaše lozinke...</string>
   <string name="check_password">Provjeri da li je lozinka kompromitovana.</string>
+  <string name="check_password_for_data_breaches">Check password for data breaches</string>
   <string name="password_exposed">Ova lozinka je kompromitovana %1$s puta tijekom malicioznih napada. Savjetujemo njenu promjenu.</string>
   <string name="password_safe">Ova lozinka nije pronađena ni u jednoj kompromitovanoj bazi podataka. Trebala bi biti sigurna sa korištenje.</string>
   <string name="identity_name">Ime identiteta</string>
@@ -480,6 +497,8 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="login_expired">Sesija je istekla.</string>
   <string name="biometrics_direction">Biometrijska autentifikacija</string>
   <string name="biometrics">biometrijom</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Koristi biometriju za otključavanje</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden zahtijeva radnju - pogledajte „Usluga auto-ispune kroz pristupačnost” u Bitwarden postavkama</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. U postavkama aplikacije uključi „Prikaz iznad drugih aplikacija” za omogućavanje podrške za preklapanje.</string>
@@ -685,12 +704,14 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="verification_codes">Autentifikacijski kodovi</string>
   <string name="premium_subscription_required">Potrebna Premium pretplata</string>
   <string name="cannot_add_authenticator_key">Nije moguće dodati autentifikacijski ključ?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Skenirajte QR kod</string>
   <string name="cannot_scan_qr_code">Nije moguće skenirati QR kod?</string>
   <string name="authenticator_key_scanner">Autentifikacijski ključ</string>
   <string name="enter_key_manually">Ručno unesi ključ</string>
   <string name="add_totp">Dodaj TOTP</string>
   <string name="setup_totp">Podesi TOTP</string>
+  <string name="set_up_authenticator_key">Set up authenticator key</string>
   <string name="once_the_key_is_successfully_entered">Jednom kada je ključ uspješno unesen, odaberi „Dodaj TOTP” za sigurno spremanje ključa</string>
   <string name="never_lock_warning">Postavljanje zaključavanja na „Nikad” čini tvoj trezor dostupnim svima koji imaju pristupom tvom uređaju. Ako koristiš ovu mogućnost, pobrini se da je uređaj adekvatno zaštićen.</string>
   <string name="environment_page_urls_error">One or more of the URLs entered are invalid. Please revise it and try to save again.</string>
@@ -909,7 +930,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password autofill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on Autofill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
@@ -978,7 +999,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="set_up_unlock_later">Set up unlock later?</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
   <string name="confirm">Confirm</string>
-  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">The best way to make sure you can always access your vault is to set up safeguards from the start.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">One of the best ways to create a secure and memorable password is to use a passphrase. \nHere’s how:</string>
@@ -1133,7 +1154,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
   <string name="alias">Alias</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Use the generator to create secure passwords, passphrases and usernames. "</string>
-  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where AutoFill is not available, like a streaming service on your TV.</string>
+  <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Passphrases are strong passwords that are often easier to remember and type than random passwords. They are helpful for logging into accounts where Autofill is not available, like a streaming service on your TV.</string>
   <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
   <string name="coachmark_1_of_6">1 OF 6</string>
   <string name="coachmark_2_of_6">2 OF 6</string>
@@ -1141,6 +1162,7 @@ Skeniranje će biti izvršeno automatski.</string>
   <string name="coachmark_4_of_6">4 OF 6</string>
   <string name="coachmark_5_of_6">5 OF 6</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to your account’s requirements.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="link">Link</string>
 </resources>

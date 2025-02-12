@@ -277,10 +277,4 @@
     <compatibility-package
         android:name="org.ungoogled.chromium.stable"
         android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="us.spotco.fennec_dos"
-        android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="us.spotco.mulch"
-        android:maxLongVersionCode="10000000000" />
 </autofill-service>

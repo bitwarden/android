@@ -303,7 +303,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SelectClick should emit the NavigateBack event with GeneratorResult`() = runTest {
+    fun `SaveClick should emit the NavigateBack event with GeneratorResult`() = runTest {
         turbineScope {
             val viewModel = createViewModel(state = initialUsernameModeState)
             val eventTurbine = viewModel
@@ -313,7 +313,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .generatorResultFlow
                 .testIn(backgroundScope)
 
-            viewModel.trySendAction(GeneratorAction.SelectClick)
+            viewModel.trySendAction(GeneratorAction.SaveClick)
 
             assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
             assertEquals(
@@ -2258,15 +2258,15 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `StartExploreGeneratorTour action calls first time action manager markCoachMarkTourCompleted called and show coach mark event sent`() =
         runTest {
-        val viewModel = createViewModel()
+            val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
                 assertEquals(GeneratorEvent.StartCoachMarkTour, awaitItem())
             }
-        verify(exactly = 1) {
-            firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+            verify(exactly = 1) {
+                firstTimeActionManager.markCoachMarkTourCompleted(CoachMarkTourType.GENERATOR)
+            }
         }
-    }
     //region Helper Functions
 
     @Suppress("LongParameterList")

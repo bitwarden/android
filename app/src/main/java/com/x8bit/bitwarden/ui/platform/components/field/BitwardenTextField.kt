@@ -1,16 +1,20 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -26,14 +30,20 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -41,11 +51,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.base.util.toPx
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
@@ -53,6 +65,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTe
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -192,6 +205,7 @@ fun BitwardenTextField(
     supportingContent: (@Composable ColumnScope.() -> Unit)?,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     placeholder: String? = null,
     leadingIconResource: IconResource? = null,
@@ -237,6 +251,7 @@ fun BitwardenTextField(
             onValueChange = onValueChange,
             defaultTextToolbar = LocalTextToolbar.current,
             clipboardManager = LocalClipboardManager.current.nativeClipboard,
+            focusManager = LocalFocusManager.current,
         )
 
         TextToolbarType.NONE -> BitwardenEmptyTextToolbar
@@ -255,12 +270,52 @@ fun BitwardenTextField(
                         paddingTop = 6.dp,
                         paddingBottom = 0.dp,
                     )
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .semantics {
+                        customActions = listOfNotNull(
+                            tooltip?.let {
+                                CustomAccessibilityAction(
+                                    label = it.contentDescription,
+                                    action = {
+                                        it.onClick()
+                                        true
+                                    },
+                                )
+                            },
+                        )
+                    },
             ) {
+                var focused by remember { mutableStateOf(false) }
+
                 TextField(
                     colors = bitwardenTextFieldColors(),
                     enabled = enabled,
-                    label = label?.let { { Text(text = it) } },
+                    label = label?.let {
+                        {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(text = it)
+                                tooltip?.let {
+                                    val targetSize = if (textFieldValue.text.isEmpty() || focused) {
+                                        16.dp
+                                    } else {
+                                        12.dp
+                                    }
+                                    val size by animateDpAsState(
+                                        targetValue = targetSize,
+                                        label = "${it.contentDescription}_animation",
+                                    )
+                                    Spacer(modifier = Modifier.width(16.dp))
+                                    BitwardenStandardIconButton(
+                                        vectorIconRes = R.drawable.ic_question_circle_small,
+                                        contentDescription = it.contentDescription,
+                                        onClick = it.onClick,
+                                        contentColor = BitwardenTheme.colorScheme.icon.secondary,
+                                        modifier = Modifier.size(size),
+                                    )
+                                }
+                            }
+                        }
+                    },
                     value = textFieldValue,
                     leadingIcon = leadingIconResource?.let { iconResource ->
                         {
@@ -298,7 +353,10 @@ fun BitwardenTextField(
                     visualTransformation = visualTransformation,
                     modifier = Modifier
                         .nullableTestTag(tag = textFieldTestTag)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .onFocusChanged { focusState ->
+                            focused = focusState.isFocused
+                        },
                 )
                 supportingContent
                     ?.let { content ->

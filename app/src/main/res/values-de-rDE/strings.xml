@@ -54,6 +54,7 @@
   <string name="my_vault">Mein Tresor</string>
   <string name="authenticator">Authenticator</string>
   <string name="name">Name</string>
+  <string name="item_name_required">Eintragsname (erforderlich)</string>
   <string name="send_name_required">"Send-Name (erforderlich)"</string>
   <string name="no">Nein</string>
   <string name="notes">Notizen</string>
@@ -71,6 +72,7 @@
   <string name="thank_you">Vielen Dank</string>
   <string name="tools">Werkzeuge</string>
   <string name="uri">URI</string>
+  <string name="website_uri">Webseite (URI)</string>
   <string name="use_fingerprint_to_unlock">Fingerabdruck zum Entsperren nutzen</string>
   <string name="username">Nutzername</string>
   <string name="validation_field_required">Das Feld %1$s ist ein Pflichtfeld.</string>
@@ -119,6 +121,7 @@
   <string name="extension_tap_icon">Tippe auf das Bitwarden Symbol im Menü, um die Erweiterung zu starten.</string>
   <string name="extension_turn_on">Um Bitwarden in Safari und anderen Apps zu aktivieren, tippe auf das \"Mehr\"-Symbol in der untersten Zeile des Menüs.</string>
   <string name="favorite">Favorit</string>
+  <string name="unfavorite">Aus Favoriten entfernen</string>
   <string name="fingerprint">Fingerabdruck</string>
   <string name="generate_password">Passwort generieren</string>
   <string name="get_password_hint">Hinweis zum Masterpasswort zusenden</string>
@@ -153,6 +156,18 @@
   <string name="no_favorites">Es befinden sich keine Favoriten in deinem Tresor.</string>
   <string name="no_items">Keine Einträge in deinem Tresor.</string>
   <string name="no_items_tap">Es befinden sich keine Zugangsdaten für diese Webseite in deinem Tresor. Zum Hinzufügen tippen.</string>
+  <string name="no_cards">Du hast keine Karten in deinem Tresor.</string>
+  <string name="new_card">Neue Karte</string>
+  <string name="no_logins">Du hast keine Zugangsdaten in deinem Tresor.</string>
+  <string name="no_identities">Du hast keine Identitäten in deinem Tresor.</string>
+  <string name="new_identity">Neue Identität</string>
+  <string name="no_notes">Du hast keine Notizen in deinem Tresor.</string>
+  <string name="new_note">Neue Notiz</string>
+  <string name="new_item">Neuer Eintrag</string>
+  <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
+  <string name="no_file_sends">Du hast keine Datei-Sends in deinem Tresor.</string>
+  <string name="new_text_send">Neues Text-Send</string>
+  <string name="new_file_send">Neues Datei-Send</string>
   <string name="no_username">Kein Benutzername</string>
   <string name="no_username_password_configured">Diese Zugangsdaten sind noch nicht konfiguriert.</string>
   <string name="ok_got_it">Ok, verstanden!</string>
@@ -356,6 +371,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="select_type_field">Welche Art Eintrag möchtest du hinzufügen?</string>
   <string name="remove">Entfernen</string>
   <string name="new_uri">Neue URI</string>
+  <string name="add_website">Website hinzufügen</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Basis-Domäne</string>
   <string name="default_text">Standard</string>
@@ -396,6 +412,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Passwort wird überprüft...</string>
   <string name="check_password">Überprüfe ob dein Kennwort kompromittiert ist.</string>
+  <string name="check_password_for_data_breaches">Passwort auf Datendiebstahl überprüfen</string>
   <string name="password_exposed">Dieses Passwort wurde %1$s-mal in Passwortdiebstahl Datenbanken gefunden. Sie sollten es ändern.</string>
   <string name="password_safe">Dieses Passwort wurde in keiner bekannten Passwortdiebstahl Datenbank gefunden. Es sollte sicher zu verwenden sein.</string>
   <string name="identity_name">Identitätsname</string>
@@ -480,6 +497,8 @@ Das Scannen erfolgt automatisch.</string>
   <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
   <string name="biometrics_direction">Biometrische Verifizierung</string>
   <string name="biometrics">Biometrie</string>
+  <string name="biometrics_failed">Biometrics Failed</string>
+  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
   <string name="use_biometrics_to_unlock">Biometrie zum Entsperren verwenden</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden braucht Aufmerksamkeit - Siehe \"Bedienungshilfen zum automatischen Ausfüllen\" in den Bitwarden-Einstellungen</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Gehe in den Android App-Einstellungen für Bitwarden zur Option \"Über anderen Apps einblenden\" (unter Erweitert) und tippe auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</string>
@@ -685,12 +704,14 @@ Das Scannen erfolgt automatisch.</string>
   <string name="verification_codes">Verifizierungscodes</string>
   <string name="premium_subscription_required">Premium-Abonnement erforderlich</string>
   <string name="cannot_add_authenticator_key">Authentifizierungsschlüssel lässt sich nicht hinzufügen?</string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Kann Authentifizierungsschlüssel nicht hinzufügen? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">QR Code scannen</string>
   <string name="cannot_scan_qr_code">QR-Code kann nicht gescannt werden?</string>
   <string name="authenticator_key_scanner">Authentifizierungsschlüssel</string>
   <string name="enter_key_manually">Schlüssel manuell eingeben</string>
   <string name="add_totp">TOTP hinzufügen</string>
   <string name="setup_totp">TOTP einrichten</string>
+  <string name="set_up_authenticator_key">Authentifizierungsschlüssel einrichten</string>
   <string name="once_the_key_is_successfully_entered">Sobald der Schlüssel erfolgreich eingegeben wurde, wähle TOTP hinzufügen, um den Schlüssel sicher abzuspeichern</string>
   <string name="never_lock_warning">Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</string>
   <string name="environment_page_urls_error">Eine oder mehrere der eingegebenen URLs sind ungültig. Bitte überarbeite diese und versuche erneut zu speichern.</string>
@@ -942,7 +963,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Folge den Anweisungen in der an %1$s gesendeten E-Mail, um mit der Erstellung deines Kontos fortzufahren.</string>
   <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
-  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
+  <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Durch Aktivieren dieses Schalters stimmst du den <annotation link="termsOfService">Nutzungsbedingungen</annotation> und <annotation link="privacyPolicy">Datenschutzbestimmungen</annotation> zu</string>
   <string name="set_password">Passwort festlegen</string>
   <string name="unsubscribe">Deabonnieren</string>
   <string name="check_your_email">Überprüfe deine E-Mails</string>
@@ -1143,4 +1164,5 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="coachmark_6_of_6">6 von 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Verwende diese Optionen, um dein Passwort an die Anforderungen deines Kontos anzupassen.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Nachdem du dein neues Passwort in Bitwarden gespeichert hast, vergiss nicht, es auf deiner Konto-Website zu aktualisieren. "</string>
+  <string name="link">Link</string>
 </resources>
