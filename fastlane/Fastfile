@@ -27,7 +27,7 @@ platform :android do
   lane :setBuildVersionInfo do |options|
 
     # Read-in app build config file.
-    buildConfigPath = "../app/build.gradle.kts"
+    buildConfigPath = "../authenticator/build.gradle.kts"
     buildConfigFile = File.open(buildConfigPath)
     buildConfigText = buildConfigFile.read
     buildConfigFile.close
@@ -123,7 +123,7 @@ platform :android do
     firebase_app_distribution(
       app: "1:867301491091:android:50b626dba42a361651e866",
       android_artifact_type: "AAB",
-      android_artifact_path: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
+      android_artifact_path: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
       service_credentials_file: options[:serviceCredentialsFile],
       groups: "internal-prod-group, livefront",
       release_notes: release_notes,
@@ -135,8 +135,8 @@ platform :android do
     upload_to_play_store(
       json_key: options[:serviceCredentialsFile],
       track: "internal",
-      aab: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
-      mapping: "app/build/outputs/mapping/release/mapping.txt",
+      aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
+      mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
   end
 end

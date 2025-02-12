@@ -50,4 +50,4 @@ buildCache {
 }
 
 rootProject.name = "Authenticator"
-include(":app")
+include(":authenticator")

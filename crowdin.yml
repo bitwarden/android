@@ -1,7 +1,7 @@
 project_id_env: _CROWDIN_PROJECT_ID
 api_token_env: CROWDIN_API_TOKEN
 preserve_hierarchy: true
-base_path: "app/src/main"
+base_path: "authenticator/src/main"
 files:
   - source: "/res/values/strings.xml"
     translation: "/res/values-%android_code%/%original_file_name%"
