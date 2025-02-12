@@ -214,7 +214,6 @@ fun VaultData.toViewState(
                     .asText()
             }
         val shouldShowAddButton = when (itemListingType) {
-            is VaultItemListingState.ItemListingType.Vault.Folder,
             VaultItemListingState.ItemListingType.Vault.Trash,
             VaultItemListingState.ItemListingType.Vault.SshKey,
                 -> false
@@ -306,13 +305,17 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
                 .orEmpty(),
         )
 
-        is VaultItemListingState.ItemListingType.Vault.Folder -> copy(
-            folderName = folderList
+        is VaultItemListingState.ItemListingType.Vault.Folder -> {
+            val fullyQualifiedName = folderList
                 .find { it.id == folderId }
                 ?.name
-                ?.toFolderDisplayName(folderList)
-                .orEmpty(),
-        )
+            copy(
+                folderName = fullyQualifiedName
+                    ?.toFolderDisplayName()
+                    .orEmpty(),
+                fullyQualifiedName = fullyQualifiedName.orEmpty(),
+            )
+        }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> this
         is VaultItemListingState.ItemListingType.Vault.Login -> this

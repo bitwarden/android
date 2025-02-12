@@ -68,18 +68,4 @@ fun List<FolderView>.getFilteredFolders(folderName: String? = null): List<Folder
  * folder name we receive is often nested, and we want to extract just the relevant name for
  * display to the user.
  */
-fun String.toFolderDisplayName(list: List<FolderView>): String {
-    var folderName = this
-
-    // cycle through the list and determine the correct display name of the folder.
-    list.forEach { folderView ->
-        if (this.startsWith(folderView.name + FOLDER_DIVIDER)) {
-            val newName = this.substringAfter(folderView.name + FOLDER_DIVIDER)
-            if (newName.isNotBlank() && newName.length < folderName.length) {
-                folderName = newName
-            }
-        }
-    }
-
-    return folderName
-}
+fun String.toFolderDisplayName(): String = this.split(FOLDER_DIVIDER).last()

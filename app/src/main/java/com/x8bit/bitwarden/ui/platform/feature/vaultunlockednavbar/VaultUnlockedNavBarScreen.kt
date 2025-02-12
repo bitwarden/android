@@ -78,6 +78,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -144,6 +145,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
+        onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
     )
 }
 
@@ -174,6 +176,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(false) }
 
@@ -233,6 +236,7 @@ private fun VaultUnlockedNavBarScaffold(
                     shouldDimNavBar = shouldDim
                 },
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             )
             sendGraph(
                 navController = navController,

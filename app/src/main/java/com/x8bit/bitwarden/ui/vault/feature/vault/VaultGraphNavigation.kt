@@ -30,6 +30,7 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
     navigation(
         route = VAULT_GRAPH_ROUTE,
@@ -37,7 +38,7 @@ fun NavGraphBuilder.vaultGraph(
     ) {
         vaultDestination(
             onNavigateToVaultAddItemScreen = {
-                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN, null, null)
+                onNavigateToVaultAddItemScreen(it, null, null)
             },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
@@ -48,6 +49,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToSearchVault = onNavigateToSearchVault,
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
+            onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -58,6 +60,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultItemListing = {
                 navController.navigateToVaultItemListing(it)
             },
+            onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         )
 
         vaultVerificationCodeDestination(

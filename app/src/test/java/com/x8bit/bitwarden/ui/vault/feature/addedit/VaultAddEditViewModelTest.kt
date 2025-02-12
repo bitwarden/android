@@ -4471,7 +4471,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 VaultItemCipherType.IDENTITY -> "identity"
                 VaultItemCipherType.SECURE_NOTE -> "secure_note"
                 VaultItemCipherType.SSH_KEY -> "ssh_key"
-                null -> null
+                else -> null
             },
         )
     }

@@ -53,6 +53,7 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -84,6 +85,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToVaultEditItemScreenId: String? = null
     private var onNavigateToSearchType: SearchType? = null
     private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
+    private var onNavigateToAddFolderCalled = false
+    private var onNavigateToAddFolderParentFolderName: String? = null
 
     private val exitManager: ExitManager = mockk {
         every { exitApplication() } just runs
@@ -126,6 +129,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToSearch = { onNavigateToSearchType = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenId = it },
                 onNavigateToVaultItemListing = { this.onNavigateToVaultItemListingScreenType = it },
+                onNavigateToAddFolder = { folderName ->
+                    onNavigateToAddFolderCalled = true
+                    onNavigateToAddFolderParentFolderName = folderName
+                },
             )
         }
     }
@@ -2105,6 +2112,60 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
                     cipherViewId = "mockCipherViewId",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `NavigateToAddFolder event calls onNavigateToAddFolder callback with parent name`() {
+        val parentFolder = "momNpop"
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.NavigateToAddFolder(parentFolderName = parentFolder),
+        )
+        assertTrue(onNavigateToAddFolderCalled)
+        assertEquals(
+            parentFolder,
+            onNavigateToAddFolderParentFolderName,
+        )
+    }
+
+    @Test
+    fun `VaultItemTypeSelection dialog state show vault item type selection dialog`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Type")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `when option is selected in VaultItemTypeSelection dialog add item action is sent`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemToAddToFolderSelected(
+                    CreateVaultItemType.CARD,
                 ),
             )
         }

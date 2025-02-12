@@ -709,7 +709,7 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
                 message = R.string.no_items_folder.asText(),
-                shouldShowAddButton = false,
+                shouldShowAddButton = true,
                 buttonText = R.string.new_item.asText(),
             ),
             vaultData.toViewState(
@@ -1002,6 +1002,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ItemListingType.Vault.Folder(
                 folderId = "mockId-1",
                 folderName = "mockName-1",
+                fullyQualifiedName = "mockName-1",
             ),
             result,
         )
