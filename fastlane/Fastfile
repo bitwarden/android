@@ -24,7 +24,7 @@ platform :android do
 
   desc "Apply build version information"
   fastlane_require "time"
-  lane :setBuildVersionInfo do |options|
+  lane :setAuthenticatorBuildVersionInfo do |options|
 
     # Read-in app build config file.
     buildConfigPath = "../authenticator/build.gradle.kts"
@@ -73,7 +73,7 @@ platform :android do
   end
 
   desc "Assemble debug variants"
-  lane :buildDebug do
+  lane :buildAuthenticatorDebug do
     gradle(
       task: "assemble",
       build_type: "Debug",
@@ -82,7 +82,7 @@ platform :android do
   end
 
   desc "Assemble and sign release APK"
-  lane :buildRelease do |options|
+  lane :builAuthenticatordRelease do |options|
     gradle(
       task: "assemble",
       build_type: "Release",
@@ -97,7 +97,7 @@ platform :android do
   end
 
   desc "Bundle and sign release AAB"
-  lane :bundleRelease do |options|
+  lane :bundleAuthenticatorRelease do |options|
     gradle(
         task: "bundle",
         build_type: "Release",
@@ -112,7 +112,7 @@ platform :android do
   end
 
   desc "Publish release AAB to Firebase"
-  lane :distributeReleaseBundleToFirebase do |options|
+  lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
     release_notes = changelog_from_git_commits(
       commits_count: 1,
       pretty: "- %s"
@@ -131,7 +131,7 @@ platform :android do
   end
 
   desc "Publish release to Google Play Store"
-  lane :publishReleaseToGooglePlayStore do |options|
+  lane :publishAuthenticatorReleaseToGooglePlayStore do |options|
     upload_to_play_store(
       package_name: "com.bitwarden.authenticator",
       json_key: options[:serviceCredentialsFile],
