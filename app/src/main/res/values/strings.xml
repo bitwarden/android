@@ -1184,6 +1184,5 @@ Do you want to switch to this account?</string>
   <string name="invalid_certificate_chain">Invalid certificate chain</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
   <string name="certificate_alias_already_exists">Certificate alias already exists</string>
-  <string name="anon_addy_self_hosted_aliases">AnonAddy self-host aliases</string>
   <string name="self_host_server_url">Self-host server URL</string>
 </resources>
