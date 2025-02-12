@@ -29,7 +29,10 @@ class ForwardedEmailServiceTypeExtensionsTest {
         )
         UsernameGenerationOptions.ForwardedEmailServiceType.entries
             .forEach {
-                val expected = createMockForwardedEmailAliasServiceType(it, true)
+                val expected = createMockForwardedEmailAliasServiceType(
+                    serviceTypeOption = it,
+                    useEmptyValues = false,
+                )
                 assertEquals(
                     expected,
                     it.toServiceType(options),
@@ -59,10 +62,11 @@ class ForwardedEmailServiceTypeExtensionsTest {
         )
         UsernameGenerationOptions.ForwardedEmailServiceType.entries
             .forEach {
-                val expected =
-                    createMockForwardedEmailAliasServiceType(serviceTypeOption = it, empty = true)
                 assertEquals(
-                    expected,
+                    createMockForwardedEmailAliasServiceType(
+                        serviceTypeOption = it,
+                        useEmptyValues = true,
+                    ),
                     it.toServiceType(options),
                 )
             }
@@ -70,42 +74,54 @@ class ForwardedEmailServiceTypeExtensionsTest {
 
     private fun createMockForwardedEmailAliasServiceType(
         serviceTypeOption: UsernameGenerationOptions.ForwardedEmailServiceType,
-        empty: Boolean = false,
+        useEmptyValues: Boolean = false,
     ): ServiceType? = when (serviceTypeOption) {
         UsernameGenerationOptions.ForwardedEmailServiceType.NONE -> null
 
         UsernameGenerationOptions.ForwardedEmailServiceType.ANON_ADDY -> {
             ServiceType.AddyIo(
-                apiAccessToken = "access_token_anon_addy".takeUnless { empty }.orEmpty(),
-                domainName = "anonaddy.com".takeUnless { empty }.orEmpty(),
-                selfHostServerUrl = "anonaddy.local".takeUnless { empty }.orEmpty(),
+                apiAccessToken = "access_token_anon_addy".takeUnless { useEmptyValues }.orEmpty(),
+                domainName = "anonaddy.com".takeUnless { useEmptyValues }.orEmpty(),
+                selfHostServerUrl = "anonaddy.local".takeUnless { useEmptyValues }.orEmpty(),
             )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.FIREFOX_RELAY -> {
             ServiceType.FirefoxRelay(
                 apiAccessToken = "access_token_firefox_relay"
-                    .takeUnless { empty }
+                    .takeUnless { useEmptyValues }
                     .orEmpty(),
             )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN -> {
-            ServiceType.SimpleLogin(apiKey = "api_key_simple_login".takeUnless { empty }.orEmpty())
+            ServiceType.SimpleLogin(
+                apiKey = "api_key_simple_login"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
+            )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.DUCK_DUCK_GO -> {
-            ServiceType.DuckDuckGo(apiKey = "api_key_duck_duck_go".takeUnless { empty }.orEmpty())
+            ServiceType.DuckDuckGo(
+                apiKey = "api_key_duck_duck_go"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
+            )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.FASTMAIL -> {
-            ServiceType.FastMail(apiKey = "api_key_fast_mail".takeUnless { empty }.orEmpty())
+            ServiceType.FastMail(
+                apiKey = "api_key_fast_mail"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
+            )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.FORWARD_EMAIL -> {
             ServiceType.ForwardEmail(
-                apiKey = "access_token_forward_email".takeUnless { empty }.orEmpty(),
-                domainName = "forwardemail.net".takeUnless { empty }.orEmpty(),
+                apiKey = "access_token_forward_email".takeUnless { useEmptyValues }.orEmpty(),
+                domainName = "forwardemail.net".takeUnless { useEmptyValues }.orEmpty(),
             )
         }
     }
