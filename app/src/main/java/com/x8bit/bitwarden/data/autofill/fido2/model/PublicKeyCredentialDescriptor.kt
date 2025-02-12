@@ -13,5 +13,5 @@ data class PublicKeyCredentialDescriptor(
     @SerialName("id")
     val id: String,
     @SerialName("transports")
-    val transports: List<String>,
+    val transports: List<String>?,
 )
