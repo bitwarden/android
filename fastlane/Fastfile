@@ -75,16 +75,16 @@ platform :android do
   desc "Assemble debug variants"
   lane :buildAuthenticatorDebug do
     gradle(
-      task: "assemble",
+      task: "authenticator:assemble",
       build_type: "Debug",
       print_command: false,
     )
   end
 
   desc "Assemble and sign release APK"
-  lane :buildAuthenticatordRelease do |options|
+  lane :buildAuthenticatorRelease do |options|
     gradle(
-      task: "assemble",
+      task: "authenticator:assemble",
       build_type: "Release",
       properties: {
         "android.injected.signing.store.file" => options[:storeFile],
@@ -99,7 +99,7 @@ platform :android do
   desc "Bundle and sign release AAB"
   lane :bundleAuthenticatorRelease do |options|
     gradle(
-        task: "bundle",
+        task: "authenticator:bundle",
         build_type: "Release",
         properties: {
           "android.injected.signing.store.file" => options[:storeFile],
