@@ -84,7 +84,7 @@ fun AboutScreen(
             AboutEvent.NavigateToRateApp -> {
                 intentManager.launchUri(
                     uri =
-                    "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
+                        "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
                 )
             }
         }

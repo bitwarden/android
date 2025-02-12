@@ -306,8 +306,8 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUserVerificationCancelled()
             }
 
-            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
-                handleFido2ErrorDialogDismissed()
+            is VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
+                handleFido2ErrorDialogDismissed(action)
             }
 
             VaultAddEditAction.Common.UserVerificationNotSupported -> {
@@ -645,12 +645,16 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
-    private fun handleFido2ErrorDialogDismissed() {
+    private fun handleFido2ErrorDialogDismissed(
+        action: VaultAddEditAction.Common.Fido2ErrorDialogDismissed,
+    ) {
         fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Error,
+                result = Fido2RegisterCredentialResult.Error(
+                    message = action.message,
+                ),
             ),
         )
     }
@@ -2837,7 +2841,7 @@ sealed class VaultAddEditAction {
         /**
          * The user has dismissed the FIDO 2 credential error dialog.
          */
-        data object Fido2ErrorDialogDismissed : Common()
+        data class Fido2ErrorDialogDismissed(val message: Text) : Common()
 
         /**
          * User verification cannot be performed with device biometrics or credentials.

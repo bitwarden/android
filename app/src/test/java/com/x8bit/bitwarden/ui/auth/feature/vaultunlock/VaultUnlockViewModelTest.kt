@@ -570,7 +570,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = initialState)
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
             viewModel.eventFlow.test {
-                assertEquals(VaultUnlockEvent.Fido2GetCredentialsError, awaitItem())
+                assertEquals(
+                    VaultUnlockEvent.Fido2GetCredentialsError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
@@ -586,7 +591,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = initialState)
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
             viewModel.eventFlow.test {
-                assertEquals(VaultUnlockEvent.Fido2CredentialAssertionError, awaitItem())
+                assertEquals(
+                    VaultUnlockEvent.Fido2CredentialAssertionError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                    awaitItem(),
+                )
             }
         }
 

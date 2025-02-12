@@ -217,7 +217,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
         val result = Fido2RegisterCredentialResult.Success(
-            registrationResponse = "mockRegistrationResponse",
+            responseJson = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
         verify { fido2CompletionManager.completeFido2Registration(result) }
@@ -454,7 +454,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.Fido2ErrorDialogDismissed("mockMessage".asText()),
+            )
+        }
     }
 
     @Test

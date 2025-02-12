@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+
 /**
  * Represents possible outcomes of a FIDO 2 credential assertion request.
  */
@@ -13,5 +15,5 @@ sealed class Fido2CredentialAssertionResult {
     /**
      * Indicates there was an error and the assertion was not successful.
      */
-    data object Error : Fido2CredentialAssertionResult()
+    data class Error(val message: Text) : Fido2CredentialAssertionResult()
 }
