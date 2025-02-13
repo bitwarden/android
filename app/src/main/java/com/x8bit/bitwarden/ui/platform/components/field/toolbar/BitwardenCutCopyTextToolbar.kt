@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.field.toolbar
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.platform.TextToolbarStatus
@@ -19,6 +20,7 @@ class BitwardenCutCopyTextToolbar(
     private val onValueChange: (String) -> Unit,
     private val defaultTextToolbar: TextToolbar,
     private val clipboardManager: ClipboardManager,
+    private val focusManager: FocusManager,
 ) : TextToolbar {
     override val status: TextToolbarStatus get() = defaultTextToolbar.status
 
@@ -58,7 +60,16 @@ class BitwardenCutCopyTextToolbar(
                                 )
                             },
                     )
-                    onValueChange("")
+                    // Clear selection
+                    focusManager.clearFocus(force = true)
+                    // Add correct text without selection
+                    onValueChange(
+                        value.text.replaceRange(
+                            minOf(value.selection.start, value.selection.end),
+                            maxOf(value.selection.start, value.selection.end),
+                            "",
+                        ),
+                    )
                 }
             },
             onSelectAllRequested = onSelectAllRequested,

@@ -6,6 +6,7 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -22,9 +23,11 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2Cred
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 /**
  * Primary implementation of [Fido2CredentialManager].
@@ -47,41 +50,45 @@ class Fido2CredentialManagerImpl(
         fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult {
-        val clientData = if (fido2CreateCredentialRequest.callingAppInfo.isOriginPopulated()) {
-            fido2CreateCredentialRequest
-                .callingAppInfo
+        val callingAppInfo = fido2CreateCredentialRequest.callingAppInfo
+        val clientData = if (fido2CreateCredentialRequest.origin.isNullOrEmpty()) {
+            ClientData.DefaultWithExtraData(androidPackageName = callingAppInfo.packageName)
+        } else {
+            callingAppInfo
                 .getAppSigningSignatureFingerprint()
                 ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-                ?: return Fido2RegisterCredentialResult.Error
-        } else {
-            ClientData.DefaultWithExtraData(
-                androidPackageName = fido2CreateCredentialRequest
-                    .callingAppInfo
-                    .packageName,
-            )
+                ?: return Fido2RegisterCredentialResult.Error(
+                    R.string.passkey_operation_failed_because_app_is_signed_incorrectly.asText(),
+                )
         }
-        val assetLinkUrl = fido2CreateCredentialRequest
-            .origin
-            ?: getOriginUrlFromAttestationOptionsOrNull(fido2CreateCredentialRequest.requestJson)
-            ?: return Fido2RegisterCredentialResult.Error
-
-        val origin = Origin.Android(
-            UnverifiedAssetLink(
-                packageName = fido2CreateCredentialRequest.packageName,
-                sha256CertFingerprint = fido2CreateCredentialRequest
-                    .callingAppInfo
-                    .getSignatureFingerprintAsHexString()
-                    ?: return Fido2RegisterCredentialResult.Error,
-                host = assetLinkUrl.toHostOrPathOrNull()
-                    ?: return Fido2RegisterCredentialResult.Error,
-                assetLinkUrl = assetLinkUrl,
-            ),
-        )
+        val sdkOrigin = if (fido2CreateCredentialRequest.origin.isNullOrEmpty()) {
+            val host = getOriginUrlFromAttestationOptionsOrNull(
+                requestJson = fido2CreateCredentialRequest.requestJson,
+            )
+                ?: return Fido2RegisterCredentialResult.Error(
+                    R.string.passkey_operation_failed_because_host_url_is_not_present_in_request
+                        .asText(),
+                )
+            Origin.Android(
+                UnverifiedAssetLink(
+                    packageName = callingAppInfo.packageName,
+                    sha256CertFingerprint = callingAppInfo.getSignatureFingerprintAsHexString()
+                        ?: return Fido2RegisterCredentialResult.Error(
+                            R.string.passkey_operation_failed_because_app_signature_is_invalid
+                                .asText(),
+                        ),
+                    host = host,
+                    assetLinkUrl = host,
+                ),
+            )
+        } else {
+            Origin.Web(fido2CreateCredentialRequest.origin)
+        }
         return vaultSdkSource
             .registerFido2Credential(
                 request = RegisterFido2CredentialRequest(
                     userId = userId,
-                    origin = origin,
+                    origin = sdkOrigin,
                     requestJson = """{"publicKey": ${fido2CreateCredentialRequest.requestJson}}""",
                     clientData = clientData,
                     selectedCipherView = selectedCipherView,
@@ -95,7 +102,11 @@ class Fido2CredentialManagerImpl(
             .mapCatching { json.encodeToString(it) }
             .fold(
                 onSuccess = { Fido2RegisterCredentialResult.Success(it) },
-                onFailure = { Fido2RegisterCredentialResult.Error },
+                onFailure = {
+                    Fido2RegisterCredentialResult.Error(
+                        R.string.passkey_registration_failed_due_to_an_internal_error.asText(),
+                    )
+                },
             )
     }
 
@@ -114,8 +125,10 @@ class Fido2CredentialManagerImpl(
         try {
             json.decodeFromString<PasskeyAttestationOptions>(requestJson)
         } catch (e: SerializationException) {
+            Timber.e(e, "Failed to decode passkey attestation options.")
             null
         } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Failed to decode passkey attestation options.")
             null
         }
 
@@ -125,11 +138,14 @@ class Fido2CredentialManagerImpl(
         try {
             json.decodeFromString<PasskeyAssertionOptions>(requestJson)
         } catch (e: SerializationException) {
+            Timber.e(e, "Failed to decode passkey assertion options: $e")
             null
         } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Failed to decode passkey assertion options: $e")
             null
         }
 
+    @Suppress("LongMethod")
     override suspend fun authenticateFido2Credential(
         userId: String,
         request: Fido2CredentialAssertionRequest,
@@ -139,22 +155,44 @@ class Fido2CredentialManagerImpl(
         val clientData = request.clientDataHash
             ?.let { ClientData.DefaultWithCustomHash(hash = it) }
             ?: ClientData.DefaultWithExtraData(androidPackageName = callingAppInfo.getAppOrigin())
-        val origin = callingAppInfo.origin
-            ?: getOriginUrlFromAssertionOptionsOrNull(request.requestJson)
-            ?: return Fido2CredentialAssertionResult.Error
         val relyingPartyId = json
             .decodeFromStringOrNull<PasskeyAssertionOptions>(request.requestJson)
             ?.relyingPartyId
-            ?: return Fido2CredentialAssertionResult.Error
+            ?: return Fido2CredentialAssertionResult.Error(
+                R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                    .asText(),
+            )
 
         val validateOriginResult = validateOrigin(
             callingAppInfo = callingAppInfo,
             relyingPartyId = relyingPartyId,
         )
 
+        val sdkOrigin = if (!request.origin.isNullOrEmpty()) {
+            Origin.Web(request.origin)
+        } else {
+            val hostUrl = getOriginUrlFromAssertionOptionsOrNull(request.requestJson)
+                ?: return Fido2CredentialAssertionResult.Error(
+                    R.string.passkey_operation_failed_because_host_url_is_not_present_in_request
+                        .asText(),
+                )
+            Origin.Android(
+                UnverifiedAssetLink(
+                    packageName = callingAppInfo.packageName,
+                    sha256CertFingerprint = callingAppInfo.getSignatureFingerprintAsHexString()
+                        ?: return Fido2CredentialAssertionResult.Error(
+                            R.string.passkey_operation_failed_because_app_signature_is_invalid
+                                .asText(),
+                        ),
+                    host = hostUrl,
+                    assetLinkUrl = hostUrl,
+                ),
+            )
+        }
+
         return when (validateOriginResult) {
             is Fido2ValidateOriginResult.Error -> {
-                Fido2CredentialAssertionResult.Error
+                Fido2CredentialAssertionResult.Error(validateOriginResult.messageResId.asText())
             }
 
             is Fido2ValidateOriginResult.Success -> {
@@ -162,16 +200,7 @@ class Fido2CredentialManagerImpl(
                     .authenticateFido2Credential(
                         request = AuthenticateFido2CredentialRequest(
                             userId = userId,
-                            origin = Origin.Android(
-                                UnverifiedAssetLink(
-                                    callingAppInfo.packageName,
-                                    callingAppInfo.getSignatureFingerprintAsHexString()
-                                        ?: return Fido2CredentialAssertionResult.Error,
-                                    origin.toHostOrPathOrNull()
-                                        ?: return Fido2CredentialAssertionResult.Error,
-                                    origin,
-                                ),
-                            ),
+                            origin = sdkOrigin,
                             requestJson = """{"publicKey": ${request.requestJson}}""",
                             clientData = clientData,
                             selectedCipherView = selectedCipherView,
@@ -183,7 +212,13 @@ class Fido2CredentialManagerImpl(
                     .mapCatching { json.encodeToString(it) }
                     .fold(
                         onSuccess = { Fido2CredentialAssertionResult.Success(it) },
-                        onFailure = { Fido2CredentialAssertionResult.Error },
+                        onFailure = {
+                            Timber.e(it, "Failed to authenticate FIDO2 credential.")
+                            Fido2CredentialAssertionResult.Error(
+                                R.string.passkey_authentication_failed_due_to_an_internal_error
+                                    .asText(),
+                            )
+                        },
                     )
             }
         }
@@ -195,13 +230,13 @@ class Fido2CredentialManagerImpl(
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
         getPasskeyAssertionOptionsOrNull(requestJson)
             ?.relyingPartyId
-            ?.let { "$HTTPS$it" }
+            ?.prefixHttpsIfNecessaryOrNull()
 
     private fun getOriginUrlFromAttestationOptionsOrNull(requestJson: String) =
         getPasskeyAttestationOptionsOrNull(requestJson)
             ?.relyingParty
             ?.id
-            ?.let { "$HTTPS$it" }
+            ?.prefixHttpsIfNecessaryOrNull()
 }
 
 private const val MAX_AUTHENTICATION_ATTEMPTS = 5

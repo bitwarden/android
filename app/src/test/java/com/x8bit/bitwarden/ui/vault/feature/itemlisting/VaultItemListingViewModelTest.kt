@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -470,7 +471,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -501,8 +502,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message = R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -966,24 +966,23 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `AddVaultItemClick inside a folder should emit NavigateToAddVaultItem with a selected folder id`() =
-        runTest {
-            val viewModel = createVaultItemListingViewModel(
-                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
-                    vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+    fun `AddVaultItemClick inside a folder should show item selection dialog state`() {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder(folderId = "id"),
+            ),
+        )
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
+                    folderId = "id",
                 ),
             )
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
-                assertEquals(
-                    VaultItemListingEvent.NavigateToAddVaultItem(
-                        VaultItemCipherType.LOGIN,
-                        selectedFolderId = "id",
-                    ),
-                    awaitItem(),
-                )
-            }
-        }
+                .copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
@@ -1005,6 +1004,51 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
+        }
+    }
+
+    @Test
+    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for folder selection`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder(""),
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemToAddToFolderSelected(
+                    itemType = CreateVaultItemType.FOLDER,
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddFolder(
+                    parentFolderName = "",
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for any other selection`() = runTest {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Folder("id"),
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ItemToAddToFolderSelected(
+                    itemType = CreateVaultItemType.CARD,
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = VaultItemCipherType.CARD,
+                    selectedFolderId = "id",
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -2594,7 +2638,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
         runTest {
-            val mockResult = Fido2RegisterCredentialResult.Error
+            val mockResult = Fido2RegisterCredentialResult.Error("".asText())
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
@@ -2621,7 +2665,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
         runTest {
             val mockResult = Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -2673,12 +2717,18 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createMockFido2CreateCredentialRequest(number = 1),
             )
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick(
+                    "".asText(),
+                ),
+            )
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error,
+                        result = Fido2RegisterCredentialResult.Error(
+                            "".asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -2705,11 +2755,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick("".asText()),
+            )
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Assertion(
-                        result = Fido2CredentialAssertionResult.Error,
+                        result = Fido2CredentialAssertionResult.Error("".asText()),
                     ),
                     awaitItem(),
                 )
@@ -2723,11 +2775,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance = null
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick("".asText()),
+            )
             assertEquals(
                 VaultItemListingState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.generic_error_message.asText(),
+                    message = "".asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -2962,7 +3016,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
@@ -3013,8 +3067,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message = R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3136,8 +3189,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
+                    message =
+                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3178,8 +3232,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
+                    message =
+                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                            .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3458,7 +3513,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_is_locked_out.asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3511,7 +3566,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -3524,7 +3579,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3549,7 +3605,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -3562,7 +3618,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3607,7 +3664,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                 )
             } returns Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockResponse",
+                responseJson = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
@@ -3894,8 +3951,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message =
+                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -3924,7 +3982,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4065,8 +4123,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                    .asText(),
+                message =
+                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -4094,7 +4153,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4243,7 +4302,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                message = R.string.passkey_operation_failed_because_user_verification_was_cancelled
                     .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
@@ -4310,7 +4369,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )

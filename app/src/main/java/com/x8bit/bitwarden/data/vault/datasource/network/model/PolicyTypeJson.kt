@@ -83,6 +83,12 @@ enum class PolicyTypeJson {
     ACTIVATE_AUTOFILL,
 
     /**
+     * Hides the setting to "Unlock with Pin".
+     */
+    @SerialName("14")
+    REMOVE_UNLOCK_WITH_PIN,
+
+    /**
      * Represents an unknown policy type.
      *
      * This is used for forward compatibility to handle new policy types that the client doesn't yet

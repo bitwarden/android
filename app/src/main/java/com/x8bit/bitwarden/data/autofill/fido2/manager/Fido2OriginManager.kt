@@ -20,13 +20,4 @@ interface Fido2OriginManager {
         callingAppInfo: CallingAppInfo,
         relyingPartyId: String,
     ): Fido2ValidateOriginResult
-
-    /**
-     * Returns the privileged app origin, or null if the calling app is not allowed.
-     *
-     * @param callingAppInfo The calling app info.
-     *
-     * @return The privileged app origin, or null.
-     */
-    suspend fun getPrivilegedAppOriginOrNull(callingAppInfo: CallingAppInfo): String?
 }

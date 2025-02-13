@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidUri
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -594,14 +595,3 @@ sealed class EnvironmentAction {
         ) : Internal()
     }
 }
-
-/**
- * If the given [String] is a valid URI, "https://" will be appended if it is not already present.
- * Otherwise `null` will be returned.
- */
-private fun String.prefixHttpsIfNecessaryOrNull(): String? =
-    when {
-        this.isBlank() || !this.isValidUri() -> null
-        "http://" in this || "https://" in this -> this
-        else -> "https://$this"
-    }

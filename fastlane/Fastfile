@@ -30,7 +30,7 @@ platform :android do
   desc "Assemble FDroid release APK"
   lane :assembleFDroidReleaseApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Fdroid",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -43,7 +43,7 @@ platform :android do
   desc "Assemble F-Droid Beta APK"
   lane :assembleFDroidBetaApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Fdroid",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -56,7 +56,7 @@ platform :android do
   desc "Assemble Play Store release APK"
   lane :assemblePlayStoreReleaseApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Standard",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -69,7 +69,7 @@ platform :android do
   desc "Assemble Play Store release APK"
   lane :assemblePlayStoreBetaApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Standard",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -82,7 +82,7 @@ platform :android do
   desc "Bundle Play Store release"
   lane :bundlePlayStoreRelease do |options|
     buildAndSignBitwarden(
-      taskName: "bundle",
+      taskName: "app:bundle",
       flavor: "Standard",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -95,7 +95,7 @@ platform :android do
   desc "Bundle Play Store release"
   lane :bundlePlayStoreBeta do |options|
     buildAndSignBitwarden(
-      taskName: "bundle",
+      taskName: "app:bundle",
       flavor: "Standard",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -108,7 +108,7 @@ platform :android do
   desc "Runs Standard Debug tests and generates Kover report"
   lane :check do
     gradle(
-        tasks: ["testStandardDebug", "lintStandardDebug", "detekt", "koverXmlReportStandardDebug"]
+        tasks: ["app:testStandardDebug", "app:lintStandardDebug", "app:detekt", "app:koverXmlReportStandardDebug"]
     )
   end
 
@@ -161,7 +161,7 @@ platform :android do
     # Save changes
     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
-  
+
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
   private_lane :buildAndSignBitwarden do |options|
     gradle(

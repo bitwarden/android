@@ -77,6 +77,10 @@ class FlagKeyTest {
             FlagKey.MutualTls.keyName,
             "mutual-tls",
         )
+        assertEquals(
+            FlagKey.AnonAddySelfHostAlias.keyName,
+            "anon-addy-self-host-alias",
+        )
     }
 
     @Test
@@ -97,6 +101,7 @@ class FlagKeyTest {
                 FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
+                FlagKey.AnonAddySelfHostAlias,
             ).all {
                 !it.defaultValue
             },
@@ -125,6 +130,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.MutualTls,
+                FlagKey.AnonAddySelfHostAlias,
             ).all {
                 it.isRemotelyConfigured
             },

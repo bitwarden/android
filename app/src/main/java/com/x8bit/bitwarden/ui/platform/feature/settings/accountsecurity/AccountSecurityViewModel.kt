@@ -82,6 +82,7 @@ class AccountSecurityViewModel @Inject constructor(
             vaultTimeoutPolicyMinutes = null,
             vaultTimeoutPolicyAction = null,
             shouldShowUnlockActionCard = false,
+            removeUnlockWithPinPolicyEnabled = false,
         )
     },
 ) {
@@ -106,6 +107,16 @@ class AccountSecurityViewModel @Inject constructor(
                     vaultTimeoutPolicies = policies.mapNotNull {
                         it.policyInformation as? PolicyInformation.VaultTimeout
                     },
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
+            .map { policies ->
+                AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive(
+                    removeUnlockWithPinPolicyEnabled = policies.isNotEmpty(),
                 )
             }
             .onEach(::sendAction)
@@ -390,6 +401,20 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.PinProtectedLockUpdate -> {
                 handlePinProtectedLockUpdate(action)
             }
+
+            is AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive -> {
+                handleRemovePinPolicyUpdate(action)
+            }
+        }
+    }
+
+    private fun handleRemovePinPolicyUpdate(
+        action: AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                removeUnlockWithPinPolicyEnabled = action.removeUnlockWithPinPolicyEnabled,
+            )
         }
     }
 
@@ -524,6 +549,7 @@ data class AccountSecurityState(
     val vaultTimeoutPolicyMinutes: Int?,
     val vaultTimeoutPolicyAction: String?,
     val shouldShowUnlockActionCard: Boolean,
+    val removeUnlockWithPinPolicyEnabled: Boolean,
 ) : Parcelable {
     /**
      * Indicates that there is a mechanism for unlocking your vault in place.
@@ -785,6 +811,13 @@ sealed class AccountSecurityAction {
          */
         data class PolicyUpdateReceive(
             val vaultTimeoutPolicies: List<PolicyInformation.VaultTimeout>?,
+        ) : Internal()
+
+        /**
+         * A remove pin policy update has been received.
+         */
+        data class RemovePinPolicyUpdateReceive(
+            val removeUnlockWithPinPolicyEnabled: Boolean,
         ) : Internal()
 
         /**

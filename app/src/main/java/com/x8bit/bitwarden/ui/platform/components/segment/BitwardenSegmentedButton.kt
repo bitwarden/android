@@ -17,10 +17,19 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SingleChoiceSegmentedButtonRowScope
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
+import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.segment.color.bitwardenSegmentedButtonColors
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
@@ -31,6 +40,9 @@ import kotlinx.collections.immutable.ImmutableList
  * @param options List of options to display.
  * @param modifier Modifier.
  * @param windowInsets The insets to be applied to this composable.
+ * @param optionContent For outer context the content lambda passes back the index of the option,
+ * the weighted width (in [Dp]) per option (total width / # number of options), and the
+ * corresponding [SegmentedButtonState].
  */
 @Composable
 fun BitwardenSegmentedButton(
@@ -39,10 +51,12 @@ fun BitwardenSegmentedButton(
     windowInsets: WindowInsets = WindowInsets.displayCutout
         .union(WindowInsets.navigationBars)
         .only(WindowInsetsSides.Horizontal),
+    density: Density = LocalDensity.current,
     optionContent: @Composable SingleChoiceSegmentedButtonRowScope.(
         Int,
+        Dp,
         SegmentedButtonState,
-    ) -> Unit = { _, optionState ->
+    ) -> Unit = { _, _, optionState ->
         this.SegmentedButtonOptionContent(
             option = optionState,
         )
@@ -55,6 +69,9 @@ fun BitwardenSegmentedButton(
             .padding(top = 4.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
             .windowInsetsPadding(insets = windowInsets),
     ) {
+        var weightedWidth by remember {
+            mutableStateOf(0.dp)
+        }
         SingleChoiceSegmentedButtonRow(
             modifier = Modifier
                 .fillMaxWidth()
@@ -62,11 +79,14 @@ fun BitwardenSegmentedButton(
                     color = BitwardenTheme.colorScheme.background.primary,
                     shape = BitwardenTheme.shapes.segmentedControl,
                 )
+                .onGloballyPositioned {
+                    weightedWidth = (it.size.width / options.size).toDp(density)
+                }
                 .padding(horizontal = 4.dp),
             space = 0.dp,
         ) {
             options.forEachIndexed { index, option ->
-                optionContent(index, option)
+                optionContent(index, weightedWidth, option)
             }
         }
     }
@@ -78,6 +98,7 @@ fun BitwardenSegmentedButton(
 @Composable
 fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
     option: SegmentedButtonState,
+    modifier: Modifier = Modifier,
 ) {
     SegmentedButton(
         enabled = option.isEnabled,
@@ -95,7 +116,7 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
         icon = {
             // No icon required
         },
-        modifier = Modifier.nullableTestTag(tag = option.testTag),
+        modifier = modifier.nullableTestTag(tag = option.testTag),
     )
 }
 

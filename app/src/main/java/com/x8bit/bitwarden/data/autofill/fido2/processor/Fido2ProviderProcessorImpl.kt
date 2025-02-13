@@ -104,6 +104,69 @@ class Fido2ProviderProcessorImpl(
         }
     }
 
+    override fun processGetCredentialRequest(
+        request: BeginGetCredentialRequest,
+        cancellationSignal: CancellationSignal,
+        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
+    ) {
+        // If the user is not logged in, return an error.
+        val userState = authRepository.userStateFlow.value
+        if (userState == null) {
+            callback.onError(GetCredentialUnknownException("Active user is required."))
+            return
+        }
+
+        // Return an unlock action if the current account is locked.
+        if (!userState.activeAccount.isVaultUnlocked) {
+            val authenticationAction = AuthenticationAction(
+                title = context.getString(R.string.unlock),
+                pendingIntent = intentManager.createFido2UnlockPendingIntent(
+                    action = UNLOCK_ACCOUNT_INTENT,
+                    userId = userState.activeUserId,
+                    requestCode = requestCode.getAndIncrement(),
+                ),
+            )
+
+            callback.onResult(
+                BeginGetCredentialResponse(
+                    authenticationActions = listOf(authenticationAction),
+                ),
+            )
+            return
+        }
+
+        // Otherwise, find all matching credentials from the current vault.
+        val getCredentialJob = scope.launch {
+            try {
+                val credentialEntries = getMatchingFido2CredentialEntries(
+                    userId = userState.activeUserId,
+                    request = request,
+                )
+
+                callback.onResult(
+                    BeginGetCredentialResponse(
+                        credentialEntries = credentialEntries,
+                    ),
+                )
+            } catch (e: GetCredentialException) {
+                callback.onError(e)
+            }
+        }
+        cancellationSignal.setOnCancelListener {
+            callback.onError(GetCredentialCancellationException())
+            getCredentialJob.cancel()
+        }
+    }
+
+    override fun processClearCredentialStateRequest(
+        request: ProviderClearCredentialStateRequest,
+        cancellationSignal: CancellationSignal,
+        callback: OutcomeReceiver<Void?, ClearCredentialException>,
+    ) {
+        // no-op: RFU
+        callback.onError(ClearCredentialUnsupportedException())
+    }
+
     private fun processCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
@@ -165,60 +228,6 @@ class Fido2ProviderProcessorImpl(
                 ?.let { entryBuilder.setBiometricPromptDataIfSupported(cipher = it) }
         }
         return entryBuilder.build()
-    }
-
-    override fun processGetCredentialRequest(
-        request: BeginGetCredentialRequest,
-        cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>,
-    ) {
-        // If the user is not logged in, return an error.
-        val userState = authRepository.userStateFlow.value
-        if (userState == null) {
-            callback.onError(GetCredentialUnknownException("Active user is required."))
-            return
-        }
-
-        // Return an unlock action if the current account is locked.
-        if (!userState.activeAccount.isVaultUnlocked) {
-            val authenticationAction = AuthenticationAction(
-                title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createFido2UnlockPendingIntent(
-                    action = UNLOCK_ACCOUNT_INTENT,
-                    userId = userState.activeUserId,
-                    requestCode = requestCode.getAndIncrement(),
-                ),
-            )
-
-            callback.onResult(
-                BeginGetCredentialResponse(
-                    authenticationActions = listOf(authenticationAction),
-                ),
-            )
-            return
-        }
-
-        // Otherwise, find all matching credentials from the current vault.
-        val getCredentialJob = scope.launch {
-            try {
-                val credentialEntries = getMatchingFido2CredentialEntries(
-                    userId = userState.activeUserId,
-                    request = request,
-                )
-
-                callback.onResult(
-                    BeginGetCredentialResponse(
-                        credentialEntries = credentialEntries,
-                    ),
-                )
-            } catch (e: GetCredentialException) {
-                callback.onError(e)
-            }
-        }
-        cancellationSignal.setOnCancelListener {
-            callback.onError(GetCredentialCancellationException())
-            getCredentialJob.cancel()
-        }
     }
 
     @Throws(GetCredentialUnsupportedException::class)
@@ -346,13 +355,4 @@ class Fido2ProviderProcessorImpl(
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
         .setCryptoObject(BiometricPrompt.CryptoObject(cipher))
         .build()
-
-    override fun processClearCredentialStateRequest(
-        request: ProviderClearCredentialStateRequest,
-        cancellationSignal: CancellationSignal,
-        callback: OutcomeReceiver<Void?, ClearCredentialException>,
-    ) {
-        // no-op: RFU
-        callback.onError(ClearCredentialUnsupportedException())
-    }
 }
