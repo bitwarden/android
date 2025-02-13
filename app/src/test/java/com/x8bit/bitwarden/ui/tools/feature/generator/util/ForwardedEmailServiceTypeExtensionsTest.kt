@@ -102,6 +102,9 @@ class ForwardedEmailServiceTypeExtensionsTest {
                 apiKey = "api_key_simple_login"
                     .takeUnless { useEmptyValues }
                     .orEmpty(),
+                selfHostServerUrl = "https://simplelogin.local"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
             )
         }
 
