@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 
 /**
@@ -18,7 +19,7 @@ fun ServiceType.toUsernameGeneratorRequest(
             val accessToken = this.apiAccessToken.orNullIfBlank() ?: return null
             val domain = this.domainName.orNullIfBlank() ?: return null
             val baseUrl = if (allowAddyIoSelfHostUrl && selfHostServerUrl.isNotBlank()) {
-                selfHostServerUrl
+                selfHostServerUrl.prefixHttpsIfNecessary()
             } else {
                 ServiceType.AddyIo.DEFAULT_ADDY_IO_URL
             }

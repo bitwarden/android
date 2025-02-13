@@ -480,8 +480,6 @@ class GeneratorViewModel @Inject constructor(
             }
 
             is ForwardedEmailAlias -> {
-                val shouldShowAnonAddySelfHostField =
-                    featureFlagManager.getFeatureFlag(FlagKey.AnonAddySelfHostAlias)
                 val mappedServiceType = options
                     ?.serviceType
                     ?.toServiceType(options)
