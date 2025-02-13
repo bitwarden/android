@@ -18,6 +18,7 @@ internal class ServiceTypeExtensionsTest {
         val request = addyIoServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -32,6 +33,7 @@ internal class ServiceTypeExtensionsTest {
         val request = addyIoServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -58,6 +60,7 @@ internal class ServiceTypeExtensionsTest {
             addyIoServiceType.toUsernameGeneratorRequest(
                 website = website,
                 allowAddyIoSelfHostUrl = true,
+                allowSimpleLoginSelfHostUrl = true,
             ),
         )
 
@@ -74,6 +77,7 @@ internal class ServiceTypeExtensionsTest {
             addyIoServiceType.toUsernameGeneratorRequest(
                 website = website,
                 allowAddyIoSelfHostUrl = false,
+                allowSimpleLoginSelfHostUrl = true,
             ),
         )
     }
@@ -89,6 +93,7 @@ internal class ServiceTypeExtensionsTest {
         val request = addyIoServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -110,6 +115,7 @@ internal class ServiceTypeExtensionsTest {
         val request = duckDuckGoServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -122,6 +128,7 @@ internal class ServiceTypeExtensionsTest {
         val request = duckDuckGoServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -139,6 +146,7 @@ internal class ServiceTypeExtensionsTest {
         val request = firefoxRelayServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -151,6 +159,7 @@ internal class ServiceTypeExtensionsTest {
         val request = firefoxRelayServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -168,6 +177,7 @@ internal class ServiceTypeExtensionsTest {
         val request = fastMailServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -182,6 +192,7 @@ internal class ServiceTypeExtensionsTest {
         val request = fastMailServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -202,6 +213,7 @@ internal class ServiceTypeExtensionsTest {
         val request = forwardMailServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -216,6 +228,7 @@ internal class ServiceTypeExtensionsTest {
         val request = forwardMailServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
@@ -231,6 +244,7 @@ internal class ServiceTypeExtensionsTest {
         val request = forwardEmailServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -251,23 +265,76 @@ internal class ServiceTypeExtensionsTest {
         val request = simpleLoginServiceType.toUsernameGeneratorRequest(
             website = null,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertNull(request)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request`() {
+    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is false and selfHostServerUrl is blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "testKey")
         val website = "bitwarden.com"
         val request = simpleLoginServiceType.toUsernameGeneratorRequest(
             website = website,
             allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.SimpleLogin(apiKey = "testKey"),
+                service = ForwarderServiceType.SimpleLogin(
+                    apiKey = "testKey",
+                    ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+                ),
+                website = website,
+            ),
+            request,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is true and selfHostServerUrl is blank`() {
+        val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "testKey")
+        val website = "bitwarden.com"
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
+            website = website,
+            allowSimpleLoginSelfHostServer = true,
+        )
+
+        assertEquals(
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.SimpleLogin(
+                    apiKey = "testKey",
+                    ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+                ),
+                website = website,
+            ),
+            request,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUsernameGeneratorRequest for SimpleLogin returns correct request when allowSimpleLoginSelfHostServer is true and selfHostServerUrl is not blank`() {
+        val simpleLoginServiceType = ServiceType.SimpleLogin(
+            apiKey = "testKey",
+            selfHostServerUrl = "https://simplelogin.local",
+        )
+        val website = "bitwarden.com"
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(
+            website = website,
+            allowSimpleLoginSelfHostServer = true,
+        )
+
+        assertEquals(
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.SimpleLogin(
+                    apiKey = "testKey",
+                    baseUrl = "https://simplelogin.local",
+                ),
                 website = website,
             ),
             request,

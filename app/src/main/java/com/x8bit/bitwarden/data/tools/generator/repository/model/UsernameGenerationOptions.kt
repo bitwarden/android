@@ -52,6 +52,9 @@ data class UsernameGenerationOptions(
     @SerialName("simpleLoginApiKey")
     val simpleLoginApiKey: String? = null,
 
+    @SerialName("simpleLoginSelfHostServerUrl")
+    val simpleLoginSelfHostServerUrl: String? = null,
+
     @SerialName("duckDuckGoApiKey")
     val duckDuckGoApiKey: String? = null,
 

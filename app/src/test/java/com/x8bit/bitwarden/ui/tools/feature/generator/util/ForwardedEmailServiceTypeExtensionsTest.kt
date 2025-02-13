@@ -18,6 +18,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",

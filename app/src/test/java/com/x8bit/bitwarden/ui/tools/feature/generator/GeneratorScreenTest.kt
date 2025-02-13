@@ -1853,4 +1853,5 @@ private val DEFAULT_STATE = GeneratorState(
     currentEmailAddress = "currentEmail",
     shouldShowCoachMarkTour = false,
     shouldShowAnonAddySelfHostServerUrlField = true,
+    shouldShowSimpleLoginSelfHostServerField = true,
 )

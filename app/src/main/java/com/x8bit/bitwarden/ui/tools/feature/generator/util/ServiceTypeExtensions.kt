@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 fun ServiceType.toUsernameGeneratorRequest(
     website: String?,
     allowAddyIoSelfHostUrl: Boolean,
+    allowSimpleLoginSelfHostUrl: Boolean,
 ): UsernameGeneratorRequest.Forwarded? {
     return when (this) {
         is ServiceType.AddyIo -> {
@@ -80,12 +81,17 @@ fun ServiceType.toUsernameGeneratorRequest(
         }
 
         is ServiceType.SimpleLogin -> {
+            val baseUrl = if (allowSimpleLoginSelfHostUrl && selfHostServerUrl.isNotBlank()) {
+                selfHostServerUrl
+            } else {
+                ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL
+            }
             this
                 .apiKey
                 .orNullIfBlank()
                 ?.let {
                     UsernameGeneratorRequest.Forwarded(
-                        service = ForwarderServiceType.SimpleLogin(apiKey = it),
+                        service = ForwarderServiceType.SimpleLogin(apiKey = it, baseUrl = baseUrl),
                         website = website,
                     )
                 }

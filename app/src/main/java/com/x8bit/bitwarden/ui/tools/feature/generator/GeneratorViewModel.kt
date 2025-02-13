@@ -115,6 +115,8 @@ class GeneratorViewModel @Inject constructor(
             shouldShowAnonAddySelfHostServerUrlField = featureFlagManager.getFeatureFlag(
                 FlagKey.AnonAddySelfHostAlias,
             ),
+            shouldShowSimpleLoginSelfHostServerField =
+                featureFlagManager.getFeatureFlag(FlagKey.SimpleLoginSelfHostAlias),
         )
     },
 ) {
@@ -148,6 +150,15 @@ class GeneratorViewModel @Inject constructor(
                 GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive(
                     shouldShowAnonAddySelfHostServerUrlField =
                         shouldShowAnonAddySelfHostServerUrlField,
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.SimpleLoginSelfHostAlias)
+            .map { shouldShowSimpleLoginSelfHostServerField ->
+                GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive(
+                    shouldShowSelfHostServerField = shouldShowSimpleLoginSelfHostServerField,
                 )
             }
             .onEach(::sendAction)
@@ -249,6 +260,10 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.MainType.Username.UsernameType.RandomWord -> {
                 handleRandomWordSpecificAction(action)
             }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.SimpleLogin.SelfHostServerUrlChange -> {
+                handleSimpleLoginSelfHostServerUrlChange(action)
+            }
         }
     }
 
@@ -288,6 +303,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.ShouldShowAnonAddySelfHostValueChangeReceive -> {
                 handleShouldShowAnonAddySelfHostValueChange(action)
+            }
+
+            is GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive -> {
+                handleShouldShowSimpleLoginSelfHostValueChange(action)
             }
         }
     }
@@ -594,6 +613,8 @@ class GeneratorViewModel @Inject constructor(
                 type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
                 serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN,
                 simpleLoginApiKey = forwardedEmailAlias.selectedServiceType.apiKey,
+                simpleLoginSelfHostServerUrl =
+                    forwardedEmailAlias.selectedServiceType.selfHostServerUrl,
             )
 
             is ForwardEmail -> options.copy(
@@ -643,6 +664,7 @@ class GeneratorViewModel @Inject constructor(
             catchAllEmailDomain = "",
             firefoxRelayApiAccessToken = "",
             simpleLoginApiKey = "",
+            simpleLoginSelfHostServerUrl = "",
             duckDuckGoApiKey = "",
             fastMailApiKey = "",
             anonAddyApiAccessToken = "",
@@ -810,6 +832,14 @@ class GeneratorViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(shouldShowCoachMarkTour = action.shouldShowCoachMarkTour)
+        }
+    }
+
+    private fun handleShouldShowSimpleLoginSelfHostValueChange(
+        action: GeneratorAction.Internal.ShouldShowSimpleLoginSelfHostValueChangeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(shouldShowSimpleLoginSelfHostServerField = action.shouldShowSelfHostServerField)
         }
     }
 
@@ -1392,6 +1422,21 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
+    private fun handleSimpleLoginSelfHostServerUrlChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .SimpleLogin
+        .SelfHostServerUrlChange,
+    ) {
+        updateSimpleLoginServiceType { simpleLoginServiceType ->
+            val newServerUrl = action.url
+            simpleLoginServiceType.copy(selfHostServerUrl = newServerUrl)
+        }
+    }
+
     //endregion SimpleLogin Service Specific Handlers
 
     //region Plus Addressed Email Specific Handlers
@@ -1538,6 +1583,7 @@ class GeneratorViewModel @Inject constructor(
             ?.toUsernameGeneratorRequest(
                 website = state.website,
                 allowAddyIoSelfHostUrl = state.shouldShowAnonAddySelfHostServerUrlField,
+                allowSimpleLoginSelfHostServer = state.shouldShowSimpleLoginSelfHostServerField,
             )
             ?: run {
                 mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
@@ -1840,6 +1886,7 @@ data class GeneratorState(
     var passcodePolicyOverride: PasscodePolicyOverride? = null,
     private val shouldShowCoachMarkTour: Boolean,
     val shouldShowAnonAddySelfHostServerUrlField: Boolean,
+    val shouldShowSimpleLoginSelfHostServerField: Boolean,
 ) : Parcelable {
 
     /**
@@ -2243,9 +2290,15 @@ data class GeneratorState(
                         @Parcelize
                         data class SimpleLogin(
                             val apiKey: String = "",
+                            val selfHostServerUrl: String = "",
                         ) : ServiceType(), Parcelable {
                             override val displayStringResId: Int
                                 get() = ServiceTypeOption.SIMPLE_LOGIN.labelRes
+
+                            @Suppress("UndocumentedPublicClass")
+                            companion object {
+                                const val DEFAULT_SIMPLE_LOGIN_URL = "https://app.simplelogin.io"
+                            }
                         }
                     }
                 }
@@ -2586,6 +2639,13 @@ sealed class GeneratorAction {
                          * @property apiKey The new api key text.
                          */
                         data class ApiKeyTextChange(val apiKey: String) : SimpleLogin()
+
+                        /**
+                         * Fired when the self host server url input text is changed.
+                         *
+                         * @property url The new self host server url text.
+                         */
+                        data class SelfHostServerUrlChange(val url: String) : SimpleLogin()
                     }
                 }
 
@@ -2703,6 +2763,13 @@ sealed class GeneratorAction {
          */
         data class ShouldShowAnonAddySelfHostValueChangeReceive(
             val shouldShowAnonAddySelfHostServerUrlField: Boolean,
+        ) : Internal()
+
+        /**
+         * The value for the shouldShowSimpleLoginSelfHostServerField has changed.
+         */
+        data class ShouldShowSimpleLoginSelfHostValueChangeReceive(
+            val shouldShowSelfHostServerField: Boolean,
         ) : Internal()
     }
 }
