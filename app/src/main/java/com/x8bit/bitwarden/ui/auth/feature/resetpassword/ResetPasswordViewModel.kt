@@ -40,8 +40,9 @@ class ResetPasswordViewModel @Inject constructor(
 ) : BaseViewModel<ResetPasswordState, ResetPasswordEvent, ResetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
+            val policies = authRepository.passwordPolicies
             ResetPasswordState(
-                policies = authRepository.passwordPolicies.toDisplayLabels(),
+                policies = policies.toDisplayLabels(),
                 resetReason = authRepository.passwordResetReason,
                 dialogState = null,
                 currentPasswordInput = "",
@@ -49,8 +50,7 @@ class ResetPasswordViewModel @Inject constructor(
                 retypePasswordInput = "",
                 passwordHintInput = "",
                 passwordStrengthState = PasswordStrengthState.NONE,
-                minimumPasswordLength = authRepository
-                    .passwordPolicies
+                minimumPasswordLength = policies
                     .toStrictestPolicy()
                     .minLength
                     ?: MIN_PASSWORD_LENGTH,
