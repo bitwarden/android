@@ -305,7 +305,6 @@ class ExportVaultScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = ExportVaultState(
     confirmFilePasswordInput = "",
     dialogState = null,
-    email = "test@bitwarden.com",
     exportFormat = ExportVaultFormat.JSON,
     filePasswordInput = "",
     passwordInput = "",

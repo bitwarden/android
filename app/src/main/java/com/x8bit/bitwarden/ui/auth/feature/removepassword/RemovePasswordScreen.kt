@@ -105,7 +105,7 @@ private fun RemovePasswordScreenContent(
             value = state.input,
             onValueChange = onInputChanged,
             showPasswordTestTag = "PasswordVisibilityToggle",
-            textFieldTestTag = "MasterPasswordEntry",
+            passwordFieldTestTag = "MasterPasswordEntry",
             autoFocus = true,
             cardStyle = CardStyle.Full,
             modifier = Modifier

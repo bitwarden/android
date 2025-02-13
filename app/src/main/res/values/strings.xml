@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Would you like to switch to it now?</string>
   <string name="master_password">Master password</string>
   <string name="master_password_required">Master password (required)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">More</string>
   <string name="my_vault">My vault</string>
   <string name="authenticator">Authenticator</string>
@@ -186,6 +187,7 @@
   <string name="rate_the_app_description">Please consider helping us out with a good review!</string>
   <string name="regenerate_password">Regenerate password</string>
   <string name="retype_master_password">Re-type master password</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Search vault</string>
   <string name="security">Security</string>
@@ -829,7 +831,7 @@ Do you want to switch to this account?</string>
   <string name="data_region">Data region</string>
   <string name="region">Region</string>
   <string name="update_weak_master_password_warning">Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
-  <string name="current_master_password">Current master password</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Logged in!</string>
   <string name="approve_with_my_other_device">Approve with my other device</string>
   <string name="request_admin_approval">Request admin approval</string>
@@ -1021,12 +1023,14 @@ Do you want to switch to this account?</string>
   <string name="generate_button_label">Generate</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Help with server geolocations.</string>
   <string name="email_address_required">Email address (required)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
   <string name="change_email_address">Change email address</string>
   <string name="next">Next</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
@@ -1046,6 +1050,7 @@ Do you want to switch to this account?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Get started</string>
   <string name="save_and_protect_your_data">Save and protect your data</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>

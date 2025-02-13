@@ -362,8 +362,10 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
 
     /**
      * Get the password strength for the given [email] and [password] combo.
+     * If no value is passed for the [email] will use the active email of the current active
+     * account via the [userStateFlow].
      */
-    suspend fun getPasswordStrength(email: String, password: String): PasswordStrengthResult
+    suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
      * Validates the master password for the current logged in user.

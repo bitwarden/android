@@ -4,10 +4,14 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordViewModel
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -57,7 +61,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     @Test
     fun `SubmitClicked with blank password shows error alert`() {
         val viewModel = createViewModel()
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -84,10 +88,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.validatePasswordAgainstPolicies(password)
         } returns false
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -96,6 +103,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                     message = R.string.master_password_policy_validation_message.asText(),
                 ),
                 passwordInput = password,
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -107,10 +115,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         every {
             authRepository.passwordResetReason
         } returns ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -121,6 +132,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                         .asText(MIN_PASSWORD_LENGTH),
                 ),
                 passwordInput = password,
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -132,11 +144,14 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.validatePasswordAgainstPolicies(password)
         } returns true
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
 
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -145,6 +160,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                     message = R.string.master_password_confirmation_val_message.asText(),
                 ),
                 passwordInput = password,
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -160,13 +176,16 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Error
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(currentPassword))
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
         viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(password))
 
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -177,6 +196,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                 currentPasswordInput = currentPassword,
                 passwordInput = password,
                 retypePasswordInput = password,
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -192,13 +212,16 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Success(isValid = false)
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(currentPassword))
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
         viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(password))
 
-        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -209,6 +232,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                 currentPasswordInput = currentPassword,
                 passwordInput = password,
                 retypePasswordInput = password,
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
             ),
             viewModel.stateFlow.value,
         )
@@ -227,6 +251,9 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.resetPassword(any(), any(), any())
         } returns ResetPasswordResult.Success
+        coEvery {
+            authRepository.getPasswordStrength(password = any())
+        } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(currentPassword))
@@ -240,11 +267,12 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                     currentPasswordInput = currentPassword,
                     passwordInput = password,
                     retypePasswordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
 
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+            viewModel.trySendAction(ResetPasswordAction.SaveClick)
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -254,6 +282,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                     currentPasswordInput = currentPassword,
                     passwordInput = password,
                     retypePasswordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
@@ -264,6 +293,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                     currentPasswordInput = currentPassword,
                     passwordInput = password,
                     retypePasswordInput = password,
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
                 ),
                 awaitItem(),
             )
@@ -272,18 +302,40 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `PasswordInputChanged should update the password input in the state`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged("Test123"))
+    fun `PasswordInputChanged should update the password input in the state along with the password strength state`() =
+        runTest {
+            val passwordInput = "Test123"
+            val viewModel = createViewModel()
+            coEvery {
+                authRepository.getPasswordStrength(password = any())
+            } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
 
-        assertEquals(
-            DEFAULT_STATE.copy(
-                passwordInput = "Test123",
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(input = passwordInput))
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = passwordInput,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        passwordInput = passwordInput,
+                        passwordStrengthState = PasswordStrengthState.STRONG,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.getPasswordStrength(
+                    password = passwordInput,
+                )
+            }
+        }
 
     @Test
     fun `RetypePasswordInputChanged should update the retype password input in the state`() {
@@ -311,6 +363,19 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `LearnHowPreventLockoutClick action sends NavigateToPreventAccountLockout event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ResetPasswordAction.LearnHowPreventLockoutClick)
+                assertEquals(
+                    ResetPasswordEvent.NavigateToPreventAccountLockout,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(): ResetPasswordViewModel =
         ResetPasswordViewModel(
             authRepository = authRepository,
@@ -327,4 +392,6 @@ private val DEFAULT_STATE = ResetPasswordState(
     passwordInput = "",
     retypePasswordInput = "",
     passwordHintInput = "",
+    passwordStrengthState = PasswordStrengthState.NONE,
+    minimumPasswordLength = 12,
 )
