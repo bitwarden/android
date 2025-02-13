@@ -52,6 +52,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
             catchAllEmailDomain = null,
             firefoxRelayApiAccessToken = null,
             simpleLoginApiKey = null,
+            simpleLoginSelfHostServerUrl = null,
             duckDuckGoApiKey = null,
             fastMailApiKey = null,
             anonAddyApiAccessToken = null,
