@@ -1873,7 +1873,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2ErrorDialogClick(
+                    message = dialogMessage.asText(),
+                ),
+            )
         }
     }
 

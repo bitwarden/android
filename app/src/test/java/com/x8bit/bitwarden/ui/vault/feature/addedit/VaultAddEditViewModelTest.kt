@@ -833,7 +833,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             val mockCreateResult = Fido2RegisterCredentialResult.Success(
-                registrationResponse = "mockRegistrationResponse",
+                responseJson = "mockRegistrationResponse",
             )
             val mockAttestationOptions = createMockPasskeyAttestationOptions(
                 number = 1,
@@ -989,7 +989,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     fido2CreateCredentialRequest = fido2CredentialRequest,
                     selectedCipherView = any(),
                 )
-            } returns Fido2RegisterCredentialResult.Success(registrationResponse = "mockResponse")
+            } returns Fido2RegisterCredentialResult.Success(responseJson = "mockResponse")
 
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
@@ -2045,12 +2045,19 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed)
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.Fido2ErrorDialogDismissed(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+            )
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialog)
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error,
+                        result = Fido2RegisterCredentialResult.Error(
+                            R.string.passkey_operation_failed_because_user_could_not_be_verified
+                                .asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -4149,7 +4156,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                     )
                 } returns Fido2RegisterCredentialResult.Success(
-                    registrationResponse = "mockResponse",
+                    responseJson = "mockResponse",
                 )
 
                 viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
@@ -4181,7 +4188,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                     )
                 } returns Fido2RegisterCredentialResult.Success(
-                    registrationResponse = "mockResponse",
+                    responseJson = "mockResponse",
                 )
 
                 viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
@@ -4218,7 +4225,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             runTest {
                 val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
-                    registrationResponse = "mockResponse",
+                    responseJson = "mockResponse",
                 )
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
@@ -4261,7 +4268,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
             runTest {
                 val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
-                val mockResult = Fido2RegisterCredentialResult.Error
+                val mockResult = Fido2RegisterCredentialResult.Error("".asText())
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
                 )
@@ -4299,7 +4306,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             runTest {
                 val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
-                    registrationResponse = "mockResponse",
+                    responseJson = "mockResponse",
                 )
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
