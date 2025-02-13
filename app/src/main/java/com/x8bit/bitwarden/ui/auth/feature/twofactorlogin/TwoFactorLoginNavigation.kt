@@ -36,7 +36,7 @@ data class TwoFactorLoginArgs(
         emailAddress = checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
         password = savedStateHandle.get<String>(PASSWORD)?.base64UrlDecodeOrNull(),
         orgIdentifier = savedStateHandle.get<String>(ORG_IDENTIFIER)?.base64UrlDecodeOrNull(),
-        isNewDeviceVerification = savedStateHandle.get<Boolean>(NEW_DEVICE_VERIFICATION) as Boolean,
+        isNewDeviceVerification = savedStateHandle.get<Boolean>(NEW_DEVICE_VERIFICATION) ?: false,
     )
 }
 
