@@ -19,7 +19,7 @@ private const val NEW_DEVICE_VERIFICATION = "new_device_verification"
 private const val TWO_FACTOR_LOGIN_ROUTE =
     "$TWO_FACTOR_LOGIN_PREFIX/{$EMAIL_ADDRESS}?" +
         "$PASSWORD={$PASSWORD}&" +
-        "$ORG_IDENTIFIER={$ORG_IDENTIFIER}" +
+        "$ORG_IDENTIFIER={$ORG_IDENTIFIER}&" +
         "$NEW_DEVICE_VERIFICATION={$NEW_DEVICE_VERIFICATION}"
 
 /**
@@ -53,7 +53,7 @@ fun NavController.navigateToTwoFactorLogin(
     this.navigate(
         route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?" +
             "$PASSWORD=${password?.base64UrlEncode()}&" +
-            "$ORG_IDENTIFIER=${orgIdentifier?.base64UrlEncode()}" +
+            "$ORG_IDENTIFIER=${orgIdentifier?.base64UrlEncode()}&" +
             "$NEW_DEVICE_VERIFICATION=$isNewDeviceVerification",
         navOptions = navOptions,
     )
