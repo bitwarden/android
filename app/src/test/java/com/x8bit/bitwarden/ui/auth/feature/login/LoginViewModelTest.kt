@@ -482,6 +482,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     LoginEvent.NavigateToTwoFactorLogin(
                         emailAddress = EMAIL,
                         password = password,
+                        isNewDeviceVerification = true,
                     ),
                     awaitItem(),
                 )
