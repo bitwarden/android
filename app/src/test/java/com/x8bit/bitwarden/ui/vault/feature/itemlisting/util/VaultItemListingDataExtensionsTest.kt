@@ -731,9 +731,9 @@ class VaultItemListingDataExtensionsTest {
         // SSH keys
         assertEquals(
             VaultItemListingState.ViewState.NoItems(
-                message = R.string.no_items.asText(),
+                message = R.string.no_ssh_keys.asText(),
                 shouldShowAddButton = false,
-                buttonText = R.string.new_item.asText(),
+                buttonText = R.string.new_ssh_key.asText(),
             ),
             vaultData.toViewState(
                 itemListingType = VaultItemListingState.ItemListingType.Vault.SshKey,
