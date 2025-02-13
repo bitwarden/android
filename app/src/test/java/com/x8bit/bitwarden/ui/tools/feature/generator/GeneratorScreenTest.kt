@@ -1365,6 +1365,93 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+            ),
+        )
+
+        val newSelfHostServerUrl = "https://simplelogin.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newSelfHostServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .SimpleLogin
+                    .SelfHostServerUrlChange(url = newSelfHostServerUrl),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, should display self host server url field based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = true,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate disabling the feature flag.
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertDoesNotExist()
+    }
+
     //endregion SimpleLogin Service Type Tests
 
     //region ForwardEmail Service Type Tests

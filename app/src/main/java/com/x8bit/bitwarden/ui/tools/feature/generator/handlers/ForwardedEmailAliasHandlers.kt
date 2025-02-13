@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorAction.MainType.U
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 data class ForwardedEmailAliasHandlers(
     val onServiceChange: (ForwardedEmailAlias.ServiceTypeOption) -> Unit,
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
@@ -24,6 +24,7 @@ data class ForwardedEmailAliasHandlers(
     val onForwardEmailApiKeyTextChange: (String) -> Unit,
     val onForwardEmailDomainNameTextChange: (String) -> Unit,
     val onSimpleLoginApiKeyTextChange: (String) -> Unit,
+    val onSimpleLoginSelfHostServerUrlChange: (String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -91,6 +92,13 @@ data class ForwardedEmailAliasHandlers(
             onSimpleLoginApiKeyTextChange = { newApiKey ->
                 viewModel.trySendAction(
                     ForwardedEmailAliasAction.SimpleLogin.ApiKeyTextChange(apiKey = newApiKey),
+                )
+            },
+            onSimpleLoginSelfHostServerUrlChange = { newServerUrl ->
+                viewModel.trySendAction(
+                    ForwardedEmailAliasAction.SimpleLogin.SelfHostServerUrlChange(
+                        url = newServerUrl,
+                    ),
                 )
             },
         )

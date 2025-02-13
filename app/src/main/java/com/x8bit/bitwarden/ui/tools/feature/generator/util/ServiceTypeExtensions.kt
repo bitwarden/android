@@ -82,7 +82,7 @@ fun ServiceType.toUsernameGeneratorRequest(
 
         is ServiceType.SimpleLogin -> {
             val baseUrl = if (allowSimpleLoginSelfHostUrl && selfHostServerUrl.isNotBlank()) {
-                selfHostServerUrl
+                selfHostServerUrl.prefixHttpsIfNecessary()
             } else {
                 ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL
             }

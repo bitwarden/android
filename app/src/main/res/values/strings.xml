@@ -1210,4 +1210,5 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="self_host_server_url">Self-host server URL</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>
