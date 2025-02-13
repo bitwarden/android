@@ -164,8 +164,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
