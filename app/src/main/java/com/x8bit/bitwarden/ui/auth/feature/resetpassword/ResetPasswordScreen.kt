@@ -208,7 +208,7 @@ private fun ResetPasswordScreenContent(
 
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenPasswordField(
-                label = stringResource(id = R.string.current_master_password),
+                label = stringResource(id = R.string.current_master_password_required),
                 value = state.currentPasswordInput,
                 onValueChange = onCurrentPasswordInputChanged,
                 passwordFieldTestTag = "MasterPasswordField",

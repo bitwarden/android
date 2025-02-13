@@ -184,7 +184,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         )
         coEvery {
             authRepository.getPasswordStrength(
-                email = EMAIL_ADDRESS,
                 password = password,
             )
         } returns PasswordStrengthResult.Success(
@@ -280,7 +279,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         val password = "password"
         coEvery {
             authRepository.getPasswordStrength(
-                email = EMAIL_ADDRESS,
                 password = password,
             )
         } returns PasswordStrengthResult.Success(
@@ -334,7 +332,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         )
         coEvery {
             authRepository.getPasswordStrength(
-                email = EMAIL_ADDRESS,
                 password = password,
             )
         } returns PasswordStrengthResult.Success(
@@ -443,7 +440,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         val password = "Test123"
         coEvery {
             authRepository.getPasswordStrength(
-                email = EMAIL_ADDRESS,
                 password = password,
             )
         } returns PasswordStrengthResult.Success(
@@ -461,7 +457,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         )
         coVerify {
             authRepository.getPasswordStrength(
-                email = EMAIL_ADDRESS,
                 password = password,
             )
         }
@@ -750,14 +745,13 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     )
 }
 
-private const val EMAIL_ADDRESS = "active@bitwarden.com"
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(
         UserState.Account(
             userId = "activeUserId",
             name = "Active User",
-            email = EMAIL_ADDRESS,
+            email = "email",
             avatarColorHex = "#aa00aa",
             environment = Environment.Us,
             isPremium = true,
@@ -779,7 +773,6 @@ private val DEFAULT_USER_STATE = UserState(
 private val DEFAULT_STATE = ExportVaultState(
     confirmFilePasswordInput = "",
     dialogState = null,
-    email = EMAIL_ADDRESS,
     exportFormat = ExportVaultFormat.JSON,
     filePasswordInput = "",
     passwordInput = "",

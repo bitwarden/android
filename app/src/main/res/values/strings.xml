@@ -829,7 +829,7 @@ Do you want to switch to this account?</string>
   <string name="data_region">Data region</string>
   <string name="region">Region</string>
   <string name="update_weak_master_password_warning">Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
-  <string name="current_master_password">Current master password (required)</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Logged in!</string>
   <string name="approve_with_my_other_device">Approve with my other device</string>
   <string name="request_admin_approval">Request admin approval</string>
