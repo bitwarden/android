@@ -22,7 +22,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
             anonAddyDomainName = "anonaddy.com",
-            anonAddySelfHostServerUrl = "anonaddy.local",
+            anonAddySelfHostServerUrl = "https://anonaddy.local",
             forwardEmailApiAccessToken = "access_token_forward_email",
             forwardEmailDomainName = "forwardemail.net",
             emailWebsite = "email.example.com",
@@ -82,7 +82,9 @@ class ForwardedEmailServiceTypeExtensionsTest {
             ServiceType.AddyIo(
                 apiAccessToken = "access_token_anon_addy".takeUnless { useEmptyValues }.orEmpty(),
                 domainName = "anonaddy.com".takeUnless { useEmptyValues }.orEmpty(),
-                selfHostServerUrl = "anonaddy.local".takeUnless { useEmptyValues }.orEmpty(),
+                selfHostServerUrl = "https://anonaddy.local"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
             )
         }
 
