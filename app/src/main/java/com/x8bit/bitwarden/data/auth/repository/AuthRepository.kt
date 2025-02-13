@@ -148,11 +148,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val showWelcomeCarousel: Boolean
 
     /**
-     * Is this a New Device Validation flow
-     */
-    var newDeviceVerification: Boolean
-
-    /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
      */
     fun clearPendingAccountDeletion()

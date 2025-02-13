@@ -209,6 +209,7 @@ class LoginViewModel @Inject constructor(
                     LoginEvent.NavigateToTwoFactorLogin(
                         emailAddress = state.emailAddress,
                         password = state.passwordInput,
+                        isNewDeviceVerification = true,
                     ),
                 )
             }
@@ -376,6 +377,7 @@ sealed class LoginEvent {
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
         val password: String?,
+        val isNewDeviceVerification: Boolean = false,
     ) : LoginEvent()
 
     /**

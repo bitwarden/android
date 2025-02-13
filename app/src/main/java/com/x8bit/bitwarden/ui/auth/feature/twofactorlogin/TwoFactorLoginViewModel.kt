@@ -74,7 +74,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 email = args.emailAddress,
                 password = args.password,
                 orgIdentifier = args.orgIdentifier,
-                isNewDeviceVerification = authRepository.newDeviceVerification,
+                isNewDeviceVerification = args.isNewDeviceVerification,
             )
         },
 ) {
@@ -484,7 +484,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 
         // Resend the email notification.
         viewModelScope.launch {
-            val result = if (!authRepository.newDeviceVerification) {
+            val result = if (!state.isNewDeviceVerification) {
                 authRepository.resendVerificationCodeEmail()
             } else {
                 authRepository.resendNewDeviceOtp()
@@ -573,7 +573,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = if (authRepository.newDeviceVerification) {
+            val result = if (state.isNewDeviceVerification) {
                 authRepository.login(
                     email = state.email,
                     password = state.password,

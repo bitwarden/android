@@ -15,10 +15,12 @@ private const val EMAIL_ADDRESS = "email_address"
 private const val PASSWORD = "password"
 private const val ORG_IDENTIFIER = "org_identifier"
 private const val TWO_FACTOR_LOGIN_PREFIX = "two_factor_login"
+private const val NEW_DEVICE_VERIFICATION = "new_device_verification"
 private const val TWO_FACTOR_LOGIN_ROUTE =
     "$TWO_FACTOR_LOGIN_PREFIX/{$EMAIL_ADDRESS}?" +
         "$PASSWORD={$PASSWORD}&" +
-        "$ORG_IDENTIFIER={$ORG_IDENTIFIER}"
+        "$ORG_IDENTIFIER={$ORG_IDENTIFIER}" +
+        "$NEW_DEVICE_VERIFICATION={$NEW_DEVICE_VERIFICATION}"
 
 /**
  * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
@@ -28,11 +30,13 @@ data class TwoFactorLoginArgs(
     val emailAddress: String,
     val password: String?,
     val orgIdentifier: String?,
+    val isNewDeviceVerification: Boolean,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
         password = savedStateHandle.get<String>(PASSWORD)?.base64UrlDecodeOrNull(),
         orgIdentifier = savedStateHandle.get<String>(ORG_IDENTIFIER)?.base64UrlDecodeOrNull(),
+        isNewDeviceVerification = savedStateHandle.get<Boolean>(NEW_DEVICE_VERIFICATION) as Boolean,
     )
 }
 
@@ -44,11 +48,13 @@ fun NavController.navigateToTwoFactorLogin(
     password: String?,
     orgIdentifier: String?,
     navOptions: NavOptions? = null,
+    isNewDeviceVerification: Boolean = false,
 ) {
     this.navigate(
         route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?" +
             "$PASSWORD=${password?.base64UrlEncode()}&" +
-            "$ORG_IDENTIFIER=${orgIdentifier?.base64UrlEncode()}",
+            "$ORG_IDENTIFIER=${orgIdentifier?.base64UrlEncode()}" +
+            "$NEW_DEVICE_VERIFICATION=$isNewDeviceVerification",
         navOptions = navOptions,
     )
 }
@@ -70,6 +76,9 @@ fun NavGraphBuilder.twoFactorLoginDestination(
             navArgument(ORG_IDENTIFIER) {
                 type = NavType.StringType
                 nullable = true
+            },
+            navArgument(NEW_DEVICE_VERIFICATION) {
+                type = NavType.BoolType
             },
         ),
     ) {

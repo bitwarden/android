@@ -238,8 +238,6 @@ class AuthRepositoryImpl(
      */
     private var passwordsToCheckMap = mutableMapOf<String, String>()
 
-    override var newDeviceVerification: Boolean = false
-
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
@@ -1804,7 +1802,6 @@ class AuthRepositoryImpl(
         settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()
         hasPendingAccountAddition = false
-        newDeviceVerification = false
         LoginResult.Success
     }
 
@@ -1830,9 +1827,6 @@ class AuthRepositoryImpl(
 
         // If this error was received, it also means any cached two-factor token is invalid.
         authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
-
-        // We should ensure newDeviceVerification is false before navigating
-        newDeviceVerification = false
         return LoginResult.TwoFactorRequired
     }
 
@@ -1845,7 +1839,6 @@ class AuthRepositoryImpl(
         authModel: IdentityTokenAuthModel,
         error: String?,
     ): LoginResult {
-        newDeviceVerification = true
         identityTokenAuthModel = authModel
         resendNewDeviceOtpRequestJson = ResendNewDeviceOtpRequestJson(
             email = email,
