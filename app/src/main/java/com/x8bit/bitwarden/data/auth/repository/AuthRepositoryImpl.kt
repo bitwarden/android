@@ -1196,12 +1196,17 @@ class AuthRepositoryImpl(
             )
 
     override suspend fun getPasswordStrength(
-        email: String,
+        email: String?,
         password: String,
     ): PasswordStrengthResult =
         authSdkSource
             .passwordStrength(
-                email = email,
+                email = email
+                    ?: userStateFlow
+                        .value
+                        ?.activeAccount
+                        ?.email
+                        .orEmpty(),
                 password = password,
             )
             .fold(

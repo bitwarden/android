@@ -126,7 +126,6 @@ class ResetPasswordViewModel @Inject constructor(
         } else {
             passwordStrengthJob = viewModelScope.launch {
                 val result = authRepository.getPasswordStrength(
-                    email = authRepository.userStateFlow.value?.activeAccount?.email.orEmpty(),
                     password = input,
                 )
                 trySendAction(ResetPasswordAction.Internal.ReceivePasswordStrengthResult(result))

@@ -23,7 +23,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -32,7 +31,6 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { passwordPolicies } returns emptyList()
         every { passwordResetReason } returns ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
-        every { userStateFlow } returns MutableStateFlow(null)
     }
 
     private val savedStateHandle = SavedStateHandle()
@@ -91,7 +89,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.validatePasswordAgainstPolicies(password)
         } returns false
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -118,7 +116,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.passwordResetReason
         } returns ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -147,7 +145,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.validatePasswordAgainstPolicies(password)
         } returns true
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -179,7 +177,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Error
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -215,7 +213,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.validatePassword(currentPassword)
         } returns ValidatePasswordResult.Success(isValid = false)
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -254,7 +252,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             authRepository.resetPassword(any(), any(), any())
         } returns ResetPasswordResult.Success
         coEvery {
-            authRepository.getPasswordStrength(any(), any())
+            authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
 
         val viewModel = createViewModel()
@@ -311,7 +309,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             val passwordInput = "Test123"
             val viewModel = createViewModel()
             coEvery {
-                authRepository.getPasswordStrength(any(), any())
+                authRepository.getPasswordStrength(password = any())
             } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_4)
 
             viewModel.stateFlow.test {
@@ -334,7 +332,6 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
             }
             coVerify {
                 authRepository.getPasswordStrength(
-                    email = "",
                     password = passwordInput,
                 )
             }
