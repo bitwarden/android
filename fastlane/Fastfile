@@ -108,7 +108,7 @@ platform :android do
   desc "Runs Standard Debug tests and generates Kover report"
   lane :check do
     gradle(
-        tasks: ["testStandardDebug", "lintStandardDebug", "detekt", "koverXmlReportStandardDebug"]
+        tasks: ["app:testStandardDebug", "app:lintStandardDebug", "app:detekt", "app:koverXmlReportStandardDebug"]
     )
   end
 
