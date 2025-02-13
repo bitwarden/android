@@ -2165,7 +2165,7 @@ data class GeneratorState(
                         data class AddyIo(
                             val apiAccessToken: String = "",
                             val domainName: String = "",
-                            internal val selfHostServerUrl: String = "",
+                            val selfHostServerUrl: String = "",
                         ) : ServiceType(), Parcelable {
                             override val displayStringResId: Int
                                 get() = ServiceTypeOption.ADDY_IO.labelRes
