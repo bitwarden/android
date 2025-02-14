@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.sdk
 
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.TotpResponse
+import com.bitwarden.vault.TotpResponse
 
 /**
  * Source of authenticator information from the Bitwarden SDK.

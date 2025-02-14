@@ -2,9 +2,9 @@ package com.bitwarden.authenticator.data.authenticator.datasource.sdk
 
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.TotpResponse
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.sdk.Client
+import com.bitwarden.vault.TotpResponse
 import javax.inject.Inject
 
 /**

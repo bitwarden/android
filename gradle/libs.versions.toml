@@ -26,7 +26,7 @@ androidxTestRules = "1.6.1"
 androidXAppCompat = "1.7.0"
 androdixAutofill = "1.1.0"
 androidxWork = "2.10.0"
-bitwardenSdk = "0.4.0-20240314.115913-173"
+bitwardenSdk = "1.0.0-20250213.181812-113"
 crashlytics = "3.0.2"
 detekt = "1.23.7"
 espresso = "3.6.1"
@@ -90,7 +90,7 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
-bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
+bitwarden-sdk = { module = "com.bitwarden:sdk-android-temp", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
