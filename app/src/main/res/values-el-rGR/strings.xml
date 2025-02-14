@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Θα θέλατε να το αλλάξετε τώρα?</string>
   <string name="master_password">Κύριος κωδικός</string>
   <string name="master_password_required">Κύριος κωδικός πρόσβασης (απαιτείται)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Περισσότερα</string>
   <string name="my_vault">Η κρύπτη μου</string>
   <string name="authenticator">Αυθεντικοποιητής</string>
@@ -58,7 +59,7 @@
   <string name="send_name_required">"Send name (required)"</string>
   <string name="no">Όχι</string>
   <string name="notes">Σημειώσεις</string>
-  <string name="private_notes">Private notes</string>
+  <string name="private_notes">Ιδιωτικές σημειώσεις</string>
   <string name="ok">Οκ</string>
   <string name="password">Κωδικός</string>
   <string name="save">Αποθήκευση</string>
@@ -72,7 +73,7 @@
   <string name="thank_you">Ευχαριστούμε</string>
   <string name="tools">Εργαλεία</string>
   <string name="uri">URI</string>
-  <string name="website_uri">Website (URI)</string>
+  <string name="website_uri">Ιστοσελίδα (URI)</string>
   <string name="use_fingerprint_to_unlock">Χρήση δακτυλικού αποτυπώματος για ξεκλείδωμα</string>
   <string name="username">Όνομα χρήστη</string>
   <string name="validation_field_required">Το πεδίο %1$s είναι υποχρεωτικό.</string>
@@ -105,7 +106,7 @@
   <string name="close">Κλείσιμο</string>
   <string name="continue_text">Συνέχεια</string>
   <string name="create_account">Δημιουργία λογαριασμού</string>
-  <string name="create_an_account">Create an account</string>
+  <string name="create_an_account">Δημιουργήστε έναν λογαριασμό</string>
   <string name="creating_account">Δημιουργία λογαριασμού...</string>
   <string name="edit_item">Επεξεργασία στοιχείου</string>
   <string name="enable_automatic_syncing">Επιτρέψτε τον αυτόματο συγχρονισμό</string>
@@ -121,7 +122,7 @@
   <string name="extension_tap_icon">Πατήστε στο εικονίδιο Bitwarden στο μενού για εκκίνηση της επέκτασης.</string>
   <string name="extension_turn_on">Για να ενεργοποιήσετε το Bitwarden στο Safari και σε άλλες εφαρμογές, πατήστε στο εικονίδιο \"Περισσότερα\" στην κάτω σειρά του μενού.</string>
   <string name="favorite">Αγαπημένο</string>
-  <string name="unfavorite">Unfavorite</string>
+  <string name="unfavorite">Αφαίρεση από τα αγαπημένα</string>
   <string name="fingerprint">Δακτυλικό αποτύπωμα</string>
   <string name="generate_password">Παραγωγή κωδικού</string>
   <string name="get_password_hint">Λήψη υπόδειξης κύριου κωδικού</string>
@@ -140,7 +141,7 @@
   <string name="vault_timeout_action">Ενέργεια χρόνου λήξης κρύπτης</string>
   <string name="vault_timeout_log_out_confirmation">Η αποσύνδεση θα καταργήσει όλη την πρόσβαση στη κρύπτη σας και απαιτεί online έλεγχο ταυτότητας μετά το χρονικό όριο λήξης. Σίγουρα θέλετε να χρησιμοποιήσετε αυτήν τη ρύθμιση;</string>
   <string name="logging_in">Σύνδεση...</string>
-  <string name="login_to_bitwarden">Log in to Bitwarden</string>
+  <string name="login_to_bitwarden">Σύνδεση στο Bitwarden</string>
   <string name="manage">Διαχείριση</string>
   <string name="master_password_confirmation_val_message">Η επιβεβαίωση του κύριου κωδικού δεν είναι σωστή.</string>
   <string name="master_password_description">Ο κύριος κωδικός χρησιμοποιείται για πρόσβαση στη κρύπτη σας. Είναι πολύ σημαντικό να μην τον ξεχάσετε. Δεν υπάρχει τρόπος να τον ανακτήσετε σε αυτή την περίπτωση.</string>
@@ -163,9 +164,11 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
-  <string name="new_item">New item</string>
+  <string name="new_item">Νέο στοιχείο</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">Χωρίς Όνομα Χρήστη</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Παρακαλούμε σκεφτείτε να μας βοηθήσετε με μια καλή κριτική!</string>
   <string name="regenerate_password">Επαναδημιουργία κωδικού</string>
   <string name="retype_master_password">Εισάγετε ξανά τον κύριο κωδικό</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης (απαιτείται)</string>
   <string name="search_vault">Αναζήτηση στο θυσαυ/κιό</string>
   <string name="security">Ασφάλεια</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Ορισμός PIN</string>
   <string name="set_pin_direction">Εισαγωγή τετραψήφιου αριθμού PIN για ξεκλείδωμα εφαρμογής.</string>
   <string name="item_information">Πληροφορίες στοιχείου</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">Το στοιχείο αποθηκεύτηκε</string>
   <string name="submitting">Υποβολή...</string>
   <string name="syncing">Συγχρονισμός...</string>
@@ -240,8 +245,8 @@
   <string name="login_unavailable">Μη διαθέσιμη σύνδεση</string>
   <string name="no_two_step_available">Αυτός ο λογαριασμός έχει ενεργοποιημένη τη σύνδεση δύο βημάτων, ωστόσο, σε αυτήν τη συσκευή δεν υποστηρίζεται κανένας από τους διαμορφωμένους παρόχους δύο βημάτων. Παρακαλώ χρησιμοποιήστε μια υποστηριζόμενη συσκευή και/ή προσθέστε επιπλέον παρόχους που υποστηρίζονται καλύτερα σε όλες τις συσκευές (όπως μια εφαρμογή αυθεντικοποίησης).</string>
   <string name="recovery_code_title">Κωδικός ανάκτησης</string>
-  <string name="remember">Remember</string>
-  <string name="remember_email">Remember email</string>
+  <string name="remember">Απομνημόνευση</string>
+  <string name="remember_email">Απομνημόνευση email</string>
   <string name="send_verification_code_again">Αποστολή μηνύματος κωδικού επαλήθευσης ηλ. ταχυδρομείου ξανά</string>
   <string name="two_step_login_options">Επιλογές σύνδεσης δύο βημάτων</string>
   <string name="use_another_two_step_method">Χρήση άλλης μεθόδου δύο παραγόντων</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">Απαιτείται μεταφορά του κλειδιού κρυπτογράφησης. Παρακαλούμε συνδεθείτε μέσω του διαδικτυακού vault για να ενημερώσετε το κλειδί κρυπτογράφησης.</string>
   <string name="learn_more">Μάθετε περισσότερα</string>
   <string name="api_url">URL διακομιστή API</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">Προσαρμοσμένο περιβάλλον</string>
   <string name="custom_environment_footer">Για προχωρημένους χρήστες. Μπορείτε να ορίσετε τo URL κάθε υπηρεσίας ανεξάρτητα.</string>
   <string name="environment_saved">Τα URL έχουν αποθηκευτεί.</string>
@@ -371,7 +379,7 @@
   <string name="select_type_field">Τι τύπος προσαρμοσμένου πεδίου είναι αυτό που θέλετε να προσθέσετε;</string>
   <string name="remove">Διαγραφή</string>
   <string name="new_uri">Νέο URI</string>
-  <string name="add_website">Add website</string>
+  <string name="add_website">Προσθήκη ιστοσελίδας</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Βασικός τομέας</string>
   <string name="default_text">Προεπιλογή</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">Όνομα ταυτότητας</string>
   <string name="value">Τιμή</string>
   <string name="password_history">Ιστορικό κωδικού</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Τύποι</string>
   <string name="no_passwords_to_list">Δεν υπάρχουν κωδικοί προς εμφάνιση.</string>
   <string name="no_items_to_list">Δεν υπάρχουν στοιχεία στη λίστα.</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">Αδυναμία προσθήκης κλειδιού ταυτοποίησης;</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Σάρωση κωδικού QR</string>
-  <string name="cannot_scan_qr_code">Αδυναμία σάρωσης κωδικού QR;</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">Κλειδί επαλήθευσης</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">Χειροκίνητη Εισαγωγή Κλειδιού</string>
   <string name="add_totp">Προσθήκη TOTP</string>
   <string name="setup_totp">Ρύθμιση TOTP</string>
@@ -821,7 +831,7 @@
   <string name="data_region">Περιοχή δεδομένων</string>
   <string name="region">Περιοχή</string>
   <string name="update_weak_master_password_warning">Ο κύριος κωδικός πρόσβασής σας δεν πληροί μία ή περισσότερες πολιτικές του οργανισμού σας. Για να αποκτήσετε πρόσβαση στο Vault σας, πρέπει να ενημερώσετε τον κύριο κωδικό πρόσβασής σας τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές εώς και μία ώρα.</string>
-  <string name="current_master_password">Τρέχων κύριος κωδικός</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Έχετε συνδεθεί!</string>
   <string name="approve_with_my_other_device">Έγκριση μέσω άλλης συσκευής μου</string>
   <string name="request_admin_approval">Αίτηση έγκρισης από διαχειριστή</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">Δημιουργία</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Γράψτε αυτόν τον κωδικό πρόσβασης και κρατήστε τον κάπου ασφαλή.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Μάθετε άλλους τρόπους για να αποτρέψετε το κλείδωμα λογαριασμού</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Βοήθεια για τον γεωγραφικό εντοπισμό του διακομιστή.</string>
   <string name="email_address_required">Διεύθυνση ηλ. ταχυδρομείου (απαιτείται)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Επιλέξτε το σύνδεσμο στο μήνυμα ηλ. ταχυδρομείου για να επαληθεύσετε τη διεύθυνση ηλ. ταχυδρομείου σας και να συνεχίσετε με τη δημιουργία του λογαριασμού σας. "</string>
   <string name="change_email_address">Αλλαγή διεύθυνσης ηλ. ταχυδρομείου</string>
   <string name="next">Επόμενο</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Το Bitwarden δεν μπορεί να ανακτήσει έναν χαμένο ή ξεχασμένο κύριο κωδικό πρόσβασης.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Επιλέξτε τον κύριο κωδικό πρόσβασης σας</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Επιλέξτε έναν μοναδικό και ισχυρό κωδικό πρόσβασης για να διατηρήσετε τις πληροφορίες σας ασφαλείς.</string>
   <string name="minimum_characters">%1$s χαρακτήρες</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Σφάλμα κατά τη σύνδεση με την υπηρεσία Duo. Χρησιμοποιήστε μια διαφορετική μέθοδο σύνδεσης δύο βημάτων ή επικοινωνήστε με την Duo για βοήθεια.</string>
   <string name="master_password_hint_not_specified">Υπόδειξη κύριου κωδικού πρόσβασης</string>
   <string name="master_password_important_hint">Σημαντικό: Δεν είναι δυνατή η ανάκτηση του κύριου κωδικού πρόσβασής σας αν τον ξεχάσετε! Πρέπει να αποτελείται από τουλάχιστον 12 χαρακτήρες.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Έναρξη</string>
   <string name="save_and_protect_your_data">Αποθηκεύστε και προστασεύστε τα δεδομένα σας</string>
   <string name="the_vault_protects_more_than_just_passwords">Η κρύπτη προστατεύει περισσότερα από μόνο κωδικούς πρόσβασης. Αποθηκεύστε ασφαλείς συνδέσεις, ταυτότητες, κάρτες και σημειώσεις με ασφάλεια εδώ.</string>
@@ -1165,5 +1178,29 @@
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

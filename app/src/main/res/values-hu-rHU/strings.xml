@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Szeretnénk most átkapcsolni erre?</string>
   <string name="master_password">Mesterjelszó</string>
   <string name="master_password_required">Master password (required)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Továbbiak</string>
   <string name="my_vault">Saját széf</string>
   <string name="authenticator">Hitelesítő</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Nincsenek jegyzetek a széfben.</string>
   <string name="new_note">Új jegyzet</string>
   <string name="new_item">Új elem</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">Nincsenek szöveges Send elemek a széfben.</string>
   <string name="no_file_sends">Nincsenek fájl Send elemek a széfben.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Új szöveges Send elem</string>
   <string name="new_file_send">Új fájl Send elem</string>
   <string name="no_username">Nincs felhasználónév</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Egy jó értékeléssel mindig segíted a munkánkat!</string>
   <string name="regenerate_password">Jelszó újragenerálása</string>
   <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Keresés a széfben</string>
   <string name="security">Biztonság</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">PIN beállítása</string>
   <string name="set_pin_direction">Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</string>
   <string name="item_information">Elem információ</string>
+  <string name="item_details">Elem részletek</string>
   <string name="item_updated">Az elem frissítésre került.</string>
   <string name="submitting">Küldés...</string>
   <string name="syncing">Szinkronizálás...</string>
@@ -280,6 +285,9 @@
   <string name="encryption_key_migration_required_description_long">Titkosítási kulcs migráció szükséges. Jelentkezzünk be a webes széfen keresztül a titkosítási kulcs frissítéséhez.</string>
   <string name="learn_more">További információ</string>
   <string name="api_url">API szerver webcím</string>
+  <string name="client_certificate_mtls">Ügyfél tanúsítvány (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Az ügyfél hitelesítéshez használt tanúsítvány.</string>
+  <string name="use_system_certificate">Rendszer tanúsítvány használata</string>
   <string name="custom_environment">Egyedi környezet</string>
   <string name="custom_environment_footer">Haladó felhasználóknak. Minden egyes szolgáltatásnak külön megadhatod az alap URL-t.</string>
   <string name="environment_saved">A környezet URL-ek el lettek mentve.</string>
@@ -417,6 +425,7 @@
   <string name="identity_name">Azonosság név</string>
   <string name="value">Érték</string>
   <string name="password_history">Jelszó előzmények</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Jelszó előzmények: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Típusok</string>
   <string name="no_passwords_to_list">Nincs megjeleníthető jelszó.</string>
   <string name="no_items_to_list">Nincsenek megjeleníthető elemek.</string>
@@ -541,7 +550,7 @@
   <string name="log_in_sso">Vállalati egyszeri bejelentkezés</string>
   <string name="log_in_sso_summary">Gyors bejelentkezés a szervezeti önálló bejelentkező portálba. A kezdéshez meg kell adni a szervezeti azonosítót.</string>
   <string name="org_identifier">Szervezeti azonosító</string>
-  <string name="login_sso_error">Jelenleg nem lehet bejelentkezni SSO segítségével.</string>
+  <string name="login_sso_error">Jelenleg nem lehet bejelentkezni SSO segítségével</string>
   <string name="set_master_password">Mesterjelszó beállítása</string>
   <string name="set_master_password_summary">Az SSO-val történő bejelentkezés befejezéséhez mesterjelszót kell beállítani a széf eléréséhez és védelméhez.</string>
   <string name="master_password_policy_in_effect">Egy vagy több szervezeti rendszabályhoz mesterjelszó szükséges a következő követelmények megfeleléséhez:</string>
@@ -649,7 +658,7 @@
   <string name="leave_organization_name">Elhagyjuk %1$s szervezetet?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
   <string name="fido2_instruction">A folytatáshoz készítsük elő a FIDO2 WebAuthn-kompatibilis biztonsági kulcsot, azután kattintsunk a WebAuthn hitelesítése lehetőségre a következő képernyőn és kövessük a megjelenő utasításokat.</string>
-  <string name="fido2_desc">Hitelesítés FIDO2 WebAuthn használatával - hitelesíthetjük magunkat egy külső biztonsági kulcs segítségével</string>
+  <string name="fido2_desc">Hitelesítés FIDO2 WebAuthn használatával - hitelesíthetjük magunkat egy külső biztonsági kulcs segítségével.</string>
   <string name="fido2_authenticate_web_authn">WebAuthn hitelesítése</string>
   <string name="fido2_return_to_app">Vissza az alkalmazásba</string>
   <string name="fido2_check_browser">Biztosítsuk, hogy az alapértelmezett böngésző támogassa a WebAuthn technológiát és próbáljuk újra.</string>
@@ -684,7 +693,7 @@
   <string name="an_error_occurred_while_sending_a_verification_code_to_your_email_please_try_again">Hiba történt az ellenőrző kód saját email címre történő elküldésekor. Próbáljuk újra.</string>
   <string name="enter_the_verification_code_that_was_sent_to_your_email">Az emailben elküldött ellenőrző kód megadása</string>
   <string name="submit_crash_logs">Összeomlási naplózások beküldése</string>
-  <string name="submit_crash_logs_description">Segítség a Bitwardennek az alkalmazás stabbilitás továbbfejlesztésében összeomlási naplózási jelentésekkel.</string>
+  <string name="submit_crash_logs_description">Segítség a Bitwarden-nek az alkalmazás stabilitás továbbfejlesztésében összeomlási naplózási jelentésekkel.</string>
   <string name="options_expanded">Az opciók nyitottak, koppintásra bezárulnak.</string>
   <string name="options_collapsed">Az opciók bezártak, koppintásra kinyílnak.</string>
   <string name="uppercase_ato_z">Nagybetűs (A-Z)</string>
@@ -705,8 +714,9 @@
   <string name="cannot_add_authenticator_key">Nem lehet hozzáadni a hitelesítő kulcsot.</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Nem lehet hozzáadni hitelesítő kulcsot? <annotation link="scanQrCode">QR-kód beolvasása</annotation></string>
   <string name="scan_qr_code">QR kód beolvasása</string>
-  <string name="cannot_scan_qr_code">Nem sikerül beolvasni a QR kódot?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Nem lehet beolvasni a QR kódot? <annotation link="enterKeyManually">Kulcs megadása manuálisan</annotation></string>
   <string name="authenticator_key_scanner">Hitelesítő kulcs</string>
+  <string name="authenticator_key_help">Hitelesítő kulcs súgó</string>
   <string name="enter_key_manually">Kód megadása manuálisan</string>
   <string name="add_totp">TOTP hozzáadása</string>
   <string name="setup_totp">TOTP beállítása</string>
@@ -820,7 +830,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="data_region">Adatrégió</string>
   <string name="region">Régió</string>
   <string name="update_weak_master_password_warning">A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak.</string>
-  <string name="current_master_password">Jelenlegi mesterjelszó</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Megtörtént a bejelentkezés.</string>
   <string name="approve_with_my_other_device">Jóváhagyás másik eszközzel</string>
   <string name="request_admin_approval">Adminisztrátori jóváhagyás kérés</string>
@@ -867,7 +877,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="vault">Széf</string>
   <string name="appearance">Megjelenés</string>
   <string name="account_security">Fiókbiztonság</string>
-  <string name="bitwarden_help_center">Bitwardsn Segítségközpont</string>
+  <string name="bitwarden_help_center">Bitwarden Segítségközpont</string>
   <string name="contact_bitwarden_support">Bitwarden ügyfélszolgálat</string>
   <string name="copy_app_information">Alkalmazás információ másolása</string>
   <string name="sync_now">Szinkronizálás most</string>
@@ -1012,12 +1022,14 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="generate_button_label">Generálás</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Írjuk le ezt a jelszót és tartsuk biztonságos helyen.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">További információ a fiókzárolás megelőzésének egyéb módjairól</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Segítség szerver geolokációval.</string>
   <string name="email_address_required">Email cím (kötelező)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Válasszuk ki az emailben található hivatkozást az email cím ellenőrzéséhez és folytassuk a fiók létrehozását. "</string>
   <string name="change_email_address">Email cím megváltoztatása</string>
   <string name="next">Következő</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Mesterjelszó kiválasztása</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Válasszunk egyedi és erős jelszót az adatok biztonságának megőrzése érdekében.</string>
   <string name="minimum_characters">%1$s karakter</string>
@@ -1037,6 +1049,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Kezdés</string>
   <string name="save_and_protect_your_data">A saját adatok mentése és védelme</string>
   <string name="the_vault_protects_more_than_just_passwords">A széf nemcsak a jelszavakat védi. Itt biztonságosan tárolhatjuk a bejelentkezési adatokat, egyéb azonosítókat, kártyákat és jegyzeteket.</string>
@@ -1164,5 +1177,29 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="coachmark_6_of_6">6/6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Ezekkel az opciókkal állíthatjuk be a jelszót a fiók követelményeihez.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Miután elmentettük az új jelszót a Bitwardenbe, ne felejtsük el frissíteni azt a fiók webhelyén. "</string>
+  <string name="error_loading_certificate">Hiba történt a tanúsítványok betöltésekor.</string>
+  <string name="certificate_alias">Tanúsítvány álnév</string>
+  <string name="import_certificate">Tanúsítvány importálása</string>
+  <string name="choose_system_certificate">Rendszer tanúsítvány kiválasztása</string>
+  <string name="certificate_installed">A tanúsítvány telepítésre került.</string>
+  <string name="certificate_installation_failed">A tanúsítvány telepítése sikertelen volt.</string>
+  <string name="certificate_selection_failed">A tanúsítvány kiválasztása sikertelen volt.</string>
+  <string name="unsupported_certificate_type">Nem-támogatott tanúsítvány típus</string>
+  <string name="certificate_password_incorrect">A tanúsítvány jelszó helytelen.</string>
+  <string name="invalid_certificate_chain">A tanúsítvány lánc érvénytelen.</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">A rendszer tanúsítvány használata kevésbé biztonságos, mint a tanúsítvány Bitwardennél történő tárolása. A folytatás megjeleníti az elérhető rendszer tanúsítványok listáját, ha már telepítve van.</string>
+  <string name="certificate_alias_already_exists">A tanúsítvány álnév már létezik.</string>
   <string name="link">Hivatkozás</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">A jbelépőkulcs művelet nem sikerült, mert az alkalmazás hibásan van aláírva.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">A belépőkulcs művelet meghiúsult, mert a kiszolgáló webcíme nem szerepel a kérésben.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">A belépőkulcs művelet meghiúsult, mert az alkalmazás aláírás érvénytelen.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">A belépőkulcs művelet meghiúsult egy belső hiba miatt.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">A belépőkulcs művelet meghiúsult, mert az megcélzott fél nem lett azonosítva.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">A belépőkulcs hitelesítés meghiúsult egy belső hiba miatt.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">A belépőkulcs művelet meghiúsult, mert a kiválasztott elem nem létezik.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">A belépőkulcs művelet meghiúsult, mert a felhasználó kizárásra került.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzés törlésre került.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">A belépőkulcs művelet meghiúsult, mert a kérés érvénytelen.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzések száma átlépésre került.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
 </resources>

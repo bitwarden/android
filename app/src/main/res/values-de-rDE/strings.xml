@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Möchtest du jetzt dazu wechseln?</string>
   <string name="master_password">Master-Passwort</string>
   <string name="master_password_required">Master-Passwort (erforderlich)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Mehr</string>
   <string name="my_vault">Mein Tresor</string>
   <string name="authenticator">Authenticator</string>
@@ -72,7 +73,7 @@
   <string name="thank_you">Vielen Dank</string>
   <string name="tools">Werkzeuge</string>
   <string name="uri">URI</string>
-  <string name="website_uri">Webseite (URI)</string>
+  <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Fingerabdruck zum Entsperren nutzen</string>
   <string name="username">Nutzername</string>
   <string name="validation_field_required">Das Feld %1$s ist ein Pflichtfeld.</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Du hast keine Notizen in deinem Tresor.</string>
   <string name="new_note">Neue Notiz</string>
   <string name="new_item">Neuer Eintrag</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
   <string name="no_file_sends">Du hast keine Datei-Sends in deinem Tresor.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Neues Text-Send</string>
   <string name="new_file_send">Neues Datei-Send</string>
   <string name="no_username">Kein Benutzername</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Wir würden uns freuen, wenn du uns mit einer positiven Bewertung helfen könntest!</string>
   <string name="regenerate_password">Passwort neu generieren</string>
   <string name="retype_master_password">Master-Passwort wiederholen</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Master-Passwort erneut eingeben (erforderlich)</string>
   <string name="search_vault">Tresor durchsuchen</string>
   <string name="security">Sicherheit</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">PIN festlegen</string>
   <string name="set_pin_direction">Gebe deine 4-stellige PIN ein, um die App zu entsperren.</string>
   <string name="item_information">Eintragsinformationen</string>
+  <string name="item_details">Eintrag-Details</string>
   <string name="item_updated">Eintrag gespeichert</string>
   <string name="submitting">Wird übermittelt...</string>
   <string name="syncing">Wird synchronisiert...</string>
@@ -281,6 +286,9 @@ Das Scannen erfolgt automatisch.</string>
   <string name="encryption_key_migration_required_description_long">Verschlüsselungscode-Migration erforderlich. Bitte melde dich über den Web-Tresor an, um deinen Verschlüsselungscode zu aktualisieren.</string>
   <string name="learn_more">Mehr erfahren</string>
   <string name="api_url">API Server-URL</string>
+  <string name="client_certificate_mtls">Client-Zertifikat (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Für die Client-Authentifizierung verwendetes Zertifikat.</string>
+  <string name="use_system_certificate">Systemzertifikat verwenden</string>
   <string name="custom_environment">Benutzerdefinierte Umgebung</string>
   <string name="custom_environment_footer">Für fortgeschrittene Benutzer. Du kannst die Basis-URL der jeweiligen Dienste unabhängig voneinander festlegen.</string>
   <string name="environment_saved">Die URLs der Umgebung wurden gespeichert.</string>
@@ -418,6 +426,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="identity_name">Identitätsname</string>
   <string name="value">Wert</string>
   <string name="password_history">Passwortverlauf</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Passwortverlauf: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Typen</string>
   <string name="no_passwords_to_list">Keine Passwörter zum Anzeigen vorhanden.</string>
   <string name="no_items_to_list">Keine Einträge zum Anzeigen vorhanden.</string>
@@ -497,8 +506,8 @@ Das Scannen erfolgt automatisch.</string>
   <string name="login_expired">Deine Sitzung ist abgelaufen.</string>
   <string name="biometrics_direction">Biometrische Verifizierung</string>
   <string name="biometrics">Biometrie</string>
-  <string name="biometrics_failed">Biometrics Failed</string>
-  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
+  <string name="biometrics_failed">Biometrie fehlgeschlagen</string>
+  <string name="biometrics_decoding_failure">Melde dich mit deinem Master-Passwort oder PIN an und aktiviere dann die biometrische Anmeldung in den Einstellungen erneut.</string>
   <string name="use_biometrics_to_unlock">Biometrie zum Entsperren verwenden</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden braucht Aufmerksamkeit - Siehe \"Bedienungshilfen zum automatischen Ausfüllen\" in den Bitwarden-Einstellungen</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Gehe in den Android App-Einstellungen für Bitwarden zur Option \"Über anderen Apps einblenden\" (unter Erweitert) und tippe auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</string>
@@ -704,10 +713,11 @@ Das Scannen erfolgt automatisch.</string>
   <string name="verification_codes">Verifizierungscodes</string>
   <string name="premium_subscription_required">Premium-Abonnement erforderlich</string>
   <string name="cannot_add_authenticator_key">Authentifizierungsschlüssel lässt sich nicht hinzufügen?</string>
-  <string name="cannot_add_authenticator_key_scan_qr_code">Kann Authentifizierungsschlüssel nicht hinzufügen? <annotation link="scanQrCode">Scan QR Code</annotation></string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Authentifizierungsschlüssel kann nicht hinzugefügt werden? <annotation link="scanQrCode">QR-Code scannen</annotation></string>
   <string name="scan_qr_code">QR Code scannen</string>
-  <string name="cannot_scan_qr_code">QR-Code kann nicht gescannt werden?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">QR-Code kann nicht gescannt werden? <annotation link="enterKeyManually">Schlüssel manuell eingeben</annotation></string>
   <string name="authenticator_key_scanner">Authentifizierungsschlüssel</string>
+  <string name="authenticator_key_help">Hilfe zum Authenticator-Schlüssel</string>
   <string name="enter_key_manually">Schlüssel manuell eingeben</string>
   <string name="add_totp">TOTP hinzufügen</string>
   <string name="setup_totp">TOTP einrichten</string>
@@ -820,7 +830,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="data_region">Datenregion</string>
   <string name="region">Region</string>
   <string name="update_weak_master_password_warning">Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben.</string>
-  <string name="current_master_password">Aktuelles Master-Passwort</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Angemeldet!</string>
   <string name="approve_with_my_other_device">Mit meinem anderen Gerät genehmigen</string>
   <string name="request_admin_approval">Admin-Genehmigung anfordern</string>
@@ -1012,12 +1022,14 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="generate_button_label">Generieren</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Notiere dir dieses Passwort und bewahre es an einem sicheren Ort auf.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Erfahre mehr über andere Möglichkeiten, wie du ein Aussperren von deinem Konto verhindern kannst</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Hilfe bei Server Geo-Standorten.</string>
   <string name="email_address_required">E-Mail-Adresse (erforderlich)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Klick auf den Link in der E-Mail, um deine E-Mail-Adresse zu verifizieren und mit der Erstellung deines Kontos fortzufahren. "</string>
   <string name="change_email_address">E-Mail-Adresse ändern</string>
   <string name="next">Weiter</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden kann kein verlorenes oder vergessenes Master-Passwort wiederherstellen.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Wähle dein Master-Passwort</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wähle ein einzigartiges und starkes Passwort, damit deine Informationen sicher sind.</string>
   <string name="minimum_characters">%1$s Zeichen</string>
@@ -1037,6 +1049,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fehler beim Verbinden mit dem Duo-Dienst. Verwende eine andere Zwei-Faktor-Authentifizierungsmethode oder kontaktiere Duo für Hilfe.</string>
   <string name="master_password_hint_not_specified">Master-Passwort-Hinweis</string>
   <string name="master_password_important_hint">Wichtig: Dein Master-Passwort kann nicht wiederhergestellt werden, wenn du es vergisst! Mindestens 12 Zeichen lang.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Loslegen</string>
   <string name="save_and_protect_your_data">Speicher und schütze deine Daten</string>
   <string name="the_vault_protects_more_than_just_passwords">Der Tresor schützt mehr als nur Passwörter. Speicher hier sicher Zugangsdaten, Ausweise, Karten und Notizen.</string>
@@ -1164,5 +1177,29 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="coachmark_6_of_6">6 von 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Verwende diese Optionen, um dein Passwort an die Anforderungen deines Kontos anzupassen.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Nachdem du dein neues Passwort in Bitwarden gespeichert hast, vergiss nicht, es auf deiner Konto-Website zu aktualisieren. "</string>
+  <string name="error_loading_certificate">Fehler beim Laden des Zertifikats</string>
+  <string name="certificate_alias">Zertifikat-Alias</string>
+  <string name="import_certificate">Zertifikat importieren</string>
+  <string name="choose_system_certificate">Systemzertifikat auswählen</string>
+  <string name="certificate_installed">Zertifikat installiert</string>
+  <string name="certificate_installation_failed">Zertifikatsinstallation fehlgeschlagen</string>
+  <string name="certificate_selection_failed">Zertifikatsauswahl fehlgeschlagen</string>
+  <string name="unsupported_certificate_type">Nicht unterstützter Zertifikatstyp</string>
+  <string name="certificate_password_incorrect">Falsches Zertifikatspasswort</string>
+  <string name="invalid_certificate_chain">Ungültige Zertifikatskette</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Die Verwendung eines Systemzertifikats ist weniger sicher als die Speicherung des Zertifikats mit Bitwarden. Im Folgenden wird eine Liste der verfügbaren Systemzertifikate angezeigt, wenn eines bereits installiert ist.</string>
+  <string name="certificate_alias_already_exists">Zertifikat-Alias existiert bereits</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

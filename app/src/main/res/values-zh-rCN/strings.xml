@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">您想现在就切换过去吗？</string>
   <string name="master_password">主密码</string>
   <string name="master_password_required">主密码（必填）</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">更多</string>
   <string name="my_vault">我的密码库</string>
   <string name="authenticator">身份验证器</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">您的密码库中没有笔记。</string>
   <string name="new_note">新增笔记</string>
   <string name="new_item">新增项目</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">您的密码库中没有文本 Send。</string>
   <string name="no_file_sends">您的密码库中没有文件 Send。</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">新增文本 Send</string>
   <string name="new_file_send">新增文件 Send</string>
   <string name="no_username">无用户名</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">我们期待您的好评！</string>
   <string name="regenerate_password">重新生成密码</string>
   <string name="retype_master_password">再次输入主密码</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">再次输入主密码（必填）</string>
   <string name="search_vault">搜索密码库</string>
   <string name="security">安全</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">设置 PIN 码</string>
   <string name="set_pin_direction">输入一个用于解锁此 App 的 4 位数 PIN 码。</string>
   <string name="item_information">项目信息</string>
+  <string name="item_details">项目详细信息</string>
   <string name="item_updated">项目已保存</string>
   <string name="submitting">正在提交...</string>
   <string name="syncing">正在同步...</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">需要迁移加密密钥。请登录网页版密码库来更新您的加密密钥。</string>
   <string name="learn_more">了解更多信息</string>
   <string name="api_url">API 服务器 URL</string>
+  <string name="client_certificate_mtls">客户端证书 (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">用于客户端身份验证的证书。</string>
+  <string name="use_system_certificate">使用系统证书</string>
   <string name="custom_environment">自定义环境</string>
   <string name="custom_environment_footer">适用于高级用户。您可以分别指定各个服务的基础 URL。</string>
   <string name="environment_saved">各环境 URL 已保存。</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">身份名称</string>
   <string name="value">值</string>
   <string name="password_history">密码历史记录</string>
+  <string name="password_history_count"><annotation link="passwordHistory">密码历史记录：<annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">类型</string>
   <string name="no_passwords_to_list">没有可列出的密码。</string>
   <string name="no_items_to_list">没有可列出的项目。</string>
@@ -497,8 +506,8 @@
   <string name="login_expired">您的登录会话已过期。</string>
   <string name="biometrics_direction">生物识别验证</string>
   <string name="biometrics">生物识别</string>
-  <string name="biometrics_failed">Biometrics Failed</string>
-  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
+  <string name="biometrics_failed">生物识别失败</string>
+  <string name="biometrics_decoding_failure">使用您的主密码或 PIN 码登录后在「设置」中重新启用生物识别登录。</string>
   <string name="use_biometrics_to_unlock">使用生物识别解锁</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden 需要注意 - 请在 Bitwarden 设置中查看「自动填充无障碍服务」</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. 在 Android App 设置界面找到 Bitwarden，进入「显示在其他应用上方」选项（在「高级」下），然后点击切换开关以启用叠加层支持。</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">无法添加验证器密钥吗？</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">无法添加验证器密钥吗？<annotation link="scanQrCode">扫描二维码</annotation></string>
   <string name="scan_qr_code">扫描二维码</string>
-  <string name="cannot_scan_qr_code">无法扫描二维码吗？</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">无法扫描二维码吗？<annotation link="enterKeyManually">手动输入密钥</annotation></string>
   <string name="authenticator_key_scanner">验证器密钥</string>
+  <string name="authenticator_key_help">验证器密钥帮助</string>
   <string name="enter_key_manually">手动输入密钥</string>
   <string name="add_totp">添加 TOTP</string>
   <string name="setup_totp">设置 TOTP</string>
@@ -821,7 +831,7 @@
   <string name="data_region">数据区域</string>
   <string name="region">区域</string>
   <string name="update_weak_master_password_warning">您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</string>
-  <string name="current_master_password">当前主密码</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">已登录！</string>
   <string name="approve_with_my_other_device">通过我的其他设备批准</string>
   <string name="request_admin_approval">请求管理员批准</string>
@@ -943,8 +953,8 @@
   <string name="passkey_operation_failed_because_browser_is_not_privileged">由于浏览器没有权限，通行密钥操作失败</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">由于浏览器签名不匹配，通行密钥操作失败</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">由于资源链接缺失，通行密钥操作失败</string>
-  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">由于在资源链接中找不到 App ，通行密钥操作失败</string>
-  <string name="passkey_operation_failed_because_app_could_not_be_verified">由于无法验证 App ，通行密钥操作失败</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">由于在资源链接中找不到 App，通行密钥操作失败</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">由于无法验证 App，通行密钥操作失败</string>
   <string name="confirm_file_password">确认文件密码</string>
   <string name="continue_to_give_feedback">前往提供反馈信息吗？</string>
   <string name="continue_to_provide_feedback">选择继续以提供针对此新 App 的反馈信息！</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">生成</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">写下此密码并将其保存在安全的地方。</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">了解其他防止账户被锁住的方法</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">帮助选择服务器位置。</string>
   <string name="email_address_required">电子邮箱地址（必填）</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"选择电子邮件中的链接来验证您的电子邮箱地址并继续创建您的账户。 "</string>
   <string name="change_email_address">更改电子邮箱地址</string>
   <string name="next">下一步</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden 无法恢复丢失或遗忘的主密码。</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">选择您的主密码</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">选择一个唯一且强大的密码，以保障您的信息安全。</string>
   <string name="minimum_characters">%1$s 个字符</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">与 Duo 服务连接时出错。请使用不同的两步登录方式或联系 Duo 获取协助。</string>
   <string name="master_password_hint_not_specified">主密码提示</string>
   <string name="master_password_important_hint">重要：主密码忘记后，将无法恢复！至少 12 个字符。</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">开始使用</string>
   <string name="save_and_protect_your_data">保存和保护您的数据</string>
   <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护您的密码，还可以安全地存储登录信息、ID、支付卡和笔记。</string>
@@ -1165,5 +1178,29 @@
   <string name="coachmark_6_of_6">6 / 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">使用这些选项来调整您的密码，以使其符合您的账户网站的要求。</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"将新密码保存到 Bitwarden 后，不要忘记在您的账户网站上更新它。 "</string>
+  <string name="error_loading_certificate">加载证书时出错</string>
+  <string name="certificate_alias">证书别名</string>
+  <string name="import_certificate">导入证书</string>
+  <string name="choose_system_certificate">选择系统证书</string>
+  <string name="certificate_installed">证书已安装</string>
+  <string name="certificate_installation_failed">证书安装失败</string>
+  <string name="certificate_selection_failed">证书选择失败</string>
+  <string name="unsupported_certificate_type">不支持的证书类型</string>
+  <string name="certificate_password_incorrect">证书密码错误</string>
+  <string name="invalid_certificate_chain">无效的证书链</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">使用系统证书不如 Bitwarden 中存储的证书安全。如果已经安装了系统证书，继续将显示可用的系统证书列表。</string>
+  <string name="certificate_alias_already_exists">证书别名已存在</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">由于 App 签名错误，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">由于请求中不存在主机 URL，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">由于 App 签名无效，通行密钥操作失败。</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">由于内部错误，通行密钥注册失败。</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">由于无法识别依赖方，通行密钥操作失败。</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">由于内部错误，通行密钥身份验证失败。</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">由于用户被锁定，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">由于用户验证被取消，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">由于请求无效，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
 </resources>
