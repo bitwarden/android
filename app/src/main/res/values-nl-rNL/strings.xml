@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Wil je er nu naar overschakelen?</string>
   <string name="master_password">Hoofdwachtwoord</string>
   <string name="master_password_required">Hoofdwachtwoord (vereist)</string>
+  <string name="new_master_password_required">Nieuw hoofdwachtwoord (vereist)</string>
   <string name="more">Meer</string>
   <string name="my_vault">Mijn kluis</string>
   <string name="authenticator">Authenticator</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Er zijn geen notities in je kluis.</string>
   <string name="new_note">Nieuwe notitie</string>
   <string name="new_item">Nieuw item</string>
+  <string name="new_ssh_key">Nieuwe SSH-sleutel</string>
   <string name="no_text_sends">Er zijn geen Sends (tekst) in je kluis.</string>
   <string name="no_file_sends">Er zijn geen Sends (bestanden) in je kluis.</string>
+  <string name="no_ssh_keys">Er zijn geen SSH-sleutels in je kluis.</string>
   <string name="new_text_send">Nieuwe Send (tekst)</string>
   <string name="new_file_send">Nieuwe Send (bestand)</string>
   <string name="no_username">Geen gebruikersnaam</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Help ons met een goede recensie!</string>
   <string name="regenerate_password">Opnieuw genereren</string>
   <string name="retype_master_password">Hoofdwachtwoord opnieuw invoeren</string>
+  <string name="retype_new_master_password_required">Hoofdwachtwoord opnieuw invoeren (verplicht)</string>
   <string name="retype_master_password_required">Hoofdwachtwoord opnieuw invoeren (verplicht)</string>
   <string name="search_vault">Kluis doorzoeken</string>
   <string name="security">Beveiliging</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">PIN-code instellen</string>
   <string name="set_pin_direction">Voer een PIN-code van 4 tekens in om de app mee te ontgrendelen.</string>
   <string name="item_information">Item</string>
+  <string name="item_details">Itemdetails</string>
   <string name="item_updated">Item bijgewerkt</string>
   <string name="submitting">Opslaan...</string>
   <string name="syncing">Synchroniseren...</string>
@@ -281,6 +286,9 @@ Het scannen gebeurt automatisch.</string>
   <string name="encryption_key_migration_required_description_long">Migratie van de encryptiesleutel vereist. Login via de website om je encryptiesleutel bij te werken.</string>
   <string name="learn_more">Meer informatie</string>
   <string name="api_url">API server-URL</string>
+  <string name="client_certificate_mtls">Clientcertificaat (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificaat gebruikt voor client-authenticatie.</string>
+  <string name="use_system_certificate">Systeemcertificaat gebruiken</string>
   <string name="custom_environment">Aangepaste omgeving</string>
   <string name="custom_environment_footer">Voor gevorderde gebruikers. Je kunt de basis-URL van elke dienst onafhankelijk instellen.</string>
   <string name="environment_saved">De omgeving-URL\'s zijn opgeslagen.</string>
@@ -418,6 +426,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="identity_name">Identiteitsnaam</string>
   <string name="value">Waarde</string>
   <string name="password_history">Geschiedenis</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Wachtwoordgeschiedenis: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Categorieën</string>
   <string name="no_passwords_to_list">Geen wachtwoorden om weer te geven.</string>
   <string name="no_items_to_list">Er zijn geen items om weer te geven.</string>
@@ -706,8 +715,9 @@ Het scannen gebeurt automatisch.</string>
   <string name="cannot_add_authenticator_key">Kun je de authenticatiesleutel niet toevoegen?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Kun je de authenticatiesleutel niet toevoegen? <annotation link="scanQrCode">QR-code scannen</annotation></string>
   <string name="scan_qr_code">QR-code scannen</string>
-  <string name="cannot_scan_qr_code">Kun je de QR-code niet scannen?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Kan je de QR-code niet scannen? <annotation link="enterKeyManually">Sleutel handmatig ingeven</annotation></string>
   <string name="authenticator_key_scanner">Authenticatiesleutel</string>
+  <string name="authenticator_key_help">Authenticatiesleutel-hulp</string>
   <string name="enter_key_manually">Sleutel handmatig invoeren</string>
   <string name="add_totp">TOTP toevoegen</string>
   <string name="setup_totp">TOTP instellen</string>
@@ -821,7 +831,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="data_region">Dataregio</string>
   <string name="region">Regio</string>
   <string name="update_weak_master_password_warning">Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief.</string>
-  <string name="current_master_password">Huidig hoofdwachtwoord</string>
+  <string name="current_master_password_required">Huidig hoofdwachtwoord (vereist)</string>
   <string name="logged_in">Ingelogd!</string>
   <string name="approve_with_my_other_device">Goedkeuren met mijn andere apparaat</string>
   <string name="request_admin_approval">Goedkeuring van beheerder vragen</string>
@@ -1013,12 +1023,14 @@ Wilt u naar dit account wisselen?</string>
   <string name="generate_button_label">Genereren</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Schrijf dit wachtwoord op en bewaar het op een veilige plaats.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Lees meer over andere manieren om te voorkomen dat je wordt buitengesloten van je account</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Lees meer over manieren om te voorkomen dat je wordt buitengesloten van je account</annotation></string>
   <string name="help_with_server_geolocations">Ondersteuning met servergeolocaties.</string>
   <string name="email_address_required">E-mailadres (verplicht)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Gebruik de link in het e-mailbericht om je e-mailadres te verifiëren en door te gaan met het aanmaken van je account. "</string>
   <string name="change_email_address">E-mailadres aanpassen</string>
   <string name="next">Volgende</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden kan een verloren of vergeten hoofdwachtwoord niet herstellen.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden kan een verloren of vergeten hoofdwachtwoord niet herstellen.</string>
   <string name="choose_your_master_password">Kies je hoofdwachtwoord</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Kies een uniek en sterk wachtwoord om je gegevens veilig te houden.</string>
   <string name="minimum_characters">%1$s tekens</string>
@@ -1038,6 +1050,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Fout bij het verbinden met de Duo-service. Gebruik een andere tweestapsaanmeldingsmethode of neem contact op met Duo voor hulp.</string>
   <string name="master_password_hint_not_specified">Hoofdwachtwoordhint</string>
   <string name="master_password_important_hint">Je hoofdwachtwoord kan niet worden hersteld als je het vergeet! Minimaal 12 tekens.</string>
+  <string name="new_master_password_hint">Nieuwe hoofdwachtwoordhint</string>
   <string name="get_started">Aan de slag</string>
   <string name="save_and_protect_your_data">Je gegevens opslaan en beschermen</string>
   <string name="the_vault_protects_more_than_just_passwords">De kluis beschermt meer dan alleen wachtwoorden. Sla hier beveiligde inloggegevens, ID\'s, kaarten en notities op.</string>
@@ -1165,5 +1178,29 @@ Wilt u naar dit account wisselen?</string>
   <string name="coachmark_6_of_6">6 VAN 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Gebruik deze opties om je wachtwoord aan de vereisten van je account aan te passen.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Vergeet je wachtwoord niet bij te werken op de website van je account nadat je je nieuwe wachtwoord in Bitwarden hebt opgeslagen. "</string>
+  <string name="error_loading_certificate">Fout bij laden van certificaat</string>
+  <string name="certificate_alias">Certificaatalias</string>
+  <string name="import_certificate">Certificaat importeren</string>
+  <string name="choose_system_certificate">Systeemcertificaat kiezen</string>
+  <string name="certificate_installed">Certificaat geïnstalleerd</string>
+  <string name="certificate_installation_failed">Certificaatinstallatie mislukt</string>
+  <string name="certificate_selection_failed">Certificaatselectie mislukt</string>
+  <string name="unsupported_certificate_type">Niet-ondersteund certificaattype</string>
+  <string name="certificate_password_incorrect">Certificaatwachtwoord onjuist</string>
+  <string name="invalid_certificate_chain">Ongeldige certificaatketen</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Het gebruik van een systeemcertificaat is minder veilig dan het opslaan van het certificaat met Bitwarden. Als je doorgaat, wordt een lijst met beschikbare systeemcertificaten weergegeven als deze al geïnstalleerd zijn.</string>
+  <string name="certificate_alias_already_exists">Certificaatalias bestaat al</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey-bewerking mislukt omdat de app verkeerd is ondertekend.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey-bewerking mislukt omdat URL van de host niet in het verzoek staat.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey-bewerking mislukt omdat de handtekening van de app ongeldig is.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey-bewerking mislukt door een interne fout.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey-bewerking mislukt omdat de vertrouwde parij niet geïdentificeerd kan worden.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Inloggen met passkey mislukt door een interne fout.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey-bewerking mislukt omdat de gebruiker is buitengesloten.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey-bewerking mislukt omdat de gebruikersverificatie is geannuleerd.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey-bewerking mislukt omdat het verzoek ongeldig is.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
 </resources>

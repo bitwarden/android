@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">您想現在就切換過去嗎？</string>
   <string name="master_password">主密碼</string>
   <string name="master_password_required">主密碼（必填）</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">更多</string>
   <string name="my_vault">我的密碼庫</string>
   <string name="authenticator">驗證器</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">沒有使用者名稱</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">請給予我們好評！</string>
   <string name="regenerate_password">重新產生密碼</string>
   <string name="retype_master_password">再次輸入主密碼</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">再次輸入主密碼（必填）</string>
   <string name="search_vault">搜尋密碼庫</string>
   <string name="security">安全</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">設定 PIN 碼</string>
   <string name="set_pin_direction">輸入一個用於解鎖程式的 4 位數 PIN 碼。</string>
   <string name="item_information">項目資訊</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">項目已儲存</string>
   <string name="submitting">正在送出...</string>
   <string name="syncing">正在同步...</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">需要遷移加密金鑰。請透過網頁版密碼庫登入以更新您的加密金鑰。</string>
   <string name="learn_more">深入了解</string>
   <string name="api_url">API 伺服器 URL</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">自訂環境</string>
   <string name="custom_environment_footer">適用於進階使用者。您可以單獨指定各個服務的基礎 URL。</string>
   <string name="environment_saved">已儲存環境 URL。</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">身分名稱</string>
   <string name="value">值</string>
   <string name="password_history">密碼歷史記錄</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">類型</string>
   <string name="no_passwords_to_list">沒有可列出的密碼。</string>
   <string name="no_items_to_list">沒有可列出的項目。</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">無法添加驗證器金鑰嗎？</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">掃描 QR Code</string>
-  <string name="cannot_scan_qr_code">無法掃描 QR Code 嗎？</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">驗證器金鑰</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">手動輸入金鑰</string>
   <string name="add_totp">新增 TOTP</string>
   <string name="setup_totp">設定 TOTP</string>
@@ -821,7 +831,7 @@
   <string name="data_region">資料區域</string>
   <string name="region">區域</string>
   <string name="update_weak_master_password_warning">您的主密碼不符合您的組織政策之一或多個要求。您必須立即更新您的主密碼以存取密碼庫。進行此操作將登出您目前的工作階段，需要您重新登入。其他裝置上的工作階段可能繼續長達一小時。</string>
-  <string name="current_master_password">目前主密碼</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">已登入！</string>
   <string name="approve_with_my_other_device">使用我的其他裝置核准</string>
   <string name="request_admin_approval">要求管理員核准</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">產生</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">將此密碼寫下來，並且保存在安全的地方。</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">了解更多避免帳號被鎖定的方式</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">幫助伺服器地理定位。</string>
   <string name="email_address_required">電子郵件地址（必填）</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"選擇您電子郵件中的連結來認證您的電子郵件地址及繼續建立您的帳號。"</string>
   <string name="change_email_address">更改電子郵件地址</string>
   <string name="next">下一步</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden 無法為您恢復遺失或忘記的主密碼。</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">選擇您的主密碼</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">選擇一個獨特且強度足夠的密碼來保護您的資訊安全。</string>
   <string name="minimum_characters">%1$s 個字元</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">連接到 Duo 服務時發生錯誤。使用不同的兩階段認證或聯繫 Duo 來獲得支援。</string>
   <string name="master_password_hint_not_specified">主密碼提示</string>
   <string name="master_password_important_hint">重要：若忘記主密碼，將無法復原！請輸入最少 12 個字元。</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">開始使用</string>
   <string name="save_and_protect_your_data">儲存並保護您的資料</string>
   <string name="the_vault_protects_more_than_just_passwords">除了密碼之外，您也可以儲存安全的登入資訊、身分資訊、信用卡及筆記在您的密碼庫。</string>
@@ -1165,5 +1178,29 @@
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

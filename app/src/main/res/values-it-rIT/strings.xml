@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Vuoi passare a questo account?</string>
   <string name="master_password">Password principale</string>
   <string name="master_password_required">Password principale (obbligatoria)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Altro</string>
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Non ci sono note nella tua cassaforte.</string>
   <string name="new_note">Nuova nota</string>
   <string name="new_item">Nuovo elemento</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">Non ci sono messaggi inviati nella tua cassaforte.</string>
   <string name="no_file_sends">Non ci sono file Send nella tua cassaforte.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Nuovo testo Send</string>
   <string name="new_file_send">Nuovo file Send</string>
   <string name="no_username">Nessun nome utente</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Aiutaci lasciando una buona recensione!</string>
   <string name="regenerate_password">Rigenera password</string>
   <string name="retype_master_password">Conferma la password principale</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Ridigita la password principale (obbligatorio)</string>
   <string name="search_vault">Cerca nella cassaforte</string>
   <string name="security">Sicurezza</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Imposta PIN</string>
   <string name="set_pin_direction">Inserisci un codice PIN a 4 cifre con cui sbloccare l\'app.</string>
   <string name="item_information">Dettagli dell\'elemento</string>
+  <string name="item_details">Dettagli elemento</string>
   <string name="item_updated">Elemento salvato</string>
   <string name="submitting">Invio in corso...</string>
   <string name="syncing">Sincronizzazione in corso...</string>
@@ -281,6 +286,9 @@ La scansione è automatica.</string>
   <string name="encryption_key_migration_required_description_long">Migrazione della chiave di crittografia obbligatoria. Accedi tramite la cassaforte web per aggiornare la tua chiave di crittografia.</string>
   <string name="learn_more">Scopri di più</string>
   <string name="api_url">URL del server API</string>
+  <string name="client_certificate_mtls">Certificato client (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificato usato per l\'autenticazione del client.</string>
+  <string name="use_system_certificate">Usa certificato di sistema</string>
   <string name="custom_environment">Ambiente personalizzato (opzionale)</string>
   <string name="custom_environment_footer">Per utenti avanzati. Puoi specificare l\'URL di base di ogni servizio indipendentemente.</string>
   <string name="environment_saved">URL dell\'ambiente salvati</string>
@@ -418,6 +426,7 @@ La scansione è automatica.</string>
   <string name="identity_name">Nome dell\'identità</string>
   <string name="value">Valore</string>
   <string name="password_history">Cronologia delle password</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Cronologia parole d\'accesso: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Tipo</string>
   <string name="no_passwords_to_list">Nessuna password</string>
   <string name="no_items_to_list">Nessun elemento</string>
@@ -706,8 +715,9 @@ La scansione è automatica.</string>
   <string name="cannot_add_authenticator_key">Non riesci a inserire la chiave 2FA?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Impossibile aggiungere la chiave di autenticazione? <annotation link="scanQrCode">Scansiona il codice QR</annotation></string>
   <string name="scan_qr_code">Scansiona il codice QR</string>
-  <string name="cannot_scan_qr_code">Non riesci a scansionare il codice QR?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Impossibile scansionare il codice QR? <annotation link="enterKeyManually">Inserisci chiave manualmente</annotation></string>
   <string name="authenticator_key_scanner">Chiave 2FA</string>
+  <string name="authenticator_key_help">Guida chiave autenticazione</string>
   <string name="enter_key_manually">Inserisci manualmente la chiave</string>
   <string name="add_totp">Salva</string>
   <string name="setup_totp">Imposta TOTP</string>
@@ -820,7 +830,7 @@ Vuoi passare a questo account?</string>
   <string name="data_region">Area dati</string>
   <string name="region">Regione</string>
   <string name="update_weak_master_password_warning">La tua password principale non soddisfa uno o più politiche della tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un\'ora.</string>
-  <string name="current_master_password">Password principale attuale</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Accesso effettuato</string>
   <string name="approve_with_my_other_device">Approva con un altro dispositivo</string>
   <string name="request_admin_approval">Richiedi l\'approvazione dell\'amministratore</string>
@@ -1012,12 +1022,14 @@ Vuoi passare a questo account?</string>
   <string name="generate_button_label">Genera</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Appunta questa password e tienila in un posto sicuro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Scopri di più su come evitare il blocco dell\'account</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Aiuta con le geolocalizzazioni dei server.</string>
   <string name="email_address_required">Indirizzo email (necessario)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Clicca sul link nell'email per verificare il tuo indirizzo di posta e proseguire con la creazione del tuo account. "</string>
   <string name="change_email_address">Modifica l\'indirizzo email</string>
   <string name="next">Continua</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la password principale al posto tuo.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Imposta la password principale</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Imposta una password forte e unica per proteggere i tuoi dati.</string>
   <string name="minimum_characters">%1$s caratteri</string>
@@ -1037,6 +1049,7 @@ Vuoi passare a questo account?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Errore di connessione con il servizio Duo. Utilizza un metodo di login in due passaggi diverso o contatta Duo per assistenza.</string>
   <string name="master_password_hint_not_specified">Suggerimento per la password principale</string>
   <string name="master_password_important_hint">La tua password principale non può essere recuperata se la dimentichi! Almeno 12 caratteri.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Inizia</string>
   <string name="save_and_protect_your_data">Salva e proteggi i tuoi dati</string>
   <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge non solo le password ma anche i login, le identità, le carte e le note in modo sicuro.</string>
@@ -1164,5 +1177,29 @@ Vuoi passare a questo account?</string>
   <string name="coachmark_6_of_6">6 DI 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua parola d\'accesso alle specifiche del tuo account.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Dopo aver salvato la tua nuova parola d'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account. "</string>
+  <string name="error_loading_certificate">Errore caricamento certificato</string>
+  <string name="certificate_alias">Alias del certificato</string>
+  <string name="import_certificate">Importa certificato</string>
+  <string name="choose_system_certificate">Scegli certificato di sistema</string>
+  <string name="certificate_installed">Certificato installato</string>
+  <string name="certificate_installation_failed">Installazione certificato non riuscita</string>
+  <string name="certificate_selection_failed">Selezione del certificato non riuscita</string>
+  <string name="unsupported_certificate_type">Tipo di certificato non supportato</string>
+  <string name="certificate_password_incorrect">Parola d\'accesso del certificato errata</string>
+  <string name="invalid_certificate_chain">Serie di certificati non valida</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Usare un certificato di sistema è meno sicuro che memorizzare il certificato con Bitwarden. Continuare mostrerà un elenco di certificati di sistema disponibili se uno è già installato.</string>
+  <string name="certificate_alias_already_exists">L\'alias del certificato esiste già</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operazione chiave d\'accesso non riuscita perché l\'app è firmata in modo errato.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operazione parola d\'accesso non riuscita perché l\'URL host non è presente nella richiesta.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Operazione parola d\'accesso non riuscita perché la firma dell\'app non è valida.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Registrazione chiave d\'accesso non riuscita a causa di un errore interno.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operazione chiave d\'accesso non riuscita perché la parte affidataria non può essere identificata.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Autenticazione chiave d\'accesso non riuscita a causa di un errore interno.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operazione chiave d\'accesso non riuscita perché l\'elemento selezionato non esiste.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Operazione chiave d\'accesso non riuscita perché l\'utente è escluso.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operazione chiave d\'accesso non riuscita perché la verifica dell\'utente è stata annullata.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Operazione parola d\'accesso non riuscita perché la richiesta non è valida.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operazione chiave d\'accesso non riuscita perché i tentativi di verifica dell\'utente sono stati superati.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
 </resources>

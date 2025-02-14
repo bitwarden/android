@@ -50,11 +50,12 @@
   <string name="switch_to_already_added_account_confirmation">Бажаєте перемкнутися на нього зараз?</string>
   <string name="master_password">Головний пароль</string>
   <string name="master_password_required">Головний пароль (обов\'язково)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Більше</string>
   <string name="my_vault">Моє сховище</string>
   <string name="authenticator">Автентифікатор</string>
   <string name="name">Назва</string>
-  <string name="item_name_required">Item name (required)</string>
+  <string name="item_name_required">Назва запису (обов\'язково)</string>
   <string name="send_name_required">"Назва відправлення (обов'язково)"</string>
   <string name="no">Ні</string>
   <string name="notes">Нотатки</string>
@@ -72,7 +73,7 @@
   <string name="thank_you">Дякуємо</string>
   <string name="tools">Інструменти</string>
   <string name="uri">URI</string>
-  <string name="website_uri">Website (URI)</string>
+  <string name="website_uri">Вебсайт (URI)</string>
   <string name="use_fingerprint_to_unlock">Розблокуйте відбитком пальця</string>
   <string name="username">Ім\'я користувача</string>
   <string name="validation_field_required">Поле %1$s є обов\'язковим.</string>
@@ -121,7 +122,7 @@
   <string name="extension_tap_icon">Торкніться піктограми Bitwarden у меню, щоб запустити розширення.</string>
   <string name="extension_turn_on">Щоб увімкнути Bitwarden у Safari та інших програмах, торкніться піктограми \"Ще\" в нижньому рядку меню.</string>
   <string name="favorite">Обране</string>
-  <string name="unfavorite">Unfavorite</string>
+  <string name="unfavorite">Вилучити з обраного</string>
   <string name="fingerprint">Відбиток пальця</string>
   <string name="generate_password">Генерувати пароль</string>
   <string name="get_password_hint">Отримати підказку для головного пароля</string>
@@ -156,18 +157,20 @@
   <string name="no_favorites">У вашому сховищі немає обраного.</string>
   <string name="no_items">У вашому сховищі немає записів.</string>
   <string name="no_items_tap">У вашому сховищі немає записів для цього вебсайту/програми. Торкніться, щоб додати.</string>
-  <string name="no_cards">There are no cards in your vault.</string>
-  <string name="new_card">New card</string>
-  <string name="no_logins">There are no logins in your vault.</string>
-  <string name="no_identities">There are no identities in your vault.</string>
-  <string name="new_identity">New identity</string>
-  <string name="no_notes">There are no notes in your vault.</string>
-  <string name="new_note">New note</string>
-  <string name="new_item">New item</string>
-  <string name="no_text_sends">There are no text Sends in your vault.</string>
-  <string name="no_file_sends">There are no file Sends in your vault.</string>
-  <string name="new_text_send">New text Send</string>
-  <string name="new_file_send">New file Send</string>
+  <string name="no_cards">У вашому сховищі немає карток.</string>
+  <string name="new_card">Нова картка</string>
+  <string name="no_logins">У вашому сховищі немає записів входу.</string>
+  <string name="no_identities">У вашому сховищі немає посвідчень.</string>
+  <string name="new_identity">Нове посвідчення</string>
+  <string name="no_notes">У вашому сховищі немає нотаток.</string>
+  <string name="new_note">Нова нотатка</string>
+  <string name="new_item">Новий запис</string>
+  <string name="new_ssh_key">New SSH key</string>
+  <string name="no_text_sends">У вашому сховищі немає текстових відправлень.</string>
+  <string name="no_file_sends">У вашому сховищі немає файлових відправлень.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="new_text_send">Нове текстове відправлення</string>
+  <string name="new_file_send">Нове файлове відправлення</string>
   <string name="no_username">Без імені користувача</string>
   <string name="no_username_password_configured">Цей запис не має імені користувача або пароля.</string>
   <string name="ok_got_it">Гаразд, зрозуміло!</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Розкажіть іншим про свої враження, залишивши хороший відгук!</string>
   <string name="regenerate_password">Генерувати новий</string>
   <string name="retype_master_password">Введіть головний пароль ще раз</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Введіть головний пароль ще раз (обов\'язково)</string>
   <string name="search_vault">Шукати у сховищі</string>
   <string name="security">Безпека</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Встановлення PIN</string>
   <string name="set_pin_direction">Введіть 4-значний PIN-код для розблокування програми.</string>
   <string name="item_information">Інформація про запис</string>
+  <string name="item_details">Подробиці запису</string>
   <string name="item_updated">Запис збережено</string>
   <string name="submitting">Відправлення...</string>
   <string name="syncing">Синхронізація...</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">Потрібно перенести ключ шифрування. Увійдіть у вебсховище та оновіть свій ключ шифрування.</string>
   <string name="learn_more">Докладніше</string>
   <string name="api_url">URL-адреса сервера API</string>
+  <string name="client_certificate_mtls">Сертифікат клієнта (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Сертифікат використовується для автентифікації клієнта.</string>
+  <string name="use_system_certificate">Використати системний сертифікат</string>
   <string name="custom_environment">Власне середовище</string>
   <string name="custom_environment_footer">Для досвідчених користувачів. Ви можете вказати основну URL-адресу окремо для кожної служби.</string>
   <string name="environment_saved">URL-адреси середовища збережено.</string>
@@ -371,7 +379,7 @@
   <string name="select_type_field">Який тип власного поля ви хочете додати?</string>
   <string name="remove">Вилучити</string>
   <string name="new_uri">Новий URI</string>
-  <string name="add_website">Add website</string>
+  <string name="add_website">Додати вебсайт</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Основний домен</string>
   <string name="default_text">Типово</string>
@@ -412,12 +420,13 @@
   <string name="ur_is">URL-адреси</string>
   <string name="checking_password">Перевірка паролів...</string>
   <string name="check_password">Перевірити чи пароль було викрито.</string>
-  <string name="check_password_for_data_breaches">Check password for data breaches</string>
+  <string name="check_password_for_data_breaches">Перевірити пароль у витоках даних</string>
   <string name="password_exposed">Цей пароль було викрито %1$s разів з витоком даних. Вам слід його змінити.</string>
   <string name="password_safe">Цей пароль не було знайдено у жодних відомих витоках даних. Його можна безпечно використовувати.</string>
   <string name="identity_name">Назва посвідчення</string>
   <string name="value">Значення</string>
   <string name="password_history">Історія паролів</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Історія паролів: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Типи</string>
   <string name="no_passwords_to_list">Немає паролів.</string>
   <string name="no_items_to_list">Немає записів.</string>
@@ -497,8 +506,8 @@
   <string name="login_expired">Тривалість вашого сеансу завершилась.</string>
   <string name="biometrics_direction">Біометрична перевірка</string>
   <string name="biometrics">біометрією</string>
-  <string name="biometrics_failed">Biometrics Failed</string>
-  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
+  <string name="biometrics_failed">Збій біометрії</string>
+  <string name="biometrics_decoding_failure">Увійдіть за допомогою головного пароля або PIN-коду, а потім активуйте вхід з біометрією в налаштуваннях.</string>
   <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden потребує вашої уваги. Перегляньте розділ \"Служба доступності автозаповнення\" в налаштуваннях Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. У налаштуваннях Android для Bitwarden перейдіть до \"Накладання інших програм\" (розділ Розширені) і змініть положення перемикача для активації накладання.</string>
@@ -704,14 +713,15 @@
   <string name="verification_codes">Коди підтвердження</string>
   <string name="premium_subscription_required">Необхідна передплата преміум</string>
   <string name="cannot_add_authenticator_key">Не вдається додати ключ автентифікації?</string>
-  <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
+  <string name="cannot_add_authenticator_key_scan_qr_code">Не вдається додати ключ автентифікації? <annotation link="scanQrCode">Скануйте QR-код</annotation></string>
   <string name="scan_qr_code">Сканувати QR-код</string>
-  <string name="cannot_scan_qr_code">Не вдається сканувати QR-код?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Не можете сканувати QR-код? <annotation link="enterKeyManually">Введіть ключ вручну</annotation></string>
   <string name="authenticator_key_scanner">Ключ автентифікації</string>
+  <string name="authenticator_key_help">Довідка щодо ключа автентифікації</string>
   <string name="enter_key_manually">Введіть ключ вручну</string>
   <string name="add_totp">Додати TOTP</string>
   <string name="setup_totp">Налаштувати TOTP</string>
-  <string name="set_up_authenticator_key">Set up authenticator key</string>
+  <string name="set_up_authenticator_key">Налаштувати ключ автентифікації</string>
   <string name="once_the_key_is_successfully_entered">Після успішного введення ключа виберіть
 Додати TOTP для надійного збереження ключа</string>
   <string name="never_lock_warning">Встановивши параметр блокування \"Ніколи\", ви залишаєте своє сховище відкритим будь-кому, хто зможе отримати доступ до вашого пристрою. Користуючись цим параметром, ви маєте бути впевненими в тому, що ваш пристрій надійно захищений.</string>
@@ -821,7 +831,7 @@
   <string name="data_region">Регіон даних</string>
   <string name="region">Регіон</string>
   <string name="update_weak_master_password_warning">Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</string>
-  <string name="current_master_password">Поточний головний пароль</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Ви увійшли!</string>
   <string name="approve_with_my_other_device">Затвердити з моїм іншим пристроєм</string>
   <string name="request_admin_approval">Запит підтвердження адміністратора</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">Генерувати</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишіть цей пароль і зберігайте його в надійному місці.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Дізнайтеся про інші способи запобігання блокування облікового запису</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Допомога з розташуванням серверів.</string>
   <string name="email_address_required">Адреса е-пошти (обов\'язково)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Перейдіть за посиланням у листі, щоб підтвердити адресу електронної пошти й продовжити створення облікового запису. "</string>
   <string name="change_email_address">Змінити адресу е-пошти</string>
   <string name="next">Далі</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не може відновити втрачений чи забутий головний пароль.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Створити головний пароль</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Створіть унікальний, надійний пароль, щоб захистити вашу інформацію.</string>
   <string name="minimum_characters">%1$s символів</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Помилка під\'єднання до служби Duo. Скористайтеся іншим способом двоетапної перевірки або зверніться до служби підтримки Duo по допомогу.</string>
   <string name="master_password_hint_not_specified">Підказка для головного пароля</string>
   <string name="master_password_important_hint">Важливо: головний пароль неможливо відновити, якщо ви його втратите! Мінімум 12 символів.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Початок роботи</string>
   <string name="save_and_protect_your_data">Збережіть і захистіть свої дані</string>
   <string name="the_vault_protects_more_than_just_passwords">Сховище захищає не лише паролі. Безпечно зберігайте дані для входу, посвідчення, картки й нотатки.</string>
@@ -1156,14 +1169,38 @@
   <string name="alias">Псевдонім</string>
   <string name="use_the_generator_to_create_secure_passwords_passphrases_and_usernames">"Використовуйте генератор для створення надійних паролів, парольних фраз та імен користувачів. "</string>
   <string name="passphrases_are_strong_passwords_that_are_often_easier_to_remember_and_type_than_random_passwords">Парольні фрази – це надійні паролі, які легше запам\'ятовуються і вводяться, порівняно з випадковими паролями. Їх доцільно використовувати для входу в облікові записи, де автозаповнення недоступне, як-от служби потокової трансляції на телевізорі.</string>
-  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Unique usernames add an extra layer of security and can help prevent hackers from finding your accounts.</string>
+  <string name="unique_usernames_add_an_extra_layer_of_security_and_can_help_prevent_hackers_from_finding_your_accounts">Унікальні імена користувачів додають ще один рівень безпеки й запобігають знаходженню ваших облікових записів хакерами.</string>
   <string name="coachmark_1_of_6">1 з 6</string>
   <string name="coachmark_2_of_6">2 з 6</string>
   <string name="coachmark_3_of_6">3 з 6</string>
   <string name="coachmark_4_of_6">4 з 6</string>
   <string name="coachmark_5_of_6">5 з 6</string>
   <string name="coachmark_6_of_6">6 з 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
-  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
-  <string name="link">Link</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Використовуйте ці параметри, щоб налаштувати відповідність пароля вимогам вебсайту.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Після збереження нового пароля у Bitwarden обов'язково оновіть його на вебсайті. "</string>
+  <string name="error_loading_certificate">Помилка завантаження сертифіката</string>
+  <string name="certificate_alias">Псевдонім сертифіката</string>
+  <string name="import_certificate">Імпортувати сертифікат</string>
+  <string name="choose_system_certificate">Вибрати системний сертифікат</string>
+  <string name="certificate_installed">Сертифікат встановлено</string>
+  <string name="certificate_installation_failed">Не вдалося встановити сертифікат</string>
+  <string name="certificate_selection_failed">Не вдалося вибрати сертифікат</string>
+  <string name="unsupported_certificate_type">Непідтримуваний тип сертифікату</string>
+  <string name="certificate_password_incorrect">Неправильний пароль сертифіката</string>
+  <string name="invalid_certificate_chain">Недійсний ланцюжок сертифіката</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Використання сертифіката системи є менш захищеним, ніж зберігання сертифіката з Bitwarden. Якщо продовжити, буде показано список доступних системних сертифікатів, якщо вони вже встановлені.</string>
+  <string name="certificate_alias_already_exists">Псевдонім сертифіката вже існує</string>
+  <string name="link">Посилання</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Не вдалося виконати операцію з ключем доступу, оскільки програма має некоректний підпис.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Не вдалося виконати операцію з ключем доступу, оскільки в запиті відсутня URL-адреса вузла.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Не вдалося виконати операцію з ключем доступу, оскільки підпис програми недійсний.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Не вдалося зареєструвати ключ доступу через внутрішню помилку.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Не вдалося виконати операцію з ключем доступу, тому що неможливо ідентифікувати відповідну сторону.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Збій автентифікації з ключем доступу через внутрішню помилку.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з ключем доступу, тому що вибраний елемент не існує.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Не вдалося виконати операцію з ключем доступу, тому що користувача заблоковано.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Не вдалося виконати операцію з ключем доступу через скасування перевірки користувача.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Не вдалося виконати операцію з ключем доступу, оскільки запит недійсний.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з ключем доступу через перевищення спроб перевірки користувача.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
 </resources>

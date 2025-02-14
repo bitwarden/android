@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Искате ли да превключите към нея сега?</string>
   <string name="master_password">Главна парола</string>
   <string name="master_password_required">Главна парола (задължително)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Още</string>
   <string name="my_vault">Моят трезор</string>
   <string name="authenticator">Удостоверител</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Няма бележки в трезора.</string>
   <string name="new_note">Нова бележка</string>
   <string name="new_item">Нов елемент</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">Няма текстови Изпращания в трезора.</string>
   <string name="no_file_sends">Няма файлови Изпращания в трезора.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Ново текстово Изпращане</string>
   <string name="new_file_send">Ново файлово Изпращане</string>
   <string name="no_username">Няма потребителско име</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Молим да ни помогнете, като оставите положителен отзив!</string>
   <string name="regenerate_password">Друга парола</string>
   <string name="retype_master_password">Въведете пак главната парола</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Въведете отново главната парола (задължително)</string>
   <string name="search_vault">Търсене в трезора</string>
   <string name="security">Сигурност</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Задаване на ПИН</string>
   <string name="set_pin_direction">Въведете 4-цифрен ПИН за отключване на Битуорден.</string>
   <string name="item_information">Сведения за елемента</string>
+  <string name="item_details">Подробности за елемента</string>
   <string name="item_updated">Елементът е обновен.</string>
   <string name="submitting">Подаване…</string>
   <string name="syncing">Синхронизиране…</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">Необходима е промяна на шифриращия ключ. Впишете се в трезора си по уеб, за да обновите своя шифриращ ключ.</string>
   <string name="learn_more">Научете повече</string>
   <string name="api_url">Адрес на ППИ-сървъра</string>
+  <string name="client_certificate_mtls">Клиентски сертификат (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Сертификат, който се ползва за удостоверяване на клиента.</string>
+  <string name="use_system_certificate">Използване на системен сертификат</string>
   <string name="custom_environment">Специална среда</string>
   <string name="custom_environment_footer">За специални случаи. Може да укажете основните адреси на всяка ползвана услуга поотделно.</string>
   <string name="environment_saved">Средата с адресите е запазена.</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">Име на самоличността</string>
   <string name="value">Стойност</string>
   <string name="password_history">Хронология на паролата</string>
+  <string name="password_history_count"><annotation link="passwordHistory">История на паролата: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Видове</string>
   <string name="no_passwords_to_list">Няма пароли за показване.</string>
   <string name="no_items_to_list">Няма елементи за показване.</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">Не можете да добавите удостоверителен ключ?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Не можете да добавите удостоверителен ключ? <annotation link="scanQrCode">Сканирайте QR кода</annotation></string>
   <string name="scan_qr_code">Сканиране на QR код</string>
-  <string name="cannot_scan_qr_code">Не можете да сканирате QR кода?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Не можете да сканирате QR кода? <annotation link="enterKeyManually">Въведете ключа ръчно</annotation></string>
   <string name="authenticator_key_scanner">Ключ за удостоверяване</string>
+  <string name="authenticator_key_help">Помощ за удостоверителните ключове</string>
   <string name="enter_key_manually">Ръчно въвеждане на кода</string>
   <string name="add_totp">Добавяне на TOTP</string>
   <string name="setup_totp">Настройка на TOTP</string>
@@ -821,7 +831,7 @@
   <string name="data_region">Регион на данните</string>
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</string>
-  <string name="current_master_password">Текуща главна парола</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Вписахте се!</string>
   <string name="approve_with_my_other_device">Одобряване с другото ми устройство</string>
   <string name="request_admin_approval">Подаване на заявка за одобрение от администратор</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">Генериране</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишете си тази парола и я пазете на сигурно място.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Научете и за други начини, чрез които да избегнете загуба на достъп до регистрацията си</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Помощ относно географските местоположения на сървърите.</string>
   <string name="email_address_required">Електронна поща (задължително)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Последвайте връзката в е-писмото, за да потвърдите адреса на е-пощата си и да продължите със създаването на регистрацията си. "</string>
   <string name="change_email_address">Промяна на адреса на е-пощата</string>
   <string name="next">Следващо</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Битуорден не може да възстанови загубена или забравена парола.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Изберете главна парола</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
   <string name="minimum_characters">%1$s знака</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при свързването с услугата на Duo. Използвайте друг метод за двустепенно удостоверяване или се свържете с Duo за съдействие.</string>
   <string name="master_password_hint_not_specified">Подсказка за главната парола</string>
   <string name="master_password_important_hint">Важно: главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне 12 знака.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Първи стъпки</string>
   <string name="save_and_protect_your_data">Запазвайте и защитавайте своите данни</string>
   <string name="the_vault_protects_more_than_just_passwords">Трезорът може да пази не само пароли. Съхранявайте защитени данни за вход, идентификационни данни, карти и бележки.</string>
@@ -1165,5 +1178,29 @@
   <string name="coachmark_6_of_6">6 ОТ 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Използвайте тези опции, за да настроите паролата според изискванията на акаунта си.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"След като запазите новата си парола в Битуорден, не забравяйте да я обновите в уеб сайта на акаунта си. "</string>
+  <string name="error_loading_certificate">Грешка при зареждане на сертификата</string>
+  <string name="certificate_alias">Псевдоним на сертификата</string>
+  <string name="import_certificate">Внасяне на сертификат</string>
+  <string name="choose_system_certificate">Изберете системен сертификат</string>
+  <string name="certificate_installed">Сертификатът е инсталиран</string>
+  <string name="certificate_installation_failed">Инсталацията на сертификата не беше успешна</string>
+  <string name="certificate_selection_failed">Изборът на сертификата не беше успешен</string>
+  <string name="unsupported_certificate_type">Неподдържан вид сертификат</string>
+  <string name="certificate_password_incorrect">Грешна парола за сертификата</string>
+  <string name="invalid_certificate_chain">Неправилна верига от сертификати</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Използването на системен сертификат е по-малко сигурно от съхраняването на сертификата в Битуорден. Ако продължите, ще бъде показан списък от наличните системни сертификати, ако вече има инсталиран.</string>
+  <string name="certificate_alias_already_exists">Псевдонимът на сертификата вече съществува</string>
   <string name="link">Връзка</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Операцията със секретния ключ беше неуспешна, тъй като приложението е подписано неправилно.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операцията със секретния ключ беше неуспешна, тъй като адресът на сървъра не присъства в заявката.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Операцията със секретния ключ беше неуспешна, тъй като подписът на приложението е грешен.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Регистрацията със секретния ключ беше неуспешна поради вътрешна грешка.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операцията със секретния ключ беше неуспешна, тъй като предаващият сървър не може да бъде идентифициран.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Удостоверяването със секретния ключ беше неуспешно поради вътрешна грешка.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Операцията със секретния ключ беше неуспешна, тъй като избраният елемент не съществува.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Операцията със секретния ключ беше неуспешна, тъй като потребителят е заключен извън системата.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Операцията със секретния ключ беше неуспешна, тъй като потвърждението беше отказано.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Операцията със секретния ключ беше неуспешна, тъй като заявката е грешна.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
 </resources>
