@@ -143,7 +143,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -201,6 +201,17 @@ class LoginViewModel @Inject constructor(
                         ),
                     )
                 }
+            }
+
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    LoginEvent.NavigateToTwoFactorLogin(
+                        emailAddress = state.emailAddress,
+                        password = state.passwordInput,
+                        isNewDeviceVerification = true,
+                    ),
+                )
             }
         }
     }
@@ -366,6 +377,7 @@ sealed class LoginEvent {
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
         val password: String?,
+        val isNewDeviceVerification: Boolean = false,
     ) : LoginEvent()
 
     /**

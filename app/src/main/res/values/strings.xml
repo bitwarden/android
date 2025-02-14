@@ -242,12 +242,13 @@
   <string name="authenticator_app_title">Authenticator app</string>
   <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
   <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Login unavailable</string>
   <string name="no_two_step_available">This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</string>
   <string name="recovery_code_title">Recovery code</string>
   <string name="remember">Remember</string>
   <string name="remember_email">Remember email</string>
-  <string name="send_verification_code_again">Send verification code email again</string>
+  <string name="send_verification_code_again">Resend code</string>
   <string name="two_step_login_options">Two-step login options</string>
   <string name="use_another_two_step_method">Use another two-step login method</string>
   <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
@@ -1178,6 +1179,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>

@@ -1597,6 +1597,40 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `login get token should return InvalidType NewDeviceVerification when message is new device verification needed`() =
+        runTest {
+            coEvery {
+                identityService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson
+                .Invalid(
+                    errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+                        errorMessage = "new device verification required",
+                    ),
+                    legacyErrorModel = null,
+                )
+                .asSuccess()
+
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(
+                LoginResult.NewDeviceVerification(errorMessage = "new device verification required"),
+                result,
+            )
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `login get token succeeds should return Success, unlockVault, update AuthState, update stored keys, and sync`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
