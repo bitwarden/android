@@ -2062,7 +2062,7 @@ data class VaultAddEditState(
     val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
-    val shouldClearSpecialCircumstance: Boolean = false,
+    val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
     private val shouldShowCoachMarkTour: Boolean,
 ) : Parcelable {
