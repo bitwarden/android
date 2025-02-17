@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -128,13 +130,18 @@ fun TwoFactorLoginScreen(
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val title = if (state.isNewDeviceVerification) {
+        R.string.verify_your_identity.asText()
+    } else {
+        state.authMethod.title
+    }
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = state.authMethod.title(),
+                title = title(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
@@ -142,22 +149,24 @@ fun TwoFactorLoginScreen(
                     { viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick) }
                 },
                 actions = {
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = state.availableAuthMethods
-                            .map {
-                                OverflowMenuItemData(
-                                    text = it.title(),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                TwoFactorLoginAction.SelectAuthMethod(it),
-                                            )
-                                        }
-                                    },
-                                )
-                            }
-                            .toPersistentList(),
-                    )
+                    if (!state.isNewDeviceVerification) {
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = state.availableAuthMethods
+                                .map {
+                                    OverflowMenuItemData(
+                                        text = it.title(),
+                                        onClick = remember(viewModel) {
+                                            {
+                                                viewModel.trySendAction(
+                                                    TwoFactorLoginAction.SelectAuthMethod(it),
+                                                )
+                                            }
+                                        },
+                                    )
+                                }
+                                .toPersistentList(),
+                        )
+                    }
                 },
             )
         },
@@ -220,10 +229,29 @@ private fun TwoFactorLoginScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
+        if (state.authMethod == TwoFactorAuthMethod.EMAIL) {
+            state.imageRes?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .size(100.dp),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
         Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
-            text = state.authMethod.description(state.displayEmail)(),
-            textAlign = TextAlign.Start,
+            text = if (state.isNewDeviceVerification) {
+                R.string.enter_verification_code_new_device.asText(state.displayEmail).invoke()
+            } else {
+                state.authMethod.description(
+                    state.displayEmail,
+                ).invoke()
+            },
+            textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -233,19 +261,21 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        state.imageRes?.let {
-            Spacer(modifier = Modifier.height(12.dp))
-            Image(
-                painter = painterResource(id = it),
-                contentDescription = null,
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
+            state.imageRes?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
 
         if (state.shouldShowCodeInput) {
@@ -268,15 +298,17 @@ private fun TwoFactorLoginScreenContent(
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        BitwardenSwitch(
-            label = stringResource(id = R.string.remember),
-            isChecked = state.isRememberEnabled,
-            onCheckedChange = onRememberMeToggle,
-            cardStyle = CardStyle.Full,
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
-        )
+        if (!state.isNewDeviceVerification) {
+            BitwardenSwitch(
+                label = stringResource(id = R.string.remember),
+                isChecked = state.isRememberEnabled,
+                onCheckedChange = onRememberMeToggle,
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
+        }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
 
@@ -322,6 +354,7 @@ private fun TwoFactorLoginScreenContentPreview() {
                 email = "",
                 password = "",
                 orgIdentifier = null,
+                isNewDeviceVerification = true,
             ),
             onCodeInputChange = {},
             onContinueButtonClick = {},

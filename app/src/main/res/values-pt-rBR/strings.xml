@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Você gostaria de mudar para ela agora?</string>
   <string name="master_password">Senha mestra</string>
   <string name="master_password_required">Senha mestra (obrigatório)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Mais</string>
   <string name="my_vault">Meu cofre</string>
   <string name="authenticator">Autenticação</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">Sem Nome de Usuário</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Por favor considere ajudar-nos com uma boa avaliação!</string>
   <string name="regenerate_password">Gerar nova senha</string>
   <string name="retype_master_password">Digite novamente a senha mestra</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Digite a senha mestra novamente (obrigatório)</string>
   <string name="search_vault">Pesquisar cofre</string>
   <string name="security">Segurança</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Definir PIN</string>
   <string name="set_pin_direction">Digite um código PIN de 4 dígitos para desbloquear o aplicativo.</string>
   <string name="item_information">Informação do Item</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">Item salvo</string>
   <string name="submitting">Enviando...</string>
   <string name="syncing">Sincronizando...</string>
@@ -281,6 +286,9 @@ A leitura será feita automaticamente.</string>
   <string name="encryption_key_migration_required_description_long">Migração de chave de criptografia necessária. Faça login através do cofre web para atualizar sua chave de criptografia.</string>
   <string name="learn_more">Saiba Mais</string>
   <string name="api_url">URL do Servidor da API</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">Ambiente personalizado</string>
   <string name="custom_environment_footer">Para usuários avançados. Você pode especificar a URL de base de cada serviço independentemente.</string>
   <string name="environment_saved">As URLs do ambiente foram salvas.</string>
@@ -418,6 +426,7 @@ A leitura será feita automaticamente.</string>
   <string name="identity_name">Nome de Identidade</string>
   <string name="value">Valor</string>
   <string name="password_history">Histórico de Senha</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Tipos</string>
   <string name="no_passwords_to_list">Nenhuma senha para listar.</string>
   <string name="no_items_to_list">Não há itens para listar.</string>
@@ -706,8 +715,9 @@ A leitura será feita automaticamente.</string>
   <string name="cannot_add_authenticator_key">Não foi possível adicionar chave de autenticação?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Escanear QR Code</string>
-  <string name="cannot_scan_qr_code">Não foi possível escanear o QR Code?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">Chave de Autenticação</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">Insira manualmente a chave</string>
   <string name="add_totp">Adicionar TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
@@ -821,7 +831,7 @@ Você deseja mudar para esta conta?</string>
   <string name="data_region">Região de dados</string>
   <string name="region">Região</string>
   <string name="update_weak_master_password_warning">A sua senha mestra não atende a uma ou mais das políticas da sua organização. Para acessar o cofre, você deve atualizar a sua senha mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</string>
-  <string name="current_master_password">Senha mestra atual</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Conectado!</string>
   <string name="approve_with_my_other_device">Aprovar com meu outro dispositivo</string>
   <string name="request_admin_approval">Solicitar aprovação do administrador</string>
@@ -1013,12 +1023,14 @@ Você deseja mudar para esta conta?</string>
   <string name="generate_button_label">Gerar</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Anote esta senha e mantenha-a em algum lugar seguro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Saiba mais sobre outras formas de evitar o bloqueio da conta</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Ajuda com geolocalização de servidores.</string>
   <string name="email_address_required">Endereço eletrônico (obrigatório)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Selecione o link na mensagem eletrônica para verificar seu endereço eletrônico e continuar criando sua conta. "</string>
   <string name="change_email_address">Alterar endereço de endereço eletrônico</string>
   <string name="next">Avançar</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">O Bitwarden não pode recuperar uma senha mestra perdida ou esquecida.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Escolha sua senha mestra</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Escolha uma senha única e forte para manter suas informações seguras.</string>
   <string name="minimum_characters">%1$s caracteres</string>
@@ -1038,6 +1050,7 @@ Você deseja mudar para esta conta?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Erro ao se conectar com o serviço Duo. Use um método de verificação de duas etapas diferente ou contate o Duo para assistência.</string>
   <string name="master_password_hint_not_specified">Dica da senha mestra</string>
   <string name="master_password_important_hint">Importante: A sua senha mestra não pode ser recuperada se você a esquecer! 12 caracteres no mínimo.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Introdução</string>
   <string name="save_and_protect_your_data">Salve e proteja seus dados</string>
   <string name="the_vault_protects_more_than_just_passwords">O cofre protege mais do que apenas senhas. Armazene logins, IDs, cartões e notas com segurança aqui.</string>
@@ -1165,5 +1178,29 @@ Você deseja mudar para esta conta?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

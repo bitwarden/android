@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Haluatko vaihtaa siihen nyt?</string>
   <string name="master_password">Pääsalasana</string>
   <string name="master_password_required">Pääsalasana (pakollinen)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Lisää</string>
   <string name="my_vault">Oma holvi</string>
   <string name="authenticator">Todentaja</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">Ei käyttäjätunnusta</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Harkitse tukemistamme hyvällä arvostelulla!</string>
   <string name="regenerate_password">Luo uusi salasana</string>
   <string name="retype_master_password">Syötä pääsalasana uudelleen</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Toista pääsalasana (pakollinen)</string>
   <string name="search_vault">Etsi holvista</string>
   <string name="security">Suojaus</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Aseta PIN-koodi</string>
   <string name="set_pin_direction">Syötä 4-numeroinen PIN-koodi, jolla sovelluksen lukitus avataan.</string>
   <string name="item_information">Kohteen tiedot</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">Kohde tallennettiin</string>
   <string name="submitting">Käsitellään…</string>
   <string name="syncing">Synkronoidaan...</string>
@@ -281,6 +286,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="encryption_key_migration_required_description_long">Salausavaimen siirto vaaditaan. Päivitä salausavaimesi kirjautumalla verkkoholviin.</string>
   <string name="learn_more">Lue lisää</string>
   <string name="api_url">API-palvelimen URL</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">Mukautettu palvelinympäristö</string>
   <string name="custom_environment_footer">Edistyneille käyttäjille. Voit määrittää jokaiselle palvelulle oman pääverkkotunnuksen.</string>
   <string name="environment_saved">Palvelinympäristön URL-osoitteet tallennettiin.</string>
@@ -418,6 +426,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="identity_name">Henkilöllisyyden nimi</string>
   <string name="value">Arvo</string>
   <string name="password_history">Salasanahistoria</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Tyypit</string>
   <string name="no_passwords_to_list">Ei näytettäviä salasanoja.</string>
   <string name="no_items_to_list">Ei näytettäviä kohteita.</string>
@@ -706,8 +715,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="cannot_add_authenticator_key">Eikä todennusavaimen lisääminen onnistu?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Skannaa QR-koodi</string>
-  <string name="cannot_scan_qr_code">Eikö QR-koodin skannaus onnistu?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">Todennusavain</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">Syötä se manuaalisesti</string>
   <string name="add_totp">Lisää TOTP</string>
   <string name="setup_totp">Määritä TOTP</string>
@@ -821,7 +831,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="data_region">Tietoalue</string>
   <string name="region">Alue</string>
   <string name="update_weak_master_password_warning">Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan.</string>
-  <string name="current_master_password">Nykyinen pääsalasana</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Kirjautuminen onnistui</string>
   <string name="approve_with_my_other_device">Hyväksy toisella laitteellani</string>
   <string name="request_admin_approval">Pyydä hyväksyntää ylläpidolta</string>
@@ -1013,12 +1023,14 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="generate_button_label">Luo</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Kirjoita salasana ylös ja säilytä sitä turvallisessa paikassa.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Lue muista tavoista joilla voit välttyä tilin menetykseltä</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Ohjeita palvelinsijainneista.</string>
   <string name="email_address_required">Sähköpostiosoite (vaaditaan)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Vahvista sähköpostiosoitteesi ja jatka tilisi luontia avaamalla viestissä oleva linkki."</string>
   <string name="change_email_address">Vaihda sähköpostiosoite</string>
   <string name="next">Seuraava</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden ei voi palauttaa kadonnutta tai unohtunutta pääsalasanaa.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Valitse pääsalasanasi</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Suojaa tietosi valitsemalla ainutlaatuinen ja vahva salasana.</string>
   <string name="minimum_characters">%1$s merkkiä</string>
@@ -1038,6 +1050,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua.</string>
   <string name="master_password_hint_not_specified">Pääsalasanan vihje</string>
   <string name="master_password_important_hint">Tärkeää: Pääsalasanaasi ei ole mahdollista palauttaa, jos unohdat sen! Vähintään 12 merkkiä.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Aloita</string>
   <string name="save_and_protect_your_data">Tallenna ja suojaa tietojasi</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
@@ -1145,8 +1158,8 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="coachmark_3_of_3">3/3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">You must add a web address to use autofill to access this account.</string>
   <string name="mutual_tls">Mutual TLS</string>
-  <string name="single_tap_passkey_creation">Single tap passkey creation</string>
-  <string name="single_tap_passkey_authentication">Single tap passkey sign-on</string>
+  <string name="single_tap_passkey_creation">Yhden napautuksen pääsyavaimen luonti</string>
+  <string name="single_tap_passkey_authentication">Yhden napautuksen kirjautuminen</string>
   <string name="learn_about_new_logins">Learn about new logins</string>
   <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
   <string name="explore_the_generator">Explore the generator</string>
@@ -1165,5 +1178,29 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

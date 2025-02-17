@@ -146,7 +146,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -162,7 +162,9 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = loginResult.errorMessage?.asText()
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
                                 ?: R.string.login_sso_error.asText(),
                         ),
                     )
@@ -201,6 +203,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.login_sso_error.asText(),
                         ),
                     )
                 }

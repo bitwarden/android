@@ -10,17 +10,21 @@ const val RESET_PASSWORD_ROUTE: String = "reset_password"
 /**
  * Add the Reset Password screen to the nav graph.
  */
-fun NavGraphBuilder.resetPasswordDestination() {
+fun NavGraphBuilder.resetPasswordDestination(
+    onNavigateToPreventAccountLockOut: () -> Unit,
+) {
     composable(
         route = RESET_PASSWORD_ROUTE,
     ) {
-        ResetPasswordScreen()
+        ResetPasswordScreen(onNavigateToPreventAccountLockOut = onNavigateToPreventAccountLockOut)
     }
 }
 
 /**
  * Navigate to the Reset Password screen.
  */
-fun NavController.navigateToResetPasswordGraph(navOptions: NavOptions? = null) {
+fun NavController.navigateToResetPasswordScreen(
+    navOptions: NavOptions? = null,
+) {
     this.navigate(RESET_PASSWORD_ROUTE, navOptions)
 }

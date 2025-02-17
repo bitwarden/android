@@ -102,6 +102,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
+                FlagKey.SimpleLoginSelfHostAlias,
             ).all {
                 !it.defaultValue
             },
@@ -131,6 +132,7 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.MutualTls,
                 FlagKey.AnonAddySelfHostAlias,
+                FlagKey.SimpleLoginSelfHostAlias,
             ).all {
                 it.isRemotelyConfigured
             },

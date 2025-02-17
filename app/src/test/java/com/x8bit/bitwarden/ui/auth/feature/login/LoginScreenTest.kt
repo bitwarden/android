@@ -70,7 +70,7 @@ class LoginScreenTest : BaseComposeTest() {
                 onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
-                onNavigateToTwoFactorLogin = { _, _ -> onNavigateToTwoFactorLoginCalled = true },
+                onNavigateToTwoFactorLogin = { _, _, _ -> onNavigateToTwoFactorLoginCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
                 keyboardController = keyboardController,

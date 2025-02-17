@@ -54,7 +54,6 @@ class ExportVaultViewModel @Inject constructor(
         ?: ExportVaultState(
             confirmFilePasswordInput = "",
             dialogState = null,
-            email = requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
             exportData = null,
             exportFormat = ExportVaultFormat.JSON,
             filePasswordInput = "",
@@ -266,7 +265,6 @@ class ExportVaultViewModel @Inject constructor(
         } else {
             passwordStrengthJob = viewModelScope.launch {
                 val result = authRepository.getPasswordStrength(
-                    email = state.email,
                     password = action.input,
                 )
                 trySendAction(ExportVaultAction.Internal.ReceivePasswordStrengthResult(result))
@@ -458,7 +456,6 @@ data class ExportVaultState(
     val exportData: String? = null,
     val confirmFilePasswordInput: String,
     val dialogState: DialogState?,
-    val email: String,
     val exportFormat: ExportVaultFormat,
     val filePasswordInput: String,
     val passwordInput: String,

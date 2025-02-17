@@ -94,7 +94,7 @@ fun BitwardenClientCertificateDialog(
                     value = password,
                     onValueChange = { password = it },
                     cardStyle = CardStyle.Bottom,
-                    textFieldTestTag = "AlertClientCertificatePasswordInputField",
+                    passwordFieldTestTag = "AlertClientCertificatePasswordInputField",
                     modifier = Modifier.imePadding(),
                 )
             }

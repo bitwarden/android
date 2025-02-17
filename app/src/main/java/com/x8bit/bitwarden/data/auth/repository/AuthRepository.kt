@@ -231,6 +231,19 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     ): LoginResult
 
     /**
+     * Repeat the previous login attempt but this time with New Device OTP
+     * information. Password is included if available to unlock the vault after
+     * authentication. Updated access token will be reflected in [authStateFlow].
+     */
+    suspend fun login(
+        email: String,
+        password: String?,
+        newDeviceOtp: String,
+        captchaToken: String?,
+        orgIdentifier: String?,
+    ): LoginResult
+
+    /**
      * Log out the current user.
      */
     fun logout()
@@ -251,6 +264,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Resend the email with the two-factor verification code.
      */
     suspend fun resendVerificationCodeEmail(): ResendEmailResult
+
+    /**
+     * Resend the email with the new device verification code.
+     */
+    suspend fun resendNewDeviceOtp(): ResendEmailResult
 
     /**
      * Switches to the account corresponding to the given [userId] if possible.
@@ -362,8 +380,10 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
 
     /**
      * Get the password strength for the given [email] and [password] combo.
+     * If no value is passed for the [email] will use the active email of the current active
+     * account via the [userStateFlow].
      */
-    suspend fun getPasswordStrength(email: String, password: String): PasswordStrengthResult
+    suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
      * Validates the master password for the current logged in user.

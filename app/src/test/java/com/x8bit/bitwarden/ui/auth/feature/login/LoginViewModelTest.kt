@@ -455,6 +455,44 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `LoginButtonClick login returns NewDeviceVerification should emit NavigateToTwoFactorLogin`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = password,
+                    captchaToken = null,
+                )
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification needed")
+
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    passwordInput = password,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(passwordInput = password),
+                    viewModel.stateFlow.value,
+                )
+                assertEquals(
+                    LoginEvent.NavigateToTwoFactorLogin(
+                        emailAddress = EMAIL,
+                        password = password,
+                        isNewDeviceVerification = true,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = password, captchaToken = null)
+            }
+        }
+
+    @Test
     fun `MasterPasswordHintClick should emit NavigateToMasterPasswordHint`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {

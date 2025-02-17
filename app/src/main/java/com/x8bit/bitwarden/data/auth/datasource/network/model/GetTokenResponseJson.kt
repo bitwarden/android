@@ -108,6 +108,28 @@ sealed class GetTokenResponseJson {
             get() = errorModel?.errorMessage ?: legacyErrorModel?.errorMessage
 
         /**
+         * The type of invalid responses that can be received.
+         */
+        sealed class InvalidType {
+            /**
+             * Represents an invalid response indicating that a new device verification is required.
+             */
+            data object NewDeviceVerification : InvalidType()
+
+            /**
+             * Represents generic invalid response
+             */
+            data object GenericInvalid : InvalidType()
+        }
+
+        val invalidType: InvalidType
+            get() = if (errorMessage?.lowercase() == "new device verification required") {
+                InvalidType.NewDeviceVerification
+            } else {
+                InvalidType.GenericInvalid
+            }
+
+        /**
          * The error body of an invalid request containing a message.
          */
         @Serializable

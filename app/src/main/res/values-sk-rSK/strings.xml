@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Chceli by ste naň prejsť teraz?</string>
   <string name="master_password">Hlavné heslo</string>
   <string name="master_password_required">Hlavné heslo (povinné)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Viac</string>
   <string name="my_vault">Môj trezor</string>
   <string name="authenticator">Overovateľ</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">V trezore sa nenachádzajú žiadne poznámky.</string>
   <string name="new_note">Nová poznámka</string>
   <string name="new_item">Nová položka</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">V trezore sa nenachádzajú žiadne textové Sendy.</string>
   <string name="no_file_sends">Vo vašom trezore nie sú žiadne súborové Sendy.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Nový textový Send</string>
   <string name="new_file_send">Nový súborový Send</string>
   <string name="no_username">Žiadne používateľské meno</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Prosíme, zvážte pomôcť nám dobrým hodnotením!</string>
   <string name="regenerate_password">Vygenerovať nové heslo</string>
   <string name="retype_master_password">Znovu zadajte hlavné heslo</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Opätovne zadajte hlavné heslo (povinné)</string>
   <string name="search_vault">Prehľadávať trezor</string>
   <string name="security">Zabezpečenie</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Nastaviť PIN</string>
   <string name="set_pin_direction">Zadajte 4-ciferný PIN kód na odomknutie aplikácie.</string>
   <string name="item_information">Informácie o položke</string>
+  <string name="item_details">Podrobnosti o položke</string>
   <string name="item_updated">Položka bola aktualizovaná.</string>
   <string name="submitting">Odosielam...</string>
   <string name="syncing">Synchronizujem...</string>
@@ -281,6 +286,9 @@ Skenovanie prebehne automaticky.</string>
   <string name="encryption_key_migration_required_description_long">Vyžaduje sa migrácia šifrovacieho kľúča. Na aktualizáciu šifrovacieho kľúča sa prihláste cez webový trezor.</string>
   <string name="learn_more">Zistiť viac</string>
   <string name="api_url">URL API servera</string>
+  <string name="client_certificate_mtls">Klientský certifikát (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certifikát používaný na overenie klienta.</string>
+  <string name="use_system_certificate">Použiť systémový certifikát</string>
   <string name="custom_environment">Vlastné prostredie</string>
   <string name="custom_environment_footer">Pre pokročilých používateľov. Môžete špecifikovať základnú URL pre každú službu nezávisle.</string>
   <string name="environment_saved">URL prostredia boli uložené.</string>
@@ -418,6 +426,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="identity_name">Meno identity</string>
   <string name="value">Hodnota</string>
   <string name="password_history">História hesla</string>
+  <string name="password_history_count"><annotation link="passwordHistory">História hesla: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Typy</string>
   <string name="no_passwords_to_list">Nenašli sa žiadne heslá.</string>
   <string name="no_items_to_list">Neexistujú žiadne položky na zobrazenie.</string>
@@ -706,8 +715,9 @@ Skenovanie prebehne automaticky.</string>
   <string name="cannot_add_authenticator_key">Overovací kľúč sa nedá pridať?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Nemôžete pridať kľúč overovateľa? <annotation link="scanQrCode">Skenovať QR kód</annotation></string>
   <string name="scan_qr_code">Skenovať QR kód</string>
-  <string name="cannot_scan_qr_code">QR kód sa nedá skenovať?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Nemôžete naskenovať QR kód? <annotation link="enterKeyManually">Zadajte kľúč manuálne</annotation></string>
   <string name="authenticator_key_scanner">Kľúč z aplikácie Authenticator</string>
+  <string name="authenticator_key_help">Pomoc pre overovací kľúč</string>
   <string name="enter_key_manually">Zadajte kľúč manuálne</string>
   <string name="add_totp">Pridať TOTP</string>
   <string name="setup_totp">Nastaviť TOTP</string>
@@ -821,7 +831,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="data_region">Dátová oblasť</string>
   <string name="region">Región</string>
   <string name="update_weak_master_password_warning">Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</string>
-  <string name="current_master_password">Súčasné hlavné heslo</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Prihlásený!</string>
   <string name="approve_with_my_other_device">Schváliť pomocou môjho druhého zariadenia</string>
   <string name="request_admin_approval">Žiadosť o schválenie správcom</string>
@@ -1013,12 +1023,14 @@ Chcete prepnúť na tento účet?</string>
   <string name="generate_button_label">Generovať</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Toto heslo si zapíšte a uložte na bezpečné miesto.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Prečítajte si o ďalších spôsoboch, ako zabrániť zablokovaniu účtu</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Pomoc pri určovaní geografickej polohy servera.</string>
   <string name="email_address_required">E-mailová adresa (povinná)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Odkazom v e-maile overte svoju e-mailovú adresu a pokračujte vo vytváraní konta. "</string>
   <string name="change_email_address">Zmeniť e-mailovú adresu</string>
   <string name="next">Ďalej</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nemôže obnoviť stratené alebo zabudnuté hlavné heslo.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
   <string name="minimum_characters">%1$s znakov</string>
@@ -1038,6 +1050,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
   <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
   <string name="master_password_important_hint">Dôležité: Vaše hlavné heslo sa nedá obnoviť, ak ho zabudnete! Minimálne 12 znakov.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Začnite</string>
   <string name="save_and_protect_your_data">Uložiť a ochrániť vaše údaje</string>
   <string name="the_vault_protects_more_than_just_passwords">Trezor chráni viac ako len heslá. Tu môžete bezpečne ukladať prihlasovacie údaje, identifikačné údaje, karty a poznámky.</string>
@@ -1165,5 +1178,29 @@ Chcete prepnúť na tento účet?</string>
   <string name="coachmark_6_of_6">6 Z 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Tieto možnosti môžete použiť na úpravu hesla, aby spĺňalo požiadavky webovej stránky.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po uložení nového hesla do Bitwardenu ho nezabudnite aktualizovať na webovej stránke účtu. "</string>
+  <string name="error_loading_certificate">Chyba pri načítaní certifikátu</string>
+  <string name="certificate_alias">Alias certifikátu</string>
+  <string name="import_certificate">Importovať certifikát</string>
+  <string name="choose_system_certificate">Vybrať systémový certifikát</string>
+  <string name="certificate_installed">Certifikát bol nainštalovaný</string>
+  <string name="certificate_installation_failed">Inštalácia certifikátu zlyhala</string>
+  <string name="certificate_selection_failed">Výber certifikátu zlyhal</string>
+  <string name="unsupported_certificate_type">Nepodporovaný typ certifikátu</string>
+  <string name="certificate_password_incorrect">Nesprávne heslo certifikátu</string>
+  <string name="invalid_certificate_chain">Neplatný reťazec certifikátu</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Použitie systémového certifikátu je menej bezpečné ako uloženie certifikátu v Bitwardene. Pokračovaním sa zobrazí zoznam dostupných systémových certifikátov, ak je už nejaký nainštalovaný.</string>
+  <string name="certificate_alias_already_exists">Alias certifikátu už existuje</string>
   <string name="link">Odkaz</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">अकाउंट अभी इस्तेमाल करें?</string>
   <string name="master_password">मास्टर पासवर्ड</string>
   <string name="master_password_required">Master password (required)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">ज़्यादा</string>
   <string name="my_vault">मेरी तिजोरी</string>
   <string name="authenticator">ऑथेंटिकेटर</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">एक अच्छा रिव्यू लिखकर हमारी मदद करें!</string>
   <string name="regenerate_password">पासवर्ड वापस बनाएं</string>
   <string name="retype_master_password">मास्टर पासवर्ड वापस लिखें</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">तिजोरी सर्च करें</string>
   <string name="security">सेक्योरिटी</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">पिन सेट करें</string>
   <string name="set_pin_direction">ऐप खोलने के लिए एक पिन कोड डालें।</string>
   <string name="item_information">आइटम जानकारी</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">आइटम सेव किया गया</string>
   <string name="submitting">भेज रहे है...</string>
   <string name="syncing">सिंक हो रहा है…</string>
@@ -280,6 +285,9 @@
   <string name="encryption_key_migration_required_description_long">एन्क्रिप्शन चाबी को अपडेट करना ज़रूरी है। एन्क्रिप्शन चाबी अपडेट करने के लिए वेब तिजोरी से लॉगइन करें।</string>
   <string name="learn_more">ज़्यादा जानें</string>
   <string name="api_url">एपीआई सर्वर यूआरएल</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">कस्टम एनवायरनमेंट</string>
   <string name="custom_environment_footer">एडवांस यूज़र के लिए। हर सर्विस का बेस यूआरएल अलग से बता सकते है।</string>
   <string name="environment_saved">एनवायरनमेंट यूआरएल सेव कर दिए गए है।</string>
@@ -417,6 +425,7 @@
   <string name="identity_name">आईडी का नाम</string>
   <string name="value">वैल्यू</string>
   <string name="password_history">पासवर्ड इतिहास</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">टाइप</string>
   <string name="no_passwords_to_list">No passwords to list.</string>
   <string name="no_items_to_list">There are no items to list.</string>
@@ -705,8 +714,9 @@
   <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">क्यूआर कोड स्कैन करें</string>
-  <string name="cannot_scan_qr_code">क्यूआर कोड स्कैन नहीं हो रहा?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">Authenticator key</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">Enter key manually</string>
   <string name="add_totp">टीओटीपी जोड़ें</string>
   <string name="setup_totp">टीओटीपी सेट करें</string>
@@ -820,7 +830,7 @@ Do you want to switch to this account?</string>
   <string name="data_region">डाटा लोकेशन</string>
   <string name="region">इलाका</string>
   <string name="update_weak_master_password_warning">आपका मुख्य पासवर्ड आपके संगठन के एक या उससे ज़्यादा नीति को नहीं मानता। तिजोरी एक्सेस करने के लिए आपको अपना मुख्य पासवर्ड अभी बदलना होगा। ये करने से आप अपने चालू सत्र से लॉग आउट हो जाएंगे, जिसके वजह से आपको वापस लॉग इन करना पड़ेगा। दूसरे डिवाइसों पर चालू सत्र एक घंटे तक सक्रिय रह सकते हैं।</string>
-  <string name="current_master_password">चालू मुख्य पासवर्ड</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">लॉगइन हो गए!</string>
   <string name="approve_with_my_other_device">Approve with my other device</string>
   <string name="request_admin_approval">Request admin approval</string>
@@ -1012,12 +1022,14 @@ Do you want to switch to this account?</string>
   <string name="generate_button_label">Generate</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Help with server geolocations.</string>
   <string name="email_address_required">Email address (required)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
   <string name="change_email_address">Change email address</string>
   <string name="next">Next</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
@@ -1037,6 +1049,7 @@ Do you want to switch to this account?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Get started</string>
   <string name="save_and_protect_your_data">Save and protect your data</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
@@ -1164,5 +1177,29 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

@@ -54,7 +54,16 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
         every { webAuthResultFlow } returns mutableWebAuthResultFlow
-        coEvery { login(any(), any(), any(), any(), any()) } returns LoginResult.Success
+        coEvery { resendNewDeviceOtp() } returns ResendEmailResult.Success
+        coEvery {
+            login(
+                email = any(),
+                password = any(),
+                twoFactorData = any(),
+                captchaToken = any(),
+                orgIdentifier = any(),
+            )
+        } returns LoginResult.Success
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -781,6 +790,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `ContinueButtonClick login returns NewDeviceVerification with message should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = "new device verification required".asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss)
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+            coVerify {
+                authRepository.login(
+                    email = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    twoFactorData = TwoFactorDataModel(
+                        code = "",
+                        method = TwoFactorAuthMethod.AUTHENTICATOR_APP.value.toString(),
+                        remember = false,
+                    ),
+                    captchaToken = null,
+                    orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+                )
+            }
+        }
+
+    @Test
     fun `RememberMeToggle should update the state`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
@@ -1000,6 +1069,111 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `when AuthRepository newDeviceOtp is true ContinueButtonClick should call the login method with newDeviceOtp`() {
+        val code = " code"
+        val initialState = DEFAULT_STATE.copy(
+            authMethod = TwoFactorAuthMethod.EMAIL,
+            codeInput = code,
+            isNewDeviceVerification = true,
+        )
+        val localAuthRepository: AuthRepository = mockk {
+            every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
+            every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+            every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
+            every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
+            every { webAuthResultFlow } returns mutableWebAuthResultFlow
+            coEvery {
+                login(
+                    email = any(),
+                    password = any(),
+                    newDeviceOtp = any(),
+                    captchaToken = any(),
+                    orgIdentifier = any(),
+                )
+            } returns LoginResult.Success
+        }
+
+        val localViewModel =
+            TwoFactorLoginViewModel(
+                authRepository = localAuthRepository,
+                environmentRepository = environmentRepository,
+                resourceManager = resourceManager,
+                savedStateHandle = SavedStateHandle().also {
+                    it["state"] = initialState
+                },
+            )
+
+        localViewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+        assertEquals(
+            initialState.copy(
+                password = DEFAULT_PASSWORD,
+                email = DEFAULT_EMAIL_ADDRESS,
+                isContinueButtonEnabled = false,
+            ),
+            localViewModel.stateFlow.value,
+        )
+        coVerify(exactly = 1) {
+            localAuthRepository.login(
+                email = DEFAULT_STATE.email,
+                password = DEFAULT_STATE.password,
+                newDeviceOtp = code.trim(),
+                captchaToken = DEFAULT_STATE.captchaToken,
+                orgIdentifier = DEFAULT_STATE.orgIdentifier,
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with newDeviceVerification true should call ResendNewDeviceOtp`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.EMAIL,
+                isNewDeviceVerification = true,
+            )
+            val viewModel = createViewModel(state = initialState)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    TwoFactorLoginAction.ResendEmailClick,
+                )
+                awaitItem()
+
+                coVerify(exactly = 1) {
+                    authRepository.resendNewDeviceOtp()
+                }
+                coVerify(exactly = 0) {
+                    authRepository.resendVerificationCodeEmail()
+                }
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with ResendEmailResult Success should ShowToast`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.EMAIL,
+                isNewDeviceVerification = true,
+            )
+            val viewModel = createViewModel(state = initialState)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                        resendEmailResult = ResendEmailResult.Success,
+                        isUserInitiated = true,
+                    ),
+                )
+                assertEquals(
+                    TwoFactorLoginEvent.ShowToast(
+                        message = R.string.verification_email_sent.asText(),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: TwoFactorLoginState? = null,
     ): TwoFactorLoginViewModel =
@@ -1012,6 +1186,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 it["email_address"] = DEFAULT_EMAIL_ADDRESS
                 it["password"] = DEFAULT_ENCODED_PASSWORD
                 it["org_identifier"] = DEFAULT_ENCODED_ORG_IDENTIFIER
+                it["new_device_verification"] = false
             },
         )
 }
@@ -1050,4 +1225,5 @@ private val DEFAULT_STATE = TwoFactorLoginState(
     email = DEFAULT_EMAIL_ADDRESS,
     password = DEFAULT_PASSWORD,
     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
+    isNewDeviceVerification = false,
 )
