@@ -42,5 +42,7 @@ enum class CipherTypeJson {
 }
 
 @Keep
-private class CipherTypeSerializer :
-    BaseEnumeratedIntSerializer<CipherTypeJson>(CipherTypeJson.entries.toTypedArray())
+private class CipherTypeSerializer : BaseEnumeratedIntSerializer<CipherTypeJson>(
+    className = "CipherTypeJson",
+    values = CipherTypeJson.entries.toTypedArray(),
+)

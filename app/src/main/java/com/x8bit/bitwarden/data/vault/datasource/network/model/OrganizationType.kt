@@ -43,5 +43,6 @@ enum class OrganizationType {
 
 @Keep
 private class OrganizationTypeSerializer : BaseEnumeratedIntSerializer<OrganizationType>(
-    OrganizationType.entries.toTypedArray(),
+    className = "OrganizationType",
+    values = OrganizationType.entries.toTypedArray(),
 )

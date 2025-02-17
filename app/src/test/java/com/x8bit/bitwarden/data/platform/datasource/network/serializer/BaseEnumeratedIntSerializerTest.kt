@@ -62,6 +62,7 @@ private enum class TestEnum {
 }
 
 private class TestEnumSerializer : BaseEnumeratedIntSerializer<TestEnum>(
+    className = "TestEnum",
     values = TestEnum.entries.toTypedArray(),
     default = TestEnum.UNKNOWN,
 )

@@ -91,5 +91,6 @@ data class PasscodeGenerationOptions(
 @Keep
 private class PasscodeTypeSerializer :
     BaseEnumeratedIntSerializer<PasscodeGenerationOptions.PasscodeType>(
-        PasscodeGenerationOptions.PasscodeType.entries.toTypedArray(),
+        className = "PasscodeGenerationOptions.PasscodeType",
+        values = PasscodeGenerationOptions.PasscodeType.entries.toTypedArray(),
     )

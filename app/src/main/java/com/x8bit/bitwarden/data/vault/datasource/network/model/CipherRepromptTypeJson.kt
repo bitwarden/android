@@ -25,5 +25,6 @@ enum class CipherRepromptTypeJson {
 
 @Keep
 private class CipherRepromptTypeSerializer : BaseEnumeratedIntSerializer<CipherRepromptTypeJson>(
-    CipherRepromptTypeJson.entries.toTypedArray(),
+    className = "CipherRepromptTypeJson",
+    values = CipherRepromptTypeJson.entries.toTypedArray(),
 )

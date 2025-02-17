@@ -21,5 +21,7 @@ enum class AuthRequestTypeJson {
 }
 
 @Keep
-private class AuthRequestTypeSerializer :
-    BaseEnumeratedIntSerializer<AuthRequestTypeJson>(AuthRequestTypeJson.entries.toTypedArray())
+private class AuthRequestTypeSerializer : BaseEnumeratedIntSerializer<AuthRequestTypeJson>(
+    className = "AuthRequestTypeJson",
+    values = AuthRequestTypeJson.entries.toTypedArray(),
+)

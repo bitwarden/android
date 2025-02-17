@@ -100,6 +100,7 @@ enum class PolicyTypeJson {
 
 @Keep
 private class PolicyTypeSerializer : BaseEnumeratedIntSerializer<PolicyTypeJson>(
+    className = "PolicyTypeJson",
     values = PolicyTypeJson.entries.toTypedArray(),
     default = PolicyTypeJson.UNKNOWN,
 )

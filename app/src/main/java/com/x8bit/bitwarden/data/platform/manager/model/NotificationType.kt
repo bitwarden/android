@@ -63,5 +63,7 @@ enum class NotificationType {
 }
 
 @Keep
-private class NotificationTypeSerializer :
-    BaseEnumeratedIntSerializer<NotificationType>(NotificationType.entries.toTypedArray())
+private class NotificationTypeSerializer : BaseEnumeratedIntSerializer<NotificationType>(
+    className = "NotificationType",
+    values = NotificationType.entries.toTypedArray(),
+)

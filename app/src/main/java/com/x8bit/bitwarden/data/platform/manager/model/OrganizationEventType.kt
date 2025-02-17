@@ -130,5 +130,6 @@ enum class OrganizationEventType {
 
 @Keep
 private class OrganizationEventTypeSerializer : BaseEnumeratedIntSerializer<OrganizationEventType>(
+    className = "OrganizationEventType",
     values = OrganizationEventType.entries.toTypedArray(),
 )

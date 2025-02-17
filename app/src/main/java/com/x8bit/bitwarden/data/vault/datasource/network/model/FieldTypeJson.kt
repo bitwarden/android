@@ -36,5 +36,7 @@ enum class FieldTypeJson {
 }
 
 @Keep
-private class FieldTypeSerializer :
-    BaseEnumeratedIntSerializer<FieldTypeJson>(FieldTypeJson.entries.toTypedArray())
+private class FieldTypeSerializer : BaseEnumeratedIntSerializer<FieldTypeJson>(
+    className = "FieldTypeJson",
+    values = FieldTypeJson.entries.toTypedArray(),
+)
