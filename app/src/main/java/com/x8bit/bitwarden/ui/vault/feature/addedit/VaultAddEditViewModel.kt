@@ -77,7 +77,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
-import timber.log.Timber
 import java.time.Clock
 import java.util.Collections
 import java.util.UUID
@@ -195,7 +194,6 @@ class VaultAddEditViewModel @Inject constructor(
         vaultRepository
             .vaultDataStateFlow
             .map { vaultDataState ->
-                Timber.e("I am updating the vault data $vaultDataState")
                 VaultAddEditAction.Internal.VaultDataReceive(
                     vaultData = vaultDataState,
                     userData = authRepository.userStateFlow.value,
@@ -1495,7 +1493,6 @@ class VaultAddEditViewModel @Inject constructor(
             )
         }
         updateCommonContent {
-            Timber.e("I am updating the selected Folder ID")
             it.copy(
                 selectedFolderId = (action.result as? CreateFolderResult.Success)?.folderView?.id,
             )
