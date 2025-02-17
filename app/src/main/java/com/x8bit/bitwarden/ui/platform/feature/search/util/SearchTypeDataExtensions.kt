@@ -233,6 +233,7 @@ private fun CipherView.toDisplayItem(
             },
         isTotp = isTotp,
         shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        cipherType = this.type,
     )
 
 private fun CipherView.toIconData(
@@ -374,6 +375,7 @@ private fun SendView.toDisplayItem(
         autofillSelectionOptions = emptyList(),
         isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
+        cipherType = null,
     )
 
 /**

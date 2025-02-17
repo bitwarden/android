@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -190,6 +191,7 @@ fun RootNavScreen(
             RootNavState.ResetPassword -> {
                 navController.navigateToResetPasswordScreen(rootNavOptions)
             }
+
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
@@ -217,7 +219,8 @@ fun RootNavScreen(
             is RootNavState.VaultUnlockedForAutofillSave -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultAddEdit(
-                    vaultAddEditType = VaultAddEditType.AddItem(
+                    args = VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
                         vaultItemCipherType = VaultItemCipherType.LOGIN,
                     ),
                     navOptions = rootNavOptions,

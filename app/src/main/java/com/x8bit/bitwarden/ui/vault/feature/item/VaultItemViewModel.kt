@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -61,11 +62,15 @@ class VaultItemViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
-        vaultItemId = VaultItemArgs(savedStateHandle).vaultItemId,
-        viewState = VaultItemState.ViewState.Loading,
-        dialog = null,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val args = VaultItemArgs(savedStateHandle)
+        VaultItemState(
+            vaultItemId = args.vaultItemId,
+            cipherType = args.cipherType,
+            viewState = VaultItemState.ViewState.Loading,
+            dialog = null,
+        )
+    },
 ) {
     /**
      * Reference to a temporary attachment saved in cache.
@@ -1358,9 +1363,22 @@ class VaultItemViewModel @Inject constructor(
 @Parcelize
 data class VaultItemState(
     val vaultItemId: String,
+    val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
+
+    /**
+     * The displayable title for the top app bar.
+     */
+    val title: Text
+        get() = when (cipherType) {
+            VaultItemCipherType.LOGIN -> R.string.view_login.asText()
+            VaultItemCipherType.CARD -> R.string.view_card.asText()
+            VaultItemCipherType.IDENTITY -> R.string.view_identity.asText()
+            VaultItemCipherType.SECURE_NOTE -> R.string.view_note.asText()
+            VaultItemCipherType.SSH_KEY -> R.string.view_passkey.asText()
+        }
 
     /**
      * Whether or not the cipher has been deleted.
