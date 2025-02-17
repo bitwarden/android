@@ -309,7 +309,7 @@ fun VaultAddEditScreen(
         BitwardenModalBottomSheet(
             sheetTitle = stringResource(R.string.folders),
             onDismiss = commonTypeHandlers.onDismissFolderSelectionSheet,
-            actions = { animatedOnDismiss ->
+            topBarActions = { animatedOnDismiss ->
                 BitwardenTextButton(
                     label = stringResource(R.string.save),
                     onClick = {
