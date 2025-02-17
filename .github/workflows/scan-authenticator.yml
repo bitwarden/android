@@ -1,0 +1,13 @@
+name: Scan Authenticator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    name: Placeholder Job
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Placeholder Step
+        run: echo "placeholder workflow"
