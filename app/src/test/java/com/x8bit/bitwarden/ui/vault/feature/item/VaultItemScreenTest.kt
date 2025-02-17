@@ -1728,6 +1728,21 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in login state, on totp help tooltip click should send AuthenticatorHelpToolTipClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(viewState = DEFAULT_LOGIN_VIEW_STATE)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll("Authenticator key help")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick)
+        }
+    }
+
+    @Test
     fun `in login state, launch uri button should be displayed according to state`() {
         val uriData = VaultItemState.ViewState.Content.ItemType.Login.UriData(
             uri = "www.example.com",

@@ -12,6 +12,7 @@ data class VaultLoginItemTypeHandlers(
     val onCheckForBreachClick: () -> Unit,
     val onCopyPasswordClick: () -> Unit,
     val onCopyTotpCodeClick: () -> Unit,
+    val onAuthenticatorHelpToolTipClick: () -> Unit,
     val onCopyUriClick: (String) -> Unit,
     val onCopyUsernameClick: () -> Unit,
     val onLaunchUriClick: (String) -> Unit,
@@ -36,6 +37,11 @@ data class VaultLoginItemTypeHandlers(
                 },
                 onCopyTotpCodeClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
+                },
+                onAuthenticatorHelpToolTipClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick,
+                    )
                 },
                 onCopyUriClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(it))
