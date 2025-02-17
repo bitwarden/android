@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.bottomsheet
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,6 +43,7 @@ fun BitwardenModalBottomSheet(
     sheetTitle: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    actions: @Composable RowScope.(animatedOnDismiss: () -> Unit) -> Unit = {},
     showBottomSheet: Boolean = true,
     sheetState: SheetState = rememberModalBottomSheetState(),
     sheetContent: @Composable (animatedOnDismiss: () -> Unit) -> Unit,
@@ -68,6 +70,9 @@ fun BitwardenModalBottomSheet(
                         onNavigationIconClick = animatedOnDismiss,
                         navigationIconContentDescription = stringResource(R.string.close),
                     ),
+                    actions = {
+                        actions(animatedOnDismiss)
+                    },
                     scrollBehavior = scrollBehavior,
                     minimumHeight = 64.dp,
                 )

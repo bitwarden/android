@@ -44,6 +44,7 @@ fun CipherView.toViewState(
     clock: Clock,
     canDelete: Boolean,
     canAssignToCollections: Boolean,
+    selectedFolderId: String?,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -112,6 +113,7 @@ fun CipherView.toViewState(
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
+            selectedFolderId = selectedFolderId,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
@@ -129,10 +131,10 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
     return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
         currentContentState.copy(
             common = currentContentState.common.copy(
-                selectedFolderId = folderViewList.toSelectedFolderId(
-                    cipherView = currentContentState.common.originalCipher,
-                )
-                    ?: currentContentState.common.selectedFolderId,
+                selectedFolderId = currentContentState.common.selectedFolderId
+                    ?: folderViewList.toSelectedFolderId(
+                        cipherView = currentContentState.common.originalCipher,
+                    ),
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),

@@ -1,11 +1,25 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,11 +28,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,10 +43,13 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
 import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
@@ -41,7 +61,11 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -53,6 +77,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
@@ -61,6 +86,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 /**
@@ -273,6 +300,49 @@ fun VaultAddEditScreen(
             onDismissClick = { pendingDeleteCipher = false },
             onDismissRequest = { pendingDeleteCipher = false },
         )
+    }
+
+    (state.viewState as? VaultAddEditState.ViewState.Content)?.let { contentState ->
+        var selectedOptionState by rememberSaveable {
+            mutableStateOf(contentState.common.selectedFolder?.name.orEmpty())
+        }
+        BitwardenModalBottomSheet(
+            sheetTitle = stringResource(R.string.folders),
+            onDismiss = commonTypeHandlers.onDismissFolderSelectionSheet,
+            actions = { animatedOnDismiss ->
+                BitwardenTextButton(
+                    label = stringResource(R.string.save),
+                    onClick = {
+                        commonTypeHandlers.onDismissFolderSelectionSheet()
+                        contentState
+                            .common
+                            .availableFolders
+                            .firstOrNull {
+                                it.name == selectedOptionState
+                            }
+                            ?.run {
+                                commonTypeHandlers.onChangeToExistingFolder(this.id)
+                            }
+                            ?: run {
+                                commonTypeHandlers.onOnAddFolder(selectedOptionState)
+                            }
+                        animatedOnDismiss()
+                    },
+                    isEnabled = selectedOptionState.isNotBlank(),
+                )
+            },
+            showBottomSheet = state.shouldShowFolderSelectionBottomSheet,
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            modifier = Modifier.statusBarsPadding(),
+        ) {
+            FolderSelectionBottomSheetContent(
+                options = contentState.common.availableFolders.map { it.name }.toImmutableList(),
+                selectedOption = selectedOptionState,
+                onOptionSelected = {
+                    selectedOptionState = it
+                },
+            )
+        }
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -515,5 +585,89 @@ private fun VaultAddEditItemDialogs(
         }
 
         null -> Unit
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun FolderSelectionBottomSheetContent(
+    options: ImmutableList<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+) {
+
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .standardHorizontalMargin(),
+    ) {
+        Spacer(modifier = Modifier.height(12.dp))
+        options.forEachIndexed { index, option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cardStyle(
+                        cardStyle = if (index == 0) {
+                            CardStyle.Top()
+                        } else {
+                            CardStyle.Middle()
+                        },
+                        onClick = {
+                            onOptionSelected(option)
+                        },
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = option,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                BitwardenRadioButton(
+                    isSelected = selectedOption == option,
+                    onClick = {
+                        onOptionSelected(option)
+                    },
+                )
+            }
+        }
+        var inEditMode by rememberSaveable {
+            mutableStateOf(false)
+        }
+        var addFolderText by rememberSaveable {
+            mutableStateOf("")
+        }
+        if (inEditMode) {
+            BitwardenTextField(
+                label = stringResource(R.string.add_folder),
+                value = addFolderText,
+                onValueChange = {
+                    addFolderText = it
+                    onOptionSelected(it)
+                },
+                autoFocus = true,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth(),
+            )
+        } else {
+            BitwardenClickableText(
+                label = stringResource(id = R.string.add_folder),
+                onClick = {
+                    onOptionSelected(addFolderText)
+                    inEditMode = true
+                },
+                leadingIcon = painterResource(id = R.drawable.ic_plus_small),
+                style = BitwardenTheme.typography.labelMedium,
+                innerPadding = PaddingValues(all = 16.dp),
+                cornerSize = 0.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cardStyle(cardStyle = CardStyle.Bottom, paddingVertical = 0.dp),
+            )
+        }
+
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

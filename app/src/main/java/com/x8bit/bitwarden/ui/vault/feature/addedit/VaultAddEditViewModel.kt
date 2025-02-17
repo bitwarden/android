@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.DateTime
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -29,12 +31,12 @@ import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -75,6 +77,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.Clock
 import java.util.Collections
 import java.util.UUID
@@ -176,6 +179,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldExitOnSave = shouldExitOnSave,
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
+                shouldShowFolderSelectionBottomSheet = false,
             )
         },
 ) {
@@ -190,8 +194,8 @@ class VaultAddEditViewModel @Inject constructor(
         }
         vaultRepository
             .vaultDataStateFlow
-            .takeUntilLoaded()
             .map { vaultDataState ->
+                Timber.e("I am updating the vault data $vaultDataState")
                 VaultAddEditAction.Internal.VaultDataReceive(
                     vaultData = vaultDataState,
                     userData = authRepository.userStateFlow.value,
@@ -251,7 +255,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleCustomFieldValueChange(action)
             }
 
-            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
             is VaultAddEditAction.Common.NameTextChange -> handleNameTextInputChange(action)
             is VaultAddEditAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
             is VaultAddEditAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
@@ -334,6 +337,19 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditAction.Common.DismissFido2VerificationDialogClick -> {
                 handleDismissFido2VerificationDialogClick()
+            }
+
+            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
+            VaultAddEditAction.Common.DismissFolderSelectionBottomSheet -> {
+                handleDismissBottomSheet()
+            }
+
+            VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
+                handleSelectOrAddFolderForItem()
+            }
+
+            is VaultAddEditAction.Common.AddNewFolder -> {
+                handleAddNewFolder(action)
             }
         }
     }
@@ -694,6 +710,36 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
+    private fun handleDismissBottomSheet() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = false)
+        }
+    }
+
+    private fun handleSelectOrAddFolderForItem() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+    }
+
+    private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepository.createFolder(
+                FolderView(
+                    name = action.newFolderName,
+                    id = null,
+                    revisionDate = DateTime.now(),
+                ),
+            )
+            sendAction(VaultAddEditAction.Internal.AddFolderResultReceive(result = result))
+        }
+    }
+
     private fun handleAddNewCustomFieldClick(
         action: VaultAddEditAction.Common.AddNewCustomFieldClick,
     ) {
@@ -792,7 +838,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.FolderChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedFolderId = action.folder.id)
+            commonContent.copy(selectedFolderId = action.folderId)
         }
     }
 
@@ -1427,6 +1473,8 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive -> {
                 handleShouldShowAddLoginCoachMarkValueChange(action)
             }
+
+            is VaultAddEditAction.Internal.AddFolderResultReceive -> handleAddFolderResult(action)
         }
     }
 
@@ -1436,6 +1484,20 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 shouldShowCoachMarkTour = action.shouldShowCoachMarkTour,
+            )
+        }
+    }
+
+    private fun handleAddFolderResult(action: VaultAddEditAction.Internal.AddFolderResultReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+            )
+        }
+        updateCommonContent {
+            Timber.e("I am updating the selected Folder ID")
+            it.copy(
+                selectedFolderId = (action.result as? CreateFolderResult.Success)?.folderView?.id,
             )
         }
     }
@@ -1603,6 +1665,7 @@ class VaultAddEditViewModel @Inject constructor(
                             clock = clock,
                             canDelete = canDelete,
                             canAssignToCollections = canAssignToCollections,
+                            selectedFolderId = selectedFolderId,
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
@@ -1943,6 +2006,7 @@ data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val shouldShowFolderSelectionBottomSheet: Boolean,
     val shouldShowCloseButton: Boolean = true,
     // Internal
     val shouldExitOnSave: Boolean = false,
@@ -2001,6 +2065,9 @@ data class VaultAddEditState(
         get() = shouldShowCoachMarkTour &&
             ((viewState as? ViewState.Content)?.type is ViewState.Content.ItemType.Login) &&
             isAddItemMode
+
+    val selectedFolderId: String?
+        get() = (viewState as? ViewState.Content)?.common?.selectedFolderId
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
@@ -2621,9 +2688,9 @@ sealed class VaultAddEditAction {
         /**
          * Fired when the folder text input is changed.
          *
-         * @property folder The new folder text.
+         * @property folderId The new folder id.
          */
-        data class FolderChange(val folder: VaultAddEditState.Folder) : Common()
+        data class FolderChange(val folderId: String?) : Common()
 
         /**
          * Fired when the Favorite toggle is changed.
@@ -2767,6 +2834,21 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the FIDO 2 password or PIN verification dialog.
          */
         data object DismissFido2VerificationDialogClick : Common()
+
+        /**
+         * The user has clicked on folder selection card for the item.
+         */
+        data object SelectOrAddFolderForItem : Common()
+
+        /**
+         * The user has dismissed the folder selection bottom sheet.
+         */
+        data object DismissFolderSelectionBottomSheet : Common()
+
+        /**
+         * The user has selected to add a new folder to associate with the item.
+         */
+        data class AddNewFolder(val newFolderName: String) : Common()
     }
 
     /**
@@ -3163,6 +3245,13 @@ sealed class VaultAddEditAction {
          */
         data class ShouldShowAddLoginCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
+        ) : Internal()
+
+        /**
+         * Received a result for attempting to add a folder.
+         */
+        data class AddFolderResultReceive(
+            val result: CreateFolderResult,
         ) : Internal()
     }
 }

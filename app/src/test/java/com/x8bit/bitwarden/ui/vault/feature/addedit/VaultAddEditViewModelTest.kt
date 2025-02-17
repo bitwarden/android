@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.DateTime
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -204,6 +206,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -285,6 +288,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
                 dialog = null,
                 shouldShowCoachMarkTour = false,
+                shouldShowFolderSelectionBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -1259,6 +1263,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1287,6 +1292,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             }
         }
@@ -1325,6 +1331,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1354,6 +1361,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             }
         }
@@ -1391,6 +1399,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = false,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1419,6 +1428,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = false,
+                    selectedFolderId = null,
                 )
             }
         }
@@ -1457,6 +1467,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1486,6 +1497,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             }
         }
@@ -1524,6 +1536,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1553,6 +1566,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             }
         }
@@ -1674,6 +1688,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1707,6 +1722,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
@@ -1743,6 +1759,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1807,6 +1824,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1874,6 +1892,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1932,6 +1951,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clock = fixedClock,
                 canDelete = true,
                 canAssignToCollections = true,
+                selectedFolderId = null,
             )
         } returns stateWithName.viewState
         every { fido2CredentialManager.isUserVerified } returns true
@@ -1995,6 +2015,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
+                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             every { fido2CredentialManager.isUserVerified } returns false
@@ -3151,10 +3172,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `FolderChange should update folder`() = runTest {
             val action = VaultAddEditAction.Common.FolderChange(
-                VaultAddEditState.Folder(
-                    id = "mockId-1",
-                    name = "Folder 1",
-                ),
+                folderId = "mockId-1",
             )
 
             viewModel.trySendAction(action)
@@ -3169,6 +3187,105 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `SelectOrAddFolderFoItem should update state to show bottom sheet`() = runTest {
+            val action = VaultAddEditAction.Common.SelectOrAddFolderForItem
+
+            viewModel.trySendAction(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                shouldShowFolderSelectionBottomSheet = true,
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DismissFolderSelectionBottomSheet should update state to hide bottom sheet`() =
+            runTest {
+                val action = VaultAddEditAction.Common.DismissFolderSelectionBottomSheet
+
+                viewModel.trySendAction(VaultAddEditAction.Common.SelectOrAddFolderForItem)
+
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        shouldShowFolderSelectionBottomSheet = true,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                val expectedState = vaultAddItemInitialState.copy(
+                    shouldShowFolderSelectionBottomSheet = false,
+                )
+                viewModel.trySendAction(action)
+                assertEquals(
+                    expectedState,
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
+        fun `AddNewFolder action calls create folder from vault repository`() = runTest {
+            mockkStatic(DateTime::class)
+            every { DateTime.now() } returns Instant.MIN
+
+            val folderName = "folderName"
+            val expectedFolderResult = FolderView(
+                id = "123",
+                name = folderName,
+                revisionDate = DateTime.now(),
+            )
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(expectedFolderResult)
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+            coVerify {
+                vaultRepository.createFolder(
+                    FolderView(
+                        name = folderName,
+                        id = null,
+                        revisionDate = Instant.MIN,
+                    ),
+                )
+            }
+
+            unmockkStatic(DateTime::class)
+        }
+
+        @Test
+        fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
+
+            val folderId = "123"
+            val folderName = "folderName"
+            val expectedFolderResult = FolderView(
+                id = folderId,
+                name = folderName,
+                revisionDate = DateTime.now(),
+            )
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(expectedFolderResult)
+
+            viewModel.stateFlow.test {
+                awaitItem() // initial state.
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    createVaultAddItemState(
+                        dialogState = null,
+                        commonContentViewState = createCommonContentViewState(
+                            selectedFolderId = folderId,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
         }
 
         @Test
@@ -4277,6 +4394,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             totpData = totpData,
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
     @Suppress("LongParameterList")
@@ -4298,10 +4416,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         hasOrganizations: Boolean = true,
         canDelete: Boolean = true,
         canAssociateToCollections: Boolean = true,
+        selectedFolderId: String? = null,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
-            selectedFolderId = null,
+            selectedFolderId = selectedFolderId,
             favorite = favorite,
             customFieldData = customFieldData,
             masterPasswordReprompt = masterPasswordReprompt,

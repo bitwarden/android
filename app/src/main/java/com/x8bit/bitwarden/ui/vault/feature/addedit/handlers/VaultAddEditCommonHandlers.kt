@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
  * within the context of adding items to a vault.
  *
  * @property onNameTextChange Handles the action when the name text is changed.
- * @property onFolderSelected Handles the action when a folder is selected.
+ * @property onSelectOrAddFolderForItem Handles the action when a folder is selected.
  * @property onToggleFavorite Handles the action when the favorite toggle is changed.
  * @property onToggleMasterPasswordReprompt Handles the action when the master password
  * reprompt toggle is changed.
@@ -27,7 +27,6 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 @Suppress("LongParameterList")
 data class VaultAddEditCommonHandlers(
     val onNameTextChange: (String) -> Unit,
-    val onFolderSelected: (VaultAddEditState.Folder) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
     val onToggleMasterPasswordReprompt: (Boolean) -> Unit,
     val onNotesTextChange: (String) -> Unit,
@@ -38,6 +37,10 @@ data class VaultAddEditCommonHandlers(
     val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
     val onCollectionSelect: (VaultCollection) -> Unit,
     val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
+    val onSelectOrAddFolderForItem: () -> Unit,
+    val onDismissFolderSelectionSheet: () -> Unit,
+    val onChangeToExistingFolder: (String?) -> Unit,
+    val onOnAddFolder: (String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -54,11 +57,9 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NameTextChange(newName),
                     )
                 },
-                onFolderSelected = { newFolder ->
+                onSelectOrAddFolderForItem = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.FolderChange(
-                            newFolder,
-                        ),
+                        VaultAddEditAction.Common.SelectOrAddFolderForItem,
                     )
                 },
                 onToggleFavorite = { isFavorite ->
@@ -121,6 +122,25 @@ data class VaultAddEditCommonHandlers(
                 onHiddenFieldVisibilityChange = {
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = it),
+                    )
+                },
+                onDismissFolderSelectionSheet = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.DismissFolderSelectionBottomSheet,
+                    )
+                },
+                onChangeToExistingFolder = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.FolderChange(
+                            folderId = it,
+                        ),
+                    )
+                },
+                onOnAddFolder = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.AddNewFolder(
+                            newFolderName = it,
+                        ),
                     )
                 },
             )
