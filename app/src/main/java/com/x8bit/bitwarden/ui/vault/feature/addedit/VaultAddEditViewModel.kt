@@ -2067,10 +2067,17 @@ data class VaultAddEditState(
      * Helper to determine the screen display name.
      */
     val screenDisplayName: Text
-        get() = when (vaultAddEditType) {
-            is VaultAddEditType.AddItem -> R.string.add_item.asText()
-            is VaultAddEditType.EditItem -> R.string.edit_item.asText()
-            is VaultAddEditType.CloneItem -> R.string.add_item.asText()
+        get() {
+            val itemTypeRes = (viewState as? ViewState.Content)
+                ?.type
+                ?.itemTypeOption
+                ?.titleSuffixRes
+                ?: R.string.item
+            return when (vaultAddEditType) {
+                is VaultAddEditType.AddItem -> R.string.new_x.asText(itemTypeRes.asText())
+                is VaultAddEditType.EditItem -> R.string.edit_x.asText(itemTypeRes.asText())
+                is VaultAddEditType.CloneItem -> R.string.new_x.asText(itemTypeRes.asText())
+            }
         }
 
     /**
@@ -2119,12 +2126,12 @@ data class VaultAddEditState(
      *
      * @property labelRes The resource ID of the string that represents the label of each type.
      */
-    enum class ItemTypeOption(val labelRes: Int) {
-        LOGIN(R.string.type_login),
-        CARD(R.string.type_card),
-        IDENTITY(R.string.type_identity),
-        SECURE_NOTES(R.string.type_secure_note),
-        SSH_KEYS(R.string.type_ssh_key),
+    enum class ItemTypeOption(val labelRes: Int, val titleSuffixRes: Int) {
+        LOGIN(R.string.type_login, R.string.login),
+        CARD(R.string.type_card, R.string.card),
+        IDENTITY(R.string.type_identity, R.string.identity),
+        SECURE_NOTES(R.string.type_secure_note, R.string.note),
+        SSH_KEYS(R.string.type_ssh_key, R.string.type_ssh_key),
     }
 
     /**

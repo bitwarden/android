@@ -4,6 +4,8 @@
   <string name="add">Add</string>
   <string name="add_folder">Add Folder</string>
   <string name="add_item">Add Item</string>
+  <string name="new_x">New %1$s</string>
+  <string name="item">item</string>
   <string name="an_error_has_occurred">An error has occurred.</string>
   <string name="back">Back</string>
   <string name="bitwarden">Bitwarden</string>
@@ -109,6 +111,7 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Creating account...</string>
   <string name="edit_item">Edit item</string>
+  <string name="edit_x">Edit %1$s</string>
   <string name="enable_automatic_syncing">Allow automatic syncing</string>
   <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
   <string name="exntesion_reenable">Reactivate app extension</string>
@@ -306,9 +309,13 @@ Scanning will happen automatically.</string>
   <string name="number">Number</string>
   <string name="security_code">Security code</string>
   <string name="type_card">Card</string>
+  <string name="card">card</string>
   <string name="type_identity">Identity</string>
+  <string name="identity">identity</string>
   <string name="type_login">Login</string>
+  <string name="login">login</string>
   <string name="type_secure_note">Secure note</string>
+  <string name="note">note</string>
   <string name="address1">Address 1</string>
   <string name="address2">Address 2</string>
   <string name="address3">Address 3</string>
