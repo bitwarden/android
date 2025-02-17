@@ -2369,7 +2369,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .performClick()
 
@@ -2398,7 +2398,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -2407,7 +2407,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Who owns this item?")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Owner")
             .assertIsDisplayed()
     }
 
@@ -2719,7 +2719,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .performClick()
 
@@ -2750,7 +2750,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -2760,7 +2760,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOwnerName-2. Who owns this item?",
+                label = "mockOwnerName-2. Owner",
             )
             .assertIsDisplayed()
     }

@@ -116,10 +116,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             item {
-                Spacer(modifier = Modifier.height(8.dp))
                 TypeOptionsItem(
                     entries = typeOptions,
                     itemType = state.type,
