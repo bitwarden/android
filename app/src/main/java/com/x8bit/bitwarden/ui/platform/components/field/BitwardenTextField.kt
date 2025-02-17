@@ -80,6 +80,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
  * @param onValueChange callback that is triggered when the input of the text field changes.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
  * @param leadingIconResource the optional resource for the leading icon on the text field.
@@ -109,6 +110,7 @@ fun BitwardenTextField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     placeholder: String? = null,
     leadingIconResource: IconResource? = null,
     supportingText: String? = null,
@@ -133,6 +135,7 @@ fun BitwardenTextField(
         label = label,
         value = value,
         onValueChange = onValueChange,
+        tooltip = tooltip,
         placeholder = placeholder,
         leadingIconResource = leadingIconResource,
         supportingContent = supportingText?.let {
@@ -171,6 +174,7 @@ fun BitwardenTextField(
  * @param label label for the text field.
  * @param value current next on the text field.
  * @param modifier modifier for the composable.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param onValueChange callback that is triggered when the input of the text field changes.
  * @param supportingContent An optional supporting content composable that will appear below the
  * text input.

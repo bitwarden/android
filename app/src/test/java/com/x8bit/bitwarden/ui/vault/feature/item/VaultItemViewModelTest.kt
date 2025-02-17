@@ -2002,6 +2002,21 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `on AuthenticatorHelpToolTipClick should emit NavigateToUri`() = runTest {
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    action = VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick,
+                )
+                assertEquals(
+                    VaultItemEvent.NavigateToUri(
+                        "https://bitwarden.com/help/integrated-authenticator",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
         fun `on PasswordHistoryClick should show password dialog when re-prompt is required`() =
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)

@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -141,6 +142,8 @@ fun VaultItemLoginContent(
                     totpCodeItemData = totpCodeItemData,
                     enabled = loginItemState.canViewTotpCode,
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
+                    onAuthenticatorHelpToolTipClick = vaultLoginItemTypeHandlers
+                        .onAuthenticatorHelpToolTipClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
@@ -399,6 +402,7 @@ private fun TotpField(
     totpCodeItemData: TotpCodeItemData,
     enabled: Boolean,
     onCopyTotpClick: () -> Unit,
+    onAuthenticatorHelpToolTipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (enabled) {
@@ -411,6 +415,10 @@ private fun TotpField(
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             readOnly = true,
             singleLine = true,
+            tooltip = TooltipData(
+                onClick = onAuthenticatorHelpToolTipClick,
+                contentDescription = stringResource(id = R.string.authenticator_key_help),
+            ),
             actions = {
                 BitwardenCircularCountdownIndicator(
                     timeLeftSeconds = totpCodeItemData.timeLeftSeconds,
@@ -431,6 +439,10 @@ private fun TotpField(
         BitwardenTextField(
             label = stringResource(id = R.string.authenticator_key),
             value = "",
+            tooltip = TooltipData(
+                onClick = onAuthenticatorHelpToolTipClick,
+                contentDescription = stringResource(id = R.string.authenticator_key_help),
+            ),
             supportingText = stringResource(id = R.string.premium_subscription_required),
             enabled = false,
             singleLine = false,
