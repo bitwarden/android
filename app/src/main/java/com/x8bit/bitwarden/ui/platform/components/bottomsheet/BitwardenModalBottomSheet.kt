@@ -69,7 +69,7 @@ fun BitwardenModalBottomSheet(
                         navigationIconContentDescription = stringResource(R.string.close),
                     ),
                     scrollBehavior = scrollBehavior,
-                    minimunHeight = 64.dp,
+                    minimumHeight = 64.dp,
                 )
             },
             modifier = Modifier

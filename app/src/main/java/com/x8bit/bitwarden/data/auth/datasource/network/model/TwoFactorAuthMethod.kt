@@ -39,5 +39,7 @@ enum class TwoFactorAuthMethod(val value: UInt) {
 }
 
 @Keep
-private class TwoFactorAuthMethodSerializer :
-    BaseEnumeratedIntSerializer<TwoFactorAuthMethod>(TwoFactorAuthMethod.entries.toTypedArray())
+private class TwoFactorAuthMethodSerializer : BaseEnumeratedIntSerializer<TwoFactorAuthMethod>(
+    className = "TwoFactorAuthMethod",
+    values = TwoFactorAuthMethod.entries.toTypedArray(),
+)

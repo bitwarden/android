@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -34,6 +36,17 @@ fun LazyListScope.vaultAddEditCardItems(
     cardState: VaultAddEditState.ViewState.Content.ItemType.Card,
     cardHandlers: VaultAddEditCardTypeHandlers,
 ) {
+    item {
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.card_details),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+    }
+
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
