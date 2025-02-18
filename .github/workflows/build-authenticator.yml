@@ -203,18 +203,18 @@ jobs:
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ secrets.AAB_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ secrets.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
           keyAlias:authenticatorupload \
-          keyPassword:'${{ secrets.AAB_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ secrets.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ secrets.APK_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ secrets.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
           keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ secrets.APK_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ secrets.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
