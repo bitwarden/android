@@ -103,12 +103,11 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
+                FlagKey.CipherKeyEncryption,
             ).all {
                 !it.defaultValue
             },
         )
-
-        assertTrue(FlagKey.CipherKeyEncryption.defaultValue)
     }
 
     @Test
