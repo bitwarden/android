@@ -308,7 +308,7 @@ fun BitwardenTextField(
                                         targetValue = targetSize,
                                         label = "${it.contentDescription}_animation",
                                     )
-                                    Spacer(modifier = Modifier.width(16.dp))
+                                    Spacer(modifier = Modifier.width(width = 8.dp))
                                     BitwardenStandardIconButton(
                                         vectorIconRes = R.drawable.ic_question_circle_small,
                                         contentDescription = it.contentDescription,
