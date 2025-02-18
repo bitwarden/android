@@ -135,6 +135,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val totpTestCodeFlow: MutableSharedFlow<TotpCodeResult> = bufferedMutableSharedFlow()
 
     private val mutableVaultDataFlow = MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+    private val mutableFolderStateFlow = MutableStateFlow<DataState<List<FolderView>>>(
+        DataState.Loading,
+    )
     private val resourceManager: ResourceManager = mockk {
         every { getString(R.string.folder_none) } returns "No Folder"
     }
@@ -156,6 +159,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
+        every { foldersStateFlow } returns mutableFolderStateFlow
     }
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
@@ -1263,7 +1267,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1292,7 +1295,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             }
         }
@@ -1331,7 +1333,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1361,7 +1362,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             }
         }
@@ -1399,7 +1399,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = false,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1428,7 +1427,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = false,
                     canAssignToCollections = false,
-                    selectedFolderId = null,
                 )
             }
         }
@@ -1467,7 +1465,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1497,7 +1494,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             }
         }
@@ -1536,7 +1532,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
 
@@ -1566,7 +1561,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             }
         }
@@ -1688,7 +1682,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1722,7 +1715,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
@@ -1759,7 +1751,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1824,7 +1815,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1892,7 +1882,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -1951,7 +1940,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 clock = fixedClock,
                 canDelete = true,
                 canAssignToCollections = true,
-                selectedFolderId = null,
             )
         } returns stateWithName.viewState
         every { fido2CredentialManager.isUserVerified } returns true
@@ -2015,7 +2003,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     clock = fixedClock,
                     canDelete = true,
                     canAssignToCollections = true,
-                    selectedFolderId = null,
                 )
             } returns stateWithName.viewState
             every { fido2CredentialManager.isUserVerified } returns false
@@ -3281,6 +3268,43 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         dialogState = null,
                         commonContentViewState = createCommonContentViewState(
                             selectedFolderId = folderId,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `State updates when available folders state is updated`() = runTest {
+            viewModel.stateFlow.test {
+                awaitItem() // initial item
+                mutableFolderStateFlow.update {
+                    DataState.Loaded(
+                        data = listOf(
+                            FolderView(
+                                name = "folder",
+                                revisionDate = DateTime.now(),
+                                id = null,
+                            ),
+                        )
+                    )
+                }
+
+                assertEquals(
+                    createVaultAddItemState(
+                        dialogState = null,
+                        commonContentViewState = createCommonContentViewState(
+                            availableFolders = listOf(
+                                VaultAddEditState.Folder(
+                                    id = null,
+                                    name = "No folder",
+                                ),
+                                VaultAddEditState.Folder(
+                                    id = null,
+                                    name = "folder",
+                                )
+                            )
                         ),
                     ),
                     awaitItem(),

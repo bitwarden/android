@@ -44,7 +44,6 @@ fun CipherView.toViewState(
     clock: Clock,
     canDelete: Boolean,
     canAssignToCollections: Boolean,
-    selectedFolderId: String?,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -113,7 +112,6 @@ fun CipherView.toViewState(
             customFieldData = this.fields.orEmpty().map { it.toCustomField() },
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
-            selectedFolderId = selectedFolderId,
         ),
         isIndividualVaultDisabled = isIndividualVaultDisabled,
     )
@@ -131,10 +129,10 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
     return (this as? VaultAddEditState.ViewState.Content)?.let { currentContentState ->
         currentContentState.copy(
             common = currentContentState.common.copy(
-                selectedFolderId = currentContentState.common.selectedFolderId
-                    ?: folderViewList.toSelectedFolderId(
-                        cipherView = currentContentState.common.originalCipher,
-                    ),
+                selectedFolderId = folderViewList.toSelectedFolderId(
+                    cipherView = currentContentState.common.originalCipher,
+                )
+                    ?: currentContentState.common.selectedFolderId,
                 availableFolders = folderViewList.toAvailableFolders(
                     resourceManager = resourceManager,
                 ),
@@ -180,7 +178,11 @@ private fun List<FolderView>.toSelectedFolderId(cipherView: CipherView?): String
         ?.folderId
         ?.takeIf { id -> id in map { it.id } }
 
-private fun List<FolderView>.toAvailableFolders(
+/**
+ * Maps a list of [FolderView]s to a list of available [VaultAddEditState.Folder]s with
+ * a default first item of "None."
+ */
+fun List<FolderView>.toAvailableFolders(
     resourceManager: ResourceManager,
 ): List<VaultAddEditState.Folder> =
     listOf(

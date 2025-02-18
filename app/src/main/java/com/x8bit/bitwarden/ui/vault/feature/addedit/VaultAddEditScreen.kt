@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +12,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -594,15 +593,16 @@ private fun FolderSelectionBottomSheetContent(
     options: ImmutableList<String>,
     selectedOption: String,
     onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
+    LazyColumn(
+        modifier = modifier
             .standardHorizontalMargin(),
     ) {
-        Spacer(modifier = Modifier.height(12.dp))
-        options.forEachIndexed { index, option ->
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+        itemsIndexed(options) { index, option ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -632,42 +632,57 @@ private fun FolderSelectionBottomSheetContent(
                 )
             }
         }
-        var inEditMode by rememberSaveable {
-            mutableStateOf(false)
+        item {
+            var inEditMode by rememberSaveable {
+                mutableStateOf(false)
+            }
+            var addFolderText by rememberSaveable {
+                mutableStateOf("")
+            }
+            val cardStyle = if (options.isEmpty()) CardStyle.Full else CardStyle.Bottom
+            if (inEditMode) {
+                BitwardenTextField(
+                    label = stringResource(R.string.add_folder),
+                    value = addFolderText,
+                    onValueChange = {
+                        addFolderText = it
+                        onOptionSelected(it)
+                    },
+                    autoFocus = true,
+                    cardStyle = cardStyle,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    actions = {
+                        BitwardenRadioButton(
+                            isSelected = selectedOption == addFolderText,
+                            onClick = {
+                                onOptionSelected(addFolderText)
+                            },
+                        )
+                    },
+                )
+            } else {
+                BitwardenClickableText(
+                    label = stringResource(id = R.string.add_folder),
+                    onClick = {
+                        onOptionSelected(addFolderText)
+                        inEditMode = true
+                    },
+                    leadingIcon = painterResource(id = R.drawable.ic_plus_small),
+                    style = BitwardenTheme.typography.labelMedium,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .cardStyle(cardStyle = cardStyle, paddingVertical = 0.dp),
+                )
+            }
         }
-        var addFolderText by rememberSaveable {
-            mutableStateOf("")
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
         }
-        if (inEditMode) {
-            BitwardenTextField(
-                label = stringResource(R.string.add_folder),
-                value = addFolderText,
-                onValueChange = {
-                    addFolderText = it
-                    onOptionSelected(it)
-                },
-                autoFocus = true,
-                cardStyle = CardStyle.Bottom,
-                modifier = Modifier
-                    .fillMaxWidth(),
-            )
-        } else {
-            BitwardenClickableText(
-                label = stringResource(id = R.string.add_folder),
-                onClick = {
-                    onOptionSelected(addFolderText)
-                    inEditMode = true
-                },
-                leadingIcon = painterResource(id = R.drawable.ic_plus_small),
-                style = BitwardenTheme.typography.labelMedium,
-                innerPadding = PaddingValues(all = 16.dp),
-                cornerSize = 0.dp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .cardStyle(cardStyle = CardStyle.Bottom, paddingVertical = 0.dp),
-            )
+        item {
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
-
-        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

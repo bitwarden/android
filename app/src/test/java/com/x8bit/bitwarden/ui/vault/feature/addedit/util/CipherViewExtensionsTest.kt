@@ -77,7 +77,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -126,7 +125,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -180,7 +178,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -243,7 +240,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -303,7 +299,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -341,7 +336,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -388,7 +382,6 @@ class CipherViewExtensionsTest {
             clock = FIXED_CLOCK,
             canDelete = true,
             canAssignToCollections = true,
-            selectedFolderId = null,
         )
 
         assertEquals(
@@ -476,56 +469,6 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             createSecureNoteViewState(withFolderAndOwnerData = true),
-            result,
-        )
-    }
-
-    @Test
-    fun `toViewState should create a Card ViewState with selected folder ID`() {
-        val cipherView = DEFAULT_CARD_CIPHER_VIEW
-        val expectedFolderId = "1234"
-        val result = cipherView.toViewState(
-            isClone = false,
-            isIndividualVaultDisabled = false,
-            totpData = null,
-            resourceManager = resourceManager,
-            clock = FIXED_CLOCK,
-            canDelete = true,
-            canAssignToCollections = true,
-            selectedFolderId = expectedFolderId,
-        )
-
-        assertEquals(
-            VaultAddEditState.ViewState.Content(
-                common = VaultAddEditState.ViewState.Content.Common(
-                    originalCipher = cipherView,
-                    name = "cipher",
-                    favorite = false,
-                    masterPasswordReprompt = true,
-                    notes = "Lots of notes",
-                    customFieldData = listOf(
-                        VaultAddEditState.Custom.BooleanField(TEST_ID, "TestBoolean", false),
-                        VaultAddEditState.Custom.TextField(TEST_ID, "TestText", "TestText"),
-                        VaultAddEditState.Custom.HiddenField(TEST_ID, "TestHidden", "TestHidden"),
-                        VaultAddEditState.Custom.LinkedField(
-                            TEST_ID,
-                            "TestLinked",
-                            VaultLinkedFieldType.USERNAME,
-                        ),
-                    ),
-                    availableFolders = emptyList(),
-                    availableOwners = emptyList(),
-                    selectedFolderId = expectedFolderId,
-                ),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.Card(
-                    cardHolderName = "Bit Warden",
-                    number = "4012888888881881",
-                    brand = VaultCardBrand.VISA,
-                    expirationYear = "2030",
-                    securityCode = "123",
-                ),
-            ),
             result,
         )
     }

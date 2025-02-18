@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -52,6 +53,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerData
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toAvailableFolders
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -193,6 +195,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
         vaultRepository
             .vaultDataStateFlow
+            .takeUntilLoaded()
             .map { vaultDataState ->
                 VaultAddEditAction.Internal.VaultDataReceive(
                     vaultData = vaultDataState,
@@ -205,6 +208,12 @@ class VaultAddEditViewModel @Inject constructor(
         vaultRepository
             .totpCodeFlow
             .map { VaultAddEditAction.Internal.TotpCodeReceive(totpResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        vaultRepository
+            .foldersStateFlow
+            .map { VaultAddEditAction.Internal.AvailableFoldersReceive(folderData = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -339,7 +348,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
             VaultAddEditAction.Common.DismissFolderSelectionBottomSheet -> {
-                handleDismissBottomSheet()
+                handleDismissFolderSelectionBottomSheet()
             }
 
             VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
@@ -708,7 +717,7 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
-    private fun handleDismissBottomSheet() {
+    private fun handleDismissFolderSelectionBottomSheet() {
         mutableStateFlow.update {
             it.copy(shouldShowFolderSelectionBottomSheet = false)
         }
@@ -1473,7 +1482,25 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is VaultAddEditAction.Internal.AddFolderResultReceive -> handleAddFolderResult(action)
+            is VaultAddEditAction.Internal.AvailableFoldersReceive -> {
+                handleAvailableFoldersReceive(action)
+            }
         }
+    }
+
+    private fun handleAvailableFoldersReceive(
+        action: VaultAddEditAction.Internal.AvailableFoldersReceive,
+    ) {
+        action
+            .folderData
+            .data
+            ?.let {
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        availableFolders = it.toAvailableFolders(resourceManager = resourceManager),
+                    )
+                }
+            }
     }
 
     private fun handleShouldShowAddLoginCoachMarkValueChange(
@@ -1662,7 +1689,6 @@ class VaultAddEditViewModel @Inject constructor(
                             clock = clock,
                             canDelete = canDelete,
                             canAssignToCollections = canAssignToCollections,
-                            selectedFolderId = selectedFolderId,
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
@@ -2062,9 +2088,6 @@ data class VaultAddEditState(
         get() = shouldShowCoachMarkTour &&
             ((viewState as? ViewState.Content)?.type is ViewState.Content.ItemType.Login) &&
             isAddItemMode
-
-    val selectedFolderId: String?
-        get() = (viewState as? ViewState.Content)?.common?.selectedFolderId
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
@@ -3249,6 +3272,13 @@ sealed class VaultAddEditAction {
          */
         data class AddFolderResultReceive(
             val result: CreateFolderResult,
+        ) : Internal()
+
+        /**
+         * Received an update to the available folders.
+         */
+        data class AvailableFoldersReceive(
+            val folderData: DataState<List<FolderView>>,
         ) : Internal()
     }
 }
