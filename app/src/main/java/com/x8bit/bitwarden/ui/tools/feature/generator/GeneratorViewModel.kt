@@ -1583,7 +1583,7 @@ class GeneratorViewModel @Inject constructor(
             ?.toUsernameGeneratorRequest(
                 website = state.website,
                 allowAddyIoSelfHostUrl = state.shouldShowAnonAddySelfHostServerUrlField,
-                allowSimpleLoginSelfHostServer = state.shouldShowSimpleLoginSelfHostServerField,
+                allowSimpleLoginSelfHostUrl = state.shouldShowSimpleLoginSelfHostServerField,
             )
             ?: run {
                 mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }

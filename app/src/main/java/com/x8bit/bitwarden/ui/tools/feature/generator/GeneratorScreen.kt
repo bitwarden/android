@@ -530,7 +530,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                         randomWordHandlers = randomWordHandlers,
                         shouldShowSelfHostServerUrlField =
                             state.shouldShowAnonAddySelfHostServerUrlField,
-                        shouldShowSimpleLoginSelfHostServer =
+                        shouldShowSimpleLoginSelfHostServerUrlField =
                             state.shouldShowSimpleLoginSelfHostServerField,
                     )
                 }
@@ -1132,7 +1132,8 @@ private fun UsernameTypeItems(
                     usernameTypeState = selectedType,
                     forwardedEmailAliasHandlers = forwardedEmailAliasHandlers,
                     shouldShowSelfHostServerUrlField = shouldShowSelfHostServerUrlField,
-                    shouldShowSimpleLoginSelfHostServerUrlField = shouldShowSimpleLoginSelfHostServerUrlField,
+                    shouldShowSimpleLoginSelfHostServerUrlField =
+                        shouldShowSimpleLoginSelfHostServerUrlField,
                 )
             }
 
