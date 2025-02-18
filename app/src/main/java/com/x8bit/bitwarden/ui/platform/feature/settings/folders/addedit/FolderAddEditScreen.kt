@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.util.folderPrefixVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
@@ -143,6 +144,9 @@ fun FolderAddEditScreen(
                         modifier = Modifier
                             .standardHorizontalMargin()
                             .fillMaxWidth(),
+                        visualTransformation = folderPrefixVisualTransformation(
+                            state.parentFolderName,
+                        ),
                     )
                     Spacer(modifier = Modifier.navigationBarsPadding())
                 }
