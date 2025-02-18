@@ -42,8 +42,6 @@ import kotlinx.collections.immutable.toImmutableList
 fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
-    typeOptions: List<VaultAddEditState.ItemTypeOption>,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
@@ -115,18 +113,6 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                         .fillMaxWidth()
                         .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-
-            item {
-                TypeOptionsItem(
-                    entries = typeOptions,
-                    itemType = state.type,
-                    onTypeOptionClicked = onTypeOptionClicked,
-                    modifier = Modifier
-                        .testTag("ItemTypePicker")
-                        .standardHorizontalMargin(),
                 )
             }
         }
@@ -280,31 +266,6 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
-}
-
-@Composable
-private fun TypeOptionsItem(
-    entries: List<VaultAddEditState.ItemTypeOption>,
-    itemType: VaultAddEditState.ViewState.Content.ItemType,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val optionsWithStrings = entries.associateWith { stringResource(id = it.labelRes) }
-
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.type),
-        options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = itemType.itemTypeOption.labelRes),
-        onOptionSelected = { selectedOption ->
-            val selectedOptionId = optionsWithStrings
-                .entries
-                .first { it.value == selectedOption }
-                .key
-            onTypeOptionClicked(selectedOptionId)
-        },
-        cardStyle = CardStyle.Full,
-        modifier = modifier,
-    )
 }
 
 /**

@@ -174,7 +174,6 @@ class VaultAddEditViewModel @Inject constructor(
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
-                supportedItemTypes = getSupportedItemTypeOptions(),
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
             )
@@ -268,7 +267,6 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
-            is VaultAddEditAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
             is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick(action)
             }
@@ -337,76 +335,6 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.DismissFido2VerificationDialogClick -> {
                 handleDismissFido2VerificationDialogClick()
             }
-        }
-    }
-
-    private fun handleTypeOptionSelect(action: VaultAddEditAction.Common.TypeOptionSelect) {
-        when (action.typeOption) {
-            VaultAddEditState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
-            VaultAddEditState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
-            VaultAddEditState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
-            VaultAddEditState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
-            VaultAddEditState.ItemTypeOption.SSH_KEYS -> handleSwitchToSshKeyItem()
-        }
-    }
-
-    private fun handleSwitchToAddLoginItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.LOGIN,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToAddSecureNotesItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SECURE_NOTES,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToAddCardItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.CARD,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToAddIdentityItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.IDENTITY,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToSshKeyItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SSH_KEYS,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
         }
     }
 
@@ -912,7 +840,6 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
     }
 
-    @Suppress("MaxLineLength")
     private fun handleCollectionSelect(
         action: VaultAddEditAction.Common.CollectionSelect,
     ) {
@@ -1583,7 +1510,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultData) {
             is DataState.Error -> {
@@ -1962,47 +1888,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun VaultAddEditState.ViewState.Content.clearNonSharedData():
-        VaultAddEditState.ViewState.Content.Common =
-        common.copy(
-            customFieldData = common.customFieldData
-                .filterNot { it is VaultAddEditState.Custom.LinkedField },
-        )
-
-    private fun VaultAddEditState.ViewState.Content.toUpdatedPreviousItemTypes():
-        Map<VaultAddEditState.ItemTypeOption, VaultAddEditState.ViewState.Content.ItemType> =
-        previousItemTypes
-            .toMutableMap()
-            .apply { set(type.itemTypeOption, type) }
-
-    private fun VaultAddEditState.ViewState.Content.previousItemTypeOrDefault(
-        itemType: VaultAddEditState.ItemTypeOption,
-    ): VaultAddEditState.ViewState.Content.ItemType =
-        previousItemTypes.getOrDefault(
-            key = itemType,
-            defaultValue = when (itemType) {
-                VaultAddEditState.ItemTypeOption.LOGIN -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Login()
-                }
-
-                VaultAddEditState.ItemTypeOption.CARD -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Card()
-                }
-
-                VaultAddEditState.ItemTypeOption.IDENTITY -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Identity()
-                }
-
-                VaultAddEditState.ItemTypeOption.SECURE_NOTES -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SecureNotes
-                }
-
-                VaultAddEditState.ItemTypeOption.SSH_KEYS -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SshKey()
-                }
-            },
-        )
-
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2059,7 +1944,6 @@ data class VaultAddEditState(
     val viewState: ViewState,
     val dialog: DialogState?,
     val shouldShowCloseButton: Boolean = true,
-    val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
     val shouldClearSpecialCircumstance: Boolean = true,
@@ -2728,15 +2612,6 @@ sealed class VaultAddEditAction {
         data object ConfirmOverwriteExistingPasskeyClick : Common()
 
         /**
-         * Represents the action when a type option is selected.
-         *
-         * @property typeOption The selected type option.
-         */
-        data class TypeOptionSelect(
-            val typeOption: VaultAddEditState.ItemTypeOption,
-        ) : Common()
-
-        /**
          * Fired when the name text input is changed.
          *
          * @property name The new name text.
@@ -3171,7 +3046,6 @@ sealed class VaultAddEditAction {
              *
              * @property expirationMonth The selected expiration month.
              */
-            @Suppress("MaxLineLength")
             data class ExpirationMonthSelect(
                 val expirationMonth: VaultCardExpirationMonth,
             ) : CardType()
@@ -3292,11 +3166,3 @@ sealed class VaultAddEditAction {
         ) : Internal()
     }
 }
-
-/**
- * Returns a list of item type options that can be selected during item creation.
- *
- * TODO: [PM-10413] Allow SSH key creation when the SDK supports it.
- */
-private fun getSupportedItemTypeOptions() = VaultAddEditState.ItemTypeOption.entries
-    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS }

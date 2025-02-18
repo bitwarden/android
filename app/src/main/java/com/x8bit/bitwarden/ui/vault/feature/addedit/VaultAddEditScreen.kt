@@ -368,14 +368,6 @@ fun VaultAddEditScreen(
                     VaultAddEditContent(
                         state = viewState,
                         isAddItemMode = state.isAddItemMode,
-                        typeOptions = state.supportedItemTypes,
-                        onTypeOptionClicked = remember(viewModel) {
-                            {
-                                viewModel.trySendAction(
-                                    VaultAddEditAction.Common.TypeOptionSelect(it),
-                                )
-                            }
-                        },
                         loginItemTypeHandlers = loginItemTypeHandlers,
                         commonTypeHandlers = commonTypeHandlers,
                         permissionsManager = permissionsManager,

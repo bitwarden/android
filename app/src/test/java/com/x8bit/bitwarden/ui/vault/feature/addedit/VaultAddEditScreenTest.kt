@@ -623,55 +623,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a Type Option should send TypeOptionSelect action`() {
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "Login")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.TypeOptionSelect(VaultAddEditState.ItemTypeOption.LOGIN),
-            )
-        }
-    }
-
-    @Test
-    fun `the Type Option field should display the text of the selected item type`() {
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(
-                viewState = VaultAddEditState.ViewState.Content(
-                    common = VaultAddEditState.ViewState.Content.Common(),
-                    type = VaultAddEditState.ViewState.Content.ItemType.Card(),
-                    isIndividualVaultDisabled = false,
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Card. Type")
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `in ItemType_Login state the password should change according to state`() {
         composeTestRule
             .onNodeWithTextAfterScroll("Password")
             .assertTextEquals("Password", "")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithText("Check password for data breaches")
+            .onNodeWithTextAfterScroll("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Generate password")
@@ -3926,7 +3884,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
@@ -3938,7 +3895,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
@@ -3950,7 +3906,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
@@ -3962,11 +3917,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
-        @Suppress("MaxLineLength")
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(
@@ -3985,7 +3938,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
@@ -3997,7 +3949,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
@@ -4009,7 +3960,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
             shouldShowCoachMarkTour = false,
         )
 
