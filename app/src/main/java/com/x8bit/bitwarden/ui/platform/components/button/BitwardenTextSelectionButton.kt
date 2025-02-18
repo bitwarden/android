@@ -99,7 +99,7 @@ fun BitwardenTextSelectionButton(
                         overflow = TextOverflow.Ellipsis,
                     )
                     tooltip?.let {
-                        Spacer(modifier = Modifier.width(3.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_question_circle_small,
                             contentDescription = it.contentDescription,

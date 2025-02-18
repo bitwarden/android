@@ -301,49 +301,6 @@ fun VaultAddEditScreen(
         )
     }
 
-    (state.viewState as? VaultAddEditState.ViewState.Content)?.let { contentState ->
-        var selectedOptionState by rememberSaveable {
-            mutableStateOf(contentState.common.selectedFolder?.name.orEmpty())
-        }
-        BitwardenModalBottomSheet(
-            sheetTitle = stringResource(R.string.folders),
-            onDismiss = commonTypeHandlers.onDismissFolderSelectionSheet,
-            topBarActions = { animatedOnDismiss ->
-                BitwardenTextButton(
-                    label = stringResource(R.string.save),
-                    onClick = {
-                        commonTypeHandlers.onDismissFolderSelectionSheet()
-                        contentState
-                            .common
-                            .availableFolders
-                            .firstOrNull {
-                                it.name == selectedOptionState
-                            }
-                            ?.run {
-                                commonTypeHandlers.onChangeToExistingFolder(this.id)
-                            }
-                            ?: run {
-                                commonTypeHandlers.onOnAddFolder(selectedOptionState)
-                            }
-                        animatedOnDismiss()
-                    },
-                    isEnabled = selectedOptionState.isNotBlank(),
-                )
-            },
-            showBottomSheet = state.shouldShowFolderSelectionBottomSheet,
-            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            modifier = Modifier.statusBarsPadding(),
-        ) {
-            FolderSelectionBottomSheetContent(
-                options = contentState.common.availableFolders.map { it.name }.toImmutableList(),
-                selectedOption = selectedOptionState,
-                onOptionSelected = {
-                    selectedOptionState = it
-                },
-            )
-        }
-    }
-
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
     val scrollBackToTop: () -> Unit = remember {
@@ -462,6 +419,11 @@ fun VaultAddEditScreen(
                         modifier = Modifier
                             .imePadding()
                             .fillMaxSize(),
+                    )
+                    FolderSelectionBottomSheet(
+                        state = viewState.common,
+                        handlers = commonTypeHandlers,
+                        showBottomSheet = state.shouldShowFolderSelectionBottomSheet,
                     )
                 }
 
@@ -584,6 +546,55 @@ private fun VaultAddEditItemDialogs(
         }
 
         null -> Unit
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FolderSelectionBottomSheet(
+    state: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    showBottomSheet: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    var selectedOptionState by rememberSaveable {
+        mutableStateOf(state.selectedFolder?.name.orEmpty())
+    }
+    BitwardenModalBottomSheet(
+        sheetTitle = stringResource(R.string.folders),
+        onDismiss = handlers.onDismissFolderSelectionSheet,
+        topBarActions = { animatedOnDismiss ->
+            BitwardenTextButton(
+                label = stringResource(R.string.save),
+                onClick = {
+                    handlers.onDismissFolderSelectionSheet()
+                    state
+                        .availableFolders
+                        .firstOrNull {
+                            it.name == selectedOptionState
+                        }
+                        ?.run {
+                            handlers.onChangeToExistingFolder(this.id)
+                        }
+                        ?: run {
+                            handlers.onOnAddFolder(selectedOptionState)
+                        }
+                    animatedOnDismiss()
+                },
+                isEnabled = selectedOptionState.isNotBlank(),
+            )
+        },
+        showBottomSheet = showBottomSheet,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        modifier = modifier.statusBarsPadding(),
+    ) {
+        FolderSelectionBottomSheetContent(
+            options = state.availableFolders.map { it.name }.toImmutableList(),
+            selectedOption = selectedOptionState,
+            onOptionSelected = {
+                selectedOptionState = it
+            },
+        )
     }
 }
 
