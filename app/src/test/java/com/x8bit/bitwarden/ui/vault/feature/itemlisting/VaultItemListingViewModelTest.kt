@@ -87,6 +87,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
@@ -964,7 +965,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `AddVaultItemClick inside a folder should show item selection dialog state`() {
         val viewModel = createVaultItemListingViewModel(
@@ -978,8 +978,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
                     folderId = "id",
                 ),
-            )
-                .copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection),
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }
@@ -1008,7 +1010,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for folder selection`() = runTest {
+    fun `ItemTypeToAddSelected sends NavigateToAddFolder for folder selection`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             savedStateHandle = createSavedStateHandleWithVaultItemListingType(
                 vaultItemListingType = VaultItemListingType.Folder(""),
@@ -1016,7 +1018,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemToAddToFolderSelected(
+                VaultItemListingsAction.ItemTypeToAddSelected(
                     itemType = CreateVaultItemType.FOLDER,
                 ),
             )
@@ -1030,7 +1032,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemToAddToFolderSelected sends NavigateToAddFolder for any other selection`() = runTest {
+    fun `ItemTypeToAddSelected sends NavigateToAddFolder for any other selection`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             savedStateHandle = createSavedStateHandleWithVaultItemListingType(
                 vaultItemListingType = VaultItemListingType.Folder("id"),
@@ -1038,7 +1040,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemToAddToFolderSelected(
+                VaultItemListingsAction.ItemTypeToAddSelected(
                     itemType = CreateVaultItemType.CARD,
                 ),
             )
@@ -3189,9 +3191,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message =
-                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                            .asText(),
+                    message = R.string
+                        .passkey_operation_failed_because_the_selected_item_does_not_exist
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3232,9 +3234,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message =
-                        R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
-                            .asText(),
+                    message = R.string
+                        .passkey_operation_failed_because_the_selected_item_does_not_exist
+                        .asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
@@ -3951,9 +3953,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message =
-                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
-                        .asText(),
+                message = R.string
+                    .passkey_operation_failed_because_user_verification_attempts_exceeded
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -4123,9 +4125,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message =
-                    R.string.passkey_operation_failed_because_user_verification_attempts_exceeded
-                        .asText(),
+                message = R.string
+                    .passkey_operation_failed_because_user_verification_attempts_exceeded
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -4444,6 +4446,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private fun createVaultItemListingState(
         itemListingType: VaultItemListingState.ItemListingType = VaultItemListingState.ItemListingType.Vault.Login,
         viewState: VaultItemListingState.ViewState = VaultItemListingState.ViewState.Loading,
+        dialogState: VaultItemListingState.DialogState? = null,
     ): VaultItemListingState =
         VaultItemListingState(
             itemListingType = itemListingType,
@@ -4455,7 +4458,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             isPullToRefreshSettingEnabled = false,
-            dialogState = null,
+            dialogState = dialogState,
             totpData = null,
             autofillSelectionData = null,
             policyDisablesSend = false,
