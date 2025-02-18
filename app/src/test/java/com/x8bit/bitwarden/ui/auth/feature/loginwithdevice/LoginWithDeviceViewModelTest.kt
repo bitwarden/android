@@ -521,6 +521,73 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `on createAuthRequestWithUpdates Success and NewDeviceVerification with message should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.stateFlow.test {
+                    assertEquals(DEFAULT_STATE, awaitItem())
+                    mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                            dialogState = LoginWithDeviceState.DialogState.Loading(
+                                message = R.string.logging_in.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            dialogState = LoginWithDeviceState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = "new device verification required".asText(),
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Test
     fun `on captchaTokenResultFlow missing token should should display error dialog`() = runTest {
         val viewModel = createViewModel()
         mutableCaptchaTokenResultFlow.tryEmit(CaptchaCallbackTokenResult.MissingToken)

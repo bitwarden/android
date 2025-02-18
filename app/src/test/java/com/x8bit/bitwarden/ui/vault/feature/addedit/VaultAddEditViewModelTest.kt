@@ -94,6 +94,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -202,8 +203,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             totpData = null,
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
-                .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
             shouldShowCoachMarkTour = false,
         )
         val viewModel = createAddVaultItemViewModel(
@@ -285,8 +284,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
-                supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
-                    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
                 shouldShowCoachMarkTour = false,
             ),
             viewModel.stateFlow.value,
@@ -782,6 +779,62 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultAddEditEvent.ExitApp, eventTurbine.awaitItem())
             }
             assertNull(specialCircumstanceManager.specialCircumstance)
+            coVerify(exactly = 1) {
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate back not clearing special circumstances`() =
+        runTest {
+            val autofillData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
+                uri = "mockUri",
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = autofillData,
+                    shouldFinishWhenComplete = true,
+                )
+            val stateWithDialog = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                dialogState = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+
+            viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
+                    eventTurbine.awaitItem(),
+                )
+                assertEquals(VaultAddEditEvent.NavigateBack, eventTurbine.awaitItem())
+            }
+            assertNotNull(specialCircumstanceManager.specialCircumstance)
             coVerify(exactly = 1) {
                 vaultRepository.createCipherInOrganization(any(), any())
             }
@@ -2064,156 +2117,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.LOGIN,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = createLoginTypeContentViewState(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect CARD should switch to CardItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.CARD,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect IDENTITY should switch to IdentityItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.IDENTITY,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect SECURE_NOTES should switch to SecureNotesItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.SECURE_NOTES,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect SSH_KEYS should switch to SshKeysItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.SSH_KEYS,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -2652,29 +2555,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
         mutableShouldShowAddLoginCoachMarkFlow.update { false }
-        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when first time action manager value is true, but type content is not login shouldShowLearnAboutNewLogins should be false`() {
-        mutableShouldShowAddLoginCoachMarkFlow.update { true }
-        val viewModel = createAddVaultItemViewModel(
-            savedStateHandle = createSavedStateHandleWithState(
-                state = createVaultAddItemState(
-                    typeContentViewState = createLoginTypeContentViewState(),
-                ),
-                vaultAddEditType = VaultAddEditType.AddItem(
-                    vaultItemCipherType = VaultItemCipherType.LOGIN,
-                ),
-            ),
-        )
-        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-        viewModel.trySendAction(
-            VaultAddEditAction.Common.TypeOptionSelect(
-                VaultAddEditState.ItemTypeOption.SSH_KEYS,
-            ),
-        )
         assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
     }
 
@@ -4383,7 +4263,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
         totpData: TotpData? = null,
-        supportedItemTypes: List<VaultAddEditState.ItemTypeOption> = VaultAddEditState.ItemTypeOption.entries,
+        shouldClearSpecialCircumstance: Boolean = true,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -4395,8 +4275,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             dialog = dialogState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
-            supportedItemTypes = supportedItemTypes,
             shouldShowCoachMarkTour = false,
+            shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
         )
 
     @Suppress("LongParameterList")

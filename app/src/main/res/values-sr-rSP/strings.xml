@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Да ли желиш да га отвориш сада?</string>
   <string name="master_password">Главна Лозинка</string>
   <string name="master_password_required">Главна лозинка (неопходно)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Више</string>
   <string name="my_vault">Мој Сеф</string>
   <string name="authenticator">Аутентификатор</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">Нема корисничког имена</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Молимо вас да размотрите да нам помогнете уз добру оцену!</string>
   <string name="regenerate_password">Поново генериши лозинку</string>
   <string name="retype_master_password">Поновити Главну Лозинку</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Поново унети главну лозинку (неопходно)</string>
   <string name="search_vault">Претражи сеф</string>
   <string name="security">Сигурност</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Подеси ПИН</string>
   <string name="set_pin_direction">Унеси четвороцифрени ПИН за откључавање апликације.</string>
   <string name="item_information">Информације о ставци</string>
+  <string name="item_details">Item details</string>
   <string name="item_updated">Ставка је сачувана</string>
   <string name="submitting">Слање...</string>
   <string name="syncing">Синхронизује се...</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">Потребна је миграција кључа за шифровање. Пријавите се преко веб сефа да бисте ажурирали кључ за шифровање.</string>
   <string name="learn_more">Сазнај више</string>
   <string name="api_url">УРЛ АПИ Сервера</string>
+  <string name="client_certificate_mtls">Client certificate (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certificate used for client authentication.</string>
+  <string name="use_system_certificate">Use system certificate</string>
   <string name="custom_environment">Прилагођено окружење</string>
   <string name="custom_environment_footer">За напредне кориснике. Можете да одредите независно основни УРЛ сваког сервиса.</string>
   <string name="environment_saved">УРЛ адресе окружења су сачуване.</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">Име идентитета</string>
   <string name="value">Вредност</string>
   <string name="password_history">Историја Лозинке</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Password history: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Врсте</string>
   <string name="no_passwords_to_list">Нема лозинке у листи.</string>
   <string name="no_items_to_list">Нама ставке у листи.</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">Не може да се дода верификациони код?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Cannot add authenticator key? <annotation link="scanQrCode">Scan QR Code</annotation></string>
   <string name="scan_qr_code">Скенирај QR код</string>
-  <string name="cannot_scan_qr_code">Не мигу да скенирам QR код?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Cannot scan QR code? <annotation link="enterKeyManually">Enter key manually</annotation></string>
   <string name="authenticator_key_scanner">Кључ аутентификатора</string>
+  <string name="authenticator_key_help">Authenticator key help</string>
   <string name="enter_key_manually">Унесите кључ ручно</string>
   <string name="add_totp">Додати ТОТП</string>
   <string name="setup_totp">Подесити ТОТП</string>
@@ -821,7 +831,7 @@
   <string name="data_region">Регион података</string>
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат.</string>
-  <string name="current_master_password">Тренутна главна лозинка</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Пријављено!</string>
   <string name="approve_with_my_other_device">Одобри са мојим другим уређајем</string>
   <string name="request_admin_approval">Затражити одобрење администратора</string>
@@ -1013,12 +1023,14 @@
   <string name="generate_button_label">Генериши</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишите ову лозинку и чувајте је негде на сигурном.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Сазнајте више о другим начинима да спречите закључавање налога</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Помоћ око геолокације сервера.</string>
   <string name="email_address_required">Адреса Е-поште (неопходно)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Изабери везу у е-поруци да верификујеш своју адресу е-поште и наставиш са прављењем налога. "</string>
   <string name="change_email_address">Промени адресу Е-поште</string>
   <string name="next">Следеће</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не може да поврати изгубљену или заборављену главну лозинку.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Одаберите вашу главну лозинку</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изаберите јединствену и јаку лозинку да бисте заштитили своје податке.</string>
   <string name="minimum_characters">%1$s знакова</string>
@@ -1038,6 +1050,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при повезивању са услугом Duo. Користите други метод пријаве у два корака или контактирајте Duo за помоћ.</string>
   <string name="master_password_hint_not_specified">Савет главне лозинке</string>
   <string name="master_password_important_hint">Важно: Ваша главна лозинка се не може повратити ако је заборавите! Минимално 12 слова.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Почните</string>
   <string name="save_and_protect_your_data">Сачувајте и заштитите своје податке</string>
   <string name="the_vault_protects_more_than_just_passwords">Сеф штити више од само лозинки. Овде безбедно чувајте безбедне пријаве, личне карте, картице и белешке.</string>
@@ -1165,5 +1178,29 @@
   <string name="coachmark_6_of_6">6 ОД 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Користите ове опције да би сте прилагодили лозинку захтевима вашег налога.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Након што сачувате вашу нову лозинку у Bitwarden, не заборавите да је обновите на налогу веб сајта. "</string>
+  <string name="error_loading_certificate">Error loading certificate</string>
+  <string name="certificate_alias">Certificate alias</string>
+  <string name="import_certificate">Import certificate</string>
+  <string name="choose_system_certificate">Choose system certificate</string>
+  <string name="certificate_installed">Certificate installed</string>
+  <string name="certificate_installation_failed">Certificate installation failed</string>
+  <string name="certificate_selection_failed">Certificate selection failed</string>
+  <string name="unsupported_certificate_type">Unsupported certificate type</string>
+  <string name="certificate_password_incorrect">Certificate password incorrect</string>
+  <string name="invalid_certificate_chain">Invalid certificate chain</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
+  <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
 </resources>

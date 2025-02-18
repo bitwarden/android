@@ -17,6 +17,7 @@ data class ForwardedEmailAliasHandlers(
     val onServiceChange: (ForwardedEmailAlias.ServiceTypeOption) -> Unit,
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
     val onAddyIoDomainNameTextChange: (String) -> Unit,
+    val onAddyIoSelfHostServerUrlChange: (String) -> Unit,
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
     val onFastMailApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
@@ -30,6 +31,7 @@ data class ForwardedEmailAliasHandlers(
          * Creates an instance of [ForwardedEmailAliasHandlers] by binding actions to the provided
          * [GeneratorViewModel].
          */
+        @Suppress("LongMethod")
         fun create(
             viewModel: GeneratorViewModel,
         ): ForwardedEmailAliasHandlers = ForwardedEmailAliasHandlers(
@@ -50,6 +52,11 @@ data class ForwardedEmailAliasHandlers(
             onAddyIoDomainNameTextChange = { newDomainName ->
                 viewModel.trySendAction(
                     ForwardedEmailAliasAction.AddyIo.DomainTextChange(domain = newDomainName),
+                )
+            },
+            onAddyIoSelfHostServerUrlChange = { newServerUrl ->
+                viewModel.trySendAction(
+                    ForwardedEmailAliasAction.AddyIo.SelfHostServerUrlChange(url = newServerUrl),
                 )
             },
             onDuckDuckGoApiKeyTextChange = { newApiKey ->

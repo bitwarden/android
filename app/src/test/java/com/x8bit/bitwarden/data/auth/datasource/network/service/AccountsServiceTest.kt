@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMaster
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendNewDeviceOtpRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
@@ -249,5 +250,18 @@ class AccountsServiceTest : BaseServiceTest() {
             accessToken = "token",
         )
         assertEquals(Unit.asSuccess(), result)
+    }
+
+    @Test
+    fun `resendNewDeviceOtp with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.resendNewDeviceOtp(
+            body = ResendNewDeviceOtpRequestJson(
+                email = "example@email.com",
+                passwordHash = "37y4d8r379r4789nt387r39k3dr87nr93",
+            ),
+        )
+        assertTrue(result.isSuccess)
     }
 }

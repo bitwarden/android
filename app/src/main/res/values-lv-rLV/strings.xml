@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Vai pārslēgties uz to?</string>
   <string name="master_password">Galvenā parole</string>
   <string name="master_password_required">Galvenā parole (nepieciešama)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Vairāk</string>
   <string name="my_vault">Mana glabātava</string>
   <string name="authenticator">Autentificētājs</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">Glabātavā nav piezīmju.</string>
   <string name="new_note">Jauna piezīme</string>
   <string name="new_item">Jauns vienums</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">Glabātavā nav teksta Send vienumu.</string>
   <string name="no_file_sends">Glabātavā nav datņu Send vienumu.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Jauns teksta Send</string>
   <string name="new_file_send">Jauns datnes Send</string>
   <string name="no_username">Nav lietotājvārda</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Lūdzu, apsver palīdzēt mums ar labu atsauksmi!</string>
   <string name="regenerate_password">Pārizveidot paroli</string>
   <string name="retype_master_password">Atkārtoti ievadīt galveno paroli</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Atkārtoti jāievada galvenā parole (nepieciešams)</string>
   <string name="search_vault">Meklēt glabātavā</string>
   <string name="security">Drošība</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Iestatīt PIN</string>
   <string name="set_pin_direction">Ievadīt 4 ciparu PIN kodu, kuru izmantot lietotnes atslēgšanai.</string>
   <string name="item_information">Vienuma informācija</string>
+  <string name="item_details">Vienuma dati</string>
   <string name="item_updated">Vienums atjaunināts.</string>
   <string name="submitting">Iesniedz...</string>
   <string name="syncing">Sinhronizē…</string>
@@ -281,6 +286,9 @@ Nolasīšana notiks automātiski.</string>
   <string name="encryption_key_migration_required_description_long">Nepieciešama šifrēšanas atslēgas nomaiņa. Lūgums pieteikties tīmekļa glabātavā, lai atjauninātu savu šifrēšanas atslēgu.</string>
   <string name="learn_more">Uzzināt vairāk</string>
   <string name="api_url">API servera URL</string>
+  <string name="client_certificate_mtls">Klienta sertifikāts (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Sertifikāts tiek izmantots klientu autentificēšanai.</string>
+  <string name="use_system_certificate">Izmantot sistēmas sertifikātu</string>
   <string name="custom_environment">Pielāgota vide</string>
   <string name="custom_environment_footer">Pieredzējušiem lietotājiem. Ir iespējams norādīt URL katram pakalpojumam atsevišķi.</string>
   <string name="environment_saved">Vides URL ir saglabāti.</string>
@@ -418,6 +426,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="identity_name">Identitātes nosaukums</string>
   <string name="value">Vērtība</string>
   <string name="password_history">Paroļu vēsture</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Paroļu vēsture: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Veidi</string>
   <string name="no_passwords_to_list">Nav paroļu, ko parādīt.</string>
   <string name="no_items_to_list">Nav vienumu, ko parādīt.</string>
@@ -479,7 +488,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="exit">Iziet</string>
   <string name="exit_confirmation">Vai tiešām iziet no Bitwarden?</string>
   <string name="require_master_password_on_app_restart">Pieprasīt galveno paroli pēc lietotnes pārsāknēšanas?</string>
-  <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes pārsāknēšanas?</string>
+  <string name="pin_require_master_password_restart">Vai pieprasīt atslēgšanu ar galveno paroli pēc lietotnes atkārtotas palaišanas?</string>
   <string name="black">Melns</string>
   <string name="nord">Nord</string>
   <string name="solarized_dark">Solarizēts tumšs</string>
@@ -497,8 +506,8 @@ Nolasīšana notiks automātiski.</string>
   <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
   <string name="biometrics_direction">Apstiprināšana ar biometriju</string>
   <string name="biometrics">Biometrija</string>
-  <string name="biometrics_failed">Biometrics Failed</string>
-  <string name="biometrics_decoding_failure">Log in with your Master Password or PIN then re-enable biometric login in Settings.</string>
+  <string name="biometrics_failed">Biometrija neizdevās</string>
+  <string name="biometrics_decoding_failure">Jāpiesakās ar savu galveno paroli vai PIN, tad iestatījumos atkārtoti jāiespējo pieteikšanās ar biometriju.</string>
   <string name="use_biometrics_to_unlock">Izmantot biometriju, lai atslēgtu</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden ir nepieciešams pievērst uzmanību - skatīt \"Automātiskās aizpildes pieejamības pakalpojums\" Bitwarden iestatījumos.</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. Android lietotņu iestatījumu sadaļā, kas attiecas uz Bitwarden, jāritina līdz \"Papildu\", jāatver \"Rādīt pāri citām lietotnēm\" un jāpiesit slēdzim, lai iespējotu pārklāšanās atbalstu.</string>
@@ -706,8 +715,9 @@ Nolasīšana notiks automātiski.</string>
   <string name="cannot_add_authenticator_key">Nevar pievienot autentificētāja atslēgu?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Nevar pievienot autentificētāja atslēgu? <annotation link="scanQrCode">Nolasīt kvadrātkodu</annotation></string>
   <string name="scan_qr_code">Nolasīt kvadrātkodu</string>
-  <string name="cannot_scan_qr_code">Nevar nolasīt kvadrātkodu?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Nevar nolasīt kvadrātkodu? <annotation link="enterKeyManually">Pašrocīgi jāievada atslēga</annotation></string>
   <string name="authenticator_key_scanner">Autentificētāja atslēga</string>
+  <string name="authenticator_key_help">Palīdzība par autentificētāja atslēgu</string>
   <string name="enter_key_manually">Ievadīt atslēgu pašrocīgi</string>
   <string name="add_totp">Pievienot TOTP</string>
   <string name="setup_totp">Uzstādīt TOTP</string>
@@ -821,7 +831,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="data_region">Datu apgabals</string>
   <string name="region">Apgabals</string>
   <string name="update_weak_master_password_warning">Galvenā parole neatbilst vienam vai vairākiem apvienības nosacījumiem. Ir jāatjaunina galvenā parole, lai varētu piekļūt glabātavai. Turpinot notiks atteikšanās no pašreizējās sesijas, un būs nepieciešams pieteikties no jauna. Citās ierīcēs esošās sesijas var turpināt darboties līdz vienai stundai.</string>
-  <string name="current_master_password">Pašreizējā galvenā parole</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Pieteicies.</string>
   <string name="approve_with_my_other_device">Apstiprināt ar citu savu ierīci</string>
   <string name="request_admin_approval">Pieprasīt pārvaldītāja apstiprinājumu</string>
@@ -943,7 +953,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Darbība ar piekļuves atslēgu neizdevās, jo pārlūkam nav atļauju</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">Darbība ar piekļuves atslēgu neizdevās, jo neatbilst pārlūka paraksts</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Darbība ar piekļuves atslēgu neizdevās trūkstošu līdzekļu saišu dēļ</string>
-  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Darbība ar piekļuves atslēgu neizdevāš, jo lietotne netika atrasta līdzekļu saitēs</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Darbība ar piekļuves atslēgu neizdevās, jo lietotne netika atrasta līdzekļu saitēs</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Darbība ar piekļuves atslēgu neizdevās, jo lietotni nevarēja apliecināt</string>
   <string name="confirm_file_password">Apstiprināt datnes paroli</string>
   <string name="continue_to_give_feedback">Turpināt, lai sniegtu atgriezenisko saiti?</string>
@@ -1013,12 +1023,14 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="generate_button_label">Veidot</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Šī parole jāpieraksta un jātur drošā vietā.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Vairāk par citiem veidiem, kā nepieļaut nepiekļūšanu kontam, var uzzināt</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Palīdzība par servera ģeogrāfiskajām atrašanās vietām.</string>
   <string name="email_address_required">E-pasta adrese (nepieciešama)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Jāatver e-pasta ziņojumā esošā saite, lai apliecininātu savu e-pasta adresi un turpinātu sava konta izveidi. "</string>
   <string name="change_email_address">Nomainīt e-pasta adresi</string>
   <string name="next">Turpināt</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nevar atkopt pazaudētu vai aizmirstu galveno paroli.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Jāizvēlas galvenā parole</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Jāizvēlas vienreizēja un spēcīga parole, lai turētu savu informāciju drošībā.</string>
   <string name="minimum_characters">%1$s rakstzīmes</string>
@@ -1038,6 +1050,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Kļūda savienojuma izveidošanā ar Duo pakalpojumu. Jāizmanto cits divpakāpju pieteikšanās veids vai jāvēršas pie Duo pēc palīdzības.</string>
   <string name="master_password_hint_not_specified">Galvenās paroles norāde</string>
   <string name="master_password_important_hint">Svarīgi: galveno paroli nevarēs atgūt, ja tā tiks aizmirsta. Vismaz 12 rakstzīmes.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Sākam</string>
   <string name="save_and_protect_your_data">Saglabā un aizsargā Tavus datus</string>
   <string name="the_vault_protects_more_than_just_passwords">Glabātava aizsargā vairāk kā tikai paroles. Drošā veidā glabā šeit pieteikšanās vienumus, identitātes, kartes un piezīmes!</string>
@@ -1160,10 +1173,34 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="coachmark_1_of_6">1 NO 6</string>
   <string name="coachmark_2_of_6">2 NO 6</string>
   <string name="coachmark_3_of_6">3 NO 6</string>
-  <string name="coachmark_4_of_6">4 OF 6</string>
-  <string name="coachmark_5_of_6">5 OF 6</string>
-  <string name="coachmark_6_of_6">6 OF 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
-  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="coachmark_4_of_6">4 NO 6</string>
+  <string name="coachmark_5_of_6">5 NO 6</string>
+  <string name="coachmark_6_of_6">6 NO 6</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Šīs iespējas ir izmantojamas, lai pielāgotu savas paroles atbilstību konta tīmekļvietnes prasībām.</string>
+  <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Pēc savas jaunās paroles saglabāšanas Bitwarden nevajadzētu aizmirst par tās atjaunināšanu sava konta tīmekļvietnē. "</string>
+  <string name="error_loading_certificate">Kļūda sertifikāta ielādēšanā</string>
+  <string name="certificate_alias">Sertifikāta aizstājvārds</string>
+  <string name="import_certificate">Ievietot sertifikātu</string>
+  <string name="choose_system_certificate">Izvēlēties sistēmas sertifikātu</string>
+  <string name="certificate_installed">Sertifikāts uzstādīts</string>
+  <string name="certificate_installation_failed">Sertifikāta uzstādīšana neizdevās</string>
+  <string name="certificate_selection_failed">Sertifikāta atlasīšana neizdevās</string>
+  <string name="unsupported_certificate_type">Neatbalstīts sertifikāta veids</string>
+  <string name="certificate_password_incorrect">Nepareiza sertifikāta parole</string>
+  <string name="invalid_certificate_chain">Nederīga sertifikātu ķēde</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistēmas sertifikāta izmantošana ir mazāk droša kā sertifikāta glabāšana ar Bitwarden. Turpinot tiks attēlots pieejamo sistēmas sertifikātu saraksts, ja kāds jau ir uzstādīts.</string>
+  <string name="certificate_alias_already_exists">Sertifikāta aizstājvārds jau pastāv</string>
   <string name="link">Saite</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Darbība ar piekļuves atslēgu neizdevās, jo lietotne ir nepareizi parakstīta.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījumā nav pieejams saimniekdatora URL.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Darbība ar piekļuves atslēgu neizdevās, jo lietotnes paraksts ir nederīgs.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Piekļuves atslēgas reģistrēšana neizdevās iekšējas kļūdas dēļ.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Darbība ar piekļuves atslēgu neizdevās, jo iesaistīto pusi nevar identificēt.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Piekļuves atslēgas autentificēšana neizdevās iekšējas kļūdas dēļ.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Darbība ar piekļuves atslēgu neizdevās, jo atlasītais vienums nepastāv.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Darbība ar piekļuves atslēgu neizdevās, jo lietotājs ir izslēgts.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Darbība ar piekļuves atslēgu neizdevās, jo lietotāja apliecināšana tika atcelta.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums ir nederīgs.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Darbība ar piekļuves atslēgu neizdevās, jo tika pārsniegts lietotāja apliecināšanas mēģinājumu skaits.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
 </resources>

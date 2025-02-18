@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Would you like to switch to it now?</string>
   <string name="master_password">Master password</string>
   <string name="master_password_required">Master password (required)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">More</string>
   <string name="my_vault">My vault</string>
   <string name="authenticator">Authenticator</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
   <string name="new_item">New item</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">No Username</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Please consider helping us out with a good review!</string>
   <string name="regenerate_password">Regenerate password</string>
   <string name="retype_master_password">Re-type master password</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Search vault</string>
   <string name="security">Security</string>
@@ -238,12 +242,13 @@
   <string name="authenticator_app_title">Authenticator app</string>
   <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
   <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Login unavailable</string>
   <string name="no_two_step_available">This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</string>
   <string name="recovery_code_title">Recovery code</string>
   <string name="remember">Remember</string>
   <string name="remember_email">Remember email</string>
-  <string name="send_verification_code_again">Send verification code email again</string>
+  <string name="send_verification_code_again">Resend code</string>
   <string name="two_step_login_options">Two-step login options</string>
   <string name="use_another_two_step_method">Use another two-step login method</string>
   <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
@@ -310,6 +315,7 @@ Scanning will happen automatically.</string>
   <string name="april">April</string>
   <string name="august">August</string>
   <string name="brand">Brand</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Cardholder name</string>
   <string name="city_town">City / Town</string>
   <string name="company">Company</string>
@@ -410,8 +416,11 @@ Scanning will happen automatically.</string>
   <string name="invalid_email">Invalid email address.</string>
   <string name="cards">Cards</string>
   <string name="identities">Identities</string>
+  <string name="identification">Identification</string>
   <string name="logins">Logins</string>
   <string name="secure_notes">Secure notes</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">All items</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Checking password...</string>
@@ -435,7 +444,7 @@ Scanning will happen automatically.</string>
   <string name="move_up">Move Up</string>
   <string name="miscellaneous">Miscellaneous</string>
   <string name="ownership">Ownership</string>
-  <string name="who_owns_this_item">Who owns this item?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">There are no collections to list.</string>
   <string name="moved_item_to_org">%1$s moved to %2$s.</string>
   <string name="item_shared">Item has been shared.</string>
@@ -827,7 +836,7 @@ Do you want to switch to this account?</string>
   <string name="data_region">Data region</string>
   <string name="region">Region</string>
   <string name="update_weak_master_password_warning">Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
-  <string name="current_master_password">Current master password</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Logged in!</string>
   <string name="approve_with_my_other_device">Approve with my other device</string>
   <string name="request_admin_approval">Request admin approval</string>
@@ -1019,12 +1028,14 @@ Do you want to switch to this account?</string>
   <string name="generate_button_label">Generate</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Help with server geolocations.</string>
   <string name="email_address_required">Email address (required)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Select the link in the email to verify your email address and continue creating your account. "</string>
   <string name="change_email_address">Change email address</string>
   <string name="next">Next</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden cannot recover a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Choose your master password</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Choose a unique and strong password to keep your information safe.</string>
   <string name="minimum_characters">%1$s characters</string>
@@ -1044,6 +1055,7 @@ Do you want to switch to this account?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Get started</string>
   <string name="save_and_protect_your_data">Save and protect your data</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
@@ -1171,6 +1183,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1196,4 +1209,5 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

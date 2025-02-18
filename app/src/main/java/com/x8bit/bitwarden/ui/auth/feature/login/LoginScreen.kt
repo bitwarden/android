@@ -67,7 +67,7 @@ fun LoginScreen(
     onNavigateToMasterPasswordHint: (String) -> Unit,
     onNavigateToEnterpriseSignOn: (String) -> Unit,
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
-    onNavigateToTwoFactorLogin: (String, String?) -> Unit,
+    onNavigateToTwoFactorLogin: (String, String?, Boolean) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
@@ -94,7 +94,11 @@ fun LoginScreen(
             }
 
             is LoginEvent.NavigateToTwoFactorLogin -> {
-                onNavigateToTwoFactorLogin(event.emailAddress, event.password)
+                onNavigateToTwoFactorLogin(
+                    event.emailAddress,
+                    event.password,
+                    event.isNewDeviceVerification,
+                )
             }
 
             is LoginEvent.ShowToast -> {

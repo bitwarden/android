@@ -66,6 +66,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.After
@@ -2137,7 +2138,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `VaultItemTypeSelection dialog state show vault item type selection dialog`() {
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
@@ -2153,7 +2158,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `when option is selected in VaultItemTypeSelection dialog add item action is sent`() {
         mutableStateFlow.update {
-            it.copy(dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection)
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                ),
+            )
         }
 
         composeTestRule
@@ -2168,7 +2177,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick)
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemToAddToFolderSelected(
+                VaultItemListingsAction.ItemTypeToAddSelected(
                     CreateVaultItemType.CARD,
                 ),
             )

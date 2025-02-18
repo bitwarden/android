@@ -60,6 +60,7 @@ class IdentityServiceImpl(
         authModel: IdentityTokenAuthModel,
         captchaToken: String?,
         twoFactorData: TwoFactorDataModel?,
+        newDeviceOtp: String?,
     ): Result<GetTokenResponseJson> = unauthenticatedIdentityApi
         .getToken(
             scope = "api offline_access",
@@ -79,6 +80,7 @@ class IdentityServiceImpl(
             twoFactorRemember = twoFactorData?.remember?.let { if (it) "1" else "0 " },
             captchaResponse = captchaToken,
             authRequestId = authModel.authRequestId,
+            newDeviceOtp = newDeviceOtp,
         )
         .toResult()
         .recoverCatching { throwable ->

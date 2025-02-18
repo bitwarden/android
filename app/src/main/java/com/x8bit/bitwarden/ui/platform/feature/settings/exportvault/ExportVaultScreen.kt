@@ -321,7 +321,7 @@ private fun ExportVaultScreenContent(
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
                 onValueChange = onPasswordInputChanged,
-                textFieldTestTag = "MasterPasswordEntry",
+                passwordFieldTestTag = "MasterPasswordEntry",
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .standardHorizontalMargin()

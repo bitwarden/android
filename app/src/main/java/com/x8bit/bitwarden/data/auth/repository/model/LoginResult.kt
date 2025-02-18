@@ -33,4 +33,9 @@ sealed class LoginResult {
      * There was an error in validating the certificate chain for the server
      */
     data object CertificateError : LoginResult()
+
+    /**
+     * New device verification is required
+     */
+    data class NewDeviceVerification(val errorMessage: String?) : LoginResult()
 }

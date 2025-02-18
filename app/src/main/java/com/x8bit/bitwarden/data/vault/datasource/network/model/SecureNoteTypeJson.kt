@@ -18,5 +18,7 @@ enum class SecureNoteTypeJson {
 }
 
 @Keep
-private class SecureNoteTypeSerializer :
-    BaseEnumeratedIntSerializer<SecureNoteTypeJson>(SecureNoteTypeJson.entries.toTypedArray())
+private class SecureNoteTypeSerializer : BaseEnumeratedIntSerializer<SecureNoteTypeJson>(
+    className = "SecureNoteTypeJson",
+    values = SecureNoteTypeJson.entries.toTypedArray(),
+)

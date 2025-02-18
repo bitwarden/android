@@ -43,6 +43,7 @@ sealed class FlagKey<out T : Any> {
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
                 AnonAddySelfHostAlias,
+                SimpleLoginSelfHostAlias,
             )
         }
     }
@@ -144,7 +145,7 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = true
+        override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
 
@@ -208,6 +209,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object AnonAddySelfHostAlias : FlagKey<Boolean>() {
         override val keyName: String = "anon-addy-self-host-alias"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable SimpleLogin self-host alias generation.
+     */
+    data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
+        override val keyName: String = "simple-login-self-host-alias"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

@@ -47,6 +47,7 @@ interface UnauthenticatedIdentityApi {
         @Field(value = "twoFactorProvider") twoFactorMethod: String?,
         @Field(value = "twoFactorRemember") twoFactorRemember: String?,
         @Field(value = "authRequest") authRequestId: String?,
+        @Field(value = "newDeviceOtp") newDeviceOtp: String?,
     ): NetworkResult<GetTokenResponseJson.Success>
 
     @GET("/sso/prevalidate")

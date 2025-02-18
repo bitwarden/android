@@ -48,5 +48,7 @@ enum class UriMatchTypeJson {
 }
 
 @Keep
-private class UriMatchTypeSerializer :
-    BaseEnumeratedIntSerializer<UriMatchTypeJson>(UriMatchTypeJson.entries.toTypedArray())
+private class UriMatchTypeSerializer : BaseEnumeratedIntSerializer<UriMatchTypeJson>(
+    className = "UriMatchTypeJson",
+    values = UriMatchTypeJson.entries.toTypedArray(),
+)

@@ -530,6 +530,10 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleLoginTypeActions(action: VaultItemAction.ItemType.Login) {
         when (action) {
+            is VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick -> {
+                handleAuthenticatorHelpToolTipClick()
+            }
+
             is VaultItemAction.ItemType.Login.CheckForBreachClick -> {
                 handleCheckForBreachClick()
             }
@@ -562,6 +566,14 @@ class VaultItemViewModel @Inject constructor(
                 handlePasswordVisibilityClicked(action)
             }
         }
+    }
+
+    private fun handleAuthenticatorHelpToolTipClick() {
+        sendEvent(
+            event = VaultItemEvent.NavigateToUri(
+                uri = "https://bitwarden.com/help/integrated-authenticator",
+            ),
+        )
     }
 
     private fun handleCheckForBreachClick() {
@@ -1991,6 +2003,11 @@ sealed class VaultItemAction {
          * Represents actions specific to the Login type.
          */
         sealed class Login : ItemType() {
+            /**
+             * The user has clicked the call to action on the authenticator help tooltip.
+             */
+            data object AuthenticatorHelpToolTipClick : Login()
+
             /**
              * The user has clicked the check for breach button.
              */

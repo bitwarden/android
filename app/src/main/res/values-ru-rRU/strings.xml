@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Хотите переключиться на него?</string>
   <string name="master_password">Мастер-пароль</string>
   <string name="master_password_required">Мастер-пароль (требуется)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Еще</string>
   <string name="my_vault">Хранилище</string>
   <string name="authenticator">Аутентификатор</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">В вашем хранилище нет заметок.</string>
   <string name="new_note">Новая заметка</string>
   <string name="new_item">Новый элемент</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">В вашем хранилище нет текстовых Send.</string>
   <string name="no_file_sends">В вашем хранилище нет файловых Send.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Новая текстовая Send</string>
   <string name="new_file_send">Новая файловая Send</string>
   <string name="no_username">Нет имени пользователя</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</string>
   <string name="regenerate_password">Создать новый пароль</string>
   <string name="retype_master_password">Введите мастер-пароль повторно</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Повторите мастер-пароль (требуется)</string>
   <string name="search_vault">Поиск в хранилище</string>
   <string name="security">Безопасность</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Установка PIN</string>
   <string name="set_pin_direction">Введите 4-значный PIN-код для разблокировки приложения.</string>
   <string name="item_information">Информация об элементе</string>
+  <string name="item_details">Информация об элементе</string>
   <string name="item_updated">Элемент сохранен</string>
   <string name="submitting">Отправка...</string>
   <string name="syncing">Синхронизация...</string>
@@ -281,6 +286,9 @@
   <string name="encryption_key_migration_required_description_long">Требуется миграция ключа шифрования. Чтобы обновить ключ шифрования, войдите через веб-хранилище.</string>
   <string name="learn_more">Узнать больше</string>
   <string name="api_url">URL API сервера</string>
+  <string name="client_certificate_mtls">Сертификат клиента (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Сертификат, используемый для аутентификации клиента.</string>
+  <string name="use_system_certificate">Использовать системный сертификат</string>
   <string name="custom_environment">Пользовательское окружение</string>
   <string name="custom_environment_footer">Для опытных пользователей. Можно указать URL отдельно для каждой службы.</string>
   <string name="environment_saved">URL окружения сохранены.</string>
@@ -418,6 +426,7 @@
   <string name="identity_name">Имя</string>
   <string name="value">Значение</string>
   <string name="password_history">История паролей</string>
+  <string name="password_history_count"><annotation link="passwordHistory">История паролей: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Типы элементов</string>
   <string name="no_passwords_to_list">Нет паролей для отображения.</string>
   <string name="no_items_to_list">Нет элементов для отображения.</string>
@@ -706,8 +715,9 @@
   <string name="cannot_add_authenticator_key">Не удается добавить ключ аутентификатора?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Не удается добавить ключ аутентификатора? <annotation link="scanQrCode">Сосканируйте QR-код</annotation></string>
   <string name="scan_qr_code">Сканировать QR-код</string>
-  <string name="cannot_scan_qr_code">Не удается сосканировать QR-код?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Не удается сосканировать QR-код? <annotation link="enterKeyManually">Введите ключ вручную</annotation></string>
   <string name="authenticator_key_scanner">Ключ аутентификатора</string>
+  <string name="authenticator_key_help">Помощь по ключу аутентификатора</string>
   <string name="enter_key_manually">Ввести ключ вручную</string>
   <string name="add_totp">Добавить TOTP</string>
   <string name="setup_totp">Настроить TOTP</string>
@@ -821,7 +831,7 @@
   <string name="data_region">Регион данных</string>
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа.</string>
-  <string name="current_master_password">Текущий мастер-пароль</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Выполнен вход!</string>
   <string name="approve_with_my_other_device">Одобрить с другим устройством</string>
   <string name="request_admin_approval">Запросить одобрение администратора</string>
@@ -1015,12 +1025,14 @@
   <string name="generate_button_label">Сгенерировать</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишите этот пароль и храните его в надежном месте.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Узнайте о других способах предотвращения блокировки аккаунта</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Справка по геолокации сервера.</string>
   <string name="email_address_required">Email (обязательно)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Кликните ссылку в письме, чтобы подтвердить свой адрес email и продолжить создание у аккаунта. "</string>
   <string name="change_email_address">Изменить адрес email</string>
   <string name="next">Далее</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden не может восстановить утерянный или забытый мастер-пароль.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Задайте мастер-пароль</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Задайте уникальный и надежный пароль, чтобы хранить информацию в безопасности.</string>
   <string name="minimum_characters">Символов: %1$s</string>
@@ -1040,6 +1052,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo.</string>
   <string name="master_password_hint_not_specified">Подсказка к мастер-паролю</string>
   <string name="master_password_important_hint">Важно: если вы забудете мастер-пароль, восстановить его будет невозможно! Не менее 12 символов.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Начать</string>
   <string name="save_and_protect_your_data">Сохраняйте и защищайте свои данные</string>
   <string name="the_vault_protects_more_than_just_passwords">Хранилище защищает не только пароли. Логины, идентификаторы, карты и заметки в нем надежно защищены.</string>
@@ -1167,5 +1180,29 @@
   <string name="coachmark_6_of_6">6 ИЗ 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Используйте эти параметры, чтобы настроить пароль в соответствии с требованиями вашего аккаунта.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"После того как вы сохраните новый пароль в Bitwarden, не забудьте обновить его на сайте вашего аккаунта. "</string>
+  <string name="error_loading_certificate">Ошибка загрузки сертификата</string>
+  <string name="certificate_alias">Псевдоним сертификата</string>
+  <string name="import_certificate">Импорт сертификата</string>
+  <string name="choose_system_certificate">Выбрать системный сертификат</string>
+  <string name="certificate_installed">Сертификат установлен</string>
+  <string name="certificate_installation_failed">Не удалось установить сертификат</string>
+  <string name="certificate_selection_failed">Не удалось выбрать сертификат</string>
+  <string name="unsupported_certificate_type">Неподдерживаемый тип сертификата</string>
+  <string name="certificate_password_incorrect">Неверный пароль сертификата</string>
+  <string name="invalid_certificate_chain">Неверная цепочка сертификатов</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Использование системного сертификата менее безопасно, чем хранение сертификата в Bitwarden. При продолжении появится список доступных системных сертификатов, если один из них уже установлен.</string>
+  <string name="certificate_alias_already_exists">Псевдоним сертификата уже существует</string>
   <string name="link">Ссылка</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операция с Passkey не удалась, поскольку URL хоста отсутствует в запросе.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Регистрация Passkey не удалась из-за внутренней ошибки.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Аутентификация Passkey не удалась из-за внутренней ошибки.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Операция с Passkey не удалась, поскольку выбранный элемент не существует.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Операция с Passkey не удалась, поскольку пользователь заблокирован.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Операция с Passkey не удалась, поскольку верификация пользователя была отменена.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Операция с Passkey не удалась, поскольку запрос некорректен.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операция с Passkey не удалась, поскольку превышено количество попыток верификации пользователя.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
 </resources>

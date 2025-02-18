@@ -29,11 +29,12 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.navigateToExpiredRegistrationLinkScreen
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.navigateToNewDeviceNoticeEmailAccess
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToPreventAccountLockout
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.REMOVE_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordScreen
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.SET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
@@ -94,7 +95,11 @@ fun RootNavScreen(
         splashDestination()
         authGraph(navController)
         removePasswordDestination()
-        resetPasswordDestination()
+        resetPasswordDestination(
+            onNavigateToPreventAccountLockOut = {
+                navController.navigateToPreventAccountLockout()
+            },
+        )
         trustedDeviceGraph(navController)
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
@@ -182,7 +187,9 @@ fun RootNavScreen(
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
-            RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
+            RootNavState.ResetPassword -> {
+                navController.navigateToResetPasswordScreen(rootNavOptions)
+            }
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)

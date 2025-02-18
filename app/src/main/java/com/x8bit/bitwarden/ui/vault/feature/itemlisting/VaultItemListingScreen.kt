@@ -272,9 +272,7 @@ fun VaultItemListingScreen(
         onVaultItemTypeSelected = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.ItemToAddToFolderSelected(
-                        itemType = it,
-                    ),
+                    VaultItemListingsAction.ItemTypeToAddSelected(itemType = it),
                 )
             }
         },
@@ -400,6 +398,7 @@ private fun VaultItemListingDialogs(
             VaultItemSelectionDialog(
                 onDismissRequest = onDismissRequest,
                 onOptionSelected = onVaultItemTypeSelected,
+                excludedOptions = dialogState.excludedOptions,
             )
         }
 

@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -79,6 +80,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -271,8 +273,8 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
-            is VaultItemListingsAction.ItemToAddToFolderSelected -> {
-                handleItemToAddToFolderSelected(action)
+            is VaultItemListingsAction.ItemTypeToAddSelected -> {
+                handleItemTypeToAddSelected(action)
             }
         }
     }
@@ -547,58 +549,71 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun handleItemToAddToFolderSelected(
-        action: VaultItemListingsAction.ItemToAddToFolderSelected,
+    private fun handleItemTypeToAddSelected(
+        action: VaultItemListingsAction.ItemTypeToAddSelected,
     ) {
-        (state.itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
-            ?.let { folder ->
-                when (val vaultItemType = action.itemType) {
-                    CreateVaultItemType.LOGIN,
-                    CreateVaultItemType.CARD,
-                    CreateVaultItemType.IDENTITY,
-                    CreateVaultItemType.SECURE_NOTE,
-                    CreateVaultItemType.SSH_KEY,
-                        -> {
-                        vaultItemType
-                            .toVaultItemCipherTypeOrNull()
-                            ?.let {
-                                sendEvent(
-                                    VaultItemListingEvent.NavigateToAddVaultItem(
-                                        vaultItemCipherType = it,
-                                        selectedFolderId = folder.folderId,
-                                    ),
-                                )
-                            }
-                    }
-
-                    CreateVaultItemType.FOLDER -> {
+        val listingType = state.itemListingType
+        val collectionId = (listingType as? VaultItemListingState.ItemListingType.Vault.Collection)
+            ?.collectionId
+        val folderId = (listingType as? VaultItemListingState.ItemListingType.Vault.Folder)
+            ?.folderId
+        when (val vaultItemType = action.itemType) {
+            CreateVaultItemType.LOGIN,
+            CreateVaultItemType.CARD,
+            CreateVaultItemType.IDENTITY,
+            CreateVaultItemType.SECURE_NOTE,
+            CreateVaultItemType.SSH_KEY,
+                -> {
+                vaultItemType
+                    .toVaultItemCipherTypeOrNull()
+                    ?.let {
                         sendEvent(
-                            VaultItemListingEvent.NavigateToAddFolder(
-                                parentFolderName = folder.fullyQualifiedName,
+                            VaultItemListingEvent.NavigateToAddVaultItem(
+                                vaultItemCipherType = it,
+                                selectedCollectionId = collectionId,
+                                selectedFolderId = folderId,
                             ),
                         )
                     }
+            }
+
+            CreateVaultItemType.FOLDER -> {
+                if (listingType is VaultItemListingState.ItemListingType.Vault.Folder) {
+                    sendEvent(
+                        VaultItemListingEvent.NavigateToAddFolder(
+                            parentFolderName = listingType.fullyQualifiedName,
+                        ),
+                    )
+                } else {
+                    throw IllegalArgumentException("$listingType does not support adding a folder")
                 }
             }
+        }
     }
 
     private fun handleAddVaultItemClick() {
         when (val itemListingType = state.itemListingType) {
-            is VaultItemListingState.ItemListingType.Vault.Folder -> {
+            is VaultItemListingState.ItemListingType.Vault.Collection -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection,
+                        dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                            excludedOptions = persistentListOfNotNull(
+                                CreateVaultItemType.SSH_KEY,
+                                CreateVaultItemType.FOLDER,
+                            ),
+                        ),
                     )
                 }
             }
 
-            is VaultItemListingState.ItemListingType.Vault.Collection -> {
-                sendEvent(
-                    VaultItemListingEvent.NavigateToAddVaultItem(
-                        vaultItemCipherType = itemListingType.toVaultItemCipherType(),
-                        selectedCollectionId = itemListingType.collectionId,
-                    ),
-                )
+            is VaultItemListingState.ItemListingType.Vault.Folder -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                            excludedOptions = persistentListOfNotNull(CreateVaultItemType.SSH_KEY),
+                        ),
+                    )
+                }
             }
 
             is VaultItemListingState.ItemListingType.Vault -> {
@@ -2016,7 +2031,9 @@ data class VaultItemListingState(
          * Represents a selection dialog to choose a vault item type to add to folder.
          */
         @Parcelize
-        data object VaultItemTypeSelection : DialogState()
+        data class VaultItemTypeSelection(
+            val excludedOptions: ImmutableList<CreateVaultItemType>,
+        ) : DialogState()
     }
 
     /**
@@ -2599,7 +2616,7 @@ sealed class VaultItemListingsAction {
     /**
      * Indicated a selection was made to add a new item to the vault.
      */
-    data class ItemToAddToFolderSelected(
+    data class ItemTypeToAddSelected(
         val itemType: CreateVaultItemType,
     ) : VaultItemListingsAction()
 

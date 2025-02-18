@@ -62,7 +62,8 @@ class TwoFactorLoginViewModel @Inject constructor(
                 authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
                 availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
                 codeInput = "",
-                displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
+                displayEmail = authRepository.twoFactorResponse?.twoFactorDisplayEmail
+                    ?: args.emailAddress,
                 dialogState = null,
                 isContinueButtonEnabled = authRepository
                     .twoFactorResponse
@@ -73,6 +74,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 email = args.emailAddress,
                 password = args.password,
                 orgIdentifier = args.orgIdentifier,
+                isNewDeviceVerification = args.isNewDeviceVerification,
             )
         },
 ) {
@@ -321,6 +323,18 @@ class TwoFactorLoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.invalid_verification_code.asText(),
+                        ),
+                    )
+                }
+            }
+
             // NO-OP: Let the auth flow handle navigation after this.
             is LoginResult.Success -> Unit
             LoginResult.CertificateError -> {
@@ -470,7 +484,11 @@ class TwoFactorLoginViewModel @Inject constructor(
 
         // Resend the email notification.
         viewModelScope.launch {
-            val result = authRepository.resendVerificationCodeEmail()
+            val result = if (!state.isNewDeviceVerification) {
+                authRepository.resendVerificationCodeEmail()
+            } else {
+                authRepository.resendNewDeviceOtp()
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
@@ -555,17 +573,27 @@ class TwoFactorLoginViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.email,
-                password = state.password,
-                twoFactorData = TwoFactorDataModel(
-                    code = code,
-                    method = state.authMethod.value.toString(),
-                    remember = state.isRememberEnabled,
-                ),
-                captchaToken = state.captchaToken,
-                orgIdentifier = state.orgIdentifier,
-            )
+            val result = if (state.isNewDeviceVerification) {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    newDeviceOtp = code,
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            } else {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    twoFactorData = TwoFactorDataModel(
+                        code = code,
+                        method = state.authMethod.value.toString(),
+                        remember = state.isRememberEnabled,
+                    ),
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveLoginResult(
                     loginResult = result,
@@ -587,6 +615,7 @@ data class TwoFactorLoginState(
     val displayEmail: String,
     val isContinueButtonEnabled: Boolean,
     val isRememberEnabled: Boolean,
+    val isNewDeviceVerification: Boolean,
     // Internal
     val captchaToken: String?,
     val email: String,

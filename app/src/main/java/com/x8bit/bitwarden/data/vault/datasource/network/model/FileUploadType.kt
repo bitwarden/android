@@ -19,5 +19,6 @@ enum class FileUploadType {
 
 @Keep
 private class FileUploadTypeSerializer : BaseEnumeratedIntSerializer<FileUploadType>(
-    FileUploadType.entries.toTypedArray(),
+    className = "FileUploadType",
+    values = FileUploadType.entries.toTypedArray(),
 )

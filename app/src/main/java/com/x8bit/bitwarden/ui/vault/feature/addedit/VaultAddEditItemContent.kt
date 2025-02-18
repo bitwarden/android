@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
@@ -40,8 +42,6 @@ import kotlinx.collections.immutable.toImmutableList
 fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
-    typeOptions: List<VaultAddEditState.ItemTypeOption>,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
@@ -107,13 +107,12 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         }
         if (isAddItemMode) {
             item {
-                TypeOptionsItem(
-                    entries = typeOptions,
-                    itemType = state.type,
-                    onTypeOptionClicked = onTypeOptionClicked,
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.item_details),
                     modifier = Modifier
-                        .testTag("ItemTypePicker")
-                        .standardHorizontalMargin(),
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
                 )
             }
         }
@@ -175,7 +174,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             val collections = state.common.selectedOwner?.collections.orEmpty()
             item {
                 BitwardenMultiSelectButton(
-                    label = stringResource(id = R.string.who_owns_this_item),
+                    label = stringResource(id = R.string.owner),
                     options = state.common.availableOwners.map { it.name }.toImmutableList(),
                     selectedOption = state.common.selectedOwner?.name,
                     onOptionSelected = { selectedOwnerName ->
@@ -267,31 +266,6 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
-}
-
-@Composable
-private fun TypeOptionsItem(
-    entries: List<VaultAddEditState.ItemTypeOption>,
-    itemType: VaultAddEditState.ViewState.Content.ItemType,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val optionsWithStrings = entries.associateWith { stringResource(id = it.labelRes) }
-
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.type),
-        options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = itemType.itemTypeOption.labelRes),
-        onOptionSelected = { selectedOption ->
-            val selectedOptionId = optionsWithStrings
-                .entries
-                .first { it.value == selectedOption }
-                .key
-            onTypeOptionClicked(selectedOptionId)
-        },
-        cardStyle = CardStyle.Full,
-        modifier = modifier,
-    )
 }
 
 /**

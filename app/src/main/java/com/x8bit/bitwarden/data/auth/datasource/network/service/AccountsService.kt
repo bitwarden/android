@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyReq
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendNewDeviceOtpRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 
@@ -51,6 +52,11 @@ interface AccountsService {
      * Resend the email with the two-factor verification code.
      */
     suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit>
+
+    /**
+     * Resend the email with the verification code for new devices
+     */
+    suspend fun resendNewDeviceOtp(body: ResendNewDeviceOtpRequestJson): Result<Unit>
 
     /**
      * Reset the password.

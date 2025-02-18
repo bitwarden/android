@@ -50,6 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Czy chcesz przełączyć się teraz?</string>
   <string name="master_password">Hasło główne</string>
   <string name="master_password_required">Hasło główne (wymagane)</string>
+  <string name="new_master_password_required">New master password (required)</string>
   <string name="more">Więcej</string>
   <string name="my_vault">Mój sejf</string>
   <string name="authenticator">Authenticator</string>
@@ -164,8 +165,10 @@
   <string name="no_notes">W twoim sejfie nie ma żadnych notatek.</string>
   <string name="new_note">Nowa notatka</string>
   <string name="new_item">Nowy element</string>
+  <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">W twoim sejfie nie ma żadnych wysyłek tekstów.</string>
   <string name="no_file_sends">W twoim sejfie nie ma żadnych wysyłek plików.</string>
+  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
   <string name="new_text_send">Nowa wysyłka tekstu</string>
   <string name="new_file_send">Nowa wysyłka pliku</string>
   <string name="no_username">Brak nazwy użytkownika</string>
@@ -184,6 +187,7 @@
   <string name="rate_the_app_description">Wesprzyj nas pozytywną opinią!</string>
   <string name="regenerate_password">Wygeneruj ponownie hasło</string>
   <string name="retype_master_password">Wpisz ponownie hasło główne</string>
+  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
   <string name="retype_master_password_required">Powtórz hasło główne (wymagane)</string>
   <string name="search_vault">Szukaj w sejfie</string>
   <string name="security">Zabezpieczenia</string>
@@ -191,6 +195,7 @@
   <string name="set_pin">Ustaw kod PIN</string>
   <string name="set_pin_direction">Wpisz 4-cyfrowy kod PIN do odblokowywania aplikacji.</string>
   <string name="item_information">Informacje o elemencie</string>
+  <string name="item_details">Szczegóły elementu</string>
   <string name="item_updated">Element został zapisany</string>
   <string name="submitting">Wysyłanie...</string>
   <string name="syncing">Synchronizuję...</string>
@@ -281,6 +286,9 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="encryption_key_migration_required_description_long">Wymagana jest migracja klucza szyfrowania. Zaloguj się przez sejf internetowy, aby zaktualizować klucz szyfrowania.</string>
   <string name="learn_more">Dowiedz się więcej</string>
   <string name="api_url">Adres URL serwera API</string>
+  <string name="client_certificate_mtls">Certyfikat klienta (mTLS)</string>
+  <string name="certificate_used_for_client_authentication">Certyfikat używany do uwierzytelniania klienta.</string>
+  <string name="use_system_certificate">Użyj certyfikatu systemowego</string>
   <string name="custom_environment">Niestandardowe środowisko</string>
   <string name="custom_environment_footer">Dla zaawansowanych użytkowników. Możesz wpisać podstawowy adres URL niezależnie dla każdej usługi.</string>
   <string name="environment_saved">Adresy URL środowiska zostały zapisane.</string>
@@ -418,6 +426,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="identity_name">Nazwa profilu</string>
   <string name="value">Wartość</string>
   <string name="password_history">Historia hasła</string>
+  <string name="password_history_count"><annotation link="passwordHistory">Historia haseł: <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="types">Rodzaje</string>
   <string name="no_passwords_to_list">Brak haseł do wyświetlenia.</string>
   <string name="no_items_to_list">Brak elementów do wyświetlenia.</string>
@@ -706,8 +715,9 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="cannot_add_authenticator_key">Nie możesz dodać klucza uwierzytelniającego?</string>
   <string name="cannot_add_authenticator_key_scan_qr_code">Nie można dodać klucza uwierzytelniającego? <annotation link="scanQrCode">Zeskanuj kod QR</annotation></string>
   <string name="scan_qr_code">Zeskanuj kod QR</string>
-  <string name="cannot_scan_qr_code">Nie możesz zeskanować kodu QR?</string>
+  <string name="cannot_scan_qr_code_enter_key_manually">Nie możesz zeskanować kodu QR? <annotation link="enterKeyManually">Wprowadź klucz ręcznie</annotation></string>
   <string name="authenticator_key_scanner">Klucz uwierzytelniający</string>
+  <string name="authenticator_key_help">Pomoc dotycząca klucza uwierzytelniającego</string>
   <string name="enter_key_manually">Wpisz klucz ręcznie</string>
   <string name="add_totp">Dodaj TOTP</string>
   <string name="setup_totp">Skonfiguruj TOTP</string>
@@ -821,7 +831,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="data_region">Region danych</string>
   <string name="region">Region</string>
   <string name="update_weak_master_password_warning">Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę.</string>
-  <string name="current_master_password">Aktualne hasło główne</string>
+  <string name="current_master_password_required">Current master password (required)</string>
   <string name="logged_in">Zalogowano!</string>
   <string name="approve_with_my_other_device">Zatwierdź za pomocą mojego innego urządzenia</string>
   <string name="request_admin_approval">Poproś administratora o zatwierdzenie</string>
@@ -1013,12 +1023,14 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="generate_button_label">Generuj</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Zapisz to hasło i przechowuj je w bezpiecznym miejscu.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Dowiedz się więcej o innych sposobach zapobiegania blokowaniu konta</string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
   <string name="help_with_server_geolocations">Pomóż mi z geolokalizacjami serwera.</string>
   <string name="email_address_required">Adres e-mail (wymagany)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Kliknij w link we wiadomości e-mail, aby zweryfikować swój adres e-mail i kontynuować tworzenie konta. "</string>
   <string name="change_email_address">Zmień adres e-mail</string>
   <string name="next">Dalej</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nie może odzyskać utraconego lub zapomnianego hasła głównego.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
   <string name="choose_your_master_password">Wybierz hasło główne</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Wybierz unikalne i mocne hasło, aby Twoje informacje były bezpieczne.</string>
   <string name="minimum_characters">%1$s znaków</string>
@@ -1038,6 +1050,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Wystąpił błąd podczas połączenia z usługą Duo. Aby uzyskać pomoc, użyj innej metody dwustopniowego logowania lub skontaktuj się z Duo.</string>
   <string name="master_password_hint_not_specified">Wskazówka do hasła głównego</string>
   <string name="master_password_important_hint">Ważne: Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz! Co najmniej 12 znaków.</string>
+  <string name="new_master_password_hint">New master password hint</string>
   <string name="get_started">Pierwsze kroki</string>
   <string name="save_and_protect_your_data">Zapisz i chroń swoje dane</string>
   <string name="the_vault_protects_more_than_just_passwords">Sejf chroni nie tylko hasła. Przechowuj tutaj bezpiecznie loginy, identyfikatory, karty i notatki.</string>
@@ -1165,5 +1178,29 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="coachmark_6_of_6">6 Z 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Użyj tych opcji, aby dostosować swoje hasło do wymagań strony Twojego konta.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po zapisaniu nowego hasła w Bitwarden nie zapomnij zaktualizować go na stronie swojego konta. "</string>
+  <string name="error_loading_certificate">Błąd podczas ładowania certyfikatu</string>
+  <string name="certificate_alias">Alias certyfikatu</string>
+  <string name="import_certificate">Importuj certyfikat</string>
+  <string name="choose_system_certificate">Wybierz certyfikat systemowy</string>
+  <string name="certificate_installed">Certyfikat zainstalowany</string>
+  <string name="certificate_installation_failed">Instalacja certyfikatu nie powiodła się</string>
+  <string name="certificate_selection_failed">Wybór certyfikatu nie powiódł się</string>
+  <string name="unsupported_certificate_type">Nieobsługiwany typ certyfikatu</string>
+  <string name="certificate_password_incorrect">Nieprawidłowe hasło certyfikatu</string>
+  <string name="invalid_certificate_chain">Nieprawidłowy łańcuch certyfikatów</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Używanie certyfikatu systemowego jest mniej bezpieczne niż przechowywanie certyfikatu w Bitwarden. Kontynuowanie wyświetli listę dostępnych certyfikatów systemowych, jeśli któryś jest już zainstalowany.</string>
+  <string name="certificate_alias_already_exists">Alias certyfikatu już istnieje</string>
   <string name="link">Powiąż</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operacja klucza dostępu nie powiodła się, ponieważ aplikacja jest podpisana nieprawidłowo.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operacja klucza dostępu nie powiodła się, ponieważ adres URL hosta nie jest obecny w żądaniu.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Operacja klucza dostępu nie powiodła się, ponieważ podpis aplikacji jest nieprawidłowy.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Rejestracja klucza dostępu nie powiodła się z powodu błędu wewnętrznego.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operacja klucza dostępu nie powiodła się, ponieważ nie można zidentyfikować strony zależnej.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Autoryzacja klucza dostępu nie powiodła się z powodu błędu wewnętrznego.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operacja klucza dostępu nie powiodła się, ponieważ wybrany element nie istnieje.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Operacja klucza dostępu nie powiodła się, ponieważ użytkownik jest zablokowany.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operacja klucza dostępu nie powiodła się, ponieważ weryfikacja użytkownika została anulowana.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Operacja klucza dostępu nie powiodła się, ponieważ żądanie jest nieprawidłowe.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operacja klucza dostępu nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Operacja klucza dostępu nie powiodła się, ponieważ nie wybrano żadnego elementu.</string>
 </resources>
