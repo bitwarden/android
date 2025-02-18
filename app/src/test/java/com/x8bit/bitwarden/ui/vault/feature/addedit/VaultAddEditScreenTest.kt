@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -31,6 +34,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
@@ -38,6 +42,7 @@ import androidx.core.net.toUri
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -2466,7 +2471,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a Folder Option should send FolderChange action`() {
+    fun `clicking a Folder Option should send SelectOrAddFolderForItem action`() {
         updateStateWithFolders()
 
         // Opens the menu
@@ -2474,21 +2479,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
             .performClick()
 
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockFolderName-1")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.FolderChange(
-                    VaultAddEditState.Folder(
-                        id = "mockFolderId-1",
-                        name = "mockFolderName-1",
-                    ),
-                ),
+                VaultAddEditAction.Common.SelectOrAddFolderForItem,
             )
         }
     }
@@ -2508,6 +2501,135 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. Folder")
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `should show folder selection bottom sheet when state updates to true`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `DismissFolderSelectionBottomSheet action sent when bottom sheet close button click`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Close")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        dispatcher.advanceTimeByAndRunCurrent(1000L)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissFolderSelectionBottomSheet)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Clicking add folder button in bottom sheet hides add button and replaced with TextField`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.EditableText))
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText))
+    }
+
+    @Test
+    fun `Editing the add folder text and clicking save send AddFolder action`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+        val newFolderName = "newFolderName"
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.EditableText))
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText))
+            .performTextInput(newFolderName)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+        }
+    }
+
+    @Test
+    fun `Selecting existing option and clicking save on folder sheet sends FolderChange action`() {
+        val folderId = "1234"
+        val folderName = "name"
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(
+                    availableFolders =
+                    listOf(
+                        VaultAddEditState.Folder(
+                            id = folderId,
+                            name = folderName,
+                        ),
+                    ),
+                )
+            }
+                .copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(folderName)
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.FolderChange(folderId = folderId))
+        }
     }
 
     @Test
@@ -3885,6 +4007,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -3896,6 +4019,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -3907,6 +4031,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -3918,6 +4043,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -3939,6 +4065,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -3950,6 +4077,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -3961,6 +4089,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             ),
             dialog = null,
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

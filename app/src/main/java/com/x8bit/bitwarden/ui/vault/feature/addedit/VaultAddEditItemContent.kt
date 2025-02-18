@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
@@ -149,15 +150,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenMultiSelectButton(
+            BitwardenTextSelectionButton(
                 label = stringResource(id = R.string.folder),
-                options = state.common.availableFolders.map { it.name }.toImmutableList(),
                 selectedOption = state.common.selectedFolder?.name,
-                onOptionSelected = { selectedFolderName ->
-                    commonTypeHandlers.onFolderSelected(
-                        state.common.availableFolders.first { it.name == selectedFolderName },
-                    )
-                },
+                onClick = commonTypeHandlers.onSelectOrAddFolderForItem,
                 cardStyle = if (isAddItemMode && state.common.hasOrganizations) {
                     CardStyle.Top(dividerPadding = 0.dp)
                 } else {
