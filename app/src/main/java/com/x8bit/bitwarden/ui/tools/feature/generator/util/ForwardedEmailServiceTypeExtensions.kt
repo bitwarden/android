@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
+import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AddyIo
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo
@@ -38,6 +39,9 @@ fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
             AddyIo(
                 apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
                 domainName = options.anonAddyDomainName.orEmpty(),
+                selfHostServerUrl = options.anonAddySelfHostServerUrl
+                    ?.prefixHttpsIfNecessary()
+                    .orEmpty(),
             )
         }
 

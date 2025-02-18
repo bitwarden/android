@@ -21,6 +21,7 @@ import kotlinx.serialization.Serializable
  * @property fastMailApiKey The API key for FastMail.
  * @property anonAddyApiAccessToken The API access token for AnonAddy.
  * @property anonAddyDomainName The domain name associated with AnonAddy.
+ * @property anonAddySelfHostServerUrl The self-hosted server URL for AnonAddy.
  * @property forwardEmailApiAccessToken The API access token for Forward Email.
  * @property forwardEmailDomainName The domain name associated with Forward Email.
  * @property emailWebsite The website associated with the email service.
@@ -62,6 +63,9 @@ data class UsernameGenerationOptions(
 
     @SerialName("anonAddyDomainName")
     val anonAddyDomainName: String? = null,
+
+    @SerialName("anonAddyBaseUrl")
+    val anonAddySelfHostServerUrl: String? = null,
 
     @SerialName("forwardEmailApiAccessToken")
     val forwardEmailApiAccessToken: String? = null,
