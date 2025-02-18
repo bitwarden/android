@@ -2160,7 +2160,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                    excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.FOLDER,
+                    ),
                 ),
             )
         }

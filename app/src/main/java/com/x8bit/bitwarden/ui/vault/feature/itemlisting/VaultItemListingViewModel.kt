@@ -610,7 +610,10 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                            excludedOptions = persistentListOfNotNull(CreateVaultItemType.SSH_KEY),
+                            excludedOptions = persistentListOfNotNull(
+                                CreateVaultItemType.SSH_KEY,
+                                CreateVaultItemType.FOLDER,
+                            ),
                         ),
                     )
                 }
