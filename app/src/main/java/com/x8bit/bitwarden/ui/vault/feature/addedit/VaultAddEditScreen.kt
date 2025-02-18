@@ -632,6 +632,7 @@ private fun FolderSelectionBottomSheetContent(
             ) {
                 Text(
                     text = option,
+                    color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
