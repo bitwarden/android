@@ -1627,6 +1627,48 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `in add mode, SaveClick with unknown custom linked field type should show error dialog`() =
+        runTest {
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.LinkedField(
+                            "mockItemId",
+                            "mockCustomFieldName",
+                            VaultLinkedFieldType.UNKNOWN,
+                        ),
+                    ),
+                ),
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Error
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+            assertEquals(
+                stateWithName.copy(
+                    dialog = VaultAddEditState.DialogState.Generic(
+                        title = R.string.invalid_custom_field_link.asText(),
+                        message = R.string.custom_field_x_has_an_invalid_link
+                            .asText("mockCustomFieldName"),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
     fun `in edit mode, SaveClick should show dialog, and remove it once an item is saved`() =
         runTest {
             val cipherView = createMockCipherView(1)

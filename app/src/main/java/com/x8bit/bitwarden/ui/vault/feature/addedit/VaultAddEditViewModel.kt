@@ -363,6 +363,21 @@ class VaultAddEditViewModel @Inject constructor(
             return@onContent
         }
 
+        // Some existing items contain invalid custom linked field types. The MAUI application
+        // simply hid these fields but we want to ensure any custom linked fields contain a valid
+        // link. If there are any invalid links we notify the user and require them to fix it before
+        // proceeding.
+        content.common.customFieldData
+            .filterIsInstance<VaultAddEditState.Custom.LinkedField>()
+            .firstOrNull { it.vaultLinkedFieldType == VaultLinkedFieldType.UNKNOWN }
+            ?.let {
+                showErrorDialog(
+                    title = R.string.invalid_custom_field_link.asText(),
+                    message = R.string.custom_field_x_has_an_invalid_link.asText(it.name),
+                )
+                return@onContent
+            }
+
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Loading(
