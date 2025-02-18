@@ -176,6 +176,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldExitOnSave = shouldExitOnSave,
                 supportedItemTypes = getSupportedItemTypeOptions(),
                 shouldShowCoachMarkTour = false,
+                shouldClearSpecialCircumstance = autofillSelectionData == null,
             )
         },
 ) {
@@ -1523,7 +1524,9 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is CreateCipherResult.Success -> {
-                specialCircumstanceManager.specialCircumstance = null
+                if (state.shouldClearSpecialCircumstance) {
+                    specialCircumstanceManager.specialCircumstance = null
+                }
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
@@ -2059,6 +2062,7 @@ data class VaultAddEditState(
     val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
+    val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
     private val shouldShowCoachMarkTour: Boolean,
 ) : Parcelable {

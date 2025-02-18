@@ -94,6 +94,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -782,6 +783,62 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(VaultAddEditEvent.ExitApp, eventTurbine.awaitItem())
             }
             assertNull(specialCircumstanceManager.specialCircumstance)
+            coVerify(exactly = 1) {
+                vaultRepository.createCipherInOrganization(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode during autofill selection, SaveClick should show dialog, remove it once an item is saved, show a toast and navigate back not clearing special circumstances`() =
+        runTest {
+            val autofillData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.LOGIN,
+                framework = AutofillSelectionData.Framework.AUTOFILL,
+                uri = "mockUri",
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.AutofillSelection(
+                    autofillSelectionData = autofillData,
+                    shouldFinishWhenComplete = true,
+                )
+            val stateWithDialog = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                dialogState = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(name = "issuer"),
+                shouldExitOnSave = false,
+                shouldClearSpecialCircumstance = false,
+            )
+            mutableVaultDataFlow.value = DataState.Loaded(createVaultData())
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+            coEvery {
+                vaultRepository.createCipherInOrganization(any(), any())
+            } returns CreateCipherResult.Success
+
+            viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.new_item_created.asText()),
+                    eventTurbine.awaitItem(),
+                )
+                assertEquals(VaultAddEditEvent.NavigateBack, eventTurbine.awaitItem())
+            }
+            assertNotNull(specialCircumstanceManager.specialCircumstance)
             coVerify(exactly = 1) {
                 vaultRepository.createCipherInOrganization(any(), any())
             }
@@ -4384,6 +4441,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         dialogState: VaultAddEditState.DialogState? = null,
         totpData: TotpData? = null,
         supportedItemTypes: List<VaultAddEditState.ItemTypeOption> = VaultAddEditState.ItemTypeOption.entries,
+        shouldClearSpecialCircumstance: Boolean = true,
     ): VaultAddEditState =
         VaultAddEditState(
             vaultAddEditType = vaultAddEditType,
@@ -4397,6 +4455,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             totpData = totpData,
             supportedItemTypes = supportedItemTypes,
             shouldShowCoachMarkTour = false,
+            shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
         )
 
     @Suppress("LongParameterList")
