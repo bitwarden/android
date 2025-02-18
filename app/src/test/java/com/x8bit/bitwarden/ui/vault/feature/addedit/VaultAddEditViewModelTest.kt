@@ -68,7 +68,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
-import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -193,7 +192,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(CipherView::toViewState)
-        unmockkStatic(CustomFieldType::toCustomField)
+        unmockkStatic(UUID::randomUUID)
     }
 
     @Test
@@ -3276,40 +3275,37 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `State updates when available folders state is updated`() = runTest {
-            viewModel.stateFlow.test {
-                awaitItem() // initial item
-                mutableFolderStateFlow.update {
-                    DataState.Loaded(
-                        data = listOf(
-                            FolderView(
-                                name = "folder",
-                                revisionDate = DateTime.now(),
-                                id = null,
-                            ),
-                        )
-                    )
-                }
-
-                assertEquals(
-                    createVaultAddItemState(
-                        dialogState = null,
-                        commonContentViewState = createCommonContentViewState(
-                            availableFolders = listOf(
-                                VaultAddEditState.Folder(
-                                    id = null,
-                                    name = "No folder",
-                                ),
-                                VaultAddEditState.Folder(
-                                    id = null,
-                                    name = "folder",
-                                )
-                            )
+        fun `State updates when available folders state is updated`() {
+            mutableFolderStateFlow.update {
+                DataState.Loaded(
+                    data = listOf(
+                        FolderView(
+                            name = "folder",
+                            revisionDate = DateTime.now(),
+                            id = null,
                         ),
                     ),
-                    awaitItem(),
                 )
             }
+            val folderList = listOf(
+                VaultAddEditState.Folder(
+                    id = null,
+                    name = "No Folder",
+                ),
+                VaultAddEditState.Folder(
+                    id = null,
+                    name = "folder",
+                ),
+            )
+
+            assertEquals(
+                createVaultAddItemState(
+                    commonContentViewState = createCommonContentViewState(
+                        availableFolders = folderList.toList(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
         @Test

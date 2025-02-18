@@ -192,7 +192,7 @@ fun List<FolderView>.toAvailableFolders(
         ),
     )
         .plus(
-            map { VaultAddEditState.Folder(name = it.name, id = it.id.toString()) },
+            map { VaultAddEditState.Folder(name = it.name, id = it.id) },
         )
 
 private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String? =
