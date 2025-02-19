@@ -6320,7 +6320,7 @@ class AuthRepositoryTest {
         repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
         assertEquals(
             OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1)
+            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
         )
     }
 
@@ -6330,14 +6330,14 @@ class AuthRepositoryTest {
         repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
         assertEquals(
             OnboardingStatus.NOT_STARTED,
-            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1)
+            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
         )
 
         fakeAuthDiskSource.userState = null
         repository.setOnboardingStatus(status = OnboardingStatus.COMPLETE)
         val activeUserId = SINGLE_USER_STATE_1.activeUserId
         assertFalse(
-            fakeAuthDiskSource.getOnboardingStatus(activeUserId) == OnboardingStatus.COMPLETE
+            fakeAuthDiskSource.getOnboardingStatus(activeUserId) == OnboardingStatus.COMPLETE,
         )
     }
 

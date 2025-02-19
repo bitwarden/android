@@ -1379,7 +1379,7 @@ class AuthRepositoryImpl(
         activeUserId?.let { userId ->
             authDiskSource.storeOnboardingStatus(
                 userId = userId,
-                onboardingStatus = status
+                onboardingStatus = status,
             )
         }
     }
