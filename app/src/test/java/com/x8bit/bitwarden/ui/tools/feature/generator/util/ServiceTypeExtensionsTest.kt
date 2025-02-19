@@ -301,7 +301,8 @@ internal class ServiceTypeExtensionsTest {
         val website = "bitwarden.com"
         val request = simpleLoginServiceType.toUsernameGeneratorRequest(
             website = website,
-            allowSimpleLoginSelfHostServer = true,
+            allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
@@ -326,7 +327,8 @@ internal class ServiceTypeExtensionsTest {
         val website = "bitwarden.com"
         val request = simpleLoginServiceType.toUsernameGeneratorRequest(
             website = website,
-            allowSimpleLoginSelfHostServer = true,
+            allowAddyIoSelfHostUrl = true,
+            allowSimpleLoginSelfHostUrl = true,
         )
 
         assertEquals(
