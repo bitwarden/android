@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -54,9 +55,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -153,7 +156,11 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
-        every { specialCircumstance } returns null
+            every { specialCircumstance } returns null
+        }
+
+    private val networkConnectionManager: NetworkConnectionManager = mockk {
+        every { isNetworkConnected } returns true
     }
 
     @Test
@@ -490,6 +497,27 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify {
+            vaultRepository.sync(forced = true)
+        }
+    }
+
+    @Test
+    fun `on SyncClick should show the no network dialog if not connection is available`() {
+        val viewModel = createViewModel()
+        coEvery {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(VaultAction.SyncClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepository.sync(forced = true)
         }
     }
@@ -1340,12 +1368,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `RefreshPull should call vault repository sync`() {
+    fun `RefreshPull should call vault repository sync`() = runTest {
         val viewModel = createViewModel()
-
         viewModel.trySendAction(VaultAction.RefreshPull)
-
+        advanceTimeBy(300)
         verify(exactly = 1) {
             vaultRepository.sync(forced = false)
         }
@@ -1938,6 +1966,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
+            networkConnectionManager = networkConnectionManager,
         )
 }
 
