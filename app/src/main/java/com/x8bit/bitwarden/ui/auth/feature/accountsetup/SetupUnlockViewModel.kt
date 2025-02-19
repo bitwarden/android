@@ -208,7 +208,7 @@ class SetupUnlockViewModel @Inject constructor(
         } else {
             OnboardingStatus.AUTOFILL_SETUP
         }
-        authRepository.setOnboardingStatus(state.userId, nextStep)
+        authRepository.setOnboardingStatus(nextStep)
     }
 }
 
