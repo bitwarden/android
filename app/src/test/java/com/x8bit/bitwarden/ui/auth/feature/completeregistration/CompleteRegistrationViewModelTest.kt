@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
@@ -31,12 +32,15 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -76,6 +80,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isMasterPasswordStrong = any(),
             )
         } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
+
+        coEvery {
+            setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        } just Runs
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -222,6 +230,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
             expectNoEvents()
         }
+        verify(exactly = 1) {
+            mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -244,6 +255,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     CompleteRegistrationEvent.NavigateToLogin(EMAIL, CAPTCHA_BYPASS_TOKEN),
                     awaitItem(),
                 )
+            }
+            verify(exactly = 1) {
+                mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
             }
         }
 

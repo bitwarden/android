@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -272,6 +273,11 @@ class CompleteRegistrationViewModel @Inject constructor(
                 message = R.string.account_created_success.asText(),
             ),
         )
+
+        authRepository.setOnboardingStatus(
+            status = OnboardingStatus.NOT_STARTED,
+        )
+
         // If the login result is Success the state based navigation will take care of it.
         // otherwise we need to navigate to the login screen.
         if (action.loginResult !is LoginResult.Success) {

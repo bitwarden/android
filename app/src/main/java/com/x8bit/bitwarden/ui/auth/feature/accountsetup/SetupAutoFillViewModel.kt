@@ -100,13 +100,13 @@ class SetupAutoFillViewModel @Inject constructor(
 
     private fun handleTurnOnLaterConfirmClick() {
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = true)
-        updateOnboardingStatusToNextStep()
+        updateOnboardingStatusToFinalStep()
     }
 
     private fun handleContinueClick() {
         firstTimeActionManager.storeShowAutoFillSettingBadge(showBadge = false)
         if (state.isInitialSetup) {
-            updateOnboardingStatusToNextStep()
+            updateOnboardingStatusToFinalStep()
         } else {
             sendEvent(SetupAutoFillEvent.NavigateBack)
         }
@@ -120,12 +120,10 @@ class SetupAutoFillViewModel @Inject constructor(
         }
     }
 
-    private fun updateOnboardingStatusToNextStep() =
-        authRepository
-            .setOnboardingStatus(
-                userId = state.userId,
-                status = OnboardingStatus.FINAL_STEP,
-            )
+    private fun updateOnboardingStatusToFinalStep() =
+        authRepository.setOnboardingStatus(
+            status = OnboardingStatus.FINAL_STEP,
+        )
 }
 
 /**
