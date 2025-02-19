@@ -47,9 +47,11 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Displays the auto-fill screen.
@@ -95,6 +97,11 @@ fun AutoFillScreen(
             }
 
             AutoFillEvent.NavigateToSetupAutofill -> onNavigateToSetupAutofill()
+            is AutoFillEvent.NavigateToChromeAutofillSettings -> {
+                intentManager.startChromeAutofillSettingsActivity(
+                    releaseChannel = event.releaseChannel,
+                )
+            }
         }
     }
 
@@ -139,7 +146,7 @@ fun AutoFillScreen(
                     actionText = stringResource(R.string.get_started),
                     onActionClick = remember(viewModel) {
                         {
-                            viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick)
+                            viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick)
                         }
                     },
                     onDismissClick = remember(viewModel) {
@@ -196,6 +203,20 @@ fun AutoFillScreen(
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
+
+            if (state.chromeAutofillSettingsOptions.isNotEmpty()) {
+                ChromeAutofillSettingsCard(
+                    options = state.chromeAutofillSettingsOptions.toPersistentList(),
+                    onOptionClicked = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(AutoFillAction.ChromeAutofillSelected(it))
+                        }
+                    },
+                    enabled = state.isAutoFillServicesEnabled,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
             if (state.showPasskeyManagementRow) {
                 BitwardenExternalLinkRow(
                     text = stringResource(id = R.string.passkey_management),
