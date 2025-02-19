@@ -10,13 +10,9 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.bitwarden.vault.CardView
-import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
-import com.bitwarden.vault.FieldType
-import com.bitwarden.vault.FieldView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
@@ -121,7 +117,6 @@ import retrofit2.HttpException
 import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 import javax.crypto.Cipher
 
 /**
@@ -195,49 +190,8 @@ class VaultRepositoryImpl(
                 collectionsDataState,
                 sendsDataState,
             ) { ciphersData, foldersData, collectionsData, sendsData ->
-                val sshKey = CipherView(
-                    id = UUID.randomUUID().toString(),
-                    organizationId = null,
-                    folderId = null,
-                    collectionIds = emptyList(),
-                    key = null,
-                    name = "Mock SSH key",
-                    notes = null,
-                    type = CipherType.CARD,
-                    login = null,
-                    identity = null,
-                    card = CardView(
-                        cardholderName = "Mock cardholder name",
-                        expMonth = "12",
-                        expYear = "27",
-                        code = "123",
-                        brand = "Mock brand",
-                        number = "1234567890123456",
-                    ),
-                    secureNote = null,
-                    sshKey = null,
-                    favorite = false,
-                    reprompt = CipherRepromptType.NONE,
-                    organizationUseTotp = false,
-                    edit = true,
-                    viewPassword = true,
-                    localData = null,
-                    attachments = emptyList(),
-                    fields = listOf(
-                        FieldView(
-                            name = "Mock field",
-                            value = "Mock value",
-                            type = FieldType.LINKED,
-                            linkedId = 0U,
-                        ),
-                    ),
-                    passwordHistory = emptyList(),
-                    creationDate = DateTime.now(),
-                    deletedDate = null,
-                    revisionDate = DateTime.now(),
-                )
                 VaultData(
-                    cipherViewList = ciphersData + listOf(sshKey),
+                    cipherViewList = ciphersData,
                     fido2CredentialAutofillViewList = null,
                     folderViewList = foldersData,
                     collectionViewList = collectionsData,
