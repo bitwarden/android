@@ -24,7 +24,12 @@ fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN -> {
-            SimpleLogin(apiKey = options.simpleLoginApiKey.orEmpty())
+            SimpleLogin(
+                apiKey = options.simpleLoginApiKey.orEmpty(),
+                selfHostServerUrl = options.simpleLoginSelfHostServerUrl
+                    ?.prefixHttpsIfNecessary()
+                    .orEmpty(),
+            )
         }
 
         UsernameGenerationOptions.ForwardedEmailServiceType.DUCK_DUCK_GO -> {
