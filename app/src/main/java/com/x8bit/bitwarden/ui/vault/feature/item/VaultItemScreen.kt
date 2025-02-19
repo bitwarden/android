@@ -40,11 +40,14 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * Displays the vault item screen.
@@ -56,7 +59,7 @@ fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
+    onNavigateToVaultAddEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
@@ -80,7 +83,16 @@ fun VaultItemScreen(
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemEvent.NavigateToAddEdit -> {
-                onNavigateToVaultAddEditItem(event.itemId, event.isClone)
+                onNavigateToVaultAddEditItem(
+                    VaultAddEditArgs(
+                        vaultAddEditType = if (event.isClone) {
+                            VaultAddEditType.CloneItem(vaultItemId = event.itemId)
+                        } else {
+                            VaultAddEditType.EditItem(vaultItemId = event.itemId)
+                        },
+                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                    ),
+                )
             }
 
             is VaultItemEvent.NavigateToPasswordHistory -> {
@@ -127,11 +139,7 @@ fun VaultItemScreen(
             }
         },
         onConfirmDeleteClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemAction.Common.ConfirmDeleteClick,
-                )
-            }
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
         },
         onConfirmCloneWithoutFido2Credential = remember(viewModel) {
             {
@@ -141,9 +149,7 @@ fun VaultItemScreen(
             }
         },
         onConfirmRestoreAction = remember(viewModel) {
-            {
-                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
-            }
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
         },
     )
 
@@ -154,7 +160,7 @@ fun VaultItemScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.view_item),
+                title = state.title(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),

@@ -22,7 +22,7 @@ private const val CARD: String = "card"
 private const val IDENTITY: String = "identity"
 private const val SECURE_NOTE: String = "secure_note"
 private const val SSH_KEY: String = "ssh_key"
-private const val ADD_ITEM_TYPE: String = "vault_add_item_type"
+private const val CIPHER_TYPE: String = "vault_item_type"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "vault_add_edit_item"
 private const val ADD_EDIT_ITEM_TYPE: String = "vault_add_edit_type"
@@ -33,7 +33,7 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
     ADD_EDIT_ITEM_PREFIX +
         "/{$ADD_EDIT_ITEM_TYPE}" +
         "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}" +
-        "?$ADD_ITEM_TYPE={$ADD_ITEM_TYPE}" +
+        "?$CIPHER_TYPE={$CIPHER_TYPE}" +
         "?$ADD_SELECTED_FOLDER_ID={$ADD_SELECTED_FOLDER_ID}" +
         "?$ADD_SELECTED_COLLECTION_ID={$ADD_SELECTED_COLLECTION_ID}"
 
@@ -43,22 +43,25 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 @OmitFromCoverage
 data class VaultAddEditArgs(
     val vaultAddEditType: VaultAddEditType,
+    val vaultItemCipherType: VaultItemCipherType,
     val selectedFolderId: String? = null,
     val selectedCollectionId: String? = null,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         vaultAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
-            ADD_TYPE -> VaultAddEditType.AddItem(
-                vaultItemCipherType = requireNotNull(
-                    value = savedStateHandle.get<String>(ADD_ITEM_TYPE),
-                )
-                    .toVaultItemCipherType(),
+            ADD_TYPE -> VaultAddEditType.AddItem
+            EDIT_TYPE -> VaultAddEditType.EditItem(
+                vaultItemId = requireNotNull(savedStateHandle[EDIT_ITEM_ID]),
             )
 
-            EDIT_TYPE -> VaultAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
-            CLONE_TYPE -> VaultAddEditType.CloneItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
+            CLONE_TYPE -> VaultAddEditType.CloneItem(
+                vaultItemId = requireNotNull(savedStateHandle[EDIT_ITEM_ID]),
+            )
+
             else -> throw IllegalStateException("Unknown VaultAddEditType.")
         },
+        vaultItemCipherType = requireNotNull(savedStateHandle.get<String>(CIPHER_TYPE))
+            .toVaultItemCipherType(),
         selectedFolderId = savedStateHandle[ADD_SELECTED_FOLDER_ID],
         selectedCollectionId = savedStateHandle[ADD_SELECTED_COLLECTION_ID],
     )
@@ -80,7 +83,12 @@ fun NavGraphBuilder.vaultAddEditDestination(
         route = ADD_EDIT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
+            navArgument(CIPHER_TYPE) { type = NavType.StringType },
             navArgument(ADD_SELECTED_FOLDER_ID) {
+                type = NavType.StringType
+                nullable = true
+            },
+            navArgument(ADD_SELECTED_COLLECTION_ID) {
                 type = NavType.StringType
                 nullable = true
             },
@@ -105,17 +113,15 @@ fun NavGraphBuilder.vaultAddEditDestination(
  * Navigate to the vault add & edit screen.
  */
 fun NavController.navigateToVaultAddEdit(
-    vaultAddEditType: VaultAddEditType,
-    selectedFolderId: String? = null,
-    selectedCollectionId: String? = null,
+    args: VaultAddEditArgs,
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$ADD_EDIT_ITEM_PREFIX/${vaultAddEditType.toTypeString()}" +
-            "?$EDIT_ITEM_ID=${vaultAddEditType.toIdOrNull()}" +
-            "?$ADD_ITEM_TYPE=${vaultAddEditType.toVaultItemCipherTypeOrNull()}" +
-            "?$ADD_SELECTED_FOLDER_ID=$selectedFolderId" +
-            "?$ADD_SELECTED_COLLECTION_ID=$selectedCollectionId",
+        route = "$ADD_EDIT_ITEM_PREFIX/${args.vaultAddEditType.toTypeString()}" +
+            "?$EDIT_ITEM_ID=${args.vaultAddEditType.toIdOrNull()}" +
+            "?$CIPHER_TYPE=${args.vaultItemCipherType.toTypeString()}" +
+            "?$ADD_SELECTED_FOLDER_ID=${args.selectedFolderId}" +
+            "?$ADD_SELECTED_COLLECTION_ID=${args.selectedCollectionId}",
         navOptions = navOptions,
     )
 }
@@ -132,14 +138,6 @@ private fun VaultAddEditType.toIdOrNull(): String? =
         is VaultAddEditType.AddItem -> null
         is VaultAddEditType.CloneItem -> vaultItemId
         is VaultAddEditType.EditItem -> vaultItemId
-    }
-
-private fun VaultAddEditType.toVaultItemCipherTypeOrNull(): String? =
-    when (this) {
-        is VaultAddEditType.AddItem -> vaultItemCipherType.toTypeString()
-        is VaultAddEditType.CloneItem,
-        is VaultAddEditType.EditItem,
-            -> null
     }
 
 private fun VaultItemCipherType.toTypeString(): String =
