@@ -189,7 +189,7 @@ fun VaultItemCardContent(
             item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
-                    label = stringResource(id = R.string.notes),
+                    label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
@@ -197,7 +197,7 @@ fun VaultItemCardContent(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
-                    label = stringResource(id = R.string.additional_options),
+                    label = stringResource(id = R.string.notes),
                     value = notes,
                     onValueChange = { },
                     readOnly = true,
