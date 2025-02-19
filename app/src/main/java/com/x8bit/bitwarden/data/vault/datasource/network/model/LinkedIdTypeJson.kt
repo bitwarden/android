@@ -177,10 +177,20 @@ enum class LinkedIdTypeJson(val value: UInt) {
     @SerialName("418")
     IDENTITY_FULL_NAME(value = 418U),
     // endregion IDENTITY
+
+    /**
+     * Represents an unknown or undefined state for a cipher field.
+     *
+     * This value is used as a fallback when the corresponding cipher field's ID
+     * cannot be deserialized or is otherwise unavailable.
+     */
+    @SerialName("0")
+    UNKNOWN(value = 0U),
 }
 
 @Keep
 private class LinkedIdTypeSerializer : BaseEnumeratedIntSerializer<LinkedIdTypeJson>(
     className = "LinkedIdTypeJson",
     values = LinkedIdTypeJson.entries.toTypedArray(),
+    default = LinkedIdTypeJson.UNKNOWN,
 )

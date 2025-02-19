@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.model
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 
 /**
  * Represents the types for linked fields.
@@ -43,6 +44,7 @@ enum class VaultLinkedFieldType(
     FIRST_NAME(id = 416.toUInt(), label = R.string.first_name.asText()),
     LAST_NAME(id = 417.toUInt(), label = R.string.last_name.asText()),
     FULL_NAME(id = 418.toUInt(), label = R.string.full_name.asText()),
+    UNKNOWN(id = 0.toUInt(), label = SELECT_TEXT),
     ;
 
     @Suppress("UndocumentedPublicClass")
@@ -51,6 +53,6 @@ enum class VaultLinkedFieldType(
          * Helper function to get the LinkedCustomFieldType from the id
          */
         fun fromId(id: UInt): VaultLinkedFieldType =
-            VaultLinkedFieldType.entries.first { it.id == id }
+            VaultLinkedFieldType.entries.find { it.id == id } ?: UNKNOWN
     }
 }
