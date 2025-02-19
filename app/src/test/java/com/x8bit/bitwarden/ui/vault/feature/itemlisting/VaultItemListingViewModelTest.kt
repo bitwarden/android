@@ -979,7 +979,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     folderId = "id",
                 ),
                 dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                    excludedOptions = persistentListOf(CreateVaultItemType.SSH_KEY),
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.FOLDER,
+                    ),
                 ),
             ),
             viewModel.stateFlow.value,
