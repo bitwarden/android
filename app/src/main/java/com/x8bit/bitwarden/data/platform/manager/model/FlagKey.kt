@@ -145,7 +145,7 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = true
+        override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
 

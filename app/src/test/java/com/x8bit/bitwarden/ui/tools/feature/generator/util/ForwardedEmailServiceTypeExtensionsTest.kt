@@ -18,6 +18,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
@@ -51,6 +52,7 @@ class ForwardedEmailServiceTypeExtensionsTest {
             catchAllEmailDomain = null,
             firefoxRelayApiAccessToken = null,
             simpleLoginApiKey = null,
+            simpleLoginSelfHostServerUrl = null,
             duckDuckGoApiKey = null,
             fastMailApiKey = null,
             anonAddyApiAccessToken = null,
@@ -99,6 +101,9 @@ class ForwardedEmailServiceTypeExtensionsTest {
         UsernameGenerationOptions.ForwardedEmailServiceType.SIMPLE_LOGIN -> {
             ServiceType.SimpleLogin(
                 apiKey = "api_key_simple_login"
+                    .takeUnless { useEmptyValues }
+                    .orEmpty(),
+                selfHostServerUrl = "https://simplelogin.local"
                     .takeUnless { useEmptyValues }
                     .orEmpty(),
             )

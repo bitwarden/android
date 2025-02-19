@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.DateTime
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -35,6 +37,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -50,6 +53,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerData
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toAvailableFolders
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -174,9 +178,9 @@ class VaultAddEditViewModel @Inject constructor(
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
-                supportedItemTypes = getSupportedItemTypeOptions(),
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
+                shouldShowFolderSelectionBottomSheet = false,
             )
         },
 ) {
@@ -204,6 +208,12 @@ class VaultAddEditViewModel @Inject constructor(
         vaultRepository
             .totpCodeFlow
             .map { VaultAddEditAction.Internal.TotpCodeReceive(totpResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        vaultRepository
+            .foldersStateFlow
+            .map { VaultAddEditAction.Internal.AvailableFoldersReceive(folderData = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -252,7 +262,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleCustomFieldValueChange(action)
             }
 
-            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
             is VaultAddEditAction.Common.NameTextChange -> handleNameTextInputChange(action)
             is VaultAddEditAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
             is VaultAddEditAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
@@ -268,7 +277,6 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
-            is VaultAddEditAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
             is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick(action)
             }
@@ -337,76 +345,19 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.DismissFido2VerificationDialogClick -> {
                 handleDismissFido2VerificationDialogClick()
             }
-        }
-    }
 
-    private fun handleTypeOptionSelect(action: VaultAddEditAction.Common.TypeOptionSelect) {
-        when (action.typeOption) {
-            VaultAddEditState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
-            VaultAddEditState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
-            VaultAddEditState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
-            VaultAddEditState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
-            VaultAddEditState.ItemTypeOption.SSH_KEYS -> handleSwitchToSshKeyItem()
-        }
-    }
+            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
+            VaultAddEditAction.Common.DismissFolderSelectionBottomSheet -> {
+                handleDismissFolderSelectionBottomSheet()
+            }
 
-    private fun handleSwitchToAddLoginItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.LOGIN,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
+            VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
+                handleSelectOrAddFolderForItem()
+            }
 
-    private fun handleSwitchToAddSecureNotesItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SECURE_NOTES,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToAddCardItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.CARD,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToAddIdentityItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.IDENTITY,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToSshKeyItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SSH_KEYS,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
+            is VaultAddEditAction.Common.AddNewFolder -> {
+                handleAddNewFolder(action)
+            }
         }
     }
 
@@ -766,6 +717,36 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
+    private fun handleDismissFolderSelectionBottomSheet() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = false)
+        }
+    }
+
+    private fun handleSelectOrAddFolderForItem() {
+        mutableStateFlow.update {
+            it.copy(shouldShowFolderSelectionBottomSheet = true)
+        }
+    }
+
+    private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepository.createFolder(
+                FolderView(
+                    name = action.newFolderName,
+                    id = null,
+                    revisionDate = DateTime.now(),
+                ),
+            )
+            sendAction(VaultAddEditAction.Internal.AddFolderResultReceive(result = result))
+        }
+    }
+
     private fun handleAddNewCustomFieldClick(
         action: VaultAddEditAction.Common.AddNewCustomFieldClick,
     ) {
@@ -864,7 +845,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.FolderChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedFolderId = action.folder.id)
+            commonContent.copy(selectedFolderId = action.folderId)
         }
     }
 
@@ -912,7 +893,6 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
     }
 
-    @Suppress("MaxLineLength")
     private fun handleCollectionSelect(
         action: VaultAddEditAction.Common.CollectionSelect,
     ) {
@@ -1500,7 +1480,27 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive -> {
                 handleShouldShowAddLoginCoachMarkValueChange(action)
             }
+
+            is VaultAddEditAction.Internal.AddFolderResultReceive -> handleAddFolderResult(action)
+            is VaultAddEditAction.Internal.AvailableFoldersReceive -> {
+                handleAvailableFoldersReceive(action)
+            }
         }
+    }
+
+    private fun handleAvailableFoldersReceive(
+        action: VaultAddEditAction.Internal.AvailableFoldersReceive,
+    ) {
+        action
+            .folderData
+            .data
+            ?.let {
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        availableFolders = it.toAvailableFolders(resourceManager = resourceManager),
+                    )
+                }
+            }
     }
 
     private fun handleShouldShowAddLoginCoachMarkValueChange(
@@ -1509,6 +1509,19 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 shouldShowCoachMarkTour = action.shouldShowCoachMarkTour,
+            )
+        }
+    }
+
+    private fun handleAddFolderResult(action: VaultAddEditAction.Internal.AddFolderResultReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+            )
+        }
+        updateCommonContent {
+            it.copy(
+                selectedFolderId = (action.result as? CreateFolderResult.Success)?.folderView?.id,
             )
         }
     }
@@ -1583,7 +1596,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultData) {
             is DataState.Error -> {
@@ -1962,47 +1974,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun VaultAddEditState.ViewState.Content.clearNonSharedData():
-        VaultAddEditState.ViewState.Content.Common =
-        common.copy(
-            customFieldData = common.customFieldData
-                .filterNot { it is VaultAddEditState.Custom.LinkedField },
-        )
-
-    private fun VaultAddEditState.ViewState.Content.toUpdatedPreviousItemTypes():
-        Map<VaultAddEditState.ItemTypeOption, VaultAddEditState.ViewState.Content.ItemType> =
-        previousItemTypes
-            .toMutableMap()
-            .apply { set(type.itemTypeOption, type) }
-
-    private fun VaultAddEditState.ViewState.Content.previousItemTypeOrDefault(
-        itemType: VaultAddEditState.ItemTypeOption,
-    ): VaultAddEditState.ViewState.Content.ItemType =
-        previousItemTypes.getOrDefault(
-            key = itemType,
-            defaultValue = when (itemType) {
-                VaultAddEditState.ItemTypeOption.LOGIN -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Login()
-                }
-
-                VaultAddEditState.ItemTypeOption.CARD -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Card()
-                }
-
-                VaultAddEditState.ItemTypeOption.IDENTITY -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Identity()
-                }
-
-                VaultAddEditState.ItemTypeOption.SECURE_NOTES -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SecureNotes
-                }
-
-                VaultAddEditState.ItemTypeOption.SSH_KEYS -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SshKey()
-                }
-            },
-        )
-
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -2058,8 +2029,8 @@ data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val shouldShowFolderSelectionBottomSheet: Boolean,
     val shouldShowCloseButton: Boolean = true,
-    val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
     val shouldClearSpecialCircumstance: Boolean = true,
@@ -2728,15 +2699,6 @@ sealed class VaultAddEditAction {
         data object ConfirmOverwriteExistingPasskeyClick : Common()
 
         /**
-         * Represents the action when a type option is selected.
-         *
-         * @property typeOption The selected type option.
-         */
-        data class TypeOptionSelect(
-            val typeOption: VaultAddEditState.ItemTypeOption,
-        ) : Common()
-
-        /**
          * Fired when the name text input is changed.
          *
          * @property name The new name text.
@@ -2746,9 +2708,9 @@ sealed class VaultAddEditAction {
         /**
          * Fired when the folder text input is changed.
          *
-         * @property folder The new folder text.
+         * @property folderId The new folder id.
          */
-        data class FolderChange(val folder: VaultAddEditState.Folder) : Common()
+        data class FolderChange(val folderId: String?) : Common()
 
         /**
          * Fired when the Favorite toggle is changed.
@@ -2892,6 +2854,21 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the FIDO 2 password or PIN verification dialog.
          */
         data object DismissFido2VerificationDialogClick : Common()
+
+        /**
+         * The user has clicked on folder selection card for the item.
+         */
+        data object SelectOrAddFolderForItem : Common()
+
+        /**
+         * The user has dismissed the folder selection bottom sheet.
+         */
+        data object DismissFolderSelectionBottomSheet : Common()
+
+        /**
+         * The user has selected to add a new folder to associate with the item.
+         */
+        data class AddNewFolder(val newFolderName: String) : Common()
     }
 
     /**
@@ -3171,7 +3148,6 @@ sealed class VaultAddEditAction {
              *
              * @property expirationMonth The selected expiration month.
              */
-            @Suppress("MaxLineLength")
             data class ExpirationMonthSelect(
                 val expirationMonth: VaultCardExpirationMonth,
             ) : CardType()
@@ -3290,13 +3266,19 @@ sealed class VaultAddEditAction {
         data class ShouldShowAddLoginCoachMarkValueChangeReceive(
             val shouldShowCoachMarkTour: Boolean,
         ) : Internal()
+
+        /**
+         * Received a result for attempting to add a folder.
+         */
+        data class AddFolderResultReceive(
+            val result: CreateFolderResult,
+        ) : Internal()
+
+        /**
+         * Received an update to the available folders.
+         */
+        data class AvailableFoldersReceive(
+            val folderData: DataState<List<FolderView>>,
+        ) : Internal()
     }
 }
-
-/**
- * Returns a list of item type options that can be selected during item creation.
- *
- * TODO: [PM-10413] Allow SSH key creation when the SDK supports it.
- */
-private fun getSupportedItemTypeOptions() = VaultAddEditState.ItemTypeOption.entries
-    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS }

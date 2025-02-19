@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.DateTime
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
@@ -66,7 +68,6 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
-import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
@@ -133,6 +134,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val totpTestCodeFlow: MutableSharedFlow<TotpCodeResult> = bufferedMutableSharedFlow()
 
     private val mutableVaultDataFlow = MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+    private val mutableFolderStateFlow = MutableStateFlow<DataState<List<FolderView>>>(
+        DataState.Loading,
+    )
     private val resourceManager: ResourceManager = mockk {
         every { getString(R.string.folder_none) } returns "No Folder"
     }
@@ -154,6 +158,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
+        every { foldersStateFlow } returns mutableFolderStateFlow
     }
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
@@ -187,7 +192,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(CipherView::toViewState)
-        unmockkStatic(CustomFieldType::toCustomField)
+        unmockkStatic(UUID::randomUUID)
     }
 
     @Test
@@ -203,9 +208,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             totpData = null,
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
-                .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
             shouldShowCoachMarkTour = false,
+            shouldShowFolderSelectionBottomSheet = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -286,9 +290,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
-                supportedItemTypes = VaultAddEditState.ItemTypeOption.entries
-                    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS },
                 shouldShowCoachMarkTour = false,
+                shouldShowFolderSelectionBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -2121,156 +2124,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Test
-    fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.LOGIN,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = createLoginTypeContentViewState(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect CARD should switch to CardItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.CARD,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.Card(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect IDENTITY should switch to IdentityItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.IDENTITY,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect SECURE_NOTES should switch to SecureNotesItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.SECURE_NOTES,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `TypeOptionSelect SSH_KEYS should switch to SshKeysItem`() = runTest {
-        mutableVaultDataFlow.value = DataState.Loaded(
-            createVaultData(cipherView = createMockCipherView(1)),
-        )
-        val viewModel = createAddVaultItemViewModel()
-        val action = VaultAddEditAction.Common.TypeOptionSelect(
-            VaultAddEditState.ItemTypeOption.SSH_KEYS,
-        )
-
-        viewModel.trySendAction(action)
-
-        val expectedState = loginInitialState.copy(
-            viewState = VaultAddEditState.ViewState.Content(
-                common = createCommonContentViewState(),
-                isIndividualVaultDisabled = false,
-                type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
-                previousItemTypes = mapOf(
-                    VaultAddEditState.ItemTypeOption.LOGIN
-                        to VaultAddEditState.ViewState.Content.ItemType.Login(),
-                ),
-            ),
-        )
-
-        assertEquals(
-            expectedState,
-            viewModel.stateFlow.value,
-        )
-    }
-
     @Nested
     inner class VaultAddEditLoginTypeItemActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -2709,29 +2562,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
         mutableShouldShowAddLoginCoachMarkFlow.update { false }
-        assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when first time action manager value is true, but type content is not login shouldShowLearnAboutNewLogins should be false`() {
-        mutableShouldShowAddLoginCoachMarkFlow.update { true }
-        val viewModel = createAddVaultItemViewModel(
-            savedStateHandle = createSavedStateHandleWithState(
-                state = createVaultAddItemState(
-                    typeContentViewState = createLoginTypeContentViewState(),
-                ),
-                vaultAddEditType = VaultAddEditType.AddItem(
-                    vaultItemCipherType = VaultItemCipherType.LOGIN,
-                ),
-            ),
-        )
-        assertTrue(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
-        viewModel.trySendAction(
-            VaultAddEditAction.Common.TypeOptionSelect(
-                VaultAddEditState.ItemTypeOption.SSH_KEYS,
-            ),
-        )
         assertFalse(viewModel.stateFlow.value.shouldShowLearnAboutNewLogins)
     }
 
@@ -3328,10 +3158,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `FolderChange should update folder`() = runTest {
             val action = VaultAddEditAction.Common.FolderChange(
-                VaultAddEditState.Folder(
-                    id = "mockId-1",
-                    name = "Folder 1",
-                ),
+                folderId = "mockId-1",
             )
 
             viewModel.trySendAction(action)
@@ -3346,6 +3173,139 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `SelectOrAddFolderFoItem should update state to show bottom sheet`() = runTest {
+            val action = VaultAddEditAction.Common.SelectOrAddFolderForItem
+
+            viewModel.trySendAction(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                shouldShowFolderSelectionBottomSheet = true,
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DismissFolderSelectionBottomSheet should update state to hide bottom sheet`() =
+            runTest {
+                val action = VaultAddEditAction.Common.DismissFolderSelectionBottomSheet
+
+                viewModel.trySendAction(VaultAddEditAction.Common.SelectOrAddFolderForItem)
+
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        shouldShowFolderSelectionBottomSheet = true,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                val expectedState = vaultAddItemInitialState.copy(
+                    shouldShowFolderSelectionBottomSheet = false,
+                )
+                viewModel.trySendAction(action)
+                assertEquals(
+                    expectedState,
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
+        fun `AddNewFolder action calls create folder from vault repository`() = runTest {
+            mockkStatic(DateTime::class)
+            every { DateTime.now() } returns Instant.MIN
+
+            val folderName = "folderName"
+            val expectedFolderResult = FolderView(
+                id = "123",
+                name = folderName,
+                revisionDate = DateTime.now(),
+            )
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(expectedFolderResult)
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+            coVerify {
+                vaultRepository.createFolder(
+                    FolderView(
+                        name = folderName,
+                        id = null,
+                        revisionDate = Instant.MIN,
+                    ),
+                )
+            }
+
+            unmockkStatic(DateTime::class)
+        }
+
+        @Test
+        fun `AddNewFolder updates dialog states and selected folder id on success`() = runTest {
+
+            val folderId = "123"
+            val folderName = "folderName"
+            val expectedFolderResult = FolderView(
+                id = folderId,
+                name = folderName,
+                revisionDate = DateTime.now(),
+            )
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(expectedFolderResult)
+
+            viewModel.stateFlow.test {
+                awaitItem() // initial state.
+                viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(folderName))
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    createVaultAddItemState(
+                        dialogState = null,
+                        commonContentViewState = createCommonContentViewState(
+                            selectedFolderId = folderId,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+        @Test
+        fun `State updates when available folders state is updated`() {
+            mutableFolderStateFlow.update {
+                DataState.Loaded(
+                    data = listOf(
+                        FolderView(
+                            name = "folder",
+                            revisionDate = DateTime.now(),
+                            id = null,
+                        ),
+                    ),
+                )
+            }
+            val folderList = listOf(
+                VaultAddEditState.Folder(
+                    id = null,
+                    name = "No Folder",
+                ),
+                VaultAddEditState.Folder(
+                    id = null,
+                    name = "folder",
+                ),
+            )
+
+            assertEquals(
+                createVaultAddItemState(
+                    commonContentViewState = createCommonContentViewState(
+                        availableFolders = folderList.toList(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
 
         @Test
@@ -4440,7 +4400,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
         totpData: TotpData? = null,
-        supportedItemTypes: List<VaultAddEditState.ItemTypeOption> = VaultAddEditState.ItemTypeOption.entries,
         shouldClearSpecialCircumstance: Boolean = true,
     ): VaultAddEditState =
         VaultAddEditState(
@@ -4453,9 +4412,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             dialog = dialogState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
-            supportedItemTypes = supportedItemTypes,
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
+            shouldShowFolderSelectionBottomSheet = false,
         )
 
     @Suppress("LongParameterList")
@@ -4477,10 +4436,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         hasOrganizations: Boolean = true,
         canDelete: Boolean = true,
         canAssociateToCollections: Boolean = true,
+        selectedFolderId: String? = null,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
-            selectedFolderId = null,
+            selectedFolderId = selectedFolderId,
             favorite = favorite,
             customFieldData = customFieldData,
             masterPasswordReprompt = masterPasswordReprompt,
