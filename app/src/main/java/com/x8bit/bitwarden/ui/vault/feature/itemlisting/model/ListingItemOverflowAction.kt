@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.model
 
 import android.os.Parcelable
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -75,7 +76,10 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the view cipher overflow option.
          */
         @Parcelize
-        data class ViewClick(val cipherId: String) : VaultAction() {
+        data class ViewClick(
+            val cipherId: String,
+            val cipherType: CipherType,
+        ) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
             override val requiresPasswordReprompt: Boolean get() = false
         }
@@ -86,6 +90,7 @@ sealed class ListingItemOverflowAction : Parcelable {
         @Parcelize
         data class EditClick(
             val cipherId: String,
+            val cipherType: CipherType,
             override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.edit.asText()

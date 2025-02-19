@@ -3375,7 +3375,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `should display policy warning when personal vault is disabled for add item type`() {
         mutableStateFlow.update {
             it.copy(
-                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                vaultAddEditType = VaultAddEditType.AddItem,
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(
                         originalCipher = createMockCipherView(1),
@@ -3791,7 +3791,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `learn about add logins card should show when state is add mode, login type content, and should show coach mark tour is true`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = true,
         )
 
@@ -3804,9 +3804,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `learn about add logins card should not show when state is add mode, login type content, and should show coach mark tour is false`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            vaultAddEditType = VaultAddEditType.AddItem(
-                vaultItemCipherType = VaultItemCipherType.LOGIN,
-            ),
+            vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
         )
 
@@ -3845,7 +3843,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `when learn about logins card is showing, clicking the close button sends LearnAboutLoginsDismissed action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             shouldShowCoachMarkTour = true,
         )
 
@@ -3867,7 +3864,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `when learn about logins card is showing, clicking the call to action sends StartLearnAboutLogins action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = true,
         )
 
@@ -3953,7 +3950,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         return currentState.copy(viewState = updatedType)
     }
 
-    @Suppress("MaxLineLength")
     private fun updateCommonContent(
         currentState: VaultAddEditState,
         transform: VaultAddEditState.ViewState.Content.Common.()
@@ -3999,19 +3995,21 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     companion object {
         private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddEditState(
+            cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
@@ -4023,7 +4021,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.IDENTITY),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.IDENTITY,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
@@ -4035,7 +4034,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.CARD),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.CARD,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
@@ -4053,9 +4053,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", false),
                         VaultAddEditState.Custom.TextField("Test ID 2", "TestText", "TestTextVal"),
                         VaultAddEditState.Custom.HiddenField(
-                            "Test ID 3",
-                            "TestHidden",
-                            "TestHiddenVal",
+                            itemId = "Test ID 3",
+                            name = "TestHidden",
+                            value = "TestHiddenVal",
                         ),
                     ),
                 ),
@@ -4063,13 +4063,15 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SECURE_NOTE,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
@@ -4081,7 +4083,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SSH_KEY),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SSH_KEY,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),

@@ -150,7 +150,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
-    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
@@ -1291,10 +1290,14 @@ class VaultViewModelTest : BaseViewModelTest() {
         val itemId = "54321"
         val item = mockk<VaultState.ViewState.VaultItem> {
             every { id } returns itemId
+            every { type } returns VaultItemCipherType.LOGIN
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.VaultItemClick(item))
-            assertEquals(VaultEvent.NavigateToVaultItem(itemId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToVaultItem(itemId = itemId, type = VaultItemCipherType.LOGIN),
+                awaitItem(),
+            )
         }
     }
 
@@ -1549,11 +1552,18 @@ class VaultViewModelTest : BaseViewModelTest() {
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
             )
-            assertEquals(VaultEvent.NavigateToEditVaultItem(cipherId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToEditVaultItem(
+                    itemId = cipherId,
+                    type = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -1578,10 +1588,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
+                    ),
                 ),
             )
-            assertEquals(VaultEvent.NavigateToVaultItem(cipherId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToVaultItem(itemId = cipherId, type = VaultItemCipherType.LOGIN),
+                awaitItem(),
+            )
         }
     }
 

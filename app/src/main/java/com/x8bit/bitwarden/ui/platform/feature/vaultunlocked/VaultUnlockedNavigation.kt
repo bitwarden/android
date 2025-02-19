@@ -53,7 +53,6 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMo
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
-import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -77,18 +76,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     ) {
         vaultItemListingDestinationAsRoot(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(vaultItemId = it) },
-            onNavigateToVaultAddItemScreen = { cipherType, selectedFolderId, collectionId ->
-                navController.navigateToVaultAddEdit(
-                    VaultAddEditType.AddItem(cipherType),
-                    selectedFolderId,
-                    collectionId,
-                )
-            },
+            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(it) },
+            onNavigateToVaultAddItemScreen = { navController.navigateToVaultAddEdit(it) },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
-            onNavigateToVaultEditItemScreen = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
-            },
+            onNavigateToVaultEditItemScreen = { navController.navigateToVaultAddEdit(it) },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -99,17 +90,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
-            onNavigateToVaultAddItem = { cipherType, selectedFolderId, collectionId ->
-                navController.navigateToVaultAddEdit(
-                    VaultAddEditType.AddItem(cipherType),
-                    selectedFolderId,
-                    collectionId,
-                )
-            },
+            onNavigateToVaultAddItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
-            onNavigateToVaultEditItem = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
-            },
+            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
             onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
             onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
@@ -169,15 +152,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultEditItem = { vaultItemId, isClone ->
-                navController.navigateToVaultAddEdit(
-                    if (isClone) {
-                        VaultAddEditType.CloneItem(vaultItemId)
-                    } else {
-                        VaultAddEditType.EditItem(vaultItemId)
-                    },
-                )
-            },
+            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
                 navController.navigateToVaultMoveToOrganization(
                     vaultItemId = vaultItemId,
@@ -226,9 +201,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
-            onNavigateToEditCipher = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
-            },
+            onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
         )
         attachmentDestination(

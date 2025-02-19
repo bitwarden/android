@@ -30,9 +30,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.LOGIN,
                     requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
@@ -63,9 +67,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.LOGIN,
                     requiresPasswordReprompt = false,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
@@ -96,9 +104,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.LOGIN,
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
@@ -128,7 +140,12 @@ class CipherViewExtensionsTest {
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
-            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
+            ),
             result,
         )
     }
@@ -149,9 +166,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.CARD,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.CARD,
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyNumberClick(
@@ -186,7 +207,12 @@ class CipherViewExtensionsTest {
         val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
         assertEquals(
-            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.CARD,
+                ),
+            ),
             result,
         )
     }
@@ -202,9 +228,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.IDENTITY,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.IDENTITY,
                     requiresPasswordReprompt = false,
                 ),
             ),
@@ -227,7 +257,12 @@ class CipherViewExtensionsTest {
         val result = cipher.toOverflowActions(hasMasterPassword = true, false)
 
         assertEquals(
-            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.IDENTITY,
+                ),
+            ),
             result,
         )
     }
@@ -245,9 +280,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.SECURE_NOTE,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.SECURE_NOTE,
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
@@ -272,7 +311,12 @@ class CipherViewExtensionsTest {
         val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
         assertEquals(
-            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.SECURE_NOTE,
+                ),
+            ),
             result,
         )
     }
@@ -298,7 +342,12 @@ class CipherViewExtensionsTest {
         val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
-            listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
+            ),
             result,
         )
     }
@@ -325,9 +374,13 @@ class CipherViewExtensionsTest {
 
         assertEquals(
             listOf(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = id,
+                    cipherType = CipherType.LOGIN,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = id,
+                    cipherType = CipherType.LOGIN,
                     requiresPasswordReprompt = true,
                 ),
             ),

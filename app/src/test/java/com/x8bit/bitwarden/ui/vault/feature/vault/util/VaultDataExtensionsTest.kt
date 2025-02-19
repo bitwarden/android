@@ -974,8 +974,15 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
         privateKey = "mockPrivateKey-$number".asText(),
         fingerprint = "mockKeyFingerprint-$number".asText(),
         overflowOptions = listOf(
-            ListingItemOverflowAction.VaultAction.ViewClick("mockId-$number"),
-            ListingItemOverflowAction.VaultAction.EditClick("mockId-$number", true),
+            ListingItemOverflowAction.VaultAction.ViewClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.SSH_KEY,
+            ),
+            ListingItemOverflowAction.VaultAction.EditClick(
+                cipherId = "mockId-$number",
+                cipherType = CipherType.SSH_KEY,
+                requiresPasswordReprompt = true,
+            ),
         ),
         startIcon = IconData.Local(iconRes = R.drawable.ic_ssh_key),
         startIconTestTag = "SshKeyCipherIcon",

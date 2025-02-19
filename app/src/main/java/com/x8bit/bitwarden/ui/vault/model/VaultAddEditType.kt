@@ -9,21 +9,16 @@ import kotlinx.parcelize.Parcelize
 sealed class VaultAddEditType : Parcelable {
 
     /**
-     *  The ID of the vault item (nullable).
+     * The ID of the vault item (nullable).
      */
     abstract val vaultItemId: String?
 
     /**
      * Indicates that we want to create a completely new vault item.
-     *
-     * @property vaultItemCipherType The specified [VaultItemCipherType].
      */
     @Parcelize
-    data class AddItem(
-        val vaultItemCipherType: VaultItemCipherType,
-    ) : VaultAddEditType() {
-        override val vaultItemId: String?
-            get() = null
+    data object AddItem : VaultAddEditType() {
+        override val vaultItemId: String? get() = null
     }
 
     /**

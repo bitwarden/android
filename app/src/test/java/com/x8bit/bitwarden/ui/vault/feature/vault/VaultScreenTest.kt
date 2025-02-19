@@ -51,8 +51,11 @@ import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
@@ -74,8 +77,8 @@ import org.junit.Test
 class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToVaultItemId: String? = null
-    private var onNavigateToVaultEditItemId: String? = null
+    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
+    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
@@ -100,8 +103,8 @@ class VaultScreenTest : BaseComposeTest() {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
-                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemArgs = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
@@ -699,15 +702,28 @@ class VaultScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToVaultItem event should call onNavigateToVaultItemScreen`() {
         val id = "id4321"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultItemId)
+        val type = VaultItemCipherType.LOGIN
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id, type = type))
+        assertEquals(
+            VaultItemArgs(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemArgs,
+        )
     }
 
     @Test
     fun `NavigateToEditVaultItem event should call onNavigateToVaultEditItemScreen`() {
         val id = "id1234"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToEditVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultEditItemId)
+        val type = VaultItemCipherType.CARD
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToEditVaultItem(itemId = id, type = type),
+        )
+        assertEquals(
+            VaultAddEditArgs(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
+                vaultItemCipherType = type,
+            ),
+            onNavigateToVaultEditItemArgs,
+        )
     }
 
     @Test

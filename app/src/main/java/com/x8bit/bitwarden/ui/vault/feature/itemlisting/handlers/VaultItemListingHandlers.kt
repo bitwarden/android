@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.MasterPasswordRepromptData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel
@@ -17,7 +18,7 @@ data class VaultItemListingHandlers(
     val backClick: () -> Unit,
     val searchIconClick: () -> Unit,
     val addVaultItemClick: () -> Unit,
-    val itemClick: (id: String) -> Unit,
+    val itemClick: (id: String, cipherType: CipherType?) -> Unit,
     val folderClick: (id: String) -> Unit,
     val collectionClick: (id: String) -> Unit,
     val masterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
@@ -55,7 +56,11 @@ data class VaultItemListingHandlers(
                 collectionClick = {
                     viewModel.trySendAction(VaultItemListingsAction.CollectionClick(it))
                 },
-                itemClick = { viewModel.trySendAction(VaultItemListingsAction.ItemClick(it)) },
+                itemClick = { cipherId, cipherType ->
+                    viewModel.trySendAction(
+                        VaultItemListingsAction.ItemClick(id = cipherId, cipherType = cipherType),
+                    )
+                },
                 folderClick = { viewModel.trySendAction(VaultItemListingsAction.FolderClick(it)) },
                 masterPasswordRepromptSubmit = { password, data ->
                     viewModel.trySendAction(

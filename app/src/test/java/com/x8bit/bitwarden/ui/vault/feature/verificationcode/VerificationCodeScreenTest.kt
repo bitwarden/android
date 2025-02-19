@@ -19,7 +19,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -34,7 +36,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToSearchCalled = false
-    private var onNavigateToVaultItemId: String? = null
+    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VerificationCodeEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -50,7 +52,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
             VerificationCodeScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
                 onNavigateToSearch = { onNavigateToSearchCalled = true },
                 appResumeStateManager = appResumeStateManager,
             )
@@ -73,7 +75,10 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     fun `NavigateToVaultItem event should call onNavigateToVaultItemScreen`() {
         val id = "id4321"
         mutableEventFlow.tryEmit(VerificationCodeEvent.NavigateToVaultItem(id = id))
-        assertEquals(id, onNavigateToVaultItemId)
+        assertEquals(
+            VaultItemArgs(vaultItemId = id, cipherType = VaultItemCipherType.LOGIN),
+            onNavigateToVaultItemArgs,
+        )
     }
 
     @Test

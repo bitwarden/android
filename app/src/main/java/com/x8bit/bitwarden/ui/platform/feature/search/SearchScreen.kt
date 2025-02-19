@@ -36,7 +36,10 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultFilter
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -48,8 +51,8 @@ import kotlinx.collections.immutable.toImmutableList
 fun SearchScreen(
     onNavigateBack: () -> Unit,
     onNavigateToEditSend: (sendId: String) -> Unit,
-    onNavigateToEditCipher: (cipherId: String) -> Unit,
-    onNavigateToViewCipher: (cipherId: String) -> Unit,
+    onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: SearchViewModel = hiltViewModel(),
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
@@ -70,8 +73,24 @@ fun SearchScreen(
         when (event) {
             SearchEvent.NavigateBack -> onNavigateBack()
             is SearchEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
-            is SearchEvent.NavigateToEditCipher -> onNavigateToEditCipher(event.cipherId)
-            is SearchEvent.NavigateToViewCipher -> onNavigateToViewCipher(event.cipherId)
+            is SearchEvent.NavigateToEditCipher -> {
+                onNavigateToEditCipher(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.cipherId),
+                        vaultItemCipherType = event.cipherType,
+                    ),
+                )
+            }
+
+            is SearchEvent.NavigateToViewCipher -> {
+                onNavigateToViewCipher(
+                    VaultItemArgs(
+                        vaultItemId = event.cipherId,
+                        cipherType = event.cipherType,
+                    ),
+                )
+            }
+
             is SearchEvent.NavigateToUrl -> intentManager.launchUri(event.url.toUri())
             is SearchEvent.ShowShareSheet -> intentManager.shareText(event.content)
             is SearchEvent.ShowToast -> {
