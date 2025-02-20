@@ -230,7 +230,7 @@ fun BitwardenSwitch(
                 cardStyle = cardStyle,
                 onClick = onCheckedChange?.let { { it(!isChecked) } },
                 clickEnabled = !readOnly && enabled,
-                paddingTop = 6.dp,
+                paddingTop = 12.dp,
                 paddingBottom = 0.dp,
             )
             .semantics(mergeDescendants = true) {
@@ -264,7 +264,7 @@ fun BitwardenSwitch(
             Spacer(modifier = Modifier.width(width = 16.dp))
             Switch(
                 modifier = Modifier
-                    .defaultMinSize(minHeight = 48.dp)
+                    .height(height = 32.dp)
                     .testTag(tag = "SwitchToggle"),
                 enabled = enabled,
                 checked = isChecked,
@@ -274,7 +274,7 @@ fun BitwardenSwitch(
         }
         supportingContent
             ?.let { content ->
-                Spacer(modifier = Modifier.height(height = 6.dp))
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenHorizontalDivider(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -288,7 +288,7 @@ fun BitwardenSwitch(
                     content = content,
                 )
             }
-            ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
+            ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 12.dp } ?: 0.dp))
     }
 }
 
