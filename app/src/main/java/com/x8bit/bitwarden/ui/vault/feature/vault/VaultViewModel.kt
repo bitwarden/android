@@ -436,14 +436,22 @@ class VaultViewModel @Inject constructor(
 
     @Suppress("MagicNumber")
     private fun handleRefreshPull() {
-        mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            // Workaround for known issue: PullRefresh indicator left visible on screen
-            // https://issuetracker.google.com/issues/248274004
+            mutableStateFlow.update { it.copy(isRefreshing = true) }
             delay(250)
-            // The Pull-To-Refresh composable is already in the refreshing state.
-            // We will reset that state when sendDataStateFlow emits later on.
-            vaultRepository.sync(forced = false)
+            if (networkConnectionManager.isNetworkConnected) {
+                vaultRepository.sync(forced = false)
+            } else {
+                mutableStateFlow.update {
+                    it.copy(
+                        isRefreshing = false,
+                        dialog = VaultState.DialogState.Error(
+                            R.string.internet_connection_required_title.asText(),
+                            R.string.internet_connection_required_message.asText(),
+                        ),
+                    )
+                }
+            }
         }
     }
 

@@ -1379,6 +1379,29 @@ class VaultViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull should show network error if no internet connection`() = runTest {
+        val viewModel = createViewModel()
+        coEvery {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(VaultAction.RefreshPull)
+        advanceTimeBy(300)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
+            vaultRepository.sync(forced = false)
+        }
+    }
+
     @Test
     fun `PullToRefreshEnableReceive should update isPullToRefreshEnabled`() = runTest {
         val viewModel = createViewModel()
