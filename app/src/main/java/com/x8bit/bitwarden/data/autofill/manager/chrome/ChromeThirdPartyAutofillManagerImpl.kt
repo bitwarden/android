@@ -23,11 +23,11 @@ class ChromeThirdPartyAutofillManagerImpl(
     private val context: Context,
 ) : ChromeThirdPartyAutofillManager {
     override val stableChromeAutofillStatus: ChromeThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForReleaseChannel(ChromeReleaseChannel.STABLE)
+        get() = getThirdPartyAutoFillStatusForChannel(ChromeReleaseChannel.STABLE)
     override val betaChromeAutofillStatus: ChromeThirdPartyAutoFillData
-        get() = getThirdPartyAutoFillStatusForReleaseChannel(ChromeReleaseChannel.BETA)
+        get() = getThirdPartyAutoFillStatusForChannel(ChromeReleaseChannel.BETA)
 
-    private fun getThirdPartyAutoFillStatusForReleaseChannel(
+    private fun getThirdPartyAutoFillStatusForChannel(
         releaseChannel: ChromeReleaseChannel,
     ): ChromeThirdPartyAutoFillData {
         val uri = Uri.Builder()

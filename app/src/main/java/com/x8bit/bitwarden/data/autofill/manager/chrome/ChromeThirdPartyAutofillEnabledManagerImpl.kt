@@ -26,6 +26,7 @@ class ChromeThirdPartyAutofillEnabledManagerImpl(
     private val mutableChromeThirdPartyAutofillStatusStateFlow = MutableStateFlow(
         chromeThirdPartyAutofillStatus,
     )
+
     override val chromeThirdPartyAutofillStatusFlow: Flow<ChromeThirdPartyAutofillStatus>
         get() = mutableChromeThirdPartyAutofillStatusStateFlow
             .combine(
