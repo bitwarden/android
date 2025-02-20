@@ -1635,9 +1635,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     name = "mockName-1",
                     customFieldData = listOf(
                         VaultAddEditState.Custom.LinkedField(
-                            "mockItemId",
-                            "mockCustomFieldName",
-                            VaultLinkedFieldType.UNKNOWN,
+                            itemId = "mockItemId",
+                            name = "mockCustomFieldName",
+                            vaultLinkedFieldType = VaultLinkedFieldType.UNKNOWN,
                         ),
                     ),
                 ),
