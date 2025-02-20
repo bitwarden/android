@@ -442,8 +442,8 @@ class VaultViewModel @Inject constructor(
 
     @Suppress("MagicNumber")
     private fun handleRefreshPull() {
+        mutableStateFlow.update { it.copy(isRefreshing = true) }
         viewModelScope.launch {
-            mutableStateFlow.update { it.copy(isRefreshing = true) }
             delay(250)
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepository.sync(forced = false)
@@ -609,8 +609,9 @@ class VaultViewModel @Inject constructor(
 
             is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
 
-            VaultAction.Internal.InternetConnectionErrorReceived ->
+            VaultAction.Internal.InternetConnectionErrorReceived -> {
                 handleInternetConnectionErrorReceived()
+            }
         }
     }
 

@@ -155,8 +155,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
-            every { specialCircumstance } returns null
-        }
+        every { specialCircumstance } returns null
+    }
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
@@ -503,7 +503,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `on SyncClick should show the no network dialog if not connection is available`() {
         val viewModel = createViewModel()
-        coEvery {
+        every {
             networkConnectionManager.isNetworkConnected
         } returns false
         viewModel.trySendAction(VaultAction.SyncClick)
@@ -1386,7 +1386,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `RefreshPull should show network error if no internet connection`() = runTest {
         val viewModel = createViewModel()
-        coEvery {
+        every {
             networkConnectionManager.isNetworkConnected
         } returns false
 
