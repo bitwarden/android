@@ -96,7 +96,13 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToEdit event should invoke onNavigateToVaultEditItem`() {
         val id = "id1234"
-        mutableEventFlow.tryEmit(VaultItemEvent.NavigateToAddEdit(itemId = id, isClone = false))
+        mutableEventFlow.tryEmit(
+            value = VaultItemEvent.NavigateToAddEdit(
+                itemId = id,
+                isClone = false,
+                type = VaultItemCipherType.LOGIN,
+            ),
+        )
         assertEquals(
             VaultAddEditArgs(
                 vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
