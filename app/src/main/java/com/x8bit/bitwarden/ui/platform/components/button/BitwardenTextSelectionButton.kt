@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 
 /**
  * A button which uses a read-only text field for layout and style purposes.
@@ -49,27 +50,12 @@ fun BitwardenTextSelectionButton(
     onClick: () -> Unit,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
-    enabled: Boolean = false,
-    tooltipEnabled: Boolean = true,
+    enabled: Boolean = true,
     supportingText: String? = null,
     tooltip: TooltipData? = null,
     insets: PaddingValues = PaddingValues(),
     textFieldTestTag: String? = null,
     semanticRole: Role = Role.Button,
-    semanticContentDescription: String = supportingText
-        ?.let { "$selectedOption. $label. $it" }
-        ?: "$selectedOption. $label",
-    customAccessibilityActions: List<CustomAccessibilityAction> = listOfNotNull(
-        tooltip?.let {
-            CustomAccessibilityAction(
-                label = it.contentDescription,
-                action = {
-                    it.onClick()
-                    true
-                },
-            )
-        },
-    ),
     actionsPadding: PaddingValues = PaddingValues(end = 4.dp),
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -77,20 +63,34 @@ fun BitwardenTextSelectionButton(
         modifier = modifier
             .clearAndSetSemantics {
                 role = semanticRole
-                contentDescription = semanticContentDescription
-                customActions = customAccessibilityActions
+                contentDescription = supportingText
+                    ?.let { "$selectedOption. $label. $it" }
+                    ?: "$selectedOption. $label"
+                customActions = persistentListOfNotNull(
+                    tooltip?.let {
+                        CustomAccessibilityAction(
+                            label = it.contentDescription,
+                            action = {
+                                it.onClick()
+                                true
+                            },
+                        )
+                    },
+                )
             }
             .cardStyle(
                 cardStyle = cardStyle,
                 paddingTop = 6.dp,
                 paddingBottom = 0.dp,
                 onClick = onClick,
+                clickEnabled = enabled,
             )
             .padding(paddingValues = insets),
     ) {
         TextField(
             textStyle = BitwardenTheme.typography.bodyLarge,
             readOnly = true,
+            enabled = false,
             label = {
                 Row {
                     Text(
@@ -104,7 +104,6 @@ fun BitwardenTextSelectionButton(
                             vectorIconRes = R.drawable.ic_question_circle_small,
                             contentDescription = it.contentDescription,
                             onClick = it.onClick,
-                            isEnabled = tooltipEnabled,
                             contentColor = BitwardenTheme.colorScheme.icon.secondary,
                             modifier = Modifier.size(16.dp),
                         )
@@ -127,7 +126,6 @@ fun BitwardenTextSelectionButton(
             },
             value = selectedOption.orEmpty(),
             onValueChange = {},
-            enabled = enabled,
             colors = bitwardenTextFieldButtonColors(),
             modifier = Modifier
                 .nullableTestTag(tag = textFieldTestTag)
