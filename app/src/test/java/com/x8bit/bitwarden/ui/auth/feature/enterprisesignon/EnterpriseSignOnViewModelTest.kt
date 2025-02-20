@@ -117,7 +117,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 authRepository.prevalidateSso(organizationId)
-            } returns PrevalidateSsoResult.Failure
+            } returns PrevalidateSsoResult.Failure()
 
             val viewModel = createViewModel(state)
             viewModel.stateFlow.test {
@@ -136,6 +136,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     state.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
                             message = R.string.login_sso_error.asText(),
                         ),
                     ),
@@ -198,6 +199,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required.asText(
                             R.string.org_identifier.asText(),
                         ),
@@ -288,6 +290,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
                     message = R.string.login_sso_error.asText(),
                 ),
             ),
@@ -305,6 +308,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
                     message = R.string.login_sso_error.asText(),
                 ),
             ),
@@ -358,6 +362,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
                             message = R.string.login_sso_error.asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -424,6 +429,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     DEFAULT_STATE.copy(
                         dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
                             message = "new device verification required".asText(),
                         ),
                         orgIdentifierInput = orgIdentifier,
@@ -847,6 +853,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.organization_sso_identifier_required.asText(),
                     ),
                     orgIdentifierInput = "Bitwarden",
@@ -1040,6 +1047,5 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             codeVerifier = "def",
         )
         private const val DEFAULT_EMAIL = "test@gmail.com"
-        private const val DEFAULT_ORG_ID = "orgId"
     }
 }
