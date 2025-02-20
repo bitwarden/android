@@ -1375,8 +1375,13 @@ class AuthRepositoryImpl(
             )
     }
 
-    override fun setOnboardingStatus(userId: String, status: OnboardingStatus?) {
-        authDiskSource.storeOnboardingStatus(userId = userId, onboardingStatus = status)
+    override fun setOnboardingStatus(status: OnboardingStatus) {
+        activeUserId?.let { userId ->
+            authDiskSource.storeOnboardingStatus(
+                userId = userId,
+                onboardingStatus = status,
+            )
+        }
     }
 
     override fun getNewDeviceNoticeState(): NewDeviceNoticeState? {
@@ -1764,15 +1769,6 @@ class AuthRepositoryImpl(
             ),
         )
         settingsRepository.hasUserLoggedInOrCreatedAccount = true
-
-        val shouldSetOnboardingStatus = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow) &&
-            !settingsRepository.getUserHasLoggedInValue(userId = userId)
-        if (shouldSetOnboardingStatus) {
-            setOnboardingStatus(
-                userId = userId,
-                status = OnboardingStatus.NOT_STARTED,
-            )
-        }
 
         authDiskSource.userState = userStateJson
         loginResponse.key?.let {

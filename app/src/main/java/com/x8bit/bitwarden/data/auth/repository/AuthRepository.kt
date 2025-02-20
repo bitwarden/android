@@ -421,7 +421,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Update the value of the onboarding status for the user.
      */
-    fun setOnboardingStatus(userId: String, status: OnboardingStatus?)
+    fun setOnboardingStatus(status: OnboardingStatus)
 
     /**
      * Checks if a new device notice should be displayed.

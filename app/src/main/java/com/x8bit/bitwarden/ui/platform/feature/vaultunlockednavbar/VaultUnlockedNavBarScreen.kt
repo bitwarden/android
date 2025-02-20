@@ -50,10 +50,11 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * Top level composable for the Vault Unlocked Screen.
@@ -63,9 +64,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onNavigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
-    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddSend: () -> Unit,
@@ -161,9 +162,9 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
-    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    navigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     navigateToAddSend: () -> Unit,

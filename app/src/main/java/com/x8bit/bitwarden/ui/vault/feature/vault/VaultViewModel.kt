@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
+import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -421,7 +422,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.vaultItem.id,
+                type = action.vaultItem.type,
+            ),
+        )
     }
 
     private fun handleTryAgainClick() {
@@ -568,7 +574,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
-        sendEvent(VaultEvent.NavigateToEditVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToEditVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleLaunchClick(action: ListingItemOverflowAction.VaultAction.LaunchClick) {
@@ -576,7 +587,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleViewClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleInternalAction(action: VaultAction.Internal) {
@@ -1016,6 +1032,11 @@ data class VaultState(
             abstract val shouldShowMasterPasswordReprompt: Boolean
 
             /**
+             * The [VaultItemCipherType] this item represents.
+             */
+            abstract val type: VaultItemCipherType
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -1032,6 +1053,7 @@ data class VaultState(
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
+                override val type: VaultItemCipherType get() = VaultItemCipherType.LOGIN
             }
 
             /**
@@ -1061,6 +1083,8 @@ data class VaultState(
                         lastFourDigits != null -> "*".asText().concat(lastFourDigits)
                         else -> null
                     }
+
+                override val type: VaultItemCipherType get() = VaultItemCipherType.CARD
             }
 
             /**
@@ -1082,6 +1106,7 @@ data class VaultState(
                 val fullName: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = fullName
+                override val type: VaultItemCipherType get() = VaultItemCipherType.IDENTITY
             }
 
             /**
@@ -1099,6 +1124,7 @@ data class VaultState(
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SECURE_NOTE
             }
 
             /**
@@ -1122,6 +1148,7 @@ data class VaultState(
                 val fingerprint: Text,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
         }
     }
@@ -1175,6 +1202,7 @@ sealed class VaultEvent {
      */
     data class NavigateToVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**
@@ -1182,6 +1210,7 @@ sealed class VaultEvent {
      */
     data class NavigateToEditVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**

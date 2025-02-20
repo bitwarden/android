@@ -10,7 +10,8 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 private const val CARD: String = "card"
@@ -61,14 +62,10 @@ data class VaultItemListingArgs(
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItemScreen: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (
-        cipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
@@ -92,13 +89,9 @@ fun NavGraphBuilder.vaultItemListingDestination(
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItemScreen: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
-    onNavigateToVaultAddItemScreen: (
-        cipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
@@ -115,7 +108,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     ) {
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToVaultItem = onNavigateToVaultItemScreen,
+            onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
@@ -141,7 +134,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = onNavigateToAddSendItem,
         onNavigateToEditSendItem = onNavigateToEditSendItem,
-        onNavigateToVaultAddItemScreen = { _, _, _ -> },
+        onNavigateToVaultAddItemScreen = { },
         onNavigateToAddFolderScreen = { _ -> },
         onNavigateToVaultItemScreen = { },
         onNavigateToVaultEditItemScreen = { },
@@ -157,14 +150,10 @@ fun NavGraphBuilder.sendItemListingDestination(
 private fun NavGraphBuilder.internalVaultItemListingDestination(
     route: String,
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItemScreen: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (
-        cipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -190,7 +179,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     ) {
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToVaultItem = onNavigateToVaultItemScreen,
+            onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToAddSendItem = onNavigateToAddSendItem,

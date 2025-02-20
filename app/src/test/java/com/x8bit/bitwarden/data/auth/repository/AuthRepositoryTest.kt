@@ -6316,9 +6316,29 @@ class AuthRepositoryTest {
 
     @Test
     fun `setOnboardingStatus should save the onboarding status to disk`() {
-        val userId = "userId"
-        repository.setOnboardingStatus(userId = userId, status = OnboardingStatus.NOT_STARTED)
-        assertEquals(OnboardingStatus.NOT_STARTED, fakeAuthDiskSource.getOnboardingStatus(userId))
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
+        assertEquals(
+            OnboardingStatus.NOT_STARTED,
+            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
+        )
+    }
+
+    @Test
+    fun `setOnboardingStatus with no userId does not change the onboarding state`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        repository.setOnboardingStatus(status = OnboardingStatus.NOT_STARTED)
+        assertEquals(
+            OnboardingStatus.NOT_STARTED,
+            fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
+        )
+
+        fakeAuthDiskSource.userState = null
+        repository.setOnboardingStatus(status = OnboardingStatus.COMPLETE)
+        val activeUserId = SINGLE_USER_STATE_1.activeUserId
+        assertFalse(
+            fakeAuthDiskSource.getOnboardingStatus(activeUserId) == OnboardingStatus.COMPLETE,
+        )
     }
 
     @Test
@@ -6378,10 +6398,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 passwordHash = PASSWORD_HASH,
             )
-            assertEquals(
-                OnboardingStatus.NOT_STARTED,
-                fakeAuthDiskSource.getOnboardingStatus(USER_ID_1),
-            )
+            // This should only be set after they complete a registration and not based on login.
+            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
     @Suppress("MaxLineLength")

@@ -26,7 +26,6 @@ class SetupCompleteViewModel @Inject constructor(
 
     private fun handleCompleteSetup() {
         authRepository.setOnboardingStatus(
-            userId = state.userId,
             status = OnboardingStatus.COMPLETE,
         )
     }

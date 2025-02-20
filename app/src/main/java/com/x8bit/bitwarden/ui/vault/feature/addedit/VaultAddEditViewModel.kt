@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState.ViewState.Content.ItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -67,6 +68,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
@@ -116,9 +118,11 @@ class VaultAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
-            val selectedFolderId = VaultAddEditArgs(savedStateHandle).selectedFolderId
-            val selectedCollectionId = VaultAddEditArgs(savedStateHandle).selectedCollectionId
+            val args = VaultAddEditArgs(savedStateHandle = savedStateHandle)
+            val vaultAddEditType = args.vaultAddEditType
+            val vaultCipherType = args.vaultItemCipherType
+            val selectedFolderId = args.selectedFolderId
+            val selectedCollectionId = args.selectedCollectionId
             val isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any()
@@ -150,6 +154,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
+                cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
                     is VaultAddEditType.AddItem -> {
                         autofillSelectionData
@@ -166,7 +171,7 @@ class VaultAddEditViewModel @Inject constructor(
                                     selectedCollectionId = selectedCollectionId,
                                 ),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
-                                type = vaultAddEditType.vaultItemCipherType.toItemType(),
+                                type = vaultCipherType.toItemType(),
                             )
                     }
 
@@ -2027,6 +2032,7 @@ class VaultAddEditViewModel @Inject constructor(
 @Parcelize
 data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
+    val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
     val shouldShowFolderSelectionBottomSheet: Boolean,
@@ -2043,9 +2049,23 @@ data class VaultAddEditState(
      */
     val screenDisplayName: Text
         get() = when (vaultAddEditType) {
-            is VaultAddEditType.AddItem -> R.string.add_item.asText()
-            is VaultAddEditType.EditItem -> R.string.edit_item.asText()
-            is VaultAddEditType.CloneItem -> R.string.add_item.asText()
+            is VaultAddEditType.AddItem,
+            is VaultAddEditType.CloneItem,
+                -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> R.string.new_login.asText()
+                VaultItemCipherType.CARD -> R.string.new_card.asText()
+                VaultItemCipherType.IDENTITY -> R.string.new_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> R.string.new_note.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.new_passkey.asText()
+            }
+
+            is VaultAddEditType.EditItem -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> R.string.edit_login.asText()
+                VaultItemCipherType.CARD -> R.string.edit_card.asText()
+                VaultItemCipherType.IDENTITY -> R.string.edit_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> R.string.edit_note.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.edit_passkey.asText()
+            }
         }
 
     /**

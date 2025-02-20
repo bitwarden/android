@@ -17,9 +17,13 @@ fun CipherView.toOverflowActions(
         .id
         ?.let { cipherId ->
             listOfNotNull(
-                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                ListingItemOverflowAction.VaultAction.ViewClick(
+                    cipherId = cipherId,
+                    cipherType = this.type,
+                ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = cipherId,
+                    cipherType = this.type,
                     requiresPasswordReprompt = hasMasterPassword,
                 )
                     .takeUnless { this.deletedDate != null || !this.edit },
