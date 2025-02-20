@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinS
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -228,17 +229,20 @@ fun AccountSecurityScreen(
                     .fillMaxWidth(),
             )
 
-            Spacer(Modifier.height(16.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.unlock_options),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-
             val biometricSupportStatus = biometricsManager.biometricSupportStatus
+            if (biometricSupportStatus != BiometricSupportStatus.NOT_SUPPORTED ||
+                !state.removeUnlockWithPinPolicyEnabled ||
+                state.isUnlockWithPinEnabled) {
+                Spacer(Modifier.height(16.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.unlock_options),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(height = 8.dp))
+            }
             BitwardenUnlockWithBiometricsSwitch(
                 biometricSupportStatus = biometricSupportStatus,
                 isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
