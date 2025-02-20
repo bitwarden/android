@@ -1389,10 +1389,12 @@ class VaultViewModelTest : BaseViewModelTest() {
         coEvery {
             networkConnectionManager.isNetworkConnected
         } returns false
+
         viewModel.trySendAction(VaultAction.RefreshPull)
         advanceTimeBy(300)
         assertEquals(
             DEFAULT_STATE.copy(
+                isRefreshing = false,
                 dialog = VaultState.DialogState.Error(
                     R.string.internet_connection_required_title.asText(),
                     R.string.internet_connection_required_message.asText(),
@@ -1987,6 +1989,23 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
         assertEquals(
             expectedState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
             viewModel.stateFlow.value,
         )
     }

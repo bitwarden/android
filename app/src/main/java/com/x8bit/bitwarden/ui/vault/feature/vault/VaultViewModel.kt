@@ -448,15 +448,7 @@ class VaultViewModel @Inject constructor(
             if (networkConnectionManager.isNetworkConnected) {
                 vaultRepository.sync(forced = false)
             } else {
-                mutableStateFlow.update {
-                    it.copy(
-                        isRefreshing = false,
-                        dialog = VaultState.DialogState.Error(
-                            R.string.internet_connection_required_title.asText(),
-                            R.string.internet_connection_required_message.asText(),
-                        ),
-                    )
-                }
+                sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
             }
         }
     }
@@ -616,6 +608,21 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
+
+            VaultAction.Internal.InternetConnectionErrorReceived ->
+                handleInternetConnectionErrorReceived()
+        }
+    }
+
+    private fun handleInternetConnectionErrorReceived() {
+        mutableStateFlow.update {
+            it.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            )
         }
     }
 
@@ -1447,6 +1454,11 @@ sealed class VaultAction {
         data class IconLoadingSettingReceive(
             val isIconLoadingDisabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the there is not internet connection.
+         */
+        data object InternetConnectionErrorReceived : Internal()
 
         /**
          * Indicates a result for generating a verification code has been received.
