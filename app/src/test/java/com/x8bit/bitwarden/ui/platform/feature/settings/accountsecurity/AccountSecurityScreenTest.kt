@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -239,6 +240,55 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithText("Unlock with Biometrics").assertIsOff()
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = true) }
         composeTestRule.onNodeWithText("Unlock with Biometrics").assertIsOn()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlock option section should be displayed according to state if biometrics is available`() {
+        val section = "UNLOCK OPTIONS"
+        composeTestRule.onNodeWithText(section).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = true,
+            )
+        }
+        composeTestRule.onNodeWithText(section).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+        composeTestRule.onNodeWithText(section).performScrollTo().assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlock option section should be displayed according to state if biometrics is not available`() {
+        coEvery {
+            biometricsManager.biometricSupportStatus
+        } returns BiometricSupportStatus.NOT_SUPPORTED
+        val section = "UNLOCK OPTIONS"
+
+        composeTestRule.onNodeWithText(section).performScrollTo().assertIsDisplayed()
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = true,
+            )
+        }
+        composeTestRule.onNodeWithText(section).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                removeUnlockWithPinPolicyEnabled = true,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+        composeTestRule.onNodeWithText(section).assertDoesNotExist()
     }
 
     @Test
