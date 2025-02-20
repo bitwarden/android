@@ -96,6 +96,11 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.Internal -> handleInternalAction(action)
         AutoFillAction.AutoFillActionCardCtaClick -> handleAutoFillActionCardCtClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
+        AutoFillAction.LifecycleResume -> handleOnResumed()
+    }
+
+    private fun handleOnResumed() {
+        settingsRepository.refreshAccessibilityEnabled()
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -272,6 +277,12 @@ sealed class AutoFillEvent {
  * Models actions for the auto-fill screen.
  */
 sealed class AutoFillAction {
+
+    /**
+     * Indicates the UI has been entered a resumed lifecycle state.
+     */
+    data object LifecycleResume : AutoFillAction()
+
     /**
      * User clicked ask to add login button.
      */

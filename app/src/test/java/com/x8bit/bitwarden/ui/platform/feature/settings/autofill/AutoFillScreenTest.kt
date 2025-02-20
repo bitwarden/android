@@ -414,7 +414,8 @@ class AutoFillScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify(exactly = 0) { viewModel.trySendAction(any()) }
+        // LifecycleResume should be sent
+        verify(exactly = 1) { viewModel.trySendAction(any()) }
         composeTestRule.assertNoDialogExists()
     }
 
@@ -504,6 +505,11 @@ class AutoFillScreenTest : BaseComposeTest() {
     fun `when NavigateToSetupAutofill event is sent should call onNavigateToSetupAutofill`() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
+    }
+
+    @Test
+    fun `LifecycleResumed action is sent when the screen is resumed`() {
+        verify { viewModel.trySendAction(AutoFillAction.LifecycleResume) }
     }
 }
 

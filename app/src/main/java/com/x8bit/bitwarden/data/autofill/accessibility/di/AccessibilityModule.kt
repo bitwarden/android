@@ -57,10 +57,10 @@ object AccessibilityModule {
     @Singleton
     @Provides
     fun providesAccessibilityEnabledManager(
-        accessibilityManager: AccessibilityManager,
+        @ApplicationContext context: Context,
     ): AccessibilityEnabledManager =
         AccessibilityEnabledManagerImpl(
-            accessibilityManager = accessibilityManager,
+            context = context,
         )
 
     @Singleton
