@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Chceli by ste naň prejsť teraz?</string>
   <string name="master_password">Hlavné heslo</string>
   <string name="master_password_required">Hlavné heslo (povinné)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Nové hlavné heslo (povinné)</string>
   <string name="more">Viac</string>
   <string name="my_vault">Môj trezor</string>
   <string name="authenticator">Overovateľ</string>
@@ -91,7 +91,7 @@
   <string name="account_created_success">Váš nový účet bol vytvorený!</string>
   <string name="add_an_item">Pridať položku</string>
   <string name="app_extension">Rozšírenie aplikácie</string>
-  <string name="autofill_accessibility_description">Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciách a na webe.</string>
+  <string name="autofill_accessibility_description">Použite službu zjednodušenia prístupu bitwarden na automatické vypĺňanie v aplikáciách a na webe.</string>
   <string name="autofill_service">Služba automatického vypĺňania</string>
   <string name="set_bitwarden_as_passkey_manager_description">Nastavte Bitwarden ako poskytovateľa prístupových kľúčov v nastaveniach zariadenia.</string>
   <string name="avoid_ambiguous_characters">Vyhnúť sa zameniteľným znakom</string>
@@ -99,7 +99,7 @@
   <string name="bitwarden_app_extension_alert2">Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z Bitwarden rozšírenia aplikácie. Ďalšie informácie o používaní Bitwarden rozšírenia aplikácie získate prechodom do obrazovky Nastavení.</string>
   <string name="bitwarden_app_extension_description">Použiť bitwarden v Safari a iných aplikáciach pre automatické vypĺňanie prihlasovacích údajov.</string>
   <string name="bitwarden_autofill_service">Služba automatického vypĺňania Bitwardenom</string>
-  <string name="bitwarden_autofill_accessibility_service_description">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov.</string>
+  <string name="bitwarden_autofill_accessibility_service_description">Použite službu uľahčenia prístupu Bitwardenu na automatické vypĺňanie prihlasovacích údajov.</string>
   <string name="change_email">Zmeniť e-mail</string>
   <string name="change_email_confirmation">Svoju e-mailovú adresu môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</string>
   <string name="change_master_password">Zmeniť hlavné heslo</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Vytvoriť účet</string>
   <string name="creating_account">Vytvára sa účet...</string>
   <string name="edit_item">Upraviť položku</string>
+  <string name="edit_login">Upraviť prihlásenie</string>
+  <string name="edit_card">Upraviť kartu</string>
+  <string name="edit_identity">Upraviť identitu</string>
+  <string name="edit_note">Upraviť poznámku</string>
+  <string name="edit_passkey">Upraviť prístupový kľúč</string>
   <string name="enable_automatic_syncing">Zapnúť automatickú synchronizáciu</string>
   <string name="enter_email_for_hint">Zadajte e-mailovú adresu na zaslanie nápovede k vášmu hlavnému heslu.</string>
   <string name="exntesion_reenable">Znovu zapnúť rozšírenie aplikácie</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Nová identita</string>
   <string name="no_notes">V trezore sa nenachádzajú žiadne poznámky.</string>
   <string name="new_note">Nová poznámka</string>
+  <string name="new_passkey">Nový prístupový kľúč</string>
   <string name="new_item">Nová položka</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Nový kľúč SSH</string>
   <string name="no_text_sends">V trezore sa nenachádzajú žiadne textové Sendy.</string>
   <string name="no_file_sends">Vo vašom trezore nie sú žiadne súborové Sendy.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">V trezore sa nenachádzajú žiadne kľúče SSH.</string>
   <string name="new_text_send">Nový textový Send</string>
   <string name="new_file_send">Nový súborový Send</string>
   <string name="no_username">Žiadne používateľské meno</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Prosíme, zvážte pomôcť nám dobrým hodnotením!</string>
   <string name="regenerate_password">Vygenerovať nové heslo</string>
   <string name="retype_master_password">Znovu zadajte hlavné heslo</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Opätovne zadajte nové hlavné heslo (povinné)</string>
   <string name="retype_master_password_required">Opätovne zadajte hlavné heslo (povinné)</string>
   <string name="search_vault">Prehľadávať trezor</string>
   <string name="security">Zabezpečenie</string>
@@ -209,6 +215,11 @@
   <string name="validating">Overujem</string>
   <string name="verification_code">Overovací kód</string>
   <string name="view_item">Zobraziť položku</string>
+  <string name="view_login">Zobraziť prihlásenie</string>
+  <string name="view_card">Zobraziť kartu</string>
+  <string name="view_identity">Zobraziť identitu</string>
+  <string name="view_note">Zobraziť poznámku</string>
+  <string name="view_passkey">Zobraziť prístupový kľúč</string>
   <string name="web_vault">Webový trezor Bitwarden</string>
   <string name="lost_2fa_app">Stratili ste overovaciu aplikáciu?</string>
   <string name="items">Položky</string>
@@ -219,7 +230,7 @@
   <string name="no_items_for_uri">V trezore sa nenachádzajú žiadne položky pre %1$s.</string>
   <string name="no_items_for_vault">Vo vašom trezore nie sú žiadne položky, ktoré zodpovedajú \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Vyhľadať alebo pridať nové prihlasovacie údaje</string>
-  <string name="bitwarden_autofill_service_overlay">Keď aktivujute vstupné pole a uvidíte tlačidlo pre automatické vyplnenie cez Bitwarden, môžete ho stlačiť a spustiť službu automatického vypĺňania.</string>
+  <string name="bitwarden_autofill_service_overlay">Keď aktivujete vstupné pole a uvidíte tlačidlo na automatické vyplnenie cez Bitwarden, môžete naň klepnúť a spustiť službu automatického vypĺňania.</string>
   <string name="bitwarden_autofill_service_notification_content">Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otvoriť nastavenia zjednodušenia prístupu</string>
   <string name="bitwarden_autofill_service_step1">1. Otvorte obrazovku Uľahčenia prístupu, ťuknite na \"Bitwarden\" pod nadpisom Služby.</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Overovacia aplikácia</string>
   <string name="enter_verification_code_app">Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</string>
   <string name="enter_verification_code_email">Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný e-mailom na %1$s.</string>
+  <string name="enter_verification_code_new_device">Nespoznávame toto zariadenie. Zadajte 8-miestny overovací kód zaslaný na %1$s.</string>
   <string name="login_unavailable">Prihlásenie nedostupné</string>
   <string name="no_two_step_available">Tento účet má povolené dvojstupňové prihlásenie, ale žiadny z konfigurovaných poskytovateľov nie je podporovaný na tomto zariadení. Prosím, použite podporované zariadenie a/alebo pridajte poskytovateľa, ktorý je lepšie podporovaný na zariadeniach (napríklad overovaciu aplikáciu).</string>
   <string name="recovery_code_title">Záchranný kód</string>
@@ -314,6 +326,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="april">Apríl</string>
   <string name="august">August</string>
   <string name="brand">Značka</string>
+  <string name="card_details">Podrobnosti o karte</string>
   <string name="cardholder_name">Meno vlastníka karty</string>
   <string name="city_town">Mesto</string>
   <string name="company">Spoločnosť</string>
@@ -414,8 +427,11 @@ Skenovanie prebehne automaticky.</string>
   <string name="invalid_email">Neplatná e-mailová adresa.</string>
   <string name="cards">Karty</string>
   <string name="identities">Identity</string>
+  <string name="identification">Identifikácia</string>
   <string name="logins">Prihlasovacie údaje</string>
   <string name="secure_notes">Zabezpečené poznámky</string>
+  <string name="personal_details">Osobné údaje</string>
+  <string name="contact_info">Kontaktné informácie</string>
   <string name="all_items">Všetky položky</string>
   <string name="ur_is">Adresy URI</string>
   <string name="checking_password">Overujem heslo...</string>
@@ -439,7 +455,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="move_up">Posunúť vyššie</string>
   <string name="miscellaneous">Ostatné</string>
   <string name="ownership">Vlastníctvo</string>
-  <string name="who_owns_this_item">Kto vlastní túto položku?</string>
+  <string name="owner">Vlastník</string>
   <string name="no_collections_to_list">Neexistujú žiadne zbierky na zobrazenie.</string>
   <string name="moved_item_to_org">%1$s presunuté do %2$s.</string>
   <string name="item_shared">Položka bola zdieľaná.</string>
@@ -574,9 +590,9 @@ Skenovanie prebehne automaticky.</string>
   <string name="inline_autofill">Použiť vnorené automatické vypĺňanie</string>
   <string name="inline_autofill_description">Ak to podporuje váš vybratý editor IME (klávesnica), použite vnorené automatické vypĺňanie. Ak to vaša konfigurácia nepodporuje (alebo je táto voľba zakázaná), bude použité predvolené automatické vyplnenie.</string>
   <string name="accessibility">Použiť dostupnosť</string>
-  <string name="accessibility_description">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. Ak je táto možnosť povolená, pri výbere prihlasovacích polí sa zobrazí vyskakovacie okno.</string>
-  <string name="accessibility_description2">Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. (Vyžaduje sa povolenie zobrazenia cez iné aplikácie)</string>
-  <string name="accessibility_description3">Použite službu zjednodušenia prístupu Bitwardenu pre použitie automatického vypĺňania cez dlaždicu a/alebo zobraziť vyskakovacie okno pomocou zobrazenia cez iné aplikácie (ak je povolené).</string>
+  <string name="accessibility_description">Použite službu uľahčenia prístupu Bitwardenu na automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. Ak je táto možnosť povolená, pri výbere prihlasovacích polí sa zobrazí vyskakovacie okno.</string>
+  <string name="accessibility_description2">Použite službu uľahčenia prístupu Bitwardenu na automatické vypĺňanie prihlasovacích údajov v aplikáciách a na webe. (Vyžaduje sa povolenie zobrazenia cez iné aplikácie)</string>
+  <string name="accessibility_description3">Použite službu uľahčenia prístupu Bitwardenu pre použitie automatického vypĺňania cez dlaždicu a/alebo zobraziť vyskakovacie okno pomocou zobrazenia cez iné aplikácie (ak je povolené).</string>
   <string name="accessibility_description4">Vyžaduje sa, aby ste použili dlaždicu rýchlej akcie automatického vypĺňania, alebo aby ste rozšírili službu automatického vypĺňania pomocou funkcie zobrazenia cez iné aplikácie (ak je povolená).</string>
   <string name="accessibility_description5">Vyžaduje sa pre použitie dlaždice rýchleho automatického vypĺňania.</string>
   <string name="draw_over">Použiť zobrazenie cez iné aplikácie</string>
@@ -831,7 +847,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="data_region">Dátová oblasť</string>
   <string name="region">Región</string>
   <string name="update_weak_master_password_warning">Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Súčasné hlavné heslo (povinné)</string>
   <string name="logged_in">Prihlásený!</string>
   <string name="approve_with_my_other_device">Schváliť pomocou môjho druhého zariadenia</string>
   <string name="request_admin_approval">Žiadosť o schválenie správcom</string>
@@ -1023,14 +1039,14 @@ Chcete prepnúť na tento účet?</string>
   <string name="generate_button_label">Generovať</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Toto heslo si zapíšte a uložte na bezpečné miesto.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Prečítajte si o ďalších spôsoboch, ako zabrániť zablokovaniu účtu</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Prečítajte si o spôsoboch, ako zabrániť zablokovaniu účtu</annotation></string>
   <string name="help_with_server_geolocations">Pomoc pri určovaní geografickej polohy servera.</string>
   <string name="email_address_required">E-mailová adresa (povinná)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Odkazom v e-maile overte svoju e-mailovú adresu a pokračujte vo vytváraní konta. "</string>
   <string name="change_email_address">Zmeniť e-mailovú adresu</string>
   <string name="next">Ďalej</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden nemôže obnoviť stratené alebo zabudnuté hlavné heslo.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden nemôže resetovať stratené alebo zabudnuté hlavné heslo.</string>
   <string name="choose_your_master_password">Zvoľte si hlavné heslo</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Na udržanie vašich informácií v bezpečí si zvoľte unikátne a silné heslo.</string>
   <string name="minimum_characters">%1$s znakov</string>
@@ -1050,7 +1066,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc.</string>
   <string name="master_password_hint_not_specified">Nápoveď k hlavnému heslu</string>
   <string name="master_password_important_hint">Dôležité: Vaše hlavné heslo sa nedá obnoviť, ak ho zabudnete! Minimálne 12 znakov.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Nová nápoveď pre hlavné heslo</string>
   <string name="get_started">Začnite</string>
   <string name="save_and_protect_your_data">Uložiť a ochrániť vaše údaje</string>
   <string name="the_vault_protects_more_than_just_passwords">Trezor chráni viac ako len heslá. Tu môžete bezpečne ukladať prihlasovacie údaje, identifikačné údaje, karty a poznámky.</string>
@@ -1178,6 +1194,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="coachmark_6_of_6">6 Z 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Tieto možnosti môžete použiť na úpravu hesla, aby spĺňalo požiadavky webovej stránky.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Po uložení nového hesla do Bitwardenu ho nezabudnite aktualizovať na webovej stránke účtu. "</string>
+  <string name="verify_your_identity">Overte svoju totožnosť</string>
   <string name="error_loading_certificate">Chyba pri načítaní certifikátu</string>
   <string name="certificate_alias">Alias certifikátu</string>
   <string name="import_certificate">Importovať certifikát</string>
@@ -1191,16 +1208,17 @@ Chcete prepnúť na tento účet?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Použitie systémového certifikátu je menej bezpečné ako uloženie certifikátu v Bitwardene. Pokračovaním sa zobrazí zoznam dostupných systémových certifikátov, ak je už nejaký nainštalovaný.</string>
   <string name="certificate_alias_already_exists">Alias certifikátu už existuje</string>
   <string name="link">Odkaz</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
-  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
-  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
-  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
-  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
-  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
-  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
-  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
-  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
-  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operácia prístupového kľúča zlyhala, pretože aplikácia je nesprávne podpísaná.</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operácia prístupového kľúča zlyhala, pretože v požiadavke nie je uvedená adresa URL hostiteľa.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Operácia prístupového kľúča zlyhala, pretože podpis aplikácia je neplatný.</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Registrácia prístupového kľúča zlyhala z dôvodu internej chyby.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operácia prístupového kľúča zlyhala, pretože sa nepodarilo identifikovať dôveryhodnú stranu.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Overenie prístupovým kľúčom zlyhalo z dôvodu vnútornej chyby.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operácia prístupového kľúča zlyhala, pretože vybraná položka neexistuje.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">Operácia prístupového kľúča zlyhala, pretože používateľ je zablokovaný.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operácia prístupového kľúča zlyhala, pretože overenie používateľa bolo zrušené.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Operácia prístupového kľúča zlyhala, pretože požiadavka nie je platná.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operácia prístupového kľúča zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
+  <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
 </resources>

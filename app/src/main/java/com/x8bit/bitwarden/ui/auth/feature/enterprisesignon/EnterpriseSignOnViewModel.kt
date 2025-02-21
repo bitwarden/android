@@ -108,8 +108,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 handleOnGenerateUriForSsoResult(action)
             }
 
-            EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
-                handleOnSsoPrevalidationFailure()
+            is EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
+                handleOnSsoPrevalidationFailure(action)
             }
 
             is EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive -> {
@@ -146,7 +146,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
-    @Suppress("MaxLineLength", "LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -159,27 +158,19 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
             is LoginResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = loginResult
-                                .errorMessage
-                                ?.asText()
-                                ?: R.string.login_sso_error.asText(),
-                        ),
-                    )
-                }
+                showError(
+                    message = loginResult.errorMessage?.asText()
+                        ?: R.string.login_sso_error.asText(),
+                )
             }
 
             is LoginResult.UnofficialServerError -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
-                                .asText(),
-                        ),
-                    )
-                }
+                @Suppress("MaxLineLength")
+                showError(
+                    message = R.string
+                        .this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                        .asText(),
+                )
             }
 
             is LoginResult.Success -> {
@@ -198,25 +189,14 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
             LoginResult.CertificateError -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
-                        ),
-                    )
-                }
+                showError(message = R.string.we_couldnt_verify_the_servers_certificate.asText())
             }
 
             is LoginResult.NewDeviceVerification -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = loginResult.errorMessage?.asText()
-                                ?: R.string.login_sso_error.asText(),
-                        ),
-                    )
-                }
+                showError(
+                    message = loginResult.errorMessage?.asText()
+                        ?: R.string.login_sso_error.asText(),
+                )
             }
         }
     }
@@ -228,8 +208,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
         sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
     }
 
-    private fun handleOnSsoPrevalidationFailure() {
-        showDefaultError()
+    private fun handleOnSsoPrevalidationFailure(
+        action: EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure,
+    ) {
+        showError(message = action.message?.asText() ?: R.string.login_sso_error.asText())
     }
 
     private fun handleOnOrganizationDomainSsoDetailsFailure() {
@@ -320,9 +302,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.organization_sso_identifier_required.asText(),
                     ),
-                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier.orEmpty(),
                 )
             }
             return
@@ -387,15 +370,11 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         val organizationIdentifier = state.orgIdentifierInput
         if (organizationIdentifier.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
-                        ),
-                    ),
-                )
-            }
+            showError(
+                message = R.string.validation_field_required.asText(
+                    R.string.org_identifier.asText(),
+                ),
+            )
             return
         }
 
@@ -404,7 +383,11 @@ class EnterpriseSignOnViewModel @Inject constructor(
         viewModelScope.launch {
             when (val prevalidateSso = authRepository.prevalidateSso(organizationIdentifier)) {
                 is PrevalidateSsoResult.Failure -> {
-                    sendAction(EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure)
+                    sendAction(
+                        action = EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure(
+                            message = prevalidateSso.message,
+                        ),
+                    )
                 }
 
                 is PrevalidateSsoResult.Success -> {
@@ -423,7 +406,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         when (ssoCallbackResult) {
             is SsoCallbackResult.MissingCode -> {
-                showDefaultError()
+                showError()
             }
 
             is SsoCallbackResult.Success -> {
@@ -442,7 +425,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
                 } else {
-                    showDefaultError()
+                    showError()
                 }
             }
         }
@@ -504,11 +487,15 @@ class EnterpriseSignOnViewModel @Inject constructor(
         sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(Uri.parse(uri)))
     }
 
-    private fun showDefaultError() {
+    private fun showError(
+        title: Text = R.string.an_error_has_occurred.asText(),
+        message: Text = R.string.login_sso_error.asText(),
+    ) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
-                    message = R.string.login_sso_error.asText(),
+                    title = title,
+                    message = message,
                 ),
             )
         }
@@ -544,7 +531,7 @@ data class EnterpriseSignOnState(
          */
         @Parcelize
         data class Error(
-            val title: Text? = null,
+            val title: Text,
             val message: Text,
         ) : DialogState()
 
@@ -639,7 +626,9 @@ sealed class EnterpriseSignOnAction {
         /**
          * SSO prevalidation failed.
          */
-        data object OnSsoPrevalidationFailure : Internal()
+        data class OnSsoPrevalidationFailure(
+            val message: String?,
+        ) : Internal()
 
         /**
          * A result was received when requesting an [OrganizationDomainSsoDetailsResult].

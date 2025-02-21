@@ -85,18 +85,23 @@ class IdentityServiceImpl(
         .toResult()
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
-            bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
-                code = 400,
-                json = json,
-            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
-                code = 400,
-                json = json,
-            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
-                code = 400,
-                json = json,
-            ) ?: throw throwable
+            bitwardenError
+                .parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
+                    code = 400,
+                    json = json,
+                )
+                ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
+                    code = 400,
+                    json = json,
+                )
+                ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
+                    code = 400,
+                    json = json,
+                )
+                ?: throw throwable
         }
 
+    @Suppress("MagicNumber")
     override suspend fun prevalidateSso(
         organizationIdentifier: String,
     ): Result<PrevalidateSsoResponseJson> = unauthenticatedIdentityApi
@@ -104,6 +109,15 @@ class IdentityServiceImpl(
             organizationIdentifier = organizationIdentifier,
         )
         .toResult()
+        .recoverCatching { throwable ->
+            val bitwardenError = throwable.toBitwardenError()
+            bitwardenError
+                .parseErrorBodyOrNull<PrevalidateSsoResponseJson.Error>(
+                    code = 400,
+                    json = json,
+                )
+                ?: throw throwable
+        }
 
     override fun refreshTokenSynchronously(
         refreshToken: String,
@@ -133,6 +147,7 @@ class IdentityServiceImpl(
                     ?: throw throwable
             }
 
+    @Suppress("MagicNumber")
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson,
     ): Result<SendVerificationEmailResponseJson> {
@@ -151,6 +166,7 @@ class IdentityServiceImpl(
             }
     }
 
+    @Suppress("MagicNumber")
     override suspend fun verifyEmailRegistrationToken(
         body: VerifyEmailTokenRequestJson,
     ): Result<VerifyEmailTokenResponseJson> = unauthenticatedIdentityApi

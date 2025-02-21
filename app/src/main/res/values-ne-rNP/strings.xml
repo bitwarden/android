@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">About</string>
   <string name="add">Add</string>
-  <string name="add_folder">Add Folder</string>
+  <string name="add_folder">Add folder</string>
   <string name="add_item">Add Item</string>
   <string name="an_error_has_occurred">An error has occurred.</string>
   <string name="back">Back</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Creating account...</string>
   <string name="edit_item">Edit item</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Allow automatic syncing</string>
   <string name="enter_email_for_hint">Enter your account email address to receive your master password hint.</string>
   <string name="exntesion_reenable">Reactivate app extension</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Validating</string>
   <string name="verification_code">Verification code</string>
   <string name="view_item">View item</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden web vault</string>
   <string name="lost_2fa_app">Lost authenticator app?</string>
   <string name="items">Items</string>
@@ -242,12 +253,13 @@
   <string name="authenticator_app_title">Authenticator app</string>
   <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
   <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Login unavailable</string>
   <string name="no_two_step_available">This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</string>
   <string name="recovery_code_title">Recovery code</string>
   <string name="remember">Remember</string>
   <string name="remember_email">Remember email</string>
-  <string name="send_verification_code_again">Send verification code email again</string>
+  <string name="send_verification_code_again">Resend code</string>
   <string name="two_step_login_options">Two-step login options</string>
   <string name="use_another_two_step_method">Use another two-step login method</string>
   <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
@@ -314,6 +326,7 @@ Scanning will happen automatically.</string>
   <string name="april">April</string>
   <string name="august">August</string>
   <string name="brand">Brand</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Cardholder name</string>
   <string name="city_town">City / Town</string>
   <string name="company">Company</string>
@@ -414,8 +427,11 @@ Scanning will happen automatically.</string>
   <string name="invalid_email">Invalid email address.</string>
   <string name="cards">Cards</string>
   <string name="identities">Identities</string>
+  <string name="identification">Identification</string>
   <string name="logins">Logins</string>
   <string name="secure_notes">Secure notes</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">All items</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Checking password...</string>
@@ -439,7 +455,7 @@ Scanning will happen automatically.</string>
   <string name="move_up">Move Up</string>
   <string name="miscellaneous">Miscellaneous</string>
   <string name="ownership">Ownership</string>
-  <string name="who_owns_this_item">Who owns this item?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">There are no collections to list.</string>
   <string name="moved_item_to_org">%1$s moved to %2$s.</string>
   <string name="item_shared">Item has been shared.</string>
@@ -1178,6 +1194,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1203,4 +1220,5 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>
