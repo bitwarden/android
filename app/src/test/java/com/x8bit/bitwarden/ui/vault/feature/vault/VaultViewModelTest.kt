@@ -727,7 +727,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
                     totpItemsCount = 1,
-                    itemTypesCount = 4,
+                    itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                 ),
             )
