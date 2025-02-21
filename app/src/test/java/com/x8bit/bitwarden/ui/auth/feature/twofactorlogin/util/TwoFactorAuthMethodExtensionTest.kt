@@ -135,7 +135,7 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `imageRes returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to null,
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.drawable.img_authenticator,
             TwoFactorAuthMethod.EMAIL to R.drawable.img_new_device_verification,
             TwoFactorAuthMethod.DUO to null,
             TwoFactorAuthMethod.YUBI_KEY to R.drawable.yubi_key,

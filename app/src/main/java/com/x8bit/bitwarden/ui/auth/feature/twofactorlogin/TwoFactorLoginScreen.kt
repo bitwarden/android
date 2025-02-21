@@ -229,7 +229,7 @@ private fun TwoFactorLoginScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-        if (state.authMethod == TwoFactorAuthMethod.EMAIL) {
+        if (state.authMethod != TwoFactorAuthMethod.YUBI_KEY) {
             state.imageRes?.let {
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(
@@ -237,7 +237,7 @@ private fun TwoFactorLoginScreenContent(
                     contentDescription = null,
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .size(100.dp),
+                        .size(124.dp),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -261,7 +261,7 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
+        if (state.authMethod == TwoFactorAuthMethod.YUBI_KEY) {
             state.imageRes?.let {
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(
