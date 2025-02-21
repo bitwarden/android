@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,23 +61,18 @@ fun ChromeAutofillSettingsCard(
                     .standardHorizontalMargin(),
             )
         }
-        Column(
-            verticalArrangement = Arrangement.Center,
+        Text(
+            text = stringResource(
+                R.string.improves_login_filling_for_supported_websites_on_chrome,
+            ),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
                 .cardStyle(cardStyle = CardStyle.Bottom)
                 .defaultMinSize(minHeight = 48.dp)
                 .padding(horizontal = 16.dp),
-            content = {
-                Text(
-                    text = stringResource(
-                        R.string.improves_login_filling_for_supported_websites_on_chrome,
-                    ),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                )
-            },
         )
     }
 }

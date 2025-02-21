@@ -26,6 +26,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -522,7 +523,7 @@ class AutoFillScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                chromeAutofillSettingsOptions = listOf(
+                chromeAutofillSettingsOptions = persistentListOf(
                     ChromeAutofillSettingsOption.Stable(enabled = true),
                 ),
             )
@@ -539,7 +540,7 @@ class AutoFillScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 isAutoFillServicesEnabled = true,
-                chromeAutofillSettingsOptions = listOf(
+                chromeAutofillSettingsOptions = persistentListOf(
                     ChromeAutofillSettingsOption.Stable(enabled = true),
                     ChromeAutofillSettingsOption.Beta(enabled = false),
                 ),
@@ -598,5 +599,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
-    chromeAutofillSettingsOptions = emptyList(),
+    chromeAutofillSettingsOptions = persistentListOf(),
 )

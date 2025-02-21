@@ -15,12 +15,14 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
+import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -56,6 +58,7 @@ class AutoFillViewModel @Inject constructor(
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = false,
                 activeUserId = userId,
+                chromeAutofillSettingsOptions = persistentListOf(),
             )
         },
 ) {
@@ -249,8 +252,7 @@ data class AutoFillState(
     val defaultUriMatchType: UriMatchType,
     val showAutofillActionCard: Boolean,
     val activeUserId: String,
-    @IgnoredOnParcel
-    val chromeAutofillSettingsOptions: List<ChromeAutofillSettingsOption> = emptyList(),
+    val chromeAutofillSettingsOptions: ImmutableList<ChromeAutofillSettingsOption>,
 ) : Parcelable {
 
     /**
@@ -262,8 +264,8 @@ data class AutoFillState(
 }
 
 @Suppress("MaxLineLength")
-private fun ChromeThirdPartyAutofillStatus.toChromeAutoFillSettingsOptions(): List<ChromeAutofillSettingsOption> =
-    listOfNotNull(
+private fun ChromeThirdPartyAutofillStatus.toChromeAutoFillSettingsOptions(): ImmutableList<ChromeAutofillSettingsOption> =
+    persistentListOfNotNull(
         ChromeAutofillSettingsOption.Stable(
             enabled = this.stableStatusData.isThirdPartyEnabled,
         )

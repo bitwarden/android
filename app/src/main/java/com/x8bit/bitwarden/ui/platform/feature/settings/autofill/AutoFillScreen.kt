@@ -51,7 +51,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAu
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 
 /**
  * Displays the auto-fill screen.
@@ -206,7 +205,7 @@ fun AutoFillScreen(
 
             if (state.chromeAutofillSettingsOptions.isNotEmpty()) {
                 ChromeAutofillSettingsCard(
-                    options = state.chromeAutofillSettingsOptions.toPersistentList(),
+                    options = state.chromeAutofillSettingsOptions,
                     onOptionClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(AutoFillAction.ChromeAutofillSelected(it))

@@ -22,6 +22,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -382,7 +383,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
                 }
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        chromeAutofillSettingsOptions = listOf(
+                        chromeAutofillSettingsOptions = persistentListOf(
                             ChromeAutofillSettingsOption.Stable(enabled = false),
                         ),
                     ),
@@ -436,7 +437,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
-    chromeAutofillSettingsOptions = emptyList(),
+    chromeAutofillSettingsOptions = persistentListOf(),
 )
 
 private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
