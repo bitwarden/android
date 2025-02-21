@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Kontua sortzen...</string>
   <string name="edit_item">Editatu elementua</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Gaitu sinkronizazio automatikoa</string>
   <string name="enter_email_for_hint">Sartu zure kontuko emaila pasahitz nagusiaren pista jasotzeko.</string>
   <string name="exntesion_reenable">Gaitu berriro aplikazio gehigarria</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Baliozkotzen</string>
   <string name="verification_code">Egiaztatze-kodea</string>
   <string name="view_item">Bistaratu elementua</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden kutxa gotorra</string>
   <string name="lost_2fa_app">Autentifikazio aplikazioa galdu duzu?</string>
   <string name="items">Elementuak</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Autentifikazio aplikazioa</string>
   <string name="enter_verification_code_app">Sartu zure autentifikazio aplikazioaren 6 digituko egiaztatze-kodea.</string>
   <string name="enter_verification_code_email">Sartu %1$s-era bidalitako 6 digituko egiaztatze-kodea.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Ez dago eskuragarri saio-hasierarik</string>
   <string name="no_two_step_available">Kontu honek bi urratseko saio hasiera du gaituta, baina ezarritako bi urratsen hornitzaileak ez dira gailu honetan bateragarriak. Mesedez, erabili gailu bateragarri bat eta/edo gehitu beste hornitzaile bat, gailu guztietan bateragarriago direnak (adibidez, autentifikazio aplikazio bat).</string>
   <string name="recovery_code_title">Berreskuratze-kodea</string>
@@ -313,6 +325,7 @@
   <string name="april">Apirila</string>
   <string name="august">Abuztua</string>
   <string name="brand">Marka</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Txartelaren titularraren izena</string>
   <string name="city_town">Hiria / Herria</string>
   <string name="company">Enpresa</string>
@@ -413,8 +426,11 @@
   <string name="invalid_email">Email helbide baliogabea.</string>
   <string name="cards">Txartelak</string>
   <string name="identities">Identitateak</string>
+  <string name="identification">Identification</string>
   <string name="logins">Saio-hasierak</string>
   <string name="secure_notes">Ohar seguruak</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Elementu guztiak</string>
   <string name="ur_is">URI-ak</string>
   <string name="checking_password">Pasahitza egiaztatzen...</string>
@@ -438,7 +454,7 @@
   <string name="move_up">Mugitu gora</string>
   <string name="miscellaneous">Bestelakoak</string>
   <string name="ownership">Jabetza</string>
-  <string name="who_owns_this_item">Nork du elementu hau?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">Ez dago erakusteko bildumarik.</string>
   <string name="moved_item_to_org">%1$s %2$s-era mugitu da.</string>
   <string name="item_shared">Elementua partekatu da.</string>
@@ -1176,6 +1192,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1201,4 +1218,5 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>
