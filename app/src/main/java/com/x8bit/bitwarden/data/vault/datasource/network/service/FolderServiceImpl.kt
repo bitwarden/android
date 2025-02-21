@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
+import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.FoldersApi
@@ -33,7 +34,7 @@ class FolderServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<UpdateFolderResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
