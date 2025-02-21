@@ -5356,14 +5356,24 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `prevalidateSso Failure should return Failure `() = runTest {
+    fun `prevalidateSso Failure should return Failure`() = runTest {
         val organizationId = "organizationid"
         val throwable = Throwable()
         coEvery {
             identityService.prevalidateSso(organizationId)
         } returns throwable.asFailure()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure, result)
+        assertEquals(PrevalidateSsoResult.Failure(), result)
+    }
+
+    @Test
+    fun `prevalidateSso Failure response should return Failure with message`() = runTest {
+        val organizationId = "organizationid"
+        coEvery {
+            identityService.prevalidateSso(organizationId)
+        } returns PrevalidateSsoResponseJson.Error(message = "Fail").asSuccess()
+        val result = repository.prevalidateSso(organizationId)
+        assertEquals(PrevalidateSsoResult.Failure(message = "Fail"), result)
     }
 
     @Test
@@ -5371,9 +5381,9 @@ class AuthRepositoryTest {
         val organizationId = "organizationid"
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns PrevalidateSsoResponseJson(token = "").asSuccess()
+        } returns PrevalidateSsoResponseJson.Success(token = "").asSuccess()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure, result)
+        assertEquals(PrevalidateSsoResult.Failure(), result)
     }
 
     @Test
@@ -5381,7 +5391,7 @@ class AuthRepositoryTest {
         val organizationId = "organizationid"
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns PrevalidateSsoResponseJson(token = "token").asSuccess()
+        } returns PrevalidateSsoResponseJson.Success(token = "token").asSuccess()
         val result = repository.prevalidateSso(organizationId)
         assertEquals(PrevalidateSsoResult.Success(token = "token"), result)
     }
@@ -7047,16 +7057,6 @@ class AuthRepositoryTest {
             ),
         )
 
-        private val SINGLE_USER_STATE_1_NEW_ACCOUNT = UserStateJson(
-            activeUserId = USER_ID_1,
-            accounts = mapOf(
-                USER_ID_1 to ACCOUNT_1.copy(
-                    profile = ACCOUNT_1.profile.copy(
-                        creationDate = ZonedDateTime.parse("2024-09-14T01:00:00.00Z"),
-                    ),
-                ),
-            ),
-        )
         private val SINGLE_USER_STATE_2 = UserStateJson(
             activeUserId = USER_ID_2,
             accounts = mapOf(

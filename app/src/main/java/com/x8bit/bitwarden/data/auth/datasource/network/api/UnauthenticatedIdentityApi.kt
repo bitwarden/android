@@ -53,7 +53,7 @@ interface UnauthenticatedIdentityApi {
     @GET("/sso/prevalidate")
     suspend fun prevalidateSso(
         @Query("domainHint") organizationIdentifier: String,
-    ): NetworkResult<PrevalidateSsoResponseJson>
+    ): NetworkResult<PrevalidateSsoResponseJson.Success>
 
     /**
      * This call needs to be synchronous so we need it to return a [Call] directly. The identity

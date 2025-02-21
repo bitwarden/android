@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
@@ -1199,13 +1200,21 @@ class AuthRepositoryImpl(
         )
         .fold(
             onSuccess = {
-                if (it.token.isNullOrBlank()) {
-                    PrevalidateSsoResult.Failure
-                } else {
-                    PrevalidateSsoResult.Success(it.token)
+                when (it) {
+                    is PrevalidateSsoResponseJson.Error -> {
+                        PrevalidateSsoResult.Failure(message = it.message)
+                    }
+
+                    is PrevalidateSsoResponseJson.Success -> {
+                        if (it.token.isNullOrBlank()) {
+                            PrevalidateSsoResult.Failure()
+                        } else {
+                            PrevalidateSsoResult.Success(token = it.token)
+                        }
+                    }
                 }
             },
-            onFailure = { PrevalidateSsoResult.Failure },
+            onFailure = { PrevalidateSsoResult.Failure() },
         )
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
