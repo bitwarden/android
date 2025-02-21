@@ -239,6 +239,7 @@ class VaultItemViewModel @Inject constructor(
                 VaultItemEvent.NavigateToAddEdit(
                     itemId = state.vaultItemId,
                     isClone = false,
+                    type = state.cipherType,
                 ),
             )
         }
@@ -423,7 +424,13 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onContent
             }
-            sendEvent(VaultItemEvent.NavigateToAddEdit(itemId = state.vaultItemId, isClone = true))
+            sendEvent(
+                event = VaultItemEvent.NavigateToAddEdit(
+                    itemId = state.vaultItemId,
+                    isClone = true,
+                    type = state.cipherType,
+                ),
+            )
         }
     }
 
@@ -1828,6 +1835,7 @@ sealed class VaultItemEvent {
     data class NavigateToAddEdit(
         val itemId: String,
         val isClone: Boolean,
+        val type: VaultItemCipherType,
     ) : VaultItemEvent()
 
     /**

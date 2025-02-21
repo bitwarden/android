@@ -660,6 +660,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     VaultItemEvent.NavigateToAddEdit(
                         itemId = VAULT_ITEM_ID,
                         isClone = false,
+                        type = VaultItemCipherType.LOGIN,
                     ),
                     awaitItem(),
                 )
@@ -724,6 +725,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemEvent.NavigateToAddEdit(
                             itemId = DEFAULT_STATE.vaultItemId,
                             isClone = false,
+                            type = VaultItemCipherType.LOGIN,
                         ),
                         eventFlow.awaitItem(),
                     )
@@ -1345,6 +1347,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         VaultItemEvent.NavigateToAddEdit(
                             itemId = VAULT_ITEM_ID,
                             isClone = true,
+                            type = VaultItemCipherType.LOGIN,
                         ),
                         awaitItem(),
                     )

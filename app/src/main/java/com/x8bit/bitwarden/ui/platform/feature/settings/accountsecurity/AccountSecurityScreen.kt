@@ -501,6 +501,7 @@ private fun SessionTimeoutPolicyRow(
             text = policyText(),
             modifier = modifier,
         )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
 }
 

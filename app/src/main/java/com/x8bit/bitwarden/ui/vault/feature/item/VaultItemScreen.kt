@@ -47,7 +47,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeH
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * Displays the vault item screen.
@@ -90,7 +89,7 @@ fun VaultItemScreen(
                         } else {
                             VaultAddEditType.EditItem(vaultItemId = event.itemId)
                         },
-                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                        vaultItemCipherType = event.type,
                     ),
                 )
             }
