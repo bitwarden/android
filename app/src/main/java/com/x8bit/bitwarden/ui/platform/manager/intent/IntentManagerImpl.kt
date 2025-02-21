@@ -26,6 +26,7 @@ import androidx.credentials.CredentialManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -131,6 +132,22 @@ class IntentManagerImpl(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             CredentialManager.create(context).createSettingsPendingIntent().send()
         }
+    }
+
+    override fun startChromeAutofillSettingsActivity(
+        releaseChannel: ChromeReleaseChannel,
+    ): Boolean = try {
+        val intent = Intent(Intent.ACTION_APPLICATION_PREFERENCES)
+            .apply {
+                addCategory(Intent.CATEGORY_DEFAULT)
+                addCategory(Intent.CATEGORY_APP_BROWSER)
+                addCategory(Intent.CATEGORY_PREFERENCE)
+                setPackage(releaseChannel.packageName)
+            }
+        context.startActivity(intent)
+        true
+    } catch (_: ActivityNotFoundException) {
+        false
     }
 
     override fun launchUri(uri: Uri) {
