@@ -61,7 +61,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -125,7 +124,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -181,7 +179,6 @@ class VaultDataExtensionsTest {
                 organizationName = "Mock Organization 1",
             ),
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -230,7 +227,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -254,7 +250,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -279,7 +274,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -317,7 +311,6 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -355,7 +348,6 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -395,7 +387,6 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -619,7 +610,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -659,7 +649,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -702,7 +691,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -758,7 +746,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
         )
 
         assertEquals(
@@ -809,7 +796,7 @@ class VaultDataExtensionsTest {
     }
 
     @Test
-    fun `toViewState should exclude SSH keys if showSshKeys is false`() {
+    fun `toViewState should include SSH key vault items and type count`() {
         val vaultData = VaultData(
             cipherViewList = listOf(
                 createMockCipherView(number = 1),
@@ -827,50 +814,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = false,
-        )
-
-        assertEquals(
-            VaultState.ViewState.Content(
-                loginItemsCount = 1,
-                cardItemsCount = 0,
-                identityItemsCount = 0,
-                secureNoteItemsCount = 0,
-                // Verify SSH key vault items are not counted when showSshKeys is false.
-                sshKeyItemsCount = 0,
-                favoriteItems = listOf(),
-                collectionItems = listOf(),
-                folderItems = listOf(),
-                noFolderItems = listOf(),
-                trashItemsCount = 0,
-                totpItemsCount = 1,
-                // Verify item types count excludes CipherType.SSH_KEY when showSshKeys is false.
-                itemTypesCount = 4,
-            ),
-            actual,
-        )
-    }
-
-    @Test
-    fun `toViewState should include SSH key vault items and type count if showSshKeys is true`() {
-        val vaultData = VaultData(
-            cipherViewList = listOf(
-                createMockCipherView(number = 1),
-                createMockCipherView(number = 2, cipherType = CipherType.SSH_KEY),
-            ),
-            collectionViewList = listOf(),
-            folderViewList = listOf(),
-            sendViewList = listOf(),
-            fido2CredentialAutofillViewList = null,
-        )
-
-        val actual = vaultData.toViewState(
-            isPremium = true,
-            isIconLoadingDisabled = false,
-            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
-            vaultFilterType = VaultFilterType.AllVaults,
-            hasMasterPassword = true,
-            showSshKeys = true,
         )
 
         assertEquals(
@@ -928,7 +871,6 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
-            showSshKeys = true,
         )
 
         assertEquals(
