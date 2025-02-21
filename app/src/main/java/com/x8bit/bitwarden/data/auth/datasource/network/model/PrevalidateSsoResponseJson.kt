@@ -7,6 +7,20 @@ import kotlinx.serialization.Serializable
  * Response body from the SSO prevalidate request.
  */
 @Serializable
-data class PrevalidateSsoResponseJson(
-    @SerialName("token") val token: String?,
-)
+sealed class PrevalidateSsoResponseJson {
+    /**
+     * Models json body of a successful response.
+     */
+    @Serializable
+    data class Success(
+        @SerialName("token") val token: String?,
+    ) : PrevalidateSsoResponseJson()
+
+    /**
+     * Models json body of an error response.
+     */
+    @Serializable
+    data class Error(
+        @SerialName("message") val message: String?,
+    ) : PrevalidateSsoResponseJson()
+}

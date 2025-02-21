@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Szeretnénk most átkapcsolni erre?</string>
   <string name="master_password">Mesterjelszó</string>
   <string name="master_password_required">Master password (required)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Új mesterjelszó (kötelező)</string>
   <string name="more">Továbbiak</string>
   <string name="my_vault">Saját széf</string>
   <string name="authenticator">Hitelesítő</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Fiók létrehozása</string>
   <string name="creating_account">Fiók létrehozása...</string>
   <string name="edit_item">Elem szerkesztése</string>
+  <string name="edit_login">Bejelentkezés szerkesztése</string>
+  <string name="edit_card">Kártya szerkesztése</string>
+  <string name="edit_identity">Személyazonossság szerkesztése</string>
+  <string name="edit_note">Jegyzet szerkesztése</string>
+  <string name="edit_passkey">Hozzáférési kulcs szerkesztése</string>
   <string name="enable_automatic_syncing">Automatikus szinkronizálás engedélyezése</string>
   <string name="enter_email_for_hint">Írd be a fiókod e-mail címét, hogy megkapd a mesterjelszó emlékeztetőt.</string>
   <string name="exntesion_reenable">Alkalmazáskiegészítő újraengedélyezése</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Új személyazonosság</string>
   <string name="no_notes">Nincsenek jegyzetek a széfben.</string>
   <string name="new_note">Új jegyzet</string>
+  <string name="new_passkey">Új hozzáférési kulcs</string>
   <string name="new_item">Új elem</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Új SSH kulcs</string>
   <string name="no_text_sends">Nincsenek szöveges Send elemek a széfben.</string>
   <string name="no_file_sends">Nincsenek fájl Send elemek a széfben.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Nincsenek SSH kulcsok a széfben.</string>
   <string name="new_text_send">Új szöveges Send elem</string>
   <string name="new_file_send">Új fájl Send elem</string>
   <string name="no_username">Nincs felhasználónév</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Egy jó értékeléssel mindig segíted a munkánkat!</string>
   <string name="regenerate_password">Jelszó újragenerálása</string>
   <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Az új mesterjelszó ismételt megadása (kötelező)</string>
   <string name="retype_master_password_required">Re-type master password (required)</string>
   <string name="search_vault">Keresés a széfben</string>
   <string name="security">Biztonság</string>
@@ -209,6 +215,11 @@
   <string name="validating">Hitelesítés</string>
   <string name="verification_code">Ellenőrzőkód</string>
   <string name="view_item">Elem megtekintése</string>
+  <string name="view_login">Bejelentkezés megtekintése</string>
+  <string name="view_card">Kártya megtekintése</string>
+  <string name="view_identity">Személyazonosság megtekintése</string>
+  <string name="view_note">Jegyzet megtekintése</string>
+  <string name="view_passkey">Hozzáférési kulcs megtekintése</string>
   <string name="web_vault">Bitwarden webes széf</string>
   <string name="lost_2fa_app">Elveszett hitelesítő alkalmazás?</string>
   <string name="items">Elemek</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
   <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
   <string name="enter_verification_code_email">6 számjegyű ellenőrző kód megadása, ami %1$s e-mail címre lett küldve.</string>
+  <string name="enter_verification_code_new_device">Nem ismerhető fel ez az eszköz. Írjuk be a 8 számjegyű ellenőrző kódot, amelyet emailben lett elküldve %1$s email címre.</string>
   <string name="login_unavailable">A bejelentkezés nem érhető el.</string>
   <string name="no_two_step_available">Ennél a fióknál engedélyezett a kétlépcsős bejelentkezés, de a beállított kétlépcsős bejelentkezési szolgáltatók egyike sem támogatott ezen az eszközön. Használjunk támogatott eszközt és/vagy olyan szolgáltatókat, amelyek jobban támogatják a több eszközzel történő használatot (ilyenek például a hitelesítőalkalmazások).</string>
   <string name="recovery_code_title">Helyreállító kód</string>
@@ -313,6 +325,7 @@
   <string name="april">április</string>
   <string name="august">augusztus</string>
   <string name="brand">Márka</string>
+  <string name="card_details">Kártya adatok</string>
   <string name="cardholder_name">Kártyatulajdonos neve</string>
   <string name="city_town">Település</string>
   <string name="company">Cég</string>
@@ -413,8 +426,11 @@
   <string name="invalid_email">Az email cím érvénytelen.</string>
   <string name="cards">Kártyák</string>
   <string name="identities">Azonosságok</string>
+  <string name="identification">Azonosítás</string>
   <string name="logins">Bejelentkezések</string>
   <string name="secure_notes">Védett jegyzetek</string>
+  <string name="personal_details">Személyes adatok</string>
+  <string name="contact_info">Kapcsolattartó infó</string>
   <string name="all_items">Összes elem</string>
   <string name="ur_is">URI elemek</string>
   <string name="checking_password">A jelszó ellenőrzése folyamatban van...</string>
@@ -438,7 +454,7 @@
   <string name="move_up">Felfelé mozgatás</string>
   <string name="miscellaneous">Egyebek</string>
   <string name="ownership">Tulajdonjog</string>
-  <string name="who_owns_this_item">Kié ez az elem?</string>
+  <string name="owner">Tulajdonos</string>
   <string name="no_collections_to_list">Nincsenek megjeleníthető gyűjtemények.</string>
   <string name="moved_item_to_org">%1$s áthelyezésre került: %2$s.</string>
   <string name="item_shared">Az elem megosztásra került.</string>
@@ -830,7 +846,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="data_region">Adatrégió</string>
   <string name="region">Régió</string>
   <string name="update_weak_master_password_warning">A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Jelenlegi mesterjelszó (kötelező)</string>
   <string name="logged_in">Megtörtént a bejelentkezés.</string>
   <string name="approve_with_my_other_device">Jóváhagyás másik eszközzel</string>
   <string name="request_admin_approval">Adminisztrátori jóváhagyás kérés</string>
@@ -1022,14 +1038,14 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="generate_button_label">Generálás</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Írjuk le ezt a jelszót és tartsuk biztonságos helyen.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">További információ a fiókzárolás megelőzésének egyéb módjairól</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">További információ a fiókzárolás megelőzésének módjairól</annotation></string>
   <string name="help_with_server_geolocations">Segítség szerver geolokációval.</string>
   <string name="email_address_required">Email cím (kötelező)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Válasszuk ki az emailben található hivatkozást az email cím ellenőrzéséhez és folytassuk a fiók létrehozását. "</string>
   <string name="change_email_address">Email cím megváltoztatása</string>
   <string name="next">Következő</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">A Bitward nem tudja visszaállítani az elveszett vagy elfelejtett mesterjelszót.</string>
   <string name="choose_your_master_password">Mesterjelszó kiválasztása</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Válasszunk egyedi és erős jelszót az adatok biztonságának megőrzése érdekében.</string>
   <string name="minimum_characters">%1$s karakter</string>
@@ -1049,7 +1065,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól.</string>
   <string name="master_password_hint_not_specified">Master password hint</string>
   <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Új mesterjelszó kérés</string>
   <string name="get_started">Kezdés</string>
   <string name="save_and_protect_your_data">A saját adatok mentése és védelme</string>
   <string name="the_vault_protects_more_than_just_passwords">A széf nemcsak a jelszavakat védi. Itt biztonságosan tárolhatjuk a bejelentkezési adatokat, egyéb azonosítókat, kártyákat és jegyzeteket.</string>
@@ -1177,6 +1193,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="coachmark_6_of_6">6/6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Ezekkel az opciókkal állíthatjuk be a jelszót a fiók követelményeihez.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Miután elmentettük az új jelszót a Bitwardenbe, ne felejtsük el frissíteni azt a fiók webhelyén. "</string>
+  <string name="verify_your_identity">Személyazonosság ellenőrzése</string>
   <string name="error_loading_certificate">Hiba történt a tanúsítványok betöltésekor.</string>
   <string name="certificate_alias">Tanúsítvány álnév</string>
   <string name="import_certificate">Tanúsítvány importálása</string>
@@ -1202,4 +1219,5 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">A belépőkulcs művelet meghiúsult, mert a kérés érvénytelen.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzések száma átlépésre került.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
+  <string name="self_host_server_url">Saját üzemeltetésű szerver webcím</string>
 </resources>
