@@ -17,9 +17,12 @@ import retrofit2.HttpException
  * will be attempted to be parsed.
  * @param json [Json] serializer to use.
  */
-inline fun <reified T> BitwardenError.parseErrorBodyOrNull(codes: List<Int>, json: Json): T? =
+inline fun <reified T> BitwardenError.parseErrorBodyOrNull(
+    codes: List<NetworkErrorCode>,
+    json: Json,
+): T? =
     (this as? BitwardenError.Http)
-        ?.takeIf { codes.any { it == this.code } }
+        ?.takeIf { codes.any { it.code == this.code } }
         ?.responseBodyString
         ?.let { responseBody ->
             json.decodeFromStringOrNull(responseBody)
@@ -28,5 +31,7 @@ inline fun <reified T> BitwardenError.parseErrorBodyOrNull(codes: List<Int>, jso
 /**
  * Helper for calling [parseErrorBodyOrNull] with a single code.
  */
-inline fun <reified T> BitwardenError.parseErrorBodyOrNull(code: Int, json: Json): T? =
-    parseErrorBodyOrNull(listOf(code), json)
+inline fun <reified T> BitwardenError.parseErrorBodyOrNull(
+    code: NetworkErrorCode,
+    json: Json,
+): T? = parseErrorBodyOrNull(codes = listOf(code), json = json)

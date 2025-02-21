@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
+import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
@@ -42,7 +43,7 @@ class SendsServiceImpl(
             .recoverCatching { throwable ->
                 throwable.toBitwardenError()
                     .parseErrorBodyOrNull<CreateSendJsonResponse.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
@@ -58,7 +59,7 @@ class SendsServiceImpl(
             .recoverCatching { throwable ->
                 throwable.toBitwardenError()
                     .parseErrorBodyOrNull<CreateFileSendResponse.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
@@ -79,7 +80,7 @@ class SendsServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<UpdateSendResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
@@ -143,7 +144,7 @@ class SendsServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<UpdateSendResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
