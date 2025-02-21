@@ -22,4 +22,5 @@ val bitwardenShapes: BitwardenShapes = BitwardenShapes(
     progressIndicator = CircleShape,
     segmentedControl = CircleShape,
     snackbar = RoundedCornerShape(size = 8.dp),
+    favicon = CircleShape,
 )

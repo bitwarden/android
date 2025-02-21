@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import androidx.annotation.DrawableRes
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -17,9 +18,12 @@ import com.x8bit.bitwarden.ui.platform.base.util.capitalize
 import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
@@ -42,6 +46,9 @@ fun CipherView.toViewState(
     canDelete: Boolean,
     canAssignToCollections: Boolean,
     canEdit: Boolean,
+    baseIconUrl: String,
+    isIconLoadingDisabled: Boolean,
+    relatedLocations: List<VaultItemLocation>,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -86,6 +93,11 @@ fun CipherView.toViewState(
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,
+            iconData = this.toIconData(
+                baseIconUrl = baseIconUrl,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+            ),
+            relatedLocations = relatedLocations,
         ),
         type = when (type) {
             CipherType.LOGIN -> {
@@ -224,6 +236,35 @@ private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
                 clock = clock,
             ),
         )
+    }
+
+private fun CipherView.toIconData(
+    baseIconUrl: String,
+    isIconLoadingDisabled: Boolean,
+): IconData {
+    return when (this.type) {
+        CipherType.LOGIN -> {
+            login?.uris.toLoginIconData(
+                baseIconUrl = baseIconUrl,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                usePasskeyDefaultIcon = false,
+            )
+        }
+
+        else -> {
+            IconData.Local(iconRes = this.type.iconRes)
+        }
+    }
+}
+
+@get:DrawableRes
+private val CipherType.iconRes: Int
+    get() = when (this) {
+        CipherType.SECURE_NOTE -> R.drawable.ic_note
+        CipherType.CARD -> R.drawable.ic_payment_card
+        CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
+        CipherType.LOGIN -> R.drawable.ic_globe
     }
 
 private val IdentityView.identityAddress: String?

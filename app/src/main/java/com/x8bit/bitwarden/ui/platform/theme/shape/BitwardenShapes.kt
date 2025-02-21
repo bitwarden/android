@@ -22,4 +22,5 @@ data class BitwardenShapes(
     val progressIndicator: CornerBasedShape,
     val segmentedControl: CornerBasedShape,
     val snackbar: CornerBasedShape,
+    val favicon: CornerBasedShape,
 )

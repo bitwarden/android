@@ -30,7 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
@@ -54,20 +54,13 @@ fun VaultItemLoginContent(
         modifier = modifier,
     ) {
         item {
-            Spacer(modifier = Modifier.height(height = 12.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.item_details),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(height = 8.dp))
-        }
-        item {
-            ItemNameField(
+            Spacer(Modifier.height(24.dp))
+            ItemHeader(
                 value = commonState.name,
                 isFavorite = commonState.favorite,
+                iconData = commonState.iconData,
+                relatedLocations = commonState.relatedLocations,
+                iconTestTag = "LoginItemNameIcon",
                 textFieldTestTag = "LoginItemNameEntry",
                 modifier = Modifier
                     .fillMaxWidth()
