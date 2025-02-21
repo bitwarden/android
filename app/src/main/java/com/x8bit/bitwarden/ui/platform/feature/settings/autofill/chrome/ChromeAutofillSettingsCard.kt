@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -70,9 +69,11 @@ fun ChromeAutofillSettingsCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
-                .cardStyle(cardStyle = CardStyle.Bottom)
-                .defaultMinSize(minHeight = 48.dp)
-                .padding(horizontal = 16.dp),
+                .cardStyle(
+                    cardStyle = CardStyle.Bottom,
+                    paddingHorizontal = 16.dp,
+                )
+                .defaultMinSize(minHeight = 48.dp),
         )
     }
 }

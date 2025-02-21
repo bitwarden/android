@@ -21,6 +21,7 @@ sealed class ChromeAutofillSettingsOption(val isEnabled: Boolean) : Parcelable {
     /**
      * Represents the stable Chrome release channel.
      */
+    @Parcelize
     data class Stable(val enabled: Boolean) : ChromeAutofillSettingsOption(isEnabled = enabled) {
         override val chromeReleaseChannel: ChromeReleaseChannel
             get() = ChromeReleaseChannel.STABLE
@@ -31,6 +32,7 @@ sealed class ChromeAutofillSettingsOption(val isEnabled: Boolean) : Parcelable {
     /**
      * Represents the beta Chrome release channel.
      */
+    @Parcelize
     data class Beta(val enabled: Boolean) : ChromeAutofillSettingsOption(isEnabled = enabled) {
         override val chromeReleaseChannel: ChromeReleaseChannel
             get() = ChromeReleaseChannel.BETA
