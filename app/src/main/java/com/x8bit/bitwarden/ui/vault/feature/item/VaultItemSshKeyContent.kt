@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
@@ -53,9 +53,12 @@ fun VaultItemSshKeyContent(
         }
 
         item {
-            ItemNameField(
+            ItemHeader(
                 value = commonState.name,
                 isFavorite = commonState.favorite,
+                iconData = commonState.iconData,
+                relatedLocations = commonState.relatedLocations,
+                iconTestTag = "SshKeyItemNameIcon",
                 textFieldTestTag = "SshKeyItemNameEntry",
                 modifier = Modifier
                     .fillMaxWidth()

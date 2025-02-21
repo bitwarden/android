@@ -21,13 +21,19 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Reusable header element that is clickable for expanding or collapsing content.
+ *
+ * @param collapsedText Text to display when the content is collapsed.
+ * @param expandedText Text to display when the content is expanded.
+ * @param showExpansionIndicator Whether to show an indicator to expand or collapse the content.
  */
 @Composable
 fun BitwardenExpandingHeader(
     isExpanded: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = R.string.additional_options),
+    collapsedText: String = stringResource(id = R.string.additional_options),
+    expandedText: String = collapsedText,
+    showExpansionIndicator: Boolean = true,
 ) {
     Row(
         modifier = modifier
@@ -45,20 +51,22 @@ fun BitwardenExpandingHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = title,
+            text = if (isExpanded) expandedText else collapsedText,
             color = BitwardenTheme.colorScheme.text.interaction,
             style = BitwardenTheme.typography.labelLarge,
             modifier = Modifier.padding(end = 8.dp),
         )
-        val iconRotationDegrees = animateFloatAsState(
-            targetValue = if (isExpanded) 0f else 180f,
-            label = "expanderIconRotationAnimation",
-        )
-        Icon(
-            painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
-            contentDescription = null,
-            tint = BitwardenTheme.colorScheme.icon.secondary,
-            modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
-        )
+        if (showExpansionIndicator) {
+            val iconRotationDegrees = animateFloatAsState(
+                targetValue = if (isExpanded) 0f else 180f,
+                label = "expanderIconRotationAnimation",
+            )
+            Icon(
+                painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
+                contentDescription = null,
+                tint = BitwardenTheme.colorScheme.icon.secondary,
+                modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
+            )
+        }
     }
 }

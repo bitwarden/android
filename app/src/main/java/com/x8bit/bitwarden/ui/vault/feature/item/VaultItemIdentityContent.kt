@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
+import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
@@ -41,10 +41,13 @@ fun VaultItemIdentityContent(
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            ItemNameField(
+            ItemHeader(
                 value = commonState.name,
                 isFavorite = commonState.favorite,
-                textFieldTestTag = "ItemNameEntry",
+                iconData = commonState.iconData,
+                relatedLocations = commonState.relatedLocations,
+                iconTestTag = "IdentityItemNameIcon",
+                textFieldTestTag = "IdentityItemNameEntry",
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin(),

@@ -13,7 +13,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -25,8 +28,10 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
@@ -37,6 +42,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -51,7 +57,7 @@ private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 /**
  * ViewModel responsible for handling user interactions in the vault item screen
  */
-@Suppress("LargeClass", "TooManyFunctions")
+@Suppress("LargeClass", "TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class VaultItemViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -60,6 +66,8 @@ class VaultItemViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
     private val organizationEventManager: OrganizationEventManager,
+    private val environmentRepository: EnvironmentRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -69,6 +77,8 @@ class VaultItemViewModel @Inject constructor(
             cipherType = args.cipherType,
             viewState = VaultItemState.ViewState.Loading,
             dialog = null,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
         )
     },
 ) {
@@ -91,7 +101,8 @@ class VaultItemViewModel @Inject constructor(
             authRepository.userStateFlow,
             vaultRepository.getAuthCodeFlow(state.vaultItemId),
             vaultRepository.collectionsStateFlow,
-        ) { cipherViewState, userState, authCodeState, collectionsState ->
+            vaultRepository.foldersStateFlow,
+        ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -106,33 +117,66 @@ class VaultItemViewModel @Inject constructor(
                     cipherViewState,
                     authCodeState,
                     collectionsState,
-                ) { _, _, _ ->
+                    folderState,
+                ) { _, _, _, _ ->
                     // We are only combining the DataStates to know the overall state,
                     // we map it to the appropriate value below.
                 }
                     .mapNullable {
-                        val canDelete = collectionsState
-                            .data
+                        val cipherView = cipherViewState.data
+                        val canDelete = collectionsState.data
                             .hasDeletePermissionInAtLeastOneCollection(
-                                collectionIds = cipherViewState.data?.collectionIds,
+                                collectionIds = cipherView?.collectionIds,
                             )
 
-                        val canAssignToCollections = collectionsState
-                            .data
-                            .canAssignToCollections(cipherViewState.data?.collectionIds)
+                        val canAssignToCollections = collectionsState.data
+                            .canAssignToCollections(cipherView?.collectionIds)
 
-                        val canEdit = cipherViewState.data?.edit == true
+                        val canEdit = cipherView?.edit == true
+                        val organizationName = cipherView
+                            ?.organizationId
+                            ?.let { orgId ->
+                                userState
+                                    ?.activeAccount
+                                    ?.organizations
+                                    ?.firstOrNull { it.id == orgId }
+                                    ?.name
+                            }
+                        val cipherCollections = cipherView
+                            ?.collectionIds
+                            .orEmpty()
+                        val collections = collectionsState.data
+                            ?.filter { cipherCollections.contains(it.id) }
+                            ?.map { it.name }
+                            .orEmpty()
+                        val folderName = cipherView
+                            ?.folderId
+                            ?.let { folderId ->
+                                folderState.data?.firstOrNull { folder -> folderId == folder.id }
+                            }
+                            ?.name
+                        val relatedLocations = buildList {
+                            organizationName?.let { add(VaultItemLocation.Organization(it)) }
+                            addAll(collections.map { VaultItemLocation.Collection(it) })
+                            folderName?.let { add(VaultItemLocation.Folder(it)) }
+                        }
 
                         VaultItemStateData(
-                            cipher = cipherViewState.data,
+                            cipher = cipherView,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
+                            relatedLocations = relatedLocations,
                         )
                     },
             )
         }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository.isIconLoadingDisabledFlow
+            .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -1046,6 +1090,10 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.AttachmentFinishedSavingToDisk -> {
                 handleAttachmentFinishedSavingToDisk(action)
             }
+
+            is VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive -> {
+                handleIsIconLoadingDisabledUpdateReceive(action)
+            }
         }
     }
 
@@ -1147,6 +1195,9 @@ class VaultItemViewModel @Inject constructor(
             canDelete = this.data?.canDelete == true,
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            relatedLocations = this.data?.relatedLocations.orEmpty(),
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1285,6 +1336,12 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleIsIconLoadingDisabledUpdateReceive(
+        action: VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isIconLoadingDisabled = action.isDisabled) }
+    }
+
     //endregion Internal Type Handlers
 
     private fun updateDialogState(dialog: VaultItemState.DialogState?) {
@@ -1373,6 +1430,8 @@ data class VaultItemState(
     val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val baseIconUrl: String,
+    val isIconLoadingDisabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -1487,7 +1546,7 @@ data class VaultItemState(
              * @property canDelete Indicates if the cipher can be deleted.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
-             * @property favorite Indicates that the cipher is favoried.
+             * @property favorite Indicates that the cipher is marked as a favorite item.
              */
             @Parcelize
             data class Common(
@@ -1504,6 +1563,8 @@ data class VaultItemState(
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
                 val favorite: Boolean,
+                val iconData: IconData,
+                val relatedLocations: List<VaultItemLocation>,
             ) : Parcelable {
 
                 /**
@@ -2247,6 +2308,13 @@ sealed class VaultItemAction {
         data class AttachmentFinishedSavingToDisk(
             val isSaved: Boolean,
             val file: File,
+        ) : Internal()
+
+        /**
+         * Indicates the `isIconLoadingDisabled` setting has changed.
+         */
+        data class IsIconLoadingDisabledUpdateReceive(
+            val isDisabled: Boolean,
         ) : Internal()
     }
 }

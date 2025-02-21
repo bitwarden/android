@@ -10,6 +10,7 @@ import com.bitwarden.vault.CipherView
  * @property canDelete Whether the item can be deleted.
  * @property canAssociateToCollections Whether the item can be associated to a collection.
  * @property canEdit Whether the item can be edited.
+ * @property relatedLocations The locations the item is assigned to.
  */
 data class VaultItemStateData(
     val cipher: CipherView?,
@@ -17,4 +18,5 @@ data class VaultItemStateData(
     val canDelete: Boolean,
     val canAssociateToCollections: Boolean,
     val canEdit: Boolean,
+    val relatedLocations: List<VaultItemLocation>,
 )
