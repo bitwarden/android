@@ -109,6 +109,11 @@
   <string name="create_an_account">Направи налог</string>
   <string name="creating_account">Прављење налога...</string>
   <string name="edit_item">Уреди ставку</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Активирај аутоматску синхронизацију</string>
   <string name="enter_email_for_hint">Унеси своју адресу Е-поште да би добио савет за твоју Главну Лозинку.</string>
   <string name="exntesion_reenable">Поново омогући додатак апликације</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Проверавање</string>
   <string name="verification_code">Верификациони код</string>
   <string name="view_item">Види ставку</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden Мрежни Сеф</string>
   <string name="lost_2fa_app">Изгубио си апликацију за аутентификацију?</string>
   <string name="items">Ставке</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Апликација Аутентификатор</string>
   <string name="enter_verification_code_app">Унесите шестоцифрени верификациони код из апликације за утврђивање аутентичности.</string>
   <string name="enter_verification_code_email">Унесите шестоцифрени верификациони код који је послан на %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Пријава недоступна</string>
   <string name="no_two_step_available">Овај налог има омогућено пријављивање у два корака, међутим, ниједан од конфигурисаних добављача пријављивања није подржан на овом уређају. Користите подржани уређај и/или додајте додатне добављаче који су боље подржани на свим уређајима (као што је апликација за утврђивање аутентичности).</string>
   <string name="recovery_code_title">Шифра за опоравак</string>
@@ -314,6 +326,7 @@
   <string name="april">Април</string>
   <string name="august">Август</string>
   <string name="brand">Произвођач</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Име Власника Картице</string>
   <string name="city_town">Град</string>
   <string name="company">Предузеће</string>
@@ -414,8 +427,11 @@
   <string name="invalid_email">Неисправна адреса Е-поште.</string>
   <string name="cards">Кредитне Картице</string>
   <string name="identities">Идентитети</string>
+  <string name="identification">Identification</string>
   <string name="logins">Пријаве</string>
   <string name="secure_notes">Сигурносне белешке</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Све ставке</string>
   <string name="ur_is">УРЛ</string>
   <string name="checking_password">Проверавање лозинке...</string>
@@ -439,7 +455,7 @@
   <string name="move_up">Помери горе</string>
   <string name="miscellaneous">Разно</string>
   <string name="ownership">Власништво</string>
-  <string name="who_owns_this_item">Ко је власник ове ставке?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">Нема колекције у листи.</string>
   <string name="moved_item_to_org">%1$s премештено у %2$s.</string>
   <string name="item_shared">Ставка је подељена.</string>
@@ -1178,6 +1194,7 @@
   <string name="coachmark_6_of_6">6 ОД 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Користите ове опције да би сте прилагодили лозинку захтевима вашег налога.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Након што сачувате вашу нову лозинку у Bitwarden, не заборавите да је обновите на налогу веб сајта. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1203,4 +1220,5 @@
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

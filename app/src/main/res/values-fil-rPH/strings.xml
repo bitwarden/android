@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Gumagawa ng account...</string>
   <string name="edit_item">Baguhin ang item</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Payagan ang awtomatikong pag-sync</string>
   <string name="enter_email_for_hint">Ipasok ang email address ng account mo para makita ang palatandaan ng master password mo.</string>
   <string name="exntesion_reenable">Buksan ulit ang ekstensyon ng app</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Bineberipika</string>
   <string name="verification_code">Code pamberipika</string>
   <string name="view_item">Tingnan ang item</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Web vault ng Bitwarden</string>
   <string name="lost_2fa_app">Nawala ang authenticator app?</string>
   <string name="items">Mga Item</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Authenticator app</string>
   <string name="enter_verification_code_app">Ilagay ang 6 na numerong code pamberipika mula sa authenticator app mo.</string>
   <string name="enter_verification_code_email">Ilagay ang 6 na numerong code pamberipikang in-email sa %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Unavailable ang login</string>
   <string name="no_two_step_available">Gumagamit ng dalawang-hakbang na pag-log in ang account na ito, pero walang suportadong naitakdang two-step provider sa device na ito. Mangyaring gumamit ng suportadong device at/o karagdagang provider na may mas mainam na suporta sa iba\'t-ibang mga device (tulad ng isang authenticator app).</string>
   <string name="recovery_code_title">Code pang-recover</string>
@@ -314,6 +326,7 @@ Awtomatikong itong magsa-scan.</string>
   <string name="april">Abril</string>
   <string name="august">Agosto</string>
   <string name="brand">Tatak</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Pangalan ng cardholder</string>
   <string name="city_town">Lungsod / Bayan</string>
   <string name="company">Kumpanya</string>
@@ -414,8 +427,11 @@ Awtomatikong itong magsa-scan.</string>
   <string name="invalid_email">\'Di-wastong email address.</string>
   <string name="cards">Mga Kard</string>
   <string name="identities">Mga Pagkakakilanlan</string>
+  <string name="identification">Identification</string>
   <string name="logins">Mga login</string>
   <string name="secure_notes">Mga Secure na Tala</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Lahat ng mga item</string>
   <string name="ur_is">Mga URI</string>
   <string name="checking_password">Sinusuri ang password...</string>
@@ -439,7 +455,7 @@ Awtomatikong itong magsa-scan.</string>
   <string name="move_up">Ilipat Pataas</string>
   <string name="miscellaneous">Miscellaneous</string>
   <string name="ownership">Pag-aari</string>
-  <string name="who_owns_this_item">Sino ang may-ari ng item na ito?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">Walang maililistang koleksyon.</string>
   <string name="moved_item_to_org">Nilipat ang %1$s sa %2$s.</string>
   <string name="item_shared">Naibahagi na ang item.</string>
@@ -1178,6 +1194,7 @@ Gusto mo bang pumunta sa account na ito?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1203,4 +1220,5 @@ Gusto mo bang pumunta sa account na ito?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

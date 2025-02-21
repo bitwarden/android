@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Bạn muốn chuyển sang tài khoản này?</string>
   <string name="master_password">Mật khẩu chính</string>
   <string name="master_password_required">Mật khẩu chính (bắt buộc)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Mật khẩu chính mới (bắt buộc)</string>
   <string name="more">Thêm</string>
   <string name="my_vault">Kho của tôi</string>
   <string name="authenticator">Xác thực</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Tạo tài khoản</string>
   <string name="creating_account">Đang tạo tài khoản...</string>
   <string name="edit_item">Sửa mục</string>
+  <string name="edit_login">Sửa thông tin đăng nhập</string>
+  <string name="edit_card">Sửa thông tin thẻ</string>
+  <string name="edit_identity">Sửa thông tin danh bạ</string>
+  <string name="edit_note">Sửa ghi chú</string>
+  <string name="edit_passkey">Sửa mã khóa</string>
   <string name="enable_automatic_syncing">Bật tự động đồng bộ</string>
   <string name="enter_email_for_hint">Nhập địa chỉ email tài khoản của bạn để nhận gợi ý mật khẩu.</string>
   <string name="exntesion_reenable">Bật lại tiện ích mở rộng</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Thêm danh bạ</string>
   <string name="no_notes">Không có ghi chú nào trong kho của bạn.</string>
   <string name="new_note">Thêm ghi chú</string>
+  <string name="new_passkey">Mã khoá mới</string>
   <string name="new_item">Thêm mục</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Mã SSH mới</string>
   <string name="no_text_sends">Không có mục Gửi Văn bản nào trong kho của bạn.</string>
   <string name="no_file_sends">Không có mục Gửi File nào trong kho của bạn.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Không có mã SSH nào trong kho của bạn.</string>
   <string name="new_text_send">Gửi văn bản</string>
   <string name="new_file_send">Gửi file</string>
   <string name="no_username">Không có tên đăng nhập</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</string>
   <string name="regenerate_password">Tạo lại mật khẩu</string>
   <string name="retype_master_password">Nhập lại mật khẩu chính</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Nhập lại mật khẩu chính mới (bắt buộc)</string>
   <string name="retype_master_password_required">Nhập lại mật khẩu chính (bắt buộc)</string>
   <string name="search_vault">Tìm kiếm trong kho</string>
   <string name="security">Bảo mật</string>
@@ -209,6 +215,11 @@
   <string name="validating">Đang xác nhận</string>
   <string name="verification_code">Mã xác minh</string>
   <string name="view_item">Xem mục</string>
+  <string name="view_login">Xem thông tin đăng nhập</string>
+  <string name="view_card">Xem thẻ</string>
+  <string name="view_identity">Xem danh bạ</string>
+  <string name="view_note">Xem ghi chú</string>
+  <string name="view_passkey">Xem mã khóa</string>
   <string name="web_vault">Trang web Bitwarden</string>
   <string name="lost_2fa_app">Mất ứng dụng xác thực?</string>
   <string name="items">Mục</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Ứng dụng Authenticator</string>
   <string name="enter_verification_code_app">Nhập mã xác minh 6 chữ số từ ứng dụng xác thực của bạn.</string>
   <string name="enter_verification_code_email">Nhập mã xác nhận 6 chữ số đã được gửi tới email %1$s.</string>
+  <string name="enter_verification_code_new_device">Không nhận ra thiết bị này. Nhập mã xác thực 8 số đã được gửi tới email %1$s.</string>
   <string name="login_unavailable">Đăng nhập không được</string>
   <string name="no_two_step_available">Tài khoản này đã kích hoạt xác thực 2 bước, tuy nhiên dịch vụ xác thực hai bước đã chọn không được hỗ trợ trên thiết bị này. Vui lòng sử dụng thiết bị được hỗ trợ và/hoặc dịch vụ xác thực bổ sung có thể hoạt động tốt trên thiết bị (chẳng hạn như một ứng dụng Authenticator).</string>
   <string name="recovery_code_title">Mã khôi phục</string>
@@ -314,6 +326,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="april">Tháng 4</string>
   <string name="august">Tháng 8</string>
   <string name="brand">Thương hiệu</string>
+  <string name="card_details">Thông tin Thẻ</string>
   <string name="cardholder_name">Tên chủ thẻ</string>
   <string name="city_town">Quận/Huyện/Thị trấn</string>
   <string name="company">Công ty</string>
@@ -414,8 +427,11 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="invalid_email">Địa chỉ email không hợp lệ.</string>
   <string name="cards">Thẻ</string>
   <string name="identities">Danh bạ</string>
+  <string name="identification">ID</string>
   <string name="logins">Đăng nhập</string>
   <string name="secure_notes">Ghi chú</string>
+  <string name="personal_details">Thông tin Cá nhân</string>
+  <string name="contact_info">Thông tin liên hệ</string>
   <string name="all_items">Tất cả mục</string>
   <string name="ur_is">Đường dẫn</string>
   <string name="checking_password">Đang kiểm tra mật khẩu...</string>
@@ -439,7 +455,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="move_up">Chuyển lên</string>
   <string name="miscellaneous">Khác</string>
   <string name="ownership">Sở hữu</string>
-  <string name="who_owns_this_item">Ai sở hữu mục này?</string>
+  <string name="owner">Chủ sở hữu</string>
   <string name="no_collections_to_list">Không có bộ sưu tập nào.</string>
   <string name="moved_item_to_org">%1$s đã di chuyển tới %2$s.</string>
   <string name="item_shared">Đã chia sẻ mục.</string>
@@ -831,7 +847,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="data_region">Nơi lưu dữ liệu</string>
   <string name="region">Khu vực</string>
   <string name="update_weak_master_password_warning">Mật khẩu chính của bạn không đáp ứng chính sách tổ chức của bạn. Để truy cập kho, bạn phải cập nhật mật khẩu chính của mình ngay bây giờ. Việc tiếp tục sẽ đăng xuất bạn khỏi phiên hiện tại và bắt buộc đăng nhập lại. Các phiên hoạt động trên các thiết bị khác có thể tiếp tục duy trì hoạt động trong tối đa một giờ.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Mật khẩu chính hiện tại (bắt buộc)</string>
   <string name="logged_in">Đã đăng nhập!</string>
   <string name="approve_with_my_other_device">Phê duyệt bằng thiết bị khác</string>
   <string name="request_admin_approval">Yêu cầu quản trị viên phê duyệt</string>
@@ -1023,14 +1039,14 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="generate_button_label">Tạo</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Hãy ghi lại mật khẩu này và giữ ở nơi an toàn.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Tìm hiểu thêm các cách khác để ngăn chặn việc tài khoản bị khoá</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Tìm hiểu cách tránh bị khóa tài khoản</annotation></string>
   <string name="help_with_server_geolocations">Trợ giúp về vị trí địa lý của máy chủ.</string>
   <string name="email_address_required">Địa chỉ email (bắt buộc)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Nhấn vào liên kết trong email để xác minh địa chỉ email của bạn và tiếp tục tạo tài khoản. "</string>
   <string name="change_email_address">Thay đổi địa chỉ email</string>
   <string name="next">Tiếp theo</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden không thể khôi phục mật khẩu chính bị mất hoặc bị quên.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden không thể khôi phục mật khẩu chính bị mất hoặc bị quên.</string>
   <string name="choose_your_master_password">Chọn mật khẩu chính của bạn</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Chọn mật khẩu mạnh và duy nhất để giữ thông tin của bạn an toàn.</string>
   <string name="minimum_characters">%1$s ký tự</string>
@@ -1050,7 +1066,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Lỗi kết nối với dịch vụ Duo. Sử dụng phương thức đăng nhập hai bước khác hoặc liên hệ với Duo để được hỗ trợ.</string>
   <string name="master_password_hint_not_specified">Gợi ý mật khẩu chính</string>
   <string name="master_password_important_hint">Không thể lấy lại mật khẩu chính nếu bạn quên nó! Tối thiểu 12 ký tự.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Gợi ý mật khẩu chính mới</string>
   <string name="get_started">Bắt đầu</string>
   <string name="save_and_protect_your_data">Lưu và bảo vệ dữ liệu của bạn</string>
   <string name="the_vault_protects_more_than_just_passwords">Kho lưu trữ không chỉ bảo vệ mật khẩu. Lưu trữ thông tin đăng nhập, ID, thẻ và ghi chú an toàn tại đây.</string>
@@ -1178,6 +1194,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="coachmark_6_of_6">6 TRONG 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Sử dụng các tùy chọn này để điều chỉnh mật khẩu theo yêu cầu của tài khoản.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Sau khi lưu mật khẩu mới vào Bitwarden, đừng quên cập nhật mật khẩu trên trang web tài khoản của bạn. "</string>
+  <string name="verify_your_identity">Xác minh danh tính của bạn</string>
   <string name="error_loading_certificate">Lỗi khi tải chứng chỉ</string>
   <string name="certificate_alias">Bí danh chứng chỉ</string>
   <string name="import_certificate">Nhập chứng chỉ</string>
@@ -1203,4 +1220,5 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Hoạt động mã khóa không thành công vì yêu cầu không hợp lệ.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Hoạt động mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
+  <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
 </resources>

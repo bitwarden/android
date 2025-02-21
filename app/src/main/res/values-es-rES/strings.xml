@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Creando cuenta...</string>
   <string name="edit_item">Editar elemento</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Habilitar sincronización automática</string>
   <string name="enter_email_for_hint">Introduce el correo electrónico de tu cuenta para recibir la pista de tu contraseña maestra.</string>
   <string name="exntesion_reenable">Reactivar extensión de la aplicación</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Validando</string>
   <string name="verification_code">Código de verificación</string>
   <string name="view_item">Ver elemento</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Caja fuerte web de Bitwarden</string>
   <string name="lost_2fa_app">¿Has perdido la autenticación en dos pasos?</string>
   <string name="items">Elementos</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Aplicación de autenticación</string>
   <string name="enter_verification_code_app">Introduce el código de verificación de 6 dígitos de tu aplicación autenticadora.</string>
   <string name="enter_verification_code_email">Introduce el código de verificación de 6 dígitos que ha sido enviado por correo a %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Inicio de sesión no disponible</string>
   <string name="no_two_step_available">Esta cuenta tiene configuración de inicio de sesión en dos pasos, sin embargo, ninguno de los proveedores de dos pasos configurados son soportados en este dispositivo. Por favor, utilice un dispositivo soportado y/o añada proveedores adicionales que sean mejor soportados entre los dispositivos (como una aplicación de autenticación).</string>
   <string name="recovery_code_title">Código de recuperación</string>
@@ -314,6 +326,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="april">Abril</string>
   <string name="august">Agosto</string>
   <string name="brand">Marca</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Nombre del propietario de la tarjeta</string>
   <string name="city_town">Ciudad / Pueblo</string>
   <string name="company">Empresa</string>
@@ -414,8 +427,11 @@ El escaneo se realizará automáticamente.</string>
   <string name="invalid_email">Dirección de correo electrónico inválida.</string>
   <string name="cards">Tarjetas</string>
   <string name="identities">Identidades</string>
+  <string name="identification">Identification</string>
   <string name="logins">Inicios de sesión</string>
   <string name="secure_notes">Notas seguras</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Todos los elementos</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">Comprobando contraseña...</string>
@@ -439,7 +455,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="move_up">Mover hacia arriba</string>
   <string name="miscellaneous">Varios</string>
   <string name="ownership">Propiedad</string>
-  <string name="who_owns_this_item">¿Quién posee este elemento?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">No hay colecciones que listar.</string>
   <string name="moved_item_to_org">%1$s se movió a %2$s.</string>
   <string name="item_shared">El elemento ha sido compartido.</string>
@@ -1179,6 +1195,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1204,4 +1221,5 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

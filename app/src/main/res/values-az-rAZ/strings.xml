@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Buna indi keçmək istəyirsiniz?</string>
   <string name="master_password">Ana parol</string>
   <string name="master_password_required">Ana parol (tələb olunur)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Yeni ana parol (tələb olunur)</string>
   <string name="more">Daha çox</string>
   <string name="my_vault">Seyfim</string>
   <string name="authenticator">Kimlik doğrulayıcı</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Bir hesab yarat</string>
   <string name="creating_account">Hesab yaradılır...</string>
   <string name="edit_item">Elementə düzəliş et</string>
+  <string name="edit_login">Girişə düzəliş et</string>
+  <string name="edit_card">Karta düzəliş et</string>
+  <string name="edit_identity">Kimliyə düzəliş et</string>
+  <string name="edit_note">Nota düzəliş et</string>
+  <string name="edit_passkey">Keçid açarına düzəliş et</string>
   <string name="enable_automatic_syncing">Avto-sinxrn icazə ver</string>
   <string name="enter_email_for_hint">Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</string>
   <string name="exntesion_reenable">Tətbiq uzantısını təkrar aktivləşdir</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Yeni kimlik</string>
   <string name="no_notes">Seyfinizdə heç bir not yoxdur.</string>
   <string name="new_note">Yeni not</string>
+  <string name="new_passkey">Yeni keçid açarı</string>
   <string name="new_item">Yeni element</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Yeni SSH açarı</string>
   <string name="no_text_sends">Seyfinizdə heç bir mətn Send-i yoxdur.</string>
   <string name="no_file_sends">Seyfinizdə heç bir fayl Send-i yoxdur.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Seyfinizdə heç bir SSH açarı yoxdur.</string>
   <string name="new_text_send">Yeni mətn Send-i</string>
   <string name="new_file_send">Yeni fayl Send-i</string>
   <string name="no_username">İstifadəçi adı yoxdur</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Gözəl bir rəy ilə bizə dəstək ola bilərsiniz!</string>
   <string name="regenerate_password">Parolu yenidən yarat</string>
   <string name="retype_master_password">Ana parolu yenidən yaz</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Yeni ana parolu təkrar yaz (tələb olunur)</string>
   <string name="retype_master_password_required">Ana parolu təkrar yaz (tələb olunur)</string>
   <string name="search_vault">Seyfdə axtar</string>
   <string name="security">Güvənlik</string>
@@ -209,6 +215,11 @@
   <string name="validating">Doğrulanır</string>
   <string name="verification_code">Doğrulama kodu</string>
   <string name="view_item">Elementə bax</string>
+  <string name="view_login">Girişə bax</string>
+  <string name="view_card">Karta bax</string>
+  <string name="view_identity">Kimliyə bax</string>
+  <string name="view_note">Nota bax</string>
+  <string name="view_passkey">Keçid açarına bax</string>
   <string name="web_vault">Bitwarden veb seyfi</string>
   <string name="lost_2fa_app">Kimlik doğrulayıcı tətbiqini itirmisiniz?</string>
   <string name="items">Elementlər</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Kimlik doğrulayıcı tətbiqi</string>
   <string name="enter_verification_code_app">Kimlik doğrulayıcı tətbiqindən 6 rəqəmli doğrulama kodunu daxil edin.</string>
   <string name="enter_verification_code_email">%1$s ünvanına göndərilən e-poçtdakı 6 rəqəmli doğrulama kodunu daxil edin.</string>
+  <string name="enter_verification_code_new_device">Bu cihazı tanımırıq. %1$s ünvanına göndərilən 8 rəqəmli doğrulama kodunu daxil edin.</string>
   <string name="login_unavailable">Giriş edilə bilmir</string>
   <string name="no_two_step_available">Bu hesabda iki addımlı giriş qurulub, ancaq konfiqurasiya edilmiş iki addımlı provayderlərin heç biri bu cihazda dəstəklənmir. Lütfən dəstəklənən cihaz istifadə edin və/və ya fərqli cihazda dəstəklənən yeni provayderlər əlavə edin (məs. kimlik doğrulayıcı tətbiq).</string>
   <string name="recovery_code_title">Bərpa kodu</string>
@@ -314,6 +326,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="april">Aprel</string>
   <string name="august">Avqust</string>
   <string name="brand">Brend</string>
+  <string name="card_details">Kart detalları</string>
   <string name="cardholder_name">Kart sahibinin adı</string>
   <string name="city_town">Şəhər/Rayon</string>
   <string name="company">Şirkət</string>
@@ -414,8 +427,11 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="invalid_email">Yararsız e-poçt ünvanı.</string>
   <string name="cards">Kartlar</string>
   <string name="identities">Kimliklər</string>
+  <string name="identification">İdentifikasiya</string>
   <string name="logins">Girişlər</string>
   <string name="secure_notes">Güvənli qeydlər</string>
+  <string name="personal_details">Şəxsi detallar</string>
+  <string name="contact_info">Əlaqə məlumatı</string>
   <string name="all_items">Bütün elementlər</string>
   <string name="ur_is">URI-lər</string>
   <string name="checking_password">Parol yoxlanılır...</string>
@@ -439,7 +455,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="move_up">Yuxarı daşı</string>
   <string name="miscellaneous">Müxtəlif</string>
   <string name="ownership">Sahiblik</string>
-  <string name="who_owns_this_item">Bu elementin sahibi kimdir?</string>
+  <string name="owner">Sahibi</string>
   <string name="no_collections_to_list">Sadalanacaq heç bir kolleksiya yoxdur.</string>
   <string name="moved_item_to_org">%1$s, bura daşındı: %2$s.</string>
   <string name="item_shared">Element paylaşıldı.</string>
@@ -830,7 +846,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="data_region">Data bölgəsi</string>
   <string name="region">Bölgə</string>
   <string name="update_weak_master_password_warning">Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Seyfə müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Hazırkı ana parol (tələb olunur)</string>
   <string name="logged_in">Giriş edildi!</string>
   <string name="approve_with_my_other_device">Digər cihazımla təsdiqlə</string>
   <string name="request_admin_approval">Admin təsdiqini tələb et</string>
@@ -1022,14 +1038,14 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="generate_button_label">Yarat</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Bu parolu bir yerə yazın və güvənli yerdə saxlayın.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Hesab kilidlənməsini önləməyin digər yolları haqqında daha ətraflı</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesab kilidlənməsini önləməyin yolları haqqında daha ətraflı</annotation></string>
   <string name="help_with_server_geolocations">Server coğrafi yerləri ilə bağlı kömək.</string>
   <string name="email_address_required">E-poçt ünvanı (lazımdır)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"E-poçt ünvanınızı doğrulamaq və hesabınızı yaratmağa davam etmək üçün e-poçtdakı keçidi seçin. "</string>
   <string name="change_email_address">E-poçt ünvanını dəyişdir</string>
   <string name="next">Növbəti</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden itmiş və ya unutulmuş ana parolu geri qaytara bilməz.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden itmiş və ya unutulmuş ana parolu sıfırlaya bilməz.</string>
   <string name="choose_your_master_password">Ana parolunuzu seçin</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Məlumatlarınızı təhlükəsiz saxlamaq üçün unikal və güclü bir parol seçin.</string>
   <string name="minimum_characters">%1$s xarakter</string>
@@ -1049,7 +1065,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo xidmətinə bağlanarkən xəta baş verdi. Fərqli iki addımlı giriş üsulu istifadə edin və ya kömək üçün Duo ilə əlaqə saxlayın.</string>
   <string name="master_password_hint_not_specified">Ana parol ipucusu</string>
   <string name="master_password_important_hint">Vacib: Ana parolunuzu unutsanız bərpa edə bilməzsiniz! Ən az %12 simvol.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Yeni ana parol üçün ipucu</string>
   <string name="get_started">Başlayaq</string>
   <string name="save_and_protect_your_data">Datanızı saxlayın və qoruyun</string>
   <string name="the_vault_protects_more_than_just_passwords">Seyf, yalnız parollar üçün deyil. Giriş məlumatlarınızı, kimlikləri, kartları və notları burada güvənli şəkildə saxlaya bilərsiniz.</string>
@@ -1177,6 +1193,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="coachmark_6_of_6">6/6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Bu seçimləri istifadə edərək parolunuzu, hesabınızın tələblərinə görə ayarlaya bilərsiniz.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Yeni parolunuzu Bitwarden-də saxladıqdan sonra, onu hesabınızın veb saytında güncəlləməyi unutmayın. "</string>
+  <string name="verify_your_identity">Kimliyinizi doğrulayın</string>
   <string name="error_loading_certificate">Sertifikat yükləmə xətası</string>
   <string name="certificate_alias">Sertifikat alias-ı</string>
   <string name="import_certificate">Sertifikatı daxilə köçür</string>
@@ -1190,16 +1207,17 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistem sertifikatını istifadə etmək, sertifikatı Bitwarden ilə saxlamaqdan daha az güvənlidir. Davam etsəniz, artıq quraşdırılmış bir sistem sertifikatı varsa, mövcud sistem sertifikatlarının bir siyahısı göstəriləcək.</string>
   <string name="certificate_alias_already_exists">Sertifikat alias-ı artıq mövcuddur</string>
   <string name="link">Keçid</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
-  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
-  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
-  <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
-  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
-  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
-  <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
-  <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
-  <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
-  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
-  <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Tətbiq yanlış imzalandığı üçün keçid açarı əməliyyatı uğursuz oldu</string>
+  <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Sorğuda host URL təqdim olunmadığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Tətbiq imzası yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu</string>
+  <string name="passkey_registration_failed_due_to_an_internal_error">Daxili bir xətaya görə keçid açarı qeydiyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Güvənilən tərəf müəyyən edilə bilmədiyi üçün keçid açarı əəməliyyatı uğursuz oldu.</string>
+  <string name="passkey_authentication_failed_due_to_an_internal_error">Daxili bir xətaya görə keçid açarı kimlik doğrulaması uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Seçilmiş element mövcud olmadığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_user_is_locked_out">İstifadəçi kilidləndiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_user_verification_was_cancelled">İstifadəçi doğrulaması ləğv edildiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_the_request_is_invalid">Sorğu yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">İstifadəçi doğrulama cəhdlərini aşdığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="self_host_server_url">Self-host server URL-si</string>
 </resources>
