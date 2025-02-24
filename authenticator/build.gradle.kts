@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId = "com.bitwarden.authenticator"
-        minSdk = libs.versions.minSdk.get().toInt()
+        minSdk = libs.versions.minSdkBwa.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
@@ -193,7 +193,7 @@ dependencies {
     implementation(libs.google.protobuf.javalite)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization)
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
     implementation(platform(libs.square.retrofit.bom))

@@ -4,7 +4,7 @@
 # SDK Versions
 compileSdk = "35"
 targetSdk = "35"
-minSdk = "28"
+minSdkBwa = "28"
 
 # Dependency Versions
 androidGradlePlugin = "8.8.0"
@@ -50,7 +50,7 @@ mockk = "1.13.13"
 okhttp = "4.12.0"
 retrofitBom = "2.11.0"
 roboelectric = "4.14.1"
-sonarqube = "6.0.1.5171" 
+sonarqube = "6.0.1.5171"
 turbine = "1.2.0"
 zxing = "3.5.3"
 testng = "7.10.2"
@@ -110,7 +110,7 @@ junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
