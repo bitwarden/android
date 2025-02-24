@@ -157,12 +157,11 @@ class VaultItemViewModel @Inject constructor(
                                 folderState.data?.firstOrNull { folder -> folderId == folder.id }
                             }
                             ?.name
-                        val relatedLocations = buildList {
-                            organizationName?.let { add(VaultItemLocation.Organization(it)) }
-                            addAll(collections.map { VaultItemLocation.Collection(it) })
-                            folderName?.let { add(VaultItemLocation.Folder(it)) }
-                        }
-                            .toImmutableList()
+                        val relatedLocations = persistentListOfNotNull(
+                            organizationName?.let { VaultItemLocation.Organization(it) },
+                            *collections.map { VaultItemLocation.Collection(it) }.toTypedArray(),
+                            folderName?.let { VaultItemLocation.Folder(it) },
+                        )
 
                         VaultItemStateData(
                             cipher = cipherView,
