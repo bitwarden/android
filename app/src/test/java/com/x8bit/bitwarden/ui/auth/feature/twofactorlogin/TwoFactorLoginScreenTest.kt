@@ -49,7 +49,7 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             TwoFactorLoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

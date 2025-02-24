@@ -45,7 +45,7 @@ class ExportVaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             ExportVaultScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

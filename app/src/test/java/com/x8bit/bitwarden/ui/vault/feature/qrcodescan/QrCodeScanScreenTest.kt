@@ -31,7 +31,7 @@ class QrCodeScanScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             QrCodeScanScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

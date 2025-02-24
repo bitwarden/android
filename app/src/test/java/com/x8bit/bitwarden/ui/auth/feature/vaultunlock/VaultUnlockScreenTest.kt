@@ -83,7 +83,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             VaultUnlockScreen(
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,

@@ -37,7 +37,7 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             AppearanceScreen(
                 onNavigateBack = { haveCalledNavigateBack = true },
                 viewModel = viewModel,

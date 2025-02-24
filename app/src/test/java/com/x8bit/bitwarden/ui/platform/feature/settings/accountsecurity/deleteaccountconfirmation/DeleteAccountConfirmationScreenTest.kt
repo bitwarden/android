@@ -33,7 +33,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             DeleteAccountConfirmationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

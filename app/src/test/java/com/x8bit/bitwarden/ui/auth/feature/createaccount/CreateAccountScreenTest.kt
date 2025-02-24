@@ -61,7 +61,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             CreateAccountScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLogin = { _, _ -> onNavigateToLoginCalled = true },

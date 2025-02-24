@@ -38,7 +38,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             DeleteAccountScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccountConfirmation = {
