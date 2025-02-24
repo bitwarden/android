@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.model
 
 import com.bitwarden.vault.CipherView
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * The state containing totp code item information and the cipher for the item.
@@ -18,5 +19,5 @@ data class VaultItemStateData(
     val canDelete: Boolean,
     val canAssociateToCollections: Boolean,
     val canEdit: Boolean,
-    val relatedLocations: List<VaultItemLocation>,
+    val relatedLocations: ImmutableList<VaultItemLocation>,
 )

@@ -44,6 +44,9 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The max number of items that can be displayed before the "show more" text is visible.
@@ -59,7 +62,7 @@ private const val EXPANDABLE_THRESHOLD = 2
 fun ItemHeader(
     value: String,
     isFavorite: Boolean,
-    relatedLocations: List<VaultItemLocation>,
+    relatedLocations: ImmutableList<VaultItemLocation>,
     iconData: IconData,
     modifier: Modifier = Modifier,
     iconTestTag: String? = null,
@@ -136,14 +139,16 @@ fun ItemHeader(
             }
 
         ExpandingItemLocationContent(
-            overflowLocations = relatedLocations.drop(EXPANDABLE_THRESHOLD),
+            overflowLocations = relatedLocations
+                .drop(EXPANDABLE_THRESHOLD)
+                .toImmutableList(),
         )
     }
 }
 
 @Composable
 private fun ExpandingItemLocationContent(
-    overflowLocations: List<VaultItemLocation>,
+    overflowLocations: ImmutableList<VaultItemLocation>,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     AnimatedVisibility(
@@ -252,7 +257,7 @@ private fun ItemHeader_LocalIcon_Preview() {
                     iconData = IconData.Local(
                         iconRes = R.drawable.ic_globe,
                     ),
-                    relatedLocations = emptyList(),
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -272,7 +277,7 @@ private fun ItemHeader_NetworkIcon_Preview() {
                         uri = "mockuri",
                         fallbackIconRes = R.drawable.ic_globe,
                     ),
-                    relatedLocations = emptyList(),
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -291,7 +296,7 @@ private fun ItemHeader_Organization_Preview() {
                     iconData = IconData.Local(
                         iconRes = R.drawable.ic_globe,
                     ),
-                    relatedLocations = listOf(
+                    relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("Stark Industries"),
                     ),
                 )
@@ -312,7 +317,7 @@ private fun ItemNameField_Org_SingleCollection_Preview() {
                     iconData = IconData.Local(
                         iconRes = R.drawable.ic_globe,
                     ),
-                    relatedLocations = listOf(
+                    relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("Stark Industries"),
                         VaultItemLocation.Collection("Marketing"),
                     ),
@@ -334,7 +339,7 @@ private fun ItemNameField_Org_MultiCollection_Preview() {
                     iconData = IconData.Local(
                         iconRes = R.drawable.ic_globe,
                     ),
-                    relatedLocations = listOf(
+                    relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("Stark Industries"),
                         VaultItemLocation.Collection("Marketing"),
                         VaultItemLocation.Collection("Product"),
@@ -357,7 +362,7 @@ private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
                     iconData = IconData.Local(
                         iconRes = R.drawable.ic_note,
                     ),
-                    relatedLocations = listOf(
+                    relatedLocations = persistentListOf(
                         VaultItemLocation.Organization("Stark Industries"),
                         VaultItemLocation.Collection("Marketing"),
                         VaultItemLocation.Folder("Competition"),

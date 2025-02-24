@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -70,7 +71,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -111,7 +112,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -145,7 +146,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -179,7 +180,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -219,7 +220,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -249,7 +250,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -277,7 +278,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -308,7 +309,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -349,7 +350,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -395,7 +396,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -443,7 +444,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -475,7 +476,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
 
         val expectedState = VaultItemState.ViewState.Content(
@@ -505,7 +506,7 @@ class CipherViewExtensionsTest {
             canEdit = true,
             baseIconUrl = "https://example.com/",
             isIconLoadingDisabled = true,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
         )
         assertEquals(
             VaultItemState.ViewState.Content(
@@ -552,7 +553,7 @@ class CipherViewExtensionsTest {
                     canEdit = true,
                     baseIconUrl = "https://example.com/",
                     isIconLoadingDisabled = true,
-                    relatedLocations = emptyList(),
+                    relatedLocations = persistentListOf(),
                 )
                 assertEquals(
                     it.value,
