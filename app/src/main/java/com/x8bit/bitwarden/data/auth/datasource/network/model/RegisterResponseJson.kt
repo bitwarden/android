@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * Models response bodies for the register request.
@@ -50,20 +52,24 @@ sealed class RegisterResponseJson {
      * The values in the array should be used for display to the user, since the keys tend to come
      * back as nonsense. (eg: empty string key)
      */
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializable
     data class Invalid(
-        @SerialName("message")
+        @JsonNames("message")
+        @SerialName("Message")
         private val invalidMessage: String? = null,
 
-        @SerialName("Message")
-        private val errorMessage: String? = null,
-
         @SerialName("validationErrors")
-        val validationErrors: Map<String, List<String>>?,
+        private val validationErrors: Map<String, List<String>>?,
     ) : RegisterResponseJson() {
         /**
          * A generic error message.
          */
-        val message: String? get() = invalidMessage ?: errorMessage
+        val message: String?
+            get() = validationErrors
+                ?.values
+                ?.firstOrNull()
+                ?.firstOrNull()
+                ?: invalidMessage
     }
 }

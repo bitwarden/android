@@ -168,7 +168,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -287,7 +287,7 @@ class IdentityServiceTest : BaseServiceTest() {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-            assertEquals(LEGACY_INVALID_LOGIN.asSuccess(), result)
+            assertEquals(INVALID_LOGIN.asSuccess(), result)
         }
 
     @Suppress("MaxLineLength")
@@ -363,7 +363,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -651,7 +651,7 @@ private const val INVALID_LOGIN_JSON = """
 private const val LEGACY_INVALID_LOGIN_JSON = """
 {
   "errorModel": {
-    "message": "Legacy-123"
+    "message": "123"
   }
 }
 """
@@ -687,14 +687,6 @@ private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
-    ),
-    legacyErrorModel = null,
-)
-
-private val LEGACY_INVALID_LOGIN = GetTokenResponseJson.Invalid(
-    errorModel = null,
-    legacyErrorModel = GetTokenResponseJson.Invalid.LegacyErrorModel(
-        errorMessage = "Legacy-123",
     ),
 )
 
