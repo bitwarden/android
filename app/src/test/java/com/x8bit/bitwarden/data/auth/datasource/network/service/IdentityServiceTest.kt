@@ -168,7 +168,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -363,7 +363,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
