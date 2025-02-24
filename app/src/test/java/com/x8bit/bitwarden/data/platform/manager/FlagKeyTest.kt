@@ -81,6 +81,10 @@ class FlagKeyTest {
             FlagKey.AnonAddySelfHostAlias.keyName,
             "anon-addy-self-host-alias",
         )
+        assertEquals(
+            FlagKey.ChromeAutofill.keyName,
+            "enable-pm-chrome-autofill",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
+                FlagKey.ChromeAutofill,
             ).all {
                 !it.defaultValue
             },
@@ -132,6 +137,7 @@ class FlagKeyTest {
                 FlagKey.MutualTls,
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
+                FlagKey.ChromeAutofill,
             ).all {
                 it.isRemotelyConfigured
             },

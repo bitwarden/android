@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -55,6 +56,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -84,6 +86,7 @@ class VaultViewModel @Inject constructor(
     private val reviewPromptManager: ReviewPromptManager,
     private val featureFlagManager: FeatureFlagManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -362,10 +365,21 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.Syncing)
+        if (networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultState.DialogState.Syncing)
+            }
+            vaultRepository.sync(forced = true)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
         }
-        vaultRepository.sync(forced = true)
     }
 
     private fun handleLockClick() {
@@ -426,11 +440,17 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
-        // The Pull-To-Refresh composable is already in the refreshing state.
-        // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepository.sync(forced = false)
+        viewModelScope.launch {
+            delay(250)
+            if (networkConnectionManager.isNetworkConnected) {
+                vaultRepository.sync(forced = false)
+            } else {
+                sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            }
+        }
     }
 
     private fun handleOverflowOptionClick(action: VaultAction.OverflowOptionClick) {
@@ -588,6 +608,22 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
+
+            VaultAction.Internal.InternetConnectionErrorReceived -> {
+                handleInternetConnectionErrorReceived()
+            }
+        }
+    }
+
+    private fun handleInternetConnectionErrorReceived() {
+        mutableStateFlow.update {
+            it.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            )
         }
     }
 
@@ -1419,6 +1455,11 @@ sealed class VaultAction {
         data class IconLoadingSettingReceive(
             val isIconLoadingDisabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the there is not internet connection.
+         */
+        data object InternetConnectionErrorReceived : Internal()
 
         /**
          * Indicates a result for generating a verification code has been received.

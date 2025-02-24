@@ -71,8 +71,7 @@ fun BitwardenMultiSelectButton(
             shouldShowDialog = true
         },
         cardStyle = cardStyle,
-        enabled = shouldShowDialog,
-        tooltipEnabled = isEnabled,
+        enabled = isEnabled,
         supportingText = supportingText,
         tooltip = tooltip,
         insets = insets,

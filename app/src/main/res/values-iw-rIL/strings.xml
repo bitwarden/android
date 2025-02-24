@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">יוצר חשבון...</string>
   <string name="edit_item">ערוך פריט</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">הפעל סנכרון אוטומטי</string>
   <string name="enter_email_for_hint">הכנס את פרטי האימייל שלך לקבלת רמז עבור הסיסמה הראשית.</string>
   <string name="exntesion_reenable">הפעל מחדש הרחבת אפליקציה</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">מאמת</string>
   <string name="verification_code">קוד אימות</string>
   <string name="view_item">צפה בפריט</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">כספת באתר Bitwarden</string>
   <string name="lost_2fa_app">הסרת את אפליקצית האימות?</string>
   <string name="items"> פריטים </string>
@@ -243,6 +254,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="authenticator_app_title">אפליקציית אימות</string>
   <string name="enter_verification_code_app">הכנס את קוד האימות בן 6 הספרות מאפליקציית האימות שלך.</string>
   <string name="enter_verification_code_email">הכנס את קוד האימות בן 6 הספרות שנשלח לכתובת המייל %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">פרטי כניסה לא זמינים</string>
   <string name="no_two_step_available">בחשבון זה הופעלה האפשרות לכניסה דו שלבית, אך אף אחד מהספקים עבור כניסה הדו שלבית לא נתמך במכשיר זה. אנא השתמש במכשיר אחר ו\או הוסף ספקים אחרים שנתמכים במכשירים נוספים (לדוגמא - אפליקציית אימות).</string>
   <string name="recovery_code_title">שחזור קוד</string>
@@ -315,6 +327,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="april">אפריל</string>
   <string name="august">אוגוסט</string>
   <string name="brand">מותג</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">שם בעל הכרטיס</string>
   <string name="city_town">עיר \ ישוב</string>
   <string name="company">חברה</string>
@@ -415,8 +428,11 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="invalid_email">כתובת אימייל לא תקינה.</string>
   <string name="cards">כרטיסים</string>
   <string name="identities">זהויות</string>
+  <string name="identification">Identification</string>
   <string name="logins">פרטי התחברות</string>
   <string name="secure_notes">פתקים מאובטחים</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">כל הפריטים</string>
   <string name="ur_is">כתובות</string>
   <string name="checking_password">בודק סיסמה...</string>
@@ -440,7 +456,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="move_up">הזז למעלה</string>
   <string name="miscellaneous">שונות</string>
   <string name="ownership">בעלות</string>
-  <string name="who_owns_this_item">מי הבעלים של הפריט הזה?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">אין אוספים להציג ברשימה.</string>
   <string name="moved_item_to_org">%1$s הועבר ל%2$s.</string>
   <string name="item_shared">הפריט שותף.</string>
@@ -1181,6 +1197,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1206,4 +1223,5 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

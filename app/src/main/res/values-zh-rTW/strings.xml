@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">正在建立帳戶...</string>
   <string name="edit_item">編輯項目</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">啟用自動同步</string>
   <string name="enter_email_for_hint">請輸入您的帳户電子郵件地址以接收主密碼提示。</string>
   <string name="exntesion_reenable">重新啟用 App 延伸功能</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">正在驗證</string>
   <string name="verification_code">驗證碼</string>
   <string name="view_item">檢視項目</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden 網頁版密碼庫</string>
   <string name="lost_2fa_app">遺失了驗證器應用程式？</string>
   <string name="items">項目</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">驗證器應用程式</string>
   <string name="enter_verification_code_app">輸入驗證器應用程式提供的 6 位數驗證碼。</string>
   <string name="enter_verification_code_email">輸入已傳送至電子郵件信箱 %1$s 的 6 位數驗證碼。</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">登入無法使用</string>
   <string name="no_two_step_available">此帳戶已啟用兩步驟登入，但是本裝置不支援已設定的兩步驟登入方式。請使用已支援的裝置，及/或新增可以更好地跨裝置的兩步驟登入方式（例如驗證器應用程式）。</string>
   <string name="recovery_code_title">復原代碼</string>
@@ -314,6 +326,7 @@
   <string name="april">四月</string>
   <string name="august">八月</string>
   <string name="brand">發卡組織</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">持卡人姓名</string>
   <string name="city_town">市/鎮</string>
   <string name="company">公司</string>
@@ -414,8 +427,11 @@
   <string name="invalid_email">無效的電子郵件地址。</string>
   <string name="cards">支付卡</string>
   <string name="identities">身分</string>
+  <string name="identification">Identification</string>
   <string name="logins">登入資料</string>
   <string name="secure_notes">安全筆記</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">所有項目</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">正在檢查密碼...</string>
@@ -439,7 +455,7 @@
   <string name="move_up">上移</string>
   <string name="miscellaneous">其他設定</string>
   <string name="ownership">擁有權</string>
-  <string name="who_owns_this_item">誰擁有這個項目？</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">沒有可顯示的集合。</string>
   <string name="moved_item_to_org">%1$s 已移動至 %2$s。</string>
   <string name="item_shared">已共用項目。</string>
@@ -1178,6 +1194,7 @@
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1203,4 +1220,5 @@
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

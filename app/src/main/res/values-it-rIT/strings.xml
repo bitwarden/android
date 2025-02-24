@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Vuoi passare a questo account?</string>
   <string name="master_password">Password principale</string>
   <string name="master_password_required">Password principale (obbligatoria)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Nuova parola d\'accesso principale (obbligatoria)</string>
   <string name="more">Altro</string>
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Crea un account</string>
   <string name="creating_account">Creazione dell\'account in corso...</string>
   <string name="edit_item">Modifica l\'elemento</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Sincronizzazione automatica</string>
   <string name="enter_email_for_hint">Inserisci l\'indirizzo email dell\'account per ricevere il suggerimento per la password principale.</string>
   <string name="exntesion_reenable">Riattiva l\'estensione app</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Nuova identità</string>
   <string name="no_notes">Non ci sono note nella tua cassaforte.</string>
   <string name="new_note">Nuova nota</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">Nuovo elemento</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Nuova chiave SSH</string>
   <string name="no_text_sends">Non ci sono messaggi inviati nella tua cassaforte.</string>
   <string name="no_file_sends">Non ci sono file Send nella tua cassaforte.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Non ci sono chiavi SSH nella tua cassaforte.</string>
   <string name="new_text_send">Nuovo testo Send</string>
   <string name="new_file_send">Nuovo file Send</string>
   <string name="no_username">Nessun nome utente</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Aiutaci lasciando una buona recensione!</string>
   <string name="regenerate_password">Rigenera password</string>
   <string name="retype_master_password">Conferma la password principale</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Ridigita la nuova parola d\'accesso principale (obbligatoria)</string>
   <string name="retype_master_password_required">Ridigita la password principale (obbligatorio)</string>
   <string name="search_vault">Cerca nella cassaforte</string>
   <string name="security">Sicurezza</string>
@@ -209,6 +215,11 @@
   <string name="validating">Convalida</string>
   <string name="verification_code">Codice di verifica</string>
   <string name="view_item">Visualizza l\'elemento</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Cassaforte web di Bitwarden</string>
   <string name="lost_2fa_app">Hai perso l\'app di autenticazione?</string>
   <string name="items">Elementi</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">App di autenticazione</string>
   <string name="enter_verification_code_app">Inserisci il codice di verifica a 6 cifre dalla tua app di autenticazione.</string>
   <string name="enter_verification_code_email">Inserisci il codice di verifica a 6 cifre inviato all\'indirizzo %1$s.</string>
+  <string name="enter_verification_code_new_device">Non riconosciamo questo dispositivo. Inserisci il codice di verifica a 8 cifre che è stato inviato via e-mail a %1$s.</string>
   <string name="login_unavailable">Login non disponibile</string>
   <string name="no_two_step_available">L\'autenticazione a due fattori è abilitata, ma nessuno dei metodi configurati è supportato da questo dispositivo. Usa un altro dispositivo o aggiungi un metodo supportato su tutti i dispositivi (come un\'app di autenticazione).</string>
   <string name="recovery_code_title">Codice di recupero</string>
@@ -314,6 +326,7 @@ La scansione è automatica.</string>
   <string name="april">Aprile</string>
   <string name="august">Agosto</string>
   <string name="brand">Marca</string>
+  <string name="card_details">Dettagli carta</string>
   <string name="cardholder_name">Titolare della carta</string>
   <string name="city_town">Città / Comune</string>
   <string name="company">Azienda</string>
@@ -414,8 +427,11 @@ La scansione è automatica.</string>
   <string name="invalid_email">Inserisci un indirizzo email valido</string>
   <string name="cards">Carte</string>
   <string name="identities">Identità</string>
+  <string name="identification">Identificazione</string>
   <string name="logins">Login</string>
   <string name="secure_notes">Note sicure</string>
+  <string name="personal_details">Dettagli personali</string>
+  <string name="contact_info">Informazioni di contatto</string>
   <string name="all_items">Tutti gli elementi</string>
   <string name="ur_is">URL</string>
   <string name="checking_password">Controllo password...</string>
@@ -439,7 +455,7 @@ La scansione è automatica.</string>
   <string name="move_up">Sposta in alto</string>
   <string name="miscellaneous">Varie</string>
   <string name="ownership">Proprietà</string>
-  <string name="who_owns_this_item">Proprietario</string>
+  <string name="owner">Propriet.</string>
   <string name="no_collections_to_list">Nessuna raccolta</string>
   <string name="moved_item_to_org">%1$s spostato in %2$s</string>
   <string name="item_shared">Elemento condiviso.</string>
@@ -830,7 +846,7 @@ Vuoi passare a questo account?</string>
   <string name="data_region">Area dati</string>
   <string name="region">Regione</string>
   <string name="update_weak_master_password_warning">La tua password principale non soddisfa uno o più politiche della tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un\'ora.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Parola d\'accesso principale attuale (obbligatoria)</string>
   <string name="logged_in">Accesso effettuato</string>
   <string name="approve_with_my_other_device">Approva con un altro dispositivo</string>
   <string name="request_admin_approval">Richiedi l\'approvazione dell\'amministratore</string>
@@ -1022,14 +1038,14 @@ Vuoi passare a questo account?</string>
   <string name="generate_button_label">Genera</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Appunta questa password e tienila in un posto sicuro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Scopri di più su come evitare il blocco dell\'account</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Scopri i modi per prevenire il blocco dell\'account</annotation></string>
   <string name="help_with_server_geolocations">Aiuta con le geolocalizzazioni dei server.</string>
   <string name="email_address_required">Indirizzo email (necessario)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Clicca sul link nell'email per verificare il tuo indirizzo di posta e proseguire con la creazione del tuo account. "</string>
   <string name="change_email_address">Modifica l\'indirizzo email</string>
   <string name="next">Continua</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la password principale al posto tuo.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la parola d\'accesso principale al posto tuo.</string>
   <string name="choose_your_master_password">Imposta la password principale</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Imposta una password forte e unica per proteggere i tuoi dati.</string>
   <string name="minimum_characters">%1$s caratteri</string>
@@ -1049,7 +1065,7 @@ Vuoi passare a questo account?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Errore di connessione con il servizio Duo. Utilizza un metodo di login in due passaggi diverso o contatta Duo per assistenza.</string>
   <string name="master_password_hint_not_specified">Suggerimento per la password principale</string>
   <string name="master_password_important_hint">La tua password principale non può essere recuperata se la dimentichi! Almeno 12 caratteri.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Nuovo suggerimento parola d\'accesso principale</string>
   <string name="get_started">Inizia</string>
   <string name="save_and_protect_your_data">Salva e proteggi i tuoi dati</string>
   <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge non solo le password ma anche i login, le identità, le carte e le note in modo sicuro.</string>
@@ -1177,6 +1193,7 @@ Vuoi passare a questo account?</string>
   <string name="coachmark_6_of_6">6 DI 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua parola d\'accesso alle specifiche del tuo account.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Dopo aver salvato la tua nuova parola d'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account. "</string>
+  <string name="verify_your_identity">Verifica la tua identità</string>
   <string name="error_loading_certificate">Errore caricamento certificato</string>
   <string name="certificate_alias">Alias del certificato</string>
   <string name="import_certificate">Importa certificato</string>
@@ -1202,4 +1219,5 @@ Vuoi passare a questo account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operazione parola d\'accesso non riuscita perché la richiesta non è valida.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operazione chiave d\'accesso non riuscita perché i tentativi di verifica dell\'utente sono stati superati.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
+  <string name="self_host_server_url">URL server autogestito</string>
 </resources>

@@ -50,12 +50,12 @@
   <string name="switch_to_already_added_account_confirmation">Şimdi geçmek ister misiniz?</string>
   <string name="master_password">Ana parola</string>
   <string name="master_password_required">Ana parola (gerekli)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Yeni ana parola (gerekli)</string>
   <string name="more">Daha fazla</string>
   <string name="my_vault">Kasam</string>
   <string name="authenticator">Doğrulayıcı</string>
   <string name="name">Ad</string>
-  <string name="item_name_required">Item name (required)</string>
+  <string name="item_name_required">Kayıt adı (gerekli)</string>
   <string name="send_name_required">"Send adı (gerekli)"</string>
   <string name="no">Hayır</string>
   <string name="notes">Notlar</string>
@@ -73,7 +73,7 @@
   <string name="thank_you">Teşekkürler</string>
   <string name="tools">Araçlar</string>
   <string name="uri">URl</string>
-  <string name="website_uri">Website (URI)</string>
+  <string name="website_uri">Web sitesi (URI)</string>
   <string name="use_fingerprint_to_unlock">Kilidi parmak iziyle aç</string>
   <string name="username">Kullanıcı adı</string>
   <string name="validation_field_required">%1$s alanı gereklidir.</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Hesap oluştur</string>
   <string name="creating_account">Hesap oluşturuluyor...</string>
   <string name="edit_item">Kaydı düzenle</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Otomatik eşitlemeyi aç</string>
   <string name="enter_email_for_hint">Ana parola ipucunuzun gönderileceği hesap e-posta adresinizi girin.</string>
   <string name="exntesion_reenable">Uygulama uzantısını yeniden etkinleştir</string>
@@ -122,7 +127,7 @@
   <string name="extension_tap_icon">Uzantıyı açmak için menüdeki Bitwarden simgesine dokunun.</string>
   <string name="extension_turn_on">Safari ve diğer uygulamalarda Bitwarden\'ı açmak için menünün alt satırındaki \"Daha Fazla\" simgesine dokunun.</string>
   <string name="favorite">Favori</string>
-  <string name="unfavorite">Unfavorite</string>
+  <string name="unfavorite">Favorilerden kaldır</string>
   <string name="fingerprint">Parmak izi</string>
   <string name="generate_password">Parola oluştur</string>
   <string name="get_password_hint">Ana parola ipucununuzu alın</string>
@@ -157,18 +162,19 @@
   <string name="no_favorites">Kasanızda hiç favoriniz yok.</string>
   <string name="no_items">Kasanızda hiç kayıt yok.</string>
   <string name="no_items_tap">Kasanızda bu siteye/uygulamaya ait hiç hesap yok. Eklemek isterseniz dokunun.</string>
-  <string name="no_cards">There are no cards in your vault.</string>
-  <string name="new_card">New card</string>
-  <string name="no_logins">There are no logins in your vault.</string>
+  <string name="no_cards">Kasanızda hiç kart yok.</string>
+  <string name="new_card">Yeni kart</string>
+  <string name="no_logins">Kasanızda hiç hesap yok.</string>
   <string name="no_identities">There are no identities in your vault.</string>
-  <string name="new_identity">New identity</string>
+  <string name="new_identity">Yeni kimlik</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Yeni SSH anahtarı</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Kasanızda hiç SSH anahtarı yok.</string>
   <string name="new_text_send">New text Send</string>
   <string name="new_file_send">New file Send</string>
   <string name="no_username">Kullanıcı adı yok</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">İyi bir yorum yazarak bizi destekleyebilirsiniz.</string>
   <string name="regenerate_password">Yeni parola oluştur</string>
   <string name="retype_master_password">Ana parolayı tekrar yazın</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Yeni ana parolayı yeniden yazın (gerekli)</string>
   <string name="retype_master_password_required">Ana parolayı yeniden yazın (gerekli)</string>
   <string name="search_vault">Kasada ara</string>
   <string name="security">Güvenlik</string>
@@ -209,6 +215,11 @@
   <string name="validating">Doğrulanıyor</string>
   <string name="verification_code">Doğrulama kodu</string>
   <string name="view_item">Kaydı görüntüle</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden web kasası</string>
   <string name="lost_2fa_app">Kimlik doğrulama uygulamanızı kayıp mı ettiniz?</string>
   <string name="items">Kayıtlar</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Kimlik doğrulama uygulaması</string>
   <string name="enter_verification_code_app">Kimlik doğrulama uygulamanızdaki 6 haneli doğrulama kodunu girin.</string>
   <string name="enter_verification_code_email">%1$s adresine e-postayla gönderdiğimiz 6 haneli doğrulama kodunu girin.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Giriş yapılamıyor</string>
   <string name="no_two_step_available">Bu hesap için iki aşamalı giriş etkinleştirilmiş ama yapılandırılan iki aşamalı giriş sağlayıcılarının hiçbiri bu cihazda desteklenmiyor. Lütfen desteklenen bir cihaz kullanın ve/veya farklı cihazlarda desteklenen yeni sağlayıcılar ekleyin (örn. kimlik doğrulama uygulaması).</string>
   <string name="recovery_code_title">Kurtarma kodu</string>
@@ -314,6 +326,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="april">Nisan</string>
   <string name="august">Ağustos</string>
   <string name="brand">Marka</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Kart sahibinin adı</string>
   <string name="city_town">Şehir</string>
   <string name="company">Şirket</string>
@@ -379,7 +392,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="select_type_field">Ne tür bir özel alan eklemek istiyorsunuz?</string>
   <string name="remove">Kaldır</string>
   <string name="new_uri">Yeni URI</string>
-  <string name="add_website">Add website</string>
+  <string name="add_website">Web sitesi ekle</string>
   <string name="uri_position">URI %1$s</string>
   <string name="base_domain">Ana alan adı</string>
   <string name="default_text">Varsayılan</string>
@@ -414,8 +427,11 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="invalid_email">Geçersiz e-posta adresi.</string>
   <string name="cards">Kartlar</string>
   <string name="identities">Kimlikler</string>
+  <string name="identification">Identification</string>
   <string name="logins">Hesaplar</string>
   <string name="secure_notes">Güvenli notlar</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Tüm kayıtlar</string>
   <string name="ur_is">URl\'ler</string>
   <string name="checking_password">Parola kontrol ediliyor...</string>
@@ -439,7 +455,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="move_up">Yukarı taşı</string>
   <string name="miscellaneous">Diğer</string>
   <string name="ownership">Sahip</string>
-  <string name="who_owns_this_item">Bu öğenin sahibi kim?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">Listelenecek koleksiyon yok.</string>
   <string name="moved_item_to_org">%1$s, %2$s kuruluşuna taşındı.</string>
   <string name="item_shared">Öge paylaşıldı.</string>
@@ -721,7 +737,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="enter_key_manually">Anahtarı elle girin</string>
   <string name="add_totp">TOTP ekle</string>
   <string name="setup_totp">TOTP\'yi kur</string>
-  <string name="set_up_authenticator_key">Set up authenticator key</string>
+  <string name="set_up_authenticator_key"></string>
   <string name="once_the_key_is_successfully_entered">Anahtar eklendikten sonra anahtarı güvenli bir şekilde depolamak için \"TOTP ekle\"yi seçin</string>
   <string name="never_lock_warning">Kilit seçeneklerinizi \"Asla\" olarak ayarlarsanız cihazınıza erişebilen herkes kasanıza da erişebilir. Bu seçeneği kullanırsanız cihazınızı uygun şekilde koruduğunuzdan emin olmalısınız.</string>
   <string name="environment_page_urls_error">Girilen adreslerden biri veya birkaçı geçersiz. Lütfen düzeltip yeniden kaydetmeyi deneyin.</string>
@@ -830,7 +846,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="data_region">Veri bölgesi</string>
   <string name="region">Bölge</string>
   <string name="update_weak_master_password_warning">Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Mevcut ana parola (gerekli)</string>
   <string name="logged_in">Giriş yapıldı!</string>
   <string name="approve_with_my_other_device">Diğer cihazımla onayla</string>
   <string name="request_admin_approval">Yönetici onayı iste</string>
@@ -944,8 +960,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">Parolalarınızı ve geçiş anahtarlarını kullanmak için \"Bitwarden\" seçin</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s için geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
-  <string name="organization_unassigned_items_message_useu_description_long">Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
-  <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
+  <string name="organization_unassigned_items_message_useu_description_long">.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long"></string>
   <string name="remind_me_later">Daha sonra hatırlat</string>
   <string name="notice">Dikkat</string>
   <string name="passkeys_not_supported_for_this_app">Bu uygulamada geçiş anahtarları desteklenmiyor</string>
@@ -955,8 +971,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama varlık bağlantılarında bulunamadı</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama doğrulanamadı</string>
   <string name="confirm_file_password">Dosya parolasını onaylayın</string>
-  <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
-  <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
+  <string name="continue_to_give_feedback">Puanlamaya devam etmek istiyor musunuz?</string>
+  <string name="continue_to_provide_feedback">Devam ederek yeni uygulamamıza puan verin!</string>
   <string name="file_password">Dosya parolası</string>
   <string name="give_feedback">Geribildirim Gönder</string>
   <string name="password_protected">Parola Korumalı</string>
@@ -1022,14 +1038,14 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="generate_button_label">Üret</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Bu parolayı not alıp güvenli bir yerde saklayın.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Hesabınıza erişimi kaybetmemenin diğer yollarını öğrenin</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Hesabınıza erişimi kaybetmemenin yollarını öğrenin</annotation></string>
   <string name="help_with_server_geolocations">Help with server geolocations.</string>
   <string name="email_address_required">Eposta adresi (gerekli)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"E-posta adresinizi onaylayarak hesap açılışına devam etmek için e-postadaki bağlantıya tıklayın. "</string>
   <string name="change_email_address">E-posta adresini değiştir</string>
   <string name="next">İleri</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden, unuttuğunuz veya kaybettiğiniz ana parolaları kurtaramaz.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden, unuttuğunuz veya kaybettiğiniz ana parolaları sıfırlayamaz.</string>
   <string name="choose_your_master_password">Ana parolanızı seçin</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Bilgilerinizi güvende tutmak için başka yerde kullanmadığınız, güçlü bir parola seçin.</string>
   <string name="minimum_characters">%1$s karakter</string>
@@ -1049,7 +1065,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Duo hizmetine bağlanırken hata oluştu. Başka bir iki aşamalı giriş yöntemi kullanın veya destek almak Duo ile iletişime geçin.</string>
   <string name="master_password_hint_not_specified">Ana parola ipucu</string>
   <string name="master_password_important_hint">Dikkat: Ana parolanızı unutursanız kurtaramazsınız! En az 12 karakter.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Yeni ana parola ipucu</string>
   <string name="get_started">Başlayın</string>
   <string name="save_and_protect_your_data">Verilerinizi kaydedin ve koruyun</string>
   <string name="the_vault_protects_more_than_just_passwords">Kasanız sadece parolalarınız için değil. Hesaplarınızı, kimliklerinizi, kredi kartlarınızı ve notlarınızı da güvenle burada depolayabilirsiniz.</string>
@@ -1177,6 +1193,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Kimliğinizi doğrulayın</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1202,4 +1219,5 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
 </resources>
