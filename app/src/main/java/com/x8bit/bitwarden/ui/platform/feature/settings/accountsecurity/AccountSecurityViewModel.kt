@@ -172,7 +172,7 @@ class AccountSecurityViewModel @Inject constructor(
     private fun arePoliciesValid(policies: List<SyncResponseJson.Policy>) =
         policies.any { policy ->
             authRepository.userStateFlow.value?.activeAccount?.organizations?.any { org ->
-                policy.organizationId == org.id && !isExemptFromPolicy(org)
+                (policy.organizationId == org.id) && !isExemptFromPolicy(org)
             } == true
         }
 
