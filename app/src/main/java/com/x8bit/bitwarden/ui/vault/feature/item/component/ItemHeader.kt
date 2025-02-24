@@ -188,7 +188,7 @@ private fun ItemHeaderIcon(
         modifier = if (iconData is IconData.Local) {
             modifier.then(
                 Modifier.background(
-                    color = BitwardenTheme.colorScheme.icon.faviconBackground,
+                    color = BitwardenTheme.colorScheme.illustration.backgroundPrimary,
                     shape = BitwardenTheme.shapes.favicon,
                 ),
             )
@@ -199,7 +199,7 @@ private fun ItemHeaderIcon(
         BitwardenIcon(
             iconData = iconData,
             contentDescription = null,
-            tint = BitwardenTheme.colorScheme.icon.faviconForeground,
+            tint = BitwardenTheme.colorScheme.illustration.outline,
             modifier = Modifier
                 .nullableTestTag(testTag),
         )
