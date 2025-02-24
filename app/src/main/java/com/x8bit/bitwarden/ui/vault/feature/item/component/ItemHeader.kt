@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -152,7 +153,7 @@ fun ItemHeader(
 }
 
 @Composable
-private fun ExpandingItemLocationContent(
+private fun ColumnScope.ExpandingItemLocationContent(
     overflowLocations: ImmutableList<VaultItemLocation>,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
