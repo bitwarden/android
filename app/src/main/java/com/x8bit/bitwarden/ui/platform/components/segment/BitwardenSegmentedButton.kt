@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -110,7 +111,10 @@ fun SingleChoiceSegmentedButtonRowScope.SegmentedButtonOptionContent(
         label = {
             Text(
                 text = option.text,
-                style = BitwardenTheme.typography.labelLarge,
+                style = BitwardenTheme.typography.labelLarge.copy(
+                    hyphens = Hyphens.Auto,
+                ),
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
             )
         },
         icon = {
