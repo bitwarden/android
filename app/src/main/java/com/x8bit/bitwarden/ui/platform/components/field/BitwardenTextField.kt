@@ -206,7 +206,7 @@ fun BitwardenTextField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
-    supportingContent: @Composable (ColumnScope.() -> Unit)?,
+    supportingContent: (@Composable ColumnScope.() -> Unit)?,
     cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     tooltip: TooltipData? = null,
