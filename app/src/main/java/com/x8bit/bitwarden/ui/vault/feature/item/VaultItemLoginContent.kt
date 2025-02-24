@@ -54,7 +54,7 @@ fun VaultItemLoginContent(
         modifier = modifier,
     ) {
         item {
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(12.dp))
             ItemHeader(
                 value = commonState.name,
                 isFavorite = commonState.favorite,
