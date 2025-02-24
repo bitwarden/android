@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">กำลังสร้างบัญชี...</string>
   <string name="edit_item">แก้ไขรายการ</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">เปิดใช้การซิงค์อัตโนมัติ</string>
   <string name="enter_email_for_hint">ป้อนที่อยู่อีเมลบัญชีของคุณเพื่อรับคำแนะนำเกี่ยวกับรหัสผ่านหลักของคุณ</string>
   <string name="exntesion_reenable">เปิดใช้งานส่วนขยายแอปอีกครั้ง</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">กำลังตรวจสอบ...</string>
   <string name="verification_code">รหัสยืนยัน</string>
   <string name="view_item">ดูรายการ</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">bitwarden Web Vault</string>
   <string name="lost_2fa_app">แอปตรวจสอบการยืนยันหายไป?</string>
   <string name="items">รายการ</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">แอป Authenticator</string>
   <string name="enter_verification_code_app">ป้อนรหัสยืนยัน 6 หลักจากคุณแอป authenticator</string>
   <string name="enter_verification_code_email">ป้อนรหัสยืนยัน6หลักที่ส่งอีเมลไปที่ %1$s</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">เข้าสู่ระบบไม่พร้อมใช้งาน</string>
   <string name="no_two_step_available">บัญชีนี้มีการเปิดใช้งานการเข้าสู่ระบบสองขั้นตอนอย่างไรก็ตามไม่มีการกำหนดค่าผู้ให้บริการสองขั้นตอนที่ได้รับการสนับสนุนบนอุปกรณ์นี้ โปรดใช้อุปกรณ์ที่รองรับและ/หรือเพิ่มผู้ให้บริการเพิ่มเติมที่ได้รับการสนับสนุนให้ดีขึ้นในอุปกรณ์ต่างๆ (เช่นแอป authenticator)</string>
   <string name="recovery_code_title">รหัสกู้คืน</string>
@@ -314,6 +326,7 @@ Scanning will happen automatically.</string>
   <string name="april">เมษายน</string>
   <string name="august">สิงหาคม</string>
   <string name="brand">แบรนด์</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">ชื่อผู้ถือบัตร</string>
   <string name="city_town">เมือง</string>
   <string name="company">บริษัท</string>
@@ -414,8 +427,11 @@ Scanning will happen automatically.</string>
   <string name="invalid_email">ที่อยู่อีเมลไม่ถูกต้อง</string>
   <string name="cards">บัตร</string>
   <string name="identities">Identities</string>
+  <string name="identification">Identification</string>
   <string name="logins">เข้าสู่ระบบ</string>
   <string name="secure_notes">บันทึกการรักษาปลอดภัย</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">รายการทั้งหมด</string>
   <string name="ur_is">URIs</string>
   <string name="checking_password">กำลังเช็กรหัสผ่าน...</string>
@@ -439,7 +455,7 @@ Scanning will happen automatically.</string>
   <string name="move_up">Move Up</string>
   <string name="miscellaneous">อื่นๆ</string>
   <string name="ownership">ความเป็นเจ้าของ</string>
-  <string name="who_owns_this_item">ใครเป็นเจ้าของรายการนี้</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">ไม่มีคอลเลกชันที่จะแสดง</string>
   <string name="moved_item_to_org">%1$s ย้ายไปที่ %2$s.</string>
   <string name="item_shared">รายการถูกแชร์แล้ว</string>
@@ -1178,6 +1194,7 @@ Do you want to switch to this account?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1203,4 +1220,5 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
 </resources>

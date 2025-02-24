@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.network.service
 import androidx.core.net.toUri
 import com.bitwarden.vault.Attachment
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
+import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -110,7 +111,7 @@ class CiphersServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<UpdateCipherResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
@@ -229,7 +230,7 @@ class CiphersServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<ImportCiphersResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
