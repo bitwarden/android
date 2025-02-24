@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.platform.testTag
@@ -34,8 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
-import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
@@ -67,9 +66,8 @@ fun ItemHeader(
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .clip(shape = BitwardenTheme.shapes.content)
-            .background(color = BitwardenTheme.colorScheme.background.secondary),
+            .cardStyle(CardStyle.Full)
+            .fillMaxWidth(),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
