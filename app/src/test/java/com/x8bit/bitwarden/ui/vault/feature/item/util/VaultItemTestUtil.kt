@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import kotlinx.collections.immutable.persistentListOf
 import java.time.Instant
 
 const val DEFAULT_IDENTITY_NAME: String = "Mr firstName middleName lastName"
@@ -177,7 +178,7 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
         )
     } else {
@@ -226,7 +227,7 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
-            relatedLocations = emptyList(),
+            relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
         )
     }

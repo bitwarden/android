@@ -53,6 +53,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
@@ -324,7 +325,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = defaultViewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = emptyList(),
+                            relatedLocations = persistentListOf(),
                         ),
                     ),
                 )
@@ -338,7 +339,9 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = defaultViewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = listOf(VaultItemLocation.Collection("collection")),
+                            relatedLocations = persistentListOf(
+                                VaultItemLocation.Collection("collection"),
+                            ),
                         ),
                     ),
                 )
@@ -357,7 +360,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = listOf(
+                            relatedLocations = persistentListOf(
                                 VaultItemLocation.Organization(
                                     organizationName,
                                 ),
@@ -374,7 +377,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = emptyList(),
+                            relatedLocations = persistentListOf(),
                         ),
                     ),
                 )
@@ -392,7 +395,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = listOf(
+                            relatedLocations = persistentListOf(
                                 VaultItemLocation.Collection("My collection"),
                             ),
                         ),
@@ -407,7 +410,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = emptyList(),
+                            relatedLocations = persistentListOf(),
                         ),
                     ),
                 )
@@ -425,7 +428,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = listOf(
+                            relatedLocations = persistentListOf(
                                 VaultItemLocation.Organization("My organization"),
                                 VaultItemLocation.Collection("My collection"),
                                 VaultItemLocation.Folder("My folder"),
@@ -452,7 +455,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                 DEFAULT_STATE.copy(
                     viewState = viewState.copy(
                         common = DEFAULT_COMMON.copy(
-                            relatedLocations = listOf(
+                            relatedLocations = persistentListOf(
                                 VaultItemLocation.Organization("My organization"),
                                 VaultItemLocation.Collection("My collection"),
                                 VaultItemLocation.Folder("My folder"),
@@ -2948,7 +2951,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canEdit = true,
         favorite = false,
         iconData = IconData.Local(iconRes = R.drawable.ic_globe),
-        relatedLocations = emptyList(),
+        relatedLocations = persistentListOf(),
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -3035,7 +3038,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canEdit = true,
         favorite = false,
         iconData = IconData.Local(iconRes = R.drawable.ic_globe),
-        relatedLocations = emptyList(),
+        relatedLocations = persistentListOf(),
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =

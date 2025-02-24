@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import kotlinx.collections.immutable.ImmutableList
 import java.time.Clock
 
 private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
@@ -48,7 +49,7 @@ fun CipherView.toViewState(
     canEdit: Boolean,
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
-    relatedLocations: List<VaultItemLocation>,
+    relatedLocations: ImmutableList<VaultItemLocation>,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(

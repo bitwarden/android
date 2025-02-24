@@ -40,6 +40,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -160,6 +162,7 @@ class VaultItemViewModel @Inject constructor(
                             addAll(collections.map { VaultItemLocation.Collection(it) })
                             folderName?.let { add(VaultItemLocation.Folder(it)) }
                         }
+                            .toImmutableList()
 
                         VaultItemStateData(
                             cipher = cipherView,
@@ -1197,7 +1200,7 @@ class VaultItemViewModel @Inject constructor(
             canEdit = this.data?.canEdit == true,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
-            relatedLocations = this.data?.relatedLocations.orEmpty(),
+            relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1564,7 +1567,7 @@ data class VaultItemState(
                 val canEdit: Boolean,
                 val favorite: Boolean,
                 val iconData: IconData,
-                val relatedLocations: List<VaultItemLocation>,
+                val relatedLocations: ImmutableList<VaultItemLocation>,
             ) : Parcelable {
 
                 /**
