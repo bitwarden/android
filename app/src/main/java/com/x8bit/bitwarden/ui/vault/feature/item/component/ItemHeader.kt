@@ -74,8 +74,8 @@ fun ItemHeader(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
         ) {
             ItemHeaderIcon(
                 iconData = iconData,
@@ -115,8 +115,8 @@ fun ItemHeader(
                 text = stringResource(R.string.no_folder),
                 iconTestTag = "NoFolderIcon",
                 modifier = Modifier
-                    .standardHorizontalMargin()
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             return@Column
         }
@@ -129,8 +129,8 @@ fun ItemHeader(
                     iconTestTag = "ItemLocationIcon",
                     text = it.name,
                     modifier = Modifier
-                        .standardHorizontalMargin()
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
 
@@ -159,7 +159,7 @@ private fun ExpandingItemLocationContent(
                         text = it.name,
                         iconTestTag = "ItemLocationIcon",
                         modifier = Modifier
-                            .standardHorizontalMargin()
+                            .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                     )
                 }
@@ -231,7 +231,8 @@ private fun ItemLocationListItem(
             text = text,
             style = BitwardenTheme.typography.bodyLarge,
             color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.padding(start = 16.dp)
+            modifier = Modifier
+                .padding(start = 16.dp)
                 .testTag("ItemLocationText"),
         )
     }
