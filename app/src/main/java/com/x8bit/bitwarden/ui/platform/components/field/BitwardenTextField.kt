@@ -378,7 +378,7 @@ fun BitwardenTextField(
                             content = content,
                         )
                     }
-                    ?: Spacer(modifier = Modifier.height(height = 6.dp))
+                    ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
             }
             val filteredAutoCompleteList = autoCompleteOptions
                 .filter { option ->
