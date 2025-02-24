@@ -17,6 +17,7 @@ data class BitwardenColorScheme(
     val toggleButton: ToggleButtonColors,
     val sliderButton: SliderButtonColors,
     val status: StatusColors,
+    val illustration: IllustrationColors,
 ) {
     /**
      * Defines all the text colors for the app.
@@ -64,8 +65,6 @@ data class BitwardenColorScheme(
         val reversed: Color,
         val badgeBackground: Color,
         val badgeForeground: Color,
-        val faviconForeground: Color,
-        val faviconBackground: Color,
     )
 
     /**
@@ -125,5 +124,14 @@ data class BitwardenColorScheme(
         val weak1: Color,
         val weak2: Color,
         val error: Color,
+    )
+
+    /**
+     * Defines all the illustration colors for the app.
+     */
+    @Immutable
+    data class IllustrationColors(
+        val outline: Color,
+        val backgroundPrimary: Color,
     )
 }
