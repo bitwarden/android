@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -157,18 +158,17 @@ private fun ExpandingItemLocationContent(
         exit = fadeOut() + slideOutVertically(),
         modifier = Modifier.clipToBounds(),
     ) {
-        Column {
-            overflowLocations
-                .forEach {
-                    ItemLocationListItem(
-                        vectorPainter = rememberVectorPainter(it.icon),
-                        text = it.name,
-                        iconTestTag = "ItemLocationIcon",
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .fillMaxWidth(),
-                    )
-                }
+        LazyColumn {
+            items(overflowLocations) {
+                ItemLocationListItem(
+                    vectorPainter = rememberVectorPainter(it.icon),
+                    text = it.name,
+                    iconTestTag = "ItemLocationIcon",
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+            }
         }
     }
 
