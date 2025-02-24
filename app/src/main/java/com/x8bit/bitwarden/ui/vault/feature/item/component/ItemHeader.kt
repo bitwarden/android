@@ -103,7 +103,7 @@ fun ItemHeader(
                     )
                 },
                 textFieldTestTag = textFieldTestTag,
-                cardStyle = CardStyle.Full,
+                cardStyle = null,
                 textStyle = BitwardenTheme.typography.titleMedium,
             )
         }
