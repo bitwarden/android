@@ -30,10 +30,6 @@ class FlagKeyTest {
             "import-logins-flow",
         )
         assertEquals(
-            FlagKey.SshKeyCipherItems.keyName,
-            "ssh-key-vault-item",
-        )
-        assertEquals(
             FlagKey.VerifiedSsoDomainEndpoint.keyName,
             "pm-12337-refactor-sso-details-endpoint",
         )
@@ -96,7 +92,6 @@ class FlagKeyTest {
                 FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.SshKeyCipherItems,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
@@ -124,7 +119,6 @@ class FlagKeyTest {
                 FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.SshKeyCipherItems,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,

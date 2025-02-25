@@ -37,7 +37,6 @@ fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
     onOverflowOptionClick: (action: ListingItemOverflowAction.VaultAction) -> Unit,
-    showSshKeys: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -192,11 +191,7 @@ fun VaultContent(
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
                 showDivider = false,
-                cardStyle = if (showSshKeys) {
-                    CardStyle.Middle(dividerPadding = 56.dp)
-                } else {
-                    CardStyle.Bottom
-                },
+                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SecureNoteFilter")
@@ -204,22 +199,20 @@ fun VaultContent(
             )
         }
 
-        if (showSshKeys) {
-            item {
-                BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = R.drawable.ic_ssh_key),
-                    startIconTestTag = "SshKeyCipherIcon",
-                    label = stringResource(id = R.string.type_ssh_key),
-                    supportingLabel = state.sshKeyItemsCount.toString(),
-                    onClick = vaultHandlers.sshKeyGroupClick,
-                    showDivider = false,
-                    cardStyle = CardStyle.Bottom,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("SshKeyFilter")
-                        .standardHorizontalMargin(),
-                )
-            }
+        item {
+            BitwardenGroupItem(
+                startIcon = rememberVectorPainter(id = R.drawable.ic_ssh_key),
+                startIconTestTag = "SshKeyCipherIcon",
+                label = stringResource(id = R.string.type_ssh_key),
+                supportingLabel = state.sshKeyItemsCount.toString(),
+                onClick = vaultHandlers.sshKeyGroupClick,
+                showDivider = false,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("SshKeyFilter")
+                    .standardHorizontalMargin(),
+            )
         }
 
         item {
