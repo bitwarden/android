@@ -160,7 +160,9 @@ fun ItemHeader(
                     isExpanded = isExpanded,
                     onClick = { isExpanded = !isExpanded },
                     showExpansionIndicator = false,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 )
             }
         }
