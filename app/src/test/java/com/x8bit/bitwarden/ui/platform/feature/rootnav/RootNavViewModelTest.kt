@@ -385,6 +385,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 id = "orgId",
                                 name = "orgName",
                                 shouldManageResetPassword = false,
+                                shouldManagePolicies = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
                             ),

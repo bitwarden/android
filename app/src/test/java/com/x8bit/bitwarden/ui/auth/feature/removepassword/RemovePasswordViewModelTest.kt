@@ -159,6 +159,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
             id = "orgId",
             name = ORGANIZATION_NAME,
             shouldManageResetPassword = false,
+            shouldManagePolicies = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
         ),
