@@ -10,7 +10,10 @@ import java.net.URLEncoder
  *
  * Uses this as a guide for format
  * https://github.com/google/google-authenticator/wiki/Key-Uri-Format
- */
+ *
+ * Replace spaces (+) with %20, and encode the label and issuer (per the above link)
+ * https://datatracker.ietf.org/doc/html/rfc5234
+ * */
 fun String?.sanitizeTotpUri(
     issuer: String?,
     username: String?,
@@ -40,16 +43,26 @@ fun String?.sanitizeTotpUri(
         }
 
         // Encode label only if it's not empty
-        val encodedLabel = rawLabel.takeIf { it.isNotEmpty() }?.let {
-            URLEncoder.encode(it, "UTF-8").replace("+", "%20")
-        } ?: ""
+        val encodedLabel = rawLabel
+            .takeIf { it.isNotEmpty() }
+            ?.let {
+                URLEncoder.encode(it, "UTF-8")
+                    .replace("+", "%20")
+            }
+            .orEmpty()
 
         //  Encode issuer separately for the query parameter
-        val encodedIssuer = trimmedIssuer?.takeIf { it.isNotBlank() }?.let {
-            URLEncoder.encode(it, "UTF-8").replace("+", "%20")
-        }
+        val encodedIssuer = trimmedIssuer
+            ?.takeIf { it.isNotBlank() }
+            ?.let {
+                URLEncoder.encode(it, "UTF-8")
+                    .replace("+", "%20")
+            }
 
-        val issuerParameter = encodedIssuer?.let { "&issuer=$it" } ?: ""
+        // Construct the issuer query parameter.
+        val issuerParameter = encodedIssuer
+            ?.let { "&issuer=$it" }
+            .orEmpty()
 
         // Remove spaces from the manually entered secret
         val sanitizedSecret = this.replace("\\s".toRegex(), "")
