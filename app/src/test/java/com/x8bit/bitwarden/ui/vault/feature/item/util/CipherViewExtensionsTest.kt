@@ -28,7 +28,6 @@ class CipherViewExtensionsTest {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(Uri::class)
         setupMockUri()
     }
 
