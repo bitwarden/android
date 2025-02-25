@@ -665,7 +665,9 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
                 ) {
                     SegmentedButtonOptionContent(
                         option = option,
-                        modifier = Modifier.width(weightedWidth),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(weightedWidth),
                     )
                 }
             }
@@ -694,7 +696,9 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
                 ) {
                     SegmentedButtonOptionContent(
                         option = option,
-                        modifier = Modifier.width(weightedWidth),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(weightedWidth),
                     )
                 }
             }
@@ -723,7 +727,9 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
                 ) {
                     SegmentedButtonOptionContent(
                         option = option,
-                        modifier = Modifier.width(weightedWidth),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .width(weightedWidth),
                     )
                 }
             }
@@ -731,7 +737,9 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.MainStateOptionsItem(
             else -> {
                 SegmentedButtonOptionContent(
                     option = option,
-                    modifier = Modifier.width(weightedWidth),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(weightedWidth),
                 )
             }
         }
