@@ -4515,12 +4515,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
         runTest {
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.Internal.InternetConnectionErrorReceived)
+            viewModel.trySendAction(
+                VaultItemListingsAction.Internal.InternetConnectionErrorReceived,
+            )
             assertEquals(
                 initialState.copy(
                     isRefreshing = false,
