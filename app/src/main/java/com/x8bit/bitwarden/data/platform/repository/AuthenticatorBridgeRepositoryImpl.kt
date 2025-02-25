@@ -109,9 +109,9 @@ class AuthenticatorBridgeRepositoryImpl(
 
                         val rawTotp = decryptedCipher?.login?.totp
                         val cipherName = decryptedCipher?.name
-                        val email = decryptedCipher?.login?.username
+                        val username = decryptedCipher?.login?.username
 
-                        rawTotp.sanitizeTotpUri(cipherName, email)
+                        rawTotp.sanitizeTotpUri(cipherName, username)
                     }
 
                 // Lock the user's vault if we unlocked it for this operation:

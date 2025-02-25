@@ -13,7 +13,7 @@ import java.net.URLEncoder
  */
 fun String?.sanitizeTotpUri(
     issuer: String?,
-    email: String?,
+    username: String?,
 ): String? {
     if (this.isNullOrBlank()) return null
 
@@ -25,16 +25,16 @@ fun String?.sanitizeTotpUri(
 
         // Trim spaces from issuer and account name **before encoding**
         val trimmedIssuer = issuer?.trim()
-        val trimmedEmail = email?.trim()
+        val trimmedUsername = username?.trim()
 
         // Determine raw label correctly (avoid empty `:` issue)
         val rawLabel = when {
             // Fully empty label
-            trimmedIssuer.isNullOrBlank() && trimmedEmail.isNullOrBlank() -> ""
+            trimmedIssuer.isNullOrBlank() && trimmedUsername.isNullOrBlank() -> ""
             // Both exist, add `:` between them
-            trimmedIssuer != null && trimmedEmail != null -> "$trimmedIssuer:$trimmedEmail"
+            trimmedIssuer != null && trimmedUsername != null -> "$trimmedIssuer:$trimmedUsername"
             // Only account name, no `:`
-            trimmedEmail != null -> trimmedEmail
+            trimmedUsername != null -> trimmedUsername
             // Only issuer exists, but we don't add a label
             else -> ""
         }
