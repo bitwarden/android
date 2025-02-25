@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -112,12 +113,17 @@ class AuthenticatorBridgeRepositoryTest {
         coEvery {
             vaultSdkSource.decryptCipher(USER_2_ID, USER_2_ENCRYPTED_SDK_TOTP_CIPHER)
         } returns USER_2_DECRYPTED_TOTP_CIPHER.asSuccess()
+        mockkStatic(String::sanitizeTotpUri)
+        every {
+            any<String>().sanitizeTotpUri(any(), any())
+        } returns "totp"
     }
 
     @AfterEach
     fun teardown() {
         confirmVerified(authRepository, vaultSdkSource, vaultRepository, vaultDiskSource)
         unmockkStatic(SyncResponseJson.Cipher::toEncryptedSdkCipher)
+        unmockkStatic(String::sanitizeTotpUri)
     }
 
     @Test
@@ -385,31 +391,41 @@ private val USER_STATE = UserState(
 
 private val USER_1_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1"
+    every { login?.username } returns "username"
     every { deletedDate } returns null
+    every { name } returns "cipher1"
 }
 
 private val USER_1_DELETED_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp1Deleted"
+    every { login?.username } returns "username"
     every { deletedDate } returns ZonedDateTime.now()
+    every { name } returns "cipher1"
 }
 
 private val USER_2_TOTP_CIPHER = mockk<SyncResponseJson.Cipher> {
     every { login?.totp } returns "encryptedTotp2"
+    every { login?.username } returns "username"
     every { deletedDate } returns null
+    every { name } returns "cipher2"
 }
 
 private val USER_1_ENCRYPTED_SDK_TOTP_CIPHER = mockk<Cipher>()
 private val USER_2_ENCRYPTED_SDK_TOTP_CIPHER = mockk<Cipher>()
 
 private val USER_1_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
-    every { login?.totp } returns "totp1"
+    every { login?.totp } returns "totp"
+    every { login?.username } returns "username"
+    every { name } returns "cipher1"
 }
 private val USER_2_DECRYPTED_TOTP_CIPHER = mockk<CipherView> {
-    every { login?.totp } returns "totp2"
+    every { login?.totp } returns "totp"
+    every { login?.username } returns "username"
+    every { name } returns "cipher1"
 }
 
-private val USER_1_EXPECTED_TOTP_LIST = listOf("totp1")
-private val USER_2_EXPECTED_TOTP_LIST = listOf("totp2")
+private val USER_1_EXPECTED_TOTP_LIST = listOf("totp")
+private val USER_2_EXPECTED_TOTP_LIST = listOf("totp")
 
 private val USER_1_SHARED_ACCOUNT = SharedAccountData.Account(
     userId = ACCOUNT_1.userId,
