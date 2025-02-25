@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -50,245 +51,228 @@ fun VaultItemLoginContent(
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
-        modifier = modifier,
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
     ) {
-        item {
-            Spacer(Modifier.height(12.dp))
-            ItemHeader(
-                value = commonState.name,
-                isFavorite = commonState.favorite,
-                iconData = commonState.iconData,
-                relatedLocations = commonState.relatedLocations,
-                iconTestTag = "LoginItemNameIcon",
-                textFieldTestTag = "LoginItemNameEntry",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
+        Spacer(Modifier.height(height = 12.dp))
+        ItemHeader(
+            value = commonState.name,
+            isFavorite = commonState.favorite,
+            iconData = commonState.iconData,
+            relatedLocations = commonState.relatedLocations,
+            iconTestTag = "LoginItemNameIcon",
+            textFieldTestTag = "LoginItemNameEntry",
+        )
+        LazyColumn(
+            modifier = modifier,
+        ) {
+            if (loginItemState.hasLoginCredentials) {
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.login_credentials),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                }
+            }
 
-        if (loginItemState.hasLoginCredentials) {
+            loginItemState.username?.let { username ->
+                item {
+                    UsernameField(
+                        username = username,
+                        onCopyUsernameClick = vaultLoginItemTypeHandlers.onCopyUsernameClick,
+                        cardStyle = loginItemState
+                            .passwordData
+                            ?.let { CardStyle.Top(dividerPadding = 0.dp) }
+                            ?: CardStyle.Full,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            loginItemState.passwordData?.let { passwordData ->
+                item {
+                    PasswordField(
+                        passwordData = passwordData,
+                        onShowPasswordClick = vaultLoginItemTypeHandlers.onShowPasswordClick,
+                        onCheckForBreachClick = vaultLoginItemTypeHandlers.onCheckForBreachClick,
+                        onCopyPasswordClick = vaultLoginItemTypeHandlers.onCopyPasswordClick,
+                        cardStyle = loginItemState
+                            .username
+                            ?.let { CardStyle.Bottom }
+                            ?: CardStyle.Full,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            loginItemState.fido2CredentialCreationDateText?.let { creationDate ->
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Fido2CredentialField(
+                        creationDate = creationDate(),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            loginItemState.totpCodeItemData?.let { totpCodeItemData ->
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TotpField(
+                        totpCodeItemData = totpCodeItemData,
+                        enabled = loginItemState.canViewTotpCode,
+                        onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
+                        onAuthenticatorHelpToolTipClick = vaultLoginItemTypeHandlers
+                            .onAuthenticatorHelpToolTipClick,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            loginItemState.uris.takeUnless { it.isEmpty() }?.let { uris ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.autofill_options),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                }
+
+                itemsIndexed(uris) { index, uriData ->
+                    UriField(
+                        uriData = uriData,
+                        onCopyUriClick = vaultLoginItemTypeHandlers.onCopyUriClick,
+                        onLaunchUriClick = vaultLoginItemTypeHandlers.onLaunchUriClick,
+                        cardStyle = uris.toListItemCardStyle(index = index, dividerPadding = 0.dp),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            commonState.notes?.let { notes ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.additional_options),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    NotesField(
+                        notes = notes,
+                        onCopyAction = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.custom_fields),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+                items(customFields) { customField ->
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                    CustomField(
+                        customField = customField,
+                        onCopyCustomHiddenField =
+                            vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                        onCopyCustomTextField =
+                            vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                        onShowHiddenFieldClick =
+                            vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                        cardStyle = CardStyle.Full,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                }
+            }
+
+            commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.attachments),
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                }
+                itemsIndexed(attachments) { index, attachmentItem ->
+                    AttachmentItemContent(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        attachmentItem = attachmentItem,
+                        cardStyle = attachments.toListItemCardStyle(index = index),
+                        onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                            .onAttachmentDownloadClick,
+                    )
+                }
+            }
+
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.login_credentials),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
-            }
-        }
-
-        loginItemState.username?.let { username ->
-            item {
-                UsernameField(
-                    username = username,
-                    onCopyUsernameClick = vaultLoginItemTypeHandlers.onCopyUsernameClick,
-                    cardStyle = loginItemState
-                        .passwordData
-                        ?.let { CardStyle.Top(dividerPadding = 0.dp) }
-                        ?: CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        loginItemState.passwordData?.let { passwordData ->
-            item {
-                PasswordField(
-                    passwordData = passwordData,
-                    onShowPasswordClick = vaultLoginItemTypeHandlers.onShowPasswordClick,
-                    onCheckForBreachClick = vaultLoginItemTypeHandlers.onCheckForBreachClick,
-                    onCopyPasswordClick = vaultLoginItemTypeHandlers.onCopyPasswordClick,
-                    cardStyle = loginItemState
-                        .username
-                        ?.let { CardStyle.Bottom }
-                        ?: CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        loginItemState.fido2CredentialCreationDateText?.let { creationDate ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                Fido2CredentialField(
-                    creationDate = creationDate(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        loginItemState.totpCodeItemData?.let { totpCodeItemData ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                TotpField(
-                    totpCodeItemData = totpCodeItemData,
-                    enabled = loginItemState.canViewTotpCode,
-                    onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
-                    onAuthenticatorHelpToolTipClick = vaultLoginItemTypeHandlers
-                        .onAuthenticatorHelpToolTipClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        loginItemState.uris.takeUnless { it.isEmpty() }?.let { uris ->
-            item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.autofill_options),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
-            }
-
-            itemsIndexed(uris) { index, uriData ->
-                UriField(
-                    uriData = uriData,
-                    onCopyUriClick = vaultLoginItemTypeHandlers.onCopyUriClick,
-                    onLaunchUriClick = vaultLoginItemTypeHandlers.onLaunchUriClick,
-                    cardStyle = uris.toListItemCardStyle(index = index, dividerPadding = 0.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        commonState.notes?.let { notes ->
-            item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.additional_options),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                NotesField(
-                    notes = notes,
-                    onCopyAction = vaultCommonItemTypeHandlers.onCopyNotesClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
-        }
-
-        commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
-            item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-            }
-            items(customFields) { customField ->
-                Spacer(modifier = Modifier.height(height = 8.dp))
-                CustomField(
-                    customField = customField,
-                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
-                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
-                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
-            }
-            itemsIndexed(attachments) { index, attachmentItem ->
-                AttachmentItemContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                    attachmentItem = attachmentItem,
-                    cardStyle = attachments.toListItemCardStyle(index = index),
-                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
-                        .onAttachmentDownloadClick,
-                )
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            VaultItemUpdateText(
-                header = "${stringResource(id = R.string.date_updated)}: ",
-                text = commonState.lastUpdated,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp),
-            )
-        }
-
-        loginItemState.passwordRevisionDate?.let { revisionDate ->
-            item {
-                Spacer(modifier = Modifier.height(height = 4.dp))
+                Spacer(modifier = Modifier.height(16.dp))
                 VaultItemUpdateText(
-                    header = "${stringResource(id = R.string.date_password_updated)}: ",
-                    text = revisionDate,
+                    header = "${stringResource(id = R.string.date_updated)}: ",
+                    text = commonState.lastUpdated,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp),
+                        .fillMaxWidth(),
                 )
             }
-        }
 
-        loginItemState.passwordHistoryCount?.let { passwordHistoryCount ->
+            loginItemState.passwordRevisionDate?.let { revisionDate ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 4.dp))
+                    VaultItemUpdateText(
+                        header = "${stringResource(id = R.string.date_password_updated)}: ",
+                        text = revisionDate,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                    )
+                }
+            }
+
+            loginItemState.passwordHistoryCount?.let { passwordHistoryCount ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 4.dp))
+                    BitwardenHyperTextLink(
+                        annotatedResId = R.string.password_history_count,
+                        args = arrayOf(passwordHistoryCount.toString()),
+                        annotationKey = "passwordHistory",
+                        accessibilityString = stringResource(id = R.string.password_history),
+                        onClick = vaultLoginItemTypeHandlers.onPasswordHistoryClick,
+                        style = BitwardenTheme.typography.labelMedium,
+                        modifier = Modifier
+                            .wrapContentWidth()
+                            .padding(horizontal = 12.dp),
+                    )
+                }
+            }
+
             item {
-                Spacer(modifier = Modifier.height(height = 4.dp))
-                BitwardenHyperTextLink(
-                    annotatedResId = R.string.password_history_count,
-                    args = arrayOf(passwordHistoryCount.toString()),
-                    annotationKey = "passwordHistory",
-                    accessibilityString = stringResource(id = R.string.password_history),
-                    onClick = vaultLoginItemTypeHandlers.onPasswordHistoryClick,
-                    style = BitwardenTheme.typography.labelMedium,
-                    modifier = Modifier
-                        .wrapContentWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp),
-                )
+                Spacer(modifier = Modifier.height(88.dp))
+                Spacer(modifier = Modifier.navigationBarsPadding())
             }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(88.dp))
-            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }

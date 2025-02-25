@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.components.header
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -50,23 +53,46 @@ fun BitwardenExpandingHeader(
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
-            text = if (isExpanded) expandedText else collapsedText,
-            color = BitwardenTheme.colorScheme.text.interaction,
-            style = BitwardenTheme.typography.labelLarge,
-            modifier = Modifier.padding(end = 8.dp),
-        )
-        if (showExpansionIndicator) {
-            val iconRotationDegrees = animateFloatAsState(
-                targetValue = if (isExpanded) 0f else 180f,
-                label = "expanderIconRotationAnimation",
-            )
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.secondary,
-                modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
-            )
+        Crossfade(
+            targetState = isExpanded,
+            label = "BitwardenExpandingHeaderTitle_animation",
+            // Make the animation shorter when the text is the same to avoid crossfading the same
+            // text.
+            animationSpec = tween(
+                durationMillis = if (expandedText != collapsedText) {
+                    AnimationConstants.DefaultDurationMillis
+                } else {
+                    0
+                },
+            ),
+        ) { expanded ->
+            if (expanded) {
+                Text(
+                    text = expandedText,
+                    color = BitwardenTheme.colorScheme.text.interaction,
+                    style = BitwardenTheme.typography.labelLarge,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            } else {
+                Text(
+                    text = collapsedText,
+                    color = BitwardenTheme.colorScheme.text.interaction,
+                    style = BitwardenTheme.typography.labelLarge,
+                    modifier = Modifier.padding(end = 8.dp),
+                )
+            }
+            if (showExpansionIndicator) {
+                val iconRotationDegrees = animateFloatAsState(
+                    targetValue = if (isExpanded) 0f else 180f,
+                    label = "expanderIconRotationAnimation",
+                )
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
+                    contentDescription = null,
+                    tint = BitwardenTheme.colorScheme.icon.secondary,
+                    modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
+                )
+            }
         }
     }
 }

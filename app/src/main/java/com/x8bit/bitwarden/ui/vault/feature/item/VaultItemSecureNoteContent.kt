@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,126 +39,129 @@ fun VaultItemSecureNoteContent(
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
-        item {
-            Spacer(modifier = Modifier.height(height = 12.dp))
-            ItemHeader(
-                value = commonState.name,
-                isFavorite = commonState.favorite,
-                iconData = commonState.iconData,
-                relatedLocations = commonState.relatedLocations,
-                iconTestTag = "SecureNoteItemNameIcon",
-                textFieldTestTag = "SecureNoteItemNameEntry",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
+    Column(modifier = modifier) {
+        Spacer(Modifier.height(height = 12.dp))
+        ItemHeader(
+            value = commonState.name,
+            isFavorite = commonState.favorite,
+            iconData = commonState.iconData,
+            relatedLocations = commonState.relatedLocations,
+            iconTestTag = "SecureNoteItemNameIcon",
+            textFieldTestTag = "SecureNoteItemNameEntry",
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        LazyColumn {
 
-        commonState.notes?.let { notes ->
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-                BitwardenTextField(
-                    label = stringResource(id = R.string.notes),
-                    value = notes,
-                    onValueChange = { },
-                    readOnly = true,
-                    singleLine = false,
-                    actions = {
-                        BitwardenStandardIconButton(
-                            vectorIconRes = R.drawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_notes),
-                            onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
-                            modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
-                        )
-                    },
-                    textFieldTestTag = "CipherNotesLabel",
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
+            commonState.notes?.let { notes ->
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    BitwardenTextField(
+                        label = stringResource(id = R.string.notes),
+                        value = notes,
+                        onValueChange = { },
+                        readOnly = true,
+                        singleLine = false,
+                        actions = {
+                            BitwardenStandardIconButton(
+                                vectorIconRes = R.drawable.ic_copy,
+                                contentDescription = stringResource(id = R.string.copy_notes),
+                                onClick = vaultCommonItemTypeHandlers.onCopyNotesClick,
+                                modifier = Modifier.testTag(tag = "CipherNotesCopyButton"),
+                            )
+                        },
+                        textFieldTestTag = "CipherNotesLabel",
+                        cardStyle = CardStyle.Full,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .standardHorizontalMargin(),
+                    )
+                }
             }
-        }
 
-        commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
+            commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.custom_fields),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .standardHorizontalMargin()
+                            .padding(horizontal = 16.dp),
+                    )
+                }
+
+                items(customFields) { customField ->
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                    CustomField(
+                        customField = customField,
+                        onCopyCustomHiddenField =
+                            vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                        onCopyCustomTextField =
+                            vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                        onShowHiddenFieldClick =
+                            vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                        cardStyle = CardStyle.Full,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .standardHorizontalMargin(),
+                    )
+                }
+            }
+
+            commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
+                item {
+                    Spacer(modifier = Modifier.height(height = 16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(id = R.string.attachments),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .standardHorizontalMargin()
+                            .padding(horizontal = 16.dp),
+                    )
+                    Spacer(modifier = Modifier.height(height = 8.dp))
+                }
+                itemsIndexed(attachments) { index, attachmentItem ->
+                    AttachmentItemContent(
+                        modifier = Modifier
+                            .testTag("CipherAttachment")
+                            .fillMaxWidth()
+                            .standardHorizontalMargin(),
+                        attachmentItem = attachmentItem,
+                        onAttachmentDownloadClick = vaultCommonItemTypeHandlers
+                            .onAttachmentDownloadClick,
+                        cardStyle = attachments.toListItemCardStyle(index = index),
+                    )
+                }
+            }
+
             item {
                 Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.custom_fields),
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
+                        .padding(horizontal = 12.dp)
+                        .semantics(mergeDescendants = true) { },
+                ) {
+                    Text(
+                        text = "${stringResource(id = R.string.date_updated)}: ",
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.primary,
+                    )
+                    Text(
+                        text = commonState.lastUpdated,
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.primary,
+                    )
+                }
             }
 
-            items(customFields) { customField ->
-                Spacer(modifier = Modifier.height(height = 8.dp))
-                CustomField(
-                    customField = customField,
-                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
-                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
-                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
-                    cardStyle = CardStyle.Full,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                )
-            }
-        }
-
-        commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
             item {
-                Spacer(modifier = Modifier.height(height = 16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(id = R.string.attachments),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 8.dp))
+                Spacer(modifier = Modifier.height(88.dp))
+                Spacer(modifier = Modifier.navigationBarsPadding())
             }
-            itemsIndexed(attachments) { index, attachmentItem ->
-                AttachmentItemContent(
-                    modifier = Modifier
-                        .testTag("CipherAttachment")
-                        .fillMaxWidth()
-                        .standardHorizontalMargin(),
-                    attachmentItem = attachmentItem,
-                    onAttachmentDownloadClick = vaultCommonItemTypeHandlers
-                        .onAttachmentDownloadClick,
-                    cardStyle = attachments.toListItemCardStyle(index = index),
-                )
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp)
-                    .semantics(mergeDescendants = true) { },
-            ) {
-                Text(
-                    text = "${stringResource(id = R.string.date_updated)}: ",
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                )
-                Text(
-                    text = commonState.lastUpdated,
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                )
-            }
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(88.dp))
-            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
