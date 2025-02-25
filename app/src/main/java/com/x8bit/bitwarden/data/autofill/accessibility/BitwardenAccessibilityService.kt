@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.autofill.accessibility
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Intent
 import android.view.accessibility.AccessibilityEvent
 import androidx.annotation.Keep
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.accessibility.processor.BitwardenAccessibilityProcessor
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
@@ -21,9 +23,22 @@ class BitwardenAccessibilityService : AccessibilityService() {
     @Inject
     lateinit var processor: BitwardenAccessibilityProcessor
 
+    @Inject
+    lateinit var accessibilityEnabledManager: AccessibilityEnabledManager
+
     override fun onAccessibilityEvent(event: AccessibilityEvent) {
         processor.processAccessibilityEvent(event = event) { rootInActiveWindow }
     }
 
     override fun onInterrupt() = Unit
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        accessibilityEnabledManager.updateAccessibilityEnabledStateFlow(isEnabled = false)
+        return super.onUnbind(intent)
+    }
+
+    override fun onServiceConnected() {
+        super.onServiceConnected()
+        accessibilityEnabledManager.updateAccessibilityEnabledStateFlow(isEnabled = true)
+    }
 }

@@ -50,7 +50,7 @@ class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
-    accessibilityEnabledManager: AccessibilityEnabledManager,
+    private val accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
@@ -327,6 +327,10 @@ class SettingsRepositoryImpl(
 
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean> =
         accessibilityEnabledManager.isAccessibilityEnabledStateFlow
+
+    override fun refreshAccessibilityEnabled() {
+        accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
+    }
 
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         autofillEnabledManager.isAutofillEnabledStateFlow
