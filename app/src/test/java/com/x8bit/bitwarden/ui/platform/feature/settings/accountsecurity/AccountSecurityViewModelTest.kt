@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -24,6 +25,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson.Policy
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
@@ -175,6 +177,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         mutableRemovePinPolicyFlow.emit(
             listOf(
                 createMockPolicy(
+                    organizationId = "organizationUser",
                     isEnabled = true,
                     type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
                 ),
@@ -185,6 +188,78 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     removeUnlockWithPinPolicyEnabled = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is false when user role is ADMIN`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationAdmin",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = false,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is false when user role is OWNER`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationOwner",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = false,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is false when user role is CUSTOM with manage policies`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationCustom",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = false,
                 ),
                 awaitItem(),
             )
@@ -909,7 +984,40 @@ private val DEFAULT_USER_STATE = UserState(
             isVaultUnlocked = true,
             needsPasswordReset = false,
             isBiometricsEnabled = false,
-            organizations = emptyList(),
+            organizations = listOf(
+                Organization(
+                    id = "organizationUser",
+                    name = "Organization User",
+                    shouldManagePolicies = false,
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.USER,
+                ),
+                Organization(
+                    id = "organizationAdmin",
+                    name = "Organization Admin",
+                    shouldManagePolicies = false,
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.ADMIN,
+                ),
+                Organization(
+                    id = "organizationOwner",
+                    name = "Organization Owner",
+                    shouldManagePolicies = false,
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.OWNER,
+                ),
+                Organization(
+                    id = "organizationCustom",
+                    name = "Organization Owner",
+                    shouldManagePolicies = true,
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.CUSTOM,
+                ),
+            ),
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,

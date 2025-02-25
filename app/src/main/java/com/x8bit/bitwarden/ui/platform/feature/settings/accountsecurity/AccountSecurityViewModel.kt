@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
@@ -21,7 +22,9 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -113,10 +116,10 @@ class AccountSecurityViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         policyManager
-            .getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
+            .getActivePoliciesFlow(type = (PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN))
             .map { policies ->
                 AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive(
-                    removeUnlockWithPinPolicyEnabled = policies.isNotEmpty(),
+                    removeUnlockWithPinPolicyEnabled = arePoliciesValid(policies),
                 )
             }
             .onEach(::sendAction)
@@ -165,6 +168,20 @@ class AccountSecurityViewModel @Inject constructor(
             )
         }
     }
+
+    private fun arePoliciesValid(policies: List<SyncResponseJson.Policy>) =
+        policies.any { policy ->
+            authRepository.userStateFlow.value?.activeAccount?.organizations?.any { org ->
+                (policy.organizationId == org.id) && !isExemptFromPolicy(org)
+            } == true
+        }
+
+    private fun isExemptFromPolicy(
+        userOrg: Organization,
+    ) = userOrg.role == OrganizationType.OWNER ||
+        userOrg.role == OrganizationType.ADMIN ||
+        (userOrg.role == OrganizationType.CUSTOM &&
+            userOrg.shouldManagePolicies)
 
     override fun handleAction(action: AccountSecurityAction): Unit = when (action) {
         AccountSecurityAction.AccountFingerprintPhraseClick -> handleAccountFingerprintPhraseClick()
