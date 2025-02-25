@@ -49,7 +49,7 @@ android {
         getByName("debug") {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
-            storeFile = file("../keystores/debug.keystore")
+            storeFile = file("../keystores/debug-bwa.keystore")
             storePassword = "android"
         }
     }
