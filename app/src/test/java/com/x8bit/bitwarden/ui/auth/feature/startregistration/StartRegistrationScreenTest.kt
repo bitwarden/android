@@ -54,7 +54,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             StartRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToCompleteRegistration = { _, _ ->

@@ -117,7 +117,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun setUp() {
         mockkStatic(String::toHostOrPathOrNull)
         every { AUTOFILL_SELECTION_DATA.uri?.toHostOrPathOrNull() } returns "www.test.com"
-        setContentWithBackDispatcher {
+        setContent {
             VaultItemListingScreen(
                 viewModel = viewModel,
                 exitManager = exitManager,

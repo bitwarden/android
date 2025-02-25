@@ -32,7 +32,7 @@ class MasterPasswordGeneratorScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             MasterPasswordGeneratorScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToPreventLockout = { onNavigateToPreventLockoutCalled = true },

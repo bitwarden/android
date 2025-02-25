@@ -65,7 +65,7 @@ class SendScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             SendScreen(
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },

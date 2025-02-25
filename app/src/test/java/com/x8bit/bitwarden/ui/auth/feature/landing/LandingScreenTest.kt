@@ -59,7 +59,7 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { capturedEmail ->

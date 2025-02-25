@@ -28,7 +28,7 @@ class MasterPasswordHintScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             MasterPasswordHintScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

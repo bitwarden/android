@@ -47,7 +47,7 @@ class EnvironmentScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             EnvironmentScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 intentManager = mockIntentManager,

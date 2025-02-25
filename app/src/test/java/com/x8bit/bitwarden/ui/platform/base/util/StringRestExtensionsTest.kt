@@ -16,7 +16,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
     @Test
     fun `toAnnotatedString should add Clickable LinkAnnotation to highlighted string`() {
         var textClickCalled = false
-        composeTestRule.setContent {
+        setContent {
             val annotatedString =
                 R.string.test_for_single_link_annotation.toAnnotatedString {
                     textClickCalled = true
@@ -32,7 +32,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `toAnnotatedString should add multiple Clickable LinkAnnotations to highlighted string`() {
-        composeTestRule.setContent {
+        setContent {
             val annotatedString =
                 R.string.test_for_multi_link_annotation.toAnnotatedString()
             Text(text = annotatedString)
@@ -45,7 +45,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `no link annotations should be applied to non annotated string resource`() {
-        composeTestRule.setContent {
+        setContent {
             Text(text = R.string.test_for_string_with_no_annotations.toAnnotatedString())
         }
 
@@ -65,7 +65,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `string with args should only use the arguments available in the string`() {
-        composeTestRule.setContent {
+        setContent {
             Text(
                 text =
                 R.string.test_for_string_with_annotation_and_arg_annotation
@@ -89,7 +89,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `string with arg annotations but no passed in args should just append empty string`() {
-        composeTestRule.setContent {
+        setContent {
             Text(
                 text = R.string.test_for_string_with_annotation_and_arg_annotation
                     .toAnnotatedString(),
@@ -104,7 +104,7 @@ class StringRestExtensionsTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `string with no annotations with args should just be handled as normal annotated string`() {
-        composeTestRule.setContent {
+        setContent {
             Text(
                 text = R.string.test_for_string_with_no_annotations_with_format_arg.toAnnotatedString(
                     args = arrayOf("this"),

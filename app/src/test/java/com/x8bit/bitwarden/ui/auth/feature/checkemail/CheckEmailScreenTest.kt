@@ -32,7 +32,7 @@ class CheckEmailScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             CheckEmailScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

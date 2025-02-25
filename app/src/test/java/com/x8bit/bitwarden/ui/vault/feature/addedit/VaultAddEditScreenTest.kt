@@ -117,7 +117,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToQrCodeScanScreen = { onNavigateQrCodeScanScreenCalled = true },

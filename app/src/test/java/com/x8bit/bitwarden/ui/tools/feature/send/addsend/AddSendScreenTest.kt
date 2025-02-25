@@ -66,7 +66,7 @@ class AddSendScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContentWithBackDispatcher {
+        setContent {
             AddSendScreen(
                 viewModel = viewModel,
                 exitManager = exitManager,

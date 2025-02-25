@@ -99,7 +99,7 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },

@@ -35,7 +35,7 @@ class RootNavScreenTest : BaseComposeTest() {
             every { eventFlow } returns emptyFlow()
             every { stateFlow } returns MutableStateFlow(RootNavState.Splash)
         }
-        composeTestRule.setContent {
+        setContent {
             RootNavScreen(
                 viewModel = viewModel,
                 navController = fakeNavHostController,
@@ -54,7 +54,7 @@ class RootNavScreenTest : BaseComposeTest() {
             every { stateFlow } returns rootNavStateFlow
         }
         var isSplashScreenRemoved = false
-        composeTestRule.setContent {
+        setContent {
             RootNavScreen(
                 viewModel = viewModel,
                 navController = fakeNavHostController,
