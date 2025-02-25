@@ -57,7 +57,7 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             AboutScreen(
                 viewModel = viewModel,
                 intentManager = intentManager,

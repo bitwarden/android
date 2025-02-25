@@ -31,7 +31,7 @@ class SetPasswordScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             SetPasswordScreen(
                 viewModel = viewModel,
             )

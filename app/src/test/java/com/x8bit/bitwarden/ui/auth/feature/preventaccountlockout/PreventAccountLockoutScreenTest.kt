@@ -20,7 +20,7 @@ class PreventAccountLockoutScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             PreventAccountLockoutScreen(
                 onNavigateBack = { onBackHasBeenInvoked = true },
                 viewModel = viewModel,

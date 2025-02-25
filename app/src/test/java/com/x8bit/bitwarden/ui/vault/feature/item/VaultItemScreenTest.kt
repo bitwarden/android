@@ -77,7 +77,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             VaultItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },

@@ -43,7 +43,7 @@ class ResetPasswordScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             ResetPasswordScreen(
                 onNavigateToPreventAccountLockOut = {
                     onNavigateToLearnToPreventLockoutCalled = true

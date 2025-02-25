@@ -25,7 +25,7 @@ class MasterPasswordGuidanceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             MasterPasswordGuidanceScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToGeneratePassword = { onNavigateToGeneratorCalled = true },
