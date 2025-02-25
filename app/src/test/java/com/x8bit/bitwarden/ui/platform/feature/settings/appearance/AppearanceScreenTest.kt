@@ -64,7 +64,7 @@ class AppearanceScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on language selection dialog item click should send LanguageChange and show dialog`() {
+    fun `on language selection dialog item click should send LanguageChange`() {
         // Clicking the Language row shows the language selection dialog
         composeTestRule
             .onNodeWithContentDescription(label = "Default (System). Language")
@@ -79,17 +79,6 @@ class AppearanceScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Afrikaans")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsNotDisplayed()
-
-        // Should show confirmation dialog
-        composeTestRule
-            .onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        // Clicking "Ok" should dismiss confirmation dialog
-        composeTestRule.onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
