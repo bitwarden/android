@@ -6,7 +6,7 @@ import java.net.URLEncoder
  * Utility for ensuring that a given TOTP string is a properly formatted otpauth:// URI.
  * If the input TOTP is already a valid URI, it is returned as-is.
  * If the TOTP is manually entered and does not follow the URI format,
- * this function reconstructs it using the provided issuer and email.
+ * this function reconstructs it using the provided issuer and username.
  *
  * Uses this as a guide for format
  * https://github.com/google/google-authenticator/wiki/Key-Uri-Format
