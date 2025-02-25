@@ -81,18 +81,18 @@ fun BitwardenExpandingHeader(
                     modifier = Modifier.padding(end = 8.dp),
                 )
             }
-            if (showExpansionIndicator) {
-                val iconRotationDegrees = animateFloatAsState(
-                    targetValue = if (isExpanded) 0f else 180f,
-                    label = "expanderIconRotationAnimation",
-                )
-                Icon(
-                    painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
-                    contentDescription = null,
-                    tint = BitwardenTheme.colorScheme.icon.secondary,
-                    modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
-                )
-            }
+        }
+        if (showExpansionIndicator) {
+            val iconRotationDegrees = animateFloatAsState(
+                targetValue = if (isExpanded) 0f else 180f,
+                label = "expanderIconRotationAnimation",
+            )
+            Icon(
+                painter = rememberVectorPainter(id = R.drawable.ic_chevron_up_small),
+                contentDescription = null,
+                tint = BitwardenTheme.colorScheme.icon.secondary,
+                modifier = Modifier.rotate(degrees = iconRotationDegrees.value),
+            )
         }
     }
 }
