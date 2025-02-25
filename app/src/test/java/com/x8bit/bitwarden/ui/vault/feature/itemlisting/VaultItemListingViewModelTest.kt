@@ -4517,20 +4517,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `InternetConnectionErrorReceived should show network error if no internet connection`() = runTest {
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(VaultItemListingsAction.Internal.InternetConnectionErrorReceived)
-        assertEquals(
-            initialState.copy(
-                isRefreshing = false,
-                dialogState = VaultItemListingState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(VaultItemListingsAction.Internal.InternetConnectionErrorReceived)
+            assertEquals(
+                initialState.copy(
+                    isRefreshing = false,
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
                 ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(

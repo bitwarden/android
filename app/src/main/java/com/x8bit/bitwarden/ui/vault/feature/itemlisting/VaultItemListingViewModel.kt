@@ -1029,9 +1029,11 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleSyncClick() {
         if (networkConnectionManager.isNetworkConnected) {
             mutableStateFlow.update {
-                it.copy(dialogState = VaultItemListingState.DialogState.Loading(
-                    message = R.string.syncing.asText(),
-                ))
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.Loading(
+                        message = R.string.syncing.asText(),
+                    ),
+                )
             }
             vaultRepository.sync(forced = true)
         } else {
