@@ -21,4 +21,6 @@ enum class SecureNoteTypeJson {
 private class SecureNoteTypeSerializer : BaseEnumeratedIntSerializer<SecureNoteTypeJson>(
     className = "SecureNoteTypeJson",
     values = SecureNoteTypeJson.entries.toTypedArray(),
+    // Because GENERIC is the only valid value we default to it if an unknown value is received.
+    default = SecureNoteTypeJson.GENERIC,
 )
