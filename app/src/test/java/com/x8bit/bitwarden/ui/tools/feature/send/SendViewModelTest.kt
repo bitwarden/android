@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -27,8 +28,10 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -56,6 +59,10 @@ class SendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+    }
+
+    private val networkConnectionManager: NetworkConnectionManager = mockk {
+        every { isNetworkConnected } returns true
     }
 
     @BeforeEach
@@ -241,6 +248,27 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on SyncClick should show the no network dialog if no connection is available`() {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(SendAction.SyncClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SendState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
+            vaultRepo.sync(forced = true)
+        }
+    }
+
+    @Test
     fun `CopyClick should call setText on the ClipboardManager`() = runTest {
         val viewModel = createViewModel()
         val testUrl = "www.test.com/"
@@ -414,14 +442,40 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `RefreshPull should call vault repository sync`() {
+    fun `RefreshPull should call vault repository sync`() = runTest {
         every { vaultRepo.sync(forced = false) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SendAction.RefreshPull)
-
+        advanceTimeBy(300)
         verify(exactly = 1) {
+            vaultRepo.sync(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull should show network error if no internet connection`() = runTest {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+
+        viewModel.trySendAction(SendAction.RefreshPull)
+        advanceTimeBy(300)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isRefreshing = false,
+                dialogState = SendState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepo.sync(forced = false)
         }
     }
@@ -457,6 +511,7 @@ class SendViewModelTest : BaseViewModelTest() {
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
+        networkConnectionManager = networkConnectionManager,
     )
 }
 
