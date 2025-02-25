@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -89,8 +90,10 @@ import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -183,6 +186,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
+    }
+
+    private val networkConnectionManager: NetworkConnectionManager = mockk {
+        every { isNetworkConnected } returns true
     }
 
     private val initialState = createVaultItemListingState()
@@ -359,6 +366,27 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
+            vaultRepository.sync(forced = true)
+        }
+    }
+
+    @Test
+    fun `on SyncClick should show the no network dialog if no connection is available`() {
+        val viewModel = createVaultItemListingViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(VaultItemListingsAction.SyncClick)
+        assertEquals(
+            initialState.copy(
+                dialogState = VaultItemListingState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepository.sync(forced = true)
         }
     }
@@ -2451,13 +2479,39 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `RefreshPull should call vault repository sync`() {
+    fun `RefreshPull should call vault repository sync`() = runTest {
         val viewModel = createVaultItemListingViewModel()
 
         viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
-
+        advanceTimeBy(300)
         verify(exactly = 1) {
+            vaultRepository.sync(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull should show network error if no internet connection`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+
+        viewModel.trySendAction(VaultItemListingsAction.RefreshPull)
+        advanceTimeBy(300)
+        assertEquals(
+            initialState.copy(
+                isRefreshing = false,
+                dialogState = VaultItemListingState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepository.sync(forced = false)
         }
     }
@@ -4461,6 +4515,25 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.Internal.InternetConnectionErrorReceived,
+            )
+            assertEquals(
+                initialState.copy(
+                    isRefreshing = false,
+                    dialogState = VaultItemListingState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType: VaultItemListingType,
@@ -4523,6 +4596,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             fido2CredentialManager = fido2CredentialManager,
             organizationEventManager = organizationEventManager,
             fido2OriginManager = fido2OriginManager,
+            networkConnectionManager = networkConnectionManager,
         )
 
     @Suppress("MaxLineLength")
