@@ -215,8 +215,6 @@ dependencies {
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
 
-    androidTestImplementation(libs.bundles.tests.instrumented)
-
     detektPlugins(libs.detekt.detekt.formatting)
     detektPlugins(libs.detekt.detekt.rules)
 }

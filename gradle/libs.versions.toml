@@ -138,15 +138,3 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
-
-[bundles]
-tests-instrumented = [
-    "androidx-compose-ui-test",
-    "androidx-test-espresso",
-    "androidx-test-runner",
-    "androidx-test-rules",
-    "fastlane-screengrab",
-    "junit-junit5",
-    "junit-vintage",
-    "mockk-android",
-]
