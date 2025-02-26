@@ -27,12 +27,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
@@ -71,15 +69,6 @@ fun AutoFillScreen(
     val context = LocalContext.current
     val resources = context.resources
     var shouldShowAutofillFallbackDialog by rememberSaveable { mutableStateOf(false) }
-    LivecycleEventEffect { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-                viewModel.trySendAction(AutoFillAction.LifecycleResume)
-            }
-
-            else -> Unit
-        }
-    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AutoFillEvent.NavigateBack -> onNavigateBack.invoke()

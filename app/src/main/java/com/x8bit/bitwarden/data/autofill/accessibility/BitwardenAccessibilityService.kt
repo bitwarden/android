@@ -33,12 +33,12 @@ class BitwardenAccessibilityService : AccessibilityService() {
     override fun onInterrupt() = Unit
 
     override fun onUnbind(intent: Intent?): Boolean {
-        accessibilityEnabledManager.updateAccessibilityEnabledStateFlow(isEnabled = false)
+        accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
         return super.onUnbind(intent)
     }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
-        accessibilityEnabledManager.updateAccessibilityEnabledStateFlow(isEnabled = true)
+        accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
     }
 }

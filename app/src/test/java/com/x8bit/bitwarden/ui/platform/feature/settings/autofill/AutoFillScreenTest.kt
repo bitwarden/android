@@ -418,8 +418,7 @@ class AutoFillScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        // LifecycleResume should be sent
-        verify(exactly = 1) { viewModel.trySendAction(any()) }
+        verify(exactly = 0) { viewModel.trySendAction(any()) }
         composeTestRule.assertNoDialogExists()
     }
 
@@ -587,23 +586,18 @@ class AutoFillScreenTest : BaseComposeTest() {
             intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.STABLE)
         }
     }
-
-    @Test
-    fun `LifecycleResumed action is sent when the screen is resumed`() {
-        verify { viewModel.trySendAction(AutoFillAction.LifecycleResume) }
-    }
 }
 
-    private val DEFAULT_STATE: AutoFillState = AutoFillState(
-        isAskToAddLoginEnabled = false,
-        isAccessibilityAutofillEnabled = false,
-        isAutoFillServicesEnabled = false,
-        isCopyTotpAutomaticallyEnabled = false,
-        isUseInlineAutoFillEnabled = false,
-        showInlineAutofillOption = true,
-        showPasskeyManagementRow = true,
-        defaultUriMatchType = UriMatchType.DOMAIN,
-        showAutofillActionCard = false,
-        activeUserId = "activeUserId",
-        chromeAutofillSettingsOptions = persistentListOf(),
-    )
+private val DEFAULT_STATE: AutoFillState = AutoFillState(
+    isAskToAddLoginEnabled = false,
+    isAccessibilityAutofillEnabled = false,
+    isAutoFillServicesEnabled = false,
+    isCopyTotpAutomaticallyEnabled = false,
+    isUseInlineAutoFillEnabled = false,
+    showInlineAutofillOption = true,
+    showPasskeyManagementRow = true,
+    defaultUriMatchType = UriMatchType.DOMAIN,
+    showAutofillActionCard = false,
+    activeUserId = "activeUserId",
+    chromeAutofillSettingsOptions = persistentListOf(),
+)

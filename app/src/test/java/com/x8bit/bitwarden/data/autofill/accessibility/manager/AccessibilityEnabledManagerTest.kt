@@ -73,16 +73,6 @@ class AccessibilityEnabledManagerTest {
             Assertions.assertTrue(result)
         }
 
-    @Test
-    fun `updateAccessibilityEnabledStateFlow updates the state flow`() = runTest {
-        accessibilityEnabledManager.updateAccessibilityEnabledStateFlow(true)
-
-        accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
-        val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
-
-        Assertions.assertTrue(result)
-    }
-
     private fun mockkSettingsSecureGetString(value: String?) {
         every {
             Settings.Secure.getString(any(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
