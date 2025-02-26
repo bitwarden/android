@@ -298,7 +298,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
     }
 
     /**
-     * If there are any existing "Login" type ciphers than will map the current value
+     * If there are any existing "Login" type ciphers then we'll map the current value
      * of the receiver Flow to `false`.
      */
     @OptIn(ExperimentalCoroutinesApi::class)
