@@ -8,7 +8,8 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -41,7 +42,7 @@ class AccessibilityEnabledManagerTest {
 
         accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
         val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
-        Assertions.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -55,7 +56,7 @@ class AccessibilityEnabledManagerTest {
             accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
             val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
 
-            Assertions.assertFalse(result)
+            assertFalse(result)
         }
 
     @Test
@@ -70,7 +71,7 @@ class AccessibilityEnabledManagerTest {
             accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
             val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
 
-            Assertions.assertTrue(result)
+            assertTrue(result)
         }
 
     private fun mockkSettingsSecureGetString(value: String?) {
