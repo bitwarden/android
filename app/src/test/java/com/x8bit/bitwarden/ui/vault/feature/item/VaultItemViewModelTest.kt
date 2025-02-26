@@ -3341,6 +3341,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
+                                shouldManagePolicies = false,
                             ),
                         ),
                     ),
