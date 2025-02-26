@@ -4450,7 +4450,6 @@ class AuthRepositoryTest {
                 every { name } returns "orgName"
                 every { permissions } returns mockk {
                     every { shouldManageResetPassword } returns false
-                    every { shouldManagePolicies } returns false
                 }
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
@@ -4476,7 +4475,6 @@ class AuthRepositoryTest {
                     every { name } returns "orgName"
                     every { permissions } returns mockk {
                         every { shouldManageResetPassword } returns false
-                        every { shouldManagePolicies } returns false
                     }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
@@ -4513,7 +4511,6 @@ class AuthRepositoryTest {
                     every { name } returns "orgName"
                     every { permissions } returns mockk {
                         every { shouldManageResetPassword } returns false
-                        every { shouldManagePolicies } returns false
                     }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
