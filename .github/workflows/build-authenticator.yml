@@ -127,6 +127,12 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name authenticator_aab-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_aab-keystore.jks --output none
 
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name com.bitwarden.authenticator-google-services.json --file ${{ github.workspace }}/authenticator/src/google-services.json --output none
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name com.bitwarden.authenticator.dev-google-services.json --file ${{ github.workspace }}/authenticator/src/debug/google-services.json --output none
+
       - name: Download Firebase credentials
         if : ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:

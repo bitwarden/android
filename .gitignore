@@ -27,3 +27,7 @@ local.properties
 fastlane/report.xml
 fastlane/README.md
 /.kotlin/
+
+# Secrets
+/keystores/*.jks
+google-services.json
