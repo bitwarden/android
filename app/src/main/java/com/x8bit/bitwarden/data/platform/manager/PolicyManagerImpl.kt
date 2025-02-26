@@ -93,13 +93,21 @@ class PolicyManagerImpl(
         organization: SyncResponseJson.Profile.Organization,
         policyType: PolicyTypeJson,
     ): Boolean =
-        if (policyType == PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT) {
-            organization.type == OrganizationType.OWNER
-        } else if (policyType == PolicyTypeJson.PASSWORD_GENERATOR) {
-            false
-        } else {
-            (organization.type == OrganizationType.OWNER ||
-                organization.type == OrganizationType.ADMIN) ||
-                organization.permissions.shouldManagePolicies
+        when (policyType) {
+            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
+                organization.type == OrganizationType.OWNER
+            }
+
+            PolicyTypeJson.PASSWORD_GENERATOR,
+            PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                -> {
+                false
+            }
+
+            else -> {
+                (organization.type == OrganizationType.OWNER ||
+                    organization.type == OrganizationType.ADMIN) ||
+                    organization.permissions.shouldManagePolicies
+            }
         }
 }
