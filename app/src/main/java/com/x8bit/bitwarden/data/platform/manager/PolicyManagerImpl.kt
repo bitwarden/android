@@ -97,6 +97,8 @@ class PolicyManagerImpl(
             organization.type == OrganizationType.OWNER
         } else if (policyType == PolicyTypeJson.PASSWORD_GENERATOR) {
             false
+        } else if (policyType == PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN) {
+            false
         } else {
             (organization.type == OrganizationType.OWNER ||
                 organization.type == OrganizationType.ADMIN) ||
