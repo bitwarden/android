@@ -5,6 +5,7 @@ import androidx.compose.animation.core.AnimationConstants
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -37,10 +39,12 @@ fun BitwardenExpandingHeader(
     collapsedText: String = stringResource(id = R.string.additional_options),
     expandedText: String = collapsedText,
     showExpansionIndicator: Boolean = true,
+    shape: Shape = BitwardenTheme.shapes.content,
+    insets: PaddingValues = PaddingValues(top = 16.dp, bottom = 8.dp),
 ) {
     Row(
         modifier = modifier
-            .clip(shape = BitwardenTheme.shapes.content)
+            .clip(shape = shape)
             .clickable(
                 onClickLabel = stringResource(
                     id = if (isExpanded) R.string.options_expanded else R.string.options_collapsed,
@@ -48,8 +52,8 @@ fun BitwardenExpandingHeader(
                 onClick = onClick,
             )
             .minimumInteractiveComponentSize()
-            .padding(top = 16.dp, bottom = 8.dp)
             .padding(horizontal = 16.dp)
+            .padding(paddingValues = insets)
             .semantics(mergeDescendants = true) {},
         verticalAlignment = Alignment.CenterVertically,
     ) {
