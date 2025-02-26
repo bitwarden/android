@@ -311,6 +311,33 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `Continue buttons should only be enabled when code is 8 digit enough on isNewDeviceVerification`() {
+        val initialState = DEFAULT_STATE.copy(isNewDeviceVerification = true)
+        val viewModel = createViewModel(initialState)
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("123456"))
+
+        // 6 digit should be false when isNewDeviceVerification is true.
+        assertEquals(
+            initialState.copy(
+                codeInput = "123456",
+                isContinueButtonEnabled = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        // Set it to true.
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("12345678"))
+        assertEquals(
+            initialState.copy(
+                codeInput = "12345678",
+                isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `ContinueButtonClick login returns success should update loadingDialogState`() = runTest {
         coEvery {
             authRepository.login(
@@ -645,7 +672,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = "Mock error message".asText(),
+                            message = R.string.invalid_verification_code.asText(),
                         ),
                     ),
                     awaitItem(),
@@ -825,7 +852,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = "new device verification required".asText(),
+                            message = R.string.invalid_verification_code.asText(),
                         ),
                     ),
                     awaitItem(),
