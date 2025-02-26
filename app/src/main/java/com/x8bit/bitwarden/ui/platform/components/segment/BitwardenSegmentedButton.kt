@@ -88,7 +88,7 @@ fun BitwardenSegmentedButton(
                 .onGloballyPositioned {
                     weightedWidth = (it.size.width / options.size).toDp(density)
                 }
-                .padding(horizontal = 4.dp, vertical = 2.dp)
+                .padding(horizontal = 2.dp, vertical = 2.dp)
                 .height(IntrinsicSize.Min),
             space = 0.dp,
         ) {
