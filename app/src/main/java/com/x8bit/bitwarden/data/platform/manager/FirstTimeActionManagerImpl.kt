@@ -159,6 +159,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         get() = settingsDiskSource
             .getShouldShowAddLoginCoachMarkFlow()
             .map { it ?: true }
+            .mapFalseIfAnyLoginCiphersAvailable()
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
             ) { shouldShow, featureIsEnabled ->
@@ -172,6 +173,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
         get() = settingsDiskSource
             .getShouldShowGeneratorCoachMarkFlow()
             .map { it ?: true }
+            .mapFalseIfAnyLoginCiphersAvailable()
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
             ) { shouldShow, featureFlagEnabled ->
@@ -294,4 +296,23 @@ class FirstTimeActionManagerImpl @Inject constructor(
         return settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false &&
             !autofillEnabledManager.isAutofillEnabled
     }
+
+    /**
+     * If there are any existing "Login" type ciphers than will map the current value
+     * of the receiver Flow to `false`.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun Flow<Boolean>.mapFalseIfAnyLoginCiphersAvailable(): Flow<Boolean> =
+        authDiskSource
+            .activeUserIdChangesFlow
+            .filterNotNull()
+            .flatMapLatest { activeUserId ->
+                combine(
+                    flow = this,
+                    flow2 = vaultDiskSource.getCiphers(activeUserId),
+                ) { currentValue, ciphers ->
+                    (currentValue) && ciphers.none { it.login != null }
+                }
+            }
+            .distinctUntilChanged()
 }
