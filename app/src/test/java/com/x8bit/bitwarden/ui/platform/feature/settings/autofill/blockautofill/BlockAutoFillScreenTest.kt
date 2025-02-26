@@ -33,7 +33,7 @@ class BlockAutoFillScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             BlockAutoFillScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

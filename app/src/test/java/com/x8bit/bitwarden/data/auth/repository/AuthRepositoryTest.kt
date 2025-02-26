@@ -1574,7 +1574,6 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-                legacyErrorModel = null,
             )
             .asSuccess()
 
@@ -1617,7 +1616,6 @@ class AuthRepositoryTest {
                     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                         errorMessage = "new device verification required",
                     ),
-                    legacyErrorModel = null,
                 )
                 .asSuccess()
 
@@ -2401,7 +2399,6 @@ class AuthRepositoryTest {
                     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                         errorMessage = "mock_error_message",
                     ),
-                    legacyErrorModel = null,
                 )
                 .asSuccess()
 
@@ -2870,7 +2867,6 @@ class AuthRepositoryTest {
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-                legacyErrorModel = null,
             )
             .asSuccess()
 
@@ -4454,6 +4450,7 @@ class AuthRepositoryTest {
                 every { name } returns "orgName"
                 every { permissions } returns mockk {
                     every { shouldManageResetPassword } returns false
+                    every { shouldManagePolicies } returns false
                 }
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
@@ -4479,6 +4476,7 @@ class AuthRepositoryTest {
                     every { name } returns "orgName"
                     every { permissions } returns mockk {
                         every { shouldManageResetPassword } returns false
+                        every { shouldManagePolicies } returns false
                     }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
@@ -4515,6 +4513,7 @@ class AuthRepositoryTest {
                     every { name } returns "orgName"
                     every { permissions } returns mockk {
                         every { shouldManageResetPassword } returns false
+                        every { shouldManagePolicies } returns false
                     }
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER

@@ -46,7 +46,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             AttachmentsScreen(
                 viewModel = viewModel,
                 intentManager = intentManager,

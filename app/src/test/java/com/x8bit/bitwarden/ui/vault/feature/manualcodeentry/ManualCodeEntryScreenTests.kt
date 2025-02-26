@@ -52,7 +52,7 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             ManualCodeEntryScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
