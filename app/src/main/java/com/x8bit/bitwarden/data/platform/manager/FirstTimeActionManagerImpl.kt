@@ -311,7 +311,7 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     flow = this,
                     flow2 = vaultDiskSource.getCiphers(activeUserId),
                 ) { currentValue, ciphers ->
-                    (currentValue) && ciphers.none { it.login != null }
+                    currentValue && ciphers.none { it.login != null }
                 }
             }
             .distinctUntilChanged()
