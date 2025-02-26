@@ -60,7 +60,7 @@ fun VaultItemIdentityContent(
             onExpandClick = { isExpanded = !isExpanded },
         )
         identityState.identityName?.let { identityName ->
-            item {
+            item(key = "identityName") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.identity_name),
                     value = identityName,
@@ -76,12 +76,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.username?.let { username ->
-            item {
+            item(key = "username") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.username),
                     value = username,
@@ -97,12 +98,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.company?.let { company ->
-            item {
+            item(key = "company") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.company),
                     value = company,
@@ -118,12 +120,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.ssn?.let { ssn ->
-            item {
+            item(key = "ssn") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.ssn),
                     value = ssn,
@@ -139,12 +142,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.passportNumber?.let { passportNumber ->
-            item {
+            item(key = "passportNumber") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.passport_number),
                     value = passportNumber,
@@ -160,12 +164,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.licenseNumber?.let { licenseNumber ->
-            item {
+            item(key = "licenseNumber") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.license_number),
                     value = licenseNumber,
@@ -181,12 +186,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.email?.let { email ->
-            item {
+            item(key = "email") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.email),
                     value = email,
@@ -202,12 +208,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.phone?.let { phone ->
-            item {
+            item(key = "phone") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.phone),
                     value = phone,
@@ -223,12 +230,13 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         identityState.address?.let { address ->
-            item {
+            item(key = "address") {
                 IdentityCopyField(
                     label = stringResource(id = R.string.address),
                     value = address,
@@ -244,19 +252,21 @@ fun VaultItemIdentityContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         commonState.notes?.let { notes ->
-            item {
+            item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 IdentityCopyField(
@@ -269,23 +279,28 @@ fun VaultItemIdentityContent(
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
-            item {
+            item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
             }
-            items(customFields) { customField ->
+            items(
+                items = customFields,
+                key = { "customField_$it" },
+            ) { customField ->
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
@@ -295,29 +310,35 @@ fun VaultItemIdentityContent(
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item {
+            item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            itemsIndexed(attachments) { index, attachmentItem ->
+            itemsIndexed(
+                items = attachments,
+                key = { index, _ -> "attachment_$index" },
+            ) { index, attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
                         .testTag("CipherAttachment")
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                     attachmentItem = attachmentItem,
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
@@ -326,7 +347,7 @@ fun VaultItemIdentityContent(
             }
         }
 
-        item {
+        item(key = "lastUpdated") {
             Spacer(modifier = Modifier.height(height = 16.dp))
             VaultItemUpdateText(
                 header = "${stringResource(id = R.string.date_updated)}: ",
@@ -334,7 +355,8 @@ fun VaultItemIdentityContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = 12.dp)
+                    .animateItem(),
             )
         }
         item {

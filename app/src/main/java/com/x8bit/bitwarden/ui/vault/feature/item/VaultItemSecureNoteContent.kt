@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +57,7 @@ fun VaultItemSecureNoteContent(
             onExpandClick = { isExpanded = !isExpanded },
         )
         commonState.notes?.let { notes ->
-            item {
+            item(key = "notes") {
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.notes),
@@ -78,59 +77,70 @@ fun VaultItemSecureNoteContent(
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
-            item {
+            item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
             }
 
-            items(customFields) { customField ->
+            itemsIndexed(
+                items = customFields,
+                key = { index, _ -> "customField_$index" },
+            ) { _, customField ->
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
                     onCopyCustomHiddenField =
-                    vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                        vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
                     onCopyCustomTextField =
-                    vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                        vaultCommonItemTypeHandlers.onCopyCustomTextField,
                     onShowHiddenFieldClick =
-                    vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                        vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item {
+            item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            itemsIndexed(attachments) { index, attachmentItem ->
+            itemsIndexed(
+                items = attachments,
+                key = { index, _ -> "attachment_$index" },
+            ) { index, attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
                         .testTag("CipherAttachment")
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                     attachmentItem = attachmentItem,
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
@@ -139,14 +149,15 @@ fun VaultItemSecureNoteContent(
             }
         }
 
-        item {
+        item(key = "lastUpdated") {
             Spacer(modifier = Modifier.height(height = 16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp)
-                    .semantics(mergeDescendants = true) { },
+                    .semantics(mergeDescendants = true) { }
+                    .animateItem(),
             ) {
                 Text(
                     text = "${stringResource(id = R.string.date_updated)}: ",

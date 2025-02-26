@@ -46,7 +46,7 @@ private const val EXPANDABLE_THRESHOLD = 2
 /**
  * Reusable composable for displaying the cipher name, favorite status, and related locations.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.itemHeader(
     value: String,
     isFavorite: Boolean,
@@ -256,9 +256,9 @@ private fun LazyItemScope.ItemLocationListItem(
 }
 
 //region Previews
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-//private fun ItemHeader_LocalIcon_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+// private fun ItemHeader_LocalIcon_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Login without favicon",
@@ -269,11 +269,11 @@ private fun LazyItemScope.ItemLocationListItem(
 //            relatedLocations = persistentListOf(),
 //        )
 //    }
-//}
+// }
 //
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-//private fun ItemHeader_NetworkIcon_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+// private fun ItemHeader_NetworkIcon_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Login with favicon",
@@ -285,11 +285,11 @@ private fun LazyItemScope.ItemLocationListItem(
 //            relatedLocations = persistentListOf(),
 //        )
 //    }
-//}
+// }
 //
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-//private fun ItemHeader_Organization_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+// private fun ItemHeader_Organization_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Login without favicon",
@@ -302,11 +302,11 @@ private fun LazyItemScope.ItemLocationListItem(
 //            ),
 //        )
 //    }
-//}
+// }
 //
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-//private fun ItemNameField_Org_SingleCollection_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+// private fun ItemNameField_Org_SingleCollection_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Login without favicon",
@@ -320,11 +320,11 @@ private fun LazyItemScope.ItemLocationListItem(
 //            ),
 //        )
 //    }
-//}
+// }
 //
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-//private fun ItemNameField_Org_MultiCollection_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+// private fun ItemNameField_Org_MultiCollection_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Login without favicon",
@@ -339,11 +339,11 @@ private fun LazyItemScope.ItemLocationListItem(
 //            ),
 //        )
 //    }
-//}
+// }
 //
-//@Composable
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-//private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
+// @Composable
+// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+// private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
 //    BitwardenTheme {
 //        ItemHeader(
 //            value = "Note without favicon",
@@ -358,5 +358,5 @@ private fun LazyItemScope.ItemLocationListItem(
 //            ),
 //        )
 //    }
-//}
+// }
 //endregion Previews
