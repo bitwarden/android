@@ -4598,7 +4598,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             id = "organizationId",
                             name = "organizationName",
                             shouldManageResetPassword = false,
-                            shouldManagePolicies = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                         ),
