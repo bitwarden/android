@@ -177,7 +177,31 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         mutableRemovePinPolicyFlow.emit(
             listOf(
                 createMockPolicy(
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
                     organizationId = "organizationUser",
+                    ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is true when user role is ADMIN`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationAdmin",
                     isEnabled = true,
                     type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
                 ),
@@ -195,31 +219,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `remove pin policy is false when user role is ADMIN`() = runTest {
-        val viewModel = createViewModel()
-
-        mutableRemovePinPolicyFlow.emit(
-            listOf(
-                createMockPolicy(
-                    organizationId = "organizationAdmin",
-                    isEnabled = true,
-                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
-                ),
-            ),
-        )
-
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    removeUnlockWithPinPolicyEnabled = false,
-                ),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
-    fun `remove pin policy is false when user role is OWNER`() = runTest {
+    fun `remove pin policy is true when user role is OWNER`() = runTest {
         val viewModel = createViewModel()
 
         mutableRemovePinPolicyFlow.emit(
@@ -235,7 +235,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    removeUnlockWithPinPolicyEnabled = false,
+                    removeUnlockWithPinPolicyEnabled = true,
                 ),
                 awaitItem(),
             )
@@ -243,7 +243,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `remove pin policy is false when user role is CUSTOM with manage policies`() = runTest {
+    fun `remove pin policy is true when user role is CUSTOM with manage policies`() = runTest {
         val viewModel = createViewModel()
 
         mutableRemovePinPolicyFlow.emit(
@@ -259,7 +259,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(
                 DEFAULT_STATE.copy(
-                    removeUnlockWithPinPolicyEnabled = false,
+                    removeUnlockWithPinPolicyEnabled = true,
                 ),
                 awaitItem(),
             )
@@ -988,7 +988,6 @@ private val DEFAULT_USER_STATE = UserState(
                 Organization(
                     id = "organizationUser",
                     name = "Organization User",
-                    shouldManagePolicies = false,
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.USER,
@@ -996,7 +995,6 @@ private val DEFAULT_USER_STATE = UserState(
                 Organization(
                     id = "organizationAdmin",
                     name = "Organization Admin",
-                    shouldManagePolicies = false,
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.ADMIN,
@@ -1004,7 +1002,6 @@ private val DEFAULT_USER_STATE = UserState(
                 Organization(
                     id = "organizationOwner",
                     name = "Organization Owner",
-                    shouldManagePolicies = false,
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.OWNER,
@@ -1012,7 +1009,6 @@ private val DEFAULT_USER_STATE = UserState(
                 Organization(
                     id = "organizationCustom",
                     name = "Organization Owner",
-                    shouldManagePolicies = true,
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.CUSTOM,
