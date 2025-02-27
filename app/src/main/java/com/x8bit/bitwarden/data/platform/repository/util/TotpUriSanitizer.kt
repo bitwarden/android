@@ -29,7 +29,7 @@ fun String?.sanitizeTotpUri(
             this
         }
         issuer?.trim().equals("steam", ignoreCase = true) -> {
-            // 🚀 If the issuer is Steam, enforce Steam-specific URI format.
+            // 🎮👾If the issuer is Steam, enforce Steam-specific URI format.
             "$STEAM_PREFIX${
                 this.replace("\\s".toRegex(), "") // Remove spaces from manually entered secret
             }"
