@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
@@ -69,6 +70,7 @@ fun VaultItemLoginContent(
             textFieldTestTag = "LoginItemNameEntry",
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
+            applyIconBackground = commonState.iconData is IconData.Local,
         )
         if (loginItemState.hasLoginCredentials) {
             item(key = "loginCredentialsHeader") {

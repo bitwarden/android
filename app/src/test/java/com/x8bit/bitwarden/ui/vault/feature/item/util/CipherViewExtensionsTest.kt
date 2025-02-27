@@ -3,9 +3,11 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 import android.net.Uri
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCardView
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -557,6 +559,36 @@ class CipherViewExtensionsTest {
                 assertEquals(
                     it.value,
                     (viewState.asContentOrNull()?.common?.iconData as? IconData.Local)?.iconRes,
+                )
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform full CipherView into ViewState Card content with iconData based on payment card brand`() {
+        mapOf<VaultCardBrand, Int>()
+            .forEach {
+                val cipherView = createCipherView(type = CipherType.CARD, isEmpty = false)
+                    .copy(card = createMockCardView(number = 1, brand = it.key.toString()))
+                val viewState = cipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    clock = fixedClock,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = "https://example.com/",
+                    isIconLoadingDisabled = true,
+                    relatedLocations = persistentListOf(),
+                )
+                assertEquals(
+                    IconData.Local(it.value),
+                    (viewState
+                        .asContentOrNull()
+                        ?.type as? VaultItemState.ViewState.Content.ItemType.Card)
+                        ?.paymentCardBrandIconData,
                 )
             }
     }

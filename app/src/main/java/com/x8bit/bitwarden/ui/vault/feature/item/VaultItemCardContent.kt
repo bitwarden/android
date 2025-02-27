@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -49,6 +48,7 @@ fun VaultItemCardContent(
     modifier: Modifier = Modifier,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(value = false) }
+    val applyIconBackground = cardState.paymentCardBrandIconData == null
     LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
             Spacer(Modifier.height(height = 12.dp))
@@ -56,12 +56,13 @@ fun VaultItemCardContent(
         itemHeader(
             value = commonState.name,
             isFavorite = commonState.favorite,
-            iconData = commonState.iconData,
+            iconData = cardState.paymentCardBrandIconData ?: commonState.iconData,
             relatedLocations = commonState.relatedLocations,
             iconTestTag = "CardItemNameIcon",
             textFieldTestTag = "CardItemNameEntry",
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
+            applyIconBackground = applyIconBackground,
         )
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))

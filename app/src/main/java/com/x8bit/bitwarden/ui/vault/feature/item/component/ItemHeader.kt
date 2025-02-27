@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.platform.testTag
@@ -53,6 +54,16 @@ private const val EXPANDABLE_THRESHOLD = 2
 
 /**
  * Reusable composable for displaying the cipher name, favorite status, and related locations.
+ *
+ * @param value The name of the cipher.
+ * @param isFavorite Whether the cipher is a favorite.
+ * @param relatedLocations The locations the cipher is assigned to.
+ * @param iconData The icon to be displayed.
+ * @param isExpanded Whether the related locations are expanded.
+ * @param applyIconBackground Whether a background should be applied to the header icon.
+ * @param iconTestTag The test tag for the icon.
+ * @param textFieldTestTag The test tag for the name field.
+ * @param onExpandClick The action to be performed when the expandable text row is clicked.
  */
 @Suppress("LongMethod", "LongParameterList")
 fun LazyListScope.itemHeader(
@@ -61,6 +72,7 @@ fun LazyListScope.itemHeader(
     relatedLocations: ImmutableList<VaultItemLocation>,
     iconData: IconData,
     isExpanded: Boolean,
+    applyIconBackground: Boolean,
     iconTestTag: String? = null,
     textFieldTestTag: String? = null,
     onExpandClick: () -> Unit,
@@ -81,6 +93,7 @@ fun LazyListScope.itemHeader(
             ItemHeaderIcon(
                 iconData = iconData,
                 testTag = iconTestTag,
+                applyBackgroundFill = applyIconBackground,
                 modifier = Modifier.size(36.dp),
             )
             BitwardenTextField(
@@ -203,14 +216,14 @@ fun LazyListScope.itemHeader(
 @Composable
 private fun ItemHeaderIcon(
     iconData: IconData,
+    applyBackgroundFill: Boolean,
     modifier: Modifier = Modifier,
     testTag: String? = null,
 ) {
-    val isLocalIcon = iconData is IconData.Local
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.then(
-            if (isLocalIcon) {
+            if (applyBackgroundFill) {
                 Modifier.background(
                     color = BitwardenTheme.colorScheme.illustration.backgroundPrimary,
                     shape = BitwardenTheme.shapes.favicon,
@@ -223,11 +236,15 @@ private fun ItemHeaderIcon(
         BitwardenIcon(
             iconData = iconData,
             contentDescription = null,
-            tint = BitwardenTheme.colorScheme.illustration.outline,
+            tint = if (applyBackgroundFill) {
+                BitwardenTheme.colorScheme.illustration.outline
+            } else {
+                Color.Unspecified
+            },
             modifier = Modifier
                 .nullableTestTag(testTag)
                 .then(
-                    if (!isLocalIcon) Modifier.fillMaxSize() else Modifier,
+                    if (!applyBackgroundFill) Modifier.fillMaxSize() else Modifier,
                 ),
         )
     }
@@ -281,6 +298,7 @@ private fun ItemHeader_LocalIcon_Preview() {
                 relatedLocations = persistentListOf(),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = true,
             )
         }
     }
@@ -302,6 +320,7 @@ private fun ItemHeader_NetworkIcon_Preview() {
                 relatedLocations = persistentListOf(),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = false,
             )
         }
     }
@@ -324,6 +343,7 @@ private fun ItemHeader_Organization_Preview() {
                 ),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = true,
             )
         }
     }
@@ -347,6 +367,7 @@ private fun ItemNameField_Org_SingleCollection_Preview() {
                 ),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = true,
             )
         }
     }
@@ -362,7 +383,7 @@ private fun ItemNameField_Org_MultiCollection_Preview() {
                 value = "Login without favicon",
                 isFavorite = true,
                 iconData = IconData.Local(
-                    iconRes = R.drawable.ic_globe,
+                    iconRes = R.drawable.ic_payment_card_brand_visa,
                 ),
                 relatedLocations = persistentListOf(
                     VaultItemLocation.Organization("Stark Industries"),
@@ -371,6 +392,7 @@ private fun ItemNameField_Org_MultiCollection_Preview() {
                 ),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = false,
             )
         }
     }
@@ -395,6 +417,7 @@ private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
                 ),
                 isExpanded = isExpanded,
                 onExpandClick = { isExpanded = !isExpanded },
+                applyIconBackground = true,
             )
         }
     }

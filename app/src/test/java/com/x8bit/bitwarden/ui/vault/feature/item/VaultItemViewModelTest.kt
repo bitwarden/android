@@ -3664,6 +3664,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     code = "987",
                     isVisible = false,
                 ),
+                paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
             )
 
         private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
