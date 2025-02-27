@@ -160,6 +160,9 @@ fun CipherView.toViewState(
                                 ?.isVisible == true,
                         )
                     },
+                    paymentCardBrandIconData = card?.paymentCardBrandIconRes?.let {
+                        IconData.Local(iconRes = it)
+                    },
                 )
             }
 
@@ -252,6 +255,12 @@ private fun CipherView.toIconData(
             )
         }
 
+        CipherType.CARD -> {
+            card?.paymentCardBrandIconRes
+                ?.let { IconData.Local(iconRes = it) }
+                ?: IconData.Local(type.iconRes)
+        }
+
         else -> {
             IconData.Local(iconRes = this.type.iconRes)
         }
@@ -266,6 +275,24 @@ private val CipherType.iconRes: Int
         CipherType.IDENTITY -> R.drawable.ic_id_card
         CipherType.SSH_KEY -> R.drawable.ic_ssh_key
         CipherType.LOGIN -> R.drawable.ic_globe
+    }
+
+@get:DrawableRes
+private val CardView.paymentCardBrandIconRes: Int?
+    get() = when (this.cardBrand) {
+        VaultCardBrand.VISA -> R.drawable.ic_payment_card_brand_visa
+        VaultCardBrand.MASTERCARD -> R.drawable.ic_payment_card_brand_mastercard
+        VaultCardBrand.AMEX -> R.drawable.ic_payment_card_brand_amex
+        VaultCardBrand.DISCOVER -> R.drawable.ic_payment_card_brand_discover
+        VaultCardBrand.DINERS_CLUB -> R.drawable.ic_payment_card_brand_diners_club
+        VaultCardBrand.JCB -> R.drawable.ic_payment_card_brand_jcb
+        VaultCardBrand.MAESTRO -> R.drawable.ic_payment_card_brand_maestro
+        VaultCardBrand.UNIONPAY -> R.drawable.ic_payment_card_brand_union_pay
+        VaultCardBrand.RUPAY -> R.drawable.ic_payment_card_brand_ru_pay
+        VaultCardBrand.SELECT,
+        VaultCardBrand.OTHER,
+        null,
+            -> null
     }
 
 private val IdentityView.identityAddress: String?

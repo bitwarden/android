@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
@@ -58,6 +59,7 @@ fun VaultItemIdentityContent(
             textFieldTestTag = "IdentityItemNameEntry",
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
+            applyIconBackground = commonState.iconData is IconData.Local,
         )
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))

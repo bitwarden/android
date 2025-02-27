@@ -3013,6 +3013,7 @@ private val DEFAULT_CARD: VaultItemState.ViewState.Content.ItemType.Card =
             code = "the security code",
             isVisible = false,
         ),
+        paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
     )
 
 private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
@@ -3080,6 +3081,7 @@ private val EMPTY_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
             code = "",
             isVisible = false,
         ),
+        paymentCardBrandIconData = null,
     )
 
 private val EMPTY_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =

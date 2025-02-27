@@ -1761,6 +1761,7 @@ data class VaultItemState(
                  * @property brand The brand for the card.
                  * @property expiration The expiration for the card.
                  * @property securityCode The securityCode for the card.
+                 * @property paymentCardBrandIconData The payment card brand icon data for the card.
                  */
                 data class Card(
                     val cardholderName: String?,
@@ -1768,6 +1769,7 @@ data class VaultItemState(
                     val brand: VaultCardBrand?,
                     val expiration: String?,
                     val securityCode: CodeData?,
+                    val paymentCardBrandIconData: IconData?,
                 ) : ItemType() {
 
                     /**
