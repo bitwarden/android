@@ -97,7 +97,7 @@ class AuthenticatorBridgeRepositoryImpl(
                 val totpUris = vaultDiskSource
                     .getCiphers(userId)
                     .first()
-                    // Filter out any ciphers without a totp item and also deleted ciphers:
+                    // Filter out any ciphers without a totp item and also deleted ciphers
                     .filter { it.login?.totp != null && it.deletedDate == null }
                     .mapNotNull {
                         val decryptedCipher = vaultSdkSource

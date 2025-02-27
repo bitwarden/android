@@ -2,8 +2,11 @@ package com.x8bit.bitwarden.data.platform.repository.util
 
 import java.net.URLEncoder
 
+private const val OTPAUTH_PREFIX = "otpauth://totp/"
+private const val STEAM_PREFIX = "steam://"
+
 /**
- * Utility for ensuring that a given TOTP string is a properly formatted otpauth:// URI.
+ * Utility for ensuring that a given TOTP string is a properly formatted otpauth:// or steam:// URI.
  * If the input TOTP is already a valid URI, it is returned as-is.
  * If the TOTP is manually entered and does not follow the URI format,
  * this function reconstructs it using the provided issuer and username.
@@ -20,54 +23,55 @@ fun String?.sanitizeTotpUri(
 ): String? {
     if (this.isNullOrBlank()) return null
 
-    return if (this.startsWith("otpauth://totp/")) {
-        // ✅ Already a valid TOTP URI, return as-is.
-        this
-    } else {
-        // ❌ Manually entered secret, reconstructing a proper otpauth:// URI.
-
-        // Trim spaces from issuer and account name **before encoding**
-        val trimmedIssuer = issuer?.trim()
-        val trimmedUsername = username?.trim()
-
-        // Determine raw label correctly (avoid empty `:` issue)
-        val rawLabel = when {
-            // Fully empty label
-            trimmedIssuer.isNullOrBlank() && trimmedUsername.isNullOrBlank() -> ""
-            // Both exist, add `:` between them
-            trimmedIssuer != null && trimmedUsername != null -> "$trimmedIssuer:$trimmedUsername"
-            // Only account name, no `:`
-            trimmedUsername != null -> trimmedUsername
-            // Only issuer exists, but we don't add a label
-            else -> ""
+    return when {
+        this.startsWith(OTPAUTH_PREFIX) || this.startsWith(STEAM_PREFIX) -> {
+            // ✅ Already a valid TOTP or Steam URI, return as-is.
+            this
         }
+        issuer?.trim().equals("steam", ignoreCase = true) -> {
+            // 🚀 If the issuer is Steam, enforce Steam-specific URI format.
+            "$STEAM_PREFIX${
+                this.replace("\\s".toRegex(), "") // Remove spaces from manually entered secret
+            }"
+        }
+        else -> {
+            // ❌ Manually entered secret, reconstruct as otpauth://totp/ URI.
 
-        // Encode label only if it's not empty
-        val encodedLabel = rawLabel
-            .takeIf { it.isNotEmpty() }
-            ?.let {
-                URLEncoder.encode(it, "UTF-8")
-                    .replace("+", "%20")
+            // Trim spaces from issuer and username
+            val trimmedIssuer = issuer?.trim().takeIf { it?.isNotEmpty() ?: false }
+            val trimmedUsername = username?.trim().takeIf { it?.isNotEmpty() ?: false }
+
+            // Determine raw label correctly (avoid empty `:` issue)
+            val rawLabel = if (!trimmedIssuer.isNullOrEmpty() && !trimmedUsername.isNullOrEmpty()) {
+                "$trimmedIssuer:$trimmedUsername"
+            } else {
+                trimmedUsername ?: ""
             }
-            .orEmpty()
 
-        //  Encode issuer separately for the query parameter
-        val encodedIssuer = trimmedIssuer
-            ?.takeIf { it.isNotBlank() }
-            ?.let {
-                URLEncoder.encode(it, "UTF-8")
-                    .replace("+", "%20")
-            }
+            // Encode label only if it's not empty
+            val encodedLabel = rawLabel
+                .takeIf { it.isNotEmpty() }
+                ?.let {
+                    URLEncoder.encode(it, "UTF-8")
+                        .replace("+", "%20")
+                }
+                .orEmpty()
 
-        // Construct the issuer query parameter.
-        val issuerParameter = encodedIssuer
-            ?.let { "&issuer=$it" }
-            .orEmpty()
+            // Encode issuer separately for the query parameter
+            val encodedIssuer = trimmedIssuer
+                ?.let {
+                    URLEncoder.encode(it, "UTF-8")
+                        .replace("+", "%20")
+                }
 
-        // Remove spaces from the manually entered secret
-        val sanitizedSecret = this.replace("\\s".toRegex(), "")
+            // Construct the issuer query parameter.
+            val issuerParameter = encodedIssuer?.let { "&issuer=$it" }.orEmpty()
 
-        // Construct final TOTP URI
-        "otpauth://totp/$encodedLabel?secret=$sanitizedSecret$issuerParameter"
+            // Remove spaces from the manually entered secret
+            val sanitizedSecret = this.filterNot { it.isWhitespace() }
+
+            // Construct final TOTP URI
+            "$OTPAUTH_PREFIX$encodedLabel?secret=$sanitizedSecret$issuerParameter"
+        }
     }
 }

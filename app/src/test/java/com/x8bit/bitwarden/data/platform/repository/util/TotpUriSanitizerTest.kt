@@ -142,4 +142,41 @@ class TotpUriSanitizerTest {
 
         assertEquals(expected, result)
     }
+
+    @Test
+    fun `valid Steam URI should remain unchanged`() {
+        val validSteamUri = "steam://abcdef12345"
+        val result = validSteamUri.sanitizeTotpUri("Steam", "test@test.com")
+
+        assertEquals(validSteamUri, result)
+    }
+
+    @Test
+    fun `Steam issuer should return steam URI instead of otpauth`() {
+        val rawTotp = "mysecuretoken"
+        val expectedUri = "steam://mysecuretoken"
+        val result = rawTotp.sanitizeTotpUri("steam", "test@test.com")
+
+        assertEquals(expectedUri, result)
+    }
+
+    @Test
+    fun `manually entered Steam TOTP should sanitize spaces properly`() {
+        val rawTotp = "  abc 123 def "
+        val expectedUri = "steam://abc123def"
+        val result = rawTotp.sanitizeTotpUri("steam", null)
+
+        assertEquals(expectedUri, result)
+    }
+
+    @Test
+    fun `Steam issuer should be case insensitive`() {
+        val rawTotp = "secretcase"
+        val expectedUri = "steam://secretcase"
+
+        assertEquals(expectedUri, rawTotp.sanitizeTotpUri("Steam", null))
+        assertEquals(expectedUri, rawTotp.sanitizeTotpUri("STEAM", null))
+        assertEquals(expectedUri, rawTotp.sanitizeTotpUri("sTeAm", null))
+        assertEquals(expectedUri, rawTotp.sanitizeTotpUri("    sTeAm    ", null))
+    }
 }
