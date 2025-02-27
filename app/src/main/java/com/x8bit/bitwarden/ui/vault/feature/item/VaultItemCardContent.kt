@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +26,8 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
@@ -311,6 +314,26 @@ fun VaultItemCardContent(
                     .animateItem(),
             )
         }
+
+        commonState.passwordHistoryCount?.let { passwordHistoryCount ->
+            item(key = "passwordHistoryCount") {
+                Spacer(modifier = Modifier.height(height = 4.dp))
+                BitwardenHyperTextLink(
+                    annotatedResId = R.string.password_history_count,
+                    args = arrayOf(passwordHistoryCount.toString()),
+                    annotationKey = "passwordHistory",
+                    accessibilityString = stringResource(id = R.string.password_history),
+                    onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
+                    style = BitwardenTheme.typography.labelMedium,
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 12.dp)
+                        .animateItem(),
+                )
+            }
+        }
+
         item {
             Spacer(modifier = Modifier.height(88.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())

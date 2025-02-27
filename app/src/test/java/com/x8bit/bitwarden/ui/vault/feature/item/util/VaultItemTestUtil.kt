@@ -178,6 +178,7 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            passwordHistoryCount = null,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
         )
@@ -227,6 +228,7 @@ fun createCommonContent(
             canAssignToCollections = true,
             canEdit = true,
             favorite = false,
+            passwordHistoryCount = 1,
             relatedLocations = persistentListOf(),
             iconData = IconData.Local(iconResId),
         )
@@ -234,7 +236,6 @@ fun createCommonContent(
 
 fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
-        passwordHistoryCount = 1.takeUnless { isEmpty },
         username = "username".takeUnless { isEmpty },
         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "password",

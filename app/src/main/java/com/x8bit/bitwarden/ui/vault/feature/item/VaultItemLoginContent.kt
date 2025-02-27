@@ -293,8 +293,7 @@ fun VaultItemLoginContent(
                 )
             }
         }
-
-        loginItemState.passwordHistoryCount?.let { passwordHistoryCount ->
+        commonState.passwordHistoryCount?.let { passwordHistoryCount ->
             item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
@@ -302,7 +301,7 @@ fun VaultItemLoginContent(
                     args = arrayOf(passwordHistoryCount.toString()),
                     annotationKey = "passwordHistory",
                     accessibilityString = stringResource(id = R.string.password_history),
-                    onClick = vaultLoginItemTypeHandlers.onPasswordHistoryClick,
+                    onClick = vaultCommonItemTypeHandlers.onPasswordHistoryClick,
                     style = BitwardenTheme.typography.labelMedium,
                     modifier = Modifier
                         .wrapContentWidth()
