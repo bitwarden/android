@@ -261,7 +261,7 @@ fun VaultItemLoginContent(
             )
         }
 
-        commonState.passwordRevisionDate?.let { revisionDate ->
+        loginItemState.passwordRevisionDate?.let { revisionDate ->
             item {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 VaultItemUpdateText(

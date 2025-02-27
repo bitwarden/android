@@ -237,20 +237,6 @@ fun VaultItemSshKeyContent(
             )
         }
 
-        commonState.passwordRevisionDate?.let { revisionDate ->
-            item {
-                Spacer(modifier = Modifier.height(height = 4.dp))
-                VaultItemUpdateText(
-                    header = "${stringResource(id = R.string.date_password_updated)}: ",
-                    text = revisionDate,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp),
-                )
-            }
-        }
-
         commonState.passwordHistoryCount?.let { passwordHistoryCount ->
             item {
                 Spacer(modifier = Modifier.height(height = 4.dp))

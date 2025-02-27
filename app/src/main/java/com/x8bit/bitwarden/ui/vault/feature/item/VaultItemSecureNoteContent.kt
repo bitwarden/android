@@ -28,7 +28,6 @@ import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 
 /**
@@ -151,20 +150,6 @@ fun VaultItemSecureNoteContent(
                     text = commonState.lastUpdated,
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.primary,
-                )
-            }
-        }
-
-        commonState.passwordRevisionDate?.let { revisionDate ->
-            item {
-                Spacer(modifier = Modifier.height(height = 4.dp))
-                VaultItemUpdateText(
-                    header = "${stringResource(id = R.string.date_password_updated)}: ",
-                    text = revisionDate,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp),
                 )
             }
         }

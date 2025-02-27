@@ -1486,8 +1486,6 @@ data class VaultItemState(
              * collections.
              * @property favorite Indicates that the cipher is favoried.
              * @property passwordHistoryCount An integer indicating how many times the password
-             * @property passwordRevisionDate An optional string indicating the last time the
-             * password was changed.
              */
             @Parcelize
             data class Common(
@@ -1505,7 +1503,6 @@ data class VaultItemState(
                 val canEdit: Boolean,
                 val favorite: Boolean,
                 val passwordHistoryCount: Int?,
-                val passwordRevisionDate: String?,
             ) : Parcelable {
 
                 /**
@@ -1579,6 +1576,8 @@ data class VaultItemState(
                  * @property passwordData The password required for the login item.
                  * has been changed.
                  * @property uris The URI associated with the login item.
+                 * @property passwordRevisionDate An optional string indicating the last time the
+                 * password was changed.
                  * @property totpCodeItemData The optional data related the TOTP code.
                  * @property isPremiumUser Indicates if the user has subscribed to a premium
                  * account.
@@ -1598,6 +1597,7 @@ data class VaultItemState(
                     val username: String?,
                     val passwordData: PasswordData?,
                     val uris: List<UriData>,
+                    val passwordRevisionDate: String?,
                     val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
                     val canViewTotpCode: Boolean,
