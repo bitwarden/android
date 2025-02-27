@@ -45,6 +45,7 @@ fun createMockCipherView(
     cipherType: CipherType = CipherType.LOGIN,
     repromptType: CipherRepromptType = CipherRepromptType.NONE,
     totp: String? = "mockTotp-$number",
+    organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
@@ -52,7 +53,7 @@ fun createMockCipherView(
 ): CipherView =
     CipherView(
         id = "mockId-$number",
-        organizationId = "mockOrganizationId-$number",
+        organizationId = organizationId,
         folderId = folderId,
         collectionIds = listOf("mockId-$number"),
         key = "mockKey-$number",

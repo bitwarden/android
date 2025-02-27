@@ -10,6 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -25,8 +29,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.ItemNameField
 import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
+import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -44,21 +48,26 @@ fun VaultItemCardContent(
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    var isExpanded by rememberSaveable { mutableStateOf(value = false) }
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         item {
-            Spacer(modifier = Modifier.height(height = 12.dp))
-            ItemNameField(
-                value = commonState.name,
-                isFavorite = commonState.favorite,
-                textFieldTestTag = "CardItemNameEntry",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
+            Spacer(Modifier.height(height = 12.dp))
+        }
+        itemHeader(
+            value = commonState.name,
+            isFavorite = commonState.favorite,
+            iconData = commonState.iconData,
+            relatedLocations = commonState.relatedLocations,
+            iconTestTag = "CardItemNameIcon",
+            textFieldTestTag = "CardItemNameEntry",
+            isExpanded = isExpanded,
+            onExpandClick = { isExpanded = !isExpanded },
+        )
+        item {
             Spacer(modifier = Modifier.height(height = 8.dp))
         }
         cardState.cardholderName?.let { cardholderName ->
-            item {
+            item(key = "cardholderName") {
                 BitwardenTextField(
                     label = stringResource(id = R.string.cardholder_name),
                     value = cardholderName,
@@ -74,12 +83,13 @@ fun VaultItemCardContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
         cardState.number?.let { numberData ->
-            item {
+            item(key = "cardNumber") {
                 BitwardenPasswordField(
                     label = stringResource(id = R.string.number),
                     value = numberData.number,
@@ -106,13 +116,14 @@ fun VaultItemCardContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         if (cardState.brand != null && cardState.brand != VaultCardBrand.SELECT) {
-            item {
+            item(key = "cardBrand") {
                 BitwardenTextField(
                     label = stringResource(id = R.string.brand),
                     value = cardState.brand.shortName(),
@@ -128,13 +139,14 @@ fun VaultItemCardContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         cardState.expiration?.let { expiration ->
-            item {
+            item(key = "expiration") {
                 BitwardenTextField(
                     label = stringResource(id = R.string.expiration),
                     value = expiration,
@@ -150,13 +162,14 @@ fun VaultItemCardContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         cardState.securityCode?.let { securityCodeData ->
-            item {
+            item(key = "securityCode") {
                 BitwardenPasswordField(
                     label = stringResource(id = R.string.security_code),
                     value = securityCodeData.code,
@@ -168,7 +181,9 @@ fun VaultItemCardContent(
                     actions = {
                         BitwardenStandardIconButton(
                             vectorIconRes = R.drawable.ic_copy,
-                            contentDescription = stringResource(id = R.string.copy_security_code),
+                            contentDescription = stringResource(
+                                id = R.string.copy_security_code,
+                            ),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
                             modifier = Modifier.testTag(tag = "CardCopySecurityCodeButton"),
                         )
@@ -183,20 +198,22 @@ fun VaultItemCardContent(
                         ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.notes?.let { notes ->
-            item {
+            item(key = "notes") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.additional_options),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
@@ -217,23 +234,28 @@ fun VaultItemCardContent(
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.customFields.takeUnless { it.isEmpty() }?.let { customFields ->
-            item {
+            item(key = "customFieldsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.custom_fields),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
             }
-            items(customFields) { customField ->
+            itemsIndexed(
+                items = customFields,
+                key = { index, _ -> "customField_$index" },
+            ) { _, customField ->
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
@@ -243,29 +265,35 @@ fun VaultItemCardContent(
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                 )
             }
         }
 
         commonState.attachments.takeUnless { it?.isEmpty() == true }?.let { attachments ->
-            item {
+            item(key = "attachmentsHeader") {
                 Spacer(modifier = Modifier.height(height = 16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.attachments),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 16.dp)
+                        .animateItem(),
                 )
                 Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            itemsIndexed(attachments) { index, attachmentItem ->
+            itemsIndexed(
+                items = attachments,
+                key = { index, _ -> "attachment_$index" },
+            ) { index, attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
                         .testTag("CipherAttachment")
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .animateItem(),
                     attachmentItem = attachmentItem,
                     onAttachmentDownloadClick = vaultCommonItemTypeHandlers
                         .onAttachmentDownloadClick,
@@ -274,7 +302,7 @@ fun VaultItemCardContent(
             }
         }
 
-        item {
+        item(key = "lastUpdated") {
             Spacer(modifier = Modifier.height(height = 16.dp))
             VaultItemUpdateText(
                 header = "${stringResource(id = R.string.date_updated)}: ",
@@ -282,7 +310,8 @@ fun VaultItemCardContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = 12.dp)
+                    .animateItem(),
             )
         }
 

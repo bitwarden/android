@@ -1,9 +1,19 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import android.net.Uri
 import com.bitwarden.vault.CipherType
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -15,6 +25,16 @@ class CipherViewExtensionsTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+
+    @BeforeEach
+    fun setUp() {
+        setupMockUri()
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(Uri::class)
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -48,6 +68,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -86,6 +109,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -117,6 +143,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -148,6 +177,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -185,6 +217,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -212,6 +247,9 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
@@ -237,11 +275,18 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_id_card,
+                )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = false),
             ),
@@ -261,11 +306,18 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = true, isPremiumUser = true)
+                common = createCommonContent(
+                    isEmpty = true,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_id_card,
+                )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(isEmpty = true),
             ),
@@ -295,11 +347,18 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_id_card,
+                )
                     .copy(currentCipher = cipherView),
                 type = createIdentityContent(
                     isEmpty = false,
@@ -334,11 +393,18 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_id_card,
+                ).copy(
                     currentCipher = cipherView.copy(
                         identity = cipherView.identity?.copy(
                             address1 = null,
@@ -375,11 +441,18 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true)
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_note,
+                )
                     .copy(currentCipher = cipherView),
                 type = VaultItemState.ViewState.Content.ItemType.SecureNote,
             ),
@@ -400,10 +473,17 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
 
         val expectedState = VaultItemState.ViewState.Content(
-            common = createCommonContent(isEmpty = true, isPremiumUser = true)
+            common = createCommonContent(
+                isEmpty = true,
+                isPremiumUser = true,
+                iconResId = R.drawable.ic_note,
+            )
                 .copy(currentCipher = cipherView),
             type = VaultItemState.ViewState.Content.ItemType.SecureNote,
         )
@@ -423,10 +503,17 @@ class CipherViewExtensionsTest {
             canDelete = true,
             canAssignToCollections = true,
             canEdit = true,
+            baseIconUrl = "https://example.com/",
+            isIconLoadingDisabled = true,
+            relatedLocations = persistentListOf(),
         )
         assertEquals(
             VaultItemState.ViewState.Content(
-                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
+                common = createCommonContent(
+                    isEmpty = false,
+                    isPremiumUser = true,
+                    iconResId = R.drawable.ic_ssh_key,
+                ).copy(
                     currentCipher = cipherView.copy(
                         name = "mockName",
                         sshKey = cipherView.sshKey?.copy(
@@ -440,5 +527,44 @@ class CipherViewExtensionsTest {
             ),
             viewState,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform full CipherView into ViewState with iconData based on cipher type`() {
+        mapOf<CipherType, Int>(
+            CipherType.LOGIN to R.drawable.ic_globe,
+            CipherType.IDENTITY to R.drawable.ic_id_card,
+            CipherType.CARD to R.drawable.ic_payment_card,
+            CipherType.SECURE_NOTE to R.drawable.ic_note,
+            CipherType.SSH_KEY to R.drawable.ic_ssh_key,
+        )
+            .forEach {
+                val cipherView = createCipherView(type = it.key, isEmpty = false)
+                val viewState = cipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    clock = fixedClock,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = "https://example.com/",
+                    isIconLoadingDisabled = true,
+                    relatedLocations = persistentListOf(),
+                )
+                assertEquals(
+                    it.value,
+                    (viewState.asContentOrNull()?.common?.iconData as? IconData.Local)?.iconRes,
+                )
+            }
+    }
+
+    private fun setupMockUri() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
     }
 }

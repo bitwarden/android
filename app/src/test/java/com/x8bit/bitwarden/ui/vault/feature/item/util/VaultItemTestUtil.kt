@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import androidx.annotation.DrawableRes
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -14,9 +15,11 @@ import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import kotlinx.collections.immutable.persistentListOf
 import java.time.Instant
 
 const val DEFAULT_IDENTITY_NAME: String = "Mr firstName middleName lastName"
@@ -160,6 +163,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
 fun createCommonContent(
     isEmpty: Boolean,
     isPremiumUser: Boolean,
+    @DrawableRes iconResId: Int = R.drawable.ic_globe,
 ): VaultItemState.ViewState.Content.Common =
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
@@ -175,6 +179,8 @@ fun createCommonContent(
             canEdit = true,
             favorite = false,
             passwordHistoryCount = null,
+            relatedLocations = persistentListOf(),
+            iconData = IconData.Local(iconResId),
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -223,6 +229,8 @@ fun createCommonContent(
             canEdit = true,
             favorite = false,
             passwordHistoryCount = 1,
+            relatedLocations = persistentListOf(),
+            iconData = IconData.Local(iconResId),
         )
     }
 
