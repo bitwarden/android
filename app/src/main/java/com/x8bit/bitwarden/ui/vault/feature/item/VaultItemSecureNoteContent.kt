@@ -103,12 +103,9 @@ fun VaultItemSecureNoteContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
-                    onCopyCustomHiddenField =
-                        vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
-                    onCopyCustomTextField =
-                        vaultCommonItemTypeHandlers.onCopyCustomTextField,
-                    onShowHiddenFieldClick =
-                        vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -225,12 +224,9 @@ fun VaultItemLoginContent(
                 Spacer(modifier = Modifier.height(height = 8.dp))
                 CustomField(
                     customField = customField,
-                    onCopyCustomHiddenField =
-                        vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
-                    onCopyCustomTextField =
-                        vaultCommonItemTypeHandlers.onCopyCustomTextField,
-                    onShowHiddenFieldClick =
-                        vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
+                    onCopyCustomHiddenField = vaultCommonItemTypeHandlers.onCopyCustomHiddenField,
+                    onCopyCustomTextField = vaultCommonItemTypeHandlers.onCopyCustomTextField,
+                    onShowHiddenFieldClick = vaultCommonItemTypeHandlers.onShowHiddenFieldClick,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .standardHorizontalMargin()
