@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -128,23 +129,23 @@ fun LazyListScope.itemHeader(
         return
     }
 
-    items(
-        key = { "locations_$it" },
+    itemsIndexed(
+        key = { index, _ -> "locations_$index" },
         items = relatedLocations.take(EXPANDABLE_THRESHOLD),
-    ) {
+    ) { index, location ->
         ItemLocationListItem(
-            vectorPainter = rememberVectorPainter(it.icon),
+            vectorPainter = rememberVectorPainter(location.icon),
             iconTestTag = "ItemLocationIcon",
-            text = it.name,
+            text = location.name,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin()
                 .animateItem()
                 .cardStyle(
-                    cardStyle = if (relatedLocations.size > EXPANDABLE_THRESHOLD) {
-                        CardStyle.Middle(hasDivider = false)
-                    } else {
+                    cardStyle = if (index == relatedLocations.size - 1) {
                         CardStyle.Bottom
+                    } else {
+                        CardStyle.Middle(hasDivider = false)
                     },
                     paddingVertical = 0.dp,
                     paddingHorizontal = 16.dp,
