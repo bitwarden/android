@@ -112,7 +112,7 @@ fun LazyListScope.itemHeader(
     }
 
     if (relatedLocations.isEmpty()) {
-        item {
+        item(key = "noFolder") {
             ItemLocationListItem(
                 vectorPainter = rememberVectorPainter(R.drawable.ic_folder),
                 text = stringResource(R.string.no_folder),
@@ -120,9 +120,11 @@ fun LazyListScope.itemHeader(
                 modifier = Modifier
                     .standardHorizontalMargin()
                     .fillMaxWidth()
+                    .animateItem()
                     .cardStyle(
                         cardStyle = CardStyle.Bottom,
                         paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
                     ),
             )
         }

@@ -59,6 +59,9 @@ fun VaultItemIdentityContent(
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
         )
+        item {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
         identityState.identityName?.let { identityName ->
             item(key = "identityName") {
                 IdentityCopyField(

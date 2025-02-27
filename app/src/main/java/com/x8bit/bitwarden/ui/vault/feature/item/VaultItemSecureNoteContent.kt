@@ -56,6 +56,9 @@ fun VaultItemSecureNoteContent(
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
         )
+        item {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
         commonState.notes?.let { notes ->
             item(key = "notes") {
                 Spacer(modifier = Modifier.height(8.dp))

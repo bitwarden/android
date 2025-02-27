@@ -60,6 +60,9 @@ fun VaultItemCardContent(
             isExpanded = isExpanded,
             onExpandClick = { isExpanded = !isExpanded },
         )
+        item {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+        }
         cardState.cardholderName?.let { cardholderName ->
             item(key = "cardholderName") {
                 BitwardenTextField(
