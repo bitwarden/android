@@ -3252,6 +3252,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isLaunchable = true,
                     ),
                 ),
+                passwordRevisionDate = "12/31/69 06:16 PM",
                 isPremiumUser = true,
                 totpCodeItemData = TotpCodeItemData(
                     totpCode = "otpauth://totp/Example:alice@google.com" +
@@ -3349,7 +3350,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canEdit = true,
                 favorite = false,
                 passwordHistoryCount = 1,
-                passwordRevisionDate = "12/31/69 06:16 PM",
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =
