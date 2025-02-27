@@ -18,6 +18,7 @@
       "description": "Kotlin and Compose dependencies that must be updated together to maintain compatibility.",
       "matchPackagePatterns": [
         "androidx.compose:compose-bom",
+        "androidx.lifecycle:*",
         "org.jetbrains.kotlin.*",
         "com.google.devtools.ksp"
       ],
