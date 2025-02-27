@@ -70,7 +70,6 @@ class PolicyManagerImpl(
             .getOrganizations(userId)
             ?.filter {
                 it.shouldUsePolicies &&
-                    it.isEnabled &&
                     it.status >= OrganizationStatusType.ACCEPTED &&
                     !isOrganizationExemptFromPolicies(it, type)
             }
