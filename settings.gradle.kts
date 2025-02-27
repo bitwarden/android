@@ -50,3 +50,4 @@ buildCache {
 rootProject.name = "Bitwarden"
 include(":app")
 include(":authenticatorbridge")
+include(":authenticator")
