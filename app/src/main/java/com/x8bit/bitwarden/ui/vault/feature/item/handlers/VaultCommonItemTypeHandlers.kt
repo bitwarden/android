@@ -7,10 +7,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 /**
  * A collection of handler functions for managing actions common within the context of viewing
  * items in a vault.
- *
- * @property onCopyCustomHiddenField
- * @property onCopyCustomTextField
- * @property onShowHiddenFieldClick
  */
 data class VaultCommonItemTypeHandlers(
     val onRefreshClick: () -> Unit,
@@ -22,6 +18,7 @@ data class VaultCommonItemTypeHandlers(
     ) -> Unit,
     val onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
     val onCopyNotesClick: () -> Unit,
+    val onPasswordHistoryClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -55,6 +52,9 @@ data class VaultCommonItemTypeHandlers(
                 },
                 onCopyNotesClick = {
                     viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
+                },
+                onPasswordHistoryClick = {
+                    viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
                 },
             )
     }

@@ -86,6 +86,7 @@ fun CipherView.toViewState(
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,
+            passwordHistoryCount = passwordHistory?.count(),
         ),
         type = when (type) {
             CipherType.LOGIN -> {
@@ -109,7 +110,6 @@ fun CipherView.toViewState(
                             pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                             clock = clock,
                         ),
-                    passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
