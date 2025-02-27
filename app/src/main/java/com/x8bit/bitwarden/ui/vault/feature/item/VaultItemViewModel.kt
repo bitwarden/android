@@ -241,6 +241,7 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
             is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
+            is VaultItemAction.Common.PasswordHistoryClick -> handlePasswordHistoryClick()
         }
     }
 
@@ -614,10 +615,6 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.ItemType.Login.LaunchClick -> {
                 handleLaunchClick(action)
-            }
-
-            is VaultItemAction.ItemType.Login.PasswordHistoryClick -> {
-                handlePasswordHistoryClick()
             }
 
             is VaultItemAction.ItemType.Login.PasswordVisibilityClicked -> {
@@ -1548,7 +1545,8 @@ data class VaultItemState(
              * @property canDelete Indicates if the cipher can be deleted.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
-             * @property favorite Indicates that the cipher is marked as a favorite item.
+             * @property favorite Indicates that the cipher is favorite.
+             * @property passwordHistoryCount An integer indicating how many times the password.
              */
             @Parcelize
             data class Common(
@@ -1565,6 +1563,7 @@ data class VaultItemState(
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
                 val favorite: Boolean,
+                val passwordHistoryCount: Int?,
                 val iconData: IconData,
                 val relatedLocations: ImmutableList<VaultItemLocation>,
             ) : Parcelable {
@@ -1638,7 +1637,6 @@ data class VaultItemState(
                  *
                  * @property username The username required for the login item.
                  * @property passwordData The password required for the login item.
-                 * @property passwordHistoryCount An integer indicating how many times the password
                  * has been changed.
                  * @property uris The URI associated with the login item.
                  * @property passwordRevisionDate An optional string indicating the last time the
@@ -1661,7 +1659,6 @@ data class VaultItemState(
                 data class Login(
                     val username: String?,
                     val passwordData: PasswordData?,
-                    val passwordHistoryCount: Int?,
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
                     val totpCodeItemData: TotpCodeItemData?,
@@ -2083,6 +2080,11 @@ sealed class VaultItemAction {
          * The user has clicked the copy button for notes text field.
          */
         data object CopyNotesClick : Common()
+
+        /**
+         * The user has clicked the password history text.
+         */
+        data object PasswordHistoryClick : Common()
     }
 
     /**
@@ -2132,11 +2134,6 @@ sealed class VaultItemAction {
             data class LaunchClick(
                 val uri: String,
             ) : Login()
-
-            /**
-             * The user has clicked the password history text.
-             */
-            data object PasswordHistoryClick : Login()
 
             /**
              * The user has clicked to display the password.
@@ -2343,13 +2340,13 @@ sealed class PasswordRepromptAction : Parcelable {
     }
 
     /**
-     * Indicates that we should launch the [VaultItemAction.ItemType.Login.PasswordHistoryClick]
+     * Indicates that we should launch the [VaultItemAction.Common.PasswordHistoryClick]
      * upon password validation.
      */
     @Parcelize
     data object PasswordHistoryClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
-            get() = VaultItemAction.ItemType.Login.PasswordHistoryClick
+            get() = VaultItemAction.Common.PasswordHistoryClick
     }
 
     /**

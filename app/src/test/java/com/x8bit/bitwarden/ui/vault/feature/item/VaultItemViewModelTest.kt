@@ -2257,7 +2257,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
-                viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
+                viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
@@ -2313,7 +2313,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.eventFlow.test {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
+                    viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
                     assertEquals(
                         VaultItemEvent.NavigateToPasswordHistory(VAULT_ITEM_ID),
                         awaitItem(),
@@ -3625,7 +3625,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         private val DEFAULT_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
             VaultItemState.ViewState.Content.ItemType.Login(
-                passwordHistoryCount = 1,
                 username = DEFAULT_LOGIN_USERNAME,
                 passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
                     password = DEFAULT_LOGIN_PASSWORD,
@@ -3737,6 +3736,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canAssignToCollections = true,
                 canEdit = true,
                 favorite = false,
+                passwordHistoryCount = 1,
                 iconData = IconData.Local(R.drawable.ic_globe),
                 relatedLocations = persistentListOf(),
             )
