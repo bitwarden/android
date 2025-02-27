@@ -23,49 +23,46 @@ fun String?.sanitizeTotpUri(
 ): String? {
     if (this.isNullOrBlank()) return null
 
-    return when {
-        this.startsWith(OTPAUTH_PREFIX) || this.startsWith(STEAM_PREFIX) -> {
-            // ✅ Already a valid TOTP or Steam URI, return as-is.
-            this
+    return if (this.startsWith(OTPAUTH_PREFIX) || this.startsWith(STEAM_PREFIX)) {
+        // ✅ Already a valid TOTP or Steam URI, return as-is.
+        this
+    } else {
+        // ❌ Manually entered secret, reconstruct as otpauth://totp/ URI.
+
+        // Trim spaces from issuer and username
+        val trimmedIssuer = issuer?.trim()?.takeIf { it.isNotEmpty() }
+        val trimmedUsername = username?.trim()?.takeIf { it.isNotEmpty() }
+
+        // Determine raw label correctly (avoid empty `:` issue)
+        val rawLabel = if (trimmedIssuer != null && trimmedUsername != null) {
+            "$trimmedIssuer:$trimmedUsername"
+        } else {
+            trimmedUsername.orEmpty()
         }
-        else -> {
-            // ❌ Manually entered secret, reconstruct as otpauth://totp/ URI.
 
-            // Trim spaces from issuer and username
-            val trimmedIssuer = issuer?.trim()?.takeIf { it.isNotEmpty() }
-            val trimmedUsername = username?.trim()?.takeIf { it.isNotEmpty() }
+        // Encode label only if it's not empty
+        val encodedLabel = rawLabel
+            .takeIf { it.isNotEmpty() }
+            ?.let {
+                URLEncoder.encode(it, "UTF-8")
+                    .replace("+", "%20")
+            }
+            .orEmpty()
 
-            // Determine raw label correctly (avoid empty `:` issue)
-            val rawLabel = if (trimmedIssuer != null && trimmedUsername != null) {
-                "$trimmedIssuer:$trimmedUsername"
-            } else {
-                trimmedUsername.orEmpty()
+        // Encode issuer separately for the query parameter
+        val encodedIssuer = trimmedIssuer
+            ?.let {
+                URLEncoder.encode(it, "UTF-8")
+                    .replace("+", "%20")
             }
 
-            // Encode label only if it's not empty
-            val encodedLabel = rawLabel
-                .takeIf { it.isNotEmpty() }
-                ?.let {
-                    URLEncoder.encode(it, "UTF-8")
-                        .replace("+", "%20")
-                }
-                .orEmpty()
+        // Construct the issuer query parameter.
+        val issuerParameter = encodedIssuer?.let { "&issuer=$it" }.orEmpty()
 
-            // Encode issuer separately for the query parameter
-            val encodedIssuer = trimmedIssuer
-                ?.let {
-                    URLEncoder.encode(it, "UTF-8")
-                        .replace("+", "%20")
-                }
+        // Remove spaces from the manually entered secret
+        val sanitizedSecret = this.filterNot { it.isWhitespace() }
 
-            // Construct the issuer query parameter.
-            val issuerParameter = encodedIssuer?.let { "&issuer=$it" }.orEmpty()
-
-            // Remove spaces from the manually entered secret
-            val sanitizedSecret = this.filterNot { it.isWhitespace() }
-
-            // Construct final TOTP URI
-            "$OTPAUTH_PREFIX$encodedLabel?secret=$sanitizedSecret$issuerParameter"
-        }
+        // Construct final TOTP URI
+        "$OTPAUTH_PREFIX$encodedLabel?secret=$sanitizedSecret$issuerParameter"
     }
 }
