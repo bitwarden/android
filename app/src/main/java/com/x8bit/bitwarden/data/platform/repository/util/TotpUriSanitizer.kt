@@ -28,24 +28,18 @@ fun String?.sanitizeTotpUri(
             // ✅ Already a valid TOTP or Steam URI, return as-is.
             this
         }
-        issuer?.trim().equals("steam", ignoreCase = true) -> {
-            // 🎮👾If the issuer is Steam, enforce Steam-specific URI format.
-            "$STEAM_PREFIX${
-                this.replace("\\s".toRegex(), "") // Remove spaces from manually entered secret
-            }"
-        }
         else -> {
             // ❌ Manually entered secret, reconstruct as otpauth://totp/ URI.
 
             // Trim spaces from issuer and username
-            val trimmedIssuer = issuer?.trim().takeIf { it?.isNotEmpty() ?: false }
-            val trimmedUsername = username?.trim().takeIf { it?.isNotEmpty() ?: false }
+            val trimmedIssuer = issuer?.trim()?.takeIf { it.isNotEmpty() }
+            val trimmedUsername = username?.trim()?.takeIf { it.isNotEmpty() }
 
             // Determine raw label correctly (avoid empty `:` issue)
-            val rawLabel = if (!trimmedIssuer.isNullOrEmpty() && !trimmedUsername.isNullOrEmpty()) {
+            val rawLabel = if (trimmedIssuer != null && trimmedUsername != null) {
                 "$trimmedIssuer:$trimmedUsername"
             } else {
-                trimmedUsername ?: ""
+                trimmedUsername.orEmpty()
             }
 
             // Encode label only if it's not empty
