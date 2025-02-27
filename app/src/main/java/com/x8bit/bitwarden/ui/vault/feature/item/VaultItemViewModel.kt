@@ -1545,8 +1545,8 @@ data class VaultItemState(
              * @property canDelete Indicates if the cipher can be deleted.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
-             * @property favorite Indicates that the cipher is favoried.
-             * @property passwordHistoryCount An integer indicating how many times the password
+             * @property favorite Indicates that the cipher is favorite.
+             * @property passwordHistoryCount An integer indicating how many times the password.
              */
             @Parcelize
             data class Common(

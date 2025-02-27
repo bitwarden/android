@@ -367,7 +367,7 @@ fun VaultItemIdentityContent(
         }
 
         commonState.passwordHistoryCount?.let { passwordHistoryCount ->
-            item {
+            item(key = "passwordHistoryCount") {
                 Spacer(modifier = Modifier.height(height = 4.dp))
                 BitwardenHyperTextLink(
                     annotatedResId = R.string.password_history_count,
@@ -379,7 +379,8 @@ fun VaultItemIdentityContent(
                     modifier = Modifier
                         .wrapContentWidth()
                         .standardHorizontalMargin()
-                        .padding(horizontal = 12.dp),
+                        .padding(horizontal = 12.dp)
+                        .animateItem(),
                 )
             }
         }
