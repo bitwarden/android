@@ -32,7 +32,7 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeH
 /**
  * The top level content UI state for the [VaultItemScreen] when viewing a Identity cipher.
  */
-@Suppress("LongMethod", "MaxLineLength")
+@Suppress("LongMethod", "MaxLineLength", "CyclomaticComplexMethod")
 @Composable
 fun VaultItemIdentityContent(
     identityState: VaultItemState.ViewState.Content.ItemType.Identity,
@@ -331,6 +331,20 @@ fun VaultItemIdentityContent(
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp),
             )
+        }
+
+        commonState.passwordRevisionDate?.let { revisionDate ->
+            item {
+                Spacer(modifier = Modifier.height(height = 4.dp))
+                VaultItemUpdateText(
+                    header = "${stringResource(id = R.string.date_password_updated)}: ",
+                    text = revisionDate,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 12.dp),
+                )
+            }
         }
 
         commonState.passwordHistoryCount?.let { passwordHistoryCount ->
