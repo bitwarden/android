@@ -585,11 +585,9 @@ class CipherViewExtensionsTest {
                 )
                 assertEquals(
                     IconData.Local(it.value),
-                    (viewState.asContentOrNull()?.type as? VaultItemState
-                    .ViewState
-                    .Content
-                    .ItemType
-                    .Card)
+                    (viewState
+                        .asContentOrNull()
+                        ?.type as? VaultItemState.ViewState.Content.ItemType.Card)
                         ?.paymentCardBrandIconData,
                 )
             }
