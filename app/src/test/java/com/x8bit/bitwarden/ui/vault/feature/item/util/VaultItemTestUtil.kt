@@ -175,6 +175,7 @@ fun createCommonContent(
             canEdit = true,
             favorite = false,
             passwordHistoryCount = null,
+            passwordRevisionDate = null,
         )
     } else {
         VaultItemState.ViewState.Content.Common(
@@ -223,7 +224,8 @@ fun createCommonContent(
             canEdit = true,
             favorite = false,
             passwordHistoryCount = 1,
-        )
+            passwordRevisionDate = "1/1/70 12:16 AM",
+            )
     }
 
 fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemType.Login =
@@ -246,7 +248,6 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = "1/1/70 12:16 AM".takeUnless { isEmpty },
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,
