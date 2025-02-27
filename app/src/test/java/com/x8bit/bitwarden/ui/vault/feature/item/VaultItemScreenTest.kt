@@ -1447,6 +1447,212 @@ class VaultItemScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultItemAction.Common.CopyNotesClick)
         }
     }
+
+    @Test
+    fun `in login state, password history should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 1,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(passwordHistoryCount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
+    }
+
+    @Test
+    fun `in identity state, password history should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 1,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(passwordHistoryCount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
+    }
+
+    @Test
+    fun `in secure note state, password history should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_SECURE_NOTE_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 1,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(passwordHistoryCount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
+    }
+
+    @Test
+    fun `in card state, password history should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CARD_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 1,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(passwordHistoryCount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
+    }
+
+    @Test
+    fun `in ssh key state, password history should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_SSH_KEY_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 1,
+                    ),
+                ),
+            )
+        }
+        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(passwordHistoryCount = null) }
+        }
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
+    }
+
+    @Test
+    fun `in login state, on password history click should send PasswordHistoryClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+        }
+    }
+
+    @Test
+    fun `in identity state, on password history click should send PasswordHistoryClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_IDENTITY_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+        }
+    }
+
+    @Test
+    fun `in card state, on password history click should send PasswordHistoryClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+        }
+    }
+
+    @Test
+    fun `in secure note state, on password history click should send PasswordHistoryClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_SECURE_NOTE_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+        }
+    }
+
+    @Test
+    fun `in ssh key state, on password history click should send PasswordHistoryClick`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_SSH_KEY_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        passwordHistoryCount = 5,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Password history: 5")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
+        }
+    }
+
     //endregion common
 
     //region login
@@ -1509,7 +1715,6 @@ class VaultItemScreenTest : BaseComposeTest() {
                     type = VaultItemState.ViewState.Content.ItemType.Login(
                         username = username,
                         passwordData = null,
-                        passwordHistoryCount = null,
                         uris = emptyList(),
                         passwordRevisionDate = null,
                         isPremiumUser = true,
@@ -1884,27 +2089,6 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in login state, on password history click should send PasswordHistoryClick`() {
-        mutableStateFlow.update { currentState ->
-            currentState.copy(
-                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
-                    type = EMPTY_LOGIN_TYPE.copy(
-                        passwordHistoryCount = 5,
-                    ),
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithTextAfterScroll("Password history: 5")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
-        }
-    }
-
-    @Test
     fun `fab should be displayed according state`() {
         mutableStateFlow.update {
             it.copy(viewState = VaultItemState.ViewState.Loading)
@@ -2000,18 +2184,6 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule.assertScrollableNodeDoesNotExist("Password updated: ")
         composeTestRule.assertScrollableNodeDoesNotExist("4/14/83 3:56 PM")
-    }
-
-    @Test
-    fun `in login state, password history should be displayed according to state`() {
-        mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("Password history: 1").assertIsDisplayed()
-
-        mutableStateFlow.update { currentState ->
-            updateLoginType(currentState) { copy(passwordHistoryCount = null) }
-        }
-
-        composeTestRule.assertScrollableNodeDoesNotExist("Password history: 1")
     }
     //endregion login
 
@@ -2778,6 +2950,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        passwordHistoryCount = null,
     )
 
 private val DEFAULT_PASSKEY = R.string.created_xy.asText(
@@ -2787,7 +2960,6 @@ private val DEFAULT_PASSKEY = R.string.created_xy.asText(
 
 private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
-        passwordHistoryCount = 1,
         username = "the username",
         passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
             password = "the password",
@@ -2863,13 +3035,13 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         canAssignToCollections = true,
         canEdit = true,
         favorite = false,
+        passwordHistoryCount = null,
     )
 
 private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
         username = null,
         passwordData = null,
-        passwordHistoryCount = null,
         uris = emptyList(),
         passwordRevisionDate = null,
         totpCodeItemData = null,
