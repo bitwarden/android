@@ -163,7 +163,7 @@ fun VaultItemCardContent(
         }
 
         cardState.securityCode?.let { securityCodeData ->
-            item(key = "securityCodeData_$securityCodeData") {
+            item(key = "securityCode") {
                 BitwardenPasswordField(
                     label = stringResource(id = R.string.security_code),
                     value = securityCodeData.code,
