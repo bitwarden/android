@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
@@ -23,6 +28,7 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
@@ -37,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * The max number of items that can be displayed before the "show more" text is visible.
@@ -256,107 +263,137 @@ private fun LazyItemScope.ItemLocationListItem(
 }
 
 //region Previews
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-// private fun ItemHeader_LocalIcon_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Login without favicon",
-//            isFavorite = true,
-//            iconData = IconData.Local(
-//                iconRes = R.drawable.ic_globe,
-//            ),
-//            relatedLocations = persistentListOf(),
-//        )
-//    }
-// }
-//
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-// private fun ItemHeader_NetworkIcon_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Login with favicon",
-//            isFavorite = true,
-//            iconData = IconData.Network(
-//                uri = "mockuri",
-//                fallbackIconRes = R.drawable.ic_globe,
-//            ),
-//            relatedLocations = persistentListOf(),
-//        )
-//    }
-// }
-//
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-// private fun ItemHeader_Organization_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Login without favicon",
-//            isFavorite = true,
-//            iconData = IconData.Local(
-//                iconRes = R.drawable.ic_globe,
-//            ),
-//            relatedLocations = persistentListOf(
-//                VaultItemLocation.Organization("Stark Industries"),
-//            ),
-//        )
-//    }
-// }
-//
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-// private fun ItemNameField_Org_SingleCollection_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Login without favicon",
-//            isFavorite = true,
-//            iconData = IconData.Local(
-//                iconRes = R.drawable.ic_globe,
-//            ),
-//            relatedLocations = persistentListOf(
-//                VaultItemLocation.Organization("Stark Industries"),
-//                VaultItemLocation.Collection("Marketing"),
-//            ),
-//        )
-//    }
-// }
-//
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-// private fun ItemNameField_Org_MultiCollection_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Login without favicon",
-//            isFavorite = true,
-//            iconData = IconData.Local(
-//                iconRes = R.drawable.ic_globe,
-//            ),
-//            relatedLocations = persistentListOf(
-//                VaultItemLocation.Organization("Stark Industries"),
-//                VaultItemLocation.Collection("Marketing"),
-//                VaultItemLocation.Collection("Product"),
-//            ),
-//        )
-//    }
-// }
-//
-// @Composable
-// @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-// private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
-//    BitwardenTheme {
-//        ItemHeader(
-//            value = "Note without favicon",
-//            isFavorite = true,
-//            iconData = IconData.Local(
-//                iconRes = R.drawable.ic_note,
-//            ),
-//            relatedLocations = persistentListOf(
-//                VaultItemLocation.Organization("Stark Industries"),
-//                VaultItemLocation.Collection("Marketing"),
-//                VaultItemLocation.Folder("Competition"),
-//            ),
-//        )
-//    }
-// }
+@Composable
+@Preview
+private fun ItemHeader_LocalIcon_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Login without favicon",
+                isFavorite = true,
+                iconData = IconData.Local(
+                    iconRes = R.drawable.ic_globe,
+                ),
+                relatedLocations = persistentListOf(),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ItemHeader_NetworkIcon_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Login with favicon",
+                isFavorite = true,
+                iconData = IconData.Network(
+                    uri = "mockuri",
+                    fallbackIconRes = R.drawable.ic_globe,
+                ),
+                relatedLocations = persistentListOf(),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ItemHeader_Organization_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Login without favicon",
+                isFavorite = true,
+                iconData = IconData.Local(
+                    iconRes = R.drawable.ic_globe,
+                ),
+                relatedLocations = persistentListOf(
+                    VaultItemLocation.Organization("Stark Industries"),
+                ),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ItemNameField_Org_SingleCollection_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Login without favicon",
+                isFavorite = true,
+                iconData = IconData.Local(
+                    iconRes = R.drawable.ic_globe,
+                ),
+                relatedLocations = persistentListOf(
+                    VaultItemLocation.Organization("Stark Industries"),
+                    VaultItemLocation.Collection("Marketing"),
+                ),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ItemNameField_Org_MultiCollection_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Login without favicon",
+                isFavorite = true,
+                iconData = IconData.Local(
+                    iconRes = R.drawable.ic_globe,
+                ),
+                relatedLocations = persistentListOf(
+                    VaultItemLocation.Organization("Stark Industries"),
+                    VaultItemLocation.Collection("Marketing"),
+                    VaultItemLocation.Collection("Product"),
+                ),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun ItemNameField_Org_SingleCollection_Folder_Preview() {
+    var isExpanded by remember { mutableStateOf(false) }
+    BitwardenTheme {
+        LazyColumn {
+            itemHeader(
+                value = "Note without favicon",
+                isFavorite = true,
+                iconData = IconData.Local(
+                    iconRes = R.drawable.ic_note,
+                ),
+                relatedLocations = persistentListOf(
+                    VaultItemLocation.Organization("Stark Industries"),
+                    VaultItemLocation.Collection("Marketing"),
+                    VaultItemLocation.Folder("Competition"),
+                ),
+                isExpanded = isExpanded,
+                onExpandClick = { isExpanded = !isExpanded },
+            )
+        }
+    }
+}
 //endregion Previews
