@@ -17,12 +17,19 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
  * @property onToggleMasterPasswordReprompt Handles the action when the master password
  * reprompt toggle is changed.
  * @property onNotesTextChange Handles the action when the notes text is changed.
- * @property onOwnerSelected Handles the action when a owner is selected.
+ * @property onPresentOwnerOptions Handles showing the list of ownership options.
+ * @property onOwnerSelected Handles the action when a owner is select.
  * @property onTooltipClick Handles the action when the tooltip button is clicked.
  * @property onAddNewCustomFieldClick Handles the action when the add new custom field
  * button is clicked.
  * @property onCustomFieldValueChange Handles the action when the field's value changes.
  * @property onCollectionSelect Handles the action when a collection is selected.
+ * @property onHiddenFieldVisibilityChange Handles the action when the hidden field visibility
+ * @property onSelectOrAddFolderForItem Handles the action when a folder is selected.
+ * @property onDismissFolderSelectionSheet Handles when the folder selection sheet is dismissed.
+ * @property onDismissOwnerSelectionSheet Handles when the owner selection sheet is dismissed.
+ * @property onChangeToExistingFolder Handles the action when the folder is changed.
+ * @property onOnAddFolder Handles the action when a new folder is added.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditCommonHandlers(
@@ -30,7 +37,8 @@ data class VaultAddEditCommonHandlers(
     val onToggleFavorite: (Boolean) -> Unit,
     val onToggleMasterPasswordReprompt: (Boolean) -> Unit,
     val onNotesTextChange: (String) -> Unit,
-    val onOwnerSelected: (VaultAddEditState.Owner) -> Unit,
+    val onPresentOwnerOptions: () -> Unit,
+    val onOwnerSelected: (String?) -> Unit,
     val onTooltipClick: () -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
@@ -39,6 +47,7 @@ data class VaultAddEditCommonHandlers(
     val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
     val onSelectOrAddFolderForItem: () -> Unit,
     val onDismissFolderSelectionSheet: () -> Unit,
+    val onDismissOwnerSelectionSheet: () -> Unit,
     val onChangeToExistingFolder: (String?) -> Unit,
     val onOnAddFolder: (String) -> Unit,
 ) {
@@ -62,6 +71,11 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.SelectOrAddFolderForItem,
                     )
                 },
+                onPresentOwnerOptions = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.SelectOwnerForItem,
+                    )
+                },
                 onToggleFavorite = { isFavorite ->
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.ToggleFavorite(isFavorite),
@@ -79,9 +93,11 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NotesTextChange(newNotes),
                     )
                 },
-                onOwnerSelected = { newOwnership ->
+                onOwnerSelected = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.OwnershipChange(newOwnership),
+                        VaultAddEditAction.Common.OwnershipChange(
+                            ownerId = it,
+                        ),
                     )
                 },
                 onTooltipClick = {
@@ -141,6 +157,11 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.AddNewFolder(
                             newFolderName = it,
                         ),
+                    )
+                },
+                onDismissOwnerSelectionSheet = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet,
                     )
                 },
             )

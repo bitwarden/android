@@ -186,6 +186,7 @@ class VaultAddEditViewModel @Inject constructor(
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
                 shouldShowFolderSelectionBottomSheet = false,
+                shouldShowOwnerSelectionBottomSheet = false,
             )
         },
 ) {
@@ -362,6 +363,14 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Common.AddNewFolder -> {
                 handleAddNewFolder(action)
+            }
+
+            VaultAddEditAction.Common.SelectOwnerForItem -> {
+                handleSelectOwnerForItem()
+            }
+
+            VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet -> {
+                handleDismissOwnerSelectionSheet()
             }
         }
     }
@@ -734,6 +743,18 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private fun handleSelectOwnerForItem() {
+        mutableStateFlow.update {
+            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+        }
+    }
+
+    private fun handleDismissOwnerSelectionSheet() {
+        mutableStateFlow.update {
+            it.copy(shouldShowOwnerSelectionBottomSheet = false)
+        }
+    }
+
     private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
         mutableStateFlow.update {
             it.copy(
@@ -882,7 +903,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.OwnershipChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedOwnerId = action.ownership.id)
+            commonContent.copy(selectedOwnerId = action.ownerId)
         }
     }
 
@@ -2036,6 +2057,7 @@ data class VaultAddEditState(
     val viewState: ViewState,
     val dialog: DialogState?,
     val shouldShowFolderSelectionBottomSheet: Boolean,
+    val shouldShowOwnerSelectionBottomSheet: Boolean,
     val shouldShowCloseButton: Boolean = true,
     // Internal
     val shouldExitOnSave: Boolean = false,
@@ -2755,11 +2777,11 @@ sealed class VaultAddEditAction {
         data class NotesTextChange(val notes: String) : Common()
 
         /**
-         * Fired when the ownership text input is changed.
+         * Fired when the owner text input is changed.
          *
-         * @property ownership The new ownership text.
+         * @property ownerId The new owner id.
          */
-        data class OwnershipChange(val ownership: VaultAddEditState.Owner) : Common()
+        data class OwnershipChange(val ownerId: String?) : Common()
 
         /**
          * Represents the action to add a new custom field.
@@ -2881,9 +2903,19 @@ sealed class VaultAddEditAction {
         data object SelectOrAddFolderForItem : Common()
 
         /**
+         * The user has clicked on owner selection card for the item.
+         */
+        data object SelectOwnerForItem : Common()
+
+        /**
          * The user has dismissed the folder selection bottom sheet.
          */
         data object DismissFolderSelectionBottomSheet : Common()
+
+        /**
+         * The user has dismissed the owner selection bottom sheet.
+         */
+        data object DismissOwnerSelectionBottomSheet : Common()
 
         /**
          * The user has selected to add a new folder to associate with the item.

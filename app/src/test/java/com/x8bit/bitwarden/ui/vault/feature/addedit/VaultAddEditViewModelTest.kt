@@ -212,6 +212,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -298,6 +299,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 dialog = null,
                 shouldShowCoachMarkTour = false,
                 shouldShowFolderSelectionBottomSheet = false,
+                shouldShowOwnerSelectionBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -3406,13 +3408,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `OwnershipChange should update ownership`() = runTest {
-            val action = VaultAddEditAction.Common.OwnershipChange(
-                ownership = VaultAddEditState.Owner(
-                    id = "mockId-1",
-                    name = "a@b.com",
-                    collections = emptyList(),
-                ),
-            )
+            val action = VaultAddEditAction.Common.OwnershipChange("mockId-1")
 
             viewModel.trySendAction(action)
 
@@ -3427,6 +3423,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
+
+        @Test
+        fun `SelectOwnerForItem should update state to show bottom sheet`() = runTest {
+            val action = VaultAddEditAction.Common.SelectOwnerForItem
+
+            viewModel.trySendAction(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                shouldShowOwnerSelectionBottomSheet = true,
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DismissOwnerSelectionBottomSheet should update state to hide bottom sheet`() =
+            runTest {
+                val action = VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet
+
+                viewModel.trySendAction(VaultAddEditAction.Common.SelectOwnerForItem)
+
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        shouldShowOwnerSelectionBottomSheet = true,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                val expectedState = vaultAddItemInitialState.copy(
+                    shouldShowOwnerSelectionBottomSheet = false,
+                )
+                viewModel.trySendAction(action)
+                assertEquals(
+                    expectedState,
+                    viewModel.stateFlow.value,
+                )
+            }
 
         @Suppress("MaxLineLength")
         @Test
@@ -4454,6 +4486,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
     @Suppress("LongParameterList")
@@ -4643,19 +4676,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
 
     private fun ownershipChangeAction(): VaultAddEditAction.Common.OwnershipChange =
-        VaultAddEditAction.Common.OwnershipChange(
-            ownership = VaultAddEditState.Owner(
-                id = "organizationId",
-                name = "organizationName",
-                collections = listOf(
-                    VaultCollection(
-                        id = "mockId-1",
-                        name = "mockName-1",
-                        isSelected = false,
-                    ),
-                ),
-            ),
-        )
+        VaultAddEditAction.Common.OwnershipChange("organizationId")
 
     private fun collectionSelectAction(): VaultAddEditAction.Common.CollectionSelect =
         VaultAddEditAction.Common.CollectionSelect(
