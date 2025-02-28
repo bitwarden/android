@@ -1104,7 +1104,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">在您的電腦上<annotation emphasis="bold">儲存匯出的檔案</annotation>方便日後尋找。</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">這不是一個 Bitwarden 伺服器。您可能需要聯繫您的提供商或更新您的伺服器。</string>
   <string name="syncing_logins_loading_message">正在同步登入資訊...</string>
-  <string name="ssh_key_cipher_item_types">SSH 密鑰加密方式種類</string>
   <string name="download_the_browser_extension">下載瀏覽器擴充套件</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">瀏覽到 bitwarden.com/download 來結合 Bitwarden 到您最愛的瀏覽器提供最好的體驗。</string>
   <string name="use_the_web_app">使用網頁應用程式</string>
@@ -1221,4 +1220,10 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="self_host_server_url">Self-host server URL</string>
+  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
+  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+  <string name="show_more">Show more</string>
+  <string name="no_folder">No folder</string>
+  <string name="show_less">Show less</string>
 </resources>

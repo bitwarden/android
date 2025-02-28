@@ -109,11 +109,11 @@
   <string name="create_an_account">Hesap oluştur</string>
   <string name="creating_account">Hesap oluşturuluyor...</string>
   <string name="edit_item">Kaydı düzenle</string>
-  <string name="edit_login">Edit login</string>
-  <string name="edit_card">Edit card</string>
-  <string name="edit_identity">Edit identity</string>
-  <string name="edit_note">Edit note</string>
-  <string name="edit_passkey">Edit passkey</string>
+  <string name="edit_login">Hesabı düzenle</string>
+  <string name="edit_card">Kartı düzenle</string>
+  <string name="edit_identity">Kimliği düzenle</string>
+  <string name="edit_note">Notu düzenle</string>
+  <string name="edit_passkey">Geçiş anahtarını düzenle</string>
   <string name="enable_automatic_syncing">Otomatik eşitlemeyi aç</string>
   <string name="enter_email_for_hint">Ana parola ipucunuzun gönderileceği hesap e-posta adresinizi girin.</string>
   <string name="exntesion_reenable">Uygulama uzantısını yeniden etkinleştir</string>
@@ -1103,7 +1103,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu Bitwarden sunucusu tanınmıyor. Servis sağlayıcınızdan bilgi alın veya sunucunuzu güncelleyin.</string>
   <string name="syncing_logins_loading_message">Hesaplar eşitleniyor...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Tarayıcı uzantısını indirin</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha rahat kullanım için Bitwarden\'ı en sevdiğiniz tarayıcınıza entegre etmek isterseniz bitwarden.com/download adresine gidin.</string>
   <string name="use_the_web_app">Web uygulamasını kullanın</string>
@@ -1220,4 +1219,10 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
+  <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
+  <string name="use_chrome_beta_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+  <string name="show_more">Daha fazla göster</string>
+  <string name="no_folder">Klasör yok</string>
+  <string name="show_less">Daha az göster</string>
 </resources>

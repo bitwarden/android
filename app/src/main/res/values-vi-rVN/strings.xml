@@ -1104,7 +1104,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Lưu file đã xuất trên máy tính để tìm dễ hơn.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Đây là một máy chủ Bitwarden chưa rõ. Bạn có thể cần kiểm tra với nhà cung cấp hoặc cập nhật máy chủ của mình.</string>
   <string name="syncing_logins_loading_message">Đang đồng bộ...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Tải tiện ích trình duyệt</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Truy cập bitwarden.com/download để tích hợp Bitwarden vào trình duyệt yêu thích của bạn.</string>
   <string name="use_the_web_app">Dùng bản web</string>
@@ -1221,4 +1220,10 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Hoạt động mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
   <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
+  <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Cải thiện việc điền thông tin đăng nhập cho các trang web được hỗ trợ trên Chrome. Sau khi bật, bạn sẽ được chuyển hướng đến cài đặt Chrome để bật tính năng tự động điền của bên thứ ba.</string>
+  <string name="show_more">Show more</string>
+  <string name="no_folder">No folder</string>
+  <string name="show_less">Show less</string>
 </resources>

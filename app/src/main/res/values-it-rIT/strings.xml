@@ -1103,7 +1103,6 @@ Vuoi passare a questo account?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Questo non è un server Bitwarden riconosciuto. Potrebbe essere necessario controllare con il tuo provider o aggiornare il server.</string>
   <string name="syncing_logins_loading_message">Sincronizzazione dei login...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Scarica l\'estensione del browser</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vai su bitwarden.com/download per integrare Bitwarden nel tuo browser preferito e avere un\'esperienza senza interruzioni.</string>
   <string name="use_the_web_app">Usa l\'app web</string>
@@ -1220,4 +1219,10 @@ Vuoi passare a questo account?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operazione chiave d\'accesso non riuscita perché i tentativi di verifica dell\'utente sono stati superati.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
   <string name="self_host_server_url">URL server autogestito</string>
+  <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Migliora il riempimento di accesso per i siti web supportati su Chrome. Una volta abilitato, sarai indirizzato alle impostazioni di Chrome per abilitare l\'auto-riempimento di terze parti.</string>
+  <string name="show_more">Mostra di più</string>
+  <string name="no_folder">Nessuna cartella</string>
+  <string name="show_less">Mostra meno</string>
 </resources>

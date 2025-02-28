@@ -1104,7 +1104,6 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Zapisz wyeksportowany plik</annotation> w miejscu na komputerze, które łatwo znajdziesz.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">To nie jest rozpoznany serwer Bitwarden. Może być konieczne skontaktowanie się z dostawcą lub zaktualizowanie serwera.</string>
   <string name="syncing_logins_loading_message">Synchronizowanie loginów...</string>
-  <string name="ssh_key_cipher_item_types">Typ elementu szyfrującego SSH</string>
   <string name="download_the_browser_extension">Pobierz rozszerzenie do przeglądarki</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Przejdź do bitwarden.com/download, aby zintegrować Bitwarden z ulubioną przeglądarką i cieszyć się płynnym doświadczeniem.</string>
   <string name="use_the_web_app">Użyj aplikacji internetowej</string>
@@ -1221,4 +1220,10 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operacja klucza dostępu nie powiodła się, ponieważ przekroczono liczbę prób weryfikacji użytkownika.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operacja klucza dostępu nie powiodła się, ponieważ nie wybrano żadnego elementu.</string>
   <string name="self_host_server_url">URL samodzielnie hostowanego serwera</string>
+  <string name="use_chrome_autofill_integration">Użyj integracji z autouzupełnianiem Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Użyj integracji z autouzupełnianiem Chrome (beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Ulepsza wypełnianie logowań dla obsługiwanych stron w przeglądarce Chrome. Po włączeniu zostaniesz przekierowany do ustawień Chrome, aby włączyć autouzupełnianie innych firm.</string>
+  <string name="show_more">Pokaż więcej</string>
+  <string name="no_folder">Brak folderu</string>
+  <string name="show_less">Pokaż mniej</string>
 </resources>

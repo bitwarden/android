@@ -1103,7 +1103,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Xaricə köçürdüyünüz faylı kompüterinizdə rahatlıqla tapa biləcəyiniz yerdə saxlayın.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Bu, bilinən Bitwarden serveri deyil. Provayderinizi yoxlamağınız və ya serverinizi güncəlləməyiniz lazım gələ bilər.</string>
   <string name="syncing_logins_loading_message">Girişlər sinxronlaşdırılır...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher element növləri</string>
   <string name="download_the_browser_extension">Brauzer uzantısını endir</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Daha problemsiz bir təcrübə üçün Bitwarden-i sevimli brauzerinizə inteqrasiya etmək üçün bitwarden.com/download ünvanına gedin. </string>
   <string name="use_the_web_app">Veb tətbiqi istifadə et</string>
@@ -1220,4 +1219,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">İstifadəçi doğrulama cəhdlərini aşdığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="self_host_server_url">Self-host server URL-si</string>
+  <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
+  <string name="use_chrome_beta_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Chrome-da dəstəklənən veb saytlar üçün giriş məlumatlarının doldurulmasını təkmilləşdirir. Fəallaşdırdıqdan sonra, üçüncü tərəf avto-doldurmanı fəallaşdırmaq üçün Chrome ayarlarına yönləndiriləcəksiniz.</string>
+  <string name="show_more">Show more</string>
+  <string name="no_folder">No folder</string>
+  <string name="show_less">Show less</string>
 </resources>

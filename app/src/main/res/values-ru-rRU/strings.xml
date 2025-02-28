@@ -1106,7 +1106,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Сохраните экспортированный файл</annotation> на компьютере, где его можно будет легко найти.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Этот сервер Bitwarden не распознан. Возможно вам следует связаться с провайдером или изменить свой сервер.</string>
   <string name="syncing_logins_loading_message">Синхронизация логинов...</string>
-  <string name="ssh_key_cipher_item_types">Типы элементов ключей шифрования SSH</string>
   <string name="download_the_browser_extension">Скачать расширение браузера</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Перейдите на bitwarden.com/download для интеграции Bitwarden в ваш любимый браузер для удобной работы.</string>
   <string name="use_the_web_app">Использовать веб-приложение</string>
@@ -1223,4 +1222,10 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операция с Passkey не удалась, поскольку превышено количество попыток верификации пользователя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
   <string name="self_host_server_url">URL собственного сервера</string>
+  <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Улучшает заполнение логина на поддерживаемых сайтах в Chrome. После включения вы будете направлены в настройки Chrome, чтобы включить автозаполнение сторонних сайтов.</string>
+  <string name="show_more">Больше</string>
+  <string name="no_folder">Без папки</string>
+  <string name="show_less">Меньше</string>
 </resources>
