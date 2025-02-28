@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.base
 
 import android.content.Context
 import android.net.Uri
+import android.os.Bundle
+import androidx.navigation.NavController
 import androidx.navigation.NavDeepLinkRequest
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
@@ -38,11 +40,25 @@ import org.junit.Assert.assertEquals
  * test any of that graph's visible contents.
  */
 @Suppress("MaxLineLength")
-class FakeNavHostController : NavHostController(context = mockk()) {
+class FakeNavHostController : NavHostController(
+    context = mockk { every { applicationContext } returns this },
+) {
     init {
         navigatorProvider = TestNavigatorProvider()
-        navigatorProvider.addNavigator(ComposeNavigator())
-
+        addOnDestinationChangedListener(
+            object : OnDestinationChangedListener {
+                override fun onDestinationChanged(
+                    controller: NavController,
+                    destination: NavDestination,
+                    arguments: Bundle?,
+                ) {
+                    println("Controller=$controller")
+                    println("Destination=$destination")
+                    println("Arguments=$arguments")
+                    currentRoute = destination.route
+                }
+            },
+        )
         val state = mockk<NavigatorState>(relaxed = true) {
             every { backStack } returns MutableStateFlow(emptyList())
         }
@@ -50,11 +66,6 @@ class FakeNavHostController : NavHostController(context = mockk()) {
             navigator.onAttach(state)
         }
     }
-
-    /**
-     * A fake ID that may be used when testing "popping" to a particular graph ID.
-     */
-    val graphId: Int = -1
 
     /**
      * The current route (or `null` if no initial graph has been set and no navigation has been
@@ -70,48 +81,13 @@ class FakeNavHostController : NavHostController(context = mockk()) {
      */
     private var lastNavigation: Navigation? = null
 
-    /**
-     * A mocked-out internal graph. This exists purely to allow for some internal Compose logic
-     * to complete without incident when rending a nav graph in a Composable.
-     */
-    private val internalGraph =
-        mockk<NavGraph>().apply {
-            every { id } returns graphId
-            every { startDestinationId } returns graphId
-            every {
-                findNode(graphId)
-            } returns mockk { every { id } returns graphId }
-        }
-
     override var graph: NavGraph
-        get() = internalGraph
+        get() = super.graph
         set(value) {
+            super.graph = value
+            println("startDestinationRoute=${value.startDestinationRoute}")
             currentRoute = value.startDestinationRoute
         }
-
-    override fun navigate(
-        request: NavDeepLinkRequest,
-        navOptions: NavOptions?,
-    ) {
-        navigate(
-            request = request,
-            navOptions = navOptions,
-            navigatorExtras = null,
-        )
-    }
-
-    override fun navigate(
-        request: NavDeepLinkRequest,
-        navOptions: NavOptions?,
-        navigatorExtras: Navigator.Extras?,
-    ) {
-        lastNavigation = Navigation(
-            request = request,
-            navOptions = navOptions,
-            navigatorExtras = navigatorExtras,
-        )
-        currentRoute = request.uri?.route
-    }
 
     /**
      * Asserts the [currentRoute] matches the given [route].
@@ -131,13 +107,6 @@ class FakeNavHostController : NavHostController(context = mockk()) {
         assertEquals(route, currentRoute)
         assertEquals(navOptions, lastNavigation?.navOptions)
         assertEquals(navigatorExtras, lastNavigation?.navigatorExtras)
-    }
-
-    /**
-     * Asserts the [lastNavigation] includes the given [navOptions].
-     */
-    fun assertLastNavOptions(navOptions: NavOptions?) {
-        assertEquals(navOptions, lastNavigation?.navOptions)
     }
 
     data class Navigation(
@@ -172,12 +141,13 @@ private class TestNavigatorProvider : NavigatorProvider() {
     init {
         addNavigator(NavGraphNavigator(this))
         addNavigator("test", navigator)
+        addNavigator(ComposeNavigator())
     }
 
     override fun <T : Navigator<out NavDestination>> getNavigator(name: String): T {
         return try {
             super.getNavigator(name)
-        } catch (e: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             @Suppress("UNCHECKED_CAST")
             navigator as T
         }

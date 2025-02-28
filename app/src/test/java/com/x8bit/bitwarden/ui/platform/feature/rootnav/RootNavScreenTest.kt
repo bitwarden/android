@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -25,15 +26,16 @@ class RootNavScreenTest : BaseComposeTest() {
         every { stateFlow } returns rootNavStateFlow
     }
 
-    private val expectedNavOptions = navOptions {
-        // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(fakeNavHostController.graphId) {
-            inclusive = false
-            saveState = false
+    private val expectedNavOptions: NavOptions
+        get() = navOptions {
+            // When changing root navigation state, pop everything else off the back stack:
+            popUpTo(fakeNavHostController.graph.id) {
+                inclusive = false
+                saveState = false
+            }
+            launchSingleTop = true
+            restoreState = false
         }
-        launchSingleTop = true
-        restoreState = false
-    }
 
     private var isSplashScreenRemoved: Boolean = false
 

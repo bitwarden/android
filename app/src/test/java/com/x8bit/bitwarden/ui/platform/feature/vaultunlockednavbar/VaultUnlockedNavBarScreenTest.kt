@@ -26,7 +26,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
 
     private val expectedNavOptions = navOptions {
         // When changing root navigation state, pop everything else off the back stack:
-        popUpTo(fakeNavHostController.graphId) {
+        popUpTo(fakeNavHostController.graph.id) {
             inclusive = false
             saveState = true
         }
