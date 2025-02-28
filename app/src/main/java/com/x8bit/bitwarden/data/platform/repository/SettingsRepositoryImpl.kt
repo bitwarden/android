@@ -328,10 +328,6 @@ class SettingsRepositoryImpl(
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean> =
         accessibilityEnabledManager.isAccessibilityEnabledStateFlow
 
-    override fun refreshAccessibilityEnabled() {
-        accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
-    }
-
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         autofillEnabledManager.isAutofillEnabledStateFlow
 

@@ -23,10 +23,6 @@ class AccessibilityEnabledManagerImpl(
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
         get() = mutableIsAccessibilityEnabledStateFlow.asStateFlow()
 
-    override fun updateAccessibilityEnabledStateFlow(isEnabled: Boolean) {
-        mutableIsAccessibilityEnabledStateFlow.value = isEnabled
-    }
-
     override fun refreshAccessibilityEnabledFromSettings() {
         mutableIsAccessibilityEnabledStateFlow.value = context.isAccessibilityServiceEnabled
     }

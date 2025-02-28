@@ -55,7 +55,7 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Displays the auto-fill screen.
  */
-@Suppress("LongMethod", "CyclomaticComplexMethod")
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutoFillScreen(

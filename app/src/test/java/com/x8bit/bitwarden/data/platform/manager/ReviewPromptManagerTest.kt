@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.FakeAccessibilityEnabledManager
@@ -15,8 +16,9 @@ import org.junit.jupiter.api.Test
 
 class ReviewPromptManagerTest {
 
+    private val context: Context = mockk()
     private val autofillEnabledManager: AutofillEnabledManager = AutofillEnabledManagerImpl()
-    private val fakeAccessibilityEnabledManager = FakeAccessibilityEnabledManager()
+    private val fakeAccessibilityEnabledManager = FakeAccessibilityEnabledManager(context = context)
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
 

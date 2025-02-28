@@ -12,11 +12,6 @@ interface AccessibilityEnabledManager {
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
 
     /**
-     * Update the value of [isAccessibilityEnabledStateFlow].
-     */
-    fun updateAccessibilityEnabledStateFlow(isEnabled: Boolean)
-
-    /**
      * Gets the accessibility enabled state from the system settings.
      */
     fun refreshAccessibilityEnabledFromSettings()

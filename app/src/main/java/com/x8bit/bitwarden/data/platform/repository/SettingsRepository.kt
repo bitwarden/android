@@ -159,11 +159,6 @@ interface SettingsRepository {
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
 
     /**
-     * Ensures that isAccessibilityEnabled checks for the current value
-     */
-    fun refreshAccessibilityEnabled()
-
-    /**
      * Emits updates whenever there is a change in the app's status for supporting autofill.
      *
      * Note that the correct value is only populated upon subscription so calling [StateFlow.value]

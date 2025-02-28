@@ -329,7 +329,6 @@ sealed class AutoFillEvent {
  * Models actions for the auto-fill screen.
  */
 sealed class AutoFillAction {
-
     /**
      * User clicked ask to add login button.
      */

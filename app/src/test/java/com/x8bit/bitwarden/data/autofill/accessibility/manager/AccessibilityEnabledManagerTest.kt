@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.content.Context
-import android.provider.Settings
+import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.unmockkStatic
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -15,31 +15,30 @@ import org.junit.jupiter.api.Test
 
 class AccessibilityEnabledManagerTest {
     private val testPackageName = "com.x8bit.bitwarden.test"
-    private val testAccessibilityService =
-        "$testPackageName/com.x8bit.bitwarden.Accessibility.AccessibilityService"
 
-    private val context: Context = mockk {
+    private val context: Context = mockk(relaxed = true) {
         every { applicationContext } returns this
         every { contentResolver } returns mockk()
         every { packageName } returns testPackageName
     }
 
-    private val accessibilityEnabledManager = AccessibilityEnabledManagerImpl(context)
+    private val accessibilityEnabledManager = FakeAccessibilityEnabledManager(context)
 
     @BeforeEach
-    fun setup() {
-        mockkStatic(Settings.Secure::getString)
+    fun setUp() {
+        mockkStatic(
+            "com.x8bit.bitwarden.data.autofill.accessibility.util.ContextExtensionsKt",
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(Settings.Secure::getString)
+        unmockkAll()
     }
 
     @Test
     fun `isAccessibilityEnabled returns false when setting is null`() = runTest {
-        mockkSettingsSecureGetString(null)
-
+        every { context.isAccessibilityServiceEnabled } returns false
         accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
         val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
         assertFalse(result)
@@ -48,11 +47,7 @@ class AccessibilityEnabledManagerTest {
     @Test
     fun `isAccessibilityEnabled returns false when setting does not contain our service`() =
         runTest {
-            mockkSettingsSecureGetString(
-                value = "some.other.service/SomeOtherService:" +
-                    "another.service/AnotherService",
-            )
-
+            every { context.isAccessibilityServiceEnabled } returns false
             accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
             val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
 
@@ -62,21 +57,10 @@ class AccessibilityEnabledManagerTest {
     @Test
     fun `isAccessibilityEnabled returns true when setting contains the defined service`() =
         runTest {
-            mockkSettingsSecureGetString(
-                value = "some.other.service/SomeOtherService:" +
-                    "$testAccessibilityService:" +
-                    "another.service/AnotherService",
-            )
-
+            every { context.isAccessibilityServiceEnabled } returns true
             accessibilityEnabledManager.refreshAccessibilityEnabledFromSettings()
             val result = accessibilityEnabledManager.isAccessibilityEnabledStateFlow.value
 
             assertTrue(result)
         }
-
-    private fun mockkSettingsSecureGetString(value: String?) {
-        every {
-            Settings.Secure.getString(any(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-        } returns value
-    }
 }
