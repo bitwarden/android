@@ -39,7 +39,6 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
-    showSshKeys: Boolean,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
@@ -47,7 +46,6 @@ fun VaultData.toViewState(
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
-        .filterSshKeysIfNecessary(showSshKeys)
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
@@ -63,12 +61,7 @@ fun VaultData.toViewState(
     val noFolderItems = filteredCipherViewList
         .filter { it.folderId.isNullOrBlank() }
 
-    val itemTypesCount: Int = if (showSshKeys) {
-        CipherType.entries
-    } else {
-        CipherType.entries.filterNot { it == CipherType.SSH_KEY }
-    }
-        .size
+    val itemTypesCount: Int = CipherType.entries.size
 
     return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
@@ -355,16 +348,3 @@ fun List<CollectionView>.toFilteredList(
                 }
             }
         }
-
-/**
- * Filters out all [CipherView]s that are of type [CipherType.SSH_KEY] if [showSshKeys] is false.
- *
- * @param showSshKeys Whether to show SSH keys in the vault.
- */
-@JvmName("filterSshKeysIfNecessary")
-fun List<CipherView>.filterSshKeysIfNecessary(showSshKeys: Boolean): List<CipherView> =
-    if (showSshKeys) {
-        this
-    } else {
-        filter { it.type != CipherType.SSH_KEY }
-    }

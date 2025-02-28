@@ -45,7 +45,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             VaultMoveToOrganizationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

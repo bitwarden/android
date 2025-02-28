@@ -38,7 +38,7 @@ class FolderAddEditScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             FolderAddEditScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },

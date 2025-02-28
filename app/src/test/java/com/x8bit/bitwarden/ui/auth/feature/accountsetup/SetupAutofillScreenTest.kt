@@ -37,7 +37,7 @@ class SetupAutofillScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             SetupAutoFillScreen(
                 intentManager = intentManager,
                 viewModel = viewModel,

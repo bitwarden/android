@@ -55,7 +55,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContentWithBackDispatcher {
+        setContent {
             CompleteRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToPasswordGuidance = { onNavigateToPasswordGuidanceCalled = true },

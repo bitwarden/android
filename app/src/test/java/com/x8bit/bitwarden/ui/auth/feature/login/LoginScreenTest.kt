@@ -64,7 +64,7 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },

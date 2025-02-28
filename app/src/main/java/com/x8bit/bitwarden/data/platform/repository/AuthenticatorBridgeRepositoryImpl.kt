@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.repository
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.repository.util.sanitizeTotpUri
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -96,18 +97,21 @@ class AuthenticatorBridgeRepositoryImpl(
                 val totpUris = vaultDiskSource
                     .getCiphers(userId)
                     .first()
-                    // Filter out any ciphers without a totp item and also deleted ciphers:
+                    // Filter out any ciphers without a totp item and also deleted ciphers
                     .filter { it.login?.totp != null && it.deletedDate == null }
                     .mapNotNull {
-                        // Decrypt each cipher and take just totp codes:
-                        vaultSdkSource
+                        val decryptedCipher = vaultSdkSource
                             .decryptCipher(
                                 userId = userId,
                                 cipher = it.toEncryptedSdkCipher(),
                             )
                             .getOrNull()
-                            ?.login
-                            ?.totp
+
+                        val rawTotp = decryptedCipher?.login?.totp
+                        val cipherName = decryptedCipher?.name
+                        val username = decryptedCipher?.login?.username
+
+                        rawTotp.sanitizeTotpUri(cipherName, username)
                     }
 
                 // Lock the user's vault if we unlocked it for this operation:

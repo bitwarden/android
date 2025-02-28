@@ -83,7 +83,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             AccountSecurityScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },

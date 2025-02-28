@@ -54,7 +54,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },

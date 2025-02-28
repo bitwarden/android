@@ -910,14 +910,7 @@ class AuthRepositoryImpl(
                         }
 
                         is RegisterResponseJson.Invalid -> {
-                            RegisterResult.Error(
-                                errorMessage = it
-                                    .validationErrors
-                                    ?.values
-                                    ?.firstOrNull()
-                                    ?.firstOrNull()
-                                    ?: it.message,
-                            )
+                            RegisterResult.Error(errorMessage = it.message)
                         }
                     }
                 },

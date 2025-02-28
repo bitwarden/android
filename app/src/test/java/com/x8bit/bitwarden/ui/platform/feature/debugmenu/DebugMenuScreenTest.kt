@@ -30,7 +30,7 @@ class DebugMenuScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             DebugMenuScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,

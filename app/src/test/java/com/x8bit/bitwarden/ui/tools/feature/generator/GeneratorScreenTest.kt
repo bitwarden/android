@@ -66,7 +66,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             GeneratorScreen(
                 viewModel = viewModel,
                 onNavigateToPasswordHistory = {

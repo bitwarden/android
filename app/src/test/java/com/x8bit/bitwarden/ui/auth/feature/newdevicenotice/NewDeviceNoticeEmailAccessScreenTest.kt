@@ -37,7 +37,7 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             NewDeviceNoticeEmailAccessScreen(
                 onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateToTwoFactorOptions = { onNavigateToTwoFactorOptionsCalled = true },

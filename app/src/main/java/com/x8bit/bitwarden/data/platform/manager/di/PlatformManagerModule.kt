@@ -34,6 +34,8 @@ import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.manager.KeyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
+import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -195,10 +197,16 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun provideNativeLibraryManager(): NativeLibraryManager = NativeLibraryManagerImpl()
+
+    @Provides
+    @Singleton
     fun provideSdkClientManager(
         featureFlagManager: FeatureFlagManager,
+        nativeLibraryManager: NativeLibraryManager,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
+        nativeLibraryManager = nativeLibraryManager,
     )
 
     @Provides

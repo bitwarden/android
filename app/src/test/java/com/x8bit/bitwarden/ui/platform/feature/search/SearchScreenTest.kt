@@ -70,7 +70,7 @@ class SearchScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             SearchScreen(
                 viewModel = viewModel,
                 intentManager = intentManager,

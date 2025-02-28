@@ -25,7 +25,7 @@ class ExpiredRegistrationLinkScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContentWithBackDispatcher {
+        setContent {
             ExpiredRegistrationLinkScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLogin = { onNavigateToLoginCalled = true },

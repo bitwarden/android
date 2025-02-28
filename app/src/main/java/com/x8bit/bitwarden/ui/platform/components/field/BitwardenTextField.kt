@@ -108,7 +108,7 @@ fun BitwardenTextField(
     label: String?,
     value: String,
     onValueChange: (String) -> Unit,
-    cardStyle: CardStyle,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     tooltip: TooltipData? = null,
     placeholder: String? = null,
@@ -207,7 +207,7 @@ fun BitwardenTextField(
     value: String,
     onValueChange: (String) -> Unit,
     supportingContent: (@Composable ColumnScope.() -> Unit)?,
-    cardStyle: CardStyle,
+    cardStyle: CardStyle?,
     modifier: Modifier = Modifier,
     tooltip: TooltipData? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
@@ -378,7 +378,7 @@ fun BitwardenTextField(
                             content = content,
                         )
                     }
-                    ?: Spacer(modifier = Modifier.height(height = 6.dp))
+                    ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
             }
             val filteredAutoCompleteList = autoCompleteOptions
                 .filter { option ->

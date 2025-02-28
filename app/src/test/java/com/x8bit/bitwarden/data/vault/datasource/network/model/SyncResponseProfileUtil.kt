@@ -36,12 +36,13 @@ fun createMockOrganization(
     isEnabled: Boolean = false,
     shouldUsePolicies: Boolean = false,
     shouldManageResetPassword: Boolean = false,
+    type: OrganizationType = OrganizationType.ADMIN,
 ): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
         shouldUseKeyConnector = false,
         keyConnectorUrl = "mockKeyConnectorUrl-$number",
-        type = OrganizationType.ADMIN,
+        type = type,
         seats = 1,
         isEnabled = isEnabled,
         providerType = 1,

@@ -39,7 +39,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             TrustedDeviceScreen(
                 viewModel = viewModel,
                 onNavigateToAdminApproval = { onNavigateToAdminApprovalEmail = it },
