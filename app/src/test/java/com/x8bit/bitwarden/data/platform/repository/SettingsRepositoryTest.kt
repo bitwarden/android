@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.platform.repository
 
-import android.content.Context
 import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
@@ -56,8 +55,7 @@ class SettingsRepositoryTest {
         every { disableAutofillServices() } just runs
     }
     private val autofillEnabledManager: AutofillEnabledManager = AutofillEnabledManagerImpl()
-    private val context: Context = mockk()
-    private val fakeAccessibilityEnabledManager = FakeAccessibilityEnabledManager(context = context)
+    private val fakeAccessibilityEnabledManager = FakeAccessibilityEnabledManager()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeSettingsDiskSource = FakeSettingsDiskSource()
     private val vaultSdkSource: VaultSdkSource = mockk()

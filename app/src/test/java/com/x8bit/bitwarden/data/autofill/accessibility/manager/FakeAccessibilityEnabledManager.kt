@@ -1,27 +1,21 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
-import android.content.Context
-import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class FakeAccessibilityEnabledManager(
-    private val context: Context,
-) : AccessibilityEnabledManager {
+class FakeAccessibilityEnabledManager : AccessibilityEnabledManager {
 
-    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(value = false)
+    var isAccessibilityEnabled: Boolean = false
+
+    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(
+        value = isAccessibilityEnabled,
+    )
 
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
         get() = mutableIsAccessibilityEnabledStateFlow.asStateFlow()
 
     override fun refreshAccessibilityEnabledFromSettings() {
-        mutableIsAccessibilityEnabledStateFlow.value = context.isAccessibilityServiceEnabled
+        mutableIsAccessibilityEnabledStateFlow.value = isAccessibilityEnabled
     }
-
-    var isAccessibilityEnabled: Boolean
-        get() = mutableIsAccessibilityEnabledStateFlow.value
-        set(value) {
-            mutableIsAccessibilityEnabledStateFlow.value = value
-        }
 }
