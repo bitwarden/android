@@ -134,7 +134,6 @@ class Fido2OriginManagerImpl(
                 target.packageName == rpPackageName &&
                 statement.relation.containsAll(
                     listOf(
-                        "delegate_permission/common.get_login_creds",
                         "delegate_permission/common.handle_all_urls",
                     ),
                 )
