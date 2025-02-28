@@ -2326,7 +2326,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a Ownership option should send OwnershipChange action`() {
+    fun `clicking a Ownership option should send SelectOwnerForItem action`() {
         updateStateWithOwners()
 
         // Opens the menu
@@ -2336,23 +2336,79 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             )
             .performClick()
 
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockOwnerName-2")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange(
-                    VaultAddEditState.Owner(
-                        id = "mockOwnerId-2",
-                        name = "mockOwnerName-2",
-                        collections = DEFAULT_COLLECTIONS,
-                    ),
-                ),
+                VaultAddEditAction.Common.SelectOwnerForItem,
             )
+        }
+    }
+
+    @Test
+    fun `should show owner selection bottom sheet when state updates to true`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Owner")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `DismissOwnerSelectionBottomSheet action sent when bottom sheet close button click`() {
+        mutableStateFlow.update {
+            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Owner")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Close")
+            .filterToOne(hasAnySibling(hasText("Owner")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        dispatcher.advanceTimeByAndRunCurrent(1000L)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet)
+        }
+    }
+
+    @Test
+    fun `Selecting option and clicking save on owner sheet sends OwnershipChange action`() {
+        val ownerId = "1234"
+        val ownerName = "name"
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(
+                    availableOwners =
+                    listOf(
+                        VaultAddEditState.Owner(
+                            id = ownerId,
+                            name = ownerName,
+                            collections = DEFAULT_COLLECTIONS,
+                        ),
+                    ),
+                )
+            }
+                .copy(shouldShowOwnerSelectionBottomSheet = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(ownerName)
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Owner")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.OwnershipChange(ownerId = ownerId))
         }
     }
 
@@ -2788,39 +2844,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onAllNodesWithTextAfterScroll("Notes")
             .filterToOne(hasSetTextAction())
             .assertTextContains("NewNote")
-    }
-
-    @Test
-    fun `Ownership option should send OwnershipChange action`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        updateStateWithOwners()
-
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Owner",
-            )
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockOwnerName-2")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange(
-                    VaultAddEditState.Owner(
-                        id = "mockOwnerId-2",
-                        name = "mockOwnerName-2",
-                        collections = DEFAULT_COLLECTIONS,
-                    ),
-                ),
-            )
-        }
     }
 
     @Suppress("MaxLineLength")
@@ -4005,6 +4028,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4018,6 +4042,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4031,6 +4056,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4044,6 +4070,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4067,6 +4094,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4080,6 +4108,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4093,6 +4122,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
             shouldShowCoachMarkTour = false,
             shouldShowFolderSelectionBottomSheet = false,
+            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
