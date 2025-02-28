@@ -1102,7 +1102,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Spremi izvezenu datoteku</annotation> na mjesto na računalu koje možeš lako naći.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ovo nije prepoznati Bitwarden poslužitelj. Možda ćeš morati provjeriti kod svog davatelja usluga ili ažurirati svoj poslužitelj.</string>
   <string name="syncing_logins_loading_message">Sinkronizacija prijava...</string>
-  <string name="ssh_key_cipher_item_types">Vrste stavki šifre SSH ključa</string>
   <string name="download_the_browser_extension">Preuzmi proširenje za preglednik</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Posjeti bitwarden.com/download za integraciju Bitwardena u svoj omiljeni preglednik za besprijekorno iskustvo.</string>
   <string name="use_the_web_app">Koristi web aplikaciju</string>
@@ -1220,4 +1219,10 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="self_host_server_url">Self-host server URL</string>
+  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
+  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+  <string name="show_more">Show more</string>
+  <string name="no_folder">No folder</string>
+  <string name="show_less">Show less</string>
 </resources>
