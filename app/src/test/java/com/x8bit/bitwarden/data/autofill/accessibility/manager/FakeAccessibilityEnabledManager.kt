@@ -6,11 +6,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class FakeAccessibilityEnabledManager : AccessibilityEnabledManager {
 
-    var isAccessibilityEnabled: Boolean = false
-
-    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(
-        value = isAccessibilityEnabled,
-    )
+    private val mutableIsAccessibilityEnabledStateFlow = MutableStateFlow(value = false)
 
     override val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
         get() = mutableIsAccessibilityEnabledStateFlow.asStateFlow()
@@ -18,4 +14,10 @@ class FakeAccessibilityEnabledManager : AccessibilityEnabledManager {
     override fun refreshAccessibilityEnabledFromSettings() {
         mutableIsAccessibilityEnabledStateFlow.value = isAccessibilityEnabled
     }
+
+    var isAccessibilityEnabled: Boolean
+        get() = mutableIsAccessibilityEnabledStateFlow.value
+        set(value) {
+            mutableIsAccessibilityEnabledStateFlow.value = value
+        }
 }
