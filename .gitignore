@@ -28,3 +28,9 @@ user.properties
 /app/src/standardBeta/google-services.json
 /app/src/standardRelease/google-services.json
 /authenticator/src/google-services.json
+
+# python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
