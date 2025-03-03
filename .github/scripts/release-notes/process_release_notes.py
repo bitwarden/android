@@ -4,54 +4,6 @@ import subprocess
 import json
 from typing import List, Tuple
 
-def get_linked_issues(owner: str, repo: str, pr_number: int) -> List[int]:
-    """Call GitHub API to get linked issue numbers for a PR.
-
-    Args:
-        owner: Repository owner
-        repo: Repository name
-        pr_number: Pull request number
-
-    Returns:
-        List of linked issue numbers
-    """
-
-
-    query = """
-    query ($owner: String!, $repo: String!, $pr: Int!) {
-        repository(owner: $owner, name: $repo) {
-            pullRequest(number: $pr) {
-                closingIssuesReferences(first: 100) {
-                    nodes {
-                        number
-                    }
-                }
-            }
-        }
-    }
-    """
-
-    try:
-        result = subprocess.run([
-            'gh', 'api', 'graphql',
-            '-F', f'owner={owner}',
-            '-F', f'repo={repo}',
-            '-F', f'pr={pr_number}',
-            '-f', f'query={query}',
-            '--jq', '.data.repository.pullRequest.closingIssuesReferences.nodes[].number'
-        ], capture_output=True, text=True, check=True)
-
-        # Split output into lines and convert to integers
-        if result.stdout.strip():
-            return [int(num) for num in result.stdout.strip().split('\n')]
-        return []
-
-    except subprocess.CalledProcessError:
-        print(f"Error fetching linked issues for PR #{pr_number}")
-        return []
-
-
-
 def extract_jira_tickets(line: str) -> List[str]:
     # Find all Jira tickets in format ABC-123 (with any prefix/suffix)
     return re.findall(r'[A-Z]+-\d+', line)
