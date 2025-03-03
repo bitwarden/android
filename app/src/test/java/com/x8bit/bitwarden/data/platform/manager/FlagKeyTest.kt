@@ -79,7 +79,7 @@ class FlagKeyTest {
         )
         assertEquals(
             FlagKey.ChromeAutofill.keyName,
-            "enable-pm-chrome-autofill",
+            "android-chrome-autofill",
         )
     }
 
