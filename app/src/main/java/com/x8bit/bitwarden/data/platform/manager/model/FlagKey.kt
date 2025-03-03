@@ -218,7 +218,7 @@ sealed class FlagKey<out T : Any> {
      * autofill.
      */
     data object ChromeAutofill : FlagKey<Boolean>() {
-        override val keyName: String = "enable-pm-chrome-autofill"
+        override val keyName: String = "android-chrome-autofill"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
