@@ -366,7 +366,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditAction.Common.DismissBottomSheet -> {
-                handleDismissBottomSheetSheet()
+                handleDismissBottomSheet()
             }
         }
     }
@@ -735,14 +735,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleDismissFolderSelectionBottomSheet() {
-        mutableStateFlow.update {
-            it.copy(
-                bottomSheetState = null,
-            )
-        }
-    }
-
     private fun handleSelectOwnerForItem() {
         mutableStateFlow.update {
             it.copy(
@@ -751,7 +743,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleDismissBottomSheetSheet() {
+    private fun handleDismissBottomSheet() {
         mutableStateFlow.update {
             it.copy(
                 bottomSheetState = null,
