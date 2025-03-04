@@ -207,11 +207,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             ),
             dialog = null,
+            bottomSheetState = null,
             totpData = null,
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -296,8 +296,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
+                bottomSheetState = null,
                 shouldShowCoachMarkTour = false,
-                shouldShowFolderSelectionBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -3217,7 +3217,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                shouldShowFolderSelectionBottomSheet = true,
+                bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -3226,18 +3226,18 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `DismissFolderSelectionBottomSheet should update state to hide bottom sheet`() =
             runTest {
-                val action = VaultAddEditAction.Common.DismissFolderSelectionBottomSheet
+                val action = VaultAddEditAction.Common.DismissBottomSheet
 
                 viewModel.trySendAction(VaultAddEditAction.Common.SelectOrAddFolderForItem)
 
                 assertEquals(
                     vaultAddItemInitialState.copy(
-                        shouldShowFolderSelectionBottomSheet = true,
+                        bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
                     ),
                     viewModel.stateFlow.value,
                 )
                 val expectedState = vaultAddItemInitialState.copy(
-                    shouldShowFolderSelectionBottomSheet = false,
+                    bottomSheetState = null,
                 )
                 viewModel.trySendAction(action)
                 assertEquals(
@@ -3406,13 +3406,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `OwnershipChange should update ownership`() = runTest {
-            val action = VaultAddEditAction.Common.OwnershipChange(
-                ownership = VaultAddEditState.Owner(
-                    id = "mockId-1",
-                    name = "a@b.com",
-                    collections = emptyList(),
-                ),
-            )
+            val action = VaultAddEditAction.Common.OwnershipChange("mockId-1")
 
             viewModel.trySendAction(action)
 
@@ -3427,6 +3421,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
+
+        @Test
+        fun `SelectOwnerForItem should update state to show bottom sheet`() = runTest {
+            val action = VaultAddEditAction.Common.SelectOwnerForItem
+
+            viewModel.trySendAction(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DismissOwnerSelectionBottomSheet should update state to hide bottom sheet`() =
+            runTest {
+                val action = VaultAddEditAction.Common.DismissBottomSheet
+
+                viewModel.trySendAction(VaultAddEditAction.Common.SelectOwnerForItem)
+
+                assertEquals(
+                    vaultAddItemInitialState.copy(
+                        bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                val expectedState = vaultAddItemInitialState.copy(
+                    bottomSheetState = null,
+                )
+                viewModel.trySendAction(action)
+                assertEquals(
+                    expectedState,
+                    viewModel.stateFlow.value,
+                )
+            }
 
         @Suppress("MaxLineLength")
         @Test
@@ -4437,6 +4467,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         shouldExitOnSave: Boolean = false,
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
+        bottomSheetState: VaultAddEditState.BottomSheetState? = null,
         totpData: TotpData? = null,
         shouldClearSpecialCircumstance: Boolean = true,
     ): VaultAddEditState =
@@ -4449,11 +4480,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 type = typeContentViewState,
             ),
             dialog = dialogState,
+            bottomSheetState = bottomSheetState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
-            shouldShowFolderSelectionBottomSheet = false,
         )
 
     @Suppress("LongParameterList")
@@ -4643,19 +4674,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
 
     private fun ownershipChangeAction(): VaultAddEditAction.Common.OwnershipChange =
-        VaultAddEditAction.Common.OwnershipChange(
-            ownership = VaultAddEditState.Owner(
-                id = "organizationId",
-                name = "organizationName",
-                collections = listOf(
-                    VaultCollection(
-                        id = "mockId-1",
-                        name = "mockName-1",
-                        isSelected = false,
-                    ),
-                ),
-            ),
-        )
+        VaultAddEditAction.Common.OwnershipChange("organizationId")
 
     private fun collectionSelectAction(): VaultAddEditAction.Common.CollectionSelect =
         VaultAddEditAction.Common.CollectionSelect(
