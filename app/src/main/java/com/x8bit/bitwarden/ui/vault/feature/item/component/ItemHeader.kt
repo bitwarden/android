@@ -77,6 +77,15 @@ fun LazyListScope.itemHeader(
     textFieldTestTag: String? = null,
     onExpandClick: () -> Unit,
 ) {
+    val organizationLocation = relatedLocations
+        .firstOrNull { it is VaultItemLocation.Organization }
+
+    val collectionLocations = relatedLocations
+        .filterIsInstance<VaultItemLocation.Collection>()
+
+    val folderLocations = relatedLocations
+        .filterIsInstance<VaultItemLocation.Folder>()
+
     item {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -124,6 +133,8 @@ fun LazyListScope.itemHeader(
         }
     }
 
+    // When the item does not belong to an Org and is not assigned to a collection or folder we
+    // display the "No Folder" indicator.
     if (relatedLocations.isEmpty()) {
         item(key = "noFolder") {
             ItemLocationListItem(
@@ -144,9 +155,64 @@ fun LazyListScope.itemHeader(
         return
     }
 
+    // When the item is owned by an Org we display the organization name.
+    if (organizationLocation != null) {
+        item(key = "organization") {
+            ItemLocationListItem(
+                vectorPainter = rememberVectorPainter(organizationLocation.icon),
+                iconTestTag = "ItemLocationIcon",
+                text = organizationLocation.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .animateItem()
+                    .cardStyle(
+                        cardStyle = if (relatedLocations.size == 1) {
+                            CardStyle.Bottom
+                        } else {
+                            CardStyle.Middle(hasDivider = false)
+                        },
+                        paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
+                    ),
+            )
+        }
+    }
+
+    // When the item is assigned single collection and a single folder we display both the
+    // collection and folder names.
+    if (collectionLocations.size == 1 && folderLocations.size == 1) {
+        itemsIndexed(
+            items = collectionLocations + folderLocations,
+            key = { index, location -> "locations_$index" },
+            ) { index, location ->
+            ItemLocationListItem(
+                vectorPainter = rememberVectorPainter(location.icon),
+                iconTestTag = "ItemLocationIcon",
+                text = location.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .animateItem()
+                    .cardStyle(
+                        cardStyle = if (index == 1) {
+                            CardStyle.Bottom
+                        } else {
+                            CardStyle.Middle(hasDivider = false)
+                        },
+                        paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
+                    ),
+            )
+        }
+        return
+    }
+
+    // When the item is assigned multiple collections or folders we only display the first
+    // [EXPANDABLE_THRESHOLD] locations and collapse the remaining locations.
     itemsIndexed(
         key = { index, _ -> "locations_$index" },
-        items = relatedLocations.take(EXPANDABLE_THRESHOLD),
+        items = collectionLocations + folderLocations,
     ) { index, location ->
         ItemLocationListItem(
             vectorPainter = rememberVectorPainter(location.icon),
