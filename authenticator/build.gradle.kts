@@ -311,6 +311,12 @@ tasks {
     getByName("sonar") {
         dependsOn("check")
     }
+    withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        jvmTarget = libs.versions.jvmTarget.get()
+    }
+    withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+        jvmTarget = libs.versions.jvmTarget.get()
+    }
 }
 
 private fun renameFile(path: String, newName: String) {
