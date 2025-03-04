@@ -59,7 +59,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param textFieldTestTag The test tag for the name field.
  * @param onExpandClick The action to be performed when the expandable text row is clicked.
  */
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun LazyListScope.itemHeader(
     value: String,
     isFavorite: Boolean,
@@ -220,7 +220,11 @@ fun LazyListScope.itemHeader(
                         .standardHorizontalMargin()
                         .animateItem()
                         .cardStyle(
-                            cardStyle = CardStyle.Middle(hasDivider = false),
+                            cardStyle = if (collectionLocations.size > 1) {
+                                CardStyle.Middle(hasDivider = false)
+                            } else {
+                                CardStyle.Bottom
+                            },
                             paddingVertical = 0.dp,
                             paddingHorizontal = 16.dp,
                         ),
