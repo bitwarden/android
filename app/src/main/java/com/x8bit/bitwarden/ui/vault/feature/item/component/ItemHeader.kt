@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -48,11 +47,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 /**
- * The max number of items that can be displayed before the "show more" text is visible.
- */
-private const val EXPANDABLE_THRESHOLD = 2
-
-/**
  * Reusable composable for displaying the cipher name, favorite status, and related locations.
  *
  * @param value The name of the cipher.
@@ -77,6 +71,15 @@ fun LazyListScope.itemHeader(
     textFieldTestTag: String? = null,
     onExpandClick: () -> Unit,
 ) {
+    val organizationLocation = relatedLocations
+        .firstOrNull { it is VaultItemLocation.Organization }
+
+    val collectionLocations = relatedLocations
+        .filterIsInstance<VaultItemLocation.Collection>()
+
+    val folderLocations = relatedLocations
+        .filterIsInstance<VaultItemLocation.Folder>()
+
     item {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -124,6 +127,8 @@ fun LazyListScope.itemHeader(
         }
     }
 
+    // When the item does not belong to an Org and is not assigned to a collection or folder we
+    // display the "No Folder" indicator.
     if (relatedLocations.isEmpty()) {
         item(key = "noFolder") {
             ItemLocationListItem(
@@ -144,38 +149,93 @@ fun LazyListScope.itemHeader(
         return
     }
 
-    itemsIndexed(
-        key = { index, _ -> "locations_$index" },
-        items = relatedLocations.take(EXPANDABLE_THRESHOLD),
-    ) { index, location ->
-        ItemLocationListItem(
-            vectorPainter = rememberVectorPainter(location.icon),
-            iconTestTag = "ItemLocationIcon",
-            text = location.name,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin()
-                .animateItem()
-                .cardStyle(
-                    cardStyle = if (index == relatedLocations.size - 1) {
-                        CardStyle.Bottom
-                    } else {
-                        CardStyle.Middle(hasDivider = false)
-                    },
-                    paddingVertical = 0.dp,
-                    paddingHorizontal = 16.dp,
-                ),
-        )
+    // When the item is owned by an Org we display the organization name.
+    if (organizationLocation != null) {
+        item(key = "organization") {
+            ItemLocationListItem(
+                vectorPainter = rememberVectorPainter(organizationLocation.icon),
+                iconTestTag = "ItemLocationIcon",
+                text = organizationLocation.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .animateItem()
+                    .cardStyle(
+                        cardStyle = if (relatedLocations.size == 1) {
+                            CardStyle.Bottom
+                        } else {
+                            CardStyle.Middle(hasDivider = false)
+                        },
+                        paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
+                    ),
+            )
+        }
     }
 
-    if (isExpanded) {
-        items(
-            key = { "expandableLocations_$it" },
-            items = relatedLocations.drop(EXPANDABLE_THRESHOLD),
-        ) {
+    // When the item is assigned to a single collection and a single folder we display both the
+    // collection and folder names.
+    if (collectionLocations.size == 1 && folderLocations.size == 1) {
+        itemsIndexed(
+            items = collectionLocations + folderLocations,
+            key = { index, location -> "locations_$index" },
+        ) { index, location ->
             ItemLocationListItem(
-                vectorPainter = rememberVectorPainter(it.icon),
-                text = it.name,
+                vectorPainter = rememberVectorPainter(location.icon),
+                iconTestTag = "ItemLocationIcon",
+                text = location.name,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .animateItem()
+                    .cardStyle(
+                        cardStyle = if (index == 1) {
+                            CardStyle.Bottom
+                        } else {
+                            CardStyle.Middle(hasDivider = false)
+                        },
+                        paddingVertical = 0.dp,
+                        paddingHorizontal = 16.dp,
+                    ),
+            )
+        }
+        return
+    }
+
+    // When the item is assigned to multiple collections we only display the first collection by
+    // default and collapse the remaining locations.
+    collectionLocations.firstOrNull()
+        ?.let {
+            item(key = "visibleCollection") {
+                ItemLocationListItem(
+                    vectorPainter = rememberVectorPainter(it.icon),
+                    iconTestTag = "ItemLocationIcon",
+                    text = if (collectionLocations.size > 1 && !isExpanded) {
+                        stringResource(R.string.x_ellipses, it.name)
+                    } else {
+                        it.name
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .animateItem()
+                        .cardStyle(
+                            cardStyle = CardStyle.Middle(hasDivider = false),
+                            paddingVertical = 0.dp,
+                            paddingHorizontal = 16.dp,
+                        ),
+                )
+            }
+        }
+
+    if (isExpanded) {
+        itemsIndexed(
+            key = { index, _ -> "expandableLocations_$index" },
+            items = collectionLocations.drop(1) + folderLocations,
+        ) { index, location ->
+            ItemLocationListItem(
+                vectorPainter = rememberVectorPainter(location.icon),
+                text = location.name,
                 iconTestTag = "ItemLocationIcon",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -190,8 +250,8 @@ fun LazyListScope.itemHeader(
         }
     }
 
-    if (relatedLocations.size > EXPANDABLE_THRESHOLD) {
-        item(key = "expandableLocationsShowMore") {
+    if (collectionLocations.size > 1) {
+        item(key = "expandableLocationsExpansionIndicator") {
             BitwardenExpandingHeader(
                 collapsedText = stringResource(R.string.show_more),
                 expandedText = stringResource(R.string.show_less),
