@@ -2373,7 +2373,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
         verify {
-            viewModel.trySendAction(VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet)
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissBottomSheet)
         }
     }
 
@@ -2593,7 +2593,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         dispatcher.advanceTimeByAndRunCurrent(1000L)
 
         verify {
-            viewModel.trySendAction(VaultAddEditAction.Common.DismissFolderSelectionBottomSheet)
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissBottomSheet)
         }
     }
 

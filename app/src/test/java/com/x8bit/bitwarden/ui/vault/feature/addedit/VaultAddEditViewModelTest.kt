@@ -3226,7 +3226,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `DismissFolderSelectionBottomSheet should update state to hide bottom sheet`() =
             runTest {
-                val action = VaultAddEditAction.Common.DismissFolderSelectionBottomSheet
+                val action = VaultAddEditAction.Common.DismissBottomSheet
 
                 viewModel.trySendAction(VaultAddEditAction.Common.SelectOrAddFolderForItem)
 
@@ -3438,7 +3438,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `DismissOwnerSelectionBottomSheet should update state to hide bottom sheet`() =
             runTest {
-                val action = VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet
+                val action = VaultAddEditAction.Common.DismissBottomSheet
 
                 viewModel.trySendAction(VaultAddEditAction.Common.SelectOwnerForItem)
 

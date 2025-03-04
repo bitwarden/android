@@ -352,9 +352,6 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
-            VaultAddEditAction.Common.DismissFolderSelectionBottomSheet -> {
-                handleDismissFolderSelectionBottomSheet()
-            }
 
             VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
                 handleSelectOrAddFolderForItem()
@@ -368,7 +365,7 @@ class VaultAddEditViewModel @Inject constructor(
                 handleSelectOwnerForItem()
             }
 
-            VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet -> {
+            VaultAddEditAction.Common.DismissBottomSheet -> {
                 handleDismissBottomSheetSheet()
             }
         }
@@ -2931,14 +2928,9 @@ sealed class VaultAddEditAction {
         data object SelectOwnerForItem : Common()
 
         /**
-         * The user has dismissed the folder selection bottom sheet.
+         * The user has dismissed the current bottom sheet.
          */
-        data object DismissFolderSelectionBottomSheet : Common()
-
-        /**
-         * The user has dismissed the owner selection bottom sheet.
-         */
-        data object DismissOwnerSelectionBottomSheet : Common()
+        data object DismissBottomSheet : Common()
 
         /**
          * The user has selected to add a new folder to associate with the item.

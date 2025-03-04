@@ -591,12 +591,12 @@ private fun FolderSelectionBottomSheet(
     }
     BitwardenModalBottomSheet(
         sheetTitle = stringResource(R.string.folders),
-        onDismiss = handlers.onDismissFolderSelectionSheet,
+        onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
                 label = stringResource(R.string.save),
                 onClick = {
-                    handlers.onDismissFolderSelectionSheet()
+                    handlers.onDismissBottomSheet()
                     state
                         .availableFolders
                         .firstOrNull {
@@ -740,12 +740,12 @@ private fun OwnerSelectionBottomSheet(
     }
     BitwardenModalBottomSheet(
         sheetTitle = stringResource(R.string.owner),
-        onDismiss = handlers.onDismissOwnerSelectionSheet,
+        onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
                 label = stringResource(R.string.save),
                 onClick = {
-                    handlers.onDismissOwnerSelectionSheet()
+                    handlers.onDismissBottomSheet()
                     state
                         .availableOwners
                         .firstOrNull {

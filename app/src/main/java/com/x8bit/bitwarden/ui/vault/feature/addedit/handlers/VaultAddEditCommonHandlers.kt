@@ -26,10 +26,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
  * @property onCollectionSelect Handles the action when a collection is selected.
  * @property onHiddenFieldVisibilityChange Handles the action when the hidden field visibility
  * @property onSelectOrAddFolderForItem Handles the action when a folder is selected.
- * @property onDismissFolderSelectionSheet Handles when the folder selection sheet is dismissed.
- * @property onDismissOwnerSelectionSheet Handles when the owner selection sheet is dismissed.
  * @property onChangeToExistingFolder Handles the action when the folder is changed.
  * @property onOnAddFolder Handles the action when a new folder is added.
+ * @property onDismissBottomSheet Handles when the current bottom sheet is dismissed.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditCommonHandlers(
@@ -46,10 +45,9 @@ data class VaultAddEditCommonHandlers(
     val onCollectionSelect: (VaultCollection) -> Unit,
     val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
     val onSelectOrAddFolderForItem: () -> Unit,
-    val onDismissFolderSelectionSheet: () -> Unit,
-    val onDismissOwnerSelectionSheet: () -> Unit,
     val onChangeToExistingFolder: (String?) -> Unit,
     val onOnAddFolder: (String) -> Unit,
+    val onDismissBottomSheet: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -140,11 +138,6 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = it),
                     )
                 },
-                onDismissFolderSelectionSheet = {
-                    viewModel.trySendAction(
-                        VaultAddEditAction.Common.DismissFolderSelectionBottomSheet,
-                    )
-                },
                 onChangeToExistingFolder = {
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.FolderChange(
@@ -159,9 +152,9 @@ data class VaultAddEditCommonHandlers(
                         ),
                     )
                 },
-                onDismissOwnerSelectionSheet = {
+                onDismissBottomSheet = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet,
+                        VaultAddEditAction.Common.DismissBottomSheet,
                     )
                 },
             )
