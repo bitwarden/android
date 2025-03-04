@@ -207,12 +207,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
             ),
             dialog = null,
+            bottomSheetState = null,
             totpData = null,
             shouldShowCloseButton = true,
             shouldExitOnSave = false,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -297,9 +296,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 ),
                 dialog = null,
+                bottomSheetState = null,
                 shouldShowCoachMarkTour = false,
-                shouldShowFolderSelectionBottomSheet = false,
-                shouldShowOwnerSelectionBottomSheet = false,
             ),
             viewModel.stateFlow.value,
         )
@@ -3219,7 +3217,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                shouldShowFolderSelectionBottomSheet = true,
+                bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -3234,12 +3232,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     vaultAddItemInitialState.copy(
-                        shouldShowFolderSelectionBottomSheet = true,
+                        bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
                     ),
                     viewModel.stateFlow.value,
                 )
                 val expectedState = vaultAddItemInitialState.copy(
-                    shouldShowFolderSelectionBottomSheet = false,
+                    bottomSheetState = null,
                 )
                 viewModel.trySendAction(action)
                 assertEquals(
@@ -3431,7 +3429,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
-                shouldShowOwnerSelectionBottomSheet = true,
+                bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -3446,12 +3444,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     vaultAddItemInitialState.copy(
-                        shouldShowOwnerSelectionBottomSheet = true,
+                        bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
                     ),
                     viewModel.stateFlow.value,
                 )
                 val expectedState = vaultAddItemInitialState.copy(
-                    shouldShowOwnerSelectionBottomSheet = false,
+                    bottomSheetState = null,
                 )
                 viewModel.trySendAction(action)
                 assertEquals(
@@ -4469,6 +4467,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         shouldExitOnSave: Boolean = false,
         typeContentViewState: VaultAddEditState.ViewState.Content.ItemType = createLoginTypeContentViewState(),
         dialogState: VaultAddEditState.DialogState? = null,
+        bottomSheetState: VaultAddEditState.BottomSheetState? = null,
         totpData: TotpData? = null,
         shouldClearSpecialCircumstance: Boolean = true,
     ): VaultAddEditState =
@@ -4481,12 +4480,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 type = typeContentViewState,
             ),
             dialog = dialogState,
+            bottomSheetState = bottomSheetState,
             shouldExitOnSave = shouldExitOnSave,
             totpData = totpData,
             shouldShowCoachMarkTour = false,
             shouldClearSpecialCircumstance = shouldClearSpecialCircumstance,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
     @Suppress("LongParameterList")

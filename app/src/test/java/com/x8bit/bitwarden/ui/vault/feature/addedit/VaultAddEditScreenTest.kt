@@ -2344,9 +2344,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `should show owner selection bottom sheet when state updates to true`() {
+    fun `should show owner selection bottom sheet when state updates to OwnerSelection`() {
         mutableStateFlow.update {
-            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
         }
 
         composeTestRule
@@ -2357,7 +2357,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `DismissOwnerSelectionBottomSheet action sent when bottom sheet close button click`() {
         mutableStateFlow.update {
-            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
         }
 
         composeTestRule
@@ -2394,7 +2394,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     ),
                 )
             }
-                .copy(shouldShowOwnerSelectionBottomSheet = true)
+                .copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
         }
 
         composeTestRule
@@ -2560,9 +2560,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `should show folder selection bottom sheet when state updates to true`() {
+    fun `should show folder selection bottom sheet when state updates to FolderSelection`() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
         }
 
         composeTestRule
@@ -2577,7 +2577,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `DismissFolderSelectionBottomSheet action sent when bottom sheet close button click`() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
         }
 
         composeTestRule
@@ -2601,7 +2601,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `Clicking add folder button in bottom sheet hides add button and replaced with TextField`() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
         }
 
         composeTestRule
@@ -2623,7 +2623,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `Editing the add folder text and clicking save send AddFolder action`() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
         }
         val newFolderName = "newFolderName"
 
@@ -2670,7 +2670,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     ),
                 )
             }
-                .copy(shouldShowFolderSelectionBottomSheet = true)
+                .copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
         }
 
         composeTestRule
@@ -4025,10 +4025,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
+            bottomSheetState = null,
             vaultAddEditType = VaultAddEditType.AddItem,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
@@ -4040,9 +4039,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
@@ -4054,9 +4052,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
@@ -4068,9 +4065,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
@@ -4090,11 +4086,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             vaultAddEditType = VaultAddEditType.AddItem,
             cipherType = VaultItemCipherType.SECURE_NOTE,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
@@ -4106,9 +4101,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
@@ -4120,9 +4114,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
+            bottomSheetState = null,
             shouldShowCoachMarkTour = false,
-            shouldShowFolderSelectionBottomSheet = false,
-            shouldShowOwnerSelectionBottomSheet = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(

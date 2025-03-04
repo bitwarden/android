@@ -179,14 +179,13 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = dialogState,
+                bottomSheetState = null,
                 totpData = totpData,
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
-                shouldShowFolderSelectionBottomSheet = false,
-                shouldShowOwnerSelectionBottomSheet = false,
             )
         },
 ) {
@@ -370,7 +369,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             VaultAddEditAction.Common.DismissOwnerSelectionBottomSheet -> {
-                handleDismissOwnerSelectionSheet()
+                handleDismissBottomSheetSheet()
             }
         }
     }
@@ -731,27 +730,35 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
-    private fun handleDismissFolderSelectionBottomSheet() {
+    private fun handleSelectOrAddFolderForItem() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = false)
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
+            )
         }
     }
 
-    private fun handleSelectOrAddFolderForItem() {
+    private fun handleDismissFolderSelectionBottomSheet() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(
+                bottomSheetState = null,
+            )
         }
     }
 
     private fun handleSelectOwnerForItem() {
         mutableStateFlow.update {
-            it.copy(shouldShowOwnerSelectionBottomSheet = true)
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
+            )
         }
     }
 
-    private fun handleDismissOwnerSelectionSheet() {
+    private fun handleDismissBottomSheetSheet() {
         mutableStateFlow.update {
-            it.copy(shouldShowOwnerSelectionBottomSheet = false)
+            it.copy(
+                bottomSheetState = null,
+            )
         }
     }
 
@@ -2056,8 +2063,7 @@ data class VaultAddEditState(
     val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
-    val shouldShowFolderSelectionBottomSheet: Boolean,
-    val shouldShowOwnerSelectionBottomSheet: Boolean,
+    val bottomSheetState: BottomSheetState?,
     val shouldShowCloseButton: Boolean = true,
     // Internal
     val shouldExitOnSave: Boolean = false,
@@ -2510,6 +2516,23 @@ data class VaultAddEditState(
         val name: String,
         val collections: List<VaultCollection>,
     ) : Parcelable
+
+    /**
+     * Displays a bottom sheet.
+     */
+    sealed class BottomSheetState : Parcelable {
+        /**
+         * Displays a folder selection bottom sheet.
+         */
+        @Parcelize
+        data object FolderSelection : BottomSheetState()
+
+        /**
+         * Displays a owner selection bottom sheet.
+         */
+        @Parcelize
+        data object OwnerSelection : BottomSheetState()
+    }
 
     /**
      * Displays a dialog.
