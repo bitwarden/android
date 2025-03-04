@@ -179,13 +179,13 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = dialogState,
+                bottomSheetState = null,
                 totpData = totpData,
                 // Set special conditions for autofill and fido2 save
                 shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
                 shouldExitOnSave = shouldExitOnSave,
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
-                shouldShowFolderSelectionBottomSheet = false,
             )
         },
 ) {
@@ -352,9 +352,6 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
-            VaultAddEditAction.Common.DismissFolderSelectionBottomSheet -> {
-                handleDismissFolderSelectionBottomSheet()
-            }
 
             VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
                 handleSelectOrAddFolderForItem()
@@ -362,6 +359,14 @@ class VaultAddEditViewModel @Inject constructor(
 
             is VaultAddEditAction.Common.AddNewFolder -> {
                 handleAddNewFolder(action)
+            }
+
+            VaultAddEditAction.Common.SelectOwnerForItem -> {
+                handleSelectOwnerForItem()
+            }
+
+            VaultAddEditAction.Common.DismissBottomSheet -> {
+                handleDismissBottomSheet()
             }
         }
     }
@@ -722,15 +727,27 @@ class VaultAddEditViewModel @Inject constructor(
         showFido2ErrorDialog()
     }
 
-    private fun handleDismissFolderSelectionBottomSheet() {
+    private fun handleSelectOrAddFolderForItem() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = false)
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
+            )
         }
     }
 
-    private fun handleSelectOrAddFolderForItem() {
+    private fun handleSelectOwnerForItem() {
         mutableStateFlow.update {
-            it.copy(shouldShowFolderSelectionBottomSheet = true)
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
+            )
+        }
+    }
+
+    private fun handleDismissBottomSheet() {
+        mutableStateFlow.update {
+            it.copy(
+                bottomSheetState = null,
+            )
         }
     }
 
@@ -882,7 +899,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.OwnershipChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedOwnerId = action.ownership.id)
+            commonContent.copy(selectedOwnerId = action.ownerId)
         }
     }
 
@@ -2035,7 +2052,7 @@ data class VaultAddEditState(
     val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
-    val shouldShowFolderSelectionBottomSheet: Boolean,
+    val bottomSheetState: BottomSheetState?,
     val shouldShowCloseButton: Boolean = true,
     // Internal
     val shouldExitOnSave: Boolean = false,
@@ -2490,6 +2507,23 @@ data class VaultAddEditState(
     ) : Parcelable
 
     /**
+     * Displays a bottom sheet.
+     */
+    sealed class BottomSheetState : Parcelable {
+        /**
+         * Displays a folder selection bottom sheet.
+         */
+        @Parcelize
+        data object FolderSelection : BottomSheetState()
+
+        /**
+         * Displays a owner selection bottom sheet.
+         */
+        @Parcelize
+        data object OwnerSelection : BottomSheetState()
+    }
+
+    /**
      * Displays a dialog.
      */
     @Parcelize
@@ -2755,11 +2789,11 @@ sealed class VaultAddEditAction {
         data class NotesTextChange(val notes: String) : Common()
 
         /**
-         * Fired when the ownership text input is changed.
+         * Fired when the owner text input is changed.
          *
-         * @property ownership The new ownership text.
+         * @property ownerId The new owner id.
          */
-        data class OwnershipChange(val ownership: VaultAddEditState.Owner) : Common()
+        data class OwnershipChange(val ownerId: String?) : Common()
 
         /**
          * Represents the action to add a new custom field.
@@ -2881,9 +2915,14 @@ sealed class VaultAddEditAction {
         data object SelectOrAddFolderForItem : Common()
 
         /**
-         * The user has dismissed the folder selection bottom sheet.
+         * The user has clicked on owner selection card for the item.
          */
-        data object DismissFolderSelectionBottomSheet : Common()
+        data object SelectOwnerForItem : Common()
+
+        /**
+         * The user has dismissed the current bottom sheet.
+         */
+        data object DismissBottomSheet : Common()
 
         /**
          * The user has selected to add a new folder to associate with the item.
