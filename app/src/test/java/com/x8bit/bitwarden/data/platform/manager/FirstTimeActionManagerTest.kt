@@ -330,9 +330,11 @@ class FirstTimeActionManagerTest {
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns null
+                every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
+                every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             // Enable feature flag so flow emits updates from disk.
@@ -393,9 +395,11 @@ class FirstTimeActionManagerTest {
         runTest {
             val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns null
+                every { organizationId } returns null
             }
             val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
+                every { organizationId } returns null
             }
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             // Enable feature flag so flow emits updates from disk.
@@ -415,6 +419,24 @@ class FirstTimeActionManagerTest {
                     )
                 }
                 assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `if there are login ciphers attached to an organization we should show coach marks`() =
+        runTest {
+            val mockJsonWithNoLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
+                every { login } returns mockk()
+                every { organizationId } returns "1234"
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            // Enable feature flag so flow emits updates from disk.
+            mutableOnboardingFeatureFlow.update { true }
+            mutableCiphersListFlow.update {
+                listOf(mockJsonWithNoLoginAndWithOrganizationId)
+            }
+            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
+                assertTrue(awaitItem())
             }
         }
 
