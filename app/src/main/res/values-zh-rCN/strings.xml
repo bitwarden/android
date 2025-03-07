@@ -29,7 +29,7 @@
   <string name="folder">文件夹</string>
   <string name="folder_created">新文件夹已创建。</string>
   <string name="folder_deleted">文件夹已删除。</string>
-  <string name="folder_none">无文件夹</string>
+  <string name="folder_none">默认文件夹</string>
   <string name="folders">文件夹</string>
   <string name="folder_updated">文件夹已保存</string>
   <string name="go_to_website">前往网站</string>
@@ -588,7 +588,7 @@
   <string name="passkey_management">通行密钥管理</string>
   <string name="autofill_services">自动填充服务</string>
   <string name="inline_autofill">使用内嵌自动填充</string>
-  <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌方式的自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层方式的自动填充。</string>
+  <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层自动填充。</string>
   <string name="accessibility">使用无障碍</string>
   <string name="accessibility_description">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。设置后，选中登录字段时将显示一个弹出窗口。</string>
   <string name="accessibility_description2">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。（需同时开启 Draw-Over）</string>
@@ -909,7 +909,7 @@
   <string name="x_hours">%1$s 小时</string>
   <string name="passkey_management_explanation_long">使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</string>
   <string name="autofill_services_explanation_long">Android 自动填充框架用于协助将登录信息填充到您设备上的其他 App 中。</string>
-  <string name="use_inline_autofill_explanation_long">如果您所选的键盘支持，请使用内联自动填充。否则，请使用默认叠加层。</string>
+  <string name="use_inline_autofill_explanation_long">如果您所选的键盘支持，将使用内嵌自动填充。否则，将使用默认的叠加层自动填充。</string>
   <string name="additional_options">附加选项</string>
   <string name="continue_to_web_app">前往网页 App 吗？</string>
   <string name="continue_to_x">前往 %1$s 吗？</string>
@@ -1223,7 +1223,7 @@
   <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
   <string name="use_chrome_beta_autofill_integration">使用 Chrome 自动填充集成 (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">改进 Chrome 上受支持的网站的登录填充。启用后，您将被引导至 Chrome 设置以启用第三方自动填充。</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">显示更多</string>
+  <string name="no_folder">默认文件夹</string>
+  <string name="show_less">显示更少</string>
 </resources>

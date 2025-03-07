@@ -1222,7 +1222,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
   <string name="use_chrome_beta_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Verbessert das Ausfüllen von Zugangsdaten für unterstützte Websites in Chrome. Einmal aktiviert, wirst du zu den Chrome-Einstellungen weitergeleitet, um das Auto-Ausfüllen von Drittanbietern zu aktivieren.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Mehr anzeigen</string>
+  <string name="no_folder">Kein Ordner</string>
+  <string name="show_less">Weniger anzeigen</string>
 </resources>
