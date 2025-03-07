@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextSelectionB
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
@@ -33,7 +32,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonH
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level content UI state for the [VaultAddEditScreen].
@@ -169,15 +167,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         if (isAddItemMode && state.common.hasOrganizations) {
             val collections = state.common.selectedOwner?.collections.orEmpty()
             item {
-                BitwardenMultiSelectButton(
+                BitwardenTextSelectionButton(
                     label = stringResource(id = R.string.owner),
-                    options = state.common.availableOwners.map { it.name }.toImmutableList(),
                     selectedOption = state.common.selectedOwner?.name,
-                    onOptionSelected = { selectedOwnerName ->
-                        commonTypeHandlers.onOwnerSelected(
-                            state.common.availableOwners.first { it.name == selectedOwnerName },
-                        )
-                    },
+                    onClick = commonTypeHandlers.onPresentOwnerOptions,
                     cardStyle = if (collections.isNotEmpty()) {
                         CardStyle.Middle()
                     } else {
