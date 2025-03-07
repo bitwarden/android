@@ -431,6 +431,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                             relatedLocations = persistentListOf(
                                 VaultItemLocation.Organization("My organization"),
                                 VaultItemLocation.Collection("My collection"),
+                                VaultItemLocation.Collection("My other collection"),
                                 VaultItemLocation.Folder("My folder"),
                             ),
                         ),
@@ -458,6 +459,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                             relatedLocations = persistentListOf(
                                 VaultItemLocation.Organization("My organization"),
                                 VaultItemLocation.Collection("My collection"),
+                                VaultItemLocation.Collection("My other collection"),
                                 VaultItemLocation.Folder("My folder"),
                             ),
                         ),
@@ -465,18 +467,73 @@ class VaultItemScreenTest : BaseComposeTest() {
                 )
             }
 
-            // Verify only two locations are shown when content is collapsed.
+            // Verify only the first collection name is shown
+            composeTestRule
+                .onNodeWithText("My collection...")
+                .assertIsDisplayed()
+
+            // Verify other collection names are not shown by default.
+            composeTestRule
+                .onNodeWithText("My other collection")
+                .assertIsNotDisplayed()
+
+            // Verify folder name is not shown by default.
             composeTestRule
                 .onNodeWithText("My folder")
                 .assertIsNotDisplayed()
 
-            // Verify all locations are show when content is expanded.
+            // Verify all locations are show when content is expanded and ellipses is removed from
+            // the first collection name.
             composeTestRule
                 .onNodeWithText("Show more")
                 .performClick()
             composeTestRule
+                .onNodeWithText("My collection")
+                .assertIsDisplayed()
+            composeTestRule
+                .onNodeWithText("My other collection")
+                .assertIsDisplayed()
+            composeTestRule
                 .onNodeWithText("My folder")
                 .assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun `ExpandingHeader should show all locations when assigned to org, collection, and folder`() {
+        DEFAULT_VIEW_STATES.forEach { viewState ->
+            mutableStateFlow.update {
+                DEFAULT_STATE.copy(
+                    viewState = viewState.copy(
+                        common = DEFAULT_COMMON.copy(
+                            relatedLocations = persistentListOf(
+                                VaultItemLocation.Organization("My organization"),
+                                VaultItemLocation.Collection("My collection"),
+                                VaultItemLocation.Folder("My folder"),
+                            ),
+                        ),
+                    ),
+                )
+            }
+
+            // Verify all location names are not shown by default.
+            composeTestRule
+                .onNodeWithText("My organization")
+                .assertIsDisplayed()
+            composeTestRule
+                .onNodeWithText("My collection")
+                .assertIsDisplayed()
+            composeTestRule
+                .onNodeWithText("My folder")
+                .assertIsDisplayed()
+
+            // Verify expander button is not displayed when all locations are shown.
+            composeTestRule
+                .onNodeWithText("Show more")
+                .assertIsNotDisplayed()
+            composeTestRule
+                .onNodeWithText("Show less")
+                .assertIsNotDisplayed()
         }
     }
 
