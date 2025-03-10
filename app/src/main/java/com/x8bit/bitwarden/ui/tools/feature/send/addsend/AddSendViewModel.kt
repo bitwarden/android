@@ -199,20 +199,12 @@ class AddSendViewModel @Inject constructor(
 
             is CreateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                if (state.isShared) {
-                    navigateBack()
-                    clipboardManager.setText(
-                        result.sendView.toSendUrl(state.baseWebSendUrl),
-                        toastDescriptorOverride = R.string.send_link.asText(),
-                    )
-                } else {
-                    navigateBack()
-                    sendEvent(
-                        AddSendEvent.ShowShareSheet(
-                            message = result.sendView.toSendUrl(state.baseWebSendUrl),
-                        ),
-                    )
-                }
+                navigateBack()
+                sendEvent(
+                    AddSendEvent.ShowShareSheet(
+                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                    ),
+                )
             }
         }
     }
