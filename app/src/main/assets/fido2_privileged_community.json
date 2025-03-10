@@ -3,6 +3,19 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.lemurbrowser.exts",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "EB:1E:57:D8:D9:18:E7:A0:B8:0C:C5:77:80:B0:8E:56:0D:3E:26:E1:8E:37:59:10:C2:11:0F:E2:50:2B:40:4A"
+          }
+        ]
+      }
+    },
+    
+    {
+      "type": "android",
+      "info": {
         "package_name": "io.github.forkmaintainers.iceraven",
         "signatures": [
           {
@@ -82,18 +95,6 @@
           {
             "build": "release",
             "cert_fingerprint_sha256": "06:66:53:58:EF:D8:BA:05:BE:23:6A:47:A1:2C:B0:95:8D:7D:75:DD:93:9D:77:C2:B3:1F:53:98:53:7E:BD:C5"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
-        "package_name": "com.lemurbrowser.exts",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "EB:1E:57:D8:D9:18:E7:A0:B8:0C:C5:77:80:B0:8E:56:0D:3E:26:E1:8E:37:59:10:C2:11:0F:E2:50:2B:40:4A"
           }
         ]
       }
