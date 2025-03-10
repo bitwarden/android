@@ -1049,9 +1049,15 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleSearchIconClick() {
+        val searchType = if (state.autofillSelectionData != null) {
+            SearchType.Vault.All
+        } else {
+            state.itemListingType.toSearchType()
+        }
+
         sendEvent(
             event = VaultItemListingEvent.NavigateToSearchScreen(
-                searchType = state.itemListingType.toSearchType(),
+                searchType = searchType,
             ),
         )
     }
