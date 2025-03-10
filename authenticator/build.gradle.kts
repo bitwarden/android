@@ -79,7 +79,7 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
         }
@@ -136,7 +136,6 @@ android {
             "ExtraTranslation",
         )
     }
-    @Suppress("UnstableApiUsage")
     testOptions {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
