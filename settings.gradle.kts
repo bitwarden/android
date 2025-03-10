@@ -51,3 +51,4 @@ rootProject.name = "Bitwarden"
 include(":app")
 include(":authenticatorbridge")
 include(":authenticator")
+include(":shared")
