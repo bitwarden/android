@@ -27,8 +27,7 @@ sealed class NotificationPayload {
     @Serializable
     data class SyncCipherNotification(
         @JsonNames("Id", "id") val cipherId: String?,
-        @JsonNames("UserId", "userId")
-        override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @JsonNames("OrganizationId", "organizationId") val organizationId: String?,
         @JsonNames("CollectionIds", "collectionIds") val collectionIds: List<String>?,
         @Contextual
@@ -41,8 +40,7 @@ sealed class NotificationPayload {
     @Serializable
     data class SyncFolderNotification(
         @JsonNames("Id", "id") val folderId: String?,
-        @JsonNames("UserId", "userId")
-        override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
         @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
@@ -52,8 +50,7 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class UserNotification(
-        @JsonNames("UserId", "userId")
-        override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
         @JsonNames("Date", "date") val date: ZonedDateTime?,
     ) : NotificationPayload()
@@ -64,8 +61,7 @@ sealed class NotificationPayload {
     @Serializable
     data class SyncSendNotification(
         @JsonNames("Id", "id") val sendId: String?,
-        @JsonNames("UserId", "userId")
-        override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
         @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
@@ -75,8 +71,7 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class PasswordlessRequestNotification(
-        @JsonNames("UserId", "userId")
-        override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @JsonNames("Id", "id") val loginRequestId: String?,
     ) : NotificationPayload()
 }
