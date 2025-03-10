@@ -42,7 +42,7 @@ googleProtoBufPlugin = "0.9.4"
 googleServices = "4.4.2"
 googleReview = "2.0.2"
 hilt = "2.55"
-junit5 = "5.11.4"
+junit5 = "5.12.0"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.1.10"
