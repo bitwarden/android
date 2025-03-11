@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.fido2.datasource.disk.Fido2PrivilegedAppDiskSource
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManagerImpl
@@ -12,6 +13,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepositoryImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -69,12 +72,27 @@ object Fido2ProviderModule {
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
         fido2OriginManager: Fido2OriginManager,
+        intentManager: IntentManager,
         json: Json,
+        @ApplicationContext context: Context,
     ): Fido2CredentialManager =
         Fido2CredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
             fido2OriginManager = fido2OriginManager,
+            intentManager = intentManager,
+            context = context,
+            json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun provideFido2PrivilegedAppRepository(
+        fido2PrivilegedAppDiskSource: Fido2PrivilegedAppDiskSource,
+        json: Json,
+    ): PrivilegedAppRepository =
+        PrivilegedAppRepositoryImpl(
+            fido2PrivilegedAppDiskSource = fido2PrivilegedAppDiskSource,
             json = json,
         )
 
@@ -83,9 +101,11 @@ object Fido2ProviderModule {
     fun provideFido2OriginManager(
         assetManager: AssetManager,
         digitalAssetLinkService: DigitalAssetLinkService,
+        privilegedAppRepository: PrivilegedAppRepository,
     ): Fido2OriginManager =
         Fido2OriginManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
+            privilegedAppRepository = privilegedAppRepository,
         )
 }

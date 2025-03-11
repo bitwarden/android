@@ -4,6 +4,7 @@ import androidx.credentials.provider.CallingAppInfo
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
@@ -19,6 +20,7 @@ private const val COMMUNITY_ALLOW_LIST_FILE_NAME = "fido2_privileged_community.j
 class Fido2OriginManagerImpl(
     private val assetManager: AssetManager,
     private val digitalAssetLinkService: DigitalAssetLinkService,
+    private val privilegedAppRepository: PrivilegedAppRepository,
 ) : Fido2OriginManager {
 
     override suspend fun validateOrigin(
@@ -35,37 +37,45 @@ class Fido2OriginManagerImpl(
     private suspend fun validateCallingApplicationAssetLinks(
         callingAppInfo: CallingAppInfo,
         relyingPartyId: String,
-    ): Fido2ValidateOriginResult = digitalAssetLinkService
-        .getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
-        .onFailure {
-            return Fido2ValidateOriginResult.Error.AssetLinkNotFound
-        }
-        .mapCatching { statements ->
-            statements
-                .filterMatchingAppStatementsOrNull(
-                    rpPackageName = callingAppInfo.packageName,
-                )
-                ?: return Fido2ValidateOriginResult.Error.ApplicationNotFound
-        }
-        .mapCatching { matchingStatements ->
-            callingAppInfo
-                .getSignatureFingerprintAsHexString()
-                ?.let { certificateFingerprint ->
-                    matchingStatements
-                        .filterMatchingAppSignaturesOrNull(
-                            signature = certificateFingerprint,
-                        )
-                }
-                ?: return Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified
-        }
-        .fold(
-            onSuccess = {
-                Fido2ValidateOriginResult.Success(null)
-            },
-            onFailure = {
-                Fido2ValidateOriginResult.Error.Unknown
-            },
-        )
+    ): Fido2ValidateOriginResult {
+        return digitalAssetLinkService
+            .getDigitalAssetLinkForRp(relyingParty = relyingPartyId)
+            .onFailure {
+                return Fido2ValidateOriginResult.Error.DigitalAssetLinkError.AssetLinkNotFound
+            }
+            .mapCatching { statements ->
+                statements
+                    .filterMatchingAppStatementsOrNull(
+                        rpPackageName = callingAppInfo.packageName,
+                    )
+                    ?: return Fido2ValidateOriginResult
+                        .Error
+                        .DigitalAssetLinkError
+                        .ApplicationNotFound
+            }
+            .mapCatching { matchingStatements ->
+                callingAppInfo
+                    .getSignatureFingerprintAsHexString()
+                    ?.let { certificateFingerprint ->
+                        matchingStatements
+                            .filterMatchingAppSignaturesOrNull(
+                                signature = certificateFingerprint,
+                            )
+                    }
+                    ?: return Fido2ValidateOriginResult
+                        .Error
+                        .DigitalAssetLinkError
+                        .ApplicationFingerprintNotVerified
+            }
+            .fold(
+                onSuccess = {
+                    Fido2ValidateOriginResult.Success(null)
+                },
+                onFailure = {
+                    Fido2ValidateOriginResult.Error.Unknown
+                },
+            )
+    }
 
     private suspend fun validatePrivilegedAppOrigin(
         callingAppInfo: CallingAppInfo,
@@ -82,7 +92,9 @@ class Fido2OriginManagerImpl(
             is Fido2ValidateOriginResult.Error -> {
                 // Check the community allow list if the Google allow list failed, and return the
                 // result as the final validation result.
-                validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+                // TODO: REVERT BEFORE RELEASE - Switch back to using the community allow list first
+                validatePrivilegedAppSignatureWithUserTrustList(callingAppInfo)
+                // validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
             }
         }
     }
@@ -97,10 +109,28 @@ class Fido2OriginManagerImpl(
 
     private suspend fun validatePrivilegedAppSignatureWithCommunityList(
         callingAppInfo: CallingAppInfo,
-    ): Fido2ValidateOriginResult =
-        validatePrivilegedAppSignatureWithAllowList(
+    ): Fido2ValidateOriginResult {
+        val communityListResult = validatePrivilegedAppSignatureWithAllowList(
             callingAppInfo = callingAppInfo,
             fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
+        )
+        return when (communityListResult) {
+            is Fido2ValidateOriginResult
+            .Error
+            .PrivilegedAppError,
+                -> {
+                validatePrivilegedAppSignatureWithUserTrustList(callingAppInfo)
+            }
+
+            else -> communityListResult
+        }
+    }
+
+    private suspend fun validatePrivilegedAppSignatureWithUserTrustList(
+        callingAppInfo: CallingAppInfo,
+    ): Fido2ValidateOriginResult = callingAppInfo
+        .validatePrivilegedApp(
+            allowList = privilegedAppRepository.getUserTrustedAllowListJson(),
         )
 
     private suspend fun validatePrivilegedAppSignatureWithAllowList(

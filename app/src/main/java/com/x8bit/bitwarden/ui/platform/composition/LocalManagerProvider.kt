@@ -43,7 +43,7 @@ fun LocalManagerProvider(
     val fido2CompletionManager = if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         Fido2CompletionManagerUnsupportedApiImpl
     } else {
-        Fido2CompletionManagerImpl(activity, fido2IntentManager)
+        Fido2CompletionManagerImpl(activity)
     }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),

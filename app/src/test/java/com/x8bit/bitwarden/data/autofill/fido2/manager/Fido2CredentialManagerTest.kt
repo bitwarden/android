@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
+import android.content.Context
 import android.content.pm.Signature
 import android.content.pm.SigningInfo
 import android.util.Base64
@@ -8,7 +9,6 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAssertionResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import io.mockk.coEvery
@@ -78,6 +78,8 @@ class Fido2CredentialManagerTest {
     }
     private val mockVaultSdkSource = mockk<VaultSdkSource>()
     private val mockFido2CredentialStore = mockk<Fido2CredentialStore>()
+    private val mockIntentManager = mockk<IntentManager>()
+    private val mockContext = mockk<Context>()
 
     @BeforeEach
     fun setUp() {
@@ -88,6 +90,8 @@ class Fido2CredentialManagerTest {
             vaultSdkSource = mockVaultSdkSource,
             fido2CredentialStore = mockFido2CredentialStore,
             fido2OriginManager = fido2OriginManager,
+            intentManager = mockIntentManager,
+            context = mockContext,
             json = json,
         )
     }
@@ -342,10 +346,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error(
-                    R.string.passkey_operation_failed_because_app_is_signed_incorrectly
-                        .asText(),
-                ),
+                Fido2RegisterCredentialResult.Error.InvalidSignature,
                 result,
             )
         }
@@ -369,10 +370,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error(
-                    R.string.passkey_operation_failed_because_app_signature_is_invalid
-                        .asText(),
-                ),
+                Fido2RegisterCredentialResult.Error.InvalidSignature,
                 result,
             )
         }
@@ -415,10 +413,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertEquals(
-                Fido2RegisterCredentialResult.Error(
-                    R.string.passkey_registration_failed_due_to_an_internal_error
-                        .asText(),
-                ),
+                Fido2RegisterCredentialResult.Error.Internal,
                 result,
             )
         }
@@ -451,10 +446,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2RegisterCredentialResult.Error(
-                R.string.passkey_operation_failed_because_host_url_is_not_present_in_request
-                    .asText(),
-            ),
+            Fido2RegisterCredentialResult.Error.MissingRpId,
             result,
         )
     }
@@ -646,10 +638,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error(
-                R.string.passkey_operation_failed_because_host_url_is_not_present_in_request
-                    .asText(),
-            ),
+            Fido2CredentialAssertionResult.Error.MissingHostUrl,
             result,
         )
     }
@@ -734,10 +723,7 @@ class Fido2CredentialManagerTest {
             }
 
             assertEquals(
-                Fido2CredentialAssertionResult.Error(
-                    R.string.passkey_authentication_failed_due_to_an_internal_error
-                        .asText(),
-                ),
+                Fido2CredentialAssertionResult.Error.Internal,
                 authResult,
             )
         }
@@ -767,10 +753,7 @@ class Fido2CredentialManagerTest {
         }
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error(
-                R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
-                    .asText(),
-            ),
+            Fido2CredentialAssertionResult.Error.InvalidRpId,
             result,
         )
     }
@@ -794,7 +777,7 @@ class Fido2CredentialManagerTest {
         )
 
         assertEquals(
-            Fido2CredentialAssertionResult.Error(R.string.generic_error_message.asText()),
+            Fido2CredentialAssertionResult.Error.Internal,
             result,
         )
 
@@ -808,15 +791,7 @@ private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
 private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
 private const val DEFAULT_HOST = "bitwarden.com"
-private val DEFAULT_ANDROID_ORIGIN = Origin.Android(
-    UnverifiedAssetLink(
-        packageName = DEFAULT_PACKAGE_NAME,
-        sha256CertFingerprint = DEFAULT_CERT_FINGERPRINT,
-        host = DEFAULT_HOST,
-        assetLinkUrl = "bitwarden.com",
-    ),
-)
-private val DEFAULT_WEB_ORIGIN = Origin.Web("bitwarden.com")
+private val DEFAULT_WEB_ORIGIN = Origin.Web(DEFAULT_HOST)
 private const val DEFAULT_ALLOW_LIST = """
 {
   "apps": [
@@ -864,7 +839,7 @@ private const val DEFAULT_FIDO2_AUTH_REQUEST_JSON = """
 """
 
 private fun createMockFido2AssertionRequest(
-    mockOrigin: String? = "bitwarden.com",
+    mockOrigin: String? = DEFAULT_HOST,
     mockClientDataHash: ByteArray? = null,
     mockSigningInfo: SigningInfo,
 ) = mockk<Fido2CredentialAssertionRequest> {

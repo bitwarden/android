@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialReques
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -60,6 +61,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2RegistrationCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -117,6 +119,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         every { initialAutofillDialogShown = any() } just runs
         every { initialAutofillDialogShown } returns true
         every { isUnlockWithPinEnabled } returns false
+    }
+    private val mockPrivilegedAppRepository: PrivilegedAppRepository = mockk {
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(createUserState())
     private val authRepository: AuthRepository = mockk {
@@ -1014,7 +1018,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(stateWithName, stateFlow.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Registration(mockCreateResult),
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        Fido2RegistrationCompletion.Success(
+                            responseJson = "mockResponse",
+                        ),
+                    ),
                     eventFlow.awaitItem(),
                 )
                 coVerify(exactly = 1) {
@@ -1116,7 +1124,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    message = R.string.passkey_operation_failed_because_the_request_is_invalid
                         .asText(),
                 ),
                 viewModel.stateFlow.value.dialog,
@@ -2140,7 +2148,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertNull(viewModel.stateFlow.value.dialog)
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error(
+                        result = Fido2RegistrationCompletion.Error(
                             R.string.passkey_operation_failed_because_user_could_not_be_verified
                                 .asText(),
                         ),
@@ -3168,6 +3176,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 organizationEventManager = organizationEventManager,
                 networkConnectionManager = networkConnectionManager,
                 firstTimeActionManager = firstTimeActionManager,
+                privilegedAppRepository = mockPrivilegedAppRepository,
             )
         }
 
@@ -3841,7 +3850,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     assertEquals(
                         VaultAddEditEvent.CompleteFido2Registration(
-                            result = Fido2RegisterCredentialResult.Cancelled,
+                            result = Fido2RegistrationCompletion.Cancelled,
                         ),
                         awaitItem(),
                     )
@@ -4247,7 +4256,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     VaultAddEditState.DialogState.Fido2Error(
-                        message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                        message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                            .asText(),
                     ),
                     viewModel.stateFlow.value.dialog,
                 )
@@ -4279,7 +4289,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 assertEquals(
                     VaultAddEditState.DialogState.Fido2Error(
-                        message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                        message = R.string.passkey_operation_failed_because_the_request_is_invalid
+                            .asText(),
                     ),
                     viewModel.stateFlow.value.dialog,
                 )
@@ -4341,7 +4352,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         awaitItem(),
                     )
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(mockResult),
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            Fido2RegistrationCompletion.Success("mockResponse"),
+                        ),
                         awaitItem(),
                     )
                 }
@@ -4352,7 +4365,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
             runTest {
                 val mockRequest = createMockFido2CreateCredentialRequest(number = 1)
-                val mockResult = Fido2RegisterCredentialResult.Error("".asText())
+                val mockResult = Fido2RegisterCredentialResult.Error.Internal
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                     fido2CreateCredentialRequest = mockRequest,
                 )
@@ -4378,7 +4391,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     )
 
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(mockResult),
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            Fido2RegistrationCompletion.Error(
+                                R.string.generic_error_message.asText(),
+                            ),
+                        ),
                         awaitItem(),
                     )
                 }
@@ -4417,7 +4434,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     )
 
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(mockResult),
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            Fido2RegistrationCompletion.Success("mockResponse"),
+                        ),
                         awaitItem(),
                     )
                 }
@@ -4449,7 +4468,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Registration(mockResult),
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            Fido2RegistrationCompletion.Cancelled,
+                        ),
                         awaitItem(),
                     )
                 }
@@ -4595,6 +4616,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
+            privilegedAppRepository = mockPrivilegedAppRepository,
         )
 
     private fun createVaultData(
