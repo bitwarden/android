@@ -87,12 +87,16 @@ object Fido2ProviderModule {
 
     @Provides
     @Singleton
-    fun provideFido2PrivilegedAppRepository(
+    fun providePrivilegedAppRepository(
         fido2PrivilegedAppDiskSource: Fido2PrivilegedAppDiskSource,
+        assetManager: AssetManager,
+        dispatcherManager: DispatcherManager,
         json: Json,
     ): PrivilegedAppRepository =
         PrivilegedAppRepositoryImpl(
             fido2PrivilegedAppDiskSource = fido2PrivilegedAppDiskSource,
+            assetManager = assetManager,
+            dispatcherManager = dispatcherManager,
             json = json,
         )
 

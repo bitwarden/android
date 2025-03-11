@@ -1232,4 +1232,14 @@ Do you want to switch to this account?</string>
   <string name="trust">Trust</string>
   <string name="unknown">Unknown</string>
   <string name="application_not_trusted">Application not trusted</string>
+  <string name="privileged_apps">Privileged apps</string>
+  <string name="trusted_by_google">Trusted by Google</string>
+  <string name="trusted_by_you">Trusted by you</string>
+  <string name="trusted_by_the_community">Trusted by the community</string>
+  <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
+  <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
+  <string name="trusted_by_you_learn_more">These are applications YOU trust to perform passkey operations on behalf of other parties. These are often web browsers, and are not currently trusted by Google or the Bitwarden community.</string>
+  <string name="trusted_by_community_learn_more">These are applications the Bitwarden Community Members trust to perform passkey operations on behalf of other parties. These are often web browsers, and are not distributed through Google\'s Play Store. They are used and considered safe by our community members.</string>
+  <string name="trusted_by_google_learn_more">These are applications Google considers safe to perform passkey operations on behalf of other parties. These are often web browsers, and are available in Google\'s Play Store.\n</string>
+  <string name="privileged_apps_description">Applications, often web browsers, trusted to perform passkey operations on behalf of other parties.</string>
 </resources>
