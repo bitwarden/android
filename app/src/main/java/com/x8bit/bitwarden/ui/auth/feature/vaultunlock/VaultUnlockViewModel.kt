@@ -121,6 +121,8 @@ class VaultUnlockViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
+        promptForBiometricsIfAvailable()
+
         // only when navigating from vault to lock we should not display biometrics
         // subsequent views of the lock screen should display biometrics if available
         vaultLockManager.isFromLockFlow = false
