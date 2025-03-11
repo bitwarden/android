@@ -398,9 +398,9 @@ private fun BitwardenSwitch_preview() {
                 isChecked = true,
                 onCheckedChange = {},
                 tooltip = TooltipData(
-                onClick = { },
-                contentDescription = "content description",
-            ),
+                    onClick = { },
+                    contentDescription = "content description",
+                ),
                 actions = {
                     BitwardenStandardIconButton(
                         vectorIconRes = R.drawable.ic_generate,
@@ -408,19 +408,19 @@ private fun BitwardenSwitch_preview() {
                         onClick = {},
                     )
                 },
-            cardStyle = CardStyle.Middle(),
-        )
-        BitwardenSwitch(
-            label = "Label",
-            supportingText = "description",
-            isChecked = true,
-            onCheckedChange = {},
-            tooltip = TooltipData(
-                onClick = { },
-                contentDescription = "content description",
-            ),
-            cardStyle = CardStyle.Middle(),
-        )
+                cardStyle = CardStyle.Middle(),
+            )
+            BitwardenSwitch(
+                label = "Label",
+                supportingText = "description",
+                isChecked = true,
+                onCheckedChange = {},
+                tooltip = TooltipData(
+                    onClick = { },
+                    contentDescription = "content description",
+                ),
+                cardStyle = CardStyle.Middle(),
+            )
             BitwardenSwitch(
                 label = "Label",
                 isChecked = false,

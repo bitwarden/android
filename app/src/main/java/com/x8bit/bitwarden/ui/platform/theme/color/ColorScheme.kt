@@ -159,7 +159,7 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
 )
 
 /**
- * Creates a [BitwardenColorScheme] for dark mode based on dynamic Material You colors.
+ * Creates a [BitwardenColorScheme] based on dynamic Material You colors.
  */
 @Suppress("LongMethod")
 fun dynamicBitwardenColorScheme(
@@ -181,7 +181,7 @@ fun dynamicBitwardenColorScheme(
             secondary = materialColorScheme.surfaceContainer,
             tertiary = materialColorScheme.surfaceContainerHighest,
             alert = materialColorScheme.error,
-            scrim = materialColorScheme.scrim,
+            scrim = materialColorScheme.scrim.copy(alpha = 0.4f),
             pressed = materialColorScheme.onSurfaceVariant,
         ),
         stroke = BitwardenColorScheme.StrokeColors(
@@ -215,8 +215,8 @@ fun dynamicBitwardenColorScheme(
         ),
         toggleButton = BitwardenColorScheme.ToggleButtonColors(
             backgroundOn = materialColorScheme.primary,
-            backgroundOff = materialColorScheme.surfaceContainerHighest,
-            switch = materialColorScheme.onPrimaryContainer,
+            backgroundOff = materialColorScheme.onSurfaceVariant,
+            switch = materialColorScheme.onPrimary,
         ),
         sliderButton = BitwardenColorScheme.SliderButtonColors(
             knobBackground = materialColorScheme.primary,
