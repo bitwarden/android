@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -50,6 +51,7 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import javax.crypto.Cipher
@@ -474,8 +476,9 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `state with input and without biometrics should request focus on input field`() {
+    fun `state with input and without biometrics should request focus on input field`() = runTest {
         mutableStateFlow.update { it.copy(hideInput = false, isBiometricEnabled = false) }
+        dispatcher.advanceTimeByAndRunCurrent(500L)
         composeTestRule
             .onNodeWithText("Master password")
             .performScrollTo()
