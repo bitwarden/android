@@ -102,7 +102,7 @@
   <string name="bitwarden_autofill_accessibility_service_description">Dùng dịch vụ trợ năng của Bitwarden để tự động điền thông tin đăng nhập của bạn.</string>
   <string name="change_email">Đổi email</string>
   <string name="change_email_confirmation">Bạn có thể thay đổi địa chỉ email trong trang web Bitwarden. Bạn có muốn truy cập bitwarden.com bây giờ?</string>
-  <string name="change_master_password">Thay đổi mật khẩu chính</string>
+  <string name="change_master_password">Đổi mật khẩu chính</string>
   <string name="close">Đóng</string>
   <string name="continue_text">Tiếp tục</string>
   <string name="create_account">Tạo tài khoản</string>
@@ -205,7 +205,7 @@
   <string name="item_updated">Đã lưu mục</string>
   <string name="submitting">Đang gửi...</string>
   <string name="syncing">Đang đồng bộ...</string>
-  <string name="syncing_complete">Đồng bộ hoàn tất</string>
+  <string name="syncing_complete">Đồng bộ xong</string>
   <string name="syncing_failed">Đồng bộ thất bại</string>
   <string name="sync_vault_now">Đồng bộ kho mật khẩu ngay</string>
   <string name="touch_id">Touch ID</string>
@@ -873,13 +873,13 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="logging_in_as_x">Đăng nhập như %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Hành động sau khi hết thời gian mở kho đã thay đổi thành đăng xuất</string>
   <string name="block_auto_fill">Chặn tự động điền</string>
-  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Vô hiệu hóa tính năng tự động điền với các URI sau.</string>
-  <string name="new_blocked_uri">URI bị chặn mới</string>
+  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Không tự động điền với các URL này.</string>
+  <string name="new_blocked_uri">Thêm URL mới</string>
   <string name="uri_saved">Đã lưu URI</string>
   <string name="invalid_format_use_https_http_or_android_app">Định dạng không hợp lệ. Dùng https://, http://, hoặc androidapp://</string>
   <string name="edit_uri">Sửa URI</string>
-  <string name="enter_uri">Nhập URI</string>
-  <string name="format_x_separate_multiple_ur_is_with_a_comma">Định dạng: %1$s. Phân tách nhiều URI bằng dấu phẩy.</string>
+  <string name="enter_uri">Nhập URL</string>
+  <string name="format_x_separate_multiple_ur_is_with_a_comma">Định dạng: %1$s. Dùng dấu phẩy để phân tách URL.</string>
   <string name="format_x">Định dạng: %1$s</string>
   <string name="invalid_uri">URI không hợp lệ</string>
   <string name="uri_removed">Đã xóa URI</string>
@@ -908,7 +908,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="x_hours_and_y_minutes">%1$s giờ %2$s phút</string>
   <string name="x_hours">%1$s giờ</string>
   <string name="passkey_management_explanation_long">Sử dụng Bitwarden để lưu các mã khoá mới và đăng nhập bằng các mã khoá được lưu trong kho của bạn.</string>
-  <string name="autofill_services_explanation_long">Dùng Android Autofill Framework để điền thông tin đăng nhập vào các ứng dụng khác trên thiết bị của bạn.</string>
+  <string name="autofill_services_explanation_long">Dùng Android Autofill Framework để điền thông tin đăng nhập vào các ứng dụng trên điện thoại.</string>
   <string name="use_inline_autofill_explanation_long">Dùng tính năng tự động điền nội tuyến nếu bàn phím hỗ trợ. Nếu không, sẽ dùng lớp phủ mặc định.</string>
   <string name="additional_options">Tùy chọn bổ sung</string>
   <string name="continue_to_web_app">Tiếp tục tới ứng dụng web?</string>
@@ -1223,7 +1223,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Cải thiện việc điền thông tin đăng nhập cho các trang web được hỗ trợ trên Chrome. Sau khi bật, bạn sẽ được chuyển hướng đến cài đặt Chrome để bật tính năng tự động điền của bên thứ ba.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Xem thêm</string>
+  <string name="no_folder">Chưa phân loại</string>
+  <string name="show_less">Thu gọn</string>
 </resources>

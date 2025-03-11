@@ -24,7 +24,7 @@
   <string name="enter_pin">הזן את קוד ה־PIN שלך</string>
   <string name="favorites">מועדפים</string>
   <string name="file_bug_report">הגש דוח באגים</string>
-  <string name="file_bug_report_description">פתח בעיה במאגר ה-Github שלנו.</string>
+  <string name="file_bug_report_description">פתח בעיה במאגר ה־Github שלנו.</string>
   <string name="fingerprint_direction">השתמש בטביעת האצבע שלך כדי לאמת.</string>
   <string name="folder">תיקייה</string>
   <string name="folder_created">תיקייה חדשה נוצרה.</string>
@@ -94,10 +94,10 @@
   <string name="autofill_accessibility_description">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית את הכניסות שלך ביישומים ובאינטרנט.</string>
   <string name="autofill_service">שירותי מילוי אוטומטי</string>
   <string name="set_bitwarden_as_passkey_manager_description">הגדר את Bitwarden כספק מפתחות הגישה שלך בהגדרות המכשיר.</string>
-  <string name="avoid_ambiguous_characters">הימנע מתווים דו-משמעיים</string>
+  <string name="avoid_ambiguous_characters">הימנע מתווים דו־משמעיים</string>
   <string name="bitwarden_app_extension">הרחבת יישום של Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">הדרך הקלה ביותר להוסיף כניסות חדשות לכספת שלך היא דרך הרחבת היישום של Bitwarden. למד עוד אודות השימוש בהרחבת היישום של Bitwarden על ידי ניווט למסך ה\"הגדרות\".</string>
-  <string name="bitwarden_app_extension_description">השתמש ב-Bitwarden ב-Safari ויישומים אחרים כדי למלא אוטומטית את הכניסות שלך.</string>
+  <string name="bitwarden_app_extension_description">השתמש ב־Bitwarden ב־Safari ויישומים אחרים כדי למלא אוטומטית את הכניסות שלך.</string>
   <string name="bitwarden_autofill_service">שירות מילוי אוטומטי של Bitwarden</string>
   <string name="bitwarden_autofill_accessibility_service_description">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית את הכניסות שלך.</string>
   <string name="change_email">שנה דוא\"ל</string>
@@ -209,7 +209,7 @@
   <string name="syncing_failed">הסנכרון נכשל</string>
   <string name="sync_vault_now">סנכרן את הכספת עכשיו</string>
   <string name="touch_id">Touch ID</string>
-  <string name="two_step_login">כניסה דו-שלבית</string>
+  <string name="two_step_login">כניסה דו־שלבית</string>
   <string name="unlock_with">בטל נעילה עם %1$s</string>
   <string name="unlock_with_pin">בטל נעילה עם קוד PIN</string>
   <string name="validating">מאמת</string>
@@ -251,20 +251,20 @@
   <string name="learn_org">למד על ארגונים</string>
   <string name="cannot_open_app">לא ניתן לפתוח את היישום \"%1$s\".</string>
   <string name="authenticator_app_title">יישום מאמת</string>
-  <string name="enter_verification_code_app">הכנס את קוד האימות בן 6 הספרות מהיישום המאמת שלך.</string>
-  <string name="enter_verification_code_email">הכנס את קוד האימות בן 6 הספרות שנשלח בדוא\"ל אל %1$s.</string>
-  <string name="enter_verification_code_new_device">אנחנו לא מזהים את המכשיר הזה. הזן את קוד האימות בן 8 הספרות שנשלח אל %1$s.</string>
+  <string name="enter_verification_code_app">הזן את קוד האימות בן 6 הספרות מהיישום המאמת שלך.</string>
+  <string name="enter_verification_code_email">הזן את קוד האימות בן 6 הספרות שנשלח בדוא\"ל אל %1$s.</string>
+  <string name="enter_verification_code_new_device">אנחנו לא מזהים את המכשיר הזה. הזן את קוד האימות בן 8 הספרות שנשלח בדוא\"ל אל %1$s.</string>
   <string name="login_unavailable">כניסה לא זמינה</string>
-  <string name="no_two_step_available">לחשבון זה מוגדרת כניסה דו-שלבית, עם זאת, אף אחד מהספקים הדו-שלביים שהוגדרו אינו נתמך במכשיר זה. נא להשתמש במכשיר נתמך ו/או להוסיף ספקים נוספים שנתמכים טוב יותר במכשירים שונים (כמו יישום מאמת).</string>
+  <string name="no_two_step_available">לחשבון זה מוגדרת כניסה דו־שלבית, עם זאת, אף אחד מהספקים הדו־שלביים שהוגדרו אינו נתמך במכשיר זה. נא להשתמש במכשיר נתמך ו/או להוסיף ספקים נוספים שנתמכים טוב יותר במכשירים שונים (כמו יישום מאמת).</string>
   <string name="recovery_code_title">קוד שחזור</string>
   <string name="remember">זכור</string>
   <string name="remember_email">זכור דוא\"ל</string>
   <string name="send_verification_code_again">שלח קוד מחדש</string>
-  <string name="two_step_login_options">אפשרויות כניסה דו-שלבית</string>
-  <string name="use_another_two_step_method">השתמש בשיטת כניסה דו-שלבית אחרת</string>
+  <string name="two_step_login_options">אפשרויות כניסה דו־שלבית</string>
+  <string name="use_another_two_step_method">השתמש בשיטת כניסה דו־שלבית אחרת</string>
   <string name="verification_email_not_sent">לא היה ניתן לשלוח דוא\"ל אימות. נסה שוב.</string>
   <string name="verification_email_sent">דוא\"ל אימות נשלח</string>
-  <string name="yubi_key_instruction">כדי להמשיך, החזק את ה-Yubikey NEO שלך כנגד החלק האחורי של המכשיר או הכנס את ה-YubiKey שלך אל תוך יציאת ה-USB של המכשיר שלך, ואז גע בכפתור שלו.</string>
+  <string name="yubi_key_instruction">כדי להמשיך, החזק את ה־Yubikey NEO שלך כנגד החלק האחורי של המכשיר או הכנס את ה־YubiKey שלך אל תוך יציאת ה־USB של המכשיר שלך, ואז גע בכפתור שלו.</string>
   <string name="yubi_key_title">מפתח אבטחה של YubiKey</string>
   <string name="add_new_attachment">צרף קובץ חדש</string>
   <string name="attachments">קבצים מצורפים</string>
@@ -274,7 +274,7 @@
   <string name="attachment_large_warning">גודל הקובץ המצורף הוא %1$s. האם אתה בטוח שברצונך להוריד אותו למכשירך?</string>
   <string name="authenticator_key">מפתח מאמת</string>
   <string name="verification_code_totp">קוד אימות (TOTP)</string>
-  <string name="authenticator_key_added">נוסף מפתח מאמת.</string>
+  <string name="authenticator_key_added">מפתח המאמת נוסף.</string>
   <string name="authenticator_key_read_error">לא ניתן לקרוא מפתח מאמת.</string>
   <string name="point_your_camera_at_the_qr_code">כוון את המצלמה שלך אל קוד ה־QR.
 הסריקה תתבצע באופן אוטומטי.</string>
@@ -362,7 +362,7 @@
   <string name="address">כתובת</string>
   <string name="expiration">תוקף</string>
   <string name="show_website_icons">הצג סמלי אתר אינטרנט</string>
-  <string name="show_website_icons_description">הצג תמונה ניתנת לזיהוי ליד כל כניסה</string>
+  <string name="show_website_icons_description">הצג תמונה מוכרת ליד כל כניסה</string>
   <string name="icons_url">URL של שרת הסמלים</string>
   <string name="autofill_with_bitwarden">מלא אוטומטית עם Bitwarden</string>
   <string name="vault_is_locked">הכספת נעולה</string>
@@ -407,7 +407,7 @@
   <string name="organization">ארגון</string>
   <string name="hold_yubikey_near_top">החזק את ה־Yubikey שלך ליד החלק העליון של המכשיר.</string>
   <string name="try_again">נסה שוב</string>
-  <string name="yubi_key_instruction_ios">כדי להמשיך, החזק את ה-Yubikey NEO שלך כנגד החלק האחורי של המכשיר.</string>
+  <string name="yubi_key_instruction_ios">כדי להמשיך, החזק את ה־Yubikey NEO שלך כנגד החלק האחורי של המכשיר.</string>
   <string name="bitwarden_autofill_accessibility_service_description2">שירות הנגישות עשוי להיות מועיל לשימוש כאשר יישומים לא תומכים בשירות המילוי האוטומטי הרגיל.</string>
   <string name="date_password_updated">הסיסמה עודכנה</string>
   <string name="date_updated">עודכן</string>
@@ -474,14 +474,14 @@
   <string name="fingerprint_phrase">ביטוי טביעת אצבע</string>
   <string name="your_accounts_fingerprint">ביטוי טביעת האצבע של חשבונך</string>
   <string name="learn_org_confirmation">Bitwarden מאפשר לך לשתף את פריטי הכספת שלך עם אחרים באמצעות חשבון ארגוני. האם תרצה לבקר באתר bitwarden.com כדי ללמוד עוד?</string>
-  <string name="export_vault">ייצוא כספת</string>
+  <string name="export_vault">ייצא כספת</string>
   <string name="lock_now">נעל עכשיו</string>
   <string name="pin">PIN</string>
   <string name="unlock">בטל נעילה</string>
   <string name="unlock_vault">בטל נעילת כספת</string>
   <string name="thirty_minutes">30 דקות</string>
   <string name="set_pin_description">קבע את קוד ה־PIN שלך לביטול נעילת Bitwarden. הגדרות ה־PIN שלך יאופסו אם אי פעם תצא באופן מלא מהיישום.</string>
-  <string name="logged_in_as_on">נכנסת כ-%1$s ב-%2$s.</string>
+  <string name="logged_in_as_on">נכנסת כ־%1$s ב־%2$s.</string>
   <string name="vault_locked_master_password">הכספת שלך נעולה. אמת את הסיסמה הראשית שלך כדי להמשיך.</string>
   <string name="vault_locked_pin">הכספת שלך נעולה. אמת את קוד ה־PIN שלך כדי להמשיך.</string>
   <string name="vault_locked_identity">הכספת שלך נעולה. אמת את זהותך כדי להמשיך.</string>
@@ -502,7 +502,7 @@
   <string name="default_dark_theme">ערכת נושא כהה ברירת מחדל</string>
   <string name="copy_notes">העתק הערה</string>
   <string name="exit">יציאה</string>
-  <string name="exit_confirmation">האם אתה בטוח שברצונך לצאת מ-Bitwarden?</string>
+  <string name="exit_confirmation">האם אתה בטוח שברצונך לצאת מ־Bitwarden?</string>
   <string name="require_master_password_on_app_restart">לדרוש סיסמה ראשית בעת הפעלה מחדש של היישום?</string>
   <string name="pin_require_master_password_restart">האם ברצונך לדרוש ביטול נעילה עם הסיסמה הראשית שלך כשהיישום מופעל מחדש?</string>
   <string name="black">שחור</string>
@@ -512,7 +512,7 @@
   <string name="ask_to_add_login">בקש לשמור כניסה</string>
   <string name="ask_to_add_login_description">בקש להוסיף פריט אם לא נמצא פריט בכספת שלך.</string>
   <string name="on_restart">בעת הפעלה מחדש של היישום</string>
-  <string name="autofill_service_not_enabled">מילוי אוטומטי הופך את זה לקל לגשת באופן מאובטח לכספת ה-Bitwarden שלך מאתרים ויישומים אחרים. נראה שלא הגדרת את שירות המילוי האוטומטי עבור Bitwarden. הגדר מילוי אוטומטי עבור Bitwarden ממסך ה\"הגדרות\".</string>
+  <string name="autofill_service_not_enabled">מילוי אוטומטי הופך את זה לקל לגשת באופן מאובטח לכספת ה־Bitwarden שלך מאתרים ויישומים אחרים. נראה שלא הגדרת את שירות המילוי האוטומטי עבור Bitwarden. הגדר מילוי אוטומטי עבור Bitwarden ממסך ה\"הגדרות\".</string>
   <string name="theme_applied_on_restart">שינויי ערכת הנושא שלך יוחלו כשהיישום יופעל מחדש.</string>
   <string name="capitalize">הפוך תו ראשון לרישית</string>
   <string name="include_number">כלול מספר</string>
@@ -526,10 +526,10 @@
   <string name="biometrics_decoding_failure">היכנס עם הסיסמה הראשית שלך או PIN ואז תאפשר מחדש כניסה ביומטרית בהגדרות.</string>
   <string name="use_biometrics_to_unlock">השתמש בזיהוי ביומטרי כדי לפתוח</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden צריך תשומת לב - ראה את \"שירות הנגישות של המילוי האוטומטי\" מהגדרות Bitwarden</string>
-  <string name="bitwarden_autofill_service_overlay_permission">3. במסך הגדרות היישום של אנדרואיד עבור Bitwarden, עבור אל אפשרויות \"הצג מעל יישומים אחרים\" (תחת מתקדם) והקש על המתג כדי לאפשר תמיכה בשכבת-על.</string>
+  <string name="bitwarden_autofill_service_overlay_permission">3. במסך הגדרות היישום של אנדרואיד עבור Bitwarden, עבור אל אפשרויות \"הצג מעל יישומים אחרים\" (תחת מתקדם) והקש על המתג כדי לאפשר תמיכה בשכבת־על.</string>
   <string name="overlay_permission">הרשאה</string>
-  <string name="bitwarden_autofill_service_open_overlay_permission_settings">פתח הגדרות הרשאת שכבת-על</string>
-  <string name="bitwarden_autofill_service_step3">3. במסך הגדרות היישום של אנדרואיד עבור Bitwarden, בחר את \"הצג מעל יישומים אחרים\" (תחת מתקדם) והדלק את המתג כדי לאפשר את שכבת-העל.</string>
+  <string name="bitwarden_autofill_service_open_overlay_permission_settings">פתח הגדרות הרשאת שכבת־על</string>
+  <string name="bitwarden_autofill_service_step3">3. במסך הגדרות היישום של אנדרואיד עבור Bitwarden, בחר את \"הצג מעל יישומים אחרים\" (תחת מתקדם) והדלק את המתג כדי לאפשר את שכבת־העל.</string>
   <string name="denied">נדחה</string>
   <string name="granted">הוענק</string>
   <string name="file_format">פורמט קובץ</string>
@@ -537,7 +537,7 @@
   <string name="send_verification_code_to_email">שלח קוד אימות לדוא\"ל שלך</string>
   <string name="code_sent">הקוד נשלח!</string>
   <string name="confirm_your_identity">אשר את זהותך כדי להמשיך.</string>
-  <string name="export_vault_warning">הייצוא מכיל את נתוני הכספת שלך בפורמט לא מוצפן. אתה לא אמור לאחסן או לשלוח את הקובץ המיוצא דרך ערוצים לא מאובטחים (כמו דוא\"ל). מחק אותו מיד לאחר שסיימת להשתמש בו.</string>
+  <string name="export_vault_warning">ייצוא זה מכיל את נתוני הכספת שלך בפורמט לא מוצפן. אתה לא אמור לאחסן או לשלוח את הקובץ המיוצא דרך ערוצים לא מאובטחים (כמו דוא\"ל). מחק אותו מיד לאחר שסיימת להשתמש בו.</string>
   <string name="export_vault_file_pw_protect_info">קובץ ייצוא זה יהיה מוגן סיסמה ודורש את סיסמת הקובץ כדי לפענח.</string>
   <string name="export_vault_confirmation_title">אשר ייצוא כספת</string>
   <string name="warning">אזהרה</string>
@@ -572,7 +572,7 @@
   <string name="set_master_password_summary">כדי להשלים את הכניסה עם SSO, נא להגדיר סיסמה ראשית כדי לגשת ולהגן על הכספת שלך.</string>
   <string name="master_password_policy_in_effect">מדיניות ארגון אחת או יותר דורשת שהסיסמה הראשית שלך תעמוד בדרישות הבאות:</string>
   <string name="policy_in_effect_min_complexity">ציון מורכבות מינימלי של %1$s</string>
-  <string name="policy_in_effect_min_length">אורך מזערי של %1$s</string>
+  <string name="policy_in_effect_min_length">אורך מינימלי של %1$s</string>
   <string name="policy_in_effect_uppercase">מכילה אות גדולה אחת או יותר</string>
   <string name="policy_in_effect_lowercase">מכילה אות קטנה אחת או יותר</string>
   <string name="policy_in_effect_numbers">מכילה מספר אחד או יותר</string>
@@ -584,18 +584,18 @@
   <string name="accept_policies_error">תנאי השימוש ומדיניות הפרטיות לא הוכרו.</string>
   <string name="terms_of_service">תנאי שימוש</string>
   <string name="privacy_policy">מדיניות הפרטיות</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden צריך תשומת לב - הפעל את \"הצג-מעל\" ב\"שירותי מילוי אוטומטי\" מהגדרות Bitwarden</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden צריך תשומת לב - הפעל את \"הצג־מעל\" ב\"שירותי מילוי אוטומטי\" מהגדרות Bitwarden</string>
   <string name="passkey_management">ניהול מפתחות גישה</string>
   <string name="autofill_services">שירותי מילוי אוטומטי</string>
   <string name="inline_autofill">השתמש במילוי אוטומטי מוטבע</string>
-  <string name="inline_autofill_description">השתמש במילוי אוטומטי מוטבע אם ה-IME (מקלדת) שבחרת תומך בכך. אם התצורה שלך אינה נתמכת (או אפשרות זו כבויה), ייעשה שימוש בשכבת המילוי האוטומטי ברירת המחדל.</string>
+  <string name="inline_autofill_description">השתמש במילוי אוטומטי מוטבע אם ה־IME (מקלדת) שבחרת תומך בכך. אם התצורה שלך אינה נתמכת (או אפשרות זו כבויה), ייעשה שימוש בשכבת המילוי האוטומטי ברירת המחדל.</string>
   <string name="accessibility">השתמש בנגישות</string>
   <string name="accessibility_description">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית את הכניסות שלך ביישומים ובאינטרנט. כאשר מוגדר, נציג חלון צץ כשנבחרו שדות כניסה.</string>
-  <string name="accessibility_description2">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית את הכניסות שלך ביישומים ובאינטרנט. (דורש שהצג-מעל יהיה מופעל גם כן)</string>
-  <string name="accessibility_description3">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית באמצעות אריח פעולה-מהירה ו/או להציג חלון צץ באמצעות הצג-מעל (אם מופעל).</string>
-  <string name="accessibility_description4">נדרש כדי למלא אוטומטית באמצעות אריח פעולה-מהירה, או כדי להרחיב את שירות המילוי האוטומטי באמצעות הצג-מעל (אם מופעל).</string>
-  <string name="accessibility_description5">דרוש כדי להשתמש בפעולה-מהירה של האריח למילוי אוטומטי.</string>
-  <string name="draw_over">השתמש בהצג-מעל</string>
+  <string name="accessibility_description2">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית את הכניסות שלך ביישומים ובאינטרנט. (דורש שהצג־מעל יהיה מופעל גם כן)</string>
+  <string name="accessibility_description3">השתמש בשירות הנגישות של Bitwarden כדי למלא אוטומטית באמצעות אריח פעולה־מהירה ו/או להציג חלון צץ באמצעות הצג־מעל (אם מופעל).</string>
+  <string name="accessibility_description4">נדרש כדי למלא אוטומטית באמצעות אריח פעולה־מהירה, או כדי להרחיב את שירות המילוי האוטומטי באמצעות הצג־מעל (אם מופעל).</string>
+  <string name="accessibility_description5">דרוש כדי להשתמש בפעולה־מהירה של האריח למילוי אוטומטי.</string>
+  <string name="draw_over">השתמש בהצג־מעל</string>
   <string name="draw_over_description">מאפשר לשירות הנגישות של Bitwarden להציג חלון צץ כאשר נבחרו שדות כניסה.</string>
   <string name="draw_over_description2">אם מופעל, שירות הנגישות של Bitwarden יציג חלון צץ כאשר נבחרו שדות כניסה כדי לסייע עם מילוי אוטומטי של הכניסות שלך.</string>
   <string name="draw_over_description3">אם מופעל, נגישות תציג חלון צץ כדי להרחיב את שירות המילוי האוטומטי עבור יישומים ישנים שלא תומכים במסגרת המילוי האוטומטי של אנדרואיד.</string>
@@ -668,20 +668,20 @@
   <string name="updating_password">מעדכן סיסמה</string>
   <string name="update_password_error">כרגע לא ניתן לעדכן את הסיסמה</string>
   <string name="remove_master_password">הסר סיסמה ראשית</string>
-  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s משתמש/ת ב־SSO עם שרת מפתחות באירוח עצמי. סיסמה ראשית לא דרושה יותר כדי להיכנס עבור חברים של ארגון זה.</string>
+  <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s משתמש/ת ב־SSO עם שרת מפתחות באירוח עצמי. סיסמה ראשית כבר לא נדרשת כדי להיכנס עבור חברים של ארגון זה.</string>
   <string name="remove_master_password_warning">%1$s משתמשים ב־SSO עם הצפנה המנוהלת על ידי הלקוח. המשך התהליך יסיר את הסיסמה הראשית שלך מחשבונך וידרוש SSO כדי להיכנס.</string>
   <string name="remove_master_password_warning2">אם אינך רוצה להסיר את הסיסמה הראשית שלך, אתה יכול לעזוב את הארגון הזה.</string>
   <string name="leave_organization">עזוב ארגון</string>
   <string name="leave_organization_name">לעזוב את %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
-  <string name="fido2_instruction">כדי להמשיך, הכן את מפתח האבטחה התואם ל-FIDO2 WebAuthn שלך, ואז עקוב אחר ההוראות לאחר לחיצה על \'אמת WebAuthn\' במסך הבא.</string>
+  <string name="fido2_instruction">כדי להמשיך, הכן את מפתח האבטחה התואם ל־FIDO2 WebAuthn שלך, ואז עקוב אחר ההוראות לאחר לחיצה על \'אמת WebAuthn\' במסך הבא.</string>
   <string name="fido2_desc">אימות באמצעות FIDO2 WebAuthn, אתה יכול לאמת באמצעות מפתח אבטחה חיצוני.</string>
   <string name="fido2_authenticate_web_authn">אמת WebAuthn</string>
   <string name="fido2_return_to_app">חזור ליישום</string>
   <string name="fido2_check_browser">נא לוודא שהדפדפן שלך תומך ב־WebAuthn ולנסות שוב.</string>
   <string name="reset_password_auto_enroll_invite_warning">לארגון זה יש מדיניות ארגונית שתרשום אותך באופן אוטומטי לאיפוס סיסמה. הרישום יאפשר למנהלי הארגון לשנות את הסיסמה הראשית שלך.</string>
-  <string name="vault_timeout_policy_in_effect">פוליסות הארגון שלך הגדירו את פסק הזמן לכספת המרבי שלך ל-%1$s שעות ו-%2$s דקות.</string>
-  <string name="vault_timeout_policy_with_action_in_effect">פוליסות הארגון שלך משפיעות על פסק הזמן לכספת שלך. פסק זמן מרבי המותר הוא %1$s שעות ו-%2$s דקות. פעולת פסק הזמן לכספת שלך מוגדרת ל%3$s.</string>
+  <string name="vault_timeout_policy_in_effect">פוליסות הארגון שלך הגדירו את פסק הזמן לכספת המרבי שלך ל־%1$s שעות ו־%2$s דקות.</string>
+  <string name="vault_timeout_policy_with_action_in_effect">פוליסות הארגון שלך משפיעות על פסק הזמן לכספת שלך. פסק זמן מרבי המותר הוא %1$s שעות ו־%2$s דקות. פעולת פסק הזמן לכספת שלך מוגדרת ל%3$s.</string>
   <string name="vault_timeout_action_policy_in_effect">פוליסות הארגון שלך הגדירו את פעולת פסק הזמן לכספת שלך ל%1$s.</string>
   <string name="vault_timeout_to_large">פסק הזמן לכספת שלך חורג מהמגבלות שנקבעו על ידי הארגון שלך.</string>
   <string name="disable_personal_vault_export_policy_in_effect">מדיניות ארגון אחת או יותר מונעת ממך מלייצא את הכספת האישית שלך.</string>
@@ -746,8 +746,8 @@
   <string name="allow_screen_capture">אפשר לכידת מסך</string>
   <string name="are_you_sure_you_want_to_enable_screen_capture">האם אתה בטוח שברצונך להפעיל לכידת מסך?</string>
   <string name="log_in_requested">התבקשה כניסה</string>
-  <string name="are_you_trying_to_log_in">האם את/ה מנסה להתחבר?</string>
-  <string name="log_in_attempt_by_x_on_y">ניסיון כניסה על ידי %1$s ב-%2$s</string>
+  <string name="are_you_trying_to_log_in">האם את/ה מנסה להיכנס?</string>
+  <string name="log_in_attempt_by_x_on_y">ניסיון כניסה על ידי %1$s ב־%2$s</string>
   <string name="device_type">סוג מכשיר</string>
   <string name="ip_address">כתובת IP</string>
   <string name="time">זמן</string>
@@ -769,7 +769,7 @@
   <string name="what_would_you_like_to_generate">מה ברצונך ליצור?</string>
   <string name="username_type">סוג שם משתמש</string>
   <string name="plus_addressed_email">דוא\"ל ממוען בפלוס</string>
-  <string name="catch_all_email">דוא\"ל תופס-כל</string>
+  <string name="catch_all_email">דוא\"ל תופס־כל</string>
   <string name="forwarded_email_alias">כינוי דוא\"ל מועבר</string>
   <string name="random_word">מילה אקראית</string>
   <string name="email_required_parenthesis">דוא\"ל (נדרש)</string>
@@ -789,7 +789,7 @@
   <string name="website_required">אתר אינטרנט (נדרש)</string>
   <string name="unknown_x_error_message">אירעה שגיאה %1$s לא ידועה.</string>
   <string name="plus_addressed_email_description">השתמש ביכולות מיעון משנה של ספק הדוא\"ל שלך</string>
-  <string name="catch_all_email_description">השתמש בתיבת דואר תפוס-כל המוגדרת בדומיין שלך.</string>
+  <string name="catch_all_email_description">השתמש בתיבת דואר תפוס־כל המוגדרת בדומיין שלך.</string>
   <string name="forwarded_email_description">צור כינוי דוא\"ל עם שירות העברה חיצוני.</string>
   <string name="random">אקראי</string>
   <string name="connect_to_watch">התחבר לשעון</string>
@@ -803,7 +803,7 @@
 האם ברצונך לעבור לחשבון זה?</string>
   <string name="new_to_bitwarden">חדש ב־Bitwarden?</string>
   <string name="get_master_passwordword_hint">קבל רמז לסיסמה הראשית</string>
-  <string name="logging_in_as_x_on_y">נכנס כ-%1$s ב-%2$s</string>
+  <string name="logging_in_as_x_on_y">נכנס כ־%1$s ב־%2$s</string>
   <string name="not_you">לא את/ה?</string>
   <string name="log_in_with_master_password">כניסה עם סיסמה ראשית</string>
   <string name="log_in_with_another_device">כניסה עם מכשיר</string>
@@ -861,16 +861,16 @@
   <string name="passkey_will_not_be_copied">מפתח גישה לא יועתק</string>
   <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">מפתח הגישה לא יועתק לפריט המשוכפל. האם ברצונך להמשיך לשכפל פריט זה?</string>
   <string name="copy_application">העתק יישום</string>
-  <string name="available_for_two_step_login">זמין עבור כניסה דו-שלבית</string>
+  <string name="available_for_two_step_login">זמין עבור כניסה דו־שלבית</string>
   <string name="master_password_re_prompt_help">עזרה עם בקשה חוזרת של סיסמה ראשית</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">ביטול הנעילה עלול להיכשל עקב מחסור בזיכרון. הקטן את הגדרות זיכרון ה-KDF שלך או הגדר ביטול נעילה ביומטרי כדי לפתור.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">ביטול הנעילה עלול להיכשל עקב מחסור בזיכרון. הקטן את הגדרות זיכרון ה־KDF שלך או הגדר ביטול נעילה ביומטרי כדי לפתור.</string>
   <string name="invalid_api_key">מפתח API לא חוקי</string>
   <string name="invalid_api_token">אסימון API לא חוקי</string>
   <string name="admin_approval_requested">התבקש אישור מנהל</string>
   <string name="your_request_has_been_sent_to_your_admin">הבקשה שלך נשלחה למנהל שלך.</string>
   <string name="you_will_be_notified_once_approved">תקבל התראה כשתאושר.</string>
   <string name="trouble_logging_in">בעיות בכניסה?</string>
-  <string name="logging_in_as_x">נכנס כ-%1$s</string>
+  <string name="logging_in_as_x">נכנס כ־%1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">פעולת פסק הזמן לכספת השתנתה ליציאה</string>
   <string name="block_auto_fill">חסום מילוי אוטומטי</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">מילוי אוטומטי לא יוצע עבור כתובות ה־URI האלה.</string>
@@ -889,11 +889,11 @@
   <string name="login_approved">כניסה אושרה</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">כניסה עם מכשיר צריכה להיות מוגדרת בהגדרות של היישום Bitwarden. צריך אפשרות אחרת?</string>
   <string name="log_in_with_device">כניסה עם מכשיר</string>
-  <string name="logging_in_on">נכנס ב-</string>
+  <string name="logging_in_on">נכנס ב־</string>
   <string name="logging_in_on_with_colon">נכנס ב:</string>
   <string name="vault">כספת</string>
   <string name="appearance">מראה</string>
-  <string name="account_security">אבטחת חשבון</string>
+  <string name="account_security">אבטחת החשבון</string>
   <string name="bitwarden_help_center">מרכז העזרה של Bitwarden</string>
   <string name="contact_bitwarden_support">פנה לתמיכת Bitwarden</string>
   <string name="copy_app_information">העתק פרטי יישום</string>
@@ -903,13 +903,13 @@
   <string name="session_timeout_action">פעולת פסק זמן להפעלה</string>
   <string name="account_fingerprint_phrase">ביטוי טביעת אצבע של חשבון</string>
   <string name="one_hour_and_one_minute">שעה אחת ודקה אחת</string>
-  <string name="one_hour_and_x_minute">שעה אחת ו-%1$s דקות</string>
+  <string name="one_hour_and_x_minute">שעה אחת ו־%1$s דקות</string>
   <string name="x_hours_and_one_minute">%1$s שעות ודקה אחת</string>
-  <string name="x_hours_and_y_minutes">%1$s שעות ו-%2$s דקות</string>
+  <string name="x_hours_and_y_minutes">%1$s שעות ו־%2$s דקות</string>
   <string name="x_hours">%1$s שעות</string>
   <string name="passkey_management_explanation_long">השתמש ב־Bitwarden כדי לשמור מפתחות גישה חדשים ולהיכנס עם מפתחות גישה המאוחסנים בכספת שלך.</string>
   <string name="autofill_services_explanation_long">מסגרת המילוי האוטומטי של אנדרואיד משמשת כדי לסייע במילוי פרטי כניסה אל תוך יישומים אחרים במכשיר שלך.</string>
-  <string name="use_inline_autofill_explanation_long">השתמש במילוי אוטומטי מוטבע אם המקלדת שבחרת תומכת בכך. אחרת, השתמש בשכבת-העל המהווה ברירת מחדל.</string>
+  <string name="use_inline_autofill_explanation_long">השתמש במילוי אוטומטי מוטבע אם המקלדת שבחרת תומכת בכך. אחרת, השתמש בשכבת־העל המהווה ברירת מחדל.</string>
   <string name="additional_options">אפשרויות נוספות</string>
   <string name="continue_to_web_app">להמשיך אל יישום רשת?</string>
   <string name="continue_to_x">להמשיך אל %1$s?</string>
@@ -918,17 +918,17 @@
   <string name="continue_to_privacy_policy">להמשיך אל מדיניות הפרטיות?</string>
   <string name="continue_to_app_store">להמשיך אל חנות האפליקציות?</string>
   <string name="continue_to_device_settings">להמשיך אל הגדרות המכשיר?</string>
-  <string name="two_step_login_description_long">הפוך את החשבון שלך למאובטח יותר על ידי הגדרת כניסה דו-שלבית ביישום הרשת של Bitwarden.</string>
+  <string name="two_step_login_description_long">הפוך את החשבון שלך למאובטח יותר על ידי הגדרת כניסה דו־שלבית ביישום הרשת של Bitwarden.</string>
   <string name="change_master_password_description_long">אתה יכול לשנות את הסיסמה הראשית שלך ביישום הרשת של Bitwarden.</string>
-  <string name="you_can_import_data_to_your_vault_on_x">אתה יכול ייבא נתונים לכספת שלך ב-%1$s.</string>
+  <string name="you_can_import_data_to_your_vault_on_x">אתה יכול ייבא נתונים לכספת שלך ב־%1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">למד עוד אודות אופן השימוש ב־Bitwarden במרכז העזרה.</string>
-  <string name="contact_support_description_long">לא מצליח למצוא את מה שאתה מחפש? פנה אל תמיכת Bitwarden ב-bitwarden.com.</string>
-  <string name="privacy_policy_description_long">בדוק את מדיניות הפרטיות שלנו ב-bitwarden.com.</string>
+  <string name="contact_support_description_long">לא מצליח למצוא את מה שאתה מחפש? פנה אל תמיכת Bitwarden ב־bitwarden.com.</string>
+  <string name="privacy_policy_description_long">בדוק את מדיניות הפרטיות שלנו ב־bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">גלה עוד תכונות של חשבון ה־Bitwarden שלך ביישום הרשת.</string>
   <string name="learn_about_organizations_description_long">Bitwarden מאפשר לך לשתף את פריטי הכספת שלך עם אחרים על ידי שימוש בארגון. למד עוד באתר האינטרנט bitwarden.com.</string>
   <string name="rate_app_description_long">עזור לאחרים לגלות אם Bitwarden מתאים להם. בקר בחנות האפליקציות והשאר דירוג עכשיו.</string>
   <string name="default_dark_theme_description_long">בחר את ערכת הנושא הכהה שבה יש להשתמש כאשר המצב הכהה של המכשיר שלך נמצא בשימוש</string>
-  <string name="created_xy">נוצר ב-%1$s, %2$s</string>
+  <string name="created_xy">נוצר ב־%1$s, %2$s</string>
   <string name="too_many_attempts">יותר מדי ניסיונות</string>
   <string name="account_logged_out_biometric_exceeded">החשבון התנתק.</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">הרשאות הארגון שלך עודכנו, מה שמאלץ אותך להגדיר סיסמה ראשית.</string>
@@ -981,7 +981,7 @@
   <string name="autofill_suggestion">הצעות למילוי אוטומטי</string>
   <string name="continue_to_complete_web_authn_verification">המשך להשלים אימות WebAuthn.</string>
   <string name="launch_web_authn">פתח WebAuthn</string>
-  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">אירעה שגיאה בהתחלת אימות דו-גורמי של WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">אירעה שגיאה בהתחלת אימות דו־גורמי של WebAuthn</string>
   <string name="self_hosted_server_url">URL של שרת אירוח עצמי</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">פעולת מפתח גישה נכשלה בגלל שלא היה ניתן לאמת את המשתמש.</string>
   <string name="user_verification_direction">אימות משתמש</string>
@@ -1002,7 +1002,7 @@
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">קבל הודעות דוא\"ל מאת Bitwarden עבור הכרזות, ייעוץ, והזדמנויות מחקר. <annotation link="unsubscribe">בטל הרשמה</annotation> בכל עת.</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">קבל עצות, הכרזות, והזדמנויות מחקר מאת Bitwarden בדואר הנכנס שלך. בטל הרשמה בכל עת.</string>
   <string name="security_prioritized">אבטחה, מועדפת</string>
-  <string name="welcome_message_1">שמור כניסות, כרטיסים, וזהויות לכספת המאובטחת שלך. Bitwarden משתמש בהצפנה מקצה-לקצה באפס ידיעה כדי להגן על מה שחשוב לך.</string>
+  <string name="welcome_message_1">שמור כניסות, כרטיסים, וזהויות לכספת המאובטחת שלך. Bitwarden משתמש בהצפנה מקצה־לקצה באפס ידיעה כדי להגן על מה שחשוב לך.</string>
   <string name="welcome_message_2">הגדר ביטול נעילה ביומטרי ומילוי אוטומטי כדי להיכנס לחשבונות שלך מבלי להקליד אות אחת.</string>
   <string name="quick_and_easy_login">כניסה מהירה וקלה</string>
   <string name="level_up_your_logins">שדרג את הכניסות שלך</string>
@@ -1053,7 +1053,7 @@
   <string name="expired_link">קישור פג תוקף</string>
   <string name="please_restart_registration_or_try_logging_in">נא להתחיל את ההרשמה מחדש או לנסות להיכנס. ייתכן שכבר יש לך חשבון.</string>
   <string name="restart_registration">התחל הרשמה מחדש</string>
-  <string name="authenticator_sync">סנכרן מאמת</string>
+  <string name="authenticator_sync">סנכרון מאמת</string>
   <string name="allow_bitwarden_authenticator_syncing">אפשר סנכרון מאמת</string>
   <string name="there_was_an_issue_validating_the_registration_token">הייתה בעיה באימות אסימון ההרשמה.</string>
   <string name="turn_on_autofill">הפעל מילוי אוטומטי</string>
@@ -1071,7 +1071,7 @@
   <string name="save_and_protect_your_data">שמור והגן על הנתונים שלך</string>
   <string name="the_vault_protects_more_than_just_passwords">הכספת מגינה על יותר מרק סיסמאות. אחסן כניסות מאובטחות, זהויות, כרטיסים והערות באופן מאובטח כאן.</string>
   <string name="new_login">כניסה חדשה</string>
-  <string name="share_files_and_data_securely_with_anyone_on_any_platform">שתף קבצים ונתונים באופן מאובטח עם כל אחד, בכל פלטפורמה. המידע שלך יישאר מוצפן מקצה-לקצה תוך הגבלת חשיפה.</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">שתף קבצים ונתונים באופן מאובטח עם כל אחד, בכל פלטפורמה. המידע שלך יישאר מוצפן מקצה־לקצה תוך הגבלת חשיפה.</string>
   <string name="send_sensitive_information_safely">שלח מידע רגיש, באופן בטוח</string>
   <string name="import_saved_logins">ייבא כניסות שמורות</string>
   <string name="use_a_computer_to_import_logins">השתמש במחשב כדי לייבא כניסות ממנהל סיסמאות קיים</string>
@@ -1097,9 +1097,9 @@
   <string name="log_in_to_bitwarden">היכנס אל Bitwarden</string>
   <string name="step_3_of_3">שלב 3 מתוך 3</string>
   <string name="import_logins_to_bitwarden">ייבא כניסות אל Bitwarden</string>
-  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">בניווט של Bitwarden, <annotation emphasis="bold">מצא את אפשרות הכלים</annotation> ו<annotation emphasis="bold">בחר \'ייבא נתונים\'.</annotation></string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">מלא את הטופס ו<annotation emphasis="bold">ייבא את קובץ הסיסמאות השמור שלך.</annotation></string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">למען הביטחון שלך, הפקד ל<annotation emphasis="bold">מחוק את קובץ הסיסמאות השמור שלך.</annotation></string>
+  <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">בניווט של Bitwarden, <annotation emphasis="bold">מצא את אפשרות הכלים</annotation> ו<annotation emphasis="bold">בחר את \'ייבוא נתונים\'.</annotation></string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">מלא את הטופס ו<annotation emphasis="bold">ייבא את קובץ הסיסמאות השמורות שלך.</annotation></string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">למען הביטחון שלך, הפקד ל<annotation emphasis="bold">מחוק את קובץ הסיסמאות השמורות שלך.</annotation></string>
   <string name="need_help_check_out_import_help">צריך עזרה? בדוק את <annotation link="importHelp">עזרה עם ייבוא</annotation>.</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">שמור את הקובץ המיוצא </annotation> במקום כלשהו במחשב שלך שאתה יכול למצוא בקלות.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">זה לא שרת מוכר של Bitwarden. ייתכן שתצטרך לבדוק עם הספק שלך או לעדכן את השרת שלך.</string>
@@ -1110,7 +1110,7 @@
   <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">היכנס אל bitwarden.com כדי לנהל את החשבון שלך ולעדכן הגדרות.</string>
   <string name="autofill_passwords">מלא אוטומטית סיסמאות</string>
   <string name="set_up_autofill_on_all_your_devices">הגדר מילוי אוטומטי בכל המכשירים שלך כדי להיכנס עם הקשה אחת בכל מקום.</string>
-  <string name="import_successful">הייבוא הושלם!</string>
+  <string name="import_successful">הייבוא הצליח!</string>
   <string name="manage_your_logins_from_anywhere_with_bitwarden_tools">נהל את כל הכניסות שלך מכל מקום עם הכלים של Bitwarden לרשת ושולחן העבודה.</string>
   <string name="bitwarden_tools">כלים של Bitwarden</string>
   <string name="got_it">הבנתי</string>
@@ -1141,15 +1141,15 @@
   <string name="copy_address">העתק כתובת</string>
   <string name="important_notice">הודעה חשובה</string>
   <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden ישלח קוד לדוא\"ל החשבון שלך כדי לאמת כניסות ממכשירים חדשים החל מפברואר 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">האם יש לך גישה מהימנה לדוא\"ל שלך, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
+  <string name="do_you_have_reliable_access_to_your_email">יש לך גישה מהימנה לדוא\"ל שלך, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
   <string name="yes_i_can_reliably_access_my_email">כן, אני יכול לגשת לדוא\"ל שלי באופן מהימן</string>
   <string name="biometrics_no_longer_supported_title">זיהוי ביומטרי אינו נתמך יותר במכשיר זה</string>
   <string name="biometrics_no_longer_supported">יצאת מהחשבון שלך בגלל שהזיהוי הביומטרי של המכשיר שלך לא עומד בדרישות האבטחה האחרונות. כדי לעדכן הגדרות, היכנס פעם נוספת או פנה אל המנהל שלך עבור גישה.</string>
   <string name="cxp_import">ייבוא CXP</string>
   <string name="cxp_export">ייצוא CXP</string>
-  <string name="set_up_two_step_login">הגדר כניסה דו-שלבית</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">אתה יכול להגדיר כניסה דו-שלבית כדרך חלופית להגן על החשבון שלך או לשנות את הדוא\"ל שלך לאחד שאתה יכול לגשת אליו.</string>
-  <string name="turn_on_two_step_login">הפעל כניסה דו-שלבית</string>
+  <string name="set_up_two_step_login">הגדר כניסה דו־שלבית</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">אתה יכול להגדיר כניסה דו־שלבית כדרך חלופית להגן על החשבון שלך או לשנות את הדוא\"ל שלך לאחד שאתה יכול לגשת אליו.</string>
+  <string name="turn_on_two_step_login">הפעל כניסה דו־שלבית</string>
   <string name="change_account_email">שנה את דוא\"ל החשבון</string>
   <string name="choose_three_or_four_random_words">בחר שלוש או ארבע מילים אקראיות</string>
   <string name="pick_three_or_four_random_unrelated_words">בחר שלוש או ארבע מילים אקראיות ולא קשורות שאתה יכול לזכור בקלות. חשוב על <annotation emphasis="bold">חפצים, מקומות, או דברים</annotation> שאתה אוהב.</string>
@@ -1169,7 +1169,7 @@
   <string name="use_this_button_to_generate_a_new_unique_password">השתמש בלחצן זה כדי ליצור סיסמה ייחודית חדשה.</string>
   <string name="coachmark_1_of_3">1 מתוך 3</string>
   <string name="coachmark_2_of_3">2 מתוך 3</string>
-  <string name="you_ll_only_need_to_set_up_authenticator_key">אתה תצטרך רק להגדיר מפתח מאמת עבור כניסות שדורשות אימות דו-גורמי עם קוד. המפתח יצור באופן רציף קודים בני שש ספרות בהם תוכל להשתמש כדי להיכנס.</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">אתה תצטרך רק להגדיר מפתח מאמת עבור כניסות שדורשות אימות דו־גורמי עם קוד. המפתח יצור באופן רציף קודים בני שש ספרות בהם תוכל להשתמש כדי להיכנס.</string>
   <string name="coachmark_3_of_3">3 מתוך 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">אתה מוכרח להוסיף כתובת אינטרנט על מנת להשתמש במילוי אוטומטי כדי לגשת לחשבון זה.</string>
   <string name="mutual_tls">TLS הדדי</string>
@@ -1222,7 +1222,7 @@
   <string name="self_host_server_url">URL של שרת אירוח עצמי</string>
   <string name="use_chrome_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome</string>
   <string name="use_chrome_beta_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome (בטא)</string>
-  <string name="improves_login_filling_for_supported_websites_on_chrome">משפר את המילוי האוטומטי עבור אתרים נתמכים ב־Chrome. ברגע שתאפשר, אתה תופנה להגדרות Chrome כדי לאפשר מילוי אוטומטי של צד-שלישי.</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">משפר את המילוי האוטומטי עבור אתרים נתמכים ב־Chrome. ברגע שתאפשר, אתה תופנה להגדרות Chrome כדי לאפשר מילוי אוטומטי של צד שלישי.</string>
   <string name="show_more">הצג עוד</string>
   <string name="no_folder">ללא תיקייה</string>
   <string name="show_less">הצג פחות</string>
