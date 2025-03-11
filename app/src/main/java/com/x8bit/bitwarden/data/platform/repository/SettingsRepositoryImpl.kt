@@ -87,6 +87,22 @@ class SettingsRepositoryImpl(
                 initialValue = settingsDiskSource.appTheme,
             )
 
+    override var isDynamicColorsEnabled: Boolean
+        get() = settingsDiskSource.isDynamicColorsEnabled ?: false
+        set(value) {
+            settingsDiskSource.isDynamicColorsEnabled = value
+        }
+
+    override val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isDynamicColorsEnabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource.isDynamicColorsEnabled ?: false,
+            )
+
     override var initialAutofillDialogShown: Boolean
         get() = settingsDiskSource.initialAutofillDialogShown ?: false
         set(value) {

@@ -86,6 +86,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var hasSeenAddLoginCoachMark: Boolean? = null
     private var hasSeenGeneratorCoachMark: Boolean? = null
     private var storedFlightRecorderData: FlightRecorderDataSet? = null
+    private var storedIsDynamicColorsEnabled: Boolean? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -98,6 +99,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private val mutableVaultRegisteredForExportFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableIsDynamicColorsEnabled =
+        bufferedMutableSharedFlow<Boolean?>()
 
     override var appLanguage: AppLanguage?
         get() = storedAppLanguage
@@ -119,6 +123,17 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow.onSubscription {
             emit(appTheme)
+        }
+    override var isDynamicColorsEnabled: Boolean?
+        get() = storedIsDynamicColorsEnabled
+        set(value) {
+            storedIsDynamicColorsEnabled = value
+            mutableIsDynamicColorsEnabled.tryEmit(value)
+        }
+
+    override val isDynamicColorsEnabledFlow: Flow<Boolean?>
+        get() = mutableIsDynamicColorsEnabled.onSubscription {
+            emit(isDynamicColorsEnabled)
         }
 
     override var screenCaptureAllowed: Boolean?

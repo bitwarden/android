@@ -47,6 +47,7 @@ private const val SHOULD_SHOW_ADD_LOGIN_COACH_MARK = "shouldShowAddLoginCoachMar
 private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMark"
 private const val RESUME_SCREEN = "resumeScreen"
 private const val FLIGHT_RECORDER_KEY = "flightRecorderData"
+private const val IS_DYNAMIC_COLORS_ENABLED = "isDynamicColorsEnabled"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -96,6 +97,8 @@ class SettingsDiskSourceImpl(
 
     private val mutableVaultRegisteredForExportFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableIsDynamicColorsEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     init {
         migrateScreenCaptureSetting()
@@ -159,6 +162,18 @@ class SettingsDiskSourceImpl(
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow
             .onSubscription { emit(appTheme) }
+    override var isDynamicColorsEnabled: Boolean?
+        get() = getBoolean(key = IS_DYNAMIC_COLORS_ENABLED) ?: false
+        set(value) {
+            putBoolean(
+                key = IS_DYNAMIC_COLORS_ENABLED,
+                value = value,
+            )
+            mutableIsDynamicColorsEnabledFlow.tryEmit(value)
+        }
+    override val isDynamicColorsEnabledFlow: Flow<Boolean?>
+        get() = mutableIsDynamicColorsEnabledFlow
+            .onSubscription { emit(getBoolean(IS_DYNAMIC_COLORS_ENABLED)) }
 
     override var isIconLoadingDisabled: Boolean?
         get() = getBoolean(key = DISABLE_ICON_LOADING_KEY)

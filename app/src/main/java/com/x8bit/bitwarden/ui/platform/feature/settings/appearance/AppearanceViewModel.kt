@@ -30,6 +30,7 @@ class AppearanceViewModel @Inject constructor(
             language = settingsRepository.appLanguage,
             showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             theme = settingsRepository.appTheme,
+            isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
         ),
 ) {
 
@@ -46,6 +47,7 @@ class AppearanceViewModel @Inject constructor(
         is AppearanceAction.LanguageChange -> handleLanguageChanged(action)
         is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
         is AppearanceAction.ThemeChange -> handleThemeChanged(action)
+        is AppearanceAction.DynamicColorsToggle -> handleDynamicColorsToggled(action)
         is AppearanceAction.Internal.AppLanguageStateUpdateReceive -> {
             handleLanguageStateChange(action)
         }
@@ -80,6 +82,11 @@ class AppearanceViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(theme = action.theme) }
         settingsRepository.appTheme = action.theme
     }
+
+    private fun handleDynamicColorsToggled(action: AppearanceAction.DynamicColorsToggle) {
+        mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isEnabled) }
+        settingsRepository.isDynamicColorsEnabled = action.isEnabled
+    }
 }
 
 /**
@@ -90,6 +97,7 @@ data class AppearanceState(
     val language: AppLanguage,
     val showWebsiteIcons: Boolean,
     val theme: AppTheme,
+    val isDynamicColorsEnabled: Boolean,
 ) : Parcelable
 
 /**
@@ -142,4 +150,11 @@ sealed class AppearanceAction {
          */
         data class AppLanguageStateUpdateReceive(val language: AppLanguage) : Internal()
     }
+
+    /**
+     * Indicates that the user toggled the Dynamic Colors switch to [isEnabled].
+     */
+    data class DynamicColorsToggle(
+        val isEnabled: Boolean,
+    ) : AppearanceAction()
 }

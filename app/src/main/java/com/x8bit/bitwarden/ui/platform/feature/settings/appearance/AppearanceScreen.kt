@@ -100,6 +100,20 @@ fun AppearanceScreen(
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenSwitch(
+                label = stringResource(id = R.string.dynamic_colors),
+                supportingText = stringResource(id = R.string.dynamic_colors_description),
+                isChecked = state.isDynamicColorsEnabled,
+                onCheckedChange = remember(viewModel) {
+                    { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(it)) }
+                },
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .testTag("DynamicColorsSwitch")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenSwitch(
                 label = stringResource(id = R.string.show_website_icons),
                 supportingText = stringResource(id = R.string.show_website_icons_description),
                 isChecked = state.showWebsiteIcons,
