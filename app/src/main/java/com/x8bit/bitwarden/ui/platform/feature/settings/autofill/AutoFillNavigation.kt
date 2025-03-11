@@ -14,6 +14,7 @@ fun NavGraphBuilder.autoFillDestination(
     onNavigateBack: () -> Unit,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToTrustedAppsScreen: () -> Unit,
 ) {
     composableWithPushTransitions(
         route = AUTO_FILL_ROUTE,
@@ -22,6 +23,7 @@ fun NavGraphBuilder.autoFillDestination(
             onNavigateBack = onNavigateBack,
             onNavigateToBlockAutoFillScreen = onNavigateToBlockAutoFillScreen,
             onNavigateToSetupAutofill = onNavigateToSetupAutofill,
+            onNavigateToPrivilegedAppsScreen = onNavigateToTrustedAppsScreen,
         )
     }
 }

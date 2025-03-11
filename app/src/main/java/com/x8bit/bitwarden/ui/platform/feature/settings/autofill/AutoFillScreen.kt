@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -31,6 +33,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
@@ -50,6 +55,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.ChromeAutofillSettingsCard
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -64,6 +70,7 @@ fun AutoFillScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
+    onNavigateToPrivilegedAppsScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -100,6 +107,9 @@ fun AutoFillScreen(
                 intentManager.startChromeAutofillSettingsActivity(
                     releaseChannel = event.releaseChannel,
                 )
+            }
+            AutoFillEvent.NavigateToPrivilegedApps -> {
+                onNavigateToPrivilegedAppsScreen()
             }
         }
     }
@@ -230,12 +240,21 @@ fun AutoFillScreen(
                         id = R.string.set_bitwarden_as_passkey_manager_description,
                     ),
                     withDivider = false,
-                    cardStyle = CardStyle.Full,
+                    cardStyle = CardStyle.Top(hasDivider = true),
                     modifier = Modifier
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
-                Spacer(modifier = Modifier.height(height = 8.dp))
+                PrivilegedAppsRow(
+                    text = R.string.privileged_apps.asText(),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(AutoFillAction.TrustedAppsClick) }
+                    },
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(8.dp))
             }
             AccessibilityAutofillSwitch(
                 isAccessibilityAutoFillEnabled = state.isAccessibilityAutofillEnabled,
@@ -372,4 +391,28 @@ private fun DefaultUriMatchTypeRow(
         cardStyle = CardStyle.Full,
         modifier = modifier,
     )
+}
+
+@Composable
+private fun PrivilegedAppsRow(
+    text: Text,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenTextRow(
+        text = text(),
+        description = stringResource(R.string.privileged_apps_description),
+        onClick = onClick,
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier,
+    ) {
+        Icon(
+            painter = rememberVectorPainter(id = R.drawable.ic_chevron_right),
+            contentDescription = null,
+            tint = BitwardenTheme.colorScheme.icon.primary,
+            modifier = Modifier
+                .mirrorIfRtl()
+                .size(size = 16.dp),
+        )
+    }
 }
