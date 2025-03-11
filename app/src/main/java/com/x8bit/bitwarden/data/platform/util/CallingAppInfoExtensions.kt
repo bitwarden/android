@@ -36,8 +36,8 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
  */
 fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOriginResult {
 
-    if (!allowList.contains("\"package_name\": \"$packageName\"")) {
-        return Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed
+    if (!allowList.contains("\"$packageName\"")) {
+        return Fido2ValidateOriginResult.Error.PrivilegedAppError.PackageNameNotFound
     }
 
     return try {
@@ -50,7 +50,7 @@ fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOrigin
     } catch (_: IllegalStateException) {
         // We know the package name is in the allow list so we can infer that this exception is
         // thrown because no matching signature is found.
-        Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
+        Fido2ValidateOriginResult.Error.PrivilegedAppError.PrivilegedAppSignatureNotFound
     } catch (_: IllegalArgumentException) {
         // The allow list is not formatted correctly so we notify the user passkeys are not
         // supported for this application

@@ -26,45 +26,56 @@ sealed class Fido2ValidateOriginResult {
         abstract val messageResId: Int
 
         /**
-         * Indicates the digital asset links file could not be located.
+         * Indicates the origin could not be validated due to a digital asset link error.
          */
-        data object AssetLinkNotFound : Error() {
-            override val messageResId =
-                R.string.passkey_operation_failed_because_of_missing_asset_links
+        sealed class DigitalAssetLinkError : Error() {
+            /**
+             * Indicates the digital asset links file could not be located.
+             */
+            data object AssetLinkNotFound : DigitalAssetLinkError() {
+                override val messageResId =
+                    R.string.passkey_operation_failed_because_of_missing_asset_links
+            }
+
+            /**
+             * Indicates the application package name was not found in the digital asset links file.
+             */
+            data object ApplicationNotFound : DigitalAssetLinkError() {
+                override val messageResId =
+                    R.string.passkey_operation_failed_because_app_not_found_in_asset_links
+            }
+
+            /**
+             * Indicates the application fingerprint was not found the digital asset links file.
+             */
+            data object ApplicationFingerprintNotVerified : DigitalAssetLinkError() {
+                override val messageResId =
+                    R.string.passkey_operation_failed_because_app_could_not_be_verified
+            }
         }
 
         /**
-         * Indicates the application package name was not found in the digital asset links file.
+         * Indicates the calling application is privileged but it is not considered trusted by
+         * reputable sources or the user.
          */
-        data object ApplicationNotFound : Error() {
-            override val messageResId =
-                R.string.passkey_operation_failed_because_app_not_found_in_asset_links
-        }
+        sealed class PrivilegedAppError : Error() {
+            /**
+             * Indicates the calling application is privileged but its package name is not found
+             * within the privileged app allow list.
+             */
+            data object PackageNameNotFound : PrivilegedAppError() {
+                override val messageResId =
+                    R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+            }
 
-        /**
-         * Indicates the application fingerprint was not found the digital asset links file.
-         */
-        data object ApplicationFingerprintNotVerified : Error() {
-            override val messageResId =
-                R.string.passkey_operation_failed_because_app_could_not_be_verified
-        }
-
-        /**
-         * Indicates the calling application is privileged but its package name is not found within
-         * the privileged app allow list.
-         */
-        data object PrivilegedAppNotAllowed : Error() {
-            override val messageResId =
-                R.string.passkey_operation_failed_because_browser_is_not_privileged
-        }
-
-        /**
-         * Indicates the calling app is privileged but but no matching signing certificate signature
-         * is present in the allow list.
-         */
-        data object PrivilegedAppSignatureNotFound : Error() {
-            override val messageResId =
-                R.string.passkey_operation_failed_because_browser_signature_does_not_match
+            /**
+             * Indicates the calling app is privileged but no matching signing certificate signature
+             * is present in the allow list.
+             */
+            data object PrivilegedAppSignatureNotFound : PrivilegedAppError() {
+                override val messageResId =
+                    R.string.passkey_operation_failed_because_browser_signature_does_not_match
+            }
         }
 
         /**

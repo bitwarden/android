@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
@@ -285,6 +286,9 @@ fun VaultAddEditScreen(
                 )
             }
         },
+        onTrustPrivilegedAppClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultAddEditAction.Common.TrustPrivilegedAppClick) }
+        },
     )
 
     if (pendingDeleteCipher) {
@@ -461,6 +465,7 @@ private fun VaultAddEditItemDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String) -> Unit,
     onRetryPinSetUpFido2Verification: () -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onTrustPrivilegedAppClick: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
@@ -545,6 +550,26 @@ private fun VaultAddEditItemDialogs(
                     stringResource(id = R.string.pin),
                 ),
                 onDismissRequest = onRetryPinSetUpFido2Verification,
+            )
+        }
+
+        is VaultAddEditState.DialogState.Fido2PrivilegedAppNotTrusted -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.application_not_trusted),
+                message = dialogState.message.invoke(),
+                confirmButtonText = stringResource(R.string.trust),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = { onTrustPrivilegedAppClick() },
+                onDismissClick = {
+                    onFido2ErrorDismiss(
+                        R.string.passkey_operation_failed_because_browser_x_is_not_trusted.asText(),
+                    )
+                },
+                onDismissRequest = {
+                    onFido2ErrorDismiss(
+                        R.string.passkey_operation_failed_because_browser_x_is_not_trusted.asText(),
+                    )
+                },
             )
         }
 

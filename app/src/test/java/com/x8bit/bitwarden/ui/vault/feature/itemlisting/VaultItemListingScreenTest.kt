@@ -17,9 +17,6 @@ import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -27,6 +24,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2AssertionCompletion
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2GetCredentialsCompletion
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2RegistrationCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
@@ -1906,16 +1906,18 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
-        val result = Fido2RegisterCredentialResult.Success("mockResponse")
+        val result = Fido2RegistrationCompletion.Success("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
         verify {
-            fido2CompletionManager.completeFido2Registration(result)
+            fido2CompletionManager.completeFido2Registration(
+                Fido2RegistrationCompletion.Success("mockResponse"),
+            )
         }
     }
 
     @Test
     fun `CompleteFido2Assertion event should call Fido2CompletionManager with result`() {
-        val result = Fido2CredentialAssertionResult.Success("mockResponse")
+        val result = Fido2AssertionCompletion.Success("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Assertion(result))
         verify {
             fido2CompletionManager.completeFido2Assertion(result)
@@ -1924,11 +1926,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `CompleteFido2GetCredentials event should call Fido2CompletionManager with result`() {
-        val result = Fido2GetCredentialsResult.Success(
-            userId = "mockUserId",
-            options = mockk(),
-            credentials = mockk(),
-        )
+        val result = Fido2GetCredentialsCompletion.Success(entries = mockk())
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2GetCredentialsRequest(result))
         verify {
             fido2CompletionManager.completeFido2GetCredentialRequest(result)

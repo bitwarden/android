@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -282,6 +284,13 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onTrustPrivilegedAppClick = remember(viewModel) {
+            { cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.TrustPrivilegedAppClick(selectedCipherId = cipherId),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -311,6 +320,7 @@ private fun VaultItemListingDialogs(
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
+    onTrustPrivilegedAppClick: (cipherId: String?) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -406,6 +416,28 @@ private fun VaultItemListingDialogs(
                 onDismissRequest = onDismissRequest,
                 onOptionSelected = onVaultItemTypeSelected,
                 excludedOptions = dialogState.excludedOptions,
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2TrustPrivilegedAppPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.an_error_has_occurred),
+                message = dialogState.message.invoke(),
+                confirmButtonText = stringResource(R.string.trust),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = {
+                    onTrustPrivilegedAppClick(dialogState.selectedCipherId)
+                },
+                onDismissClick = {
+                    onDismissFido2ErrorDialog(
+                        R.string.passkey_operation_failed_because_browser_x_is_not_trusted.asText(),
+                    )
+                },
+                onDismissRequest = {
+                    onDismissFido2ErrorDialog(
+                        R.string.passkey_operation_failed_because_browser_x_is_not_trusted.asText(),
+                    )
+                },
             )
         }
 
@@ -505,7 +537,7 @@ private fun VaultItemListingScaffold(
                     collectionClick = vaultItemListingHandlers.collectionClick,
                     folderClick = vaultItemListingHandlers.folderClick,
                     masterPasswordRepromptSubmit =
-                    vaultItemListingHandlers.masterPasswordRepromptSubmit,
+                        vaultItemListingHandlers.masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
                     modifier = Modifier.fillMaxSize(),
                 )

@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -32,6 +33,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
+import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -42,6 +44,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2RegistrationCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -58,6 +61,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
+import com.x8bit.bitwarden.ui.vault.feature.util.errorMessage
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
@@ -104,6 +108,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
+    private val privilegedAppRepository: PrivilegedAppRepository,
     private val fido2CredentialManager: Fido2CredentialManager,
     generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
@@ -367,6 +372,10 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.DismissBottomSheet -> {
                 handleDismissBottomSheet()
             }
+
+            VaultAddEditAction.Common.TrustPrivilegedAppClick -> {
+                handleTrustPrivilegedAppClick()
+            }
         }
     }
 
@@ -454,20 +463,26 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
 
         if (fido2CredentialManager.isUserVerified) {
-            registerFido2CredentialToCipher(request, cipherView)
+            viewModelScope.launch {
+                registerFido2CredentialToCipher(request, cipherView)
+            }
             return
         }
 
         val createOptions = fido2CredentialManager
             .getPasskeyAttestationOptionsOrNull(request.requestJson)
             ?: run {
-                showFido2ErrorDialog()
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                )
                 return
             }
 
         when (createOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
-                registerFido2CredentialToCipher(request, cipherView)
+                viewModelScope.launch {
+                    registerFido2CredentialToCipher(request, cipherView)
+                }
             }
 
             UserVerificationRequirement.PREFERRED -> {
@@ -480,26 +495,41 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun registerFido2CredentialToCipher(
+    private suspend fun trustPrivilegedApp(request: Fido2CreateCredentialRequest) {
+        val signature = request.callingAppInfo.getSignatureFingerprintAsHexString()
+            ?: run {
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_browser_signature_does_not_match
+                        .asText(),
+                )
+                return
+            }
+        privilegedAppRepository.addTrustedPrivilegedApp(
+            packageName = request.packageName,
+            signature = signature,
+        )
+    }
+
+    private suspend fun registerFido2CredentialToCipher(
         request: Fido2CreateCredentialRequest,
         cipherView: CipherView,
     ) {
-        viewModelScope.launch {
-            val userId = authRepository.activeUserId
-                ?: run {
-                    showFido2ErrorDialog()
-                    return@launch
-                }
-            val result: Fido2RegisterCredentialResult =
-                fido2CredentialManager.registerFido2Credential(
-                    userId = userId,
-                    fido2CreateCredentialRequest = request,
-                    selectedCipherView = cipherView,
+        val userId = authRepository.activeUserId
+            ?: run {
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 )
-            sendAction(
-                VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
+                return
+            }
+        val result: Fido2RegisterCredentialResult =
+            fido2CredentialManager.registerFido2Credential(
+                userId = userId,
+                fido2CreateCredentialRequest = request,
+                selectedCipherView = cipherView,
             )
-        }
+        sendAction(
+            VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
+        )
     }
 
     private fun handleAttachmentsClick() {
@@ -576,12 +606,14 @@ class VaultAddEditViewModel @Inject constructor(
                     registerFido2Credential(request, content.toCipherView())
                 }
             }
-            ?: showFido2ErrorDialog()
+            ?: showFido2ErrorDialog(
+                R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+            )
     }
 
     private fun handleUserVerificationLockOut() {
         fido2CredentialManager.isUserVerified = false
-        showFido2ErrorDialog()
+        showFido2UserVerificationErrorDialog()
     }
 
     private fun handleUserVerificationSuccess() {
@@ -595,17 +627,21 @@ class VaultAddEditViewModel @Inject constructor(
             ?.toFido2CreateRequestOrNull()
             ?.let { request ->
                 onContent { content ->
-                    registerFido2CredentialToCipher(
-                        request = request,
-                        cipherView = content.toCipherView(),
-                    )
+                    viewModelScope.launch {
+                        registerFido2CredentialToCipher(
+                            request = request,
+                            cipherView = content.toCipherView(),
+                        )
+                    }
                 }
             }
-            ?: showFido2ErrorDialog()
+            ?: showFido2ErrorDialog(
+                R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+            )
 
     private fun handleUserVerificationFail() {
         fido2CredentialManager.isUserVerified = false
-        showFido2ErrorDialog()
+        showFido2UserVerificationErrorDialog()
     }
 
     private fun handleFido2ErrorDialogDismissed(
@@ -615,7 +651,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Error(
+                result = Fido2RegistrationCompletion.Error(
                     message = action.message,
                 ),
             ),
@@ -627,7 +663,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Cancelled,
+                result = Fido2RegistrationCompletion.Cancelled,
             ),
         )
     }
@@ -640,7 +676,7 @@ class VaultAddEditViewModel @Inject constructor(
             .value
             ?.activeAccount
             ?: run {
-                showFido2ErrorDialog()
+                showFido2UserVerificationErrorDialog()
                 return
             }
 
@@ -725,7 +761,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDismissFido2VerificationDialogClick() {
-        showFido2ErrorDialog()
+        showFido2UserVerificationErrorDialog()
     }
 
     private fun handleSelectOrAddFolderForItem() {
@@ -749,6 +785,28 @@ class VaultAddEditViewModel @Inject constructor(
             it.copy(
                 bottomSheetState = null,
             )
+        }
+    }
+
+    private fun handleTrustPrivilegedAppClick() {
+        onContent { content ->
+            val request = specialCircumstanceManager
+                .specialCircumstance
+                ?.toFido2CreateRequestOrNull()
+                ?: run {
+                    showFido2ErrorDialog(
+                        R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    )
+                    return@onContent
+                }
+
+            viewModelScope.launch {
+                trustPrivilegedApp(request)
+                registerFido2CredentialToCipher(
+                    request,
+                    content.toCipherView(),
+                )
+            }
         }
     }
 
@@ -1818,20 +1876,55 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
         clearDialogState()
+        val request = specialCircumstanceManager
+            .specialCircumstance
+            ?.toFido2CreateRequestOrNull()
+            ?: run {
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                )
+                return
+            }
         when (action.result) {
+            is Fido2RegisterCredentialResult.PrivilegedAppNotTrusted -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultAddEditState.DialogState.Fido2PrivilegedAppNotTrusted(
+                            R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+                                .asText(request.packageName),
+                        ),
+                    )
+                }
+            }
+
             is Fido2RegisterCredentialResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        Fido2RegistrationCompletion.Error(
+                            message = action.result.errorMessage,
+                        ),
+                    ),
+                )
             }
 
             is Fido2RegisterCredentialResult.Success -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+                sendEvent(
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        Fido2RegistrationCompletion.Success(action.result.responseJson),
+                    ),
+                )
             }
 
             Fido2RegisterCredentialResult.Cancelled -> {
-                // no-op: The OS will handle re-displaying the system prompt.
+                sendEvent(
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        Fido2RegistrationCompletion.Cancelled,
+                    ),
+                )
             }
         }
-        sendEvent(VaultAddEditEvent.CompleteFido2Registration(action.result))
     }
 
     private fun handleValidateFido2PasswordResultReceive(
@@ -1841,7 +1934,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         when (action.result) {
             is ValidatePasswordResult.Error -> {
-                showFido2ErrorDialog()
+                showFido2UserVerificationErrorDialog()
             }
 
             is ValidatePasswordResult.Success -> {
@@ -1863,7 +1956,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         when (action.result) {
             is ValidatePinResult.Error -> {
-                showFido2ErrorDialog()
+                showFido2UserVerificationErrorDialog()
             }
 
             is ValidatePinResult.Success -> {
@@ -1885,7 +1978,7 @@ class VaultAddEditViewModel @Inject constructor(
                 it.copy(dialog = errorDialogState)
             }
         } else {
-            showFido2ErrorDialog()
+            showFido2UserVerificationErrorDialog()
         }
     }
 
@@ -1907,12 +2000,21 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
-    private fun showFido2ErrorDialog() {
+    private fun showFido2UserVerificationErrorDialog() {
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun showFido2ErrorDialog(message: Text) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Fido2Error(
+                    message = message,
                 ),
             )
         }
@@ -2625,6 +2727,12 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object Fido2PinSetUpError : DialogState()
+
+        /**
+         * Displays a dialog to alert the user that the FIDO 2 privileged app is not trusted.
+         */
+        @Parcelize
+        data class Fido2PrivilegedAppNotTrusted(val message: Text) : DialogState()
     }
 }
 
@@ -2697,7 +2805,7 @@ sealed class VaultAddEditEvent {
      * @property result the result of FIDO 2 credential registration.
      */
     data class CompleteFido2Registration(
-        val result: Fido2RegisterCredentialResult,
+        val result: Fido2RegistrationCompletion,
     ) : BackgroundEvent, VaultAddEditEvent()
 
     /**
@@ -2951,6 +3059,11 @@ sealed class VaultAddEditAction {
          * The user has selected to add a new folder to associate with the item.
          */
         data class AddNewFolder(val newFolderName: String) : Common()
+
+        /**
+         * The user has selected to trust a privileged app.
+         */
+        data object TrustPrivilegedAppClick : Common()
     }
 
     /**

@@ -40,11 +40,11 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2RegistrationCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -222,7 +222,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
-        val result = Fido2RegisterCredentialResult.Success(
+        val result = Fido2RegistrationCompletion.Success(
             responseJson = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
