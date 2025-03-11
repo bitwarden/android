@@ -966,7 +966,7 @@ Do you want to switch to this account?</string>
   <string name="remind_me_later">Remind me later</string>
   <string name="notice">Notice</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
-  <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not trusted. Select \"Trust\" to add %1$s to the list of trusted applications or \"Cancel"\ to abort the operation.</string>
+  <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not recognized. Select \"Trust\" to add %1$s to the list of locally trusted applications.</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
@@ -1244,4 +1244,11 @@ Do you want to switch to this account?</string>
   <string name="trusted_by_the_community">Trusted by the Community</string>
   <string name="trusted_by_google">Trusted by Google</string>
   <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+  <string name="google">Google</string>
+  <string name="the_community">the Community</string>
+  <string name="you">YOU</string>
+  <string name="installed_apps">Installed apps</string>
+  <string name="trusted_by_x">Trusted by %s</string>
+  <string name="all_trusted_apps">All trusted apps</string>
+  <string name="unrecognized_application">Unrecognized browser</string>
 </resources>

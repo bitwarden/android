@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.PrivilegedAppAllowListJson
 import com.x8bit.bitwarden.data.autofill.fido2.model.PrivilegedAppData
 import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
+import com.x8bit.bitwarden.data.platform.manager.BitwardenPackageManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -33,13 +34,13 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class PrivilegedAppsViewModel @Inject constructor(
     private val privilegedAppRepository: PrivilegedAppRepository,
+    private val bitwardenPackageManager: BitwardenPackageManager,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<Fido2TrustState, PrivilegedAppsListEvent, PrivilegedAppsListAction>(
+) : BaseViewModel<PrivilegedAppsListState, PrivilegedAppsListEvent, PrivilegedAppsListAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: Fido2TrustState(
-            googleTrustedApps = persistentListOf<PrivilegedAppListItem>(),
-            communityTrustedApps = persistentListOf<PrivilegedAppListItem>(),
-            userTrustedApps = persistentListOf<PrivilegedAppListItem>(),
+        ?: PrivilegedAppsListState(
+            installedApps = persistentListOf(),
+            notInstalledApps = persistentListOf(),
             dialogState = null,
         ),
 ) {
@@ -71,7 +72,7 @@ class PrivilegedAppsViewModel @Inject constructor(
             }
 
             is PrivilegedAppsListAction.Internal.PrivilegedAppDataStateReceive -> {
-                handleTrustedAppDataStateReceive(action.dataState)
+                handleTrustedAppDataStateReceive(action)
             }
         }
     }
@@ -84,8 +85,10 @@ class PrivilegedAppsViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
-    private fun handleTrustedAppDataStateReceive(dataState: DataState<PrivilegedAppData>) {
-        when (dataState) {
+    private fun handleTrustedAppDataStateReceive(
+        action: PrivilegedAppsListAction.Internal.PrivilegedAppDataStateReceive,
+    ) {
+        when (val dataState = action.dataState) {
             is DataState.Loaded -> handleTrustedAppDataStateLoaded(dataState)
             DataState.Loading -> handleTrustedAppDataStateLoading()
             is DataState.Pending -> handleTrustedAppDataStatePending(dataState)
@@ -98,7 +101,7 @@ class PrivilegedAppsViewModel @Inject constructor(
     private fun handleTrustedAppDataStateError() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = Fido2TrustState.DialogState.General(
+                dialogState = PrivilegedAppsListState.DialogState.General(
                     message = R.string.generic_error_message.asText(),
                 ),
             )
@@ -106,45 +109,21 @@ class PrivilegedAppsViewModel @Inject constructor(
     }
 
     private fun handleTrustedAppDataStateLoaded(
-        loaded: DataState.Loaded<PrivilegedAppData>,
+        dataState: DataState.Loaded<PrivilegedAppData>,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                googleTrustedApps = loaded.data
-                    .googleTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                communityTrustedApps = loaded.data
-                    .communityTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                userTrustedApps = loaded.data
-                    .userTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                dialogState = null,
-            )
-        }
+        updateViewStateWithData(data = dataState.data, dialogState = null)
     }
 
     private fun handleTrustedAppDataStateLoading() {
-        mutableStateFlow.update { it.copy(dialogState = Fido2TrustState.DialogState.Loading) }
+        mutableStateFlow.update {
+            it.copy(dialogState = PrivilegedAppsListState.DialogState.Loading)
+        }
     }
 
     private fun handleTrustedAppDataStatePending(
         state: DataState.Pending<PrivilegedAppData>,
     ) {
-        mutableStateFlow.update {
-            it.copy(
-                googleTrustedApps = state.data
-                    .googleTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                communityTrustedApps = state.data
-                    .communityTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                userTrustedApps = state.data
-                    .userTrustedApps
-                    .toImmutablePrivilegedAppList(),
-                dialogState = Fido2TrustState.DialogState.Loading,
-            )
-        }
+        updateViewStateWithData(state.data, PrivilegedAppsListState.DialogState.Loading)
     }
 
     private fun handleUserTrustedAppDeleteClick(
@@ -152,7 +131,8 @@ class PrivilegedAppsViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = Fido2TrustState.DialogState.ConfirmDeleteTrustedApp(action.app),
+                dialogState =
+                    PrivilegedAppsListState.DialogState.ConfirmDeleteTrustedApp(action.app),
             )
         }
     }
@@ -160,7 +140,7 @@ class PrivilegedAppsViewModel @Inject constructor(
     private fun handleUserTrustedAppDeleteConfirmClick(app: PrivilegedAppListItem) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = Fido2TrustState.DialogState.Loading,
+                dialogState = PrivilegedAppsListState.DialogState.Loading,
             )
         }
         viewModelScope.launch {
@@ -172,27 +152,92 @@ class PrivilegedAppsViewModel @Inject constructor(
         }
     }
 
-    private fun PrivilegedAppAllowListJson.toImmutablePrivilegedAppList() = this.apps
-        .map { it.toPrivilegedAppListItem() }
-        .toImmutableList()
+    private fun updateViewStateWithData(
+        data: PrivilegedAppData?,
+        dialogState: PrivilegedAppsListState.DialogState?,
+    ) {
+        val notInstalledApps = mutableListOf<PrivilegedAppListItem>()
+        val installedApps = mutableListOf<PrivilegedAppListItem>()
 
-    private fun PrivilegedAppAllowListJson.PrivilegedAppJson.toPrivilegedAppListItem() =
-        PrivilegedAppListItem(
-            packageName = info.packageName,
-            signature = info.signatures
-                .first()
-                .certFingerprintSha256,
-        )
+        data
+            ?.googleTrustedApps
+            ?.toPrivilegedAppList(
+                trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.GOOGLE,
+            )
+            ?.sortIntoInstalledAndNotInstalledCollections(
+                installedApps = installedApps,
+                notInstalledApps = notInstalledApps,
+            )
+        data
+            ?.communityTrustedApps
+            ?.toPrivilegedAppList(
+                trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.COMMUNITY,
+            )
+            ?.sortIntoInstalledAndNotInstalledCollections(
+                installedApps = installedApps,
+                notInstalledApps = notInstalledApps,
+            )
+        data
+            ?.userTrustedApps
+            ?.toPrivilegedAppList(
+                trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.USER,
+            )
+            ?.sortIntoInstalledAndNotInstalledCollections(
+                installedApps = installedApps,
+                notInstalledApps = notInstalledApps,
+            )
+
+        mutableStateFlow.update {
+            it.copy(
+                installedApps = installedApps
+                    .sortedBy { it.appName ?: it.packageName }
+                    .toImmutableList(),
+                notInstalledApps = notInstalledApps
+                    .sortedBy { it.packageName }
+                    .toImmutableList(),
+                dialogState = dialogState,
+            )
+        }
+    }
+
+    private fun List<PrivilegedAppListItem>.sortIntoInstalledAndNotInstalledCollections(
+        installedApps: MutableList<PrivilegedAppListItem>,
+        notInstalledApps: MutableList<PrivilegedAppListItem>,
+    ) {
+        this.forEach {
+            if (bitwardenPackageManager.isPackageInstalled(it.packageName)) {
+                installedApps.add(it)
+            } else {
+                notInstalledApps.add(it)
+            }
+        }
+    }
+
+    private fun PrivilegedAppAllowListJson.toPrivilegedAppList(
+        trustAuthority: PrivilegedAppListItem.PrivilegedAppTrustAuthority,
+    ) = this.apps
+        .map { it.toPrivilegedAppListItem(trustAuthority) }
+
+    private fun PrivilegedAppAllowListJson.PrivilegedAppJson.toPrivilegedAppListItem(
+        trustAuthority: PrivilegedAppListItem.PrivilegedAppTrustAuthority,
+    ) = PrivilegedAppListItem(
+        packageName = info.packageName,
+        signature = info.signatures
+            .first()
+            .certFingerprintSha256,
+        trustAuthority = trustAuthority,
+        appName = bitwardenPackageManager
+            .getAppNameFromPackageNameOrNull(info.packageName),
+    )
 }
 
 /**
  * Models the state of the [PrivilegedAppsViewModel].
  */
 @Parcelize
-data class Fido2TrustState(
-    val googleTrustedApps: ImmutableList<PrivilegedAppListItem>,
-    val communityTrustedApps: ImmutableList<PrivilegedAppListItem>,
-    val userTrustedApps: ImmutableList<PrivilegedAppListItem>,
+data class PrivilegedAppsListState(
+    val installedApps: ImmutableList<PrivilegedAppListItem>,
+    val notInstalledApps: ImmutableList<PrivilegedAppListItem>,
     val dialogState: DialogState?,
 ) : Parcelable {
 
