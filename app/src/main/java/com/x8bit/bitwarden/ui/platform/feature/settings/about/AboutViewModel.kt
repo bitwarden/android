@@ -1,16 +1,17 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
+import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
+import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.isFdroid
+import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -37,10 +38,15 @@ class AboutViewModel @Inject constructor(
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: createInitialState(
-        clock = clock,
-        isCrashLoggingEnabled = logsManager.isEnabled,
-    ),
+    initialState = savedStateHandle[KEY_STATE]
+        ?: AboutState(
+            version = R.string.version.asText().concat(": $versionData".asText()),
+            deviceData = deviceData.asText(),
+            ciData = ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
+            isSubmitCrashLogsEnabled = logsManager.isEnabled,
+            shouldShowCrashLogsButton = !isFdroid,
+            copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(clock).value}".asText(),
+        ),
 ) {
     init {
         stateFlow
@@ -92,34 +98,13 @@ class AboutViewModel @Inject constructor(
     }
 
     private fun handleVersionClick() {
-        val buildFlavour = when (BuildConfig.FLAVOR) {
-            "standard" -> ""
-            else -> "-${BuildConfig.FLAVOR}"
-        }
-
-        val buildVariant = when (BuildConfig.BUILD_TYPE) {
-            "debug" -> "dev"
-            "release" -> "prod"
-            else -> BuildConfig.BUILD_TYPE
-        }
-
-        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
-        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
-        val buildInfo = "\uD83D\uDCE6 $buildVariant$buildFlavour"
-        val ciBuildInfoString = BuildConfig.CI_INFO
-
         clipboardManager.setText(
             text = state.copyrightInfo
                 .concat("\n\n".asText())
                 .concat(state.version)
                 .concat("\n".asText())
-                .concat("$deviceBrandModel $osInfo $buildInfo".asText())
-                .concat(
-                    "\n$ciBuildInfoString"
-                        .takeUnless { ciBuildInfoString.isEmpty() }
-                        .orEmpty()
-                        .asText(),
-                ),
+                .concat(state.deviceData)
+                .concat(state.ciData),
         )
     }
 
@@ -130,26 +115,6 @@ class AboutViewModel @Inject constructor(
             ),
         )
     }
-
-    @Suppress("UndocumentedPublicClass")
-    companion object {
-        /**
-         * Create initial state for the About View model.
-         */
-        fun createInitialState(clock: Clock, isCrashLoggingEnabled: Boolean): AboutState {
-            val currentYear = Year.now(clock).value
-            val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
-
-            return AboutState(
-                version = R.string.version
-                    .asText()
-                    .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
-                isSubmitCrashLogsEnabled = isCrashLoggingEnabled,
-                shouldShowCrashLogsButton = !isFdroid,
-                copyrightInfo = copyrightInfo,
-            )
-        }
-    }
 }
 
 /**
@@ -158,6 +123,8 @@ class AboutViewModel @Inject constructor(
 @Parcelize
 data class AboutState(
     val version: Text,
+    val deviceData: Text,
+    val ciData: Text,
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
     val copyrightInfo: Text,
