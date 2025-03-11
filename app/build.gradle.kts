@@ -68,7 +68,7 @@ android {
         buildConfigField(
             type = "String",
             name = "CI_INFO",
-            value = "${ciProperties.getOrDefault("ci.info", "\"local\"")}"
+            value = "${ciProperties.getOrDefault("ci.info", "\"local\"")}",
         )
     }
 
@@ -104,7 +104,7 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
@@ -115,7 +115,7 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
 
             buildConfigField(type = "boolean", name = "HAS_DEBUG_MENU", value = "false")
@@ -180,7 +180,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    @Suppress("UnstableApiUsage")
     testOptions {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true

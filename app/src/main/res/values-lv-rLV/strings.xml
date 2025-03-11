@@ -1223,7 +1223,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="use_chrome_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu</string>
   <string name="use_chrome_beta_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Uzlabo pieteikšanās vietumu aizpildīšanu atbalstītās tīmekļvietnēs Crome pārlūkā. Uzreiz pēc iespējošanas notiks novirzīšana uz Chrome iestatījumiem, lai iespējotu trešo pušu automātisko aizpildi.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Rādīt vairāk</string>
+  <string name="no_folder">Nav mapes</string>
+  <string name="show_less">Rādīt mazāk</string>
 </resources>
