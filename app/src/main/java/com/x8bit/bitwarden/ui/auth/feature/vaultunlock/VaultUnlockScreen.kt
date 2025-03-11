@@ -254,10 +254,11 @@ fun VaultUnlockScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             if (!state.hideInput) {
-                // When switching from an unlocked account to a locked account, garbage collection
-                // is triggered which causing this screen to be composed twice. Adding this delay
-                // prevents the MP or Pin field from auto focusing on the first composition which
-                // creates a visual jank where the keyboard shows, disappears, and then shows again.
+                // When switching from an unlocked account to a locked account, the
+                // current activity is recreated and therefore the composition takes place
+                // twice. Adding this delay prevents the MP or Pin field
+                // from auto focusing on the first composition which creates a visual jank where
+                // the keyboard shows, disappears, and then shows again.
                 var autoFocusDelayCompleted by rememberSaveable {
                     mutableStateOf(false)
                 }
