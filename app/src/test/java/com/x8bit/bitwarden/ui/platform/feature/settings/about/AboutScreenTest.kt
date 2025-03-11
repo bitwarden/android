@@ -39,6 +39,8 @@ class AboutScreenTest : BaseComposeTest() {
     private val mutableStateFlow = MutableStateFlow(
         AboutState(
             version = "Version: 1.0.0 (1)".asText(),
+            deviceData = "device_data".asText(),
+            ciData = "ci_data".asText(),
             isSubmitCrashLogsEnabled = false,
             copyrightInfo = "".asText(),
             shouldShowCrashLogsButton = true,
