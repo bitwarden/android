@@ -23,6 +23,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabled = true } just runs
         every { appTheme = AppTheme.DARK } just runs
+        every { isDynamicColorsEnabled } returns false
     }
 
     @Test
@@ -132,6 +133,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
             language = AppLanguage.DEFAULT,
             showWebsiteIcons = true,
             theme = AppTheme.DEFAULT,
+            isDynamicColorsEnabled = false,
         )
     }
 }

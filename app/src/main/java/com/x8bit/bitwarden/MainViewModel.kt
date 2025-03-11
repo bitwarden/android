@@ -79,6 +79,7 @@ class MainViewModel @Inject constructor(
     initialState = MainState(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+        isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -120,6 +121,12 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .isScreenCaptureAllowedStateFlow
             .map { MainAction.Internal.ScreenCaptureUpdate(it) }
+            .onEach(::trySendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { MainAction.Internal.DynamicColorsUpdate(it) }
             .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
@@ -185,6 +192,7 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
+            is MainAction.Internal.DynamicColorsUpdate -> handleDynamicColorsUpdate(action)
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
@@ -232,6 +240,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleVaultUnlockStateChange() {
         recreateUiAndGarbageCollect()
+    }
+
+    private fun handleDynamicColorsUpdate(action: MainAction.Internal.DynamicColorsUpdate) {
+        mutableStateFlow.update { it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled) }
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -445,6 +457,7 @@ class MainViewModel @Inject constructor(
 data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
+    val isDynamicColorsEnabled: Boolean,
 ) : Parcelable
 
 /**
@@ -513,6 +526,13 @@ sealed class MainAction {
          * Indicates a relevant change in the current vault lock state.
          */
         data object VaultUnlockStateChange : Internal()
+
+        /**
+         * Indicates that the dynamic colors state has changed.
+         */
+        data class DynamicColorsUpdate(
+            val isDynamicColorsEnabled: Boolean,
+        ) : Internal()
     }
 }
 

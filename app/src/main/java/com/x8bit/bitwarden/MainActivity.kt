@@ -121,7 +121,10 @@ class MainActivity : AppCompatActivity() {
                         }
                     },
                 )
-                BitwardenTheme(theme = state.theme) {
+                BitwardenTheme(
+                    theme = state.theme,
+                    dynamicColor = state.isDynamicColorsEnabled,
+                ) {
                     RootNavScreen(
                         onSplashScreenRemoved = { shouldShowSplashScreen = false },
                         navController = navController,

@@ -157,7 +157,9 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on show website icons row click should send ShowWebsiteIconsToggled`() {
-        composeTestRule.onNodeWithText("Show website icons").performClick()
+        composeTestRule.onNodeWithText("Show website icons")
+            .performScrollTo()
+            .performClick()
         verify { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(true)) }
     }
 
@@ -172,4 +174,5 @@ private val DEFAULT_STATE = AppearanceState(
     language = AppLanguage.DEFAULT,
     showWebsiteIcons = false,
     theme = AppTheme.DEFAULT,
+    isDynamicColorsEnabled = false,
 )
