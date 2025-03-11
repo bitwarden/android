@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -68,7 +69,7 @@ class MainViewModel @Inject constructor(
     private val garbageCollectionManager: GarbageCollectionManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
@@ -189,7 +190,12 @@ class MainViewModel @Inject constructor(
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
             MainAction.OpenDebugMenu -> handleOpenDebugMenu()
             is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
+            is MainAction.AppSpecificLanguageUpdate -> handleAppSpecificLanguageUpdate(action)
         }
+    }
+
+    private fun handleAppSpecificLanguageUpdate(action: MainAction.AppSpecificLanguageUpdate) {
+        settingsRepository.appLanguage = action.appLanguage
     }
 
     private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
@@ -470,6 +476,12 @@ sealed class MainAction {
      * Receive event to save the app resume screen
      */
     data class ResumeScreenDataReceived(val screenResumeData: AppResumeScreenData?) : MainAction()
+
+    /**
+     * Receive if there is an app specific locale selection made by user
+     * in the device's settings.
+     */
+    data class AppSpecificLanguageUpdate(val appLanguage: AppLanguage) : MainAction()
 
     /**
      * Actions for internal use by the ViewModel.

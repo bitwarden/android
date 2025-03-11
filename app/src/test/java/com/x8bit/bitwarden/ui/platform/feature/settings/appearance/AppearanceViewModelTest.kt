@@ -11,11 +11,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
+    private val mutableAppLanguageStateFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { appLanguage } returns AppLanguage.DEFAULT
         every { appTheme } returns AppTheme.DEFAULT
@@ -23,6 +26,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabled = true } just runs
         every { appTheme = AppTheme.DARK } just runs
+        every { appLanguageStateFlow } returns mutableAppLanguageStateFlow
     }
 
     @Test
@@ -48,29 +52,31 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on LanguageChange should update state and store language`() = runTest {
-        val viewModel = createViewModel(
-            settingsRepository = mockSettingsRepository,
-        )
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE,
-                awaitItem(),
-            )
-            viewModel.trySendAction(AppearanceAction.LanguageChange(AppLanguage.ENGLISH))
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    language = AppLanguage.ENGLISH,
-                ),
-                awaitItem(),
-            )
-        }
+    fun `on LanguageChange should store updated language in repository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(AppearanceAction.LanguageChange(AppLanguage.ENGLISH))
 
-        verify {
-            mockSettingsRepository.appLanguage
-            mockSettingsRepository.appLanguage = AppLanguage.ENGLISH
-        }
+        verify { mockSettingsRepository.appLanguage = AppLanguage.ENGLISH }
     }
+
+    @Test
+    fun `on AppLanguageStateFlow value updated, view model language state should change`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+                mutableAppLanguageStateFlow.update { AppLanguage.AFRIKAANS }
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        language = AppLanguage.AFRIKAANS,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `on ShowWebsiteIconsToggle should update state and store the value`() = runTest {
