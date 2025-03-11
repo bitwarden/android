@@ -67,7 +67,10 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 import javax.crypto.Cipher
+
+private const val AUTO_FOCUS_DELAY = 415L
 
 /**
  * The top level composable for the Vault Unlock screen.
@@ -251,6 +254,17 @@ fun VaultUnlockScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             if (!state.hideInput) {
+                // When switching from an unlocked account to a locked account, garbage collection
+                // is triggered which causing this screen to be composed twice. Adding this delay
+                // prevents the MP or Pin field from auto focusing on the first composition which
+                // creates a visual jank where the keyboard shows, disappears, and then shows again.
+                var autoFocusDelayCompleted by rememberSaveable {
+                    mutableStateOf(false)
+                }
+                LaunchedEffect(Unit) {
+                    delay(AUTO_FOCUS_DELAY)
+                    autoFocusDelayCompleted = true
+                }
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
                     value = state.input,
@@ -261,7 +275,7 @@ fun VaultUnlockScreen(
                     showPasswordTestTag = state
                         .vaultUnlockType
                         .inputFieldVisibilityToggleTestTag,
-                    autoFocus = state.showKeyboard,
+                    autoFocus = state.showKeyboard && autoFocusDelayCompleted,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
                         onDone = remember(viewModel) {
