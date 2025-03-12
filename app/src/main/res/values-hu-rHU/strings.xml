@@ -1222,7 +1222,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
   <string name="use_chrome_beta_autofill_integration">Chrome automatikus kitöltés integráció használata (Béta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Javítja a bejelentkezési adatok kitöltését a támogatott webhelyeken a Chrome-ban. Az engedélyezést követően a Chrome beállításaiba kerülünk, ahol engedélyezhetjük a harmadik féltől származó automatikus kitöltést.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Több megjelenítése</string>
+  <string name="no_folder">Nincs mappa</string>
+  <string name="show_less">Kevesebb megjelenítése</string>
 </resources>

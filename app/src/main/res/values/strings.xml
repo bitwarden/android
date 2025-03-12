@@ -1226,4 +1226,5 @@ Do you want to switch to this account?</string>
   <string name="show_more">Show more</string>
   <string name="no_folder">No folder</string>
   <string name="show_less">Show less</string>
+  <string name="x_ellipses">%s...</string>
 </resources>

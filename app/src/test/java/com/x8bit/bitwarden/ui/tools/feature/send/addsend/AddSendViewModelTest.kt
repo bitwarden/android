@@ -158,36 +158,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick with createSend success should emit NavigateBack and ShowShareSheet when not an external shared`() =
-        runTest {
-            val viewState = DEFAULT_VIEW_STATE.copy(
-                common = DEFAULT_COMMON_STATE.copy(name = "input"),
-            )
-            val initialState = DEFAULT_STATE.copy(viewState = viewState)
-            val mockSendView = mockk<SendView>()
-            every { viewState.toSendView(clock) } returns mockSendView
-            val sendUrl = "www.test.com/send/test"
-            val resultSendView = mockk<SendView> {
-                every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
-            }
-            coEvery {
-                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-            } returns CreateSendResult.Success(sendView = resultSendView)
-            val viewModel = createViewModel(initialState)
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.SaveClick)
-                assertEquals(AddSendEvent.NavigateBack, awaitItem())
-                assertEquals(AddSendEvent.ShowShareSheet(sendUrl), awaitItem())
-            }
-            assertEquals(initialState, viewModel.stateFlow.value)
-            coVerify(exactly = 1) {
-                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `SaveClick with createSend success should copy the send URL to the clipboard and emit NavigateBack`() =
         runTest {
             val viewState = DEFAULT_VIEW_STATE.copy(
@@ -212,15 +182,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AddSendAction.SaveClick)
                 assertEquals(AddSendEvent.NavigateBack, awaitItem())
+                assertEquals(
+                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    awaitItem(),
+                )
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(
-                    text = sendUrl,
-                    toastDescriptorOverride = R.string.send_link.asText(),
-                )
             }
         }
 
@@ -250,15 +220,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AddSendAction.SaveClick)
                 assertEquals(AddSendEvent.ExitApp, awaitItem())
+                assertEquals(
+                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    awaitItem(),
+                )
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(
-                    text = sendUrl,
-                    toastDescriptorOverride = R.string.send_link.asText(),
-                )
             }
         }
 
