@@ -85,11 +85,12 @@ class VaultUnlockScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+            fido2CompletionManager = fido2CompletionManager,
+        ) {
             VaultUnlockScreen(
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
-                fido2CompletionManager = fido2CompletionManager,
             )
         }
     }

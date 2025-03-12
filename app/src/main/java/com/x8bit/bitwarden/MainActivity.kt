@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider {
+            LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
                         {

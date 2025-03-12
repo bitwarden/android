@@ -37,12 +37,13 @@ class NewDeviceNoticeEmailAccessScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             NewDeviceNoticeEmailAccessScreen(
                 onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateToTwoFactorOptions = { onNavigateToTwoFactorOptionsCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

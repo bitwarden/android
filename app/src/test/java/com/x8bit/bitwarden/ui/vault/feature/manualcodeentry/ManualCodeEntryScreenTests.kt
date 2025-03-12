@@ -52,15 +52,14 @@ class ManualCodeEntryScreenTests : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            permissionsManager = fakePermissionManager,
+            intentManager = intentManager,
+        ) {
             ManualCodeEntryScreen(
-                onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                onNavigateToQrCodeScreen = {
-                    onNavigateToScanQrCodeCalled = true
-                },
-                permissionsManager = fakePermissionManager,
-                intentManager = intentManager,
+                onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToQrCodeScreen = { onNavigateToScanQrCodeCalled = true },
             )
         }
     }

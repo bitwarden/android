@@ -1229,7 +1229,7 @@ class AuthRepositoryImpl(
         haveIBeenPwnedService
             .getPasswordBreachCount(password)
             .fold(
-                onFailure = { BreachCountResult.Error },
+                onFailure = { BreachCountResult.Error(error = it) },
                 onSuccess = { BreachCountResult.Success(it) },
             )
 

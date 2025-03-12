@@ -40,11 +40,12 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            exitManager = exitManager,
+        ) {
             LoginApprovalScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                exitManager = exitManager,
             )
         }
     }

@@ -1103,17 +1103,25 @@ class VaultItemViewModel @Inject constructor(
     private fun handlePasswordBreachReceive(
         action: VaultItemAction.Internal.PasswordBreachReceive,
     ) {
-        val message = when (val result = action.result) {
-            BreachCountResult.Error -> R.string.generic_error_message.asText()
+        val dialogState = when (val result = action.result) {
+            is BreachCountResult.Error -> {
+                VaultItemState.DialogState.Generic(
+                    message = R.string.generic_error_message.asText(),
+                    error = result.error,
+                )
+            }
+
             is BreachCountResult.Success -> {
-                if (result.breachCount > 0) {
-                    R.string.password_exposed.asText(result.breachCount)
-                } else {
-                    R.string.password_safe.asText()
-                }
+                VaultItemState.DialogState.Generic(
+                    message = if (result.breachCount > 0) {
+                        R.string.password_exposed.asText(result.breachCount)
+                    } else {
+                        R.string.password_safe.asText()
+                    },
+                )
             }
         }
-        updateDialogState(VaultItemState.DialogState.Generic(message = message))
+        updateDialogState(dialogState)
     }
 
     @Suppress("LongMethod")
@@ -1840,6 +1848,7 @@ data class VaultItemState(
         @Parcelize
         data class Generic(
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

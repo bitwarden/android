@@ -98,7 +98,11 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            appReviewManager = appReviewManager,
+        ) {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
@@ -116,9 +120,6 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
-                exitManager = exitManager,
-                intentManager = intentManager,
-                appReviewManager = appReviewManager,
             )
         }
     }

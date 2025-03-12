@@ -117,7 +117,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            permissionsManager = fakePermissionManager,
+            exitManager = exitManager,
+            intentManager = intentManager,
+            fido2CompletionManager = fido2CompletionManager,
+            biometricsManager = biometricsManager,
+        ) {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToQrCodeScanScreen = { onNavigateQrCodeScanScreenCalled = true },
@@ -128,11 +134,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 viewModel = viewModel,
-                permissionsManager = fakePermissionManager,
-                exitManager = exitManager,
-                intentManager = intentManager,
-                fido2CompletionManager = fido2CompletionManager,
-                biometricsManager = biometricsManager,
             )
         }
     }
@@ -2384,8 +2385,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) {
                 copy(
-                    availableOwners =
-                    listOf(
+                    availableOwners = listOf(
                         VaultAddEditState.Owner(
                             id = ownerId,
                             name = ownerName,
@@ -2661,8 +2661,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) {
                 copy(
-                    availableFolders =
-                    listOf(
+                    availableFolders = listOf(
                         VaultAddEditState.Folder(
                             id = folderId,
                             name = folderName,

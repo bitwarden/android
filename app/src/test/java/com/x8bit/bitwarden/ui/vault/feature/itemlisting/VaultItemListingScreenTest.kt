@@ -117,13 +117,14 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     fun setUp() {
         mockkStatic(String::toHostOrPathOrNull)
         every { AUTOFILL_SELECTION_DATA.uri?.toHostOrPathOrNull() } returns "www.test.com"
-        setContent {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            fido2CompletionManager = fido2CompletionManager,
+            biometricsManager = biometricsManager,
+        ) {
             VaultItemListingScreen(
                 viewModel = viewModel,
-                exitManager = exitManager,
-                intentManager = intentManager,
-                fido2CompletionManager = fido2CompletionManager,
-                biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },

@@ -59,10 +59,11 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AboutScreen(
                 viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateBack = { haveCalledNavigateBack = true },
             )
         }
