@@ -315,12 +315,12 @@ class FirstTimeActionManagerImpl @Inject constructor(
                     flow2 = vaultDiskSource.getCiphers(activeUserId),
                     flow3 = authDiskSource.getPoliciesFlow(activeUserId),
                 ) { receiverCurrentValue, ciphers, policies ->
-                    val hasLoginCiphersWithNoAssociatedOrgs = ciphers.any {
+                    val hasLoginsWithNoOrganizations = ciphers.any {
                         it.login != null && it.organizationId == null
                     }
                     val onlyOrgPolicy = policies?.any { it.type == PolicyTypeJson.ONLY_ORG } == true
 
-                    receiverCurrentValue && (!hasLoginCiphersWithNoAssociatedOrgs || onlyOrgPolicy)
+                    receiverCurrentValue && (!hasLoginsWithNoOrganizations || onlyOrgPolicy)
                 }
             }
             .distinctUntilChanged()
