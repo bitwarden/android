@@ -455,8 +455,8 @@ class FirstTimeActionManagerTest {
                         number = 2,
                         organizationId = "1234",
                         type = PolicyTypeJson.ONLY_ORG,
-                    )
-                )
+                    ),
+                ),
             )
             // Enable feature flag so flow emits updates from disk.
             mutableOnboardingFeatureFlow.update { true }
@@ -482,8 +482,8 @@ class FirstTimeActionManagerTest {
                         number = 2,
                         organizationId = "1234",
                         type = PolicyTypeJson.ONLY_ORG,
-                    )
-                )
+                    ),
+                ),
             )
             val mockJsonWithLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
                 every { login } returns mockk()
