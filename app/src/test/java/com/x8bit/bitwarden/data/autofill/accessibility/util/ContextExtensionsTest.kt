@@ -29,6 +29,7 @@ class ContextExtensionsTest {
         val context: Context = mockk {
             every { applicationContext } returns this
             every { packageName } returns null
+            every { contentResolver } returns mockk()
         }
 
         assertFalse(context.isAccessibilityServiceEnabled)
@@ -70,6 +71,20 @@ class ContextExtensionsTest {
         }
         mockkSettingsSecureGetString(
             value = "com.x8bit.bitwarden/com.x8bit.bitwarden.Accessibility.AccessibilityService",
+        )
+
+        assertTrue(context.isAccessibilityServiceEnabled)
+    }
+
+    @Test
+    fun `isAccessibilityServiceEnabled with correct abbreviated secure string returns true`() {
+        val context: Context = mockk {
+            every { applicationContext } returns this
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { contentResolver } returns mockk()
+        }
+        mockkSettingsSecureGetString(
+            value = "com.x8bit.bitwarden/.Accessibility.AccessibilityService",
         )
 
         assertTrue(context.isAccessibilityServiceEnabled)
