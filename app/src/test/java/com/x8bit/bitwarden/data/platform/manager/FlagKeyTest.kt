@@ -81,6 +81,10 @@ class FlagKeyTest {
             FlagKey.ChromeAutofill.keyName,
             "android-chrome-autofill",
         )
+        assertEquals(
+            FlagKey.ArchiveItem.keyName,
+            "pm-19148-innovation-archive",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.ChromeAutofill,
+                FlagKey.ArchiveItem,
             ).all {
                 !it.defaultValue
             },

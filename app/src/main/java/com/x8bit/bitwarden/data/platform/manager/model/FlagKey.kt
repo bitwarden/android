@@ -44,6 +44,7 @@ sealed class FlagKey<out T : Any> {
                 AnonAddySelfHostAlias,
                 SimpleLoginSelfHostAlias,
                 ChromeAutofill,
+                ArchiveItem,
             )
         }
     }
@@ -219,6 +220,15 @@ sealed class FlagKey<out T : Any> {
      */
     data object ChromeAutofill : FlagKey<Boolean>() {
         override val keyName: String = "android-chrome-autofill"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the archive item.
+     */
+    data object ArchiveItem : FlagKey<Boolean>() {
+        override val keyName: String = "pm-19148-innovation-archive"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

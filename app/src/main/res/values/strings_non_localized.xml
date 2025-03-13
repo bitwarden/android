@@ -29,5 +29,6 @@
     <string name="anon_addy_self_hosted_aliases">AnonAddy self-hosted aliases</string>
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
     <string name="enable_chrome_autofill">Enable chrome autofill</string>
+    <string name="archive_item">Enable archive item</string>
     <!-- /Debug Menu -->
 </resources>
