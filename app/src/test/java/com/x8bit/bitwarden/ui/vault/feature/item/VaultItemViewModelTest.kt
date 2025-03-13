@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -108,6 +109,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
+    }
+
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag<Boolean>(any()) } returns true
     }
 
     @BeforeEach
@@ -3558,6 +3563,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         organizationEventManager = eventManager,
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
+        featureFlagManager = featureFlagManager,
     )
 
     private fun createViewState(
@@ -3596,6 +3602,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             dialog = null,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
+            isArchiveItemEnabled = true,
         )
 
         private val DEFAULT_USER_ACCOUNT = UserState.Account(

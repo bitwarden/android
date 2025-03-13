@@ -125,4 +125,9 @@ interface CiphersService {
      * Attempt to import ciphers.
      */
     suspend fun importCiphers(request: ImportCiphersJsonRequest): Result<ImportCiphersResponseJson>
+
+    /**
+     * Attempt to archive a cipher.
+     */
+    suspend fun archiveCipher(cipherId: String): Result<Unit>
 }

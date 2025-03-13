@@ -10,8 +10,10 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -21,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -70,6 +73,7 @@ class VaultItemViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -81,6 +85,7 @@ class VaultItemViewModel @Inject constructor(
             dialog = null,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            isArchiveItemEnabled = featureFlagManager.getFeatureFlag(FlagKey.ArchiveItem),
         )
     },
 ) {
@@ -177,6 +182,16 @@ class VaultItemViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        featureFlagManager.getFeatureFlagFlow(FlagKey.ArchiveItem)
+            .map { isArchiveEnabled ->
+                mutableStateFlow.update {
+                    it.copy(
+                        isArchiveItemEnabled = isArchiveEnabled,
+                    )
+                }
+            }
+            .launchIn(viewModelScope)
+
         settingsRepository.isIconLoadingDisabledFlow
             .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
             .onEach(::sendAction)
@@ -242,6 +257,8 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
             is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
             is VaultItemAction.Common.PasswordHistoryClick -> handlePasswordHistoryClick()
+            is VaultItemAction.Common.ArchiveClick -> handleArchiveClick()
+            is VaultItemAction.Common.ConfirmArchiveClick -> handleConfirmArchiveClick()
         }
     }
 
@@ -580,6 +597,38 @@ class VaultItemViewModel @Inject constructor(
                 text = notes,
                 toastDescriptorOverride = R.string.notes.asText(),
             )
+        }
+    }
+
+    private fun handleArchiveClick() {
+        onContent { content ->
+            updateDialogState(
+                VaultItemState
+                    .DialogState
+                    .ArchiveConfirmationPrompt,
+            )
+        }
+    }
+
+    private fun handleConfirmArchiveClick() {
+        onContent { content ->
+            updateDialogState(
+                VaultItemState.DialogState.Loading(
+                    R.string.sending_archive.asText(),
+                ),
+            )
+            content.common.currentCipher?.let { cipher ->
+                viewModelScope.launch {
+                    trySendAction(
+                        VaultItemAction.Internal.ArchiveCipherReceive(
+                            vaultRepository.archiveCipher(
+                                cipherId = state.vaultItemId,
+                                cipherView = cipher,
+                            ),
+                        ),
+                    )
+                }
+            }
         }
     }
 
@@ -1093,6 +1142,8 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive -> {
                 handleIsIconLoadingDisabledUpdateReceive(action)
             }
+
+            is VaultItemAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
         }
     }
 
@@ -1341,6 +1392,29 @@ class VaultItemViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isIconLoadingDisabled = action.isDisabled) }
     }
 
+    private fun handleArchiveCipherReceive(action: VaultItemAction.Internal.ArchiveCipherReceive) {
+        when (action.result) {
+            ArchiveCipherResult.Error -> {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
+            }
+
+            ArchiveCipherResult.Success -> {
+                dismissDialog()
+                sendEvent(
+                    VaultItemEvent.ShowToast(
+                        message =
+                            R.string.item_archived.asText(),
+                    ),
+                )
+                sendEvent(VaultItemEvent.NavigateBack)
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     private fun updateDialogState(dialog: VaultItemState.DialogState?) {
@@ -1431,6 +1505,7 @@ data class VaultItemState(
     val dialog: DialogState?,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
+    val isArchiveItemEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -1879,6 +1954,12 @@ data class VaultItemState(
          */
         @Parcelize
         data object RestoreItemDialog : DialogState()
+
+        /**
+         * Displays the dialog for archiving the item to the user.
+         */
+        @Parcelize
+        data object ArchiveConfirmationPrompt : DialogState()
     }
 }
 
@@ -1998,6 +2079,11 @@ sealed class VaultItemAction {
         data object EditClick : Common()
 
         /**
+         * The user has confirmed to archive the cipher.
+         */
+        data object ConfirmArchiveClick : Common()
+
+        /**
          * The user has submitted their master password.
          */
         data class MasterPasswordSubmit(
@@ -2009,6 +2095,11 @@ sealed class VaultItemAction {
          * The user has clicked the refresh button.
          */
         data object RefreshClick : Common()
+
+        /**
+         * The user has clicked the archive button.
+         */
+        data object ArchiveClick : Common()
 
         /**
          * The user has clicked the copy button for a custom hidden field.
@@ -2316,6 +2407,13 @@ sealed class VaultItemAction {
          */
         data class IsIconLoadingDisabledUpdateReceive(
             val isDisabled: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the archive cipher result has been received.
+         */
+        data class ArchiveCipherReceive(
+            val result: ArchiveCipherResult,
         ) : Internal()
     }
 }

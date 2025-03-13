@@ -150,6 +150,9 @@ fun VaultItemScreen(
         onConfirmRestoreAction = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
         },
+        onConfirmArchiveClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmArchiveClick) }
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -225,6 +228,20 @@ fun VaultItemScreen(
                                         state.canAssignToCollections
                                 },
                             OverflowMenuItemData(
+                                text = stringResource(id = R.string.archive),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.ArchiveClick,
+                                        )
+                                    }
+                                },
+                            )
+                                .takeUnless
+                                {
+                                    state.isCipherInCollection || !state.isArchiveItemEnabled
+                                },
+                            OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
                                 onClick = remember(viewModel) {
                                     {
@@ -284,6 +301,7 @@ fun VaultItemScreen(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
@@ -291,6 +309,7 @@ private fun VaultItemDialogs(
     onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
+    onConfirmArchiveClick: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -343,6 +362,20 @@ private fun VaultItemDialogs(
             onDismissClick = onDismissRequest,
             onDismissRequest = onDismissRequest,
         )
+
+        is VaultItemState.DialogState.ArchiveConfirmationPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.archive),
+                message = stringResource(
+                    id = R.string.do_you_really_want_to_archive_cipher,
+                ),
+                confirmButtonText = stringResource(id = R.string.ok),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = onConfirmArchiveClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         null -> Unit
     }

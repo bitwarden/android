@@ -3139,6 +3139,7 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     dialog = null,
     baseIconUrl = "https://example.com/",
     isIconLoadingDisabled = true,
+    isArchiveItemEnabled = false,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

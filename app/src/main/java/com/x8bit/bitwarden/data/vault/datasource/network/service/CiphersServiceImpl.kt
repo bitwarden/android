@@ -236,6 +236,11 @@ class CiphersServiceImpl(
                     ?: throw throwable
             }
 
+    override suspend fun archiveCipher(cipherId: String): Result<Unit> =
+        ciphersApi
+            .archiveCipher(cipherId = cipherId)
+            .toResult()
+
     private fun createMultipartBodyBuilder(
         encryptedFile: File,
         filename: String?,

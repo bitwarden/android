@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
@@ -323,6 +324,39 @@ class CipherManagerImpl(
                 onFailure = { CreateAttachmentResult.Error },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
+
+    override suspend fun archiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): ArchiveCipherResult {
+        val userId = activeUserId ?: return ArchiveCipherResult.Error
+        return cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
+            .flatMap { cipher ->
+                ciphersService
+                    .archiveCipher(cipherId = cipherId)
+                    .flatMap { vaultSdkSource.decryptCipher(userId = userId, cipher = cipher) }
+            }
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = it.copy(
+                        // TODO update this when the SDK is updated
+                        // archivedDate = clock.instant()
+                    ),
+                )
+            }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.toEncryptedNetworkCipherResponse(),
+                )
+            }
+            .fold(
+                onSuccess = { ArchiveCipherResult.Success },
+                onFailure = { ArchiveCipherResult.Error },
+            )
+    }
 
     @Suppress("LongMethod")
     private suspend fun createAttachmentForResult(

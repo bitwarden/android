@@ -155,4 +155,12 @@ interface CiphersApi {
     suspend fun importCiphers(
         @Body body: ImportCiphersJsonRequest,
     ): NetworkResult<Unit>
+
+    /**
+     * Archives a cipher.
+     */
+    @PUT("ciphers/{cipherId}/archive")
+    suspend fun archiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<Unit>
 }
