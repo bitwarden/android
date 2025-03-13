@@ -67,7 +67,7 @@ fun VaultAddEditCustomFieldsButton(
     }
     val focusManager = LocalFocusManager.current
     BitwardenOutlinedButton(
-        label = stringResource(id = R.string.new_custom_field),
+        label = stringResource(id = R.string.add_field),
         onClick = {
             // Clear any current focused item such as an unrelated text field.
             focusManager.clearFocus()

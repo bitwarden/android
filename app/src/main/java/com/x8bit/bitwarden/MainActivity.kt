@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -28,12 +29,14 @@ import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunch
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
  * Primary entry point for the application.
  */
+@Suppress("TooManyFunctions")
 @OmitFromCoverage
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -69,13 +72,9 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Within the app the language and theme will change dynamically and will be managed by the
+        // Within the app the theme will change dynamically and will be managed by the
         // OS, but we need to ensure we properly set the values when upgrading from older versions
         // that handle this differently or when the activity restarts.
-        settingsRepository.appLanguage.localeName?.let { localeName ->
-            val localeList = LocaleListCompat.forLanguageTags(localeName)
-            AppCompatDelegate.setApplicationLocales(localeList)
-        }
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
@@ -138,6 +137,31 @@ class MainActivity : AppCompatActivity() {
                 intent = intent,
             ),
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // When the app resumes check for any app specific language which may have been
+        // set via the device settings. Similar to the theme setting in onCreate this
+        // ensures we properly set the values when upgrading from older versions
+        // that handle this differently or when the activity restarts.
+        val appSpecificLanguage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val locales: LocaleListCompat = AppCompatDelegate.getApplicationLocales()
+            if (locales.isEmpty) {
+                // App is using the system language
+                null
+            } else {
+                // App has specific language settings
+                locales.get(0)?.appLanguage
+            }
+        } else {
+            // For older versions, use what ever language is available from the repository.
+            settingsRepository.appLanguage
+        }
+
+        appSpecificLanguage?.let {
+            mainViewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(it))
+        }
     }
 
     override fun onStop() {

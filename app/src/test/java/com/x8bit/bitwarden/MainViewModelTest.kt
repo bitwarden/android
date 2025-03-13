@@ -97,6 +97,7 @@ class MainViewModelTest : BaseViewModelTest() {
         every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
         every { storeUserHasLoggedInValue(any()) } just runs
+        every { appLanguage = any() } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -1088,6 +1089,15 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         verify { appResumeManager.setResumeScreen(AppResumeScreenData.GeneratorScreen) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on AppSpecificLanguageUpdate, the repository value should be updated with the specified value`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(AppLanguage.SPANISH))
+
+        verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
     }
 
     private fun createViewModel(

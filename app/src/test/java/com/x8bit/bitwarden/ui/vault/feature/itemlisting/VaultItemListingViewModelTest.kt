@@ -340,6 +340,24 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `SearchIconClick should emit NavigateToVaultSearchScreen with all search type`() = runTest {
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
+            autofillSelectionData = AutofillSelectionData(
+                framework = AutofillSelectionData.Framework.ACCESSIBILITY,
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = null,
+            ),
+            shouldFinishWhenComplete = false,
+        )
+        val searchType = SearchType.Vault.All
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultItemListingsAction.SearchIconClick)
+            assertEquals(VaultItemListingEvent.NavigateToSearchScreen(searchType), awaitItem())
+        }
+    }
+
+    @Test
     fun `LockClick should call lockVaultForCurrentUser`() {
         every { vaultRepository.lockVaultForCurrentUser() } just runs
         val viewModel = createVaultItemListingViewModel()
