@@ -471,6 +471,7 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
             )
         }

@@ -1228,4 +1228,5 @@ Do you want to switch to this account?</string>
   <string name="show_less">Show less</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

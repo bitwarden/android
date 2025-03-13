@@ -5670,16 +5670,17 @@ class AuthRepositoryTest {
     @Test
     fun `getPasswordBreachCount should return failure when service returns failure`() = runTest {
         val password = "password"
+        val error = Throwable("Fail")
         coEvery {
             haveIBeenPwnedService.getPasswordBreachCount(password)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.getPasswordBreachCount(password)
 
         coVerify(exactly = 1) {
             haveIBeenPwnedService.getPasswordBreachCount(password)
         }
-        assertEquals(BreachCountResult.Error, result)
+        assertEquals(BreachCountResult.Error(error = error), result)
     }
 
     @Test

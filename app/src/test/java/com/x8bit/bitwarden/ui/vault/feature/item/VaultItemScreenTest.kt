@@ -82,7 +82,9 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             VaultItemScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -92,7 +94,6 @@ class VaultItemScreenTest : BaseComposeTest() {
                 },
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryId = it },
-                intentManager = intentManager,
             )
         }
     }

@@ -54,13 +54,14 @@ class VaultSettingsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             VaultSettingsScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
-                intentManager = intentManager,
                 onNavigateToImportLogins = {
                     onNavigateToImportLoginsCalled = true
                     assertEquals(SnackbarRelay.VAULT_SETTINGS_RELAY, it)

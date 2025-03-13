@@ -296,6 +296,7 @@ private fun VaultItemDialogs(
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
             title = null,
             message = dialog.message(),
+            throwable = dialog.error,
             onDismissRequest = onDismissRequest,
         )
 

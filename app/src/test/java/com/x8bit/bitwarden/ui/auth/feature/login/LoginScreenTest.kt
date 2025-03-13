@@ -64,7 +64,9 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },
@@ -72,7 +74,6 @@ class LoginScreenTest : BaseComposeTest() {
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
                 onNavigateToTwoFactorLogin = { _, _, _ -> onNavigateToTwoFactorLoginCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
                 keyboardController = keyboardController,
             )
         }

@@ -35,12 +35,14 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -136,6 +138,14 @@ class MainViewModelTest : BaseViewModelTest() {
     private val appResumeManager: AppResumeManager = mockk {
         every { setResumeScreen(any()) } just runs
         every { clearResumeScreen() } just runs
+    }
+
+    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
+        every {
+            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
+        } returns mutableMobileErrorReportingFeatureFlow
     }
 
     @BeforeEach
@@ -1119,12 +1129,14 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
         appResumeManager = appResumeManager,
+        featureFlagManager = featureFlagManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
+    isErrorReportingDialogEnabled = false,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(

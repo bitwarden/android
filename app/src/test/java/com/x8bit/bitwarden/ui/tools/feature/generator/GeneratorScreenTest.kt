@@ -66,16 +66,15 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+            appResumeStateManager = appResumeStateManager,
+        ) {
             GeneratorScreen(
                 viewModel = viewModel,
-                onNavigateToPasswordHistory = {
-                    onNavigateToPasswordHistoryScreenCalled = true
-                },
+                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
                 onNavigateBack = {},
                 onDimNavBarRequest = { onDimNavBarRequest = it },
-                intentManager = intentManager,
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }

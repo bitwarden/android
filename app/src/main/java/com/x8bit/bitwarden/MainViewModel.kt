@@ -19,10 +19,12 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -35,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
@@ -64,6 +67,7 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
+    featureFlagManager: FeatureFlagManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
@@ -80,6 +84,9 @@ class MainViewModel @Inject constructor(
     initialState = MainState(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+        isErrorReportingDialogEnabled = featureFlagManager.getFeatureFlag(
+            key = FlagKey.MobileErrorReporting,
+        ),
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -95,6 +102,12 @@ class MainViewModel @Inject constructor(
         specialCircumstanceManager
             .specialCircumstanceStateFlow
             .onEach { specialCircumstance = it }
+            .launchIn(viewModelScope)
+
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
+            .map { MainAction.Internal.OnMobileErrorReportingReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         accessibilitySelectionManager
@@ -174,6 +187,17 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
+            is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
+            is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
+            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
+            is MainAction.AppSpecificLanguageUpdate -> handleAppSpecificLanguageUpdate(action)
+            is MainAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: MainAction.Internal) {
+        when (action) {
             is MainAction.Internal.AccessibilitySelectionReceive -> {
                 handleAccessibilitySelectionReceive(action)
             }
@@ -186,11 +210,17 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
-            is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
-            is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
-            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
-            is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
-            is MainAction.AppSpecificLanguageUpdate -> handleAppSpecificLanguageUpdate(action)
+            is MainAction.Internal.OnMobileErrorReportingReceive -> {
+                handleOnMobileErrorReportingReceive(action)
+            }
+        }
+    }
+
+    private fun handleOnMobileErrorReportingReceive(
+        action: MainAction.Internal.OnMobileErrorReportingReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isErrorReportingDialogEnabled = action.isErrorReportingEnabled)
         }
     }
 
@@ -451,7 +481,16 @@ class MainViewModel @Inject constructor(
 data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
-) : Parcelable
+    private val isErrorReportingDialogEnabled: Boolean,
+) : Parcelable {
+    /**
+     * Contains all feature flags that are available to the UI.
+     */
+    val featureFlagsState: FeatureFlagsState
+        get() = FeatureFlagsState(
+            isErrorReportingDialogEnabled = isErrorReportingDialogEnabled,
+        )
+}
 
 /**
  * Models actions for the [MainActivity].
@@ -493,6 +532,13 @@ sealed class MainAction {
          */
         data class AccessibilitySelectionReceive(
             val cipherView: CipherView,
+        ) : Internal()
+
+        /**
+         * Indicates the Mobile Error Reporting feature flag has been updated.
+         */
+        data class OnMobileErrorReportingReceive(
+            val isErrorReportingEnabled: Boolean,
         ) : Internal()
 
         /**

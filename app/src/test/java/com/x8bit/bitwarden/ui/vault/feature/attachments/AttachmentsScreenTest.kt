@@ -46,10 +46,11 @@ class AttachmentsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AttachmentsScreen(
                 viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }

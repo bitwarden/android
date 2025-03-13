@@ -136,6 +136,7 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.AnonAddySelfHostAlias to true,
     FlagKey.SimpleLoginSelfHostAlias to true,
     FlagKey.ChromeAutofill to true,
+    FlagKey.MobileErrorReporting to true,
 )
 
 private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
@@ -157,6 +158,7 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.AnonAddySelfHostAlias to false,
     FlagKey.SimpleLoginSelfHostAlias to false,
     FlagKey.ChromeAutofill to false,
+    FlagKey.MobileErrorReporting to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

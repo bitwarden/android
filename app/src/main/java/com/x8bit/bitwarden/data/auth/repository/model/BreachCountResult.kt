@@ -12,5 +12,8 @@ sealed class BreachCountResult {
     /**
      * There was an error determining if the password has been breached.
      */
-    data object Error : BreachCountResult()
+    data class Error(
+        val error: Throwable,
+        val message: String? = null,
+    ) : BreachCountResult()
 }
