@@ -29,14 +29,14 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+  - type: checkboxes
     id: operation-type
     attributes:
       label: Passkey Action
-      description: What passkey related action were you trying to perform?
+      description: What passkey related action(s) were you trying to perform?
       options:
-        - Creating new passkey (Registration)
-        - Signing in (Authentication)
+        - label: Creating new passkey (Registration)
+        - label: Signing in (Authentication)
     validations:
       required: true
 
