@@ -13,15 +13,18 @@ env:
 
 jobs:
   sync-privileged-browsers:
+    name: Sync Google Privileged Browsers List
     runs-on: ubuntu-24.04
     permissions:
       contents: write
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
 
-      - run: curl -s $SOURCE_URL -o $GOOGLE_FILE
+      - name: Download Google Privileged Browsers List
+        run: curl -s $SOURCE_URL -o $GOOGLE_FILE
 
       - name: Check for changes
         id: check-changes
