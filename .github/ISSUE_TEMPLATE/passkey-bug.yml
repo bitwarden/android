@@ -1,6 +1,6 @@
 name: Passkey Bug Report
-description: File a Passkey/FIDO2 related bug report
-labels: [ bug, passkey ]
+description: File a Passkey / FIDO2 related bug report
+labels: [ "app:password-manager", "bug-passkey" ]
 body:
   - type: markdown
     attributes:
