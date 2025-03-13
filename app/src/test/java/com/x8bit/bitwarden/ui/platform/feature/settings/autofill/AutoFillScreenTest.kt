@@ -39,6 +39,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
+    private var onNavigateToPrivilegedAppsScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -62,6 +63,9 @@ class AutoFillScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 intentManager = intentManager,
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                onNavigateToPrivilegedAppsScreen = {
+                    onNavigateToPrivilegedAppsScreenCalled = true
+                },
             )
         }
     }
