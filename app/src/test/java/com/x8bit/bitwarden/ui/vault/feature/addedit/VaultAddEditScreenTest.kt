@@ -2285,7 +2285,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Linked type`() {
+    fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
         // Expand the additional options UI before interacting with it
@@ -2294,7 +2294,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2869,7 +2869,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Text type`() {
+    fun `clicking Add field button should allow creation of Text type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Expand the additional options UI before interacting with it
@@ -2878,7 +2878,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2910,7 +2910,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should not display linked type`() {
+    fun `clicking Add field button should not display linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Expand the additional options UI before interacting with it
@@ -2919,7 +2919,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2933,7 +2933,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Boolean type`() {
+    fun `clicking Add field button should allow creation of Boolean type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Expand the additional options UI before interacting with it
@@ -2942,7 +2942,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2974,7 +2974,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Hidden type`() {
+    fun `clicking Add field button should allow creation of Hidden type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         // Expand the additional options UI before interacting with it
@@ -2983,7 +2983,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
