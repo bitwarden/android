@@ -18,12 +18,15 @@ fun NavController.navigateToDebugMenuScreen() {
 /**
  * Add the setup unlock screen to the nav graph.
  */
-fun NavGraphBuilder.setupDebugMenuDestination(
+fun NavGraphBuilder.debugMenuDestination(
     onNavigateBack: () -> Unit,
+    onSplashScreenRemoved: () -> Unit,
 ) {
     composableWithPushTransitions(
         route = DEBUG_MENU,
     ) {
         DebugMenuScreen(onNavigateBack = onNavigateBack)
+        // If we are displaying the debug screen, then we can just hide the splash screen.
+        onSplashScreenRemoved()
     }
 }
