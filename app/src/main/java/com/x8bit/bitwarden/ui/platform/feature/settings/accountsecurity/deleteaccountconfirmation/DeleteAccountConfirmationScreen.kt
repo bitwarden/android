@@ -112,6 +112,7 @@ private fun DeleteAccountConfirmationDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissDialog,
             )
         }

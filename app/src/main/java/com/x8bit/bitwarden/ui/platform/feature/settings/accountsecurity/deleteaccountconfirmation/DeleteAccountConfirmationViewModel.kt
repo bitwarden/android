@@ -156,6 +156,7 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = result.error,
                         )
                     }
 
@@ -201,6 +202,7 @@ data class DeleteAccountConfirmationState(
         data class Error(
             val title: Text = R.string.an_error_has_occurred.asText(),
             val message: Text,
+            val error: Throwable? = null,
         ) : DeleteAccountConfirmationDialog()
 
         /**

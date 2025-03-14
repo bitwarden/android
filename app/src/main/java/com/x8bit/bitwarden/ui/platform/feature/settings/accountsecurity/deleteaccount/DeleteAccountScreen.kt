@@ -81,6 +81,7 @@ fun DeleteAccountScreen(
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
             title = stringResource(id = R.string.an_error_has_occurred),
             message = dialog.message(),
+            throwable = dialog.error,
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
             },

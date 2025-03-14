@@ -99,6 +99,7 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -467,7 +468,7 @@ class AuthRepositoryImpl(
         masterPassword: String,
     ): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return DeleteAccountResult.Error(message = null)
+            ?: return DeleteAccountResult.Error(message = null, error = NoActiveUserException())
         mutableHasPendingAccountDeletionStateFlow.value = true
         return authSdkSource
             .hashPassword(
@@ -501,18 +502,13 @@ class AuthRepositoryImpl(
         fold(
             onFailure = {
                 clearPendingAccountDeletion()
-                DeleteAccountResult.Error(message = null)
+                DeleteAccountResult.Error(error = it, message = null)
             },
             onSuccess = { response ->
                 when (response) {
                     is DeleteAccountResponseJson.Invalid -> {
                         clearPendingAccountDeletion()
-                        DeleteAccountResult.Error(
-                            message = response.validationErrors
-                                ?.values
-                                ?.firstOrNull()
-                                ?.firstOrNull(),
-                        )
+                        DeleteAccountResult.Error(message = response.message, error = null)
                     }
 
                     DeleteAccountResponseJson.Success -> {

@@ -58,7 +58,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
             every { authRepo.clearPendingAccountDeletion() } just runs
             val state = DEFAULT_STATE.copy(
                 dialog =
-                DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
+                    DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
             )
             val viewModel = createViewModel(state = state)
 
@@ -121,9 +121,10 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `on DeleteAccountClick with DeleteAccountResult Error should set dialog to Error with message`() =
         runTest {
+            val error = Throwable("Fail!")
             coEvery {
                 authRepo.deleteAccountWithOneTimePassword("123456")
-            } returns DeleteAccountResult.Error(message = "Delete account error")
+            } returns DeleteAccountResult.Error(message = "Delete account error", error = error)
             val initialState = DEFAULT_STATE.copy(
                 verificationCode = "123456",
             )
@@ -145,6 +146,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
                     initialState.copy(
                         dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = "Delete account error".asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),

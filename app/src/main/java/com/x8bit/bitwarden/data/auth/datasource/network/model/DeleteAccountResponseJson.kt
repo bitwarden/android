@@ -23,6 +23,15 @@ sealed class DeleteAccountResponseJson {
     @Serializable
     data class Invalid(
         @SerialName("validationErrors")
-        val validationErrors: Map<String, List<String?>>?,
-    ) : DeleteAccountResponseJson()
+        private val validationErrors: Map<String, List<String?>>?,
+    ) : DeleteAccountResponseJson() {
+        /**
+         * A human readable error message.
+         */
+        val message: String?
+            get() = validationErrors
+                ?.values
+                ?.firstOrNull()
+                ?.firstOrNull()
+    }
 }

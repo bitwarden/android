@@ -105,6 +105,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -134,6 +135,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
@@ -295,6 +297,10 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
+        mockkConstructor(NoActiveUserException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
     }
 
     @AfterEach
@@ -303,6 +309,7 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
+        unmockkStatic(NoActiveUserException::class)
     }
 
     @Test
@@ -724,7 +731,10 @@ class AuthRepositoryTest {
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(
+            DeleteAccountResult.Error(message = null, error = NoActiveUserException()),
+            result,
+        )
     }
 
     @Test
@@ -732,13 +742,14 @@ class AuthRepositoryTest {
         val masterPassword = "hello world"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        val error = Throwable("Fail")
         coEvery {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         }
@@ -750,6 +761,7 @@ class AuthRepositoryTest {
         val hashedMasterPassword = "dlrow olleh"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        val error = Throwable("Fail")
         coEvery {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
@@ -758,11 +770,11 @@ class AuthRepositoryTest {
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
