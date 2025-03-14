@@ -186,6 +186,7 @@ private fun SearchDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is SearchState.DialogState.Loading -> BitwardenLoadingDialog(

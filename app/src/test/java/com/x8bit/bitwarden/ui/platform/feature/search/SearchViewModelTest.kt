@@ -715,8 +715,11 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
         runTest {
+            val error = Throwable("Ahhh")
             val sendId = "sendId1234"
-            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+            coEvery {
+                vaultRepository.deleteSend(sendId)
+            } returns DeleteSendResult.Error(error = error)
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -739,6 +742,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -787,7 +791,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val sendId = "sendId1234"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {

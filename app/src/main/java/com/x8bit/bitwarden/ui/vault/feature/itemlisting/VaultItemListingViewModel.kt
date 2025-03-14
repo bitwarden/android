@@ -1206,13 +1206,14 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: VaultItemListingsAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1238,6 +1239,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1310,6 +1312,8 @@ class VaultItemListingViewModel @Inject constructor(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
+                            // TODO PM-19425 update ValidatePasswordResult to propagate error.
+                            throwable = null,
                         ),
                     )
                 }
@@ -1322,6 +1326,8 @@ class VaultItemListingViewModel @Inject constructor(
                             dialogState = VaultItemListingState.DialogState.Error(
                                 title = null,
                                 message = R.string.invalid_master_password.asText(),
+                                // TODO PM-19425 update ValidatePasswordResult to propagate error.
+                                throwable = null,
                             ),
                         )
                     }
@@ -2025,6 +2031,7 @@ data class VaultItemListingState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
