@@ -48,8 +48,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -94,12 +96,17 @@ class CipherManagerTest {
     @BeforeEach
     fun setup() {
         mockkStatic(Uri::class)
+        mockkConstructor(NoActiveUserException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class, Instant::class)
         unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkConstructor(NoActiveUserException::class)
     }
 
     @Test
