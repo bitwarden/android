@@ -16,5 +16,5 @@ sealed class UpdateFolderResult {
      * Generic error while updating a folder. The optional [errorMessage]
      * may be displayed directly in the UI when present.
      */
-    data class Error(val errorMessage: String?) : UpdateFolderResult()
+    data class Error(val errorMessage: String?, val error: Throwable?) : UpdateFolderResult()
 }

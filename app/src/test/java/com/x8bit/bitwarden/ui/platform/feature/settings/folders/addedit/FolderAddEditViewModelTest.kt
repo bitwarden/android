@@ -199,10 +199,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `DeleteClick with DeleteFolderResult Failure should show an error dialog`() =
         runTest {
+            val error = Throwable("Oops")
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Error(
                     R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
@@ -231,7 +233,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
-            } returns DeleteFolderResult.Error
+            } returns DeleteFolderResult.Error(error = error)
 
             viewModel.trySendAction(FolderAddEditAction.DeleteClick)
 
@@ -404,9 +406,10 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
 
+        val error = Throwable("Oops")
         coEvery {
             vaultRepository.createFolder(any())
-        } returns CreateFolderResult.Error
+        } returns CreateFolderResult.Error(error = error)
 
         viewModel.trySendAction(FolderAddEditAction.SaveClick)
 
@@ -414,6 +417,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
                     R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -485,6 +489,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 state = state,
             ),
         )
+        val error = Throwable("Oops")
 
         mutableFoldersStateFlow.value =
             DataState.Loaded(
@@ -497,14 +502,15 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
         coEvery {
             vaultRepository.updateFolder(any(), any())
-        } returns UpdateFolderResult.Error(errorMessage = null)
+        } returns UpdateFolderResult.Error(errorMessage = null, error = error)
 
         viewModel.trySendAction(FolderAddEditAction.SaveClick)
 
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    message = R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,

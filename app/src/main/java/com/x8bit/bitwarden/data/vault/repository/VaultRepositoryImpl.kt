@@ -788,7 +788,8 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun createFolder(folderView: FolderView): CreateFolderResult {
-        val userId = activeUserId ?: return CreateFolderResult.Error
+        val userId = activeUserId
+            ?: return CreateFolderResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptFolder(
                 userId = userId,
@@ -804,7 +805,7 @@ class VaultRepositoryImpl(
             .flatMap { vaultSdkSource.decryptFolder(userId, it.toEncryptedSdkFolder()) }
             .fold(
                 onSuccess = { CreateFolderResult.Success(folderView = it) },
-                onFailure = { CreateFolderResult.Error },
+                onFailure = { CreateFolderResult.Error(error = it) },
             )
     }
 
@@ -812,7 +813,10 @@ class VaultRepositoryImpl(
         folderId: String,
         folderView: FolderView,
     ): UpdateFolderResult {
-        val userId = activeUserId ?: return UpdateFolderResult.Error(null)
+        val userId = activeUserId ?: return UpdateFolderResult.Error(
+            errorMessage = null,
+            error = NoActiveUserException(),
+        )
         return vaultSdkSource
             .encryptFolder(
                 userId = userId,
@@ -837,21 +841,30 @@ class VaultRepositoryImpl(
                                 )
                                 .fold(
                                     onSuccess = { UpdateFolderResult.Success(it) },
-                                    onFailure = { UpdateFolderResult.Error(errorMessage = null) },
+                                    onFailure = {
+                                        UpdateFolderResult.Error(
+                                            errorMessage = null,
+                                            error = it,
+                                        )
+                                    },
                                 )
                         }
 
                         is UpdateFolderResponseJson.Invalid -> {
-                            UpdateFolderResult.Error(response.message)
+                            UpdateFolderResult.Error(
+                                errorMessage = response.message,
+                                error = null,
+                            )
                         }
                     }
                 },
-                onFailure = { UpdateFolderResult.Error(it.message) },
+                onFailure = { UpdateFolderResult.Error(it.message, error = it) },
             )
     }
 
     override suspend fun deleteFolder(folderId: String): DeleteFolderResult {
-        val userId = activeUserId ?: return DeleteFolderResult.Error
+        val userId = activeUserId
+            ?: return DeleteFolderResult.Error(error = NoActiveUserException())
         return folderService
             .deleteFolder(
                 folderId = folderId,
@@ -862,7 +875,7 @@ class VaultRepositoryImpl(
             }
             .fold(
                 onSuccess = { DeleteFolderResult.Success },
-                onFailure = { DeleteFolderResult.Error },
+                onFailure = { DeleteFolderResult.Error(error = it) },
             )
     }
 
