@@ -55,6 +55,7 @@ class AttachmentsViewModel @Inject constructor(
                 dialogState = AttachmentsState.DialogState.Error(
                     title = null,
                     message = R.string.premium_required.asText(),
+                    throwable = null,
                 )
                     .takeUnless { isPremiumUser },
                 isPremiumUser = isPremiumUser,
@@ -99,6 +100,7 @@ class AttachmentsViewModel @Inject constructor(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.premium_required.asText(),
+                            throwable = null,
                         ),
                     )
                 }
@@ -112,6 +114,7 @@ class AttachmentsViewModel @Inject constructor(
                             message = R.string.validation_field_required.asText(
                                 R.string.file.asText(),
                             ),
+                            throwable = null,
                         ),
                     )
                 }
@@ -124,6 +127,7 @@ class AttachmentsViewModel @Inject constructor(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.max_file_size.asText(),
+                            throwable = null,
                         ),
                     )
                 }
@@ -265,13 +269,14 @@ class AttachmentsViewModel @Inject constructor(
     private fun handleCreateAttachmentResultReceive(
         action: AttachmentsAction.Internal.CreateAttachmentResultReceive,
     ) {
-        when (action.result) {
-            CreateAttachmentResult.Error -> {
+        when (val result = action.result) {
+            is CreateAttachmentResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -285,13 +290,14 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     private fun handleDeleteResultReceive(action: AttachmentsAction.Internal.DeleteResultReceive) {
-        when (action.result) {
-            DeleteAttachmentResult.Error -> {
+        when (val result = action.result) {
+            is DeleteAttachmentResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -399,6 +405,7 @@ data class AttachmentsState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable?,
         ) : DialogState()
 
         /**
