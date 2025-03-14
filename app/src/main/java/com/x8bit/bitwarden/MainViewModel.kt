@@ -58,6 +58,7 @@ import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
+private const val ANIMATION_REFRESH_DELAY = 500L
 
 /**
  * A view model that helps launch actions for the [MainActivity].
@@ -148,8 +149,7 @@ class MainViewModel @Inject constructor(
                 // Switching between account states often involves some kind of animation (ex:
                 // account switcher) that we might want to give time to finish before triggering
                 // a refresh.
-                @Suppress("MagicNumber")
-                delay(500)
+                delay(ANIMATION_REFRESH_DELAY)
                 trySendAction(MainAction.Internal.CurrentUserStateChange)
             }
             .launchIn(viewModelScope)
@@ -161,8 +161,7 @@ class MainViewModel @Inject constructor(
                     is VaultStateEvent.Locked -> {
                         // Similar to account switching, triggering this action too soon can
                         // interfere with animations or navigation logic, so we will delay slightly.
-                        @Suppress("MagicNumber")
-                        delay(500)
+                        delay(ANIMATION_REFRESH_DELAY)
                         trySendAction(MainAction.Internal.VaultUnlockStateChange)
                     }
 
