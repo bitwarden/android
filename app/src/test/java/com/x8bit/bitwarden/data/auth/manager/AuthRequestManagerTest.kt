@@ -68,6 +68,7 @@ class AuthRequestManagerTest {
         runTest {
             val email = "email@email.com"
             val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val error = Throwable("Fail")
             coEvery {
                 authSdkSource.getNewAuthRequest(email = email)
             } returns authRequestResponse.asSuccess()
@@ -80,7 +81,7 @@ class AuthRequestManagerTest {
                     fingerprint = authRequestResponse.fingerprint,
                     authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             repository
                 .createAuthRequestWithUpdates(
@@ -88,7 +89,7 @@ class AuthRequestManagerTest {
                     authRequestType = AuthRequestType.OTHER_DEVICE,
                 )
                 .test {
-                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    assertEquals(CreateAuthRequestResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
         }
@@ -405,9 +406,10 @@ class AuthRequestManagerTest {
     fun `createAuthRequestWithUpdates with authSdkSource getNewAuthRequest error should emit Error`() =
         runTest {
             val email = "email@email.com"
+            val error = Throwable("Fail")
             coEvery {
                 authSdkSource.getNewAuthRequest(email = email)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             repository
                 .createAuthRequestWithUpdates(
@@ -415,7 +417,7 @@ class AuthRequestManagerTest {
                     authRequestType = AuthRequestType.OTHER_DEVICE,
                 )
                 .test {
-                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    assertEquals(CreateAuthRequestResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
         }

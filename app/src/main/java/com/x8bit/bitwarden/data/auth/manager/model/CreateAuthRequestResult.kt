@@ -23,7 +23,9 @@ sealed class CreateAuthRequestResult {
     /**
      * There was a generic error getting the user's auth requests.
      */
-    data object Error : CreateAuthRequestResult()
+    data class Error(
+        val error: Throwable,
+    ) : CreateAuthRequestResult()
 
     /**
      * The auth request has been declined.

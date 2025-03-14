@@ -70,9 +70,8 @@ class AuthRequestManagerImpl(
             email = email,
             authRequestType = authRequestType.toAuthRequestTypeJson(),
         )
-            .getOrNull()
-            ?: run {
-                emit(CreateAuthRequestResult.Error)
+            .getOrElse {
+                emit(CreateAuthRequestResult.Error(error = it))
                 return@flow
             }
         var authRequest = initialResult.authRequest
@@ -103,7 +102,7 @@ class AuthRequestManagerImpl(
                     )
                 }
                 .fold(
-                    onFailure = { emit(CreateAuthRequestResult.Error) },
+                    onFailure = { emit(CreateAuthRequestResult.Error(error = it)) },
                     onSuccess = { updateAuthRequest ->
                         when {
                             updateAuthRequest.requestApproved -> {

@@ -258,6 +258,7 @@ private fun LoginWithDeviceDialogs(
         is LoginWithDeviceState.DialogState.Error -> BitwardenBasicDialog(
             title = state.title?.invoke(),
             message = state.message(),
+            throwable = state.error,
             onDismissRequest = onDismissDialog,
         )
 

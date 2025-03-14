@@ -647,9 +647,12 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on createAuthRequestWithUpdates Error received should show content with error dialog`() {
+        val error = Throwable("Fail!")
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Error)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+            value = CreateAuthRequestResult.Error(error = error),
+        )
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
@@ -659,6 +662,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
             viewModel.stateFlow.value,
