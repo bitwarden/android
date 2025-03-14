@@ -153,6 +153,9 @@ fun VaultItemScreen(
         onConfirmArchiveClick = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmArchiveClick) }
         },
+        onConfirmUnarchiveClick = remember(viewModel) {
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmUnarchiveClick) }
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -181,6 +184,20 @@ fun VaultItemScreen(
                                 }
                             },
                             modifier = Modifier.testTag("RestoreButton"),
+                        )
+                    }
+
+                    if (state.isCipherArchived) {
+                        BitwardenTextButton(
+                            label = stringResource(id = R.string.restore),
+                            onClick = remember(viewModel) {
+                                {
+                                    viewModel.trySendAction(
+                                        VaultItemAction.Common.UnarchiveVaultItemClick,
+                                    )
+                                }
+                            },
+                            modifier = Modifier.testTag("UnarchiveButton"),
                         )
                     }
                     BitwardenOverflowActionItem(
@@ -310,6 +327,7 @@ private fun VaultItemDialogs(
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
     onConfirmArchiveClick: () -> Unit,
+    onConfirmUnarchiveClick: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -372,6 +390,18 @@ private fun VaultItemDialogs(
                 confirmButtonText = stringResource(id = R.string.ok),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmArchiveClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemState.DialogState.UnarchiveItemDialog -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.restore),
+                message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
+                confirmButtonText = stringResource(id = R.string.ok),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = onConfirmUnarchiveClick,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
             )

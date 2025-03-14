@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
@@ -355,6 +356,25 @@ class CipherManagerImpl(
             .fold(
                 onSuccess = { ArchiveCipherResult.Success },
                 onFailure = { ArchiveCipherResult.Error },
+            )
+    }
+
+    override suspend fun unarchiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UnarchiveCipherResult {
+        val userId = activeUserId ?: return UnarchiveCipherResult.Error
+        return ciphersService
+            .unarchiveCipher(cipherId = cipherId)
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.copy(collectionIds = cipherView.collectionIds),
+                )
+            }
+            .fold(
+                onSuccess = { UnarchiveCipherResult.Success },
+                onFailure = { UnarchiveCipherResult.Error },
             )
     }
 

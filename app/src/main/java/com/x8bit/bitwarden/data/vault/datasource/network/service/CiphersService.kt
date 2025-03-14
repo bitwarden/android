@@ -130,4 +130,9 @@ interface CiphersService {
      * Attempt to archive a cipher.
      */
     suspend fun archiveCipher(cipherId: String): Result<Unit>
+
+    /**
+     * Attempt to unarchive a cipher.
+     */
+    suspend fun unarchiveCipher(cipherId: String): Result<SyncResponseJson.Cipher>
 }

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 
 /**
@@ -118,4 +119,12 @@ interface CipherManager {
         cipherId: String,
         cipherView: CipherView,
     ): ArchiveCipherResult
+
+    /**
+     * Attempt to unarchive a cipher.
+     */
+    suspend fun unarchiveCipher(
+        cipherId: String,
+        cipherView: CipherView,
+    ): UnarchiveCipherResult
 }

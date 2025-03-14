@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -259,6 +260,8 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.PasswordHistoryClick -> handlePasswordHistoryClick()
             is VaultItemAction.Common.ArchiveClick -> handleArchiveClick()
             is VaultItemAction.Common.ConfirmArchiveClick -> handleConfirmArchiveClick()
+            is VaultItemAction.Common.UnarchiveVaultItemClick -> handleUnarchiveClick()
+            is VaultItemAction.Common.ConfirmUnarchiveClick -> handleConfirmUnarchiveClick()
         }
     }
 
@@ -622,6 +625,38 @@ class VaultItemViewModel @Inject constructor(
                     trySendAction(
                         VaultItemAction.Internal.ArchiveCipherReceive(
                             vaultRepository.archiveCipher(
+                                cipherId = state.vaultItemId,
+                                cipherView = cipher,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun handleUnarchiveClick() {
+        onContent { content ->
+            updateDialogState(
+                VaultItemState
+                    .DialogState
+                    .UnarchiveItemDialog,
+            )
+        }
+    }
+
+    private fun handleConfirmUnarchiveClick() {
+        onContent { content ->
+            updateDialogState(
+                VaultItemState.DialogState.Loading(
+                    R.string.restoring.asText(),
+                ),
+            )
+            content.common.currentCipher?.let { cipher ->
+                viewModelScope.launch {
+                    trySendAction(
+                        VaultItemAction.Internal.UnarchiveCipherReceive(
+                            vaultRepository.unarchiveCipher(
                                 cipherId = state.vaultItemId,
                                 cipherView = cipher,
                             ),
@@ -1144,6 +1179,9 @@ class VaultItemViewModel @Inject constructor(
             }
 
             is VaultItemAction.Internal.ArchiveCipherReceive -> handleArchiveCipherReceive(action)
+            is VaultItemAction.Internal.UnarchiveCipherReceive -> {
+                handleUnarchiveCipherReceive(action)
+            }
         }
     }
 
@@ -1415,6 +1453,26 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleUnarchiveCipherReceive(
+        action: VaultItemAction.Internal.UnarchiveCipherReceive,
+    ) {
+        when (action.result) {
+            UnarchiveCipherResult.Error -> {
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
+            }
+
+            UnarchiveCipherResult.Success -> {
+                dismissDialog()
+                sendEvent(VaultItemEvent.ShowToast(message = R.string.item_restored.asText()))
+                sendEvent(VaultItemEvent.NavigateBack)
+            }
+        }
+    }
+
     //endregion Internal Type Handlers
 
     private fun updateDialogState(dialog: VaultItemState.DialogState?) {
@@ -1530,6 +1588,15 @@ data class VaultItemState(
             ?.deletedDate != null
 
     private val isCipherEditable: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canEdit == true
+
+    /**
+     * Whether or not the cipher has been archived.
+     */
+    // TODO update this when SDK is updated
+    val isCipherArchived: Boolean
         get() = viewState.asContentOrNull()
             ?.common
             ?.canEdit == true
@@ -1960,6 +2027,12 @@ data class VaultItemState(
          */
         @Parcelize
         data object ArchiveConfirmationPrompt : DialogState()
+
+        /**
+         * Displays the dialog to prompt the user to confirm restoring an archived item.
+         */
+        @Parcelize
+        data object UnarchiveItemDialog : DialogState()
     }
 }
 
@@ -2176,6 +2249,17 @@ sealed class VaultItemAction {
          * The user has clicked the password history text.
          */
         data object PasswordHistoryClick : Common()
+
+        /**
+         * The user has clicked to restore an archived item.
+
+         */
+        data object UnarchiveVaultItemClick : Common()
+
+        /**
+         * The user has confirmed to unarchive the cipher.
+         */
+        data object ConfirmUnarchiveClick : Common()
     }
 
     /**
@@ -2414,6 +2498,13 @@ sealed class VaultItemAction {
          */
         data class ArchiveCipherReceive(
             val result: ArchiveCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the unarchive cipher result has been received.
+         */
+        data class UnarchiveCipherReceive(
+            val result: UnarchiveCipherResult,
         ) : Internal()
     }
 }

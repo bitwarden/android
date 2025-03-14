@@ -163,4 +163,12 @@ interface CiphersApi {
     suspend fun archiveCipher(
         @Path("cipherId") cipherId: String,
     ): NetworkResult<Unit>
+
+    /**
+     * Unarchives a cipher.
+     */
+    @PUT("ciphers/{cipherId}/unarchive")
+    suspend fun unarchiveCipher(
+        @Path("cipherId") cipherId: String,
+    ): NetworkResult<SyncResponseJson.Cipher>
 }

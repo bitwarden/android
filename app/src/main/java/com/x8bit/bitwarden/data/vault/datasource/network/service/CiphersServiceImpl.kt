@@ -241,6 +241,11 @@ class CiphersServiceImpl(
             .archiveCipher(cipherId = cipherId)
             .toResult()
 
+    override suspend fun unarchiveCipher(cipherId: String): Result<SyncResponseJson.Cipher> =
+        ciphersApi
+            .unarchiveCipher(cipherId = cipherId)
+            .toResult()
+
     private fun createMultipartBodyBuilder(
         encryptedFile: File,
         filename: String?,
