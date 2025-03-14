@@ -766,8 +766,8 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun createFolder(folderView: FolderView): CreateFolderResult {
-        val userId =
-            activeUserId ?: return CreateFolderResult.Error(error = NoActiveUserException())
+        val userId = activeUserId
+            ?: return CreateFolderResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptFolder(
                 userId = userId,
@@ -841,8 +841,8 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun deleteFolder(folderId: String): DeleteFolderResult {
-        val userId =
-            activeUserId ?: return DeleteFolderResult.Error(error = NoActiveUserException())
+        val userId = activeUserId
+            ?: return DeleteFolderResult.Error(error = NoActiveUserException())
         return folderService
             .deleteFolder(
                 folderId = folderId,
