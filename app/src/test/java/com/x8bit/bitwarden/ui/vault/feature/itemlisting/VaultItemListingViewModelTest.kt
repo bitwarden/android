@@ -1232,7 +1232,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
         runTest {
             val sendId = "sendId1234"
-            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+            val error = Throwable("Oops")
+            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error(
+                error = error,
+            )
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
@@ -1255,6 +1258,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -1301,9 +1305,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend error should display error dialog`() =
         runTest {
             val sendId = "sendId1234"
+            val error = Throwable("Oops")
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = error)
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
@@ -1326,6 +1331,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),

@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -622,7 +623,8 @@ class VaultRepositoryImpl(
         sendView: SendView,
         fileUri: Uri?,
     ): CreateSendResult {
-        val userId = activeUserId ?: return CreateSendResult.Error(message = null)
+        val userId = activeUserId
+            ?: return CreateSendResult.Error(message = null, error = NoActiveUserException())
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -639,6 +641,7 @@ class VaultRepositoryImpl(
                     is CreateSendJsonResponse.Invalid -> {
                         return CreateSendResult.Error(
                             message = createSendResponse.firstValidationErrorMessage,
+                            error = null,
                         )
                     }
 
@@ -656,7 +659,7 @@ class VaultRepositoryImpl(
                 )
             }
             .fold(
-                onFailure = { CreateSendResult.Error(message = null) },
+                onFailure = { CreateSendResult.Error(message = null, error = it) },
                 onSuccess = {
                     reviewPromptManager.registerCreateSendAction()
                     CreateSendResult.Success(it)
@@ -668,7 +671,11 @@ class VaultRepositoryImpl(
         sendId: String,
         sendView: SendView,
     ): UpdateSendResult {
-        val userId = activeUserId ?: return UpdateSendResult.Error(null)
+        val userId = activeUserId
+            ?: return UpdateSendResult.Error(
+                errorMessage = null,
+                error = NoActiveUserException(),
+            )
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -681,11 +688,11 @@ class VaultRepositoryImpl(
                 )
             }
             .fold(
-                onFailure = { UpdateSendResult.Error(errorMessage = null) },
+                onFailure = { UpdateSendResult.Error(errorMessage = null, error = it) },
                 onSuccess = { response ->
                     when (response) {
                         is UpdateSendResponseJson.Invalid -> {
-                            UpdateSendResult.Error(errorMessage = response.message)
+                            UpdateSendResult.Error(errorMessage = response.message, error = null)
                         }
 
                         is UpdateSendResponseJson.Success -> {
@@ -695,9 +702,12 @@ class VaultRepositoryImpl(
                                     userId = userId,
                                     send = response.send.toEncryptedSdkSend(),
                                 )
-                                .getOrNull()
-                                ?.let { UpdateSendResult.Success(sendView = it) }
-                                ?: UpdateSendResult.Error(errorMessage = null)
+                                .fold(
+                                    onSuccess = { UpdateSendResult.Success(sendView = it) },
+                                    onFailure = {
+                                        UpdateSendResult.Error(errorMessage = null, error = it)
+                                    },
+                                )
                         }
                     }
                 },
@@ -705,14 +715,21 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult {
-        val userId = activeUserId ?: return RemovePasswordSendResult.Error(null)
+        val userId = activeUserId
+            ?: return RemovePasswordSendResult.Error(
+                errorMessage = null,
+                error = NoActiveUserException(),
+            )
         return sendsService
             .removeSendPassword(sendId = sendId)
             .fold(
                 onSuccess = { response ->
                     when (response) {
                         is UpdateSendResponseJson.Invalid -> {
-                            RemovePasswordSendResult.Error(errorMessage = response.message)
+                            RemovePasswordSendResult.Error(
+                                errorMessage = response.message,
+                                error = null,
+                            )
                         }
 
                         is UpdateSendResponseJson.Success -> {
@@ -722,24 +739,30 @@ class VaultRepositoryImpl(
                                     userId = userId,
                                     send = response.send.toEncryptedSdkSend(),
                                 )
-                                .getOrNull()
-                                ?.let { RemovePasswordSendResult.Success(sendView = it) }
-                                ?: RemovePasswordSendResult.Error(errorMessage = null)
+                                .fold(
+                                    onSuccess = { RemovePasswordSendResult.Success(sendView = it) },
+                                    onFailure = {
+                                        RemovePasswordSendResult.Error(
+                                            errorMessage = null,
+                                            error = it,
+                                        )
+                                    },
+                                )
                         }
                     }
                 },
-                onFailure = { RemovePasswordSendResult.Error(errorMessage = null) },
+                onFailure = { RemovePasswordSendResult.Error(errorMessage = null, error = it) },
             )
     }
 
     override suspend fun deleteSend(sendId: String): DeleteSendResult {
-        val userId = activeUserId ?: return DeleteSendResult.Error
+        val userId = activeUserId ?: return DeleteSendResult.Error(error = NoActiveUserException())
         return sendsService
             .deleteSend(sendId)
             .onSuccess { vaultDiskSource.deleteSend(userId, sendId) }
             .fold(
                 onSuccess = { DeleteSendResult.Success },
-                onFailure = { DeleteSendResult.Error },
+                onFailure = { DeleteSendResult.Error(error = it) },
             )
     }
 

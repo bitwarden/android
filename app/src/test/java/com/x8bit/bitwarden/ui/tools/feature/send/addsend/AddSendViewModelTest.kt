@@ -242,7 +242,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-        } returns CreateSendResult.Error("Fail")
+        } returns CreateSendResult.Error(message = "Fail", error = null)
         val viewModel = createViewModel(initialState)
 
         viewModel.stateFlow.test {
@@ -337,7 +337,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.updateSend(sendId = sendId, sendView = mockSendView)
-        } returns UpdateSendResult.Error(errorMessage = errorMessage)
+        } returns UpdateSendResult.Error(errorMessage = errorMessage, error = null)
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(initialState, AddSendType.EditItem(sendId))
 
@@ -493,7 +493,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val sendId = "mockId-1"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
             val initialState = DEFAULT_STATE.copy(
                 addSendType = AddSendType.EditItem(sendItemId = sendId),
             )
@@ -542,7 +542,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val errorMessage = "Fail"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = errorMessage)
+            } returns RemovePasswordSendResult.Error(errorMessage = errorMessage, error = null)
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
@@ -608,8 +608,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `DeleteClick vaultRepository deleteSend Error should show error dialog`() = runTest {
+        val error = Throwable("Ooops")
         val sendId = "mockId-1"
-        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error(
+            error = error,
+        )
         val initialState = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = sendId),
         )
@@ -643,6 +646,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                     dialogState = AddSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 awaitItem(),
