@@ -169,7 +169,7 @@ class PendingRequestsViewModel @Inject constructor(
                 }
             }
 
-            AuthRequestsUpdatesResult.Error -> {
+            is AuthRequestsUpdatesResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         authRequests = emptyList(),

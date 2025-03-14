@@ -14,5 +14,7 @@ sealed class AuthRequestsUpdatesResult {
     /**
      * There was an error getting the user's auth requests.
      */
-    data object Error : AuthRequestsUpdatesResult()
+    data class Error(
+        val error: Throwable,
+    ) : AuthRequestsUpdatesResult()
 }
