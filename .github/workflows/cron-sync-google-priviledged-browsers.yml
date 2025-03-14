@@ -1,0 +1,98 @@
+name: Cron / Sync Google Privileged Browsers List
+
+on:
+  schedule:
+    # Run weekly on Monday at 00:00 UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+env:
+  SOURCE_URL: https://www.gstatic.com/gpm-passkeys-privileged-apps/apps.json
+  GOOGLE_FILE: app/src/main/assets/fido2_privileged_google.json
+  COMMUNITY_FILE: app/src/main/assets/fido2_privileged_community.json
+
+jobs:
+  sync-privileged-browsers:
+    name: Sync Google Privileged Browsers List
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # 4.2.2
+
+      - name: Download Google Privileged Browsers List
+        run: curl -s $SOURCE_URL -o $GOOGLE_FILE
+
+      - name: Check for changes
+        id: check-changes
+        run: |
+          if git diff --quiet -- $GOOGLE_FILE; then
+            echo "👀 No changes detected, skipping..."
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "👀 Changes detected, validating fido2_privileged_google.json..."
+
+          python .github/scripts/validate-json/validate_json.py validate $GOOGLE_FILE
+          if [ $? -ne 0 ]; then
+            echo "::error::JSON validation failed for $GOOGLE_FILE"
+            exit 1
+          fi
+
+          echo "👀 fido2_privileged_google.json is valid, checking for duplicates..."
+
+          # Check for duplicates between Google and Community files
+          python .github/scripts/validate-json/validate_json.py duplicates $GOOGLE_FILE $COMMUNITY_FILE duplicates.txt
+
+          if [ -f duplicates.txt ]; then
+            echo "::warning::Duplicate package names found between Google and Community files."
+            echo "duplicates_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "✅ No duplicate package names found between Google and Community files"
+            echo "duplicates_found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create branch and commit
+        if: steps.check-changes.outputs.has_changes == 'true'
+        run: |
+          echo "👀 Committing fido2_privileged_google.json..."
+
+          BRANCH_NAME="cron-sync-privileged-browsers/$GITHUB_RUN_NUMBER-sync"
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git checkout -b $BRANCH_NAME
+          git add $GOOGLE_FILE
+          git commit -m "Update Google privileged browsers list"
+          git push origin $BRANCH_NAME
+          echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+          echo "🌱 Branch created: $BRANCH_NAME"
+
+      - name: Create Pull Request
+        if: steps.check-changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DUPLICATES_FOUND: ${{ steps.check-changes.outputs.duplicates_found }}
+          BASE_PR_URL: ${{ github.server_url }}/${{ github.repository }}/pull/
+        run: |
+          PR_BODY="Updates the Google privileged browsers list with the latest data from $SOURCE_URL"
+
+          if [ "$DUPLICATES_FOUND" = "true" ]; then
+            PR_BODY="$PR_BODY\n\n> [!WARNING]\n> :suspect: The following package(s) appear in both Google and Community files:"
+            while IFS= read -r line; do
+              PR_BODY="$PR_BODY\n> - $line"
+            done < duplicates.txt
+          fi
+
+          # Use echo -e to interpret escape sequences and pipe to gh pr create
+          PR_URL=$(echo -e "$PR_BODY" | gh pr create \
+            --title "Update Google privileged browsers list" \
+            --body-file - \
+            --base main \
+            --head $BRANCH_NAME \
+            --label "automated-pr" \
+            --label "t:ci")

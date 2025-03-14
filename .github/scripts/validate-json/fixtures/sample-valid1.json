@@ -1,0 +1,48 @@
+{
+  "apps": [
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.android.chrome",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "F0:FD:6C:5B:41:0F:25:CB:25:C3:B5:33:46:C8:97:2F:AE:30:F8:EE:74:11:DF:91:04:80:AD:6B:2D:60:DB:83"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "19:75:B2:F1:71:77:BC:89:A5:DF:F3:1F:9E:64:A6:CA:E2:81:A5:3D:C1:D1:D5:9B:1D:14:7F:E1:C8:2A:FA:00"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.chrome.dev",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "90:44:EE:5F:EE:4B:BC:5E:21:DD:44:66:54:31:C4:EB:1F:1F:71:A3:27:16:A0:BC:92:7B:CB:B3:92:33:CA:BF"
+          },
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "3D:7A:12:23:01:9A:A3:9D:9E:A0:E3:43:6A:B7:C0:89:6B:FB:4F:B6:79:F4:DE:5F:E7:C2:3F:32:6C:8F:99:4A"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "com.chrome.canary",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "DF:A1:FB:23:EF:BF:70:C5:BC:D1:44:3C:5B:EA:B0:4F:3F:2F:F4:36:6E:9A:C1:E3:45:76:39:A2:4C:FC"
+          }
+        ]
+      }
+    }
+  ]
+}
