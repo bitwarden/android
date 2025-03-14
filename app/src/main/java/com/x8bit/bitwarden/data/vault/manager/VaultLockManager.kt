@@ -23,6 +23,11 @@ interface VaultLockManager {
     val vaultStateEventFlow: Flow<VaultStateEvent>
 
     /**
+     * Whether the user is coming from the lock flow or not.
+     */
+    var isFromLockFlow: Boolean
+
+    /**
      * Whether or not the vault is currently locked for the given [userId].
      */
     fun isVaultUnlocked(userId: String): Boolean
