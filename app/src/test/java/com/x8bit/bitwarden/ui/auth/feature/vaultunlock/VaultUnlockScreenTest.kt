@@ -479,7 +479,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     @Test
     fun `state with input and without biometrics should request focus on input field`() = runTest {
         mutableStateFlow.update { it.copy(hideInput = false, isBiometricEnabled = false) }
-        dispatcher.advanceTimeByAndRunCurrent(500L)
+        dispatcher.advanceTimeByAndRunCurrent(600L)
         composeTestRule
             .onNodeWithText("Master password")
             .performScrollTo()
