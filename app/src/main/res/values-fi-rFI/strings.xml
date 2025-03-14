@@ -255,7 +255,7 @@
   <string name="enter_verification_code_email">Syötä osoitteeseen %1$s lähetetty kuusinumeroinen todennuskoodi.</string>
   <string name="enter_verification_code_new_device">Laitetta ei tunnisteta. Syötä osoitteeseen %1$s lähetetty kahdeksan numeroinen vahvistuskoodi.</string>
   <string name="login_unavailable">Kirjautuminen ei ole käytettävissä</string>
-  <string name="no_two_step_available">Tilillä on käytössä kaksivaiheinen kirjautuminen, mutta tämä laite ei tue käytettävissä olevia todentajia. Käytä yhteensopivaa laitetta ja/tai lisää eri alustoija laajemmin tukevia todentajia (kuten todennussovellus).</string>
+  <string name="no_two_step_available">Tilille on määritetty kaksivaiheinen kirjautuminen, mutta tämä laite ei tue käytettävissä olevia todennustapoja. Käytä yhteensopivaa laitetta ja/tai lisää eri alustoja laajemmin tukevia todentajia (kuten todennussovellus).</string>
   <string name="recovery_code_title">Palautuskoodi</string>
   <string name="remember">Muista</string>
   <string name="remember_email">Muista sähköpostiosoite</string>
@@ -264,7 +264,7 @@
   <string name="use_another_two_step_method">Käytä vaihtoehtoista todennustapaa</string>
   <string name="verification_email_not_sent">Todennussähköpostin lähetys ei onnistunut. Yritä uudelleen.</string>
   <string name="verification_email_sent">Todennussähköposti lähetettiin</string>
-  <string name="yubi_key_instruction">Jatka asettamalla YubiKey NEO -todennuslaite laitteen taustaa vasten tai kytke YubiKey-todennuslaite laitteen USB-porttiin ja paina sen painiketta.</string>
+  <string name="yubi_key_instruction">Jatka asettamalla YubiKey NEO -suojausavain laitteen taustaa vasten tai kytke YubiKey-suojausavain laitteen USB-porttiin ja kosketa sen painiketta.</string>
   <string name="yubi_key_title">YubiKey-suojausavain</string>
   <string name="add_new_attachment">Lisää uusi tiedostoliite</string>
   <string name="attachments">Liitteet</string>
@@ -282,7 +282,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="camera">Kamera</string>
   <string name="photos">Kuvat</string>
   <string name="copy_totp">Kopioi TOTP-koodi</string>
-  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen kirjautumisen todennusavaimen, kopioidaan TOTP-koodi leikepöydälle kohteen automaattisen täytön yhteydessä.</string>
+  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen kirjautumisen todennusavaimen, kopioidaan TOTP-koodi leikepöydälle kun kohde täytetään automaattisesti.</string>
   <string name="copy_totp_automatically">Kopioi TOTP-koodi automaattisesti</string>
   <string name="premium_required">Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</string>
   <string name="attachement_added">Tiedostoliite lisätty</string>
@@ -405,9 +405,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="yes_and_save">Kyllä, ja tallenna</string>
   <string name="autofill_and_save">Automaattitäytä ja tallenna</string>
   <string name="organization">Organisaatio</string>
-  <string name="hold_yubikey_near_top">Pidä YubiKey-todennuslaittettasi lähellä laitteen yläosaa.</string>
+  <string name="hold_yubikey_near_top">Pidä YubiKey-suojausavaintasi lähellä laitteen yläosaa.</string>
   <string name="try_again">Yritä uudelleen</string>
-  <string name="yubi_key_instruction_ios">Jatka pitämällä YubiKey NEO -todennuslaitetta laitteen taustaa vasten.</string>
+  <string name="yubi_key_instruction_ios">Jatka pitämällä YubiKey NEO -suojausavainta laitteen taustaa vasten.</string>
   <string name="bitwarden_autofill_accessibility_service_description2">Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattitäytön palvelua.</string>
   <string name="date_password_updated">Salasana vaihdettiin</string>
   <string name="date_updated">Päivitettiin</string>
@@ -466,13 +466,13 @@ Koodi skannataan automaattisesti.</string>
   <string name="no_orgs_to_list">Ei näytettäviä organisaatioita.</string>
   <string name="move_to_org_desc">Valitse organisaatio, jolle haluat siirtää kohteen. Tämä siirtää kohteen organisaation omistukseen, etkä tämän jälkeen ole enää sen suora omistaja.</string>
   <string name="number_of_words">Sanojen määrä</string>
-  <string name="passphrase">Salauslauseke</string>
+  <string name="passphrase">Salalause</string>
   <string name="word_separator">Sanojen erotin</string>
   <string name="clear">Tyhjennä</string>
   <string name="generator">Generaattori</string>
   <string name="no_folders_to_list">Ei näytettäviä kansioita.</string>
-  <string name="fingerprint_phrase">Tunnistelauseke</string>
-  <string name="your_accounts_fingerprint">Tilisi tunnistelauseke</string>
+  <string name="fingerprint_phrase">Tunnistelause</string>
+  <string name="your_accounts_fingerprint">Tilisi tunnistelause</string>
   <string name="learn_org_confirmation">Bitwardenin avulla voit jakaa holvisi sisältöä muiden kanssa organisaatiotiliä käyttäen. Haluatko lukea bitwarden.com-sivustolta lisää?</string>
   <string name="export_vault">Vie holvi</string>
   <string name="lock_now">Lukitse nyt</string>
@@ -674,9 +674,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="leave_organization">Poistu organisaatiosta</string>
   <string name="leave_organization_name">Poistutaanko organisaatiosta %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
-  <string name="fido2_instruction">Jatka valmistelemalla FIDO2 WebAuthn -suojausavaimesi ja seuraa ohjeita valittuasi seuraavasta näytöstä \"WebAuthn-todennus\".</string>
-  <string name="fido2_desc">FIDO2 WebAuthn -todennus mahdollistaa tunnistautumisen fyysisellä suojausavaimella.</string>
-  <string name="fido2_authenticate_web_authn">WebAuthn-todennus</string>
+  <string name="fido2_instruction">Jatka valmistelemalla FIDO2 WebAuthn -suojausavaimesi ja seuraa ohjeita valittuasi seuraavasta näytöstä \"WebAuthn-tunnistautuminen\".</string>
+  <string name="fido2_desc">FIDO2 WebAuthn mahdollistaa tunnistautumisen fyysisellä suojausavaimella.</string>
+  <string name="fido2_authenticate_web_authn">WebAuthn-tunnistautuminen</string>
   <string name="fido2_return_to_app">Palaa sovellukseen</string>
   <string name="fido2_check_browser">Varmista, että oletusselaimesi sisältää WebAuthn-tuen ja yritä uudelleen.</string>
   <string name="reset_password_auto_enroll_invite_warning">Organisaatiolla on yrityskäytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</string>
@@ -809,7 +809,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="log_in_with_another_device">Laitteella kirjautuminen</string>
   <string name="log_in_initiated">Kirjautuminen aloitettu</string>
   <string name="a_notification_has_been_sent_to_your_device">Laitteellesi on lähetetty ilmoitus.</string>
-  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelausekkeen.</string>
+  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelauseen.</string>
   <string name="resend_notification">Lähetä ilmoitus uudelleen</string>
   <string name="need_another_option">Tarvitsetko toisen vaihtoehdon?</string>
   <string name="view_all_login_options">Näytä kaikki kirjautumisvaihtoehdot</string>
@@ -901,7 +901,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="unlock_options">Avausasetukset</string>
   <string name="session_timeout">Istunnon aikakatkaisu</string>
   <string name="session_timeout_action">Istunnon aikakatkaisutoiminto</string>
-  <string name="account_fingerprint_phrase">Tilin tunnistelauseke</string>
+  <string name="account_fingerprint_phrase">Tilin tunnistelause</string>
   <string name="one_hour_and_one_minute">Tunti ja minuutti</string>
   <string name="one_hour_and_x_minute">Tunti ja %1$s minuuttia</string>
   <string name="x_hours_and_one_minute">%1$s tuntia ja minuutti</string>
@@ -1148,7 +1148,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="cxp_import">CXP-tuonti</string>
   <string name="cxp_export">CXP-vienti</string>
   <string name="set_up_two_step_login">Määritä kaksivaiheinen kirjautuminen</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">You can set up two-step login as an alternative way to protect your account or change your email to one you can access.</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Voit määrittää kaksivaiheisen kirjautumisen tilisi vaihtoehtoiseksi suojaustavaksi tai vaihtaa sähköpostiosoitteesi sellaiseen, johon sinulla on pääsy.</string>
   <string name="turn_on_two_step_login">Ota kaksivaiheinen kirjautuminen käyttöön</string>
   <string name="change_account_email">Muuta tilin sähköpostiosoitetta</string>
   <string name="choose_three_or_four_random_words">Valitse kolme tai neljä satunnaista sanaa</string>
@@ -1223,7 +1223,10 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
   <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Näytä enemmän</string>
+  <string name="no_folder">Ei kansiota</string>
+  <string name="show_less">Näytä vähemmän</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

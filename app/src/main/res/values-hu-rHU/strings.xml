@@ -1225,4 +1225,7 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="show_more">Több megjelenítése</string>
   <string name="no_folder">Nincs mappa</string>
   <string name="show_less">Kevesebb megjelenítése</string>
+  <string name="add_field">Mező hozzáadása</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

@@ -1225,4 +1225,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="show_more">Daha çox göstər</string>
   <string name="no_folder">Qovluq yoxdur</string>
   <string name="show_less">Daha az göstər</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

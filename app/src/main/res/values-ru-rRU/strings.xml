@@ -1228,4 +1228,7 @@
   <string name="show_more">Больше</string>
   <string name="no_folder">Без папки</string>
   <string name="show_less">Меньше</string>
+  <string name="add_field">Добавить поле</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Поделиться информацией об ошибке</string>
 </resources>

@@ -1224,4 +1224,7 @@ Kontu honetara aldatu nahi duzu?</string>
   <string name="show_more">Show more</string>
   <string name="no_folder">No folder</string>
   <string name="show_less">Show less</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

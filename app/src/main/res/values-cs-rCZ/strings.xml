@@ -1225,4 +1225,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="show_more">Zobrazit další</string>
   <string name="no_folder">Žádná složka</string>
   <string name="show_less">Zobrazit méně</string>
+  <string name="add_field">Přidat pole</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Sdílet podrobnosti o chybě</string>
 </resources>
