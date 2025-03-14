@@ -1226,4 +1226,7 @@ Pretende mudar para esta conta?</string>
   <string name="show_more">Mostrar mais</string>
   <string name="no_folder">Sem pasta</string>
   <string name="show_less">Mostrar menos</string>
+  <string name="add_field">Adicionar campo</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Partilhar detalhes do erro</string>
 </resources>

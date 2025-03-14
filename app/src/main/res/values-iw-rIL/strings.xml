@@ -266,12 +266,12 @@
   <string name="verification_email_sent">דוא\"ל אימות נשלח</string>
   <string name="yubi_key_instruction">כדי להמשיך, החזק את ה־Yubikey NEO שלך כנגד החלק האחורי של המכשיר או הכנס את ה־YubiKey שלך אל תוך יציאת ה־USB של המכשיר שלך, ואז גע בכפתור שלו.</string>
   <string name="yubi_key_title">מפתח אבטחה של YubiKey</string>
-  <string name="add_new_attachment">צרף קובץ חדש</string>
-  <string name="attachments">קבצים מצורפים</string>
+  <string name="add_new_attachment">הוסף צרופה חדשה</string>
+  <string name="attachments">צרופות</string>
   <string name="unable_to_download_file">לא ניתן להוריד את הקובץ.</string>
   <string name="unable_to_open_file">המכשיר שלך לא יכול לפתוח סוג זה של קובץ.</string>
   <string name="downloading">מוריד...</string>
-  <string name="attachment_large_warning">גודל הקובץ המצורף הוא %1$s. האם אתה בטוח שברצונך להוריד אותו למכשירך?</string>
+  <string name="attachment_large_warning">גודל הצרופה הוא %1$s. האם אתה בטוח שברצונך להוריד אותה למכשירך?</string>
   <string name="authenticator_key">מפתח מאמת</string>
   <string name="verification_code_totp">קוד אימות (TOTP)</string>
   <string name="authenticator_key_added">מפתח המאמת נוסף.</string>
@@ -285,12 +285,12 @@
   <string name="copy_totp_automatically_description">אם לכניסה שלך יש מפתח מאמת, העתק את קוד האימות ה־TOTP ללוח ההעתקה שלך כאשר אתה ממלא אוטומטית את הכניסה.</string>
   <string name="copy_totp_automatically">העתק TOTP באופן אוטומטי</string>
   <string name="premium_required">נדרשת חברות פרימיום כדי להשתמש בתכונה זו.</string>
-  <string name="attachement_added">קובץ מצורף נוסף</string>
-  <string name="attachment_deleted">קובץ מצורף נמחק</string>
+  <string name="attachement_added">הצרופה נוספה</string>
+  <string name="attachment_deleted">הצרופה נמחקה</string>
   <string name="choose_file">בחר קובץ</string>
   <string name="file">קובץ</string>
   <string name="no_file_chosen">לא נבחר קובץ</string>
-  <string name="no_attachments">אין קבצים מצורפים.</string>
+  <string name="no_attachments">אין צרופות.</string>
   <string name="file_source">מקור הקובץ</string>
   <string name="feature_unavailable">התכונה אינה זמינה</string>
   <string name="max_file_size">גודל הקובץ המרבי הוא 100MB.</string>
@@ -546,8 +546,8 @@
   <string name="clone">שכפול</string>
   <string name="password_generator_policy_in_effect">מדיניות ארגון אחת או יותר משפיעה על הגדרות המחולל שלך</string>
   <string name="open">פתח</string>
-  <string name="unable_to_save_attachment">הייתה בעיה בשמירת קובץ מצורף זה. אם הבעיה נמשכת, אתה יכול לשמור אותו מכספת הרשת.</string>
-  <string name="save_attachment_success">הקובץ המצורף נשמר בהצלחה</string>
+  <string name="unable_to_save_attachment">הייתה בעיה בשמירת צרופה זו. אם הבעיה נמשכת, אתה יכול לשמור אותה מכספת הרשת.</string>
+  <string name="save_attachment_success">הצרופה נשמרה בהצלחה</string>
   <string name="autofill_tile_accessibility_required">נא להפעיל את \"שירות הנגישות של המילוי האוטומטי\" מהגדרות Bitwarden כדי להשתמש באריח המילוי האוטומטי.</string>
   <string name="autofill_tile_uri_not_found">לא זוהו שדות סיסמה</string>
   <string name="soft_deleting">שולח לאשפה...</string>
@@ -1226,4 +1226,7 @@
   <string name="show_more">הצג עוד</string>
   <string name="no_folder">ללא תיקייה</string>
   <string name="show_less">הצג פחות</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

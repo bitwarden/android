@@ -1223,7 +1223,10 @@
   <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
   <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="show_more">Прикажи више</string>
+  <string name="no_folder">Нема фасцикле</string>
+  <string name="show_less">Прикажи мање</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

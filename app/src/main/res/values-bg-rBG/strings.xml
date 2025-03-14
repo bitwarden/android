@@ -1226,4 +1226,7 @@
   <string name="show_more">Показване на повече</string>
   <string name="no_folder">Няма папка</string>
   <string name="show_less">Показване на по-малко</string>
+  <string name="add_field">Добавяне на поле</string>
+  <string name="x_ellipses">%s…</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

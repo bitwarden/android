@@ -270,7 +270,7 @@
   <string name="attachments">附件</string>
   <string name="unable_to_download_file">无法下载文件。</string>
   <string name="unable_to_open_file">您的设备无法打开这种类型的文件。</string>
-  <string name="downloading">正在下载……</string>
+  <string name="downloading">正在下载...</string>
   <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
   <string name="authenticator_key">验证器密钥</string>
   <string name="verification_code_totp">验证码 (TOTP)</string>
@@ -389,7 +389,7 @@
   <string name="field_type_linked">链接型</string>
   <string name="field_type_text">文本型</string>
   <string name="new_custom_field">新增自定义字段</string>
-  <string name="select_type_field">您想添加的自定义字段的类型是？</string>
+  <string name="select_type_field">您想添加什么类型的自定义字段？</string>
   <string name="remove">移除</string>
   <string name="new_uri">新增 URI</string>
   <string name="add_website">添加网站</string>
@@ -434,7 +434,7 @@
   <string name="contact_info">联系信息</string>
   <string name="all_items">所有项目</string>
   <string name="ur_is">URI</string>
-  <string name="checking_password">正在检查密码......</string>
+  <string name="checking_password">正在检查密码...</string>
   <string name="check_password">检查密码是否已经被公开。</string>
   <string name="check_password_for_data_breaches">检查数据泄露中的密码</string>
   <string name="password_exposed">此密码在泄露数据中已被公开 %1$s 次。请立即修改。</string>
@@ -506,7 +506,7 @@
   <string name="require_master_password_on_app_restart">App 重启时要求主密码吗？</string>
   <string name="pin_require_master_password_restart">您希望当应用程序重启时，要求使用主密码解锁吗？</string>
   <string name="black">黑色</string>
-  <string name="nord">Nord</string>
+  <string name="nord">冷色</string>
   <string name="solarized_dark">过曝暗</string>
   <string name="autofill_blocked_uris">自动填充已屏蔽的 URI</string>
   <string name="ask_to_add_login">询问添加登录</string>
@@ -589,7 +589,7 @@
   <string name="autofill_services">自动填充服务</string>
   <string name="inline_autofill">使用内嵌自动填充</string>
   <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层自动填充。</string>
-  <string name="accessibility">使用无障碍</string>
+  <string name="accessibility">使用无障碍功能</string>
   <string name="accessibility_description">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。设置后，选中登录字段时将显示一个弹出窗口。</string>
   <string name="accessibility_description2">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。（需同时开启 Draw-Over）</string>
   <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速操作磁贴，和/或使用 Draw-Over（若已开启）来显示弹出窗口。</string>
@@ -669,7 +669,7 @@
   <string name="update_password_error">当前无法更新密码</string>
   <string name="remove_master_password">移除主密码</string>
   <string name="organization_is_using_sso_with_a_self_hosted_key_server">%1$s 正在使用自托管密钥服务器 SSO。该组织的成员不再需要主密码登录。</string>
-  <string name="remove_master_password_warning">%1$s 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</string>
+  <string name="remove_master_password_warning">%1$s 正在使用客户管理加密的 SSO。继续操作将移除您的账户主密码并要求 SSO 登录。</string>
   <string name="remove_master_password_warning2">如果您不想移除您的主密码，您可以退出该组织。</string>
   <string name="leave_organization">退出组织</string>
   <string name="leave_organization_name">退出 %1$s？</string>
@@ -1069,7 +1069,7 @@
   <string name="new_master_password_hint">新主密码提示</string>
   <string name="get_started">开始使用</string>
   <string name="save_and_protect_your_data">保存和保护您的数据</string>
-  <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护您的密码，还可以安全地存储登录信息、ID、支付卡和笔记。</string>
+  <string name="the_vault_protects_more_than_just_passwords">密码库不仅保护密码。在这里可以安全地存储登录、ID、支付卡和笔记。</string>
   <string name="new_login">新增登录</string>
   <string name="share_files_and_data_securely_with_anyone_on_any_platform">在任何平台上安全地与任何人共享文件和数据。您的信息将在限制曝光的同时保持端到端加密。</string>
   <string name="send_sensitive_information_safely">安全地发送敏感信息</string>
@@ -1226,4 +1226,7 @@
   <string name="show_more">显示更多</string>
   <string name="no_folder">默认文件夹</string>
   <string name="show_less">显示更少</string>
+  <string name="add_field">添加字段</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">分享错误详细信息</string>
 </resources>

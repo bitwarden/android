@@ -75,7 +75,7 @@
   <string name="uri">URI</string>
   <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Fingerabdruck zum Entsperren nutzen</string>
-  <string name="username">Nutzername</string>
+  <string name="username">Benutzername</string>
   <string name="validation_field_required">Das Feld %1$s ist ein Pflichtfeld.</string>
   <string name="value_has_been_copied">%1$s kopiert</string>
   <string name="verify_fingerprint">Fingerabdruck verifizieren</string>
@@ -771,7 +771,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="catch_all_email">Catch-All E-Mail-Adresse</string>
   <string name="forwarded_email_alias">Weitergeleitetes E-Mail-Alias</string>
   <string name="random_word">Zufälliges Wort</string>
-  <string name="email_required_parenthesis">E-Mail (erforderlich)</string>
+  <string name="email_required_parenthesis">E-Mail-Adresse (erforderlich)</string>
   <string name="domain_name_required_parenthesis">Domainname (erforderlich)</string>
   <string name="api_key_required_parenthesis">API-Schlüssel (erforderlich)</string>
   <string name="service">Dienst</string>
@@ -1225,4 +1225,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="show_more">Mehr anzeigen</string>
   <string name="no_folder">Kein Ordner</string>
   <string name="show_less">Weniger anzeigen</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

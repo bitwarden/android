@@ -1226,4 +1226,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="show_more">Zobraziť viac</string>
   <string name="no_folder">Žiadny priečinok</string>
   <string name="show_less">Zobraziť menej</string>
+  <string name="add_field">Pridať pole</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Zdieľať podrobnosti o chybe</string>
 </resources>
