@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -47,8 +48,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -93,12 +96,17 @@ class CipherManagerTest {
     @BeforeEach
     fun setup() {
         mockkStatic(Uri::class)
+        mockkConstructor(NoActiveUserException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class, Instant::class)
         unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkConstructor(NoActiveUserException::class)
     }
 
     @Test
@@ -607,7 +615,10 @@ class CipherManagerTest {
                 cipherView = mockk(),
             )
 
-            assertEquals(DeleteAttachmentResult.Error, result)
+            assertEquals(
+                DeleteAttachmentResult.Error(error = NoActiveUserException()),
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -617,12 +628,13 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
             val attachmentId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.deleteCipherAttachment(
                     cipherId = cipherId,
                     attachmentId = attachmentId,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.deleteCipherAttachment(
                 cipherId = cipherId,
@@ -630,7 +642,7 @@ class CipherManagerTest {
                 cipherView = createMockCipherView(number = 1),
             )
 
-            assertEquals(DeleteAttachmentResult.Error, result)
+            assertEquals(DeleteAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1138,7 +1150,7 @@ class CipherManagerTest {
                 fileUri = mockk(),
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(NoActiveUserException()), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1152,9 +1164,10 @@ class CipherManagerTest {
             val mockCipherView = createMockCipherView(number = 1)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1164,7 +1177,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1186,6 +1199,7 @@ class CipherManagerTest {
                 url = null,
                 key = null,
             )
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1200,7 +1214,7 @@ class CipherManagerTest {
                     decryptedFilePath = mockFile.absolutePath,
                     encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1210,7 +1224,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1225,12 +1239,13 @@ class CipherManagerTest {
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1240,7 +1255,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1263,6 +1278,7 @@ class CipherManagerTest {
             )
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1287,7 +1303,7 @@ class CipherManagerTest {
                         fileSize = mockFileSize,
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1297,7 +1313,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1321,6 +1337,7 @@ class CipherManagerTest {
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1351,7 +1368,7 @@ class CipherManagerTest {
                     attachmentJsonResponse = mockAttachmentJsonResponse,
                     encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1361,7 +1378,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1389,6 +1406,7 @@ class CipherManagerTest {
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
                 collectionIds = listOf("mockId-1"),
             )
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1428,7 +1446,7 @@ class CipherManagerTest {
                     userId = userId,
                     cipher = mockUpdatedCipherResponse.toEncryptedSdkCipher(),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1438,7 +1456,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")

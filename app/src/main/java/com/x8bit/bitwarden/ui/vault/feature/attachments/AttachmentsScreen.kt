@@ -125,6 +125,7 @@ private fun AttachmentsDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is AttachmentsState.DialogState.Loading -> BitwardenLoadingDialog(

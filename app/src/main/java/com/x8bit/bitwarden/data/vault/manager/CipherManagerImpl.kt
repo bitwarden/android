@@ -6,6 +6,7 @@ import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -152,7 +153,7 @@ class CipherManagerImpl(
         )
             .fold(
                 onSuccess = { DeleteAttachmentResult.Success },
-                onFailure = { DeleteAttachmentResult.Error },
+                onFailure = { DeleteAttachmentResult.Error(error = it) },
             )
 
     private suspend fun deleteCipherAttachmentForResult(
@@ -160,7 +161,7 @@ class CipherManagerImpl(
         attachmentId: String,
         cipherView: CipherView,
     ): Result<Cipher> {
-        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
         return ciphersService
             .deleteCipherAttachment(
                 cipherId = cipherId,
@@ -320,7 +321,7 @@ class CipherManagerImpl(
             fileUri = fileUri,
         )
             .fold(
-                onFailure = { CreateAttachmentResult.Error },
+                onFailure = { CreateAttachmentResult.Error(error = it) },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
 
@@ -332,7 +333,7 @@ class CipherManagerImpl(
         fileName: String?,
         fileUri: Uri,
     ): Result<CipherView> {
-        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
         val attachmentView = AttachmentView(
             id = null,
             url = null,
@@ -411,7 +412,7 @@ class CipherManagerImpl(
         cipherView: CipherView,
         attachmentId: String,
     ): Result<File> {
-        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
+        val userId = activeUserId ?: return NoActiveUserException().asFailure()
 
         val cipher = cipherView
             .encryptCipherAndCheckForMigration(

@@ -217,6 +217,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
                 dialogState = AttachmentsState.DialogState.Error(
                     title = null,
                     message = errorMessage.asText(),
+                    throwable = null,
                 ),
             )
         }
