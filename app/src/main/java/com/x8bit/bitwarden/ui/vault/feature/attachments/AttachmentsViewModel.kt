@@ -55,7 +55,6 @@ class AttachmentsViewModel @Inject constructor(
                 dialogState = AttachmentsState.DialogState.Error(
                     title = null,
                     message = R.string.premium_required.asText(),
-                    throwable = null,
                 )
                     .takeUnless { isPremiumUser },
                 isPremiumUser = isPremiumUser,
@@ -100,7 +99,6 @@ class AttachmentsViewModel @Inject constructor(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.premium_required.asText(),
-                            throwable = null,
                         ),
                     )
                 }
@@ -114,7 +112,6 @@ class AttachmentsViewModel @Inject constructor(
                             message = R.string.validation_field_required.asText(
                                 R.string.file.asText(),
                             ),
-                            throwable = null,
                         ),
                     )
                 }
@@ -127,7 +124,6 @@ class AttachmentsViewModel @Inject constructor(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.max_file_size.asText(),
-                            throwable = null,
                         ),
                     )
                 }
@@ -405,7 +401,7 @@ data class AttachmentsState(
         data class Error(
             val title: Text?,
             val message: Text,
-            val throwable: Throwable?,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
