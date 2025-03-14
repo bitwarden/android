@@ -210,7 +210,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             viewState = LoginApprovalState.ViewState.Error,
         )
         val viewModel = createViewModel()
-        mutableAuthRequestSharedFlow.tryEmit(AuthRequestUpdatesResult.Error)
+        mutableAuthRequestSharedFlow.tryEmit(AuthRequestUpdatesResult.Error(error = Throwable()))
         assertEquals(expected, viewModel.stateFlow.value)
     }
 
@@ -383,6 +383,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ErrorDialogDismiss should update state`() = runTest {
         val viewModel = createViewModel()
+        val error = Throwable("Fail!")
         coEvery {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -390,7 +391,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 publicKey = PUBLIC_KEY,
                 isApproved = false,
             )
-        } returns AuthRequestResult.Error
+        } returns AuthRequestResult.Error(error = error)
         viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
 
         assertEquals(
@@ -399,6 +400,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 dialogState = LoginApprovalState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
         )

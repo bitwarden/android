@@ -152,7 +152,9 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
             viewState = PendingRequestsState.ViewState.Error,
         )
         val viewModel = createViewModel()
-        mutableAuthRequestsWithUpdatesFlow.tryEmit(AuthRequestsUpdatesResult.Error)
+        mutableAuthRequestsWithUpdatesFlow.tryEmit(
+            value = AuthRequestsUpdatesResult.Error(error = Throwable()),
+        )
         assertEquals(expected, viewModel.stateFlow.value)
     }
 
