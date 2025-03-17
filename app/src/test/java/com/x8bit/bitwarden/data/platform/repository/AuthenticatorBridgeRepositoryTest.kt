@@ -235,9 +235,10 @@ class AuthenticatorBridgeRepositoryTest {
     fun `syncAccounts when for user 1 vault is locked and unlock fails should reset authenticator sync unlock key and omit user from the list`() =
         runTest {
             every { vaultRepository.isVaultUnlocked(USER_1_ID) } returns false
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVaultWithDecryptedUserKey(USER_1_ID, USER_1_UNLOCK_KEY)
-            } returns VaultUnlockResult.InvalidStateError
+            } returns VaultUnlockResult.InvalidStateError(error = error)
 
             val sharedAccounts = authenticatorBridgeRepository.getSharedAccounts()
             assertEquals(SharedAccountData(listOf(USER_2_SHARED_ACCOUNT)), sharedAccounts)

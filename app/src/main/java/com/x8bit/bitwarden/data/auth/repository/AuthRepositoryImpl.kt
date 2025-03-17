@@ -1117,9 +1117,9 @@ class AuthRepositoryImpl(
                     }
 
                     is VaultUnlockResult.AuthenticationError,
-                    VaultUnlockResult.BiometricDecodingError,
-                    VaultUnlockResult.InvalidStateError,
-                    VaultUnlockResult.GenericError,
+                    is VaultUnlockResult.BiometricDecodingError,
+                    is VaultUnlockResult.InvalidStateError,
+                    is VaultUnlockResult.GenericError,
                         -> {
                         IllegalStateException("Failed to unlock vault").asFailure()
                     }
@@ -1880,7 +1880,7 @@ class AuthRepositoryImpl(
                 }
                 .fold(
                     // If the request failed, we want to abort the login process
-                    onFailure = { VaultUnlockResult.GenericError },
+                    onFailure = { VaultUnlockResult.GenericError(error = it) },
                     onSuccess = { it },
                 )
         } else {
@@ -1920,7 +1920,7 @@ class AuthRepositoryImpl(
                 }
                 .fold(
                     // If the request failed, we want to abort the login process
-                    onFailure = { VaultUnlockResult.GenericError },
+                    onFailure = { VaultUnlockResult.GenericError(error = it) },
                     onSuccess = { it },
                 )
         }

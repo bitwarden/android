@@ -324,7 +324,7 @@ class VaultUnlockViewModel @Inject constructor(
         fido2CredentialManager.isUserVerified =
             action.vaultUnlockResult is VaultUnlockResult.Success
 
-        when (action.vaultUnlockResult) {
+        when (val result = action.vaultUnlockResult) {
             is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -335,12 +335,13 @@ class VaultUnlockViewModel @Inject constructor(
                             } else {
                                 state.vaultUnlockType.unlockScreenErrorMessage
                             },
+                            throwable = result.error,
                         ),
                     )
                 }
             }
 
-            VaultUnlockResult.BiometricDecodingError -> {
+            is VaultUnlockResult.BiometricDecodingError -> {
                 biometricsEncryptionManager.clearBiometrics(userId = state.userId)
                 mutableStateFlow.update {
                     it.copy(
@@ -353,14 +354,16 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
-            VaultUnlockResult.GenericError,
-            VaultUnlockResult.InvalidStateError,
+            is VaultUnlockResult.GenericError,
+            is VaultUnlockResult.InvalidStateError,
                 -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = (result as? VaultUnlockResult.InvalidStateError)?.error
+                                ?: (result as? VaultUnlockResult.GenericError)?.error,
                         ),
                     )
                 }
@@ -506,6 +509,7 @@ data class VaultUnlockState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : VaultUnlockDialog()
 
         /**

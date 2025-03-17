@@ -156,6 +156,7 @@ fun VaultUnlockScreen(
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
             },
+            throwable = dialog.throwable,
         )
 
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
