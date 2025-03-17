@@ -9,12 +9,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationBarItemColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A custom Bitwarden-themed bottom app bar.
@@ -54,7 +54,11 @@ fun RowScope.BitwardenNavigationBarItem(
                         id = if (isSelected) selectedIconRes else unselectedIconRes,
                     ),
                     contentDescription = stringResource(id = contentDescriptionRes),
-                    tint = Color.Unspecified,
+                    tint = if (isSelected) {
+                        BitwardenTheme.colorScheme.icon.secondary
+                    } else {
+                        BitwardenTheme.colorScheme.icon.primary
+                    },
                 )
             }
         },
