@@ -13,5 +13,5 @@ sealed class DeleteCipherResult {
     /**
      * Generic error while deleting a cipher.
      */
-    data object Error : DeleteCipherResult()
+    data class Error(val error: Throwable) : DeleteCipherResult()
 }

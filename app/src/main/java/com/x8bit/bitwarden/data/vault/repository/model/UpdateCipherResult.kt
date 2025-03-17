@@ -14,5 +14,5 @@ sealed class UpdateCipherResult {
      * Generic error while updating cipher. The optional [errorMessage] may be displayed directly in
      * the UI when present.
      */
-    data class Error(val errorMessage: String?) : UpdateCipherResult()
+    data class Error(val errorMessage: String?, val error: Throwable?) : UpdateCipherResult()
 }

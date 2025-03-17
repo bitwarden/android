@@ -1245,11 +1245,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultItemAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }

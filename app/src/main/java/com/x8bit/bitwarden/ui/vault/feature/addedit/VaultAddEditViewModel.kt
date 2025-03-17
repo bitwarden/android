@@ -1554,9 +1554,14 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         clearDialogState()
 
-        when (action.createCipherResult) {
+        when (val result = action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                showGenericErrorDialog()
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
             }
 
             is CreateCipherResult.Success -> {
@@ -1581,11 +1586,15 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
-                showGenericErrorDialog(
-                    message = result
-                        .errorMessage
-                        ?.asText()
-                        ?: R.string.generic_error_message.asText(),
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = result
+                            .errorMessage
+                            ?.asText()
+                            ?: R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
                 )
             }
 
@@ -1602,11 +1611,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
