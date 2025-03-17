@@ -898,7 +898,10 @@ class AuthRepositoryImpl(
                         is RegisterResponseJson.CaptchaRequired -> {
                             it.validationErrors.captchaKeys.firstOrNull()
                                 ?.let { key -> RegisterResult.CaptchaRequired(captchaId = key) }
-                                ?: RegisterResult.Error(errorMessage = null)
+                                ?: RegisterResult.Error(
+                                    errorMessage = null,
+                                    error = MissingPropertyException("Captcha ID"),
+                                )
                         }
 
                         is RegisterResponseJson.Success -> {
@@ -907,11 +910,11 @@ class AuthRepositoryImpl(
                         }
 
                         is RegisterResponseJson.Invalid -> {
-                            RegisterResult.Error(errorMessage = it.message)
+                            RegisterResult.Error(errorMessage = it.message, error = null)
                         }
                     }
                 },
-                onFailure = { RegisterResult.Error(errorMessage = null) },
+                onFailure = { RegisterResult.Error(errorMessage = null, error = it) },
             )
     }
 

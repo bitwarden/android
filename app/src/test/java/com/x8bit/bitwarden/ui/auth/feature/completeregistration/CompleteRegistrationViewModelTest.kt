@@ -178,6 +178,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CallToActionClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             mockAuthRepository.register(
                 email = EMAIL,
@@ -188,7 +189,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(errorMessage = "mock_error")
+        } returns RegisterResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
@@ -202,6 +203,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     dialog = CompleteRegistrationDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -273,7 +275,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(null)
+        } returns RegisterResult.Error(errorMessage = null, error = null)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.ContinueWithBreachedPasswordClick)
         coVerify {
