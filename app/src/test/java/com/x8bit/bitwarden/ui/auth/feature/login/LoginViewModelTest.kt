@@ -177,7 +177,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `should have default state when isKnownDevice returns error`() = runTest {
         coEvery {
             authRepository.getIsKnownDevice(EMAIL)
-        } returns KnownDeviceResult.Error
+        } returns KnownDeviceResult.Error(error = Throwable("Fail!"))
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {

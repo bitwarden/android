@@ -5662,16 +5662,17 @@ class AuthRepositoryTest {
 
     @Test
     fun `getIsKnownDevice should return failure when service returns failure`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.getIsKnownDevice(EMAIL)
 
         coVerify(exactly = 1) {
             devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
         }
-        assertEquals(KnownDeviceResult.Error, result)
+        assertEquals(KnownDeviceResult.Error(error = error), result)
     }
 
     @Test
@@ -6286,39 +6287,38 @@ class AuthRepositoryTest {
         runTest {
             val errorMessage = "I haven't heard of second breakfast."
             coEvery {
-                identityService
-                    .verifyEmailRegistrationToken(
-                        body = VerifyEmailTokenRequestJson(
-                            email = EMAIL,
-                            token = EMAIL_VERIFICATION_TOKEN,
-                        ),
-                    )
+                identityService.verifyEmailRegistrationToken(
+                    body = VerifyEmailTokenRequestJson(
+                        email = EMAIL,
+                        token = EMAIL_VERIFICATION_TOKEN,
+                    ),
+                )
             } returns VerifyEmailTokenResponseJson.Invalid(message = errorMessage).asSuccess()
 
             val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
             assertEquals(
-                EmailTokenResult.Error(message = errorMessage),
+                EmailTokenResult.Error(message = errorMessage, error = null),
                 emailTokenResult,
             )
         }
 
     @Test
     fun `validateEmailToken should return error result when service returns failure`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
-            identityService
-                .verifyEmailRegistrationToken(
-                    body = VerifyEmailTokenRequestJson(
-                        email = EMAIL,
-                        token = EMAIL_VERIFICATION_TOKEN,
-                    ),
-                )
-        } returns Exception().asFailure()
+            identityService.verifyEmailRegistrationToken(
+                body = VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    token = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns error.asFailure()
 
         val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
         assertEquals(
-            EmailTokenResult.Error(message = null),
+            EmailTokenResult.Error(message = null, error = error),
             emailTokenResult,
         )
     }

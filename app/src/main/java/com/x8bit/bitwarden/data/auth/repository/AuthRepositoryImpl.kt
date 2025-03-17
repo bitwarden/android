@@ -1218,8 +1218,8 @@ class AuthRepositoryImpl(
                 deviceId = authDiskSource.uniqueAppId,
             )
             .fold(
-                onFailure = { KnownDeviceResult.Error },
-                onSuccess = { KnownDeviceResult.Success(it) },
+                onFailure = { KnownDeviceResult.Error(error = it) },
+                onSuccess = { KnownDeviceResult.Success(isKnownDevice = it) },
             )
 
     override suspend fun getPasswordBreachCount(password: String): BreachCountResult =
@@ -1362,15 +1362,13 @@ class AuthRepositoryImpl(
                     when (val json = it) {
                         VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
                         is VerifyEmailTokenResponseJson.Invalid -> {
-                            EmailTokenResult.Error(json.message)
+                            EmailTokenResult.Error(message = json.message, error = null)
                         }
 
                         VerifyEmailTokenResponseJson.TokenExpired -> EmailTokenResult.Expired
                     }
                 },
-                onFailure = {
-                    EmailTokenResult.Error(message = null)
-                },
+                onFailure = { EmailTokenResult.Error(message = null, error = it) },
             )
     }
 

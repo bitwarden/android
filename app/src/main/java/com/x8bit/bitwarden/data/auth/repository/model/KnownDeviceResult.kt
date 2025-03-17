@@ -12,5 +12,7 @@ sealed class KnownDeviceResult {
     /**
      * There was an error determining if this is a known device.
      */
-    data object Error : KnownDeviceResult()
+    data class Error(
+        val error: Throwable,
+    ) : KnownDeviceResult()
 }
