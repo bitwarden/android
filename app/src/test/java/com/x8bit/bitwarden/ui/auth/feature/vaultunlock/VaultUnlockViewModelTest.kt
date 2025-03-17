@@ -512,12 +512,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on BiometricsUnlockClick should not emit PromptForBiometrics when isFromLockFlow is true`() =
         runTest {
             val initialState =
-                DEFAULT_STATE.copy(isBiometricsValid = true, isBiometricEnabled = true)
+                DEFAULT_STATE.copy(
+                    isBiometricsValid = true,
+                    isBiometricEnabled = true,
+                    isFromLockFlow = true,
+                )
             val viewModel = createViewModel(
                 state = initialState,
-                lockManager = mockk(relaxed = true) {
-                    every { isFromLockFlow } returns true
-                },
             )
 
             viewModel.eventFlow.test {
@@ -652,7 +653,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultUnlockAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = false) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Test
@@ -1356,6 +1357,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     userId = USER_ID,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     hasMasterPassword = true,
+    isFromLockFlow = false,
 )
 
 private val TRUSTED_DEVICE: UserState.TrustedDevice = UserState.TrustedDevice(

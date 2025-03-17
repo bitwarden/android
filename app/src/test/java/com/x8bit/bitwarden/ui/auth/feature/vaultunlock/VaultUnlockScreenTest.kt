@@ -642,4 +642,5 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     hasMasterPassword = true,
+    isFromLockFlow = false,
 )
