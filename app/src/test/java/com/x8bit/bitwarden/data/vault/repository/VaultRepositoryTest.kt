@@ -2724,7 +2724,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.deleteFolder("Test")
 
             assertEquals(
-                DeleteFolderResult.Error,
+                DeleteFolderResult.Error(error = NoActiveUserException()),
                 result,
             )
         }
@@ -2734,11 +2734,12 @@ class VaultRepositoryTest {
     fun `DeleteFolder with folderService Delete failure should return DeleteFolderResult Failure`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = Throwable("fail")
             val folderId = "mockId-1"
-            coEvery { folderService.deleteFolder(folderId) } returns Throwable("fail").asFailure()
+            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
 
             val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error, result)
+            assertEquals(DeleteFolderResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -2800,7 +2801,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.createFolder(mockk())
 
             assertEquals(
-                CreateFolderResult.Error,
+                CreateFolderResult.Error(NoActiveUserException()),
                 result,
             )
         }
@@ -2811,10 +2812,11 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val folderId = "mockId-1"
-            coEvery { folderService.deleteFolder(folderId) } returns Throwable("fail").asFailure()
+            val error = Throwable("fail")
+            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
 
             val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error, result)
+            assertEquals(DeleteFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2826,16 +2828,17 @@ class VaultRepositoryTest {
                 name = "TestName",
                 revisionDate = DateTime.now(),
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
                     userId = MOCK_USER_STATE.activeUserId,
                     folder = folderView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error, result)
+            assertEquals(CreateFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2850,6 +2853,7 @@ class VaultRepositoryTest {
                 name = testFolderName,
                 revisionDate = date,
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
@@ -2862,10 +2866,10 @@ class VaultRepositoryTest {
                 folderService.createFolder(
                     body = FolderJsonRequest(testFolderName),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error, result)
+            assertEquals(CreateFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2926,7 +2930,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.updateFolder("Test", mockk())
 
             assertEquals(
-                UpdateFolderResult.Error(null),
+                UpdateFolderResult.Error(errorMessage = null, error = NoActiveUserException()),
                 result,
             )
         }
@@ -2941,17 +2945,18 @@ class VaultRepositoryTest {
                 name = "TestName",
                 revisionDate = DateTime.now(),
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
                     userId = MOCK_USER_STATE.activeUserId,
                     folder = folderView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateFolder(folderId, folderView)
 
-            assertEquals(UpdateFolderResult.Error(errorMessage = null), result)
+            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2967,6 +2972,7 @@ class VaultRepositoryTest {
                 name = testFolderName,
                 revisionDate = date,
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
@@ -2980,10 +2986,10 @@ class VaultRepositoryTest {
                     folderId = folderId,
                     body = FolderJsonRequest(testFolderName),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateFolder(folderId, folderView)
-            assertEquals(UpdateFolderResult.Error(errorMessage = null), result)
+            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -3024,6 +3030,7 @@ class VaultRepositoryTest {
             assertEquals(
                 UpdateFolderResult.Error(
                     errorMessage = "You do not have permission to edit this.",
+                    error = null,
                 ),
                 result,
             )

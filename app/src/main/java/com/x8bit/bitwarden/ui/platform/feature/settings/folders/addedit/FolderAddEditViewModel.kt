@@ -250,12 +250,13 @@ class FolderAddEditViewModel @Inject constructor(
             it.copy(dialog = null)
         }
 
-        when (action.result) {
+        when (val result = action.result) {
             is UpdateFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -275,12 +276,13 @@ class FolderAddEditViewModel @Inject constructor(
             it.copy(dialog = null)
         }
 
-        when (action.result) {
+        when (val result = action.result) {
             is CreateFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -296,12 +298,13 @@ class FolderAddEditViewModel @Inject constructor(
     private fun handleDeleteResultReceive(
         action: FolderAddEditAction.Internal.DeleteFolderResultReceive,
     ) {
-        when (action.result) {
-            DeleteFolderResult.Error -> {
+        when (val result = action.result) {
+            is DeleteFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -398,6 +401,7 @@ data class FolderAddEditState(
         @Parcelize
         data class Error(
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
     }
 }
