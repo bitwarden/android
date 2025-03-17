@@ -565,8 +565,8 @@ class VaultRepositoryImpl(
                                 cipher
                                     .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
                                     .decodeToString()
-                            } catch (_: GeneralSecurityException) {
-                                return VaultUnlockResult.BiometricDecodingError(error = null)
+                            } catch (e: GeneralSecurityException) {
+                                return VaultUnlockResult.BiometricDecodingError(error = e)
                             }
                         }
                         ?: biometricsKey,
