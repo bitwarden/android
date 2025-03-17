@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -52,6 +53,30 @@ fun AppearanceScreen(
         when (event) {
             AppearanceEvent.NavigateBack -> onNavigateBack.invoke()
         }
+    }
+
+    when (state.dialogState) {
+        AppearanceState.DialogState.EnableDynamicColors -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.dynamic_colors),
+                message = stringResource(
+                    id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
+                ),
+                confirmButtonText = stringResource(R.string.ok),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = remember(viewModel) {
+                    { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
+                },
+                onDismissClick = remember(viewModel) {
+                    { viewModel.trySendAction(AppearanceAction.DismissDialog) }
+                },
+                onDismissRequest = remember {
+                    { viewModel.trySendAction(AppearanceAction.DismissDialog) }
+                },
+            )
+        }
+
+        else -> Unit
     }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())

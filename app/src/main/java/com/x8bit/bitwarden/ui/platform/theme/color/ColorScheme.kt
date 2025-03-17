@@ -204,7 +204,7 @@ fun dynamicBitwardenColorScheme(
         toggleButton = BitwardenColorScheme.ToggleButtonColors(
             backgroundOn = materialColorScheme.primary,
             backgroundOff = materialColorScheme.surfaceContainerHighest,
-            switch = materialColorScheme.onPrimary,
+            switch = materialColorScheme.onPrimaryContainer,
         ),
         sliderButton = BitwardenColorScheme.SliderButtonColors(
             knobBackground = materialColorScheme.primary,

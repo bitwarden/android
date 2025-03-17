@@ -134,6 +134,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
             showWebsiteIcons = true,
             theme = AppTheme.DEFAULT,
             isDynamicColorsEnabled = false,
+            dialogState = null,
         )
     }
 }

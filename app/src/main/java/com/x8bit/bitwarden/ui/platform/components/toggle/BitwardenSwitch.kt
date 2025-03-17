@@ -24,7 +24,6 @@ import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
@@ -293,51 +292,49 @@ fun BitwardenSwitch(
     }
 }
 
-@Preview(wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE)
+@Preview
 @Composable
 private fun BitwardenSwitch_preview() {
-    BitwardenTheme(dynamicColor = true) {
-        Column {
-            BitwardenSwitch(
-                label = "Label",
-                supportingText = "description",
-                isChecked = true,
-                onCheckedChange = {},
-                cardStyle = CardStyle.Top(),
-            )
-            BitwardenSwitch(
-                label = "Label",
-                isChecked = false,
-                onCheckedChange = {},
-                cardStyle = CardStyle.Middle(),
-            )
-            BitwardenSwitch(
-                label = "Label",
-                supportingText = "description",
-                isChecked = true,
-                onCheckedChange = {},
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_question_circle,
-                        contentDescription = "content description",
-                        onClick = {},
-                    )
-                },
-                cardStyle = CardStyle.Middle(),
-            )
-            BitwardenSwitch(
-                label = "Label",
-                isChecked = false,
-                onCheckedChange = {},
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_question_circle,
-                        contentDescription = "content description",
-                        onClick = {},
-                    )
-                },
-                cardStyle = CardStyle.Bottom,
-            )
-        }
+    Column {
+        BitwardenSwitch(
+            label = "Label",
+            supportingText = "description",
+            isChecked = true,
+            onCheckedChange = {},
+            cardStyle = CardStyle.Top(),
+        )
+        BitwardenSwitch(
+            label = "Label",
+            isChecked = false,
+            onCheckedChange = {},
+            cardStyle = CardStyle.Middle(),
+        )
+        BitwardenSwitch(
+            label = "Label",
+            supportingText = "description",
+            isChecked = true,
+            onCheckedChange = {},
+            actions = {
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_question_circle,
+                    contentDescription = "content description",
+                    onClick = {},
+                )
+            },
+            cardStyle = CardStyle.Middle(),
+        )
+        BitwardenSwitch(
+            label = "Label",
+            isChecked = false,
+            onCheckedChange = {},
+            actions = {
+                BitwardenStandardIconButton(
+                    vectorIconRes = R.drawable.ic_question_circle,
+                    contentDescription = "content description",
+                    onClick = {},
+                )
+            },
+            cardStyle = CardStyle.Bottom,
+        )
     }
 }

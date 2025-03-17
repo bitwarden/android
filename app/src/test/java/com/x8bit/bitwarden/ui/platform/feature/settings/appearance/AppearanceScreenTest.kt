@@ -175,4 +175,5 @@ private val DEFAULT_STATE = AppearanceState(
     showWebsiteIcons = false,
     theme = AppTheme.DEFAULT,
     isDynamicColorsEnabled = false,
+    dialogState = null,
 )
