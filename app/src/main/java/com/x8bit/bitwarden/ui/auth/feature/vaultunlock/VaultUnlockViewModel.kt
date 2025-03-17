@@ -102,6 +102,7 @@ class VaultUnlockViewModel @Inject constructor(
             // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
             fido2CredentialAssertionRequest = null,
             hasMasterPassword = activeAccount.hasMasterPassword,
+            isFromLockFlow = vaultLockManager.isFromLockFlow,
         )
     },
 ) {
@@ -428,7 +429,7 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun promptForBiometricsIfAvailable() {
         val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null && !vaultLockManager.isFromLockFlow) {
+        if (state.showBiometricLogin && cipher != null && !state.isFromLockFlow) {
             sendEvent(
                 VaultUnlockEvent.PromptForBiometrics(
                     cipher = cipher,
@@ -461,6 +462,7 @@ data class VaultUnlockState(
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     private val hasMasterPassword: Boolean,
+    val isFromLockFlow: Boolean,
 ) : Parcelable {
 
     /**
