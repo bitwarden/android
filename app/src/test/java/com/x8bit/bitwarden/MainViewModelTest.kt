@@ -558,11 +558,8 @@ class MainViewModelTest : BaseViewModelTest() {
             )
             every { authRepository.activeUserId } returns null
             coEvery {
-                authRepository.validateEmailToken(
-                    intentEmail,
-                    token,
-                )
-            } returns EmailTokenResult.Error(message = null)
+                authRepository.validateEmailToken(email = intentEmail, token = token)
+            } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
             viewModel.eventFlow.test {
                 // We skip the first 2 events because they are the default appTheme and appLanguage
@@ -595,11 +592,8 @@ class MainViewModelTest : BaseViewModelTest() {
 
             val expectedMessage = "expectedMessage"
             coEvery {
-                authRepository.validateEmailToken(
-                    intentEmail,
-                    token,
-                )
-            } returns EmailTokenResult.Error(message = expectedMessage)
+                authRepository.validateEmailToken(email = intentEmail, token = token)
+            } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
             viewModel.eventFlow.test {
                 // We skip the first 2 events because they are the default appTheme and appLanguage
