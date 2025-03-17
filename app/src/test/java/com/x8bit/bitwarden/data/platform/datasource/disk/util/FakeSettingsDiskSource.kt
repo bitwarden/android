@@ -124,6 +124,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableAppThemeFlow.onSubscription {
             emit(appTheme)
         }
+
     override var isDynamicColorsEnabled: Boolean?
         get() = storedIsDynamicColorsEnabled
         set(value) {

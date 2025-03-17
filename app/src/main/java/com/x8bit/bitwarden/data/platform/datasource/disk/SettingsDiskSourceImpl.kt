@@ -162,6 +162,7 @@ class SettingsDiskSourceImpl(
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow
             .onSubscription { emit(appTheme) }
+
     override var isDynamicColorsEnabled: Boolean?
         get() = getBoolean(key = IS_DYNAMIC_COLORS_ENABLED) ?: false
         set(value) {
@@ -171,6 +172,7 @@ class SettingsDiskSourceImpl(
             )
             mutableIsDynamicColorsEnabledFlow.tryEmit(value)
         }
+
     override val isDynamicColorsEnabledFlow: Flow<Boolean?>
         get() = mutableIsDynamicColorsEnabledFlow
             .onSubscription { emit(getBoolean(IS_DYNAMIC_COLORS_ENABLED)) }
