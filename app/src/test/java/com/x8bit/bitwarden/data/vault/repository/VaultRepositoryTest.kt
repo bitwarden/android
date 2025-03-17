@@ -87,6 +87,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.NoKeyFoundForUserException
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -252,8 +253,12 @@ class VaultRepositoryTest {
         mockkStatic(MessageDigest::class)
         mockkStatic(Base64::class)
         mockkConstructor(NoActiveUserException::class)
+        mockkConstructor(NoKeyFoundForUserException::class)
         every {
             anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+        every {
+            anyConstructed<NoKeyFoundForUserException>() == any<NoKeyFoundForUserException>()
         } returns true
     }
 
@@ -264,6 +269,7 @@ class VaultRepositoryTest {
         unmockkStatic(MessageDigest::class)
         unmockkStatic(Base64::class)
         unmockkConstructor(NoActiveUserException::class)
+        unmockkConstructor(NoKeyFoundForUserException::class)
     }
 
     @Test
@@ -1166,7 +1172,10 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
+                result,
+            )
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultRepository.vaultUnlockDataStateFlow.value,
@@ -1187,7 +1196,10 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+                result,
+            )
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultRepository.vaultUnlockDataStateFlow.value,
@@ -1273,7 +1285,12 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.BiometricDecodingError, result)
+            assertEquals(
+                VaultUnlockResult.BiometricDecodingError(
+                    error = NoKeyFoundForUserException(),
+                ),
+                result,
+            )
             coVerify(exactly = 0) {
                 vaultSdkSource.derivePinProtectedUserKey(any(), any())
             }
@@ -1466,6 +1483,7 @@ class VaultRepositoryTest {
             val authenticatorSyncUnlockKey = "asdf1234"
             val privateKey = "mockPrivateKey-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = Throwable("Fail")
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -1477,7 +1495,7 @@ class VaultRepositoryTest {
                     ),
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.InvalidStateError
+            } returns VaultUnlockResult.InvalidStateError(error = error)
             fakeAuthDiskSource.apply {
                 storeAuthenticatorSyncUnlockKey(
                     userId = userId,
@@ -1490,7 +1508,7 @@ class VaultRepositoryTest {
                 userId = userId,
                 decryptedUserKey = authenticatorSyncUnlockKey,
             )
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(VaultUnlockResult.InvalidStateError(error = error), result)
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -1517,7 +1535,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
 
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
                 result,
             )
             assertEquals(
@@ -1545,7 +1563,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
                 result,
             )
             assertEquals(
@@ -1573,7 +1591,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
                 result,
             )
 
@@ -1696,7 +1714,7 @@ class VaultRepositoryTest {
     fun `unlockVaultWithMasterPassword with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
-            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError(error = null)
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
             val result = vaultRepository.unlockVaultWithMasterPassword(
@@ -1734,7 +1752,7 @@ class VaultRepositoryTest {
         val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
         assertEquals(
-            VaultUnlockResult.InvalidStateError,
+            VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
             result,
         )
         assertEquals(
@@ -1763,7 +1781,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
                 result,
             )
             assertEquals(
@@ -1789,7 +1807,7 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertEquals(
-            VaultUnlockResult.InvalidStateError,
+            VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
             result,
         )
         assertEquals(
@@ -1832,7 +1850,7 @@ class VaultRepositoryTest {
     fun `unlockVaultWithPin with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
-            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError(error = null)
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
             val result = vaultRepository.unlockVaultWithPin(pin = "1234")

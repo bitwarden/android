@@ -1428,6 +1428,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
         fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVault(
                 userId = USER_ID_1,
@@ -1440,7 +1441,7 @@ class AuthRepositoryTest {
                 ),
                 organizationKeys = orgKeys,
             )
-        } returns VaultUnlockResult.AuthenticationError(message = null)
+        } returns VaultUnlockResult.AuthenticationError(message = null, error = error)
         coEvery { vaultRepository.syncIfNecessary() } just runs
 
         val result = repository.completeTdeLogin(
@@ -1756,6 +1757,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -1768,7 +1770,10 @@ class AuthRepositoryTest {
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.AuthenticationError(expectedErrorMessage)
+            } returns VaultUnlockResult.AuthenticationError(
+                message = expectedErrorMessage,
+                error = error,
+            )
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
@@ -2222,6 +2227,7 @@ class AuthRepositoryTest {
                     twoFactorData = TWO_FACTOR_DATA,
                 )
             } returns successResponse.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -2234,7 +2240,7 @@ class AuthRepositoryTest {
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.InvalidStateError
+            } returns VaultUnlockResult.InvalidStateError(error = error)
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -5151,9 +5157,10 @@ class AuthRepositoryTest {
         coEvery {
             accountsService.setPassword(body = setPasswordRequestJson)
         } returns Unit.asSuccess()
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.GenericError
+        } returns VaultUnlockResult.GenericError(error = error)
 
         val result = repository.setPassword(
             organizationIdentifier = organizationIdentifier,

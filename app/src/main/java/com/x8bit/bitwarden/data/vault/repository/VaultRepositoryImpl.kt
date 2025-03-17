@@ -67,6 +67,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.NoKeyFoundForUserException
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -546,10 +547,11 @@ class VaultRepositoryImpl(
     )
 
     override suspend fun unlockVaultWithBiometrics(cipher: Cipher): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val biometricsKey = authDiskSource
             .getUserBiometricUnlockKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
         val iv = authDiskSource.getUserBiometricInitVector(userId = userId)
         return this
             .unlockVaultForUser(
@@ -562,7 +564,7 @@ class VaultRepositoryImpl(
                                     .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
                                     .decodeToString()
                             } catch (_: GeneralSecurityException) {
-                                return VaultUnlockResult.BiometricDecodingError
+                                return VaultUnlockResult.BiometricDecodingError(error = null)
                             }
                         }
                         ?: biometricsKey,
@@ -587,9 +589,10 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val userKey = authDiskSource.getUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
@@ -607,9 +610,10 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Pin(
@@ -981,9 +985,9 @@ class VaultRepositoryImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
         val organizationKeys = authDiskSource
             .getOrganizationKeys(userId = userId)
         return unlockVault(
