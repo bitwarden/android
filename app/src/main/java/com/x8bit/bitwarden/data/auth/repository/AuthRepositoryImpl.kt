@@ -924,11 +924,15 @@ class AuthRepositoryImpl(
         return accountsService.requestPasswordHint(email).fold(
             onSuccess = {
                 when (it) {
-                    is PasswordHintResponseJson.Error -> PasswordHintResult.Error(it.errorMessage)
+                    is PasswordHintResponseJson.Error -> PasswordHintResult.Error(
+                        message = it.errorMessage,
+                        error = null,
+                    )
+
                     PasswordHintResponseJson.Success -> PasswordHintResult.Success
                 }
             },
-            onFailure = { PasswordHintResult.Error(null) },
+            onFailure = { PasswordHintResult.Error(message = null, error = it) },
         )
     }
 
@@ -936,12 +940,12 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(error = NoActiveUserException())
         val profile = activeAccount.profile
         val userId = profile.userId
         val userKey = authDiskSource
             .getUserKey(userId = userId)
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
         val keyConnectorUrl = organizations
             .find {
                 it.shouldUseKeyConnector &&
@@ -949,7 +953,9 @@ class AuthRepositoryImpl(
                     it.type != OrganizationType.ADMIN
             }
             ?.keyConnectorUrl
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(
+                error = MissingPropertyException("Key Connector URL"),
+            )
         return keyConnectorManager
             .migrateExistingUserToKeyConnector(
                 userId = userId,
@@ -967,7 +973,7 @@ class AuthRepositoryImpl(
                 settingsRepository.setDefaultsIfNecessary(userId = userId)
             }
             .fold(
-                onFailure = { RemovePasswordResult.Error },
+                onFailure = { RemovePasswordResult.Error(error = it) },
                 onSuccess = { RemovePasswordResult.Success },
             )
     }
@@ -980,7 +986,7 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return ResetPasswordResult.Error
+            ?: return ResetPasswordResult.Error(error = NoActiveUserException())
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
@@ -990,7 +996,7 @@ class AuthRepositoryImpl(
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
-                    onFailure = { return ResetPasswordResult.Error },
+                    onFailure = { return ResetPasswordResult.Error(error = it) },
                     onSuccess = { it },
                 )
         }
@@ -1036,7 +1042,7 @@ class AuthRepositoryImpl(
                     // Return the success.
                     ResetPasswordResult.Success
                 },
-                onFailure = { ResetPasswordResult.Error },
+                onFailure = { ResetPasswordResult.Error(error = it) },
             )
     }
 
@@ -1049,7 +1055,7 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return SetPasswordResult.Error
+            ?: return SetPasswordResult.Error(error = NoActiveUserException())
         val userId = activeAccount.profile.userId
 
         // Update the saved master password hash.
@@ -1060,7 +1066,7 @@ class AuthRepositoryImpl(
                 kdf = activeAccount.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-            .getOrElse { return@setPassword SetPasswordResult.Error }
+            .getOrElse { return@setPassword SetPasswordResult.Error(error = it) }
 
         return when (activeAccount.profile.forcePasswordResetReason) {
             ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
@@ -1110,7 +1116,7 @@ class AuthRepositoryImpl(
                     }
             }
             .flatMap {
-                when (vaultRepository.unlockVaultWithMasterPassword(password)) {
+                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
                             userId = userId,
@@ -1119,12 +1125,9 @@ class AuthRepositoryImpl(
                         )
                     }
 
-                    is VaultUnlockResult.AuthenticationError,
-                    is VaultUnlockResult.BiometricDecodingError,
-                    is VaultUnlockResult.InvalidStateError,
-                    is VaultUnlockResult.GenericError,
-                        -> {
-                        IllegalStateException("Failed to unlock vault").asFailure()
+                    is VaultUnlockError -> {
+                        (result.error ?: IllegalStateException("Failed to unlock vault"))
+                            .asFailure()
                     }
                 }
             }
@@ -1134,7 +1137,7 @@ class AuthRepositoryImpl(
                 this.organizationIdentifier = null
             }
             .fold(
-                onFailure = { SetPasswordResult.Error },
+                onFailure = { SetPasswordResult.Error(error = it) },
                 onSuccess = { SetPasswordResult.Success },
             )
     }
@@ -1251,7 +1254,7 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = { PasswordStrengthResult.Success(passwordStrength = it) },
-                onFailure = { PasswordStrengthResult.Error },
+                onFailure = { PasswordStrengthResult.Error(error = it) },
             )
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {

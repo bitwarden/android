@@ -12,5 +12,7 @@ sealed class SetPasswordResult {
     /**
      * There was an error setting the password.
      */
-    data object Error : SetPasswordResult()
+    data class Error(
+        val error: Throwable,
+    ) : SetPasswordResult()
 }

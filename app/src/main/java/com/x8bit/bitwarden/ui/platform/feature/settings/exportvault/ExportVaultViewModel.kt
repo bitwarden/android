@@ -382,7 +382,7 @@ class ExportVaultViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> {
+            is PasswordStrengthResult.Error -> {
                 // Leave UI the same
             }
         }

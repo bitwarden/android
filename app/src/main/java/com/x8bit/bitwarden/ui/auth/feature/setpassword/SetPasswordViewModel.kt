@@ -179,13 +179,14 @@ class SetPasswordViewModel @Inject constructor(
     private fun handleReceiveSetPasswordResult(
         action: SetPasswordAction.Internal.ReceiveSetPasswordResult,
     ) {
-        when (action.result) {
-            SetPasswordResult.Error -> {
+        when (val result = action.result) {
+            is SetPasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SetPasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -267,6 +268,7 @@ data class SetPasswordState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
