@@ -905,7 +905,7 @@ class AuthRepositoryTest {
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -915,21 +915,25 @@ class AuthRepositoryTest {
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(
+            NewSsoUserResult.Failure(error = MissingPropertyException("OrgIdentifier")),
+            result,
+        )
     }
 
     @Test
     fun `createNewSsoUser when getOrganizationAutoEnrollStatus fails returns failure`() = runTest {
         val orgIdentifier = "rememberedOrgIdentifier"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         }
@@ -939,6 +943,7 @@ class AuthRepositoryTest {
     fun `createNewSsoUser when getOrganizationKeys fails returns failure`() = runTest {
         val orgIdentifier = "rememberedOrgIdentifier"
         val orgId = "organizationId"
+        val error = Throwable("Fail!")
         val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
             organizationId = orgId,
             isResetPasswordEnabled = false,
@@ -948,11 +953,11 @@ class AuthRepositoryTest {
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         } returns orgAutoEnrollStatusResponse.asSuccess()
-        coEvery { organizationService.getOrganizationKeys(orgId) } returns Throwable().asFailure()
+        coEvery { organizationService.getOrganizationKeys(orgId) } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -974,6 +979,7 @@ class AuthRepositoryTest {
                 privateKey = "privateKey",
                 publicKey = orgPublicKey,
             )
+            val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
 
@@ -994,11 +1000,11 @@ class AuthRepositoryTest {
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = repository.createNewSsoUser()
 
-            assertEquals(NewSsoUserResult.Failure, result)
+            assertEquals(NewSsoUserResult.Failure(error = error), result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
                 organizationService.getOrganizationKeys(orgId)
@@ -1034,6 +1040,7 @@ class AuthRepositoryTest {
             adminReset = userAdminReset,
             deviceKey = null,
         )
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         fakeAuthDiskSource.storeShouldTrustDevice(
@@ -1059,11 +1066,11 @@ class AuthRepositoryTest {
                 publicKey = userPublicKey,
                 encryptedPrivateKey = userPrivateKey,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -1103,6 +1110,7 @@ class AuthRepositoryTest {
             adminReset = userAdminReset,
             deviceKey = null,
         )
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         fakeAuthDiskSource.storeShouldTrustDevice(
@@ -1136,11 +1144,11 @@ class AuthRepositoryTest {
                 passwordHash = null,
                 resetPasswordKey = userAdminReset,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -5302,12 +5310,12 @@ class AuthRepositoryTest {
     @Test
     fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
         val email = "test@gmail.com"
-        val throwable = Throwable()
+        val throwable = Throwable("Fail!")
         coEvery {
             organizationService.getOrganizationDomainSsoDetails(email)
         } returns throwable.asFailure()
         val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(OrganizationDomainSsoDetailsResult.Failure, result)
+        assertEquals(OrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5381,7 +5389,7 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns throwable.asFailure()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(), result)
+        assertEquals(PrevalidateSsoResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5391,7 +5399,7 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns PrevalidateSsoResponseJson.Error(message = "Fail").asSuccess()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(message = "Fail"), result)
+        assertEquals(PrevalidateSsoResult.Failure(message = "Fail", error = null), result)
     }
 
     @Test
@@ -5401,7 +5409,10 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns PrevalidateSsoResponseJson.Success(token = "").asSuccess()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(), result)
+        assertEquals(
+            PrevalidateSsoResult.Failure(error = MissingPropertyException("Token")),
+            result,
+        )
     }
 
     @Test

@@ -109,8 +109,11 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ContinueClick with createNewSsoUser failure should display the error dialog state`() =
         runTest {
+            val error = Throwable("Fail!")
             every { authRepository.shouldTrustDevice = true } just runs
-            coEvery { authRepository.createNewSsoUser() } returns NewSsoUserResult.Failure
+            coEvery {
+                authRepository.createNewSsoUser()
+            } returns NewSsoUserResult.Failure(error = error)
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -129,6 +132,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = TrustedDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),

@@ -16,5 +16,6 @@ sealed class PrevalidateSsoResult {
      */
     data class Failure(
         val message: String? = null,
+        val error: Throwable?,
     ) : PrevalidateSsoResult()
 }
