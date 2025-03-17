@@ -400,12 +400,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
+                val error = Throwable("Oh dang.")
                 coEvery {
                     vaultRepo.softDeleteCipher(
                         cipherId = VAULT_ITEM_ID,
                         cipherView = createMockCipherView(number = 1),
                     )
-                } returns DeleteCipherResult.Error
+                } returns DeleteCipherResult.Error(error = error)
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
 
@@ -414,6 +415,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         viewState = loginViewState,
                         dialog = VaultItemState.DialogState.Generic(
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     viewModel.stateFlow.value,
@@ -624,12 +626,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             val viewModel = createViewModel(state = DEFAULT_STATE)
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepo.restoreCipher(
                     cipherId = VAULT_ITEM_ID,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns RestoreCipherResult.Error
+            } returns RestoreCipherResult.Error(error = error)
 
             viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
@@ -638,6 +641,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewState = DEFAULT_VIEW_STATE,
                     dialog = VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                 ),
                 viewModel.stateFlow.value,

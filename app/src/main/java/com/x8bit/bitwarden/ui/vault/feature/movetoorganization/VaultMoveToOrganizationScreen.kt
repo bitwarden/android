@@ -85,6 +85,7 @@ private fun VaultMoveToOrganizationScaffold(
                 title = stringResource(id = R.string.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = dismissClick,
+                throwable = dialog.throwable,
             )
         }
 

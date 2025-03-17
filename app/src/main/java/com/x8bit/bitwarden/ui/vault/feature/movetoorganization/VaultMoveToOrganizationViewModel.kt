@@ -151,12 +151,13 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         action: VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        when (action.shareCipherResult) {
+        when (val result = action.shareCipherResult) {
             is ShareCipherResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultMoveToOrganizationState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -358,6 +359,7 @@ data class VaultMoveToOrganizationState(
         @Parcelize
         data class Error(
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

@@ -275,6 +275,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherView = setupForAutofill()
         val cipherId = CIPHER_ID
         val errorMessage = "Server error"
+        val error = Throwable("Oof")
         val updatedCipherView = cipherView.copy(
             login = createMockLoginView(number = 1, clock = clock).copy(
                 uris = listOf(createMockUriView(number = 1)) +
@@ -291,7 +292,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 cipherId = cipherId,
                 cipherView = updatedCipherView,
             )
-        } returns UpdateCipherResult.Error(errorMessage)
+        } returns UpdateCipherResult.Error(errorMessage = errorMessage, error = error)
 
         viewModel.stateFlow.test {
             assertEquals(INITIAL_STATE_FOR_AUTOFILL, awaitItem())
@@ -314,6 +315,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = errorMessage.asText(),
+                            throwable = error,
                         ),
                     ),
                 awaitItem(),

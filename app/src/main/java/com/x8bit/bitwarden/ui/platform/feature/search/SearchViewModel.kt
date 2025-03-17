@@ -546,6 +546,7 @@ class SearchViewModel @Inject constructor(
                             title = null,
                             message = result.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
