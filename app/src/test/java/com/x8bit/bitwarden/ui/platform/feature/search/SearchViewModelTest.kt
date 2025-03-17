@@ -442,9 +442,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             setupForAutofill()
             val cipherId = CIPHER_ID
             val password = "password"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
             val viewModel = createViewModel()
             assertEquals(
                 INITIAL_STATE_FOR_AUTOFILL,
@@ -465,6 +466,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     dialogState = SearchState.DialogState.Error(
                         title = null,
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 viewModel.stateFlow.value,

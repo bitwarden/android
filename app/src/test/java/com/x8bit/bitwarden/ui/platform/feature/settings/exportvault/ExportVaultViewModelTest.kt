@@ -385,11 +385,12 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `ConfirmExportVaultClicked error checking password should show an error`() {
         val password = "password"
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.validatePassword(
                 password = password,
             )
-        } returns ValidatePasswordResult.Error
+        } returns ValidatePasswordResult.Error(error = error)
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
@@ -400,6 +401,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 dialogState = ExportVaultState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
                 passwordInput = password,
             ),

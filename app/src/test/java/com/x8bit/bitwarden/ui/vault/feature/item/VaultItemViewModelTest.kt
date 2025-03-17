@@ -895,11 +895,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
-
                 val password = "password"
+                val error = Throwable("Fail!")
                 coEvery {
                     authRepo.validatePassword(password)
-                } returns ValidatePasswordResult.Error
+                } returns ValidatePasswordResult.Error(error = error)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
@@ -928,6 +928,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 message = R.string.generic_error_message.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),

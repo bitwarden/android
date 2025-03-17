@@ -1212,10 +1212,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.ValidatePasswordReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }

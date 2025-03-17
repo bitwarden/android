@@ -1306,14 +1306,13 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
 
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
-                            // TODO PM-19425 update ValidatePasswordResult to propagate error.
-                            throwable = null,
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1326,8 +1325,6 @@ class VaultItemListingViewModel @Inject constructor(
                             dialogState = VaultItemListingState.DialogState.Error(
                                 title = null,
                                 message = R.string.invalid_master_password.asText(),
-                                // TODO PM-19425 update ValidatePasswordResult to propagate error.
-                                throwable = null,
                             ),
                         )
                     }
@@ -1384,7 +1381,7 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 showFido2UserVerificationErrorDialog()
             }
 

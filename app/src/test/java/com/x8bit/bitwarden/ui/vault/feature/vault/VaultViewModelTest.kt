@@ -1608,9 +1608,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
         runTest {
             val password = "password"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -1635,6 +1636,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
@@ -1943,22 +1945,22 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `InternetConnectionErrorReceived should show network error if no internet connection`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                isRefreshing = false,
-                dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isRefreshing = false,
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
                 ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+                viewModel.stateFlow.value,
+            )
+        }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
