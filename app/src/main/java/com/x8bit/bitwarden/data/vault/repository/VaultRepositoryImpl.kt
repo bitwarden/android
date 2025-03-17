@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -67,7 +68,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.NoKeyFoundForUserException
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -551,7 +551,9 @@ class VaultRepositoryImpl(
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val biometricsKey = authDiskSource
             .getUserBiometricUnlockKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Biometric key"),
+            )
         val iv = authDiskSource.getUserBiometricInitVector(userId = userId)
         return this
             .unlockVaultForUser(
@@ -592,7 +594,9 @@ class VaultRepositoryImpl(
         val userId = activeUserId
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val userKey = authDiskSource.getUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("User key"),
+            )
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
@@ -613,7 +617,9 @@ class VaultRepositoryImpl(
         val userId = activeUserId
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Pin protected key"),
+            )
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Pin(
@@ -987,7 +993,9 @@ class VaultRepositoryImpl(
         val account = authDiskSource.userState?.accounts?.get(userId)
             ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException())
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Private key"),
+            )
         val organizationKeys = authDiskSource
             .getOrganizationKeys(userId = userId)
         return unlockVault(

@@ -1132,10 +1132,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             accounts = listOf(DEFAULT_ACCOUNT.copy(isBiometricsEnabled = true)),
         )
         val viewModel = createViewModel(state = initialState)
-        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithBiometrics(cipher = CIPHER)
-        } returns VaultUnlockResult.BiometricDecodingError(error = error)
+        } returns VaultUnlockResult.BiometricDecodingError(error = Throwable("Fail"))
         every { encryptionManager.clearBiometrics(userId = USER_ID) } just runs
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
@@ -1146,7 +1145,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
                     title = R.string.biometrics_failed.asText(),
                     message = R.string.biometrics_decoding_failure.asText(),
-                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,

@@ -349,7 +349,6 @@ class VaultUnlockViewModel @Inject constructor(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
                             title = R.string.biometrics_failed.asText(),
                             message = R.string.biometrics_decoding_failure.asText(),
-                            throwable = result.error,
                         ),
                     )
                 }

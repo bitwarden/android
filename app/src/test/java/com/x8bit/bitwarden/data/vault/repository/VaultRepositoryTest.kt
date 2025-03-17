@@ -25,6 +25,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -87,7 +88,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.data.vault.repository.model.NoKeyFoundForUserException
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
@@ -253,12 +253,12 @@ class VaultRepositoryTest {
         mockkStatic(MessageDigest::class)
         mockkStatic(Base64::class)
         mockkConstructor(NoActiveUserException::class)
-        mockkConstructor(NoKeyFoundForUserException::class)
+        mockkConstructor(MissingPropertyException::class)
         every {
             anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
         } returns true
         every {
-            anyConstructed<NoKeyFoundForUserException>() == any<NoKeyFoundForUserException>()
+            anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
         } returns true
     }
 
@@ -269,7 +269,7 @@ class VaultRepositoryTest {
         unmockkStatic(MessageDigest::class)
         unmockkStatic(Base64::class)
         unmockkConstructor(NoActiveUserException::class)
-        unmockkConstructor(NoKeyFoundForUserException::class)
+        unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
@@ -1197,7 +1197,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
             assertEquals(
-                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
             assertEquals(
@@ -1287,7 +1287,7 @@ class VaultRepositoryTest {
 
             assertEquals(
                 VaultUnlockResult.BiometricDecodingError(
-                    error = NoKeyFoundForUserException(),
+                    error = MissingPropertyException("Foo"),
                 ),
                 result,
             )
@@ -1563,7 +1563,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
             assertEquals(
@@ -1591,7 +1591,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
 
@@ -1781,7 +1781,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
             assertEquals(
@@ -1807,7 +1807,7 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertEquals(
-            VaultUnlockResult.InvalidStateError(error = NoKeyFoundForUserException()),
+            VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
             result,
         )
         assertEquals(
