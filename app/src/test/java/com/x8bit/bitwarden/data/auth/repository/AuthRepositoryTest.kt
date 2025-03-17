@@ -4276,7 +4276,13 @@ class AuthRepositoryTest {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-            assertEquals(RegisterResult.Error(errorMessage = null), result)
+            assertEquals(
+                RegisterResult.Error(
+                    errorMessage = null,
+                    error = MissingPropertyException("Captcha ID"),
+                ),
+                result,
+            )
         }
 
     @Test
@@ -4322,6 +4328,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register Failure should return Error with no message`() = runTest {
+        val error = RuntimeException()
         coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.register(
@@ -4339,7 +4346,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RuntimeException().asFailure()
+        } returns error.asFailure()
 
         val result = repository.register(
             email = EMAIL,
@@ -4349,7 +4356,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = null), result)
+        assertEquals(RegisterResult.Error(errorMessage = null, error = error), result)
     }
 
     @Test
@@ -4383,7 +4390,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = "message"), result)
+        assertEquals(RegisterResult.Error(errorMessage = "message", error = null), result)
     }
 
     @Test
@@ -4420,7 +4427,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = "expected"), result)
+        assertEquals(RegisterResult.Error(errorMessage = "expected", error = null), result)
     }
 
     @Test

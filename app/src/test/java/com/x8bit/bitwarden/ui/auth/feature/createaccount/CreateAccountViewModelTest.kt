@@ -252,6 +252,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SubmitClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         val repo = mockk<AuthRepository> {
             every { captchaTokenResultFlow } returns flowOf()
             coEvery {
@@ -263,7 +264,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Error(errorMessage = "mock_error")
+            } returns RegisterResult.Error(errorMessage = "mock_error", error = error)
         }
         val viewModel = CreateAccountViewModel(
             savedStateHandle = validInputHandle,
@@ -281,6 +282,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     dialog = CreateAccountDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -368,7 +370,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Error(null)
+            } returns RegisterResult.Error(errorMessage = null, error = null)
         }
         val viewModel = CreateAccountViewModel(
             savedStateHandle = validInputHandle,
