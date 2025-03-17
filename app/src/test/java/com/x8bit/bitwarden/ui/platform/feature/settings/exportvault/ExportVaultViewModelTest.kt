@@ -146,11 +146,12 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             passwordInput = passcode,
             showSendCodeButton = true,
         )
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.verifyOneTimePasscode(
                 oneTimePasscode = passcode,
             )
-        } returns VerifyOtpResult.NotVerified("Wrong")
+        } returns VerifyOtpResult.NotVerified(errorMessage = "Wrong", error = error)
 
         val viewModel = createViewModel(initialState)
 
@@ -161,6 +162,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 dialogState = ExportVaultState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -509,10 +511,11 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `SendCodeClick should call requestOneTimePasscode and update dialog state to sending then back to null when request completes and send correct event on error`() =
         runTest {
+            val error = Throwable("Fail!")
             val viewModel = createViewModel()
             coEvery {
                 authRepository.requestOneTimePasscode()
-            } returns RequestOtpResult.Error(message = null)
+            } returns RequestOtpResult.Error(message = null, error = error)
             viewModel.stateEventFlow(backgroundScope) { stateTurbine, eventTurbine ->
                 assertEquals(DEFAULT_STATE, stateTurbine.awaitItem())
                 viewModel.trySendAction(ExportVaultAction.SendCodeClick)

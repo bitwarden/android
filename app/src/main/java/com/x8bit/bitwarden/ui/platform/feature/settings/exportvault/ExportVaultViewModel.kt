@@ -403,11 +403,14 @@ class ExportVaultViewModel @Inject constructor(
     private fun handleReceiveVerifyOneTimePasscodeResult(
         action: ExportVaultAction.Internal.ReceiveVerifyOneTimePasscodeResult,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             VerifyOtpResult.Verified -> exportVaultData()
 
             is VerifyOtpResult.NotVerified -> {
-                updateStateWithError(R.string.generic_error_message.asText())
+                updateStateWithError(
+                    message = R.string.generic_error_message.asText(),
+                    error = result.error,
+                )
             }
         }
     }

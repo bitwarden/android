@@ -1862,7 +1862,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePinResult.Error -> {
+            is ValidatePinResult.Error -> {
                 showFido2ErrorDialog()
             }
 

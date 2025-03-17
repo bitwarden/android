@@ -4216,7 +4216,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val pin = "PIN"
         coEvery {
             authRepository.validatePin(pin = pin)
-        } returns ValidatePinResult.Error
+        } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
         viewModel.trySendAction(
             VaultItemListingsAction.PinFido2VerificationSubmit(

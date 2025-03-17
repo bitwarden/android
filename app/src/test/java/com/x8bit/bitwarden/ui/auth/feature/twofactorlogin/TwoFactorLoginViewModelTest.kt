@@ -926,9 +926,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ResendEmailClick returns error should update dialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.resendVerificationCodeEmail()
-        } returns ResendEmailResult.Error(message = null)
+        } returns ResendEmailResult.Error(message = null, error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -951,6 +952,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     dialogState = TwoFactorLoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.verification_email_not_sent.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -973,6 +975,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     dialogState = TwoFactorLoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.verification_email_not_sent.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -1079,12 +1082,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `ReceiveResendEmailResult with ResendEmailResult Error should not emit any events`() =
         runTest {
+            val error = Throwable("Fail!")
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 viewModel.trySendAction(
                     TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
-                        resendEmailResult = ResendEmailResult.Error(message = null),
+                        resendEmailResult = ResendEmailResult.Error(message = null, error = error),
                         isUserInitiated = true,
                     ),
                 )
@@ -1093,6 +1097,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -180,7 +181,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                     isEnabled = true,
                     type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
                     organizationId = "organizationUser",
-                    ),
+                ),
             ),
         )
 
@@ -297,7 +298,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         // Clear fingerprint phrase
         viewModel.trySendAction(
             AccountSecurityAction.Internal.FingerprintResultReceive(
-                UserFingerprintResult.Error,
+                fingerprintResult = UserFingerprintResult.Error(error = NoActiveUserException()),
             ),
         )
         assertEquals(

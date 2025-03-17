@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
@@ -380,12 +381,13 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun getUserFingerprint(): UserFingerprintResult {
-        val userId = activeUserId ?: return UserFingerprintResult.Error
+        val userId = activeUserId
+            ?: return UserFingerprintResult.Error(error = NoActiveUserException())
 
         return vaultSdkSource
             .getUserFingerprint(userId)
             .fold(
-                onFailure = { UserFingerprintResult.Error },
+                onFailure = { UserFingerprintResult.Error(error = it) },
                 onSuccess = { UserFingerprintResult.Success(it) },
             )
     }

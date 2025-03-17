@@ -183,9 +183,10 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `on ResendCodeClick with requestOneTimePasscode Success should set dialog to Error`() =
         runTest {
+            val error = Throwable("Fail!")
             coEvery {
                 authRepo.requestOneTimePasscode()
-            } returns RequestOtpResult.Error(message = "Error")
+            } returns RequestOtpResult.Error(message = "error", error = error)
             val viewModel = createViewModel(state = DEFAULT_STATE)
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
@@ -202,6 +203,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
                     DEFAULT_STATE.copy(
                         dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
