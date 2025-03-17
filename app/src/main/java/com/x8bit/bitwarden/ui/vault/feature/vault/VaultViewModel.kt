@@ -937,6 +937,7 @@ data class VaultState(
             val noFolderItems: List<VaultItem>,
             val collectionItems: List<CollectionItem>,
             val trashItemsCount: Int,
+            val archiveItemsCount: Int,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true

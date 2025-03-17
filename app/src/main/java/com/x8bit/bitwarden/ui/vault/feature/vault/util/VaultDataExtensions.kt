@@ -142,6 +142,8 @@ fun VaultData.toViewState(
             trashItemsCount = filteredCipherViewListWithDeletedItems.count {
                 it.deletedDate != null
             },
+            // TODO update when SDK is updated
+            archiveItemsCount = 0,
         )
     }
 }

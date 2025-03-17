@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 private const val TOTP_TYPES_COUNT: Int = 1
-private const val TRASH_TYPES_COUNT: Int = 1
+private const val HIDDEN_ITEMS_TYPES_COUNT: Int = 2
 
 /**
  * Content view for the [VaultScreen].
@@ -336,14 +336,29 @@ fun VaultContent(
 
         item {
             BitwardenListHeaderText(
-                label = stringResource(id = R.string.trash),
-                supportingLabel = TRASH_TYPES_COUNT.toString(),
+                label = stringResource(id = R.string.hidden_items),
+                supportingLabel = HIDDEN_ITEMS_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(height = 8.dp))
+        }
+
+        item {
+            BitwardenGroupItem(
+                startIcon = rememberVectorPainter(id = R.drawable.archive_icon),
+                label = stringResource(id = R.string.archive),
+                supportingLabel = state.trashItemsCount.toString(),
+                onClick = vaultHandlers.trashClick,
+                showDivider = false,
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("ArchiveFilter")
+                    .standardHorizontalMargin(),
+            )
         }
 
         item {
