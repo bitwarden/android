@@ -286,7 +286,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     //region VaultItemListing Handlers
     private fun handleLockAccountClick(action: VaultItemListingsAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultItemListingsAction.LogoutAccountClick) {

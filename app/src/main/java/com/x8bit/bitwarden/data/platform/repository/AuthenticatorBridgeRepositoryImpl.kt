@@ -116,7 +116,10 @@ class AuthenticatorBridgeRepositoryImpl(
 
                 // Lock the user's vault if we unlocked it for this operation:
                 if (!isVaultAlreadyUnlocked) {
-                    vaultRepository.lockVault(userId)
+                    vaultRepository.lockVault(
+                        userId = userId,
+                        isUserInitiated = false,
+                    )
                 }
 
                 SharedAccountData.Account(

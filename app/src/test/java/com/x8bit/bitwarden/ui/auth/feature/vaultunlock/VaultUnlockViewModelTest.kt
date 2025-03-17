@@ -61,7 +61,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
-        every { lockVault(any()) } just runs
+        every { lockVault(any(), any()) } just runs
     }
     private val encryptionManager: BiometricsEncryptionManager = mockk {
         every { getOrCreateCipher(USER_ID) } returns CIPHER
@@ -652,7 +652,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultUnlockAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = false) }
     }
 
     @Test

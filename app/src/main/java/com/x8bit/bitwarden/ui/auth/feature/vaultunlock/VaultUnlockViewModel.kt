@@ -215,7 +215,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultUnlockAction.LockAccountClick) {
-        vaultRepo.lockVault(userId = action.accountSummary.userId)
+        vaultRepo.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {

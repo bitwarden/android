@@ -40,7 +40,7 @@ interface VaultLockManager {
     /**
      * Locks the vault for the user with the given [userId].
      */
-    fun lockVault(userId: String)
+    fun lockVault(userId: String, isUserInitiated: Boolean)
 
     /**
      * Locks the vault for the current user if currently unlocked.

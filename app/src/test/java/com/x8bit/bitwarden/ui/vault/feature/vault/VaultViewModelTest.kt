@@ -132,7 +132,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { sync(forced = any()) } just runs
             every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser() } just runs
-            every { lockVault(any()) } just runs
+            every { lockVault(any(), any()) } just runs
         }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -382,7 +382,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Suppress("MaxLineLength")
@@ -1945,20 +1945,21 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `InternetConnectionErrorReceived should show network error if no internet connection`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                isRefreshing = false,
-                dialog = VaultState.DialogState.Error(
-                    R.string.internet_connection_required_title.asText(),
-                    R.string.internet_connection_required_message.asText(),
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isRefreshing = false,
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
                 ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+                viewModel.stateFlow.value,
+            )
+        }
 
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(

@@ -142,7 +142,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        every { lockVault(any()) } just runs
+        every { lockVault(any(), any()) } just runs
         every { sync(forced = any()) } just runs
         coEvery {
             getDecryptedFido2CredentialAutofillViews(any())
@@ -246,7 +246,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultItemListingsAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Test
