@@ -192,7 +192,8 @@ class CipherManagerImpl(
         cipherId: String,
         cipherView: CipherView,
     ): RestoreCipherResult {
-        val userId = activeUserId ?: return RestoreCipherResult.Error
+        val userId = activeUserId
+            ?: return RestoreCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .restoreCipher(cipherId = cipherId)
             .onSuccess {
@@ -203,7 +204,7 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { RestoreCipherResult.Success },
-                onFailure = { RestoreCipherResult.Error },
+                onFailure = { RestoreCipherResult.Error(error = it) },
             )
     }
 
@@ -251,7 +252,7 @@ class CipherManagerImpl(
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
-        val userId = activeUserId ?: return ShareCipherResult.Error
+        val userId = activeUserId ?: return ShareCipherResult.Error(error = NoActiveUserException())
         return migrateAttachments(userId = userId, cipherView = cipherView)
             .flatMap {
                 vaultSdkSource.moveToOrganization(
@@ -277,7 +278,7 @@ class CipherManagerImpl(
                 )
             }
             .fold(
-                onFailure = { ShareCipherResult.Error },
+                onFailure = { ShareCipherResult.Error(error = it) },
                 onSuccess = { ShareCipherResult.Success },
             )
     }
@@ -287,7 +288,7 @@ class CipherManagerImpl(
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
-        val userId = activeUserId ?: return ShareCipherResult.Error
+        val userId = activeUserId ?: return ShareCipherResult.Error(error = NoActiveUserException())
         return ciphersService
             .updateCipherCollections(
                 cipherId = cipherId,
@@ -307,7 +308,7 @@ class CipherManagerImpl(
             }
             .fold(
                 onSuccess = { ShareCipherResult.Success },
-                onFailure = { ShareCipherResult.Error },
+                onFailure = { ShareCipherResult.Error(error = it) },
             )
     }
 

@@ -714,7 +714,7 @@ class CipherManagerTest {
             cipherView = createMockCipherView(number = 1),
         )
 
-        assertEquals(RestoreCipherResult.Error, result)
+        assertEquals(RestoreCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Suppress("MaxLineLength")
@@ -724,16 +724,17 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.restoreCipher(cipherId = cipherId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.restoreCipher(
                 cipherId = cipherId,
                 cipherView = cipherView,
             )
 
-            assertEquals(RestoreCipherResult.Error, result)
+            assertEquals(RestoreCipherResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -772,7 +773,7 @@ class CipherManagerTest {
             collectionIds = emptyList(),
         )
 
-        assertEquals(ShareCipherResult.Error, result)
+        assertEquals(ShareCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -982,6 +983,7 @@ class CipherManagerTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -990,7 +992,7 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
 
             val result = cipherManager.shareCipher(
@@ -1000,7 +1002,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1010,13 +1012,14 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val organizationId = "organizationId"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.moveToOrganization(
                     userId = userId,
                     organizationId = organizationId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -1035,7 +1038,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1049,7 +1052,7 @@ class CipherManagerTest {
                 collectionIds = emptyList(),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = NoActiveUserException()), result)
         }
 
     @Test
@@ -1097,6 +1100,7 @@ class CipherManagerTest {
                     cipherView = createMockCipherView(number = 1),
                 )
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -1104,7 +1108,7 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveCipher(userId, any()) } just runs
 
             val result = cipherManager.updateCipherCollections(
@@ -1115,7 +1119,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1124,12 +1128,13 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -1148,7 +1153,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test

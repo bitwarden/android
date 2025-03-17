@@ -13,5 +13,5 @@ sealed class RestoreCipherResult {
     /**
      * Generic error while restoring a cipher.
      */
-    data object Error : RestoreCipherResult()
+    data class Error(val error: Throwable) : RestoreCipherResult()
 }

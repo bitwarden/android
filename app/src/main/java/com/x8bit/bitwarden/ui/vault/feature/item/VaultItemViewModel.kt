@@ -1272,11 +1272,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleRestoreCipherReceive(action: VaultItemAction.Internal.RestoreCipherReceive) {
-        when (action.result) {
-            RestoreCipherResult.Error -> {
+        when (val result = action.result) {
+            is RestoreCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
