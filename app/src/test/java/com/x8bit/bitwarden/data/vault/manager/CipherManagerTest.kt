@@ -100,6 +100,10 @@ class CipherManagerTest {
         every {
             anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
         } returns true
+        mockkConstructor(IllegalStateException::class)
+        every {
+            anyConstructed<IllegalStateException>() == any<IllegalStateException>()
+        } returns true
     }
 
     @AfterEach
@@ -107,6 +111,7 @@ class CipherManagerTest {
         unmockkStatic(Uri::class, Instant::class)
         unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
         unmockkConstructor(NoActiveUserException::class)
+        unmockkConstructor(IllegalStateException::class)
     }
 
     @Test
@@ -1714,7 +1719,7 @@ class CipherManagerTest {
         } returns cipher.asSuccess()
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1752,13 +1757,14 @@ class CipherManagerTest {
                     cipherView = cipherView,
                 )
             } returns cipher.asSuccess()
+            val error = Throwable()
 
             coEvery {
                 ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             assertEquals(
-                DownloadAttachmentResult.Failure,
+                DownloadAttachmentResult.Failure(error = error),
                 cipherManager.downloadAttachment(
                     cipherView = cipherView,
                     attachmentId = attachmentId,
@@ -1805,7 +1811,7 @@ class CipherManagerTest {
         } returns response.asSuccess()
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(error = IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1857,7 +1863,7 @@ class CipherManagerTest {
         } returns DownloadResult.Failure
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1912,7 +1918,7 @@ class CipherManagerTest {
             coEvery {
                 fileManager.downloadFileToCache(url = any())
             } returns DownloadResult.Success(file)
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -1921,10 +1927,10 @@ class CipherManagerTest {
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             assertEquals(
-                DownloadAttachmentResult.Failure,
+                DownloadAttachmentResult.Failure(error = error),
                 cipherManager.downloadAttachment(
                     cipherView = cipherView,
                     attachmentId = attachmentId,

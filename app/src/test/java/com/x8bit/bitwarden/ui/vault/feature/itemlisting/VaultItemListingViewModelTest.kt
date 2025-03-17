@@ -139,6 +139,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+    private val defaultError = Throwable("Fail")
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
@@ -146,7 +147,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { sync(forced = any()) } just runs
         coEvery {
             getDecryptedFido2CredentialAutofillViews(any())
-        } returns DecryptFido2CredentialAutofillViewResult.Error
+        } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -422,7 +423,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView),
                 )
-            } returns DecryptFido2CredentialAutofillViewResult.Error
+            } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
                 autofillSelectionData = AutofillSelectionData(
                     type = AutofillSelectionData.Type.LOGIN,
@@ -469,7 +470,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView),
                 )
-            } returns DecryptFido2CredentialAutofillViewResult.Error
+            } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AutofillSelection(
                     autofillSelectionData = AutofillSelectionData(
@@ -1491,7 +1492,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = defaultError)
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(

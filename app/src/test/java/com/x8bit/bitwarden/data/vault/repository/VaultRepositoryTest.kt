@@ -2689,7 +2689,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                GenerateTotpResult.Error,
+                GenerateTotpResult.Error(error = NoActiveUserException()),
                 result,
             )
         }
@@ -4392,12 +4392,12 @@ class VaultRepositoryTest {
             coEvery {
                 vaultDiskSource.getFolders(userId)
             } returns flowOf(listOf(createMockFolder(1)))
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.exportVaultDataToString(userId, any(), any(), format)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
-            val expected = ExportVaultDataResult.Error
+            val expected = ExportVaultDataResult.Error(error = error)
             val result = vaultRepository.exportVaultDataToString(format = format)
 
             assertEquals(
@@ -4411,7 +4411,9 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = null
 
-            val expected = DecryptFido2CredentialAutofillViewResult.Error
+            val expected = DecryptFido2CredentialAutofillViewResult.Error(
+                error = NoActiveUserException(),
+            )
             val result = vaultRepository
                 .getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(createMockCipherView(number = 1)),
@@ -4431,18 +4433,19 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherViewList = listOf(createMockCipherView(number = 1))
+            val error = Throwable()
             coEvery {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipherViews = cipherViewList.toTypedArray(),
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.getDecryptedFido2CredentialAutofillViews(
                 cipherViewList = cipherViewList,
             )
 
-            assertEquals(DecryptFido2CredentialAutofillViewResult.Error, result)
+            assertEquals(DecryptFido2CredentialAutofillViewResult.Error(error = error), result)
             coVerify {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,

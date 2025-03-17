@@ -14,5 +14,5 @@ sealed class ExportVaultDataResult {
     /**
      * There was an error converting the vault data.
      */
-    data object Error : ExportVaultDataResult()
+    data class Error(val error: Throwable) : ExportVaultDataResult()
 }

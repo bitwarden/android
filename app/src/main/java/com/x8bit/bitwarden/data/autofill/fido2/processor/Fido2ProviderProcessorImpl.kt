@@ -267,7 +267,7 @@ class Fido2ProviderProcessorImpl(
         val result = vaultRepository
             .getDecryptedFido2CredentialAutofillViews(cipherViews)
         return when (result) {
-            DecryptFido2CredentialAutofillViewResult.Error -> {
+            is DecryptFido2CredentialAutofillViewResult.Error -> {
                 throw GetCredentialUnknownException("Error decrypting credentials.")
             }
 
