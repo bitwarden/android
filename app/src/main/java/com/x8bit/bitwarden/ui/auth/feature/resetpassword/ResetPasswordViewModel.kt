@@ -309,14 +309,15 @@ class ResetPasswordViewModel @Inject constructor(
     private fun handleReceiveValidatePasswordResult(
         action: ResetPasswordAction.Internal.ReceiveValidatePasswordResult,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             // Display an alert if there was an error.
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -441,6 +442,7 @@ data class ResetPasswordState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

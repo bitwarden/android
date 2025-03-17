@@ -304,9 +304,12 @@ class ExportVaultViewModel @Inject constructor(
     private fun handleReceiveValidatePasswordResult(
         action: ExportVaultAction.Internal.ReceiveValidatePasswordResult,
     ) {
-        when (action.result) {
-            ValidatePasswordResult.Error -> {
-                updateStateWithError(R.string.generic_error_message.asText())
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
+                updateStateWithError(
+                    message = R.string.generic_error_message.asText(),
+                    error = result.error,
+                )
             }
 
             is ValidatePasswordResult.Success -> {
@@ -435,12 +438,13 @@ class ExportVaultViewModel @Inject constructor(
         }
     }
 
-    private fun updateStateWithError(message: Text) {
+    private fun updateStateWithError(message: Text, error: Throwable? = null) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = ExportVaultState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = message,
+                    error = error,
                 ),
             )
         }
@@ -475,6 +479,7 @@ data class ExportVaultState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

@@ -563,13 +563,14 @@ class SearchViewModel @Inject constructor(
     private fun handleValidatePasswordResultReceive(
         action: SearchAction.Internal.ValidatePasswordResultReceive,
     ) {
-        when (action.result) {
-            ValidatePasswordResult.Error -> {
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }

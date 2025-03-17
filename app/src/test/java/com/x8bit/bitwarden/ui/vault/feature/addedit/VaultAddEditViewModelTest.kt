@@ -3973,7 +3973,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val password = "password"
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = Throwable("Fail!"))
 
             viewModel.trySendAction(
                 VaultAddEditAction.Common.MasterPasswordFido2VerificationSubmit(

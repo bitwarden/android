@@ -99,6 +99,7 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -1249,7 +1250,7 @@ class AuthRepositoryImpl(
             )
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
-        val userId = activeUserId ?: return ValidatePasswordResult.Error
+        val userId = activeUserId ?: return ValidatePasswordResult.Error(NoActiveUserException())
         return authDiskSource
             .getMasterPasswordHash(userId = userId)
             ?.let { masterPasswordHash ->
@@ -1261,13 +1262,13 @@ class AuthRepositoryImpl(
                     )
                     .fold(
                         onSuccess = { ValidatePasswordResult.Success(isValid = it) },
-                        onFailure = { ValidatePasswordResult.Error },
+                        onFailure = { ValidatePasswordResult.Error(error = it) },
                     )
             }
             ?: run {
                 val encryptedKey = authDiskSource
                     .getUserKey(userId)
-                    ?: return ValidatePasswordResult.Error
+                    ?: return ValidatePasswordResult.Error(MissingPropertyException("UserKey"))
                 vaultSdkSource
                     .validatePasswordUserKey(
                         userId = userId,

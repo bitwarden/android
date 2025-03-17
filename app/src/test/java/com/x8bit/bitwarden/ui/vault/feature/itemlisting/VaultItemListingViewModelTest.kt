@@ -817,6 +817,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val cipherView = createMockCipherView(number = 1)
             val cipherId = "mockId-1"
             val password = "password"
+            val error = Throwable("Fail!")
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),
@@ -828,7 +829,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
             val initialState = createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
@@ -858,6 +859,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     dialogState = VaultItemListingState.DialogState.Error(
                         title = null,
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -4041,7 +4043,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(password = password)
-        } returns ValidatePasswordResult.Error
+        } returns ValidatePasswordResult.Error(error = Throwable("Fail!"))
 
         viewModel.trySendAction(
             VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(

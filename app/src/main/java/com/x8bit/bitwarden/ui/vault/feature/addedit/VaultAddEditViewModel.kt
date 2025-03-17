@@ -1839,7 +1839,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 showFido2ErrorDialog()
             }
 

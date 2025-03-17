@@ -105,6 +105,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -297,9 +298,15 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
-        mockkConstructor(NoActiveUserException::class)
+        mockkConstructor(
+            NoActiveUserException::class,
+            MissingPropertyException::class,
+        )
         every {
             anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+        every {
+            anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
         } returns true
     }
 
@@ -309,7 +316,10 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
-        unmockkStatic(NoActiveUserException::class)
+        unmockkStatic(
+            NoActiveUserException::class,
+            MissingPropertyException::class,
+        )
     }
 
     @Test
@@ -5761,25 +5771,13 @@ class AuthRepositoryTest {
 
     @Test
     fun `validatePassword with no current user returns ValidatePasswordResult Error`() = runTest {
-        val userId = "userId"
         val password = "password"
-        val passwordHash = "passwordHash"
         fakeAuthDiskSource.userState = null
-        coEvery {
-            vaultSdkSource.validatePassword(
-                userId = userId,
-                password = password,
-                passwordHash = passwordHash,
-            )
-        } returns true.asSuccess()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
-            ValidatePasswordResult.Error,
+            ValidatePasswordResult.Error(error = NoActiveUserException()),
             result,
         )
     }
@@ -5800,13 +5798,10 @@ class AuthRepositoryTest {
                 )
             } returns true.asSuccess()
 
-            val result = repository
-                .validatePassword(
-                    password = password,
-                )
+            val result = repository.validatePassword(password = password)
 
             assertEquals(
-                ValidatePasswordResult.Error,
+                ValidatePasswordResult.Error(error = MissingPropertyException("UserKey")),
                 result,
             )
         }
@@ -5816,6 +5811,7 @@ class AuthRepositoryTest {
         val userId = USER_ID_1
         val password = "password"
         val passwordHash = "passwordHash"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
         coEvery {
@@ -5824,15 +5820,12 @@ class AuthRepositoryTest {
                 password = password,
                 passwordHash = passwordHash,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
-            ValidatePasswordResult.Error,
+            ValidatePasswordResult.Error(error = error),
             result,
         )
     }
@@ -5852,10 +5845,7 @@ class AuthRepositoryTest {
             )
         } returns true.asSuccess()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
             ValidatePasswordResult.Success(isValid = true),
