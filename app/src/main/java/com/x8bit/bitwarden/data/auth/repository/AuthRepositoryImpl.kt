@@ -521,8 +521,10 @@ class AuthRepositoryImpl(
         )
 
     override suspend fun createNewSsoUser(): NewSsoUserResult {
-        val account = authDiskSource.userState?.activeAccount ?: return NewSsoUserResult.Failure
-        val orgIdentifier = rememberedOrgIdentifier ?: return NewSsoUserResult.Failure
+        val account = authDiskSource.userState?.activeAccount
+            ?: return NewSsoUserResult.Failure(error = NoActiveUserException())
+        val orgIdentifier = rememberedOrgIdentifier
+            ?: return NewSsoUserResult.Failure(error = MissingPropertyException("OrgIdentifier"))
         val userId = account.profile.userId
         return organizationService
             .getOrganizationAutoEnrollStatus(orgIdentifier)
@@ -574,7 +576,7 @@ class AuthRepositoryImpl(
             }
             .fold(
                 onSuccess = { NewSsoUserResult.Success },
-                onFailure = { NewSsoUserResult.Failure },
+                onFailure = { NewSsoUserResult.Failure(error = it) },
             )
     }
 
@@ -1164,7 +1166,7 @@ class AuthRepositoryImpl(
                     verifiedDate = it.verifiedDate,
                 )
             },
-            onFailure = { OrganizationDomainSsoDetailsResult.Failure },
+            onFailure = { OrganizationDomainSsoDetailsResult.Failure(error = it) },
         )
 
     override suspend fun getVerifiedOrganizationDomainSsoDetails(
@@ -1192,19 +1194,19 @@ class AuthRepositoryImpl(
             onSuccess = {
                 when (it) {
                     is PrevalidateSsoResponseJson.Error -> {
-                        PrevalidateSsoResult.Failure(message = it.message)
+                        PrevalidateSsoResult.Failure(message = it.message, error = null)
                     }
 
                     is PrevalidateSsoResponseJson.Success -> {
                         if (it.token.isNullOrBlank()) {
-                            PrevalidateSsoResult.Failure()
+                            PrevalidateSsoResult.Failure(error = MissingPropertyException("Token"))
                         } else {
                             PrevalidateSsoResult.Success(token = it.token)
                         }
                     }
                 }
             },
-            onFailure = { PrevalidateSsoResult.Failure() },
+            onFailure = { PrevalidateSsoResult.Failure(error = it) },
         )
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {

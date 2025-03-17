@@ -171,6 +171,7 @@ private fun EnterpriseSignOnDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
             )
         }

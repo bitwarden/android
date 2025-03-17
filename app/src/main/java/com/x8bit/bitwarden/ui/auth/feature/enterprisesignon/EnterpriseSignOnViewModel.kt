@@ -211,7 +211,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun handleOnSsoPrevalidationFailure(
         action: EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure,
     ) {
-        showError(message = action.message?.asText() ?: R.string.login_sso_error.asText())
+        showError(
+            message = action.message?.asText() ?: R.string.login_sso_error.asText(),
+            error = action.error,
+        )
     }
 
     private fun handleOnOrganizationDomainSsoDetailsFailure() {
@@ -386,6 +389,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     sendAction(
                         action = EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure(
                             message = prevalidateSso.message,
+                            error = prevalidateSso.error,
                         ),
                     )
                 }
@@ -490,12 +494,14 @@ class EnterpriseSignOnViewModel @Inject constructor(
     private fun showError(
         title: Text = R.string.an_error_has_occurred.asText(),
         message: Text = R.string.login_sso_error.asText(),
+        error: Throwable? = null,
     ) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
                     title = title,
                     message = message,
+                    error = error,
                 ),
             )
         }
@@ -533,6 +539,7 @@ data class EnterpriseSignOnState(
         data class Error(
             val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -628,6 +635,7 @@ sealed class EnterpriseSignOnAction {
          */
         data class OnSsoPrevalidationFailure(
             val message: String?,
+            val error: Throwable?,
         ) : Internal()
 
         /**
