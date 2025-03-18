@@ -14,5 +14,8 @@ sealed class GeneratedForwardedServiceUsernameResult {
     /**
      * There was an error during the operation.
      */
-    data class InvalidRequest(val message: String?) : GeneratedForwardedServiceUsernameResult()
+    data class InvalidRequest(
+        val message: String?,
+        val error: Throwable,
+    ) : GeneratedForwardedServiceUsernameResult()
 }

@@ -91,7 +91,7 @@ class MasterPasswordGeneratorViewModel @Inject constructor(
 
     private fun handleUpdatedPassphraseResult(passphraseResult: GeneratedPassphraseResult) {
         when (passphraseResult) {
-            GeneratedPassphraseResult.InvalidRequest -> {
+            is GeneratedPassphraseResult.InvalidRequest -> {
                 sendEvent(
                     MasterPasswordGeneratorEvent.ShowSnackbar(
                         R.string.an_error_has_occurred.asText(),

@@ -736,7 +736,7 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedPasswordResult.InvalidRequest -> {
+            is GeneratedPasswordResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -752,7 +752,7 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedPassphraseResult.InvalidRequest -> {
+            is GeneratedPassphraseResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -768,7 +768,7 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedPlusAddressedUsernameResult.InvalidRequest -> {
+            is GeneratedPlusAddressedUsernameResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -784,7 +784,7 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedCatchAllUsernameResult.InvalidRequest -> {
+            is GeneratedCatchAllUsernameResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
@@ -800,7 +800,7 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedRandomWordUsernameResult.InvalidRequest -> {
+            is GeneratedRandomWordUsernameResult.InvalidRequest -> {
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
