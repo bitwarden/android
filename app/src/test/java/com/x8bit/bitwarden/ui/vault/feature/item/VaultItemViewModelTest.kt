@@ -1707,10 +1707,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     url = "https://example.com",
                     title = "test.mp4",
                 )
-
+                val error = Throwable("Fail")
                 coEvery {
                     vaultRepo.downloadAttachment(any(), any())
-                } returns DownloadAttachmentResult.Failure
+                } returns DownloadAttachmentResult.Failure(error = error)
 
                 viewModel.stateFlow.test {
                     assertEquals(
@@ -1731,6 +1731,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 R.string.unable_to_download_file.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),

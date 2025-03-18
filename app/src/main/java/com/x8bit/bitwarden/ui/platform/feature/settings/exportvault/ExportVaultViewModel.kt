@@ -334,6 +334,7 @@ class ExportVaultViewModel @Inject constructor(
             is ExportVaultDataResult.Error -> {
                 updateStateWithError(
                     message = R.string.export_vault_failure.asText(),
+                    error = result.error,
                 )
             }
 

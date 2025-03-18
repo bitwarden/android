@@ -411,7 +411,7 @@ class CipherManagerImpl(
         )
             .fold(
                 onSuccess = { DownloadAttachmentResult.Success(file = it) },
-                onFailure = { DownloadAttachmentResult.Failure },
+                onFailure = { DownloadAttachmentResult.Failure(error = it) },
             )
 
     private suspend fun downloadAttachmentForResult(

@@ -918,10 +918,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode failure should not call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = error)
 
             val viewModel = createViewModel()
             viewModel.trySendAction(

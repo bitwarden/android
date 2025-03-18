@@ -511,11 +511,13 @@ class VaultRepositoryImpl(
     ): DecryptFido2CredentialAutofillViewResult {
         return vaultSdkSource
             .decryptFido2CredentialAutofillViews(
-                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error,
+                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error(
+                    error = NoActiveUserException(),
+                ),
                 cipherViews = cipherViewList.toTypedArray(),
             )
             .fold(
-                onFailure = { DecryptFido2CredentialAutofillViewResult.Error },
+                onFailure = { DecryptFido2CredentialAutofillViewResult.Error(error = it) },
                 onSuccess = { DecryptFido2CredentialAutofillViewResult.Success(it) },
             )
     }
@@ -780,7 +782,8 @@ class VaultRepositoryImpl(
         totpCode: String,
         time: DateTime,
     ): GenerateTotpResult {
-        val userId = activeUserId ?: return GenerateTotpResult.Error
+        val userId = activeUserId
+            ?: return GenerateTotpResult.Error(error = NoActiveUserException())
         return vaultSdkSource.generateTotp(
             time = time,
             userId = userId,
@@ -793,7 +796,7 @@ class VaultRepositoryImpl(
                         periodSeconds = it.period.toInt(),
                     )
                 },
-                onFailure = { GenerateTotpResult.Error },
+                onFailure = { GenerateTotpResult.Error(error = it) },
             )
     }
 
@@ -900,7 +903,8 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult {
-        val userId = activeUserId ?: return ExportVaultDataResult.Error
+        val userId = activeUserId
+            ?: return ExportVaultDataResult.Error(error = NoActiveUserException())
         val folders = vaultDiskSource
             .getFolders(userId)
             .firstOrNull()
@@ -923,7 +927,7 @@ class VaultRepositoryImpl(
             )
             .fold(
                 onSuccess = { ExportVaultDataResult.Success(it) },
-                onFailure = { ExportVaultDataResult.Error },
+                onFailure = { ExportVaultDataResult.Error(error = it) },
             )
     }
 

@@ -1742,7 +1742,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
-        when (action.totpResult) {
+        when (val result = action.totpResult) {
             is TotpCodeResult.Success -> {
                 sendEvent(
                     event = VaultAddEditEvent.ShowToast(
@@ -1751,15 +1751,16 @@ class VaultAddEditViewModel @Inject constructor(
                 )
 
                 updateLoginContent { loginType ->
-                    loginType.copy(totp = action.totpResult.code)
+                    loginType.copy(totp = result.code)
                 }
             }
 
-            TotpCodeResult.CodeScanningError -> {
+            is TotpCodeResult.CodeScanningError -> {
                 showDialog(
                     dialogState = VaultAddEditState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.authenticator_key_read_error.asText(),
+                        error = result.error,
                     ),
                 )
             }
