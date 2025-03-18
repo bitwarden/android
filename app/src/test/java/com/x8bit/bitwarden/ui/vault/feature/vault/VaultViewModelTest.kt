@@ -1481,7 +1481,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = Throwable("Fail"))
 
             val viewModel = createViewModel()
             viewModel.trySendAction(

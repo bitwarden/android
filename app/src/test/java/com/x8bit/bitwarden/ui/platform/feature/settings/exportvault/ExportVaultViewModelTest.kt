@@ -538,10 +538,10 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     @Test
     fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() {
         val viewModel = createViewModel()
-
+        val error = Throwable("Fail")
         viewModel.trySendAction(
             ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
-                result = ExportVaultDataResult.Error,
+                result = ExportVaultDataResult.Error(error = error),
             ),
         )
 
@@ -550,6 +550,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 dialogState = ExportVaultState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.export_vault_failure.asText(),
+                    error = error,
                 ),
             ),
             viewModel.stateFlow.value,

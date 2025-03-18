@@ -557,7 +557,7 @@ class Fido2ProviderProcessorTest {
         every { callback.onError(capture(captureSlot)) } just runs
         coEvery {
             vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
-        } returns DecryptFido2CredentialAutofillViewResult.Error
+        } returns DecryptFido2CredentialAutofillViewResult.Error(error = Throwable("Ooops"))
         coEvery {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,

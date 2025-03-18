@@ -1295,10 +1295,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.AttachmentDecryptReceive,
     ) {
         when (val result = action.result) {
-            DownloadAttachmentResult.Failure -> {
+            is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.unable_to_download_file.asText(),
+                        error = result.error,
                     ),
                 )
             }
