@@ -169,7 +169,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 settingsRepository.setupBiometricsKey(CIPHER)
-            } returns BiometricsKeyResult.Error
+            } returns BiometricsKeyResult.Error(error = Throwable("Fail!"))
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {

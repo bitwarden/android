@@ -589,7 +589,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 settingsRepository.setupBiometricsKey(cipher = CIPHER)
-            } returns BiometricsKeyResult.Error
+            } returns BiometricsKeyResult.Error(error = Throwable("Fail!"))
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {

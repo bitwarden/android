@@ -494,7 +494,8 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
-        val userId = activeUserId ?: return BiometricsKeyResult.Error
+        val userId = activeUserId
+            ?: return BiometricsKeyResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .getUserEncryptionKey(userId = userId)
             .onSuccess { biometricsKey ->
@@ -508,7 +509,7 @@ class SettingsRepositoryImpl(
             }
             .fold(
                 onSuccess = { BiometricsKeyResult.Success },
-                onFailure = { BiometricsKeyResult.Error },
+                onFailure = { BiometricsKeyResult.Error(error = it) },
             )
     }
 

@@ -446,7 +446,10 @@ class CipherManagerImpl(
             ?: return IllegalStateException("Attachment does not have a url").asFailure()
 
         val encryptedFile = when (val result = fileManager.downloadFileToCache(url)) {
-            DownloadResult.Failure -> return IllegalStateException("Download failed").asFailure()
+            is DownloadResult.Failure -> {
+                return IllegalStateException("Download failed", result.error).asFailure()
+            }
+
             is DownloadResult.Success -> result.file
         }
 

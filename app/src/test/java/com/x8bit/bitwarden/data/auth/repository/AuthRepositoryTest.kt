@@ -316,7 +316,7 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
-        unmockkStatic(
+        mockkConstructor(
             NoActiveUserException::class,
             MissingPropertyException::class,
         )

@@ -833,7 +833,7 @@ class SettingsRepositoryTest {
 
             val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
-            assertEquals(BiometricsKeyResult.Error, result)
+            assertEquals(BiometricsKeyResult.Error(error = NoActiveUserException()), result)
             coVerify(exactly = 0) {
                 vaultSdkSource.getUserEncryptionKey(userId = any())
             }
@@ -845,13 +845,14 @@ class SettingsRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipher = mockk<Cipher>()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
-            assertEquals(BiometricsKeyResult.Error, result)
+            assertEquals(BiometricsKeyResult.Error(error = error), result)
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
