@@ -16,5 +16,7 @@ sealed class PasswordStrengthResult {
     /**
      * There was an error determining the password strength.
      */
-    data object Error : PasswordStrengthResult()
+    data class Error(
+        val error: Throwable,
+    ) : PasswordStrengthResult()
 }

@@ -46,11 +46,12 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueClick with input and remove password error should show error dialog`() = runTest {
         val password = "123"
+        val error = Throwable("Fail!")
         val initialState = DEFAULT_STATE.copy(input = password)
         val viewModel = createViewModel(state = initialState)
         coEvery {
             authRepository.removePassword(masterPassword = password)
-        } returns RemovePasswordResult.Error
+        } returns RemovePasswordResult.Error(error = error)
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
@@ -68,6 +69,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                     dialogState = RemovePasswordState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),

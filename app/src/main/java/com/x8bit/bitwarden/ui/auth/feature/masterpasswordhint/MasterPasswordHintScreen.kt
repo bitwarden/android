@@ -71,6 +71,7 @@ fun MasterPasswordHintScreen(
                     ?.invoke()
                     ?: stringResource(id = R.string.an_error_has_occurred),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
                 },

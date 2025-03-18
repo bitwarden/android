@@ -187,7 +187,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> Unit
+            is PasswordStrengthResult.Error -> Unit
         }
     }
 

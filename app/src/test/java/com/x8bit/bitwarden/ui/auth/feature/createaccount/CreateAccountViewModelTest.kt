@@ -137,7 +137,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "abcdefghikl"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -163,7 +163,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -189,7 +189,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val password = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", password)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -569,7 +569,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength("", "input")
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
