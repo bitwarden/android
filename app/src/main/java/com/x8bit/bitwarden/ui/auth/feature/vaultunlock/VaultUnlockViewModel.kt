@@ -127,6 +127,7 @@ class VaultUnlockViewModel @Inject constructor(
         // only when navigating from vault to lock we should not display biometrics
         // subsequent views of the lock screen should display biometrics if available
         vaultLockManager.isFromLockFlow = false
+        mutableStateFlow.update { it.copy(isFromLockFlow = false) }
     }
 
     override fun onCleared() {
