@@ -46,7 +46,9 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHan
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.ViewAsQrCodeArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * Displays the vault item screen.
@@ -62,6 +64,7 @@ fun VaultItemScreen(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToViewAsQrCode: (args: ViewAsQrCodeArgs) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -99,6 +102,15 @@ fun VaultItemScreen(
             }
 
             is VaultItemEvent.NavigateToUri -> intentManager.launchUri(event.uri.toUri())
+
+            is VaultItemEvent.NavigateToViewAsQrCode -> {
+                onNavigateToViewAsQrCode(
+                    ViewAsQrCodeArgs(
+                        vaultItemId = event.itemId,
+                        vaultItemCipherType = event.type,
+                    ),
+                )
+            }
 
             is VaultItemEvent.NavigateToAttachments -> onNavigateToAttachments(event.itemId)
 
@@ -182,6 +194,16 @@ fun VaultItemScreen(
                     }
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOfNotNull(
+                            OverflowMenuItemData(
+                                text = stringResource(id = R.string.view_as_qr_code),
+                                onClick = remember(viewModel) {
+                                    {
+                                        viewModel.trySendAction(
+                                            VaultItemAction.Common.ViewAsQrCodeClick,
+                                        )
+                                    }
+                                },
+                            ),
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.attachments),
                                 onClick = remember(viewModel) {

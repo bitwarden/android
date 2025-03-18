@@ -1229,4 +1229,18 @@ Do you want to switch to this account?</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+
+  <string name="view_as_qr_code">View as QR code</string>
+  <string name="qr_code">QR code</string>
+  <string name="qr_code_type">QR code type</string>
+  <string name="url">URL</string>
+  <string name="subject">Subject</string>
+  <string name="body">Body</string>
+  <string name="message">Message</string>
+  <string name="ssid">SSID</string>
+  <string name="encryption_type">Encryption Type</string>
+  <string name="hidden">Hidden</string>
+  <string name="sms">SMS</string>
+  <string name="wifi">WiFi</string>
+  <string name="contact">Contact</string>
 </resources>

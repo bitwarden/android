@@ -228,6 +228,7 @@ class VaultItemViewModel @Inject constructor(
                 handleNoAttachmentFileLocationReceive()
             }
 
+            is VaultItemAction.Common.ViewAsQrCodeClick -> handleViewAsQrCodeClick()
             is VaultItemAction.Common.AttachmentsClick -> handleAttachmentsClick()
             is VaultItemAction.Common.CloneClick -> handleCloneClick()
             is VaultItemAction.Common.MoveToOrganizationClick -> handleMoveToOrganizationClick()
@@ -435,6 +436,16 @@ class VaultItemViewModel @Inject constructor(
         updateDialogState(
             VaultItemState.DialogState.Generic(
                 R.string.unable_to_save_attachment.asText(),
+            ),
+        )
+    }
+
+    private fun handleViewAsQrCodeClick() {
+        // TODO - do we need onContent?
+        sendEvent(
+            event = VaultItemEvent.NavigateToViewAsQrCode(
+                itemId = state.vaultItemId,
+                type = state.cipherType,
             ),
         )
     }
@@ -1928,6 +1939,14 @@ sealed class VaultItemEvent {
     ) : VaultItemEvent()
 
     /**
+     * Navigate to view as QR code screen.
+     */
+    data class NavigateToViewAsQrCode(
+        val itemId: String,
+        val type: VaultItemCipherType,
+        ) : VaultItemEvent()
+
+    /**
      * Navigates to the attachments screen.
      */
     data class NavigateToAttachments(
@@ -2098,6 +2117,11 @@ sealed class VaultItemAction {
          * The user has clicked the password history text.
          */
         data object PasswordHistoryClick : Common()
+
+        /**
+         * User clicked the View as QR code button.
+         */
+        data object ViewAsQrCodeClick : Common()
     }
 
     /**
