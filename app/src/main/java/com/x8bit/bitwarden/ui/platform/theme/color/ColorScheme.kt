@@ -179,7 +179,7 @@ fun dynamicBitwardenColorScheme(
             segmentedNav = materialColorScheme.outline,
         ),
         icon = BitwardenColorScheme.IconColors(
-            primary = materialColorScheme.onBackground,
+            primary = materialColorScheme.onSurfaceVariant,
             secondary = materialColorScheme.primary,
             reversed = materialColorScheme.inversePrimary,
             badgeBackground = materialColorScheme.error,
