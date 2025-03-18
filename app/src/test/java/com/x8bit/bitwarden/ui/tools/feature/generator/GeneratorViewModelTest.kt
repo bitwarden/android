@@ -403,7 +403,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             fakeGeneratorRepository.setMockGeneratePasswordResult(
-                GeneratedPasswordResult.InvalidRequest,
+                GeneratedPasswordResult.InvalidRequest(error = Throwable("Fail")),
             )
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
@@ -465,7 +465,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialPassphraseState)
 
             fakeGeneratorRepository.setMockGeneratePassphraseResult(
-                GeneratedPassphraseResult.InvalidRequest,
+                GeneratedPassphraseResult.InvalidRequest(error = Throwable("Fail")),
             )
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)

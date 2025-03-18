@@ -15,5 +15,5 @@ sealed class GeneratedRandomWordUsernameResult {
     /**
      * There was an error during the operation.
      */
-    data object InvalidRequest : GeneratedRandomWordUsernameResult()
+    data class InvalidRequest(val error: Throwable) : GeneratedRandomWordUsernameResult()
 }
