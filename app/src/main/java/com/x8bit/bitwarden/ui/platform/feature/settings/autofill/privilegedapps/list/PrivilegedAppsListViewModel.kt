@@ -1,8 +1,6 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list
 
-import android.net.Uri
 import android.os.Parcelable
-import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -13,9 +11,10 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist.model.PrivilegedAppListItem
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.model.PrivilegedAppListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -26,12 +25,11 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
-private val BITWARDEN_HELP_CENTER_USING_PASSKEYS_URI =
-    "https://bitwarden.com/help/storing-passkeys/#using-passkeys-with-bitwarden".toUri()
 
 /**
  * View model for the [PrivilegedAppsListScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class PrivilegedAppsViewModel @Inject constructor(
     private val privilegedAppRepository: PrivilegedAppRepository,
@@ -39,12 +37,9 @@ class PrivilegedAppsViewModel @Inject constructor(
 ) : BaseViewModel<Fido2TrustState, PrivilegedAppsListEvent, PrivilegedAppsListAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: Fido2TrustState(
-            googleTrustedApps = emptyList<PrivilegedAppListItem>()
-                .toImmutableList<PrivilegedAppListItem>(),
-            communityTrustedApps = emptyList<PrivilegedAppListItem>()
-                .toImmutableList<PrivilegedAppListItem>(),
-            userTrustedApps = emptyList<PrivilegedAppListItem>()
-                .toImmutableList<PrivilegedAppListItem>(),
+            googleTrustedApps = persistentListOf<PrivilegedAppListItem>(),
+            communityTrustedApps = persistentListOf<PrivilegedAppListItem>(),
+            userTrustedApps = persistentListOf<PrivilegedAppListItem>(),
             dialogState = null,
         ),
 ) {
@@ -60,7 +55,7 @@ class PrivilegedAppsViewModel @Inject constructor(
     override fun handleAction(action: PrivilegedAppsListAction) {
         when (action) {
             is PrivilegedAppsListAction.UserTrustedAppDeleteClick -> {
-                handleUserTrustedAppDeleteClick(action.app)
+                handleUserTrustedAppDeleteClick(action)
             }
 
             is PrivilegedAppsListAction.UserTrustedAppDeleteConfirmClick -> {
@@ -68,28 +63,25 @@ class PrivilegedAppsViewModel @Inject constructor(
             }
 
             is PrivilegedAppsListAction.DismissDialogClick -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
+                handleDismissDialogClick()
             }
 
-            is PrivilegedAppsListAction.LaunchHelpCenterClick -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = Fido2TrustState.DialogState.ConfirmLaunchUri(
-                            title = R.string.continue_to_help_center.asText(),
-                            message = R.string.learn_more_about_using_passkeys_with_bitwarden
-                                .asText(),
-                            uri = BITWARDEN_HELP_CENTER_USING_PASSKEYS_URI,
-                        ),
-                    )
-                }
+            is PrivilegedAppsListAction.BackClick -> {
+                handleBackClick()
             }
-
-            is PrivilegedAppsListAction.BackClick -> sendEvent(PrivilegedAppsListEvent.NavigateBack)
 
             is PrivilegedAppsListAction.Internal.PrivilegedAppDataStateReceive -> {
                 handleTrustedAppDataStateReceive(action.dataState)
             }
         }
+    }
+
+    private fun handleBackClick() {
+        sendEvent(PrivilegedAppsListEvent.NavigateBack)
+    }
+
+    private fun handleDismissDialogClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun handleTrustedAppDataStateReceive(dataState: DataState<PrivilegedAppData>) {
@@ -155,10 +147,12 @@ class PrivilegedAppsViewModel @Inject constructor(
         }
     }
 
-    private fun handleUserTrustedAppDeleteClick(app: PrivilegedAppListItem) {
+    private fun handleUserTrustedAppDeleteClick(
+        action: PrivilegedAppsListAction.UserTrustedAppDeleteClick,
+    ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = Fido2TrustState.DialogState.ConfirmDeleteTrustedApp(app),
+                dialogState = Fido2TrustState.DialogState.ConfirmDeleteTrustedApp(action.app),
             )
         }
     }
@@ -228,16 +222,6 @@ data class Fido2TrustState(
         data class General(
             val message: Text,
         ) : DialogState()
-
-        /**
-         * Show the confirm launch URI dialog.
-         */
-        @Parcelize
-        data class ConfirmLaunchUri(
-            val title: Text,
-            val message: Text,
-            val uri: Uri,
-        ) : DialogState()
     }
 }
 
@@ -250,11 +234,6 @@ sealed class PrivilegedAppsListEvent {
      * Navigate back to the previous screen.
      */
     data object NavigateBack : PrivilegedAppsListEvent()
-
-    /**
-     * Navigate to the given [uri].
-     */
-    data class NavigateToUri(val uri: Uri) : PrivilegedAppsListEvent()
 }
 
 /**
@@ -270,11 +249,6 @@ sealed class PrivilegedAppsListAction {
      * The user has dismissed the current dialog.
      */
     data object DismissDialogClick : PrivilegedAppsListAction()
-
-    /**
-     * The user has clicked the help center button.
-     */
-    data object LaunchHelpCenterClick : PrivilegedAppsListAction()
 
     /**
      * The user has selected to delete a trusted app from their local trust store.

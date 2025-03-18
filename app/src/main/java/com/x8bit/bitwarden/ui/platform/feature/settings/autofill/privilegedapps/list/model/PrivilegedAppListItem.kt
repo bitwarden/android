@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist.model
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

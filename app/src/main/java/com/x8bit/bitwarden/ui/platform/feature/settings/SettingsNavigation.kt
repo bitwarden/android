@@ -14,9 +14,11 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.navigateToApp
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.blockAutoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.navigateToBlockAutoFillScreen
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist.privilegedAppsListDestination
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist.navigateToPrivilegedAppsList
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.aboutPrivilegedAppsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.navigateToPrivilegedAppsList
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.privilegedAppsListDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
@@ -69,6 +71,9 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
             onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
             onNavigateToTrustedAppsScreen = { navController.navigateToPrivilegedAppsList() },
+            onNavigateToAboutPrivilegedAppsScreen = {
+                navController.navigateToAboutPrivilegedAppsScreen()
+            },
         )
         otherDestination(onNavigateBack = { navController.popBackStack() })
         vaultSettingsDestination(
@@ -79,6 +84,7 @@ fun NavGraphBuilder.settingsGraph(
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
         privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
+        aboutPrivilegedAppsDestination(navigateBack = { navController.popBackStack() })
     }
 }
 

@@ -113,6 +113,7 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
         is AutoFillAction.ChromeAutofillSelected -> handleChromeAutofillSelected(action)
         AutoFillAction.TrustedAppsClick -> handleTrustedAppsClick()
+        AutoFillAction.TrustedAppsHelpLinkClick -> handleTrustedAppsHelpLinkClick()
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -153,6 +154,10 @@ class AutoFillViewModel @Inject constructor(
 
     private fun handleTrustedAppsClick() {
         sendEvent(AutoFillEvent.NavigateToPrivilegedApps)
+    }
+
+    private fun handleTrustedAppsHelpLinkClick() {
+        sendEvent(AutoFillEvent.NavigateToAboutPrivilegedApps)
     }
 
     private fun handleDismissShowAutofillActionCard() {
@@ -330,9 +335,14 @@ sealed class AutoFillEvent {
     data object NavigateToSetupAutofill : AutoFillEvent()
 
     /**
-     * Navigates to the privileged apps screen.
+     * Navigate to the privileged apps screen.
      */
-    object NavigateToPrivilegedApps : AutoFillEvent()
+    data object NavigateToPrivilegedApps : AutoFillEvent()
+
+    /**
+     * Navigate to the about privileged apps screen.
+     */
+    data object NavigateToAboutPrivilegedApps : AutoFillEvent()
 }
 
 /**
@@ -407,7 +417,12 @@ sealed class AutoFillAction {
     /**
      * User has clicked the trusted apps action card.
      */
-    object TrustedAppsClick : AutoFillAction()
+    data object TrustedAppsClick : AutoFillAction()
+
+    /**
+     * User has clicked the trusted apps help link.
+     */
+    data object TrustedAppsHelpLinkClick : AutoFillAction()
 
     /**
      * User has clicked one of the chrome autofill options.

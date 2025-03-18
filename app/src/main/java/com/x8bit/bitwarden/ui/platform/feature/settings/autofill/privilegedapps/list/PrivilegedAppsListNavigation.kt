@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedappslist
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
