@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.ViewAsQrCodeArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 private const val LOGIN: String = "login"
@@ -47,12 +48,18 @@ fun NavGraphBuilder.vaultItemDestination(
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
+    onNavigateToViewAsQrCode: (args: ViewAsQrCodeArgs) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = VAULT_ITEM_ROUTE,
         arguments = listOf(
-            navArgument(VAULT_ITEM_ID) { type = NavType.StringType },
-            navArgument(VAULT_ITEM_CIPHER_TYPE) { type = NavType.StringType },
+            navArgument(VAULT_ITEM_ID) {
+                type = NavType.StringType
+            },
+            navArgument(VAULT_ITEM_CIPHER_TYPE) {
+                type = NavType.StringType
+                defaultValue = LOGIN
+            },
         ),
     ) {
         VaultItemScreen(
@@ -61,6 +68,7 @@ fun NavGraphBuilder.vaultItemDestination(
             onNavigateToMoveToOrganization = onNavigateToMoveToOrganization,
             onNavigateToAttachments = onNavigateToAttachments,
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onNavigateToViewAsQrCode = onNavigateToViewAsQrCode,
         )
     }
 }

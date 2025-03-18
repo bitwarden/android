@@ -53,6 +53,8 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMo
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.navigateToViewAsQrCode
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.viewAsQrCodeDestination
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -165,6 +167,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     passwordHistoryMode = GeneratorPasswordHistoryMode.Item(itemId = it),
                 )
             },
+            onNavigateToViewAsQrCode = { navController.navigateToViewAsQrCode(it) },
         )
         vaultQrCodeScanDestination(
             onNavigateToManualCodeEntryScreen = {
@@ -226,6 +229,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         newDeviceNoticeTwoFactorDestination(
             onNavigateBackToVault = { navController.navigateToVaultUnlockedGraph() },
+            onNavigateBack = { navController.popBackStack() },
+        )
+        viewAsQrCodeDestination(
             onNavigateBack = { navController.popBackStack() },
         )
     }
