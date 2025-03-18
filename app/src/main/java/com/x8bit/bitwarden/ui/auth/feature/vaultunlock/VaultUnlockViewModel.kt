@@ -75,11 +75,12 @@ class VaultUnlockViewModel @Inject constructor(
         }
 
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
-
+        val args = VaultUnlockArgs(savedStateHandle)
         val showAccountMenu =
-            VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
+            args.unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
                     specialCircumstance !is SpecialCircumstance.Fido2Assertion)
+        val shouldPromptBiometrics = args.shouldPromptForBio
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
@@ -100,6 +101,7 @@ class VaultUnlockViewModel @Inject constructor(
             // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
             fido2CredentialAssertionRequest = null,
             hasMasterPassword = activeAccount.hasMasterPassword,
+            shouldPromptForBiometrics = shouldPromptBiometrics,
         )
     },
 ) {
@@ -425,7 +427,7 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun promptForBiometricsIfAvailable() {
         val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null) {
+        if (state.showBiometricLogin && cipher != null && state.shouldPromptForBiometrics) {
             sendEvent(
                 VaultUnlockEvent.PromptForBiometrics(
                     cipher = cipher,
@@ -458,6 +460,7 @@ data class VaultUnlockState(
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     private val hasMasterPassword: Boolean,
+    val shouldPromptForBiometrics: Boolean,
 ) : Parcelable {
 
     /**

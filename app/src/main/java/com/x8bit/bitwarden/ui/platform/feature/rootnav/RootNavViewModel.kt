@@ -173,7 +173,16 @@ class RootNavViewModel @Inject constructor(
                 }
             }
 
-            else -> RootNavState.VaultLocked
+            else -> {
+                val promptForBiometrics = when (val previousState = state) {
+                    is RootNavState.VaultUnlocked -> {
+                        previousState.activeUserId != userState.activeUserId
+                    }
+
+                    else -> true
+                }
+                RootNavState.VaultLocked(promptForBiometrics = promptForBiometrics)
+            }
         }
         mutableStateFlow.update { updatedRootNavState }
     }
@@ -260,7 +269,7 @@ sealed class RootNavState : Parcelable {
      * App should show vault locked nav graph.
      */
     @Parcelize
-    data object VaultLocked : RootNavState()
+    data class VaultLocked(val promptForBiometrics: Boolean) : RootNavState()
 
     /**
      * App should show vault unlocked nav graph for the given [activeUserId].

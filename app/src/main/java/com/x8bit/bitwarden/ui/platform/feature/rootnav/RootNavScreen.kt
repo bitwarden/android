@@ -120,7 +120,7 @@ fun RootNavScreen(
         RootNavState.RemovePassword -> REMOVE_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.TrustedDevice -> TRUSTED_DEVICE_GRAPH_ROUTE
-        RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
+        is RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
         is RootNavState.VaultUnlockedForAutofillSave,
         is RootNavState.VaultUnlockedForAutofillSelection,
@@ -193,7 +193,12 @@ fun RootNavScreen(
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
-            RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
+            is RootNavState.VaultLocked -> {
+                navController.navigateToVaultUnlock(
+                    navOptions = rootNavOptions,
+                    shouldPromptForBio = currentState.promptForBiometrics,
+                )
+            }
             is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
                 navOptions = rootNavOptions,
             )
