@@ -161,6 +161,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 showError(
                     message = loginResult.errorMessage?.asText()
                         ?: R.string.login_sso_error.asText(),
+                    error = loginResult.error,
                 )
             }
 

@@ -308,6 +308,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.invalid_verification_code.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -658,6 +659,7 @@ data class TwoFactorLoginState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

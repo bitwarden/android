@@ -323,9 +323,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error when server is an official Bitwarden server`() =
         runTest {
             val orgIdentifier = "Bitwarden"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
-            } returns LoginResult.Error(null)
+            } returns LoginResult.Error(errorMessage = null, error = error)
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
@@ -366,6 +367,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.login_sso_error.asText(),
+                            error = error,
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),

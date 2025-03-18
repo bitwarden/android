@@ -585,10 +585,13 @@ class AuthRepositoryImpl(
         asymmetricalKey: String,
     ): LoginResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return LoginResult.Error(errorMessage = null)
+            ?: return LoginResult.Error(errorMessage = null, error = NoActiveUserException())
         val userId = profile.userId
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return LoginResult.Error(errorMessage = null)
+            ?: return LoginResult.Error(
+                errorMessage = null,
+                error = MissingPropertyException("Private Key"),
+            )
 
         checkForVaultUnlockError(
             onVaultUnlockError = { error ->
@@ -638,7 +641,7 @@ class AuthRepositoryImpl(
             onFailure = { throwable ->
                 when {
                     throwable.isSslHandShakeError() -> LoginResult.CertificateError
-                    else -> LoginResult.Error(errorMessage = null)
+                    else -> LoginResult.Error(errorMessage = null, error = throwable)
                 }
             },
             onSuccess = { it },
@@ -687,7 +690,10 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(errorMessage = null)
+        ?: LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Identity Token Auth Model"),
+        )
 
     override suspend fun login(
         email: String,
@@ -707,7 +713,10 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(errorMessage = null)
+        ?: LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Identity Token Auth Model"),
+        )
 
     override suspend fun login(
         email: String,
@@ -1645,7 +1654,10 @@ class AuthRepositoryImpl(
                         LoginResult.UnofficialServerError
                     }
 
-                    else -> LoginResult.Error(errorMessage = null)
+                    else -> LoginResult.Error(
+                        errorMessage = null,
+                        error = throwable,
+                    )
                 }
             },
             onSuccess = { loginResponse ->
@@ -1681,6 +1693,7 @@ class AuthRepositoryImpl(
                             is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
                                 LoginResult.Error(
                                     errorMessage = loginResponse.errorMessage,
+                                    error = null,
                                 )
                             }
                         }

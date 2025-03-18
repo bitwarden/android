@@ -236,6 +236,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
