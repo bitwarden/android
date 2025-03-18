@@ -188,7 +188,7 @@ class VaultRepositoryTest {
         }
         every { isVaultUnlocking(any()) } returns false
         every { lockVault(any(), any()) } just runs
-        every { lockVaultForCurrentUser() } just runs
+        every { lockVaultForCurrentUser(any()) } just runs
         coEvery {
             waitUntilUnlocked(any())
         } coAnswers { call ->
@@ -1142,8 +1142,8 @@ class VaultRepositoryTest {
 
     @Test
     fun `lockVaultForCurrentUser should delegate to the VaultLockManager`() {
-        vaultRepository.lockVaultForCurrentUser()
-        verify { vaultLockManager.lockVaultForCurrentUser() }
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
+        verify { vaultLockManager.lockVaultForCurrentUser(isUserInitiated = true) }
     }
 
     @Test

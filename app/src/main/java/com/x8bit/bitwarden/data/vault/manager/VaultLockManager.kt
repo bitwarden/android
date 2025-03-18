@@ -45,7 +45,7 @@ interface VaultLockManager {
     /**
      * Locks the vault for the current user if currently unlocked.
      */
-    fun lockVaultForCurrentUser()
+    fun lockVaultForCurrentUser(isUserInitiated: Boolean)
 
     /**
      * Attempt to unlock the vault with the specified user information.

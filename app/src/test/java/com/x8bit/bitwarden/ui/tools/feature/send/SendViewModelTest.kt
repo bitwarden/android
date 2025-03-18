@@ -102,12 +102,12 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `LockClick should lock the vault`() {
         val viewModel = createViewModel()
-        every { vaultRepo.lockVaultForCurrentUser() } just runs
+        every { vaultRepo.lockVaultForCurrentUser(any()) } just runs
 
         viewModel.trySendAction(SendAction.LockClick)
 
         verify {
-            vaultRepo.lockVaultForCurrentUser()
+            vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 

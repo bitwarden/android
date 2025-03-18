@@ -124,11 +124,11 @@ class VaultLockManagerImpl(
         setVaultToLocked(userId = userId)
     }
 
-    override fun lockVaultForCurrentUser() {
+    override fun lockVaultForCurrentUser(isUserInitiated: Boolean) {
         activeUserId?.let {
             lockVault(
                 userId = it,
-                isUserInitiated = true,
+                isUserInitiated = isUserInitiated,
             )
         }
     }

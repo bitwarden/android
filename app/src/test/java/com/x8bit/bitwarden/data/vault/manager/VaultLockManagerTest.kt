@@ -837,7 +837,7 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
 
-            vaultLockManager.lockVaultForCurrentUser()
+            vaultLockManager.lockVaultForCurrentUser(isUserInitiated = true)
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
