@@ -65,6 +65,38 @@ class ItemListingScreenTest : BaseComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `when denying camera permissions and attempting to add a code we should be shown the manual entry screen`() {
+        permissionsManager.getPermissionsResult = false
+
+        composeTestRule
+            .onNodeWithText("Add code")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                ItemListingAction.EnterSetupKeyClick,
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `when allowing camera permissions and attempting to add a code we should be shown the scan QR code screen`() {
+        permissionsManager.getPermissionsResult = true
+
+        composeTestRule
+            .onNodeWithText("Add code")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                ItemListingAction.ScanQrCodeClick,
+            )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `shared accounts error message should show when view is Content with SharedCodesDisplayState Error`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = ItemListingState.ViewState.Content(
