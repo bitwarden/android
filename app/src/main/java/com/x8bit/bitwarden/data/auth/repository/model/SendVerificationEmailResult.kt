@@ -18,5 +18,8 @@ sealed class SendVerificationEmailResult {
      *
      * @param errorMessage a message describing the error.
      */
-    data class Error(val errorMessage: String?) : SendVerificationEmailResult()
+    data class Error(
+        val errorMessage: String?,
+        val error: Throwable?,
+    ) : SendVerificationEmailResult()
 }

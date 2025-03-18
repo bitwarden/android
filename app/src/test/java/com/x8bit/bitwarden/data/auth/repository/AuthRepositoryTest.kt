@@ -5422,12 +5422,12 @@ class AuthRepositoryTest {
     @Test
     fun `getVerifiedOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
         val email = "test@gmail.com"
-        val throwable = Throwable()
+        val throwable = Throwable("Fail!")
         coEvery {
             organizationService.getVerifiedOrganizationDomainSsoDetails(email)
         } returns throwable.asFailure()
         val result = repository.getVerifiedOrganizationDomainSsoDetails(email)
-        assertEquals(VerifiedOrganizationDomainSsoDetailsResult.Failure, result)
+        assertEquals(VerifiedOrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5499,13 +5499,14 @@ class AuthRepositoryTest {
     @Test
     fun `requestOneTimePasscode with error response should return Error`() = runTest {
         val errorMessage = "Error message"
+        val error = Throwable(errorMessage)
         coEvery {
             accountsService.requestOneTimePasscode()
-        } returns Throwable(errorMessage).asFailure()
+        } returns error.asFailure()
 
         val result = repository.requestOneTimePasscode()
 
-        assertEquals(RequestOtpResult.Error(errorMessage), result)
+        assertEquals(RequestOtpResult.Error(message = errorMessage, error = error), result)
     }
 
     @Test
@@ -5524,13 +5525,17 @@ class AuthRepositoryTest {
     fun `verifyOneTimePasscode with error response should return NotVerified result`() = runTest {
         val errorMessage = "Error message"
         val passcode = "passcode"
+        val error = Throwable(errorMessage)
         coEvery {
             accountsService.verifyOneTimePasscode(passcode)
-        } returns Throwable(errorMessage).asFailure()
+        } returns error.asFailure()
 
         val result = repository.verifyOneTimePasscode(passcode)
 
-        assertEquals(VerifyOtpResult.NotVerified(errorMessage), result)
+        assertEquals(
+            VerifyOtpResult.NotVerified(errorMessage = errorMessage, error = error),
+            result,
+        )
     }
 
     @Test
@@ -5599,7 +5604,13 @@ class AuthRepositoryTest {
     @Test
     fun `resendVerificationCodeEmail returns error if no request data cached`() = runTest {
         val result = repository.resendVerificationCodeEmail()
-        assertEquals(ResendEmailResult.Error(message = null), result)
+        assertEquals(
+            ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend Email Request"),
+            ),
+            result,
+        )
     }
 
     @Test
@@ -5971,7 +5982,7 @@ class AuthRepositoryTest {
         val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePinResult.Error,
+            ValidatePinResult.Error(error = NoActiveUserException()),
             result,
         )
     }
@@ -5989,7 +6000,7 @@ class AuthRepositoryTest {
             val result = repository.validatePin(pin = pin)
 
             assertEquals(
-                ValidatePinResult.Error,
+                ValidatePinResult.Error(MissingPropertyException("Pin Protected User Key")),
                 result,
             )
         }
@@ -5998,6 +6009,7 @@ class AuthRepositoryTest {
     fun `validatePin returns ValidatePinResult Error when SDK validatePin fails`() = runTest {
         val pin = "PIN"
         val pinProtectedUserKey = "pinProtectedUserKey"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePinProtectedUserKey(
             userId = SINGLE_USER_STATE_1.activeUserId,
@@ -6009,12 +6021,12 @@ class AuthRepositoryTest {
                 pin = pin,
                 pinProtectedUserKey = pinProtectedUserKey,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePinResult.Error,
+            ValidatePinResult.Error(error = error),
             result,
         )
         coVerify(exactly = 1) {
@@ -6226,7 +6238,7 @@ class AuthRepositoryTest {
             receiveMarketingEmails = true,
         )
         assertEquals(
-            SendVerificationEmailResult.Error(errorMessage = errorMessage),
+            SendVerificationEmailResult.Error(errorMessage = errorMessage, error = null),
             result,
         )
     }
@@ -6279,6 +6291,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `sendVerificationEmail failure should return error`() = runTest {
+        val error = Throwable("fail")
         coEvery {
             identityService.sendVerificationEmail(
                 SendVerificationEmailRequestJson(
@@ -6287,7 +6300,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns Throwable("fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.sendVerificationEmail(
             email = EMAIL,
@@ -6295,7 +6308,7 @@ class AuthRepositoryTest {
             receiveMarketingEmails = true,
         )
         assertEquals(
-            SendVerificationEmailResult.Error(null),
+            SendVerificationEmailResult.Error(errorMessage = null, error = error),
             result,
         )
     }

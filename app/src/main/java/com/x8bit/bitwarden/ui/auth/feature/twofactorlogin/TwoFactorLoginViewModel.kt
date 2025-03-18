@@ -430,7 +430,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
 
-        when (action.resendEmailResult) {
+        when (val result = action.resendEmailResult) {
             // Display a dialog for an error result.
             is ResendEmailResult.Error -> {
                 mutableStateFlow.update {
@@ -438,6 +438,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
+                            error = result.error,
                         ),
                     )
                 }

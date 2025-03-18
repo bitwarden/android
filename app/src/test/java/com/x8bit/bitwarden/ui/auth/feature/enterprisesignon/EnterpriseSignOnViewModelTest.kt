@@ -985,7 +985,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 authRepository.getVerifiedOrganizationDomainSsoDetails(any())
-            } returns VerifiedOrganizationDomainSsoDetailsResult.Failure
+            } returns VerifiedOrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
 
             coEvery {
                 featureFlagManager.getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)

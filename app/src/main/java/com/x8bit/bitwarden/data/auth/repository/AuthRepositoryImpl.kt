@@ -775,7 +775,7 @@ class AuthRepositoryImpl(
     override suspend fun requestOneTimePasscode(): RequestOtpResult =
         accountsService.requestOneTimePasscode()
             .fold(
-                onFailure = { RequestOtpResult.Error(it.message) },
+                onFailure = { RequestOtpResult.Error(message = it.message, error = it) },
                 onSuccess = { RequestOtpResult.Success },
             )
 
@@ -785,7 +785,7 @@ class AuthRepositoryImpl(
                 passcode = oneTimePasscode,
             )
             .fold(
-                onFailure = { VerifyOtpResult.NotVerified(it.message) },
+                onFailure = { VerifyOtpResult.NotVerified(errorMessage = it.message, error = it) },
                 onSuccess = { VerifyOtpResult.Verified },
             )
 
@@ -793,21 +793,27 @@ class AuthRepositoryImpl(
         resendEmailRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
-                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
                     onSuccess = { ResendEmailResult.Success },
                 )
             }
-            ?: ResendEmailResult.Error(message = null)
+            ?: ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend Email Request"),
+            )
 
     override suspend fun resendNewDeviceOtp(): ResendEmailResult =
         resendNewDeviceOtpRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendNewDeviceOtp(body = jsonRequest).fold(
-                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
                     onSuccess = { ResendEmailResult.Success },
                 )
             }
-            ?: ResendEmailResult.Error(message = null)
+            ?: ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend New Device OTP Request"),
+            )
 
     override fun switchAccount(userId: String): SwitchAccountResult {
         val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
@@ -1196,7 +1202,7 @@ class AuthRepositoryImpl(
                     verifiedOrganizationDomainSsoDetails = it.verifiedOrganizationDomainSsoDetails,
                 )
             },
-            onFailure = { VerifiedOrganizationDomainSsoDetailsResult.Failure },
+            onFailure = { VerifiedOrganizationDomainSsoDetailsResult.Failure(error = it) },
         )
 
     override suspend fun prevalidateSso(
@@ -1315,10 +1321,12 @@ class AuthRepositoryImpl(
             .userState
             ?.activeAccount
             ?.profile
-            ?: return ValidatePinResult.Error
+            ?: return ValidatePinResult.Error(error = NoActiveUserException())
         val pinProtectedUserKey = authDiskSource
             .getPinProtectedUserKey(userId = activeAccount.userId)
-            ?: return ValidatePinResult.Error
+            ?: return ValidatePinResult.Error(
+                error = MissingPropertyException("Pin Protected User Key"),
+            )
         return vaultSdkSource
             .validatePin(
                 userId = activeAccount.userId,
@@ -1327,7 +1335,7 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = { ValidatePinResult.Success(isValid = it) },
-                onFailure = { ValidatePinResult.Error },
+                onFailure = { ValidatePinResult.Error(error = it) },
             )
     }
 
@@ -1353,7 +1361,10 @@ class AuthRepositoryImpl(
                 onSuccess = {
                     when (it) {
                         is SendVerificationEmailResponseJson.Invalid -> {
-                            SendVerificationEmailResult.Error(it.message)
+                            SendVerificationEmailResult.Error(
+                                errorMessage = it.message,
+                                error = null,
+                            )
                         }
 
                         is SendVerificationEmailResponseJson.Success -> {
@@ -1361,9 +1372,7 @@ class AuthRepositoryImpl(
                         }
                     }
                 },
-                onFailure = {
-                    SendVerificationEmailResult.Error(null)
-                },
+                onFailure = { SendVerificationEmailResult.Error(errorMessage = null, error = it) },
             )
 
     override suspend fun validateEmailToken(email: String, token: String): EmailTokenResult {

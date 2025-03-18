@@ -189,6 +189,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         val repo = mockk<AuthRepository> {
             every { captchaTokenResultFlow } returns flowOf()
             coEvery {
@@ -197,7 +198,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     name = NAME,
                     receiveMarketingEmails = true,
                 )
-            } returns SendVerificationEmailResult.Error(errorMessage = "mock_error")
+            } returns SendVerificationEmailResult.Error(errorMessage = "mock_error", error = error)
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
@@ -217,6 +218,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     dialog = StartRegistrationDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
