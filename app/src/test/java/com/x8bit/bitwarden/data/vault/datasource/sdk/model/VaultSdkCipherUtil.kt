@@ -59,6 +59,8 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         organizationUseTotp = false,
         viewPassword = false,
         localData = null,
+        permissions = null,
+        archivedDate = null,
     )
 
 /**

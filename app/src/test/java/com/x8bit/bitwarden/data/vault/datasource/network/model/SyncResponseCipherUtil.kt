@@ -47,6 +47,7 @@ fun createMockCipher(
         shouldOrganizationUseTotp = false,
         shouldViewPassword = false,
         key = "mockKey-$number",
+        archivedDate = null,
     )
 
 /**

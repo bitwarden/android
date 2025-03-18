@@ -1595,7 +1595,6 @@ data class VaultItemState(
     /**
      * Whether or not the cipher has been archived.
      */
-    // TODO update this when SDK is updated
     val isCipherArchived: Boolean
         get() = viewState.asContentOrNull()
             ?.common

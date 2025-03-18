@@ -89,6 +89,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
         id = id.orEmpty(),
         shouldViewPassword = viewPassword,
         key = key,
+        archivedDate = archivedDate?.let { ZonedDateTime.ofInstant(it, ZoneOffset.UTC) },
     )
 
 /**
@@ -360,6 +361,8 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         creationDate = creationDate.toInstant(),
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate.toInstant(),
+        permissions = null,
+        archivedDate = archivedDate?.toInstant(),
     )
 
 /**

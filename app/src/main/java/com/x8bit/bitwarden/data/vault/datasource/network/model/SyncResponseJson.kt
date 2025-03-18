@@ -423,6 +423,7 @@ data class SyncResponseJson(
      * @property folderId The folder ID of the cipher (nullable).
      * @property organizationId The organization ID of the cipher (nullable).
      * @property deletedDate The deleted date of the cipher (nullable).
+     * @property archivedDate The archived date of the cipher (nullable).
      * @property identity The identity of the cipher.
      * @property collectionIds A list of collection IDs associated with the cipher (nullable).
      * @property name The name of the cipher (nullable).
@@ -478,6 +479,10 @@ data class SyncResponseJson(
         @SerialName("deletedDate")
         @Contextual
         val deletedDate: ZonedDateTime?,
+
+        @SerialName("archivedDate")
+        @Contextual
+        val archivedDate: ZonedDateTime?,
 
         @SerialName("identity")
         val identity: Identity?,

@@ -638,6 +638,8 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     deletedDate = null,
     revisionDate = FIXED_CLOCK.instant(),
     sshKey = null,
+    permissions = null,
+    archivedDate = null,
 )
 
 private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(

@@ -89,6 +89,8 @@ fun createMockCipherView(
         organizationUseTotp = false,
         viewPassword = true,
         localData = null,
+        permissions = null,
+        archivedDate = null,
     )
 
 /**

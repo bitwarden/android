@@ -342,8 +342,7 @@ class CipherManagerImpl(
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = it.copy(
-                        // TODO update this when the SDK is updated
-                        // archivedDate = clock.instant()
+                        archivedDate = clock.instant(),
                     ),
                 )
             }

@@ -158,6 +158,8 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),
         sshKey = createSshKeyView(isEmpty),
+        permissions = null,
+        archivedDate = null,
     )
 
 fun createCommonContent(
