@@ -519,7 +519,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 EnvironmentAction.Internal.ImportKeyResultReceive(
-                    result = ImportPrivateKeyResult.Error.UnsupportedKey,
+                    result = ImportPrivateKeyResult.Error.UnsupportedKey(
+                        throwable = Throwable("Fail!"),
+                    ),
                 ),
             )
             assertEquals(
@@ -529,7 +531,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 EnvironmentAction.Internal.ImportKeyResultReceive(
-                    result = ImportPrivateKeyResult.Error.KeyStoreOperationFailed,
+                    result = ImportPrivateKeyResult.Error.KeyStoreOperationFailed(
+                        throwable = Throwable("Fail!"),
+                    ),
                 ),
             )
             assertEquals(
@@ -539,7 +543,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 EnvironmentAction.Internal.ImportKeyResultReceive(
-                    result = ImportPrivateKeyResult.Error.UnrecoverableKey,
+                    result = ImportPrivateKeyResult.Error.UnrecoverableKey(
+                        throwable = Throwable("Fail!"),
+                    ),
                 ),
             )
             assertEquals(
@@ -549,7 +555,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 EnvironmentAction.Internal.ImportKeyResultReceive(
-                    result = ImportPrivateKeyResult.Error.InvalidCertificateChain,
+                    result = ImportPrivateKeyResult.Error.InvalidCertificateChain(
+                        throwable = Throwable("Fail!"),
+                    ),
                 ),
             )
             assertEquals(

@@ -3,14 +3,17 @@ package com.x8bit.bitwarden.data.platform.manager
 import android.content.Context
 import android.security.KeyChain
 import android.security.KeyChainException
-import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
@@ -39,11 +42,16 @@ class KeyManagerTest {
     @BeforeEach
     fun setUp() {
         mockkStatic(KeyStore::class, KeyChain::class)
+        mockkConstructor(MissingPropertyException::class)
+        every {
+            anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
+        } returns true
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(KeyStore::class, KeyChain::class)
+        unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
@@ -367,11 +375,10 @@ class KeyManagerTest {
         val password = "password"
 
         // Verify KeyStoreException is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws KeyStoreException()
+        val keystoreError = KeyStoreException()
+        every { mockPkcs12KeyStore.load(any(), any()) } throws keystoreError
         assertEquals(
-            ImportPrivateKeyResult.Error.UnsupportedKey,
+            ImportPrivateKeyResult.Error.UnsupportedKey(throwable = keystoreError),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -380,11 +387,12 @@ class KeyManagerTest {
         ) { "KeyStoreException was not handled correctly" }
 
         // Verify IOException is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws IOException()
+        val keystoreOperationIoError = IOException()
+        every { mockPkcs12KeyStore.load(any(), any()) } throws keystoreOperationIoError
         assertEquals(
-            ImportPrivateKeyResult.Error.KeyStoreOperationFailed,
+            ImportPrivateKeyResult.Error.KeyStoreOperationFailed(
+                throwable = keystoreOperationIoError,
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -393,12 +401,10 @@ class KeyManagerTest {
         ) { "IOException was not handled correctly" }
 
         // Verify IOException with UnrecoverableKeyException cause is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws IOException(UnrecoverableKeyException())
-
+        val unrecoverableKeyError = IOException(UnrecoverableKeyException())
+        every { mockPkcs12KeyStore.load(any(), any()) } throws unrecoverableKeyError
         assertEquals(
-            ImportPrivateKeyResult.Error.UnrecoverableKey,
+            ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = unrecoverableKeyError),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -407,11 +413,12 @@ class KeyManagerTest {
         )
 
         // Verify IOException with unexpected cause is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws IOException(Exception())
+        val keystoreOperationError = IOException(Exception())
+        every { mockPkcs12KeyStore.load(any(), any()) } throws keystoreOperationError
         assertEquals(
-            ImportPrivateKeyResult.Error.KeyStoreOperationFailed,
+            ImportPrivateKeyResult.Error.KeyStoreOperationFailed(
+                throwable = keystoreOperationError,
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -420,11 +427,10 @@ class KeyManagerTest {
         ) { "IOException with Unexpected exception cause was not handled correctly" }
 
         // Verify CertificateException is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws CertificateException()
+        val certificateError = CertificateException()
+        every { mockPkcs12KeyStore.load(any(), any()) } throws certificateError
         assertEquals(
-            ImportPrivateKeyResult.Error.InvalidCertificateChain,
+            ImportPrivateKeyResult.Error.InvalidCertificateChain(throwable = certificateError),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -433,11 +439,10 @@ class KeyManagerTest {
         ) { "CertificateException was not handled correctly" }
 
         // Verify NoSuchAlgorithmException is handled
-        every {
-            mockPkcs12KeyStore.load(any(), any())
-        } throws NoSuchAlgorithmException()
+        val algorithmError = NoSuchAlgorithmException()
+        every { mockPkcs12KeyStore.load(any(), any()) } throws algorithmError
         assertEquals(
-            ImportPrivateKeyResult.Error.UnsupportedKey,
+            ImportPrivateKeyResult.Error.UnsupportedKey(throwable = algorithmError),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -458,7 +463,9 @@ class KeyManagerTest {
         }
 
         assertEquals(
-            ImportPrivateKeyResult.Error.UnsupportedKey,
+            ImportPrivateKeyResult.Error.UnsupportedKey(
+                throwable = MissingPropertyException("Internal Alias"),
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -481,15 +488,16 @@ class KeyManagerTest {
             every { hasMoreElements() } returns true
             every { nextElement() } returns "mockInternalAlias"
         }
+        val error = UnrecoverableKeyException()
         every {
             mockPkcs12KeyStore.getKey(
                 "mockInternalAlias",
                 password.toCharArray(),
             )
-        } throws UnrecoverableKeyException()
+        } throws error
 
         assertEquals(
-            ImportPrivateKeyResult.Error.UnrecoverableKey,
+            ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = error),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -504,7 +512,9 @@ class KeyManagerTest {
             )
         } returns null
         assertEquals(
-            ImportPrivateKeyResult.Error.UnrecoverableKey,
+            ImportPrivateKeyResult.Error.UnrecoverableKey(
+                throwable = MissingPropertyException("Private Key"),
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -537,7 +547,9 @@ class KeyManagerTest {
             mockPkcs12KeyStore.getCertificateChain("mockInternalAlias")
         } returns emptyArray()
         assertEquals(
-            ImportPrivateKeyResult.Error.InvalidCertificateChain,
+            ImportPrivateKeyResult.Error.InvalidCertificateChain(
+                throwable = MissingPropertyException("Certificate Chain"),
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -550,7 +562,9 @@ class KeyManagerTest {
             mockPkcs12KeyStore.getCertificateChain("mockInternalAlias")
         } returns null
         assertEquals(
-            ImportPrivateKeyResult.Error.InvalidCertificateChain,
+            ImportPrivateKeyResult.Error.InvalidCertificateChain(
+                throwable = MissingPropertyException("Certificate Chain"),
+            ),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
@@ -563,9 +577,11 @@ class KeyManagerTest {
     @Test
     fun `importMutualTlsCertificate should return KeyStoreOperationFailed when saving to Android KeyStore throws KeyStoreException`() {
         setupMockAndroidKeyStore()
+        setupMockPkcs12KeyStore()
         val expectedAlias = "mockAlias"
         val pkcs12Bytes = "key.p12".toByteArray()
         val password = "password"
+        val error = KeyStoreException()
 
         every { mockPkcs12KeyStore.aliases() } returns mockk {
             every { hasMoreElements() } returns true
@@ -582,6 +598,8 @@ class KeyManagerTest {
             mockPkcs12KeyStore.getCertificateChain("mockInternalAlias")
         } returns arrayOf(mockk())
 
+        every { mockAndroidKeyStore.containsAlias(expectedAlias) } returns false
+
         every {
             mockAndroidKeyStore.setKeyEntry(
                 expectedAlias,
@@ -589,10 +607,10 @@ class KeyManagerTest {
                 any(),
                 any(),
             )
-        } throws KeyStoreException()
+        } throws error
 
         assertEquals(
-            ImportPrivateKeyResult.Error.KeyStoreOperationFailed,
+            ImportPrivateKeyResult.Error.KeyStoreOperationFailed(throwable = error),
             keyDiskSource.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,

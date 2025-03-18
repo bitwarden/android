@@ -44,7 +44,7 @@ class FileManagerImpl(
             .getDataStream(url)
             .fold(
                 onSuccess = { it },
-                onFailure = { return DownloadResult.Failure },
+                onFailure = { return DownloadResult.Failure(error = it) },
             )
 
         // Create a temporary file in cache to write to
@@ -66,7 +66,7 @@ class FileManagerImpl(
                         }
                         fos.flush()
                     } catch (e: RuntimeException) {
-                        return@withContext DownloadResult.Failure
+                        return@withContext DownloadResult.Failure(error = e)
                     }
                 }
             }
@@ -94,7 +94,7 @@ class FileManagerImpl(
                     }
             }
             true
-        } catch (exception: RuntimeException) {
+        } catch (_: RuntimeException) {
             false
         }
     }
@@ -111,7 +111,7 @@ class FileManagerImpl(
                     }
             }
             true
-        } catch (exception: RuntimeException) {
+        } catch (_: RuntimeException) {
             false
         }
     }

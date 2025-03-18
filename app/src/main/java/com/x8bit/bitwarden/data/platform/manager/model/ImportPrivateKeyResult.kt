@@ -16,30 +16,44 @@ sealed class ImportPrivateKeyResult {
      * Represents a generic error during the import process.
      */
     sealed class Error : ImportPrivateKeyResult() {
+        /**
+         * The underlying error.
+         */
+        abstract val throwable: Throwable?
 
         /**
          * Indicates that the provided key is unrecoverable or the password is incorrect.
          */
-        data object UnrecoverableKey : Error()
+        data class UnrecoverableKey(
+            override val throwable: Throwable,
+        ) : Error()
 
         /**
          * Indicates that the certificate chain associated with the key is invalid.
          */
-        data object InvalidCertificateChain : Error()
+        data class InvalidCertificateChain(
+            override val throwable: Throwable,
+        ) : Error()
 
         /**
          * Indicates that the specified alias is already in use.
          */
-        data object DuplicateAlias : Error()
+        data object DuplicateAlias : Error() {
+            override val throwable: Throwable? = null
+        }
 
         /**
          * Indicates that an error occurred during the key store operation.
          */
-        data object KeyStoreOperationFailed : Error()
+        data class KeyStoreOperationFailed(
+            override val throwable: Throwable,
+        ) : Error()
 
         /**
          * Indicates the provided key is not supported.
          */
-        data object UnsupportedKey : Error()
+        data class UnsupportedKey(
+            override val throwable: Throwable,
+        ) : Error()
     }
 }

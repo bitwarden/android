@@ -1857,10 +1857,9 @@ class CipherManagerTest {
         coEvery {
             ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
         } returns response.asSuccess()
-
         coEvery {
             fileManager.downloadFileToCache(url = any())
-        } returns DownloadResult.Failure
+        } returns DownloadResult.Failure(error = Throwable("Fail!"))
 
         assertEquals(
             DownloadAttachmentResult.Failure(IllegalStateException()),
