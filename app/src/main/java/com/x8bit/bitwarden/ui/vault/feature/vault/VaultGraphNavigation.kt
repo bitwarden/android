@@ -6,11 +6,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 
@@ -20,13 +21,9 @@ const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultGraph(
     navController: NavController,
-    onNavigateToVaultAddItemScreen: (
-        vaultItemCipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
-    onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
@@ -37,9 +34,7 @@ fun NavGraphBuilder.vaultGraph(
         startDestination = VAULT_ROUTE,
     ) {
         vaultDestination(
-            onNavigateToVaultAddItemScreen = {
-                onNavigateToVaultAddItemScreen(it, null, null)
-            },
+            onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreen(it) },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListingScreen = { navController.navigateToVaultItemListing(it) },
@@ -57,9 +52,7 @@ fun NavGraphBuilder.vaultGraph(
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToSearchVault = onNavigateToSearchVault,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
-            onNavigateToVaultItemListing = {
-                navController.navigateToVaultItemListing(it)
-            },
+            onNavigateToVaultItemListing = { navController.navigateToVaultItemListing(it) },
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         )
 

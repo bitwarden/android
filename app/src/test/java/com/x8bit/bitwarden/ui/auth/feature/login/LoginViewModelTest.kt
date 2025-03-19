@@ -177,7 +177,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `should have default state when isKnownDevice returns error`() = runTest {
         coEvery {
             authRepository.getIsKnownDevice(EMAIL)
-        } returns KnownDeviceResult.Error
+        } returns KnownDeviceResult.Error(error = Throwable("Fail!"))
         val viewModel = createViewModel()
 
         viewModel.stateFlow.test {
@@ -247,13 +247,14 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LoginButtonClick login returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.login(
                 email = EMAIL,
                 password = "",
                 captchaToken = null,
             )
-        } returns LoginResult.Error(errorMessage = "mock_error")
+        } returns LoginResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
@@ -271,6 +272,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     dialogState = LoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),

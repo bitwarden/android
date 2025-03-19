@@ -65,10 +65,11 @@ class SetupUnlockScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+        ) {
             SetupUnlockScreen(
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }

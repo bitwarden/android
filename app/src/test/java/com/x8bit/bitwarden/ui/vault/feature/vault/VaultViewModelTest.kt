@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -54,9 +55,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -142,18 +145,15 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.ImportLoginsFlow)
         } returns mutableImportLoginsFeatureFlow
-        every {
-            getFeatureFlagFlow(FlagKey.SshKeyCipherItems)
-        } returns mutableSshKeyVaultItemsEnabledFlow
-        every {
-            getFeatureFlag(FlagKey.SshKeyCipherItems)
-        } returns mutableSshKeyVaultItemsEnabledFlow.value
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
-    private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
 
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
+    }
+
+    private val networkConnectionManager: NetworkConnectionManager = mockk {
+        every { isNetworkConnected } returns true
     }
 
     @Test
@@ -495,6 +495,27 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on SyncClick should show the no network dialog if not connection is available`() {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(VaultAction.SyncClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
+            vaultRepository.sync(forced = true)
+        }
+    }
+
+    @Test
     fun `on LockClick should call lockVaultForCurrentUser on the VaultRepository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.LockClick)
@@ -552,7 +573,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                 hasMasterPassword = true,
-                showSshKeys = false,
             ),
         )
             .copy(
@@ -577,7 +597,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
                     hasMasterPassword = true,
-                    showSshKeys = false,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -687,7 +706,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
                 ),
-                showSshKeys = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -709,7 +727,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
                     totpItemsCount = 1,
-                    itemTypesCount = 4,
+                    itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                 ),
             )
@@ -823,7 +841,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     noFolderItems = listOf(),
                     trashItemsCount = 0,
                     totpItemsCount = 1,
-                    itemTypesCount = 4,
+                    itemTypesCount = 5,
                     sshKeyItemsCount = 0,
                 ),
             ),
@@ -923,7 +941,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 1,
-                        itemTypesCount = 4,
+                        itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                     ),
                     dialog = VaultState.DialogState.Error(
@@ -1021,7 +1039,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         noFolderItems = listOf(),
                         trashItemsCount = 0,
                         totpItemsCount = 1,
-                        itemTypesCount = 4,
+                        itemTypesCount = 5,
                         sshKeyItemsCount = 0,
                     ),
                     dialog = null,
@@ -1066,47 +1084,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `vaultDataStateFlow Loaded should exclude SSH key vault items when showSshKeys is false`() =
-        runTest {
-            mutableVaultDataStateFlow.tryEmit(
-                value = DataState.Loaded(
-                    data = VaultData(
-                        cipherViewList = listOf(
-                            createMockCipherView(number = 1),
-                            createMockCipherView(number = 1, cipherType = CipherType.SSH_KEY),
-                        ),
-                        collectionViewList = listOf(),
-                        folderViewList = listOf(),
-                        sendViewList = listOf(),
-                    ),
-                ),
-            )
-
-            val viewModel = createViewModel()
-
-            assertEquals(
-                createMockVaultState(
-                    viewState = VaultState.ViewState.Content(
-                        loginItemsCount = 1,
-                        cardItemsCount = 0,
-                        identityItemsCount = 0,
-                        secureNoteItemsCount = 0,
-                        favoriteItems = listOf(),
-                        folderItems = listOf(),
-                        collectionItems = listOf(),
-                        noFolderItems = listOf(),
-                        trashItemsCount = 0,
-                        totpItemsCount = 1,
-                        itemTypesCount = CipherType.entries.size - 1,
-                        sshKeyItemsCount = 0,
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
-
-    @Test
-    fun `vaultDataStateFlow Loaded should include SSH key vault items when showSshKeys is true`() =
+    fun `vaultDataStateFlow Loaded should include SSH key vault items`() =
         runTest {
             mutableSshKeyVaultItemsEnabledFlow.value = true
             mutableVaultDataStateFlow.tryEmit(
@@ -1141,7 +1119,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
                     ),
-                    showSshKeys = true,
                 ),
                 viewModel.stateFlow.value,
             )
@@ -1291,10 +1268,14 @@ class VaultViewModelTest : BaseViewModelTest() {
         val itemId = "54321"
         val item = mockk<VaultState.ViewState.VaultItem> {
             every { id } returns itemId
+            every { type } returns VaultItemCipherType.LOGIN
         }
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultAction.VaultItemClick(item))
-            assertEquals(VaultEvent.NavigateToVaultItem(itemId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToVaultItem(itemId = itemId, type = VaultItemCipherType.LOGIN),
+                awaitItem(),
+            )
         }
     }
 
@@ -1340,13 +1321,38 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `RefreshPull should call vault repository sync`() {
+    fun `RefreshPull should call vault repository sync`() = runTest {
         val viewModel = createViewModel()
+        viewModel.trySendAction(VaultAction.RefreshPull)
+        advanceTimeBy(300)
+        verify(exactly = 1) {
+            vaultRepository.sync(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull should show network error if no internet connection`() = runTest {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
 
         viewModel.trySendAction(VaultAction.RefreshPull)
-
-        verify(exactly = 1) {
+        advanceTimeBy(300)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepository.sync(forced = false)
         }
     }
@@ -1475,7 +1481,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = Throwable("Fail"))
 
             val viewModel = createViewModel()
             viewModel.trySendAction(
@@ -1549,11 +1555,18 @@ class VaultViewModelTest : BaseViewModelTest() {
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
             )
-            assertEquals(VaultEvent.NavigateToEditVaultItem(cipherId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToEditVaultItem(
+                    itemId = cipherId,
+                    type = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -1578,10 +1591,16 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
+                    ),
                 ),
             )
-            assertEquals(VaultEvent.NavigateToVaultItem(cipherId), awaitItem())
+            assertEquals(
+                VaultEvent.NavigateToVaultItem(itemId = cipherId, type = VaultItemCipherType.LOGIN),
+                awaitItem(),
+            )
         }
     }
 
@@ -1589,9 +1608,10 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
         runTest {
             val password = "password"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -1616,6 +1636,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
@@ -1924,6 +1945,23 @@ class VaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `InternetConnectionErrorReceived should show network error if no internet connection`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.trySendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    isRefreshing = false,
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,
@@ -1938,6 +1976,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             snackbarRelayManager = snackbarRelayManager,
             reviewPromptManager = reviewPromptManager,
             specialCircumstanceManager = specialCircumstanceManager,
+            networkConnectionManager = networkConnectionManager,
         )
 }
 
@@ -2009,7 +2048,6 @@ private val DEFAULT_USER_STATE = UserState(
 private fun createMockVaultState(
     viewState: VaultState.ViewState,
     dialog: VaultState.DialogState? = null,
-    showSshKeys: Boolean = false,
 ): VaultState =
     VaultState(
         appBarTitle = R.string.my_vault.asText(),
@@ -2047,5 +2085,4 @@ private fun createMockVaultState(
         hasMasterPassword = true,
         showImportActionCard = true,
         isRefreshing = false,
-        showSshKeys = showSshKeys,
     )

@@ -41,7 +41,7 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             PasswordHistoryScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },

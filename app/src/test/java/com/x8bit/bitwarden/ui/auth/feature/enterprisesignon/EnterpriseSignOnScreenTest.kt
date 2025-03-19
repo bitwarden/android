@@ -47,7 +47,9 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToSetPassword = { onNavigateToSetPasswordCalled = true },
@@ -55,7 +57,6 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
                     onNavigateToTwoFactorLoginEmailAndOrgIdentifier = email to orgIdentifier
                 },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }
@@ -143,6 +144,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
+                    title = "Error dialog title".asText(),
                     message = "Error dialog message".asText(),
                 ),
             )
@@ -151,7 +153,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("An error has occurred.")
+            .onNodeWithText("Error dialog title")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -188,6 +190,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
+                    title = "title".asText(),
                     message = "message".asText(),
                 ),
             )

@@ -117,7 +117,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             setupMockUri(algorithm = "SHA-224")
 
             val viewModel = createViewModel()
-            val result = TotpCodeResult.CodeScanningError
+            val result = TotpCodeResult.CodeScanningError()
             val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&algorithm=sha224"
 
             viewModel.eventFlow.test {
@@ -133,7 +133,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         setupMockUri(digits = "11")
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&digits=11"
 
         viewModel.eventFlow.test {
@@ -149,7 +149,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         setupMockUri(period = "0")
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&period=0"
 
         viewModel.eventFlow.test {
@@ -164,7 +164,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     fun `QrCodeScan should emit failure result without correct prefix`() = runTest {
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "nototpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP"
 
         viewModel.eventFlow.test {
@@ -180,7 +180,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         setupMockUri(secret = "JBSWY3dpeHPK3PXP1")
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP1"
 
         viewModel.eventFlow.test {
@@ -196,7 +196,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         setupMockUri(secret = null)
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "otpauth://totp/Test:me"
 
         viewModel.eventFlow.test {
@@ -212,7 +212,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         setupMockUri(secret = "")
 
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = "otpauth://totp/Test:me?secret= "
 
         viewModel.eventFlow.test {
@@ -226,7 +226,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     @Test
     fun `QrCodeScan should emit failure result and NavigateBack if code is empty`() = runTest {
         val viewModel = createViewModel()
-        val result = TotpCodeResult.CodeScanningError
+        val result = TotpCodeResult.CodeScanningError()
         val invalidCode = ""
 
         viewModel.eventFlow.test {

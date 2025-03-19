@@ -65,9 +65,11 @@ import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -83,11 +85,9 @@ private const val APP_REVIEW_DELAY = 3000L
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
-    onNavigateToVaultAddItemScreen: (
-        vaultItemCipherType: VaultItemCipherType,
-    ) -> Unit,
-    onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
@@ -129,7 +129,12 @@ fun VaultScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultEvent.NavigateToAddItemScreen -> {
-                onNavigateToVaultAddItemScreen(event.type)
+                onNavigateToVaultAddItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = event.type,
+                    ),
+                )
             }
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
@@ -138,9 +143,18 @@ fun VaultScreen(
                 onNavigateToVerificationCodeScreen()
             }
 
-            is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)
+            is VaultEvent.NavigateToVaultItem -> {
+                onNavigateToVaultItemScreen(VaultItemArgs(event.itemId, event.type))
+            }
 
-            is VaultEvent.NavigateToEditVaultItem -> onNavigateToVaultEditItemScreen(event.itemId)
+            is VaultEvent.NavigateToEditVaultItem -> {
+                onNavigateToVaultEditItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.itemId),
+                        vaultItemCipherType = event.type,
+                    ),
+                )
+            }
 
             is VaultEvent.NavigateToItemListing -> {
                 onNavigateToVaultItemListingScreen(event.itemListingType)
@@ -338,7 +352,6 @@ private fun VaultScreenScaffold(
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
-                    showSshKeys = state.showSshKeys,
                     vaultHandlers = vaultHandlers,
                     onOverflowOptionClick = { masterPasswordRepromptAction = it },
                     modifier = Modifier.fillMaxSize(),
@@ -406,6 +419,7 @@ private fun VaultDialogs(
         is VaultState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 

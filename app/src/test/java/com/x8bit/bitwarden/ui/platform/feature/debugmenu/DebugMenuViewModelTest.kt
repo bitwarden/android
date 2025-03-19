@@ -13,6 +13,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -117,13 +119,12 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
+private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.AuthenticatorSync to true,
     FlagKey.EmailVerification to true,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to true,
     FlagKey.ImportLoginsFlow to true,
-    FlagKey.SshKeyCipherItems to true,
     FlagKey.VerifiedSsoDomainEndpoint to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
@@ -136,15 +137,16 @@ private val DEFAULT_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.SingleTapPasskeyAuthentication to true,
     FlagKey.AnonAddySelfHostAlias to true,
     FlagKey.SimpleLoginSelfHostAlias to true,
+    FlagKey.ChromeAutofill to true,
+    FlagKey.MobileErrorReporting to true,
 )
 
-private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
+private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
     FlagKey.AuthenticatorSync to false,
     FlagKey.EmailVerification to false,
     FlagKey.OnboardingCarousel to true,
     FlagKey.OnboardingFlow to false,
     FlagKey.ImportLoginsFlow to false,
-    FlagKey.SshKeyCipherItems to false,
     FlagKey.VerifiedSsoDomainEndpoint to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
@@ -157,6 +159,8 @@ private val UPDATED_MAP_VALUE: Map<FlagKey<Any>, Any> = mapOf(
     FlagKey.SingleTapPasskeyAuthentication to false,
     FlagKey.AnonAddySelfHostAlias to false,
     FlagKey.SimpleLoginSelfHostAlias to false,
+    FlagKey.ChromeAutofill to false,
+    FlagKey.MobileErrorReporting to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

@@ -109,6 +109,11 @@
   <string name="create_an_account">Create an account</string>
   <string name="creating_account">Skapar konto...</string>
   <string name="edit_item">Redigera objekt</string>
+  <string name="edit_login">Edit login</string>
+  <string name="edit_card">Edit card</string>
+  <string name="edit_identity">Edit identity</string>
+  <string name="edit_note">Edit note</string>
+  <string name="edit_passkey">Edit passkey</string>
   <string name="enable_automatic_syncing">Aktivera automatisk synkronisering</string>
   <string name="enter_email_for_hint">Ange ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</string>
   <string name="exntesion_reenable">Återaktivera apptillägg</string>
@@ -164,6 +169,7 @@
   <string name="new_identity">New identity</string>
   <string name="no_notes">There are no notes in your vault.</string>
   <string name="new_note">New note</string>
+  <string name="new_passkey">New passkey</string>
   <string name="new_item">New item</string>
   <string name="new_ssh_key">New SSH key</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
@@ -209,6 +215,11 @@
   <string name="validating">Validerar</string>
   <string name="verification_code">Verifieringskod</string>
   <string name="view_item">Visa objekt</string>
+  <string name="view_login">View login</string>
+  <string name="view_card">View card</string>
+  <string name="view_identity">View identity</string>
+  <string name="view_note">View note</string>
+  <string name="view_passkey">View passkey</string>
   <string name="web_vault">Bitwarden webbvalv</string>
   <string name="lost_2fa_app">Förlorat autentiseringsapp?</string>
   <string name="items">Objekt</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Autentiseringsapp</string>
   <string name="enter_verification_code_app">Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</string>
   <string name="enter_verification_code_email">Ange den 6-siffriga verifieringskoden som skickades till %1$s.</string>
+  <string name="enter_verification_code_new_device">We don\'t recognize this device. Enter the 8 digit verification code that was emailed to %1$s.</string>
   <string name="login_unavailable">Inloggning ej tillgänglig</string>
   <string name="no_two_step_available">Detta konto har tvåstegsverifiering aktiverat, men ingen av de konfigurerade metoderna stöds av den här enheten. 
 Vänligen använd en enhet som stöds och/eller lägg till fler metoder som har bättre stöd bland enheter (t.ex. en autentiseringsapp).</string>
@@ -315,6 +327,7 @@ Skanningen sker automatiskt.</string>
   <string name="april">April</string>
   <string name="august">Augusti</string>
   <string name="brand">Märke</string>
+  <string name="card_details">Card Details</string>
   <string name="cardholder_name">Kortinnehavarens namn</string>
   <string name="city_town">Ort</string>
   <string name="company">Företag</string>
@@ -415,8 +428,11 @@ Skanningen sker automatiskt.</string>
   <string name="invalid_email">Ogiltig e-postadress.</string>
   <string name="cards">Kort</string>
   <string name="identities">Identiteter</string>
+  <string name="identification">Identification</string>
   <string name="logins">Inloggningar</string>
   <string name="secure_notes">Säkra anteckningar</string>
+  <string name="personal_details">Personal Details</string>
+  <string name="contact_info">Contact Info</string>
   <string name="all_items">Alla objekt</string>
   <string name="ur_is">URI:er</string>
   <string name="checking_password">Kontrollerar lösenord...</string>
@@ -440,7 +456,7 @@ Skanningen sker automatiskt.</string>
   <string name="move_up">Flytta upp</string>
   <string name="miscellaneous">Diverse</string>
   <string name="ownership">Ägarskap</string>
-  <string name="who_owns_this_item">Vem äger detta objekt?</string>
+  <string name="owner">Owner</string>
   <string name="no_collections_to_list">Det finns inga samlingar att visa.</string>
   <string name="moved_item_to_org">%1$s flyttades till %2$s.</string>
   <string name="item_shared">Objektet har delats.</string>
@@ -1089,7 +1105,6 @@ Vill du byta till detta konto?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">This is not a recognized Bitwarden server. You may need to check with your provider or update your server.</string>
   <string name="syncing_logins_loading_message">Syncing logins...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Download the browser extension</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Go to bitwarden.com/download to integrate Bitwarden into your favorite browser for a seamless experience.</string>
   <string name="use_the_web_app">Use the web app</string>
@@ -1179,6 +1194,7 @@ Vill du byta till detta konto?</string>
   <string name="coachmark_6_of_6">6 OF 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
+  <string name="verify_your_identity">Verify your identity</string>
   <string name="error_loading_certificate">Error loading certificate</string>
   <string name="certificate_alias">Certificate alias</string>
   <string name="import_certificate">Import certificate</string>
@@ -1204,4 +1220,14 @@ Vill du byta till detta konto?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="self_host_server_url">Self-host server URL</string>
+  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
+  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
+  <string name="show_more">Show more</string>
+  <string name="no_folder">No folder</string>
+  <string name="show_less">Show less</string>
+  <string name="add_field">Add field</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

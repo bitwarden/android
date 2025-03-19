@@ -296,6 +296,7 @@ private fun LoginApprovalDialogs(
         is LoginApprovalState.DialogState.Error -> BitwardenBasicDialog(
             title = state.title?.invoke(),
             message = state.message(),
+            throwable = state.error,
             onDismissRequest = onDismissError,
         )
 

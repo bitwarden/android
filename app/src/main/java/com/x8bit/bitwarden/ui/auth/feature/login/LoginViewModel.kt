@@ -172,6 +172,7 @@ class LoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -326,6 +327,7 @@ data class LoginState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

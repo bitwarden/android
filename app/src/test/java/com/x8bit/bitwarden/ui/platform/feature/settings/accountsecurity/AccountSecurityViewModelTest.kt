@@ -6,9 +6,11 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
@@ -24,6 +26,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson.Policy
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
@@ -177,6 +180,79 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 createMockPolicy(
                     isEnabled = true,
                     type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                    organizationId = "organizationUser",
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is true when user role is ADMIN`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationAdmin",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is true when user role is OWNER`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationOwner",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                ),
+            ),
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    removeUnlockWithPinPolicyEnabled = true,
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `remove pin policy is true when user role is CUSTOM with manage policies`() = runTest {
+        val viewModel = createViewModel()
+
+        mutableRemovePinPolicyFlow.emit(
+            listOf(
+                createMockPolicy(
+                    organizationId = "organizationCustom",
+                    isEnabled = true,
+                    type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
                 ),
             ),
         )
@@ -222,7 +298,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         // Clear fingerprint phrase
         viewModel.trySendAction(
             AccountSecurityAction.Internal.FingerprintResultReceive(
-                UserFingerprintResult.Error,
+                fingerprintResult = UserFingerprintResult.Error(error = NoActiveUserException()),
             ),
         )
         assertEquals(
@@ -513,7 +589,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 settingsRepository.setupBiometricsKey(cipher = CIPHER)
-            } returns BiometricsKeyResult.Error
+            } returns BiometricsKeyResult.Error(error = Throwable("Fail!"))
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -909,7 +985,36 @@ private val DEFAULT_USER_STATE = UserState(
             isVaultUnlocked = true,
             needsPasswordReset = false,
             isBiometricsEnabled = false,
-            organizations = emptyList(),
+            organizations = listOf(
+                Organization(
+                    id = "organizationUser",
+                    name = "Organization User",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.USER,
+                ),
+                Organization(
+                    id = "organizationAdmin",
+                    name = "Organization Admin",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.ADMIN,
+                ),
+                Organization(
+                    id = "organizationOwner",
+                    name = "Organization Owner",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.OWNER,
+                ),
+                Organization(
+                    id = "organizationCustom",
+                    name = "Organization Owner",
+                    shouldUseKeyConnector = false,
+                    shouldManageResetPassword = false,
+                    role = OrganizationType.CUSTOM,
+                ),
+            ),
             needsMasterPassword = false,
             trustedDevice = null,
             hasMasterPassword = true,

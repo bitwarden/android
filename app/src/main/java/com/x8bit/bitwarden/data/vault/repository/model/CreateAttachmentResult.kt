@@ -17,5 +17,5 @@ sealed class CreateAttachmentResult {
     /**
      * Generic error while creating an attachment.
      */
-    data object Error : CreateAttachmentResult()
+    data class Error(val error: Throwable) : CreateAttachmentResult()
 }

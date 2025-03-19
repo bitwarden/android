@@ -76,26 +76,12 @@ fun EnterpriseSignOnScreen(
         }
     }
 
-    when (val dialog = state.dialogState) {
-        is EnterpriseSignOnState.DialogState.Error -> {
-            BitwardenBasicDialog(
-                title = dialog
-                    .title
-                    ?.invoke()
-                    ?: stringResource(id = R.string.an_error_has_occurred),
-                message = dialog.message(),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
-                },
-            )
-        }
-
-        is EnterpriseSignOnState.DialogState.Loading -> {
-            BitwardenLoadingDialog(text = dialog.message())
-        }
-
-        null -> Unit
-    }
+    EnterpriseSignOnDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -172,5 +158,28 @@ private fun EnterpriseSignOnScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
+    }
+}
+
+@Composable
+private fun EnterpriseSignOnDialogs(
+    dialogState: EnterpriseSignOnState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is EnterpriseSignOnState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = dialogState.title(),
+                message = dialogState.message(),
+                throwable = dialogState.error,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is EnterpriseSignOnState.DialogState.Loading -> {
+            BitwardenLoadingDialog(text = dialogState.message())
+        }
+
+        null -> Unit
     }
 }

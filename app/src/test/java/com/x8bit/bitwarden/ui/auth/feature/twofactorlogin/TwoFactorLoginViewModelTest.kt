@@ -311,6 +311,33 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `Continue buttons should only be enabled when code is 8 digit enough on isNewDeviceVerification`() {
+        val initialState = DEFAULT_STATE.copy(isNewDeviceVerification = true)
+        val viewModel = createViewModel(initialState)
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("123456"))
+
+        // 6 digit should be false when isNewDeviceVerification is true.
+        assertEquals(
+            initialState.copy(
+                codeInput = "123456",
+                isContinueButtonEnabled = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        // Set it to true.
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged("12345678"))
+        assertEquals(
+            initialState.copy(
+                codeInput = "12345678",
+                isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `ContinueButtonClick login returns success should update loadingDialogState`() = runTest {
         coEvery {
             authRepository.login(
@@ -554,6 +581,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueButtonClick login returns Error should update dialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.login(
                 email = DEFAULT_EMAIL_ADDRESS,
@@ -566,7 +594,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 captchaToken = null,
                 orgIdentifier = DEFAULT_ORG_IDENTIFIER,
             )
-        } returns LoginResult.Error(errorMessage = null)
+        } returns LoginResult.Error(errorMessage = null, error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -587,6 +615,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     dialogState = TwoFactorLoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.invalid_verification_code.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -613,6 +642,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueButtonClick login returns Error with message should update dialogState`() =
         runTest {
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(
                     email = DEFAULT_EMAIL_ADDRESS,
@@ -625,7 +655,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     captchaToken = null,
                     orgIdentifier = DEFAULT_ORG_IDENTIFIER,
                 )
-            } returns LoginResult.Error(errorMessage = "Mock error message")
+            } returns LoginResult.Error(errorMessage = "Mock error message", error = error)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -646,6 +676,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = "Mock error message".asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
@@ -895,9 +926,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ResendEmailClick returns error should update dialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.resendVerificationCodeEmail()
-        } returns ResendEmailResult.Error(message = null)
+        } returns ResendEmailResult.Error(message = null, error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -920,6 +952,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     dialogState = TwoFactorLoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.verification_email_not_sent.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -942,6 +975,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     dialogState = TwoFactorLoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.verification_email_not_sent.asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -1048,12 +1082,13 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `ReceiveResendEmailResult with ResendEmailResult Error should not emit any events`() =
         runTest {
+            val error = Throwable("Fail!")
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 viewModel.trySendAction(
                     TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
-                        resendEmailResult = ResendEmailResult.Error(message = null),
+                        resendEmailResult = ResendEmailResult.Error(message = null, error = error),
                         isUserInitiated = true,
                     ),
                 )
@@ -1062,6 +1097,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),

@@ -12,10 +12,10 @@ data class VaultLoginItemTypeHandlers(
     val onCheckForBreachClick: () -> Unit,
     val onCopyPasswordClick: () -> Unit,
     val onCopyTotpCodeClick: () -> Unit,
+    val onAuthenticatorHelpToolTipClick: () -> Unit,
     val onCopyUriClick: (String) -> Unit,
     val onCopyUsernameClick: () -> Unit,
     val onLaunchUriClick: (String) -> Unit,
-    val onPasswordHistoryClick: () -> Unit,
     val onShowPasswordClick: (isVisible: Boolean) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -37,6 +37,11 @@ data class VaultLoginItemTypeHandlers(
                 onCopyTotpCodeClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
                 },
+                onAuthenticatorHelpToolTipClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick,
+                    )
+                },
                 onCopyUriClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUriClick(it))
                 },
@@ -45,9 +50,6 @@ data class VaultLoginItemTypeHandlers(
                 },
                 onLaunchUriClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.LaunchClick(it))
-                },
-                onPasswordHistoryClick = {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
                 },
                 onShowPasswordClick = {
                     viewModel.trySendAction(

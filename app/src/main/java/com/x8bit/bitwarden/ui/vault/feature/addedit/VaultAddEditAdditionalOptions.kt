@@ -136,6 +136,7 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item(key = "addCustomFieldButton") {
@@ -145,7 +146,7 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             ) {
-                Spacer(modifier = Modifier.height(height = 16.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
                 VaultAddEditCustomFieldsButton(
                     onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
                     options = persistentListOfNotNull(

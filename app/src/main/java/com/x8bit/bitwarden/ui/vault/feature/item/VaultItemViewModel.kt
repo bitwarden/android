@@ -13,7 +13,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -25,17 +28,23 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemStateData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -50,7 +59,7 @@ private const val KEY_TEMP_ATTACHMENT = "tempAttachmentFile"
 /**
  * ViewModel responsible for handling user interactions in the vault item screen
  */
-@Suppress("LargeClass", "TooManyFunctions")
+@Suppress("LargeClass", "TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class VaultItemViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -59,13 +68,21 @@ class VaultItemViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
     private val organizationEventManager: OrganizationEventManager,
+    private val environmentRepository: EnvironmentRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
-        vaultItemId = VaultItemArgs(savedStateHandle).vaultItemId,
-        viewState = VaultItemState.ViewState.Loading,
-        dialog = null,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val args = VaultItemArgs(savedStateHandle)
+        VaultItemState(
+            vaultItemId = args.vaultItemId,
+            cipherType = args.cipherType,
+            viewState = VaultItemState.ViewState.Loading,
+            dialog = null,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+        )
+    },
 ) {
     /**
      * Reference to a temporary attachment saved in cache.
@@ -86,7 +103,8 @@ class VaultItemViewModel @Inject constructor(
             authRepository.userStateFlow,
             vaultRepository.getAuthCodeFlow(state.vaultItemId),
             vaultRepository.collectionsStateFlow,
-        ) { cipherViewState, userState, authCodeState, collectionsState ->
+            vaultRepository.foldersStateFlow,
+        ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -101,33 +119,66 @@ class VaultItemViewModel @Inject constructor(
                     cipherViewState,
                     authCodeState,
                     collectionsState,
-                ) { _, _, _ ->
+                    folderState,
+                ) { _, _, _, _ ->
                     // We are only combining the DataStates to know the overall state,
                     // we map it to the appropriate value below.
                 }
                     .mapNullable {
-                        val canDelete = collectionsState
-                            .data
+                        val cipherView = cipherViewState.data
+                        val canDelete = collectionsState.data
                             .hasDeletePermissionInAtLeastOneCollection(
-                                collectionIds = cipherViewState.data?.collectionIds,
+                                collectionIds = cipherView?.collectionIds,
                             )
 
-                        val canAssignToCollections = collectionsState
-                            .data
-                            .canAssignToCollections(cipherViewState.data?.collectionIds)
+                        val canAssignToCollections = collectionsState.data
+                            .canAssignToCollections(cipherView?.collectionIds)
 
-                        val canEdit = cipherViewState.data?.edit == true
+                        val canEdit = cipherView?.edit == true
+                        val organizationName = cipherView
+                            ?.organizationId
+                            ?.let { orgId ->
+                                userState
+                                    ?.activeAccount
+                                    ?.organizations
+                                    ?.firstOrNull { it.id == orgId }
+                                    ?.name
+                            }
+                        val cipherCollections = cipherView
+                            ?.collectionIds
+                            .orEmpty()
+                        val collections = collectionsState.data
+                            ?.filter { cipherCollections.contains(it.id) }
+                            ?.map { it.name }
+                            .orEmpty()
+                        val folderName = cipherView
+                            ?.folderId
+                            ?.let { folderId ->
+                                folderState.data?.firstOrNull { folder -> folderId == folder.id }
+                            }
+                            ?.name
+                        val relatedLocations = persistentListOfNotNull(
+                            organizationName?.let { VaultItemLocation.Organization(it) },
+                            *collections.map { VaultItemLocation.Collection(it) }.toTypedArray(),
+                            folderName?.let { VaultItemLocation.Folder(it) },
+                        )
 
                         VaultItemStateData(
-                            cipher = cipherViewState.data,
+                            cipher = cipherView,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
+                            relatedLocations = relatedLocations,
                         )
                     },
             )
         }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository.isIconLoadingDisabledFlow
+            .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -190,6 +241,7 @@ class VaultItemViewModel @Inject constructor(
 
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
             is VaultItemAction.Common.CopyNotesClick -> handleCopyNotesClick()
+            is VaultItemAction.Common.PasswordHistoryClick -> handlePasswordHistoryClick()
         }
     }
 
@@ -234,6 +286,7 @@ class VaultItemViewModel @Inject constructor(
                 VaultItemEvent.NavigateToAddEdit(
                     itemId = state.vaultItemId,
                     isClone = false,
+                    type = state.cipherType,
                 ),
             )
         }
@@ -418,7 +471,13 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onContent
             }
-            sendEvent(VaultItemEvent.NavigateToAddEdit(itemId = state.vaultItemId, isClone = true))
+            sendEvent(
+                event = VaultItemEvent.NavigateToAddEdit(
+                    itemId = state.vaultItemId,
+                    isClone = true,
+                    type = state.cipherType,
+                ),
+            )
         }
     }
 
@@ -530,6 +589,10 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleLoginTypeActions(action: VaultItemAction.ItemType.Login) {
         when (action) {
+            is VaultItemAction.ItemType.Login.AuthenticatorHelpToolTipClick -> {
+                handleAuthenticatorHelpToolTipClick()
+            }
+
             is VaultItemAction.ItemType.Login.CheckForBreachClick -> {
                 handleCheckForBreachClick()
             }
@@ -554,14 +617,18 @@ class VaultItemViewModel @Inject constructor(
                 handleLaunchClick(action)
             }
 
-            is VaultItemAction.ItemType.Login.PasswordHistoryClick -> {
-                handlePasswordHistoryClick()
-            }
-
             is VaultItemAction.ItemType.Login.PasswordVisibilityClicked -> {
                 handlePasswordVisibilityClicked(action)
             }
         }
+    }
+
+    private fun handleAuthenticatorHelpToolTipClick() {
+        sendEvent(
+            event = VaultItemEvent.NavigateToUri(
+                uri = "https://bitwarden.com/help/integrated-authenticator",
+            ),
+        )
     }
 
     private fun handleCheckForBreachClick() {
@@ -1022,6 +1089,10 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.AttachmentFinishedSavingToDisk -> {
                 handleAttachmentFinishedSavingToDisk(action)
             }
+
+            is VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive -> {
+                handleIsIconLoadingDisabledUpdateReceive(action)
+            }
         }
     }
 
@@ -1032,17 +1103,25 @@ class VaultItemViewModel @Inject constructor(
     private fun handlePasswordBreachReceive(
         action: VaultItemAction.Internal.PasswordBreachReceive,
     ) {
-        val message = when (val result = action.result) {
-            BreachCountResult.Error -> R.string.generic_error_message.asText()
+        val dialogState = when (val result = action.result) {
+            is BreachCountResult.Error -> {
+                VaultItemState.DialogState.Generic(
+                    message = R.string.generic_error_message.asText(),
+                    error = result.error,
+                )
+            }
+
             is BreachCountResult.Success -> {
-                if (result.breachCount > 0) {
-                    R.string.password_exposed.asText(result.breachCount)
-                } else {
-                    R.string.password_safe.asText()
-                }
+                VaultItemState.DialogState.Generic(
+                    message = if (result.breachCount > 0) {
+                        R.string.password_exposed.asText(result.breachCount)
+                    } else {
+                        R.string.password_safe.asText()
+                    },
+                )
             }
         }
-        updateDialogState(VaultItemState.DialogState.Generic(message = message))
+        updateDialogState(dialogState)
     }
 
     @Suppress("LongMethod")
@@ -1123,6 +1202,9 @@ class VaultItemViewModel @Inject constructor(
             canDelete = this.data?.canDelete == true,
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
+            baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
+            relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1130,10 +1212,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.ValidatePasswordReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1163,11 +1246,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultItemAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1189,11 +1273,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleRestoreCipherReceive(action: VaultItemAction.Internal.RestoreCipherReceive) {
-        when (action.result) {
-            RestoreCipherResult.Error -> {
+        when (val result = action.result) {
+            is RestoreCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1210,10 +1295,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.AttachmentDecryptReceive,
     ) {
         when (val result = action.result) {
-            DownloadAttachmentResult.Failure -> {
+            is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.unable_to_download_file.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1259,6 +1345,12 @@ class VaultItemViewModel @Inject constructor(
                 updateDialogState(VaultItemState.DialogState.RestoreItemDialog)
             }
         }
+    }
+
+    private fun handleIsIconLoadingDisabledUpdateReceive(
+        action: VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isIconLoadingDisabled = action.isDisabled) }
     }
 
     //endregion Internal Type Handlers
@@ -1346,9 +1438,24 @@ class VaultItemViewModel @Inject constructor(
 @Parcelize
 data class VaultItemState(
     val vaultItemId: String,
+    val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val baseIconUrl: String,
+    val isIconLoadingDisabled: Boolean,
 ) : Parcelable {
+
+    /**
+     * The displayable title for the top app bar.
+     */
+    val title: Text
+        get() = when (cipherType) {
+            VaultItemCipherType.LOGIN -> R.string.view_login.asText()
+            VaultItemCipherType.CARD -> R.string.view_card.asText()
+            VaultItemCipherType.IDENTITY -> R.string.view_identity.asText()
+            VaultItemCipherType.SECURE_NOTE -> R.string.view_note.asText()
+            VaultItemCipherType.SSH_KEY -> R.string.view_passkey.asText()
+        }
 
     /**
      * Whether or not the cipher has been deleted.
@@ -1450,7 +1557,8 @@ data class VaultItemState(
              * @property canDelete Indicates if the cipher can be deleted.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
-             * @property favorite Indicates that the cipher is favoried.
+             * @property favorite Indicates that the cipher is favorite.
+             * @property passwordHistoryCount An integer indicating how many times the password.
              */
             @Parcelize
             data class Common(
@@ -1467,6 +1575,9 @@ data class VaultItemState(
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
                 val favorite: Boolean,
+                val passwordHistoryCount: Int?,
+                val iconData: IconData,
+                val relatedLocations: ImmutableList<VaultItemLocation>,
             ) : Parcelable {
 
                 /**
@@ -1538,7 +1649,6 @@ data class VaultItemState(
                  *
                  * @property username The username required for the login item.
                  * @property passwordData The password required for the login item.
-                 * @property passwordHistoryCount An integer indicating how many times the password
                  * has been changed.
                  * @property uris The URI associated with the login item.
                  * @property passwordRevisionDate An optional string indicating the last time the
@@ -1561,7 +1671,6 @@ data class VaultItemState(
                 data class Login(
                     val username: String?,
                     val passwordData: PasswordData?,
-                    val passwordHistoryCount: Int?,
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
                     val totpCodeItemData: TotpCodeItemData?,
@@ -1661,6 +1770,7 @@ data class VaultItemState(
                  * @property brand The brand for the card.
                  * @property expiration The expiration for the card.
                  * @property securityCode The securityCode for the card.
+                 * @property paymentCardBrandIconData The payment card brand icon data for the card.
                  */
                 data class Card(
                     val cardholderName: String?,
@@ -1668,6 +1778,7 @@ data class VaultItemState(
                     val brand: VaultCardBrand?,
                     val expiration: String?,
                     val securityCode: CodeData?,
+                    val paymentCardBrandIconData: IconData?,
                 ) : ItemType() {
 
                     /**
@@ -1741,6 +1852,7 @@ data class VaultItemState(
         @Parcelize
         data class Generic(
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -1798,6 +1910,7 @@ sealed class VaultItemEvent {
     data class NavigateToAddEdit(
         val itemId: String,
         val isClone: Boolean,
+        val type: VaultItemCipherType,
     ) : VaultItemEvent()
 
     /**
@@ -1980,6 +2093,11 @@ sealed class VaultItemAction {
          * The user has clicked the copy button for notes text field.
          */
         data object CopyNotesClick : Common()
+
+        /**
+         * The user has clicked the password history text.
+         */
+        data object PasswordHistoryClick : Common()
     }
 
     /**
@@ -1991,6 +2109,11 @@ sealed class VaultItemAction {
          * Represents actions specific to the Login type.
          */
         sealed class Login : ItemType() {
+            /**
+             * The user has clicked the call to action on the authenticator help tooltip.
+             */
+            data object AuthenticatorHelpToolTipClick : Login()
+
             /**
              * The user has clicked the check for breach button.
              */
@@ -2024,11 +2147,6 @@ sealed class VaultItemAction {
             data class LaunchClick(
                 val uri: String,
             ) : Login()
-
-            /**
-             * The user has clicked the password history text.
-             */
-            data object PasswordHistoryClick : Login()
 
             /**
              * The user has clicked to display the password.
@@ -2205,6 +2323,13 @@ sealed class VaultItemAction {
             val isSaved: Boolean,
             val file: File,
         ) : Internal()
+
+        /**
+         * Indicates the `isIconLoadingDisabled` setting has changed.
+         */
+        data class IsIconLoadingDisabledUpdateReceive(
+            val isDisabled: Boolean,
+        ) : Internal()
     }
 }
 
@@ -2228,13 +2353,13 @@ sealed class PasswordRepromptAction : Parcelable {
     }
 
     /**
-     * Indicates that we should launch the [VaultItemAction.ItemType.Login.PasswordHistoryClick]
+     * Indicates that we should launch the [VaultItemAction.Common.PasswordHistoryClick]
      * upon password validation.
      */
     @Parcelize
     data object PasswordHistoryClick : PasswordRepromptAction() {
         override val vaultItemAction: VaultItemAction
-            get() = VaultItemAction.ItemType.Login.PasswordHistoryClick
+            get() = VaultItemAction.Common.PasswordHistoryClick
     }
 
     /**

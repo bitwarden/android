@@ -15,6 +15,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @Suppress("UnnecessaryAbstractClass")
 abstract class BaseEnumeratedIntSerializer<T : Enum<T>>(
+    private val className: String,
     private val values: Array<T>,
     private val default: T? = null,
 ) : KSerializer<T> {
@@ -29,7 +30,7 @@ abstract class BaseEnumeratedIntSerializer<T : Enum<T>>(
         val decodedValue = decoder.decodeInt().toString()
         return values.firstOrNull { it.serialNameAnnotation?.value == decodedValue }
             ?: default
-            ?: throw IllegalArgumentException("Unknown value $decodedValue")
+            ?: throw IllegalArgumentException("Unknown value $decodedValue for $className")
     }
 
     override fun serialize(encoder: Encoder, value: T) {

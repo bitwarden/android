@@ -178,7 +178,11 @@ private fun List<FolderView>.toSelectedFolderId(cipherView: CipherView?): String
         ?.folderId
         ?.takeIf { id -> id in map { it.id } }
 
-private fun List<FolderView>.toAvailableFolders(
+/**
+ * Maps a list of [FolderView]s to a list of available [VaultAddEditState.Folder]s with
+ * a default first item of "None."
+ */
+fun List<FolderView>.toAvailableFolders(
     resourceManager: ResourceManager,
 ): List<VaultAddEditState.Folder> =
     listOf(
@@ -188,7 +192,7 @@ private fun List<FolderView>.toAvailableFolders(
         ),
     )
         .plus(
-            map { VaultAddEditState.Folder(name = it.name, id = it.id.toString()) },
+            map { VaultAddEditState.Folder(name = it.name, id = it.id) },
         )
 
 private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String? =

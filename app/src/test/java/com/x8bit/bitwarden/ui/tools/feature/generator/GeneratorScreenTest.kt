@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
@@ -65,16 +66,15 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+            appResumeStateManager = appResumeStateManager,
+        ) {
             GeneratorScreen(
                 viewModel = viewModel,
-                onNavigateToPasswordHistory = {
-                    onNavigateToPasswordHistoryScreenCalled = true
-                },
+                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
                 onNavigateBack = {},
                 onDimNavBarRequest = { onDimNavBarRequest = it },
-                intentManager = intentManager,
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }
@@ -1124,6 +1124,84 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newServerUrl = "https://addyio.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .AddyIo
+                    .SelfHostServerUrlChange(
+                        url = newServerUrl,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, self host server url field should show based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = true,
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate Disabling the feature flag
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertIsNotDisplayed()
+    }
+
     //endregion Addy.Io Service Type Tests
 
     //region DuckDuckGo Service Type Tests
@@ -1284,6 +1362,93 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+            ),
+        )
+
+        val newSelfHostServerUrl = "https://simplelogin.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newSelfHostServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .SimpleLogin
+                    .SelfHostServerUrlChange(url = newSelfHostServerUrl),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, should display self host server url field based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = true,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate disabling the feature flag.
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertDoesNotExist()
     }
 
     //endregion SimpleLogin Service Type Tests
@@ -1773,4 +1938,6 @@ private val DEFAULT_STATE = GeneratorState(
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
     shouldShowCoachMarkTour = false,
+    shouldShowAnonAddySelfHostServerUrlField = true,
+    shouldShowSimpleLoginSelfHostServerField = true,
 )

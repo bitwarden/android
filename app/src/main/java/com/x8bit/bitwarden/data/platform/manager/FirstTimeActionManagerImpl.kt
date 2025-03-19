@@ -158,7 +158,8 @@ class FirstTimeActionManagerImpl @Inject constructor(
     override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
         get() = settingsDiskSource
             .getShouldShowAddLoginCoachMarkFlow()
-            .map { it ?: true }
+            .map { it != false }
+            .mapFalseIfAnyLoginCiphersAvailable()
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
             ) { shouldShow, featureIsEnabled ->
@@ -171,10 +172,13 @@ class FirstTimeActionManagerImpl @Inject constructor(
     override val shouldShowGeneratorCoachMarkFlow: Flow<Boolean>
         get() = settingsDiskSource
             .getShouldShowGeneratorCoachMarkFlow()
-            .map { it ?: true }
+            .map { it != false }
+            .mapFalseIfAnyLoginCiphersAvailable()
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
             ) { shouldShow, featureFlagEnabled ->
+                // If the feature flag is off always return true so observers know
+                // the card has not been shown.
                 shouldShow && featureFlagEnabled
             }
             .distinctUntilChanged()
@@ -294,4 +298,25 @@ class FirstTimeActionManagerImpl @Inject constructor(
         return settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false &&
             !autofillEnabledManager.isAutofillEnabled
     }
+
+    /**
+     *  If there are any existing "Login" type ciphers then we'll map the current value
+     *  of the receiver Flow to `false`.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun Flow<Boolean>.mapFalseIfAnyLoginCiphersAvailable(): Flow<Boolean> =
+        authDiskSource
+            .activeUserIdChangesFlow
+            .filterNotNull()
+            .flatMapLatest { activeUserId ->
+                combine(
+                    flow = this,
+                    flow2 = vaultDiskSource.getCiphers(activeUserId),
+                ) { receiverCurrentValue, ciphers ->
+                    receiverCurrentValue && ciphers.none {
+                        it.login != null && it.organizationId == null
+                    }
+                }
+            }
+            .distinctUntilChanged()
 }

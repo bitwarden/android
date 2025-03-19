@@ -74,8 +74,8 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             shouldShowEnableAuthenticatorSync =
-            featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
-                !isBuildVersionBelow(Build.VERSION_CODES.S),
+                featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
+                    !isBuildVersionBelow(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -365,7 +365,7 @@ class AccountSecurityViewModel @Inject constructor(
                 settingsRepository.storeUnlockPin(
                     pin = state.pin,
                     shouldRequireMasterPasswordOnRestart =
-                    state.shouldRequireMasterPasswordOnRestart,
+                        state.shouldRequireMasterPasswordOnRestart,
                 )
             }
         }
@@ -464,7 +464,7 @@ class AccountSecurityViewModel @Inject constructor(
         action: AccountSecurityAction.Internal.BiometricsKeyResultReceive,
     ) {
         when (action.result) {
-            BiometricsKeyResult.Error -> {
+            is BiometricsKeyResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = null,

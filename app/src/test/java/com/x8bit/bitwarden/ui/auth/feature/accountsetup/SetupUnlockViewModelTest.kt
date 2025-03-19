@@ -34,7 +34,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { setOnboardingStatus(userId = any(), status = any()) } just runs
+        every { setOnboardingStatus(status = any()) } just runs
     }
 
     private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
@@ -78,7 +78,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
         }
@@ -98,7 +97,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 0) {
                 authRepository.setOnboardingStatus(
-                    userId = DEFAULT_USER_ID,
                     status = OnboardingStatus.AUTOFILL_SETUP,
                 )
             }
@@ -111,7 +109,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
         verify {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
@@ -126,7 +123,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.FINAL_STEP,
             )
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
@@ -142,7 +138,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
             verify {
                 authRepository.setOnboardingStatus(
-                    userId = DEFAULT_USER_ID,
                     status = OnboardingStatus.FINAL_STEP,
                 )
             }
@@ -174,7 +169,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 settingsRepository.setupBiometricsKey(CIPHER)
-            } returns BiometricsKeyResult.Error
+            } returns BiometricsKeyResult.Error(error = Throwable("Fail!"))
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {

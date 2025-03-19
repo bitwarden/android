@@ -35,7 +35,7 @@ class FoldersScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             FoldersScreen(
                 viewModel = viewModel,
                 onNavigateToEditFolderScreen = { onNavigateToEditFolderScreenId = it },

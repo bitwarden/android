@@ -25,6 +25,8 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
@@ -109,8 +111,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
@@ -248,6 +252,14 @@ class VaultRepositoryTest {
         mockkStatic(Uri::class)
         mockkStatic(MessageDigest::class)
         mockkStatic(Base64::class)
+        mockkConstructor(NoActiveUserException::class)
+        mockkConstructor(MissingPropertyException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+        every {
+            anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
+        } returns true
     }
 
     @AfterEach
@@ -256,6 +268,8 @@ class VaultRepositoryTest {
         unmockkStatic(Uri::class)
         unmockkStatic(MessageDigest::class)
         unmockkStatic(Base64::class)
+        unmockkConstructor(NoActiveUserException::class)
+        unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
@@ -1158,7 +1172,10 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
+                result,
+            )
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultRepository.vaultUnlockDataStateFlow.value,
@@ -1179,7 +1196,10 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
+                result,
+            )
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultRepository.vaultUnlockDataStateFlow.value,
@@ -1265,7 +1285,12 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
 
-            assertEquals(VaultUnlockResult.BiometricDecodingError, result)
+            assertEquals(
+                VaultUnlockResult.BiometricDecodingError(
+                    error = MissingPropertyException("Foo"),
+                ),
+                result,
+            )
             coVerify(exactly = 0) {
                 vaultSdkSource.derivePinProtectedUserKey(any(), any())
             }
@@ -1458,6 +1483,7 @@ class VaultRepositoryTest {
             val authenticatorSyncUnlockKey = "asdf1234"
             val privateKey = "mockPrivateKey-1"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = Throwable("Fail")
             coEvery {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -1469,7 +1495,7 @@ class VaultRepositoryTest {
                     ),
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.InvalidStateError
+            } returns VaultUnlockResult.InvalidStateError(error = error)
             fakeAuthDiskSource.apply {
                 storeAuthenticatorSyncUnlockKey(
                     userId = userId,
@@ -1482,7 +1508,7 @@ class VaultRepositoryTest {
                 userId = userId,
                 decryptedUserKey = authenticatorSyncUnlockKey,
             )
-            assertEquals(VaultUnlockResult.InvalidStateError, result)
+            assertEquals(VaultUnlockResult.InvalidStateError(error = error), result)
             coVerify {
                 vaultLockManager.unlockVault(
                     userId = userId,
@@ -1509,7 +1535,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.unlockVaultWithMasterPassword(masterPassword = "")
 
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
                 result,
             )
             assertEquals(
@@ -1537,7 +1563,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
             assertEquals(
@@ -1565,7 +1591,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
 
@@ -1688,7 +1714,7 @@ class VaultRepositoryTest {
     fun `unlockVaultWithMasterPassword with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
-            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError(error = null)
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
             val result = vaultRepository.unlockVaultWithMasterPassword(
@@ -1726,7 +1752,7 @@ class VaultRepositoryTest {
         val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
         assertEquals(
-            VaultUnlockResult.InvalidStateError,
+            VaultUnlockResult.InvalidStateError(error = NoActiveUserException()),
             result,
         )
         assertEquals(
@@ -1755,7 +1781,7 @@ class VaultRepositoryTest {
             )
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             assertEquals(
-                VaultUnlockResult.InvalidStateError,
+                VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
                 result,
             )
             assertEquals(
@@ -1781,7 +1807,7 @@ class VaultRepositoryTest {
         )
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertEquals(
-            VaultUnlockResult.InvalidStateError,
+            VaultUnlockResult.InvalidStateError(error = MissingPropertyException("Foo")),
             result,
         )
         assertEquals(
@@ -1824,7 +1850,7 @@ class VaultRepositoryTest {
     fun `unlockVaultWithPin with VaultLockManager non-Success should unlock for the current user and return the error`() =
         runTest {
             val userId = "mockId-1"
-            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError
+            val mockVaultUnlockResult = VaultUnlockResult.InvalidStateError(error = null)
             prepareStateForUnlocking(unlockResult = mockVaultUnlockResult)
 
             val result = vaultRepository.unlockVaultWithPin(pin = "1234")
@@ -2116,7 +2142,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                CreateSendResult.Error(message = null),
+                CreateSendResult.Error(message = null, error = NoActiveUserException()),
                 result,
             )
         }
@@ -2127,13 +2153,14 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockSendView = createMockSendView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
-            assertEquals(CreateSendResult.Error(message = null), result)
+            assertEquals(CreateSendResult.Error(message = null, error = error), result)
         }
 
     @Test
@@ -2143,6 +2170,7 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockSendView = createMockSendView(number = 1, type = SendType.TEXT)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
@@ -2151,11 +2179,11 @@ class VaultRepositoryTest {
                     body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
                         .copy(fileLength = null),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
-            assertEquals(CreateSendResult.Error(IllegalStateException().message), result)
+            assertEquals(CreateSendResult.Error(message = error.message, error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -2219,13 +2247,14 @@ class VaultRepositoryTest {
                     destinationFilePath = "mockAbsolutePath",
                 )
             } returns encryptedFile.asSuccess()
+            val error = IllegalStateException()
             coEvery {
                 sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error(IllegalStateException().message), result)
+            assertEquals(CreateSendResult.Error(message = error.message, error = error), result)
         }
 
     @Test
@@ -2254,6 +2283,7 @@ class VaultRepositoryTest {
                     type = SendTypeJson.FILE,
                 ),
             )
+            val error = Throwable()
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
@@ -2284,11 +2314,11 @@ class VaultRepositoryTest {
                     sendFileResponse = sendFileResponse.createFileJsonResponse,
                     encryptedFile = encryptedFile,
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error(null), result)
+            assertEquals(CreateSendResult.Error(message = null, error = error), result)
         }
 
     @Test
@@ -2301,14 +2331,15 @@ class VaultRepositoryTest {
             val uri = setupMockUri(url = url)
             val mockSendView = createMockSendView(number = 1)
             val mockSdkSend = createMockSdkSend(number = 1)
+            val error = Throwable()
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.writeUriToCache(any()) } returns Throwable().asFailure()
+            coEvery { fileManager.writeUriToCache(any()) } returns error.asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error(message = null), result)
+            assertEquals(CreateSendResult.Error(message = null, error = error), result)
         }
 
     @Test
@@ -2381,7 +2412,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                UpdateSendResult.Error(null),
+                UpdateSendResult.Error(errorMessage = null, error = NoActiveUserException()),
                 result,
             )
         }
@@ -2393,16 +2424,17 @@ class VaultRepositoryTest {
             val userId = "mockId-1"
             val sendId = "sendId1234"
             val mockSendView = createMockSendView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateSend(
                 sendId = sendId,
                 sendView = mockSendView,
             )
 
-            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2416,20 +2448,21 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns createMockSdkSend(number = 1, type = SendType.TEXT).asSuccess()
+            val error = IllegalStateException()
             coEvery {
                 sendsService.updateSend(
                     sendId = sendId,
                     body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
                         .copy(fileLength = null),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateSend(
                 sendId = sendId,
                 sendView = mockSendView,
             )
 
-            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2464,6 +2497,7 @@ class VaultRepositoryTest {
             assertEquals(
                 UpdateSendResult.Error(
                     errorMessage = "You do not have permission to edit this.",
+                    error = null,
                 ),
                 result,
             )
@@ -2488,11 +2522,12 @@ class VaultRepositoryTest {
                         .copy(fileLength = null),
                 )
             } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.decryptSend(
                     userId = userId, send = createMockSdkSend(number = 1, type = SendType.TEXT),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
 
             val result = vaultRepository.updateSend(
@@ -2500,7 +2535,7 @@ class VaultRepositoryTest {
                 sendView = mockSendView,
             )
 
-            assertEquals(UpdateSendResult.Error(errorMessage = null), result)
+            assertEquals(UpdateSendResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2549,7 +2584,10 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                RemovePasswordSendResult.Error(null),
+                RemovePasswordSendResult.Error(
+                    errorMessage = null,
+                    error = NoActiveUserException(),
+                ),
                 result,
             )
         }
@@ -2560,13 +2598,14 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendId = "sendId1234"
+            val error = Throwable("Fail")
             coEvery {
                 sendsService.removeSendPassword(sendId = sendId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.removePasswordSend(sendId = sendId)
 
-            assertEquals(RemovePasswordSendResult.Error(errorMessage = null), result)
+            assertEquals(RemovePasswordSendResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2577,17 +2616,18 @@ class VaultRepositoryTest {
             val userId = "mockId-1"
             val sendId = "sendId1234"
             val mockSend = createMockSend(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 sendsService.removeSendPassword(sendId = sendId)
             } returns UpdateSendResponseJson.Success(send = mockSend).asSuccess()
             coEvery {
                 vaultSdkSource.decryptSend(userId = userId, send = createMockSdkSend(number = 1))
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveSend(userId = userId, send = mockSend) } just runs
 
             val result = vaultRepository.removePasswordSend(sendId = sendId)
 
-            assertEquals(RemovePasswordSendResult.Error(errorMessage = null), result)
+            assertEquals(RemovePasswordSendResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2622,7 +2662,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                DeleteSendResult.Error,
+                DeleteSendResult.Error(error = NoActiveUserException()),
                 result,
             )
         }
@@ -2632,13 +2672,14 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val sendId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 sendsService.deleteSend(sendId = sendId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.deleteSend(sendId)
 
-            assertEquals(DeleteSendResult.Error, result)
+            assertEquals(DeleteSendResult.Error(error = error), result)
         }
 
     @Test
@@ -2666,7 +2707,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                GenerateTotpResult.Error,
+                GenerateTotpResult.Error(error = NoActiveUserException()),
                 result,
             )
         }
@@ -2701,7 +2742,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.deleteFolder("Test")
 
             assertEquals(
-                DeleteFolderResult.Error,
+                DeleteFolderResult.Error(error = NoActiveUserException()),
                 result,
             )
         }
@@ -2711,11 +2752,12 @@ class VaultRepositoryTest {
     fun `DeleteFolder with folderService Delete failure should return DeleteFolderResult Failure`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val error = Throwable("fail")
             val folderId = "mockId-1"
-            coEvery { folderService.deleteFolder(folderId) } returns Throwable("fail").asFailure()
+            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
 
             val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error, result)
+            assertEquals(DeleteFolderResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -2777,7 +2819,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.createFolder(mockk())
 
             assertEquals(
-                CreateFolderResult.Error,
+                CreateFolderResult.Error(NoActiveUserException()),
                 result,
             )
         }
@@ -2788,10 +2830,11 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val folderId = "mockId-1"
-            coEvery { folderService.deleteFolder(folderId) } returns Throwable("fail").asFailure()
+            val error = Throwable("fail")
+            coEvery { folderService.deleteFolder(folderId) } returns error.asFailure()
 
             val result = vaultRepository.deleteFolder(folderId)
-            assertEquals(DeleteFolderResult.Error, result)
+            assertEquals(DeleteFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2803,16 +2846,17 @@ class VaultRepositoryTest {
                 name = "TestName",
                 revisionDate = DateTime.now(),
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
                     userId = MOCK_USER_STATE.activeUserId,
                     folder = folderView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error, result)
+            assertEquals(CreateFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2827,6 +2871,7 @@ class VaultRepositoryTest {
                 name = testFolderName,
                 revisionDate = date,
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
@@ -2839,10 +2884,10 @@ class VaultRepositoryTest {
                 folderService.createFolder(
                     body = FolderJsonRequest(testFolderName),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.createFolder(folderView)
-            assertEquals(CreateFolderResult.Error, result)
+            assertEquals(CreateFolderResult.Error(error = error), result)
         }
 
     @Test
@@ -2903,7 +2948,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.updateFolder("Test", mockk())
 
             assertEquals(
-                UpdateFolderResult.Error(null),
+                UpdateFolderResult.Error(errorMessage = null, error = NoActiveUserException()),
                 result,
             )
         }
@@ -2918,17 +2963,18 @@ class VaultRepositoryTest {
                 name = "TestName",
                 revisionDate = DateTime.now(),
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
                     userId = MOCK_USER_STATE.activeUserId,
                     folder = folderView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateFolder(folderId, folderView)
 
-            assertEquals(UpdateFolderResult.Error(errorMessage = null), result)
+            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -2944,6 +2990,7 @@ class VaultRepositoryTest {
                 name = testFolderName,
                 revisionDate = date,
             )
+            val error = IllegalStateException()
 
             coEvery {
                 vaultSdkSource.encryptFolder(
@@ -2957,10 +3004,10 @@ class VaultRepositoryTest {
                     folderId = folderId,
                     body = FolderJsonRequest(testFolderName),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.updateFolder(folderId, folderView)
-            assertEquals(UpdateFolderResult.Error(errorMessage = null), result)
+            assertEquals(UpdateFolderResult.Error(errorMessage = null, error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -3001,6 +3048,7 @@ class VaultRepositoryTest {
             assertEquals(
                 UpdateFolderResult.Error(
                     errorMessage = "You do not have permission to edit this.",
+                    error = null,
                 ),
                 result,
             )
@@ -4362,12 +4410,12 @@ class VaultRepositoryTest {
             coEvery {
                 vaultDiskSource.getFolders(userId)
             } returns flowOf(listOf(createMockFolder(1)))
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.exportVaultDataToString(userId, any(), any(), format)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
-            val expected = ExportVaultDataResult.Error
+            val expected = ExportVaultDataResult.Error(error = error)
             val result = vaultRepository.exportVaultDataToString(format = format)
 
             assertEquals(
@@ -4381,7 +4429,9 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = null
 
-            val expected = DecryptFido2CredentialAutofillViewResult.Error
+            val expected = DecryptFido2CredentialAutofillViewResult.Error(
+                error = NoActiveUserException(),
+            )
             val result = vaultRepository
                 .getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(createMockCipherView(number = 1)),
@@ -4401,18 +4451,19 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherViewList = listOf(createMockCipherView(number = 1))
+            val error = Throwable()
             coEvery {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipherViews = cipherViewList.toTypedArray(),
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = vaultRepository.getDecryptedFido2CredentialAutofillViews(
                 cipherViewList = cipherViewList,
             )
 
-            assertEquals(DecryptFido2CredentialAutofillViewResult.Error, result)
+            assertEquals(DecryptFido2CredentialAutofillViewResult.Error(error = error), result)
             coVerify {
                 vaultSdkSource.decryptFido2CredentialAutofillViews(
                     userId = MOCK_USER_STATE.activeUserId,

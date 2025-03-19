@@ -31,7 +31,6 @@ sealed class FlagKey<out T : Any> {
                 OnboardingFlow,
                 OnboardingCarousel,
                 ImportLoginsFlow,
-                SshKeyCipherItems,
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
@@ -44,12 +43,14 @@ sealed class FlagKey<out T : Any> {
                 SingleTapPasskeyAuthentication,
                 AnonAddySelfHostAlias,
                 SimpleLoginSelfHostAlias,
+                ChromeAutofill,
+                MobileErrorReporting,
             )
         }
     }
 
     /**
-     *  Data object holding the key for syncing with the Bitwarden Authenticator app.
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
      */
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-bwa-sync"
@@ -64,6 +65,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "email-verification"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
+     */
+    data object MobileErrorReporting : FlagKey<Boolean>() {
+        override val keyName: String = "mobile-error-reporting"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
     }
 
     /**
@@ -89,15 +99,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
-    }
-
-    /**
-     * Data object holding the feature flag key for the SSH key cipher items feature.
-     */
-    data object SshKeyCipherItems : FlagKey<Boolean>() {
-        override val keyName: String = "ssh-key-vault-item"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
@@ -145,7 +146,7 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = true
+        override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
 
@@ -218,6 +219,16 @@ sealed class FlagKey<out T : Any> {
      */
     data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
         override val keyName: String = "simple-login-self-host-alias"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the checking for Chrome's third party
+     * autofill.
+     */
+    data object ChromeAutofill : FlagKey<Boolean>() {
+        override val keyName: String = "android-chrome-autofill"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }

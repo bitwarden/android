@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.DeleteAccountState.DeleteAccountDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -84,13 +83,13 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountConfirmDialogClick(
         action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
     ) {
-        updateDialogState(DeleteAccountDialog.Loading)
+        updateDialogState(DeleteAccountState.DeleteAccountDialog.Loading)
         viewModelScope.launch {
             val validPasswordResult = authRepository.validatePassword(action.masterPassword)
             if ((validPasswordResult as? ValidatePasswordResult.Success)?.isValid == false) {
                 sendAction(
                     DeleteAccountAction.Internal.UpdateDialogState(
-                        DeleteAccountDialog.Error(
+                        DeleteAccountState.DeleteAccountDialog.Error(
                             message = R.string.invalid_master_password.asText(),
                         ),
                     ),
@@ -116,21 +115,22 @@ class DeleteAccountViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             DeleteAccountResult.Success -> {
-                updateDialogState(DeleteAccountDialog.DeleteSuccess)
+                updateDialogState(DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
             }
 
             is DeleteAccountResult.Error -> {
                 updateDialogState(
-                    DeleteAccountDialog.Error(
+                    DeleteAccountState.DeleteAccountDialog.Error(
                         message = result.message?.asText()
                             ?: R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
         }
     }
 
-    private fun updateDialogState(dialog: DeleteAccountDialog?) {
+    private fun updateDialogState(dialog: DeleteAccountState.DeleteAccountDialog?) {
         mutableStateFlow.update {
             it.copy(dialog = dialog)
         }
@@ -170,6 +170,7 @@ data class DeleteAccountState(
         @Parcelize
         data class Error(
             val message: Text,
+            val error: Throwable? = null,
         ) : DeleteAccountDialog()
 
         /**
@@ -190,7 +191,7 @@ sealed class DeleteAccountEvent {
     data object NavigateBack : DeleteAccountEvent()
 
     /**
-     * Navigates to the [DeleteAccountConfirmationScreen].
+     * Navigates to the Delete Account Confirmation Screen.
      */
     data object NavigateToDeleteAccountConfirmationScreen : DeleteAccountEvent()
 
@@ -255,7 +256,7 @@ sealed class DeleteAccountAction {
          * An internal event to update the dialog state utilizing the synchronous action channel.
          */
         data class UpdateDialogState(
-            val dialog: DeleteAccountDialog,
+            val dialog: DeleteAccountState.DeleteAccountDialog,
         ) : Internal()
     }
 }

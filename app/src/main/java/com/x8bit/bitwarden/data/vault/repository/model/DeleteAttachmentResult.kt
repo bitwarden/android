@@ -13,5 +13,5 @@ sealed class DeleteAttachmentResult {
     /**
      * Generic error while deleting an attachment.
      */
-    data object Error : DeleteAttachmentResult()
+    data class Error(val error: Throwable) : DeleteAttachmentResult()
 }

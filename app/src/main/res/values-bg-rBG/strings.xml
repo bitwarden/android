@@ -50,7 +50,7 @@
   <string name="switch_to_already_added_account_confirmation">Искате ли да превключите към нея сега?</string>
   <string name="master_password">Главна парола</string>
   <string name="master_password_required">Главна парола (задължително)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Нова главна парола (задължително)</string>
   <string name="more">Още</string>
   <string name="my_vault">Моят трезор</string>
   <string name="authenticator">Удостоверител</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Създаване на регистрация</string>
   <string name="creating_account">Създаване на сметката...</string>
   <string name="edit_item">Редактиране на елемента</string>
+  <string name="edit_login">Редактиране на елемента за вписване</string>
+  <string name="edit_card">Редактиране на картата</string>
+  <string name="edit_identity">Редактиране на самоличността</string>
+  <string name="edit_note">Редактиране на бележката</string>
+  <string name="edit_passkey">Редактиране на секретния ключ</string>
   <string name="enable_automatic_syncing">Автоматично синхронизиране</string>
   <string name="enter_email_for_hint">Въведете адреса си на е-поща, за да получите писмо с подсказка за главната парола.</string>
   <string name="exntesion_reenable">Повторно включване на разширението</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Нова самоличност</string>
   <string name="no_notes">Няма бележки в трезора.</string>
   <string name="new_note">Нова бележка</string>
+  <string name="new_passkey">Нов секретен ключ</string>
   <string name="new_item">Нов елемент</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Нов SSH ключ</string>
   <string name="no_text_sends">Няма текстови Изпращания в трезора.</string>
   <string name="no_file_sends">Няма файлови Изпращания в трезора.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Няма SSH ключове в трезора.</string>
   <string name="new_text_send">Ново текстово Изпращане</string>
   <string name="new_file_send">Ново файлово Изпращане</string>
   <string name="no_username">Няма потребителско име</string>
@@ -187,7 +193,7 @@
   <string name="rate_the_app_description">Молим да ни помогнете, като оставите положителен отзив!</string>
   <string name="regenerate_password">Друга парола</string>
   <string name="retype_master_password">Въведете пак главната парола</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Въведете отново новата главна парола (задължително)</string>
   <string name="retype_master_password_required">Въведете отново главната парола (задължително)</string>
   <string name="search_vault">Търсене в трезора</string>
   <string name="security">Сигурност</string>
@@ -209,6 +215,11 @@
   <string name="validating">Потвърждаване</string>
   <string name="verification_code">Код за потвърждаване</string>
   <string name="view_item">Преглед на елемента</string>
+  <string name="view_login">Преглед на елемента за вписване</string>
+  <string name="view_card">Преглед на картата</string>
+  <string name="view_identity">Преглед на самоличността</string>
+  <string name="view_note">Преглед на бележката</string>
+  <string name="view_passkey">Преглед на секретния ключ</string>
   <string name="web_vault">Трезор по уеб</string>
   <string name="lost_2fa_app">Изгубено приложение за идентификация</string>
   <string name="items">Елементи</string>
@@ -242,6 +253,7 @@
   <string name="authenticator_app_title">Приложение за удостоверяване</string>
   <string name="enter_verification_code_app">Въведете шестцифрения код за потвърждение от приложението за удостоверяване.</string>
   <string name="enter_verification_code_email">Въведете шестцифрения код за потвърждение, който е бил изпратен на %1$s.</string>
+  <string name="enter_verification_code_new_device">Това устройство е непознато. Въведете 8-цифрения код за потвърждаване, който беше изпратен на %1$s.</string>
   <string name="login_unavailable">Записът липсва</string>
   <string name="no_two_step_available">Регистрацията е защитена с двустепенно удостоверяване, но никой от настроените доставчици на удостоверяване не се поддържа от тази система. Пробвайте с друго устройство и/или добавете други доставчици на удостоверяване, които се поддържат по-добре (като специални програми за удостоверяване).</string>
   <string name="recovery_code_title">Код за възстановяване</string>
@@ -314,6 +326,7 @@
   <string name="april">април</string>
   <string name="august">август</string>
   <string name="brand">Вид</string>
+  <string name="card_details">Данни за картата</string>
   <string name="cardholder_name">Име на притежателя на картата</string>
   <string name="city_town">Населено място</string>
   <string name="company">Фирма</string>
@@ -414,8 +427,11 @@
   <string name="invalid_email">Грешен адрес на е-поща.</string>
   <string name="cards">Карти</string>
   <string name="identities">Самоличности</string>
+  <string name="identification">Идентификация</string>
   <string name="logins">Записи</string>
   <string name="secure_notes">Защитени бележки</string>
+  <string name="personal_details">Лични данни</string>
+  <string name="contact_info">Информация за връзка</string>
   <string name="all_items">Всички елементи</string>
   <string name="ur_is">Адреси</string>
   <string name="checking_password">Проверка на паролата…</string>
@@ -439,7 +455,7 @@
   <string name="move_up">Преместване нагоре</string>
   <string name="miscellaneous">Разни</string>
   <string name="ownership">Собственост</string>
-  <string name="who_owns_this_item">Кой притежава този запис?</string>
+  <string name="owner">Собственик</string>
   <string name="no_collections_to_list">Няма колекции за показване.</string>
   <string name="moved_item_to_org">%1$s се премести в %2$s.</string>
   <string name="item_shared">Записът е споделен.</string>
@@ -831,7 +847,7 @@
   <string name="data_region">Регион на данните</string>
   <string name="region">Регион</string>
   <string name="update_weak_master_password_warning">Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Текуща главна парола (задължително)</string>
   <string name="logged_in">Вписахте се!</string>
   <string name="approve_with_my_other_device">Одобряване с другото ми устройство</string>
   <string name="request_admin_approval">Подаване на заявка за одобрение от администратор</string>
@@ -1023,14 +1039,14 @@
   <string name="generate_button_label">Генериране</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Запишете си тази парола и я пазете на сигурно място.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Научете и за други начини, чрез които да избегнете загуба на достъп до регистрацията си</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Научете и за начините, чрез които да избегнете загуба на достъп до регистрацията си</annotation></string>
   <string name="help_with_server_geolocations">Помощ относно географските местоположения на сървърите.</string>
   <string name="email_address_required">Електронна поща (задължително)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Последвайте връзката в е-писмото, за да потвърдите адреса на е-пощата си и да продължите със създаването на регистрацията си. "</string>
   <string name="change_email_address">Промяна на адреса на е-пощата</string>
   <string name="next">Следващо</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Битуорден не може да възстанови загубена или забравена парола.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Битуорден не може да нулира загубена или забравена парола.</string>
   <string name="choose_your_master_password">Изберете главна парола</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Изберете уникална и сложна парола, за да запазите информацията си защитена.</string>
   <string name="minimum_characters">%1$s знака</string>
@@ -1050,7 +1066,7 @@
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Грешка при свързването с услугата на Duo. Използвайте друг метод за двустепенно удостоверяване или се свържете с Duo за съдействие.</string>
   <string name="master_password_hint_not_specified">Подсказка за главната парола</string>
   <string name="master_password_important_hint">Важно: главната парола не може да бъде възстановена, ако я забравите! Дължината трябва да е поне 12 знака.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Подсказка за новата главна парола</string>
   <string name="get_started">Първи стъпки</string>
   <string name="save_and_protect_your_data">Запазвайте и защитавайте своите данни</string>
   <string name="the_vault_protects_more_than_just_passwords">Трезорът може да пази не само пароли. Съхранявайте защитени данни за вход, идентификационни данни, карти и бележки.</string>
@@ -1088,7 +1104,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Запазете изнесения файл някъде в компютъра си, така че да може да го намерите лесно.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Това не изглежда да е познат сървър на Битуорден. Може да се наложи да го проверите при доставчика си или да обновите сървъра си.</string>
   <string name="syncing_logins_loading_message">Синхронизиране на елементите за вписване…</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Свалете добавката за браузър</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Посетете bitwarden.com/download, за да вградите Битуорден в любимия си браузър и да използвате възможностите му по-лесно.</string>
   <string name="use_the_web_app">Използвайте приложението по уеб</string>
@@ -1178,6 +1193,7 @@
   <string name="coachmark_6_of_6">6 ОТ 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Използвайте тези опции, за да настроите паролата според изискванията на акаунта си.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"След като запазите новата си парола в Битуорден, не забравяйте да я обновите в уеб сайта на акаунта си. "</string>
+  <string name="verify_your_identity">Потвърдете самоличността си</string>
   <string name="error_loading_certificate">Грешка при зареждане на сертификата</string>
   <string name="certificate_alias">Псевдоним на сертификата</string>
   <string name="import_certificate">Внасяне на сертификат</string>
@@ -1203,4 +1219,14 @@
   <string name="passkey_operation_failed_because_the_request_is_invalid">Операцията със секретния ключ беше неуспешна, тъй като заявката е грешна.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
+  <string name="self_host_server_url">Адрес на собствения сървър</string>
+  <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome (бета)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Подобрява попълването на данни за вписване в Chrome за поддържаните уеб сайтове. Ако го включите, ще бъдете пренасочени към настройките на Chrome, за да включите автоматичното попълване чрез добавка.</string>
+  <string name="show_more">Показване на повече</string>
+  <string name="no_folder">Няма папка</string>
+  <string name="show_less">Показване на по-малко</string>
+  <string name="add_field">Добавяне на поле</string>
+  <string name="x_ellipses">%s…</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

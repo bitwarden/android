@@ -12,5 +12,7 @@ sealed class BiometricsKeyResult {
     /**
      * Generic error while setting up the biometrics key.
      */
-    data object Error : BiometricsKeyResult()
+    data class Error(
+        val error: Throwable,
+    ) : BiometricsKeyResult()
 }

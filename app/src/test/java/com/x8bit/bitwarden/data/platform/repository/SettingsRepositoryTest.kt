@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -36,14 +37,18 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 import java.time.ZonedDateTime
@@ -76,6 +81,19 @@ class SettingsRepositoryTest {
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
     )
+
+    @BeforeEach
+    fun setup() {
+        mockkConstructor(NoActiveUserException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkConstructor(NoActiveUserException::class)
+    }
 
     @Test
     fun `setDefaultsIfNecessary should set LOCK default values for the given user if necessary`() {
@@ -743,23 +761,24 @@ class SettingsRepositoryTest {
 
         val result = settingsRepository.getUserFingerprint()
 
-        assertEquals(UserFingerprintResult.Error, result)
+        assertEquals(UserFingerprintResult.Error(error = NoActiveUserException()), result)
     }
 
     @Test
     fun `getUserFingerprint should return failure with active user when source returns failure`() =
         runTest {
+            val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 vaultSdkSource.getUserFingerprint(userId = USER_ID)
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = settingsRepository.getUserFingerprint()
 
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserFingerprint(userId = USER_ID)
             }
-            assertEquals(UserFingerprintResult.Error, result)
+            assertEquals(UserFingerprintResult.Error(error = error), result)
         }
 
     @Test
@@ -814,7 +833,7 @@ class SettingsRepositoryTest {
 
             val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
-            assertEquals(BiometricsKeyResult.Error, result)
+            assertEquals(BiometricsKeyResult.Error(error = NoActiveUserException()), result)
             coVerify(exactly = 0) {
                 vaultSdkSource.getUserEncryptionKey(userId = any())
             }
@@ -826,13 +845,14 @@ class SettingsRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipher = mockk<Cipher>()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = settingsRepository.setupBiometricsKey(cipher = cipher)
 
-            assertEquals(BiometricsKeyResult.Error, result)
+            assertEquals(BiometricsKeyResult.Error(error = error), result)
             coVerify(exactly = 1) {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }

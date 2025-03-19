@@ -14,5 +14,7 @@ sealed class DownloadResult {
     /**
      * The download failed.
      */
-    data object Failure : DownloadResult()
+    data class Failure(
+        val error: Throwable,
+    ) : DownloadResult()
 }

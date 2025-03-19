@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.search
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -50,6 +51,8 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.model.TotpData
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -65,7 +68,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the search screen.
  */
-@Suppress("LongParameterList", "TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions", "LargeClass")
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -161,9 +164,15 @@ class SearchViewModel @Inject constructor(
         val event = when (state.searchType) {
             is SearchTypeData.Vault -> {
                 if (state.isTotp) {
-                    SearchEvent.NavigateToEditCipher(cipherId = action.itemId)
+                    SearchEvent.NavigateToEditCipher(
+                        cipherId = action.itemId,
+                        cipherType = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                    )
                 } else {
-                    SearchEvent.NavigateToViewCipher(cipherId = action.itemId)
+                    SearchEvent.NavigateToViewCipher(
+                        cipherId = action.itemId,
+                        cipherType = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                    )
                 }
             }
 
@@ -402,7 +411,12 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleEditCipherClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
-        sendEvent(SearchEvent.NavigateToEditCipher(action.cipherId))
+        sendEvent(
+            event = SearchEvent.NavigateToEditCipher(
+                cipherId = action.cipherId,
+                cipherType = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleLaunchCipherUrlClick(
@@ -412,7 +426,12 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleViewCipherClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
-        sendEvent(SearchEvent.NavigateToViewCipher(action.cipherId))
+        sendEvent(
+            event = SearchEvent.NavigateToViewCipher(
+                cipherId = action.cipherId,
+                cipherType = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleInternalAction(action: SearchAction.Internal) {
@@ -455,13 +474,14 @@ class SearchViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: SearchAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -526,6 +546,7 @@ class SearchViewModel @Inject constructor(
                             title = null,
                             message = result.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -542,13 +563,14 @@ class SearchViewModel @Inject constructor(
     private fun handleValidatePasswordResultReceive(
         action: SearchAction.Internal.ValidatePasswordResultReceive,
     ) {
-        when (action.result) {
-            ValidatePasswordResult.Error -> {
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -601,7 +623,12 @@ class SearchViewModel @Inject constructor(
             }
 
             is MasterPasswordRepromptData.Totp -> {
-                trySendAction(SearchAction.ItemClick(itemId = data.cipherId))
+                trySendAction(
+                    action = SearchAction.ItemClick(
+                        itemId = data.cipherId,
+                        cipherType = CipherType.LOGIN,
+                    ),
+                )
             }
         }
     }
@@ -833,6 +860,7 @@ data class SearchState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -862,6 +890,7 @@ data class SearchState(
         val autofillSelectionOptions: List<AutofillSelectionOption>,
         val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
+        val cipherType: CipherType?,
     ) : Parcelable
 }
 
@@ -1041,6 +1070,7 @@ sealed class SearchAction {
      */
     data class ItemClick(
         val itemId: String,
+        val cipherType: CipherType?,
     ) : SearchAction()
 
     /**
@@ -1165,6 +1195,7 @@ sealed class SearchEvent {
      */
     data class NavigateToEditCipher(
         val cipherId: String,
+        val cipherType: VaultItemCipherType,
     ) : SearchEvent()
 
     /**
@@ -1172,6 +1203,7 @@ sealed class SearchEvent {
      */
     data class NavigateToViewCipher(
         val cipherId: String,
+        val cipherType: VaultItemCipherType,
     ) : SearchEvent()
 
     /**

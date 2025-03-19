@@ -14,5 +14,8 @@ sealed class PrevalidateSsoResult {
     /**
      * There was an error in prevalidation.
      */
-    data object Failure : PrevalidateSsoResult()
+    data class Failure(
+        val message: String? = null,
+        val error: Throwable?,
+    ) : PrevalidateSsoResult()
 }

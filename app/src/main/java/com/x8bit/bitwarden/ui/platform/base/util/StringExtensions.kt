@@ -215,3 +215,10 @@ fun String.prefixHttpsIfNecessaryOrNull(): String? =
         "http://" in this || "https://" in this -> this
         else -> "https://$this"
     }
+
+/**
+ * If the given [String] is a valid URI, "https://" will be appended if it is not already present.
+ * Otherwise the original [String] will be returned.
+ */
+fun String.prefixHttpsIfNecessary(): String =
+    prefixHttpsIfNecessaryOrNull() ?: this

@@ -14,7 +14,7 @@
   <string name="credits">Crediti</string>
   <string name="delete">Elimina l\'elemento</string>
   <string name="deleting">Eliminazione in corso...</string>
-  <string name="do_you_really_want_to_delete">Sei sicuro di voler eliminare questo elemento? Questa azione è irreversibile.</string>
+  <string name="do_you_really_want_to_delete">Vuoi davvero eliminare questo elemento? L\'azione è irreversibile.</string>
   <string name="edit">Modifica l\'elemento</string>
   <string name="edit_folder">Modifica la cartella</string>
   <string name="email">Indirizzo email</string>
@@ -43,14 +43,14 @@
   <string name="log_in_verb">Accedi</string>
   <string name="log_in_noun">Login</string>
   <string name="log_out">Esci</string>
-  <string name="logout_confirmation">Sei sicuro di voler uscire da questo account?</string>
+  <string name="logout_confirmation">Vuoi davvero disconnetterti da questo account?</string>
   <string name="remove_account">Rimuovi l\'account</string>
-  <string name="remove_account_confirmation">Sei sicuro di voler rimuovere questo account?</string>
+  <string name="remove_account_confirmation">Vuoi davvero rimuovere questo account?</string>
   <string name="account_already_added">Account già aggiunto</string>
   <string name="switch_to_already_added_account_confirmation">Vuoi passare a questo account?</string>
   <string name="master_password">Password principale</string>
   <string name="master_password_required">Password principale (obbligatoria)</string>
-  <string name="new_master_password_required">New master password (required)</string>
+  <string name="new_master_password_required">Nuova parola d\'accesso principale (obbligatoria)</string>
   <string name="more">Altro</string>
   <string name="my_vault">Cassaforte</string>
   <string name="authenticator">Autenticatore</string>
@@ -109,6 +109,11 @@
   <string name="create_an_account">Crea un account</string>
   <string name="creating_account">Creazione dell\'account in corso...</string>
   <string name="edit_item">Modifica l\'elemento</string>
+  <string name="edit_login">Modifica login</string>
+  <string name="edit_card">Modifica carta</string>
+  <string name="edit_identity">Modifica identità</string>
+  <string name="edit_note">Modifica nota</string>
+  <string name="edit_passkey">Modifica passkey</string>
   <string name="enable_automatic_syncing">Sincronizzazione automatica</string>
   <string name="enter_email_for_hint">Inserisci l\'indirizzo email dell\'account per ricevere il suggerimento per la password principale.</string>
   <string name="exntesion_reenable">Riattiva l\'estensione app</string>
@@ -139,7 +144,7 @@
   <string name="immediately">Immediato</string>
   <string name="vault_timeout">Blocco automatico della cassaforte</string>
   <string name="vault_timeout_action">Azione programmata</string>
-  <string name="vault_timeout_log_out_confirmation">Uscire rimuoverà tutti gli accessi alla tua cassaforte e richiede l\'autenticazione online dopo il periodo di timeout. Sei sicuro di voler usare questa opzione?</string>
+  <string name="vault_timeout_log_out_confirmation">La disconnessione dall\'account rimuoverà tutti gli accessi alla tua cassaforte e richiederà l\'accesso online dopo il periodo di timeout. Vuoi davvero procedere?</string>
   <string name="logging_in">Accesso in corso...</string>
   <string name="login_to_bitwarden">Accedi a Bitwarden</string>
   <string name="manage">Gestisci</string>
@@ -164,11 +169,12 @@
   <string name="new_identity">Nuova identità</string>
   <string name="no_notes">Non ci sono note nella tua cassaforte.</string>
   <string name="new_note">Nuova nota</string>
+  <string name="new_passkey">Nuova passkey</string>
   <string name="new_item">Nuovo elemento</string>
-  <string name="new_ssh_key">New SSH key</string>
+  <string name="new_ssh_key">Nuova chiave SSH</string>
   <string name="no_text_sends">Non ci sono messaggi inviati nella tua cassaforte.</string>
   <string name="no_file_sends">Non ci sono file Send nella tua cassaforte.</string>
-  <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
+  <string name="no_ssh_keys">Non ci sono chiavi SSH nella tua cassaforte.</string>
   <string name="new_text_send">Nuovo testo Send</string>
   <string name="new_file_send">Nuovo file Send</string>
   <string name="no_username">Nessun nome utente</string>
@@ -181,13 +187,13 @@
   <string name="password_generator">Generatore di password</string>
   <string name="password_hint">Suggerimento per la password</string>
   <string name="password_hint_alert">Abbiamo inviato un\'email con il suggerimento per la password principale.</string>
-  <string name="password_override_alert">Sei sicuro di voler sovrascrivere la password attuale?</string>
+  <string name="password_override_alert">Vuoi davvero sovrascrivere la password?</string>
   <string name="push_notification_alert">Bitwarden sincronizza la tua cassaforte automaticamente utilizzando le notifiche push. Per la migliore esperienza possibile, clicca \"Consenti\" nel menu seguente quando ti è richiesto di abilitare le notifiche push.</string>
   <string name="rate_the_app">Valuta l\'app</string>
   <string name="rate_the_app_description">Aiutaci lasciando una buona recensione!</string>
   <string name="regenerate_password">Rigenera password</string>
   <string name="retype_master_password">Conferma la password principale</string>
-  <string name="retype_new_master_password_required">Re-type new master password (required)</string>
+  <string name="retype_new_master_password_required">Ridigita la nuova parola d\'accesso principale (obbligatoria)</string>
   <string name="retype_master_password_required">Ridigita la password principale (obbligatorio)</string>
   <string name="search_vault">Cerca nella cassaforte</string>
   <string name="security">Sicurezza</string>
@@ -203,12 +209,17 @@
   <string name="syncing_failed">Sincronizzazione fallita</string>
   <string name="sync_vault_now">Sincronizza la cassaforte</string>
   <string name="touch_id">Touch ID</string>
-  <string name="two_step_login">Configurazione 2FA</string>
+  <string name="two_step_login">Configurazione 2FA (accesso in due passaggi)</string>
   <string name="unlock_with">Sblocco con %1$s</string>
   <string name="unlock_with_pin">Sblocco con Codice PIN</string>
   <string name="validating">Convalida</string>
   <string name="verification_code">Codice di verifica</string>
   <string name="view_item">Visualizza l\'elemento</string>
+  <string name="view_login">Visualizza login</string>
+  <string name="view_card">Visualizza carta</string>
+  <string name="view_identity">Visualizza identità</string>
+  <string name="view_note">Visualizza nota</string>
+  <string name="view_passkey">Visualizza passkey</string>
   <string name="web_vault">Cassaforte web di Bitwarden</string>
   <string name="lost_2fa_app">Hai perso l\'app di autenticazione?</string>
   <string name="items">Elementi</string>
@@ -232,7 +243,7 @@
   <string name="bitwarden_autofill_service_alert2">Puoi aggiungere facilmente nuovi login alla cassaforte con il servizio di riempimento automatico di Bitwarden. Scopri di più su come usare il riempimento automatico nelle impostazioni dell\'app.</string>
   <string name="autofill">Riempimento automatico</string>
   <string name="autofill_or_view">Vuoi riempire automaticamente o vedere questo elemento?</string>
-  <string name="bitwarden_autofill_service_match_confirm">Questo elemento non è una corrispondenza completa per \"%1$s\". Sei sicuro di voler riempire automaticamente questo elemento?</string>
+  <string name="bitwarden_autofill_service_match_confirm">Questo elemento non è una corrispondenza completa per \"%1$s\". Vuoi davvero attivare il riempimento automatico?</string>
   <string name="matching_items">Elementi corrispondenti</string>
   <string name="possible_matching_items">Possibili elementi corrispondenti</string>
   <string name="search">Cerca</string>
@@ -242,14 +253,15 @@
   <string name="authenticator_app_title">App di autenticazione</string>
   <string name="enter_verification_code_app">Inserisci il codice di verifica a 6 cifre dalla tua app di autenticazione.</string>
   <string name="enter_verification_code_email">Inserisci il codice di verifica a 6 cifre inviato all\'indirizzo %1$s.</string>
+  <string name="enter_verification_code_new_device">Non riconosciamo questo dispositivo. Inserisci il codice di verifica a 8 cifre che è stato inviato via e-mail a %1$s.</string>
   <string name="login_unavailable">Login non disponibile</string>
-  <string name="no_two_step_available">L\'autenticazione a due fattori è abilitata, ma nessuno dei metodi configurati è supportato da questo dispositivo. Usa un altro dispositivo o aggiungi un metodo supportato su tutti i dispositivi (come un\'app di autenticazione).</string>
+  <string name="no_two_step_available">L\'accesso in due passaggi è attivo, ma nessuno dei metodi configurati è supportato da questo dispositivo. Usa un altro dispositivo, oppure aggiungi un metodo supportato universalmente (app di autenticazione).</string>
   <string name="recovery_code_title">Codice di recupero</string>
   <string name="remember">Ricorda</string>
   <string name="remember_email">Ricorda e-mail</string>
   <string name="send_verification_code_again">Invia email con codice di verifica di nuovo</string>
-  <string name="two_step_login_options">Opzioni di autenticazione a due fattori</string>
-  <string name="use_another_two_step_method">Usa un altro metodo di autenticazione a due fattori</string>
+  <string name="two_step_login_options">Opzioni per l\'accesso in due passaggi</string>
+  <string name="use_another_two_step_method">Usa un altro metodo di accesso in due passaggi</string>
   <string name="verification_email_not_sent">Impossibile inviare l\'email con il codice di verifica. Riprova.</string>
   <string name="verification_email_sent">Email di verifica inviata</string>
   <string name="yubi_key_instruction">Per continuare, appoggia la tua YubiKey NEO sul retro del dispositivo o inserisci la tua Yubikey nella porta USB, poi premi il suo pulsante.</string>
@@ -259,7 +271,7 @@
   <string name="unable_to_download_file">Impossibile scaricare il file.</string>
   <string name="unable_to_open_file">Il tuo dispositivo non può aprire questo tipo di file.</string>
   <string name="downloading">Download in corso...</string>
-  <string name="attachment_large_warning">La dimensione di questo allegato è %1$s. Sei sicuro di voler scaricare questo file sul dispositivo?</string>
+  <string name="attachment_large_warning">La dimensione di questo allegato è %1$s. Vuoi scaricarlo?</string>
   <string name="authenticator_key">Chiave 2FA (TOTP)</string>
   <string name="verification_code_totp">Codice 2FA (TOTP)</string>
   <string name="authenticator_key_added">Chiave 2FA aggiunta</string>
@@ -314,6 +326,7 @@ La scansione è automatica.</string>
   <string name="april">Aprile</string>
   <string name="august">Agosto</string>
   <string name="brand">Marca</string>
+  <string name="card_details">Dettagli carta</string>
   <string name="cardholder_name">Titolare della carta</string>
   <string name="city_town">Città / Comune</string>
   <string name="company">Azienda</string>
@@ -360,7 +373,7 @@ La scansione è automatica.</string>
   <string name="no_items_trash">Nessun elemento nel cestino</string>
   <string name="autofill_accessibility_service">Servizio di accessibilità di riempimento automatico</string>
   <string name="autofill_accessibility_summary">Assiste con il riempimento dei campi nome utente e password in altre applicazioni e nei siti web.</string>
-  <string name="autofill_service_description">Il servizio di riempimento automatico di Bitwarden usa la struttura di riempimento automatico di Android per aiutare a inserire le tue credenziali su altre app nel tuo dispositivo.</string>
+  <string name="autofill_service_description">Il riempimento automatico di Bitwarden usa il servizio di riempimento di sistema per inserire facilmente le credenziali di accesso nei campi di autenticazione di pagine Web e altre app.</string>
   <string name="bitwarden_autofill_service_description">Usa il servizio di riempimento automatico di Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Apri impostazioni di riempimento automatico</string>
   <string name="face_id">Face ID</string>
@@ -368,7 +381,7 @@ La scansione è automatica.</string>
   <string name="use_face_id_to_unlock">Usa Face ID per sbloccare</string>
   <string name="verify_face_id">Verifica Face ID</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_credential_provider_go_to_settings">Non siamo riusciti ad aprire automaticamente il menu delle impostazioni del fornitore di credenziali di Android per te. Puoi raggiungere il menu delle impostazioni del fornitore di credenziali manualmente da Impostazioni Android &gt; Sistema &gt; Password e account &gt; Password, passkey, e servizi dati.</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Non è stato possibile aprire automaticamente il menu delle impostazioni del provider di credenziali di sistema. Puoi raggiungere il menu manualmente dalle Impostazioni di Android → Sistema → Password e account → \'Password, passkey, e servizi dati\'.</string>
   <string name="bitwarden_autofill_go_to_settings">Non siamo riusciti ad aprire le impostazioni del riempimento automatico di Android per te. Puoi navigare manualmente nelle impostazioni di riempimento automatico dalle Impostazioni di Android &gt; Cerca Impostazioni &gt; Cerca \"Password e autofill\"</string>
   <string name="custom_field_name">Nome del campo</string>
   <string name="field_type_boolean">Booleano</string>
@@ -414,8 +427,11 @@ La scansione è automatica.</string>
   <string name="invalid_email">Inserisci un indirizzo email valido</string>
   <string name="cards">Carte</string>
   <string name="identities">Identità</string>
+  <string name="identification">Identificazione</string>
   <string name="logins">Login</string>
   <string name="secure_notes">Note sicure</string>
+  <string name="personal_details">Dettagli personali</string>
+  <string name="contact_info">Informazioni di contatto</string>
   <string name="all_items">Tutti gli elementi</string>
   <string name="ur_is">URL</string>
   <string name="checking_password">Controllo password...</string>
@@ -434,12 +450,12 @@ La scansione è automatica.</string>
   <string name="search_file_sends">Cerca Send di tipo file</string>
   <string name="search_text_sends">Cerca Send di testo</string>
   <string name="search_group">Cerca %1$s</string>
-  <string name="type">Tipo</string>
+  <string name="type">Digita</string>
   <string name="move_down">Sposta in basso</string>
   <string name="move_up">Sposta in alto</string>
   <string name="miscellaneous">Varie</string>
   <string name="ownership">Proprietà</string>
-  <string name="who_owns_this_item">Proprietario</string>
+  <string name="owner">Propriet.</string>
   <string name="no_collections_to_list">Nessuna raccolta</string>
   <string name="moved_item_to_org">%1$s spostato in %2$s</string>
   <string name="item_shared">Elemento condiviso.</string>
@@ -464,7 +480,7 @@ La scansione è automatica.</string>
   <string name="unlock">Sblocca</string>
   <string name="unlock_vault">Sblocca la cassaforte</string>
   <string name="thirty_minutes">30 minuti</string>
-  <string name="set_pin_description">Imposta il codice PIN necessario per sbloccare Bitwarden. Lo sblocco con PIN verrà rimosso se esci completamente dall\'account.</string>
+  <string name="set_pin_description">Imposta il codice PIN che sarà richiesto per sbloccare Bitwarden. Lo sblocco con PIN sarà rimosso se ti disconnetti dall\'account.</string>
   <string name="logged_in_as_on">Accesso effettuato come %1$s su %2$s.</string>
   <string name="vault_locked_master_password">La cassaforte è bloccata. Inserisci la password principale.</string>
   <string name="vault_locked_pin">La cassaforte è bloccata. Inserisci il codice PIN.</string>
@@ -486,7 +502,7 @@ La scansione è automatica.</string>
   <string name="default_dark_theme">Tema scuro predefinito</string>
   <string name="copy_notes">Copia le note</string>
   <string name="exit">Chiudi</string>
-  <string name="exit_confirmation">Sei sicuro di voler chiudere Bitwarden?</string>
+  <string name="exit_confirmation">Vuoi davvero chiudere Bitwarden?</string>
   <string name="require_master_password_on_app_restart">Richiedi la password principale al riavvio dell\'app?</string>
   <string name="pin_require_master_password_restart">Vuoi richiedere lo sblocco con la password principale quando l\'app viene riavviata?</string>
   <string name="black">Nero</string>
@@ -496,7 +512,7 @@ La scansione è automatica.</string>
   <string name="ask_to_add_login">Chiedi di aggiungere nuovi login</string>
   <string name="ask_to_add_login_description">Chiedi di aggiungere un nuovo elemento se non ce n\'è uno nella tua cassaforte.</string>
   <string name="on_restart">Al riavvio dell\'app</string>
-  <string name="autofill_service_not_enabled">Il riempimento automatico rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e app. Abilita il servizio di riempimento automatico di Bitwarden dalla sezione \"Impostazioni\".</string>
+  <string name="autofill_service_not_enabled">Il riempimento automatico rende facile e veloce accedere ai tuoi account nelle app e nelle pagine Web con i dati della tua cassaforte. Abilita la funzionalità dalla sezione \'Riempimento automatico\' delle impostazioni di Bitwarden.</string>
   <string name="theme_applied_on_restart">Le modifiche al tema saranno applicate al riavvio dell\'app.</string>
   <string name="capitalize">Iniziale maiuscola</string>
   <string name="include_number">Include un numero</string>
@@ -541,9 +557,9 @@ La scansione è automatica.</string>
   <string name="item_restored">Elemento ripristinato</string>
   <string name="trash">Cestino</string>
   <string name="search_trash">Cerca nel cestino</string>
-  <string name="do_you_really_want_to_permanently_delete_cipher">Sei sicuro di voler eliminare definitivamente questo elemento? Questa azione non può essere annullata.</string>
-  <string name="do_you_really_want_to_restore_cipher">Sei sicuro di voler ripristinare questo elemento?</string>
-  <string name="do_you_really_want_to_soft_delete_cipher">Sei sicuro di voler eliminare questo elemento?</string>
+  <string name="do_you_really_want_to_permanently_delete_cipher">Vuoi davvero eliminare definitivamente questo elemento? L\'azione non può essere annullata.</string>
+  <string name="do_you_really_want_to_restore_cipher">Vuoi davvero ripristinare questo elemento?</string>
+  <string name="do_you_really_want_to_soft_delete_cipher">Vuoi davvero eliminare questo elemento?</string>
   <string name="account_biometric_invalidated">Sblocco biometrico per questo account disabilitato in attesa della verifica della password principale.</string>
   <string name="account_biometric_invalidated_extension">Sblocco biometrico del riempimento automatico per questo account disabilitato in attesa della verifica della password principale.</string>
   <string name="enable_sync_on_refresh">Gesto di sincronizzazione</string>
@@ -594,14 +610,14 @@ La scansione è automatica.</string>
   <string name="type_text">Testo</string>
   <string name="hide_text_by_default">Nascondi il testo per impostazione predefinita</string>
   <string name="type_file">File</string>
-  <string name="type_file_info">Il file che verrà inviato.</string>
+  <string name="type_file_info">Il file da inviare.</string>
   <string name="file_type_is_selected">Il tipo di file è selezionato.</string>
   <string name="file_type_is_not_selected">Il tipo di file non è selezionato, clicca per selezionare.</string>
   <string name="text_type_is_selected">Il tipo di testo è selezionato.</string>
   <string name="text_type_is_not_selected">Il tipo di testo non è selezionato, clicca per selezionare.</string>
   <string name="deletion_date">Eliminazione programmata</string>
   <string name="deletion_time">Orario</string>
-  <string name="deletion_date_info">La data e l\'ora in cui verrà eliminato definitivamente il Send.</string>
+  <string name="deletion_date_info">Il Send sarà eliminato definitivamente nella data e all\'ora specificate.</string>
   <string name="pending_delete">In attesa di eliminazione</string>
   <string name="expired">Scaduto</string>
   <string name="maximum_access_count">Numero massimo di accessi</string>
@@ -609,9 +625,9 @@ La scansione è automatica.</string>
   <string name="maximum_access_count_reached">Numero massimo di accessi raggiunto</string>
   <string name="current_access_count">Numero di accessi attuali</string>
   <string name="new_password">Password aggiuntiva</string>
-  <string name="password_info">La password necessaria per accedere al Send. (opzionale)</string>
+  <string name="password_info">La password per accedere al Send (facoltativa).</string>
   <string name="remove_password">Rimuovi la password</string>
-  <string name="are_you_sure_remove_send_password">Sei sicuro di voler rimuovere la password?</string>
+  <string name="are_you_sure_remove_send_password">Vuoi davvero eliminare la password?</string>
   <string name="removing_send_password">Rimozione della password in corso...</string>
   <string name="send_password_removed">La password è stata rimossa.</string>
   <string name="notes_info">Note riguardanti il Send che non verranno condivise.</string>
@@ -623,7 +639,7 @@ La scansione è automatica.</string>
   <string name="search_sends">Cerca Send</string>
   <string name="edit_send">Modifica il Send</string>
   <string name="add_send">Aggiungi un Send</string>
-  <string name="are_you_sure_delete_send">Sei sicuro di voler eliminare questo Send?</string>
+  <string name="are_you_sure_delete_send">Vuoi davvero eliminare questo Send?</string>
   <string name="send_deleted">Send eliminato</string>
   <string name="send_updated">Send salvato</string>
   <string name="new_send_created">Send creato</string>
@@ -639,8 +655,8 @@ La scansione è automatica.</string>
   <string name="about_send">Informazioni sui Send</string>
   <string name="hide_email">Nascondi l\'indirizzo email</string>
   <string name="send_options_policy_in_effect">Una o più politiche dell\'organizzazione stanno influenzando le tue opzioni di Send.</string>
-  <string name="send_file_premium_required">Passa a un abbonamento Premium per condividere dei file con Send</string>
-  <string name="send_file_email_verification_required">Devi verificare la tua email per usare i file con Send. Puoi verificare la tua email nella cassaforte web.</string>
+  <string name="send_file_premium_required">Passa a un abbonamento Premium per condividere file in modo sicuro con Send.</string>
+  <string name="send_file_email_verification_required">Devi verificare la tua email per poter usare Send. Puoi verificare la tua email dalle impostazioni della versione Web di Bitwarden.</string>
   <string name="password_prompt">Richiedi la conferma della password principale</string>
   <string name="password_confirmation">Conferma la password principale</string>
   <string name="password_confirmation_desc">Questa azione è protetta. Inserisci la password principale per verificare la tua identità.</string>
@@ -656,7 +672,7 @@ La scansione è automatica.</string>
   <string name="remove_master_password_warning">%1$s sta usando SSO con crittografia gestita dal cliente. Continuare rimuoverà la tua password principale dal tuo profilo e richiederà SSO per accedere.</string>
   <string name="remove_master_password_warning2">Se non vuoi rimuovere la password principale, puoi abbandonare questa organizzazione.</string>
   <string name="leave_organization">Lascia organizzazione</string>
-  <string name="leave_organization_name">Sei sicuro di voler abbandonare %1$s?</string>
+  <string name="leave_organization_name">Vuoi davvero abbandonare %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
   <string name="fido2_instruction">Per continuare, prepara la tua chiave di sicurezza di FIDO2 WebAuthn e segui le istruzioni dopo aver cliccato \"Autenticazione WebAuthn\" nella prossima schermata.</string>
   <string name="fido2_desc">Autenticazione tramite FIDO2 WebAuthn, puoi autenticarti utilizzando una chiave di sicurezza esterna.</string>
@@ -679,7 +695,7 @@ La scansione è automatica.</string>
   <string name="account_removed_successfully">Account rimosso</string>
   <string name="delete_account">Elimina l\'account</string>
   <string name="deleting_your_account_is_permanent">L\'eliminazione dell\'account è irreversibile</string>
-  <string name="delete_account_explanation">Il tuo account e tutti i dati della tua cassaforte saranno eliminati e non recuperabili. Sei sicuro di voler continuare?</string>
+  <string name="delete_account_explanation">Il tuo account e tutti i dati della tua cassaforte saranno eliminati definitivamente e non saranno recuperabili in alcun modo. Vuoi davvero eliminare l\'account?</string>
   <string name="deleting_your_account">Eliminazione dell\'account in corso...</string>
   <string name="your_account_has_been_permanently_deleted">Il tuo account è stato eliminato definitivamente.</string>
   <string name="invalid_verification_code">Inserisci il codice di verifica corretto</string>
@@ -722,12 +738,13 @@ La scansione è automatica.</string>
   <string name="add_totp">Salva</string>
   <string name="setup_totp">Imposta TOTP</string>
   <string name="set_up_authenticator_key">Imposta la chiave di autenticazione</string>
-  <string name="once_the_key_is_successfully_entered">Inserisci la chiave e tocca \"Salva\" per salvare la chiave in modo sicuro.</string>
-  <string name="never_lock_warning">Sei sicuro di voler usare l\'opzione \"Mai\"? Impostare le opzioni di blocco su \"Mai\" salverà la chiave di crittografia della cassaforte sul tuo dispositivo. Se utilizzi questa opzione, assicurati di mantenere il tuo dispositivo adeguatamente protetto.</string>
+  <string name="once_the_key_is_successfully_entered">Una volta inserita la chiave di autenticazione,
+usa \'Aggiungi TOTP\' per salvarla in modo sicuro.</string>
+  <string name="never_lock_warning">Vuoi davvero usare l\'opzione \'Mai\'? La chiave crittografica della cassaforte sarà salvata sul tuo dispositivo. Se scegli questo valore, assicurati di mantenere il tuo dispositivo adeguatamente protetto.</string>
   <string name="environment_page_urls_error">Inserisci degli URL validi</string>
   <string name="generic_error_message">Non siamo riusciti a elaborare la tua richiesta. Riprova o contattaci.</string>
   <string name="allow_screen_capture">Permetti cattura dello schermo</string>
-  <string name="are_you_sure_you_want_to_enable_screen_capture">Sei sicuro di voler attivare la cattura dello schermo?</string>
+  <string name="are_you_sure_you_want_to_enable_screen_capture">Vuoi davvero attivare la cattura dello schermo?</string>
   <string name="log_in_requested">Accesso richiesto</string>
   <string name="are_you_trying_to_log_in">Stai cercando di accedere?</string>
   <string name="log_in_attempt_by_x_on_y">Tentativo di accesso di %1$s su %2$s</string>
@@ -766,7 +783,7 @@ La scansione è automatica.</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
   <string name="api_access_token">Token API (necessario)</string>
-  <string name="are_you_sure_you_want_to_overwrite_the_current_username">Sei sicuro di voler sovrascrivere il nome utente attuale?</string>
+  <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vuoi davvero sovrascrivere il nome utente attuale?</string>
   <string name="generate_username">Genera nome utente</string>
   <string name="email_type">Tipo di email</string>
   <string name="website_required">Sito web (necessario)</string>
@@ -777,7 +794,7 @@ La scansione è automatica.</string>
   <string name="random">Casuale</string>
   <string name="connect_to_watch">Connetti all\'orologio</string>
   <string name="accessibility_service_disclosure">Ulteriori informazioni sul servizio di accessibilità</string>
-  <string name="accessibility_disclosure_text">Bitwarden usa il servizio di accessibilità per cercare i campi di login in app e siti web e individuare gli ID di campo appropriati per inserire nome utente e password quando è trovata una corrispondenza per il sito o l\'app. Non memorizziamo nessuna delle informazioni che ci soono presentate dal servizio, e non controlliamo eventuali altri elementi sullo schermo diversi dall\'immissione di credenziali.</string>
+  <string name="accessibility_disclosure_text">Questa app utilizza il servizio di accessibilità di sistema per cercare i campi di login e verifica se nella tua cassaforte ci sono corrispondenze per la pagina Web visualizzata o l\'app attiva. Bitwarden non memorizza nessuna delle informazioni consultate dal servizio, e non legge né controlla altri dati durante l\'inserimento delle credenziali.</string>
   <string name="accept">Accetta</string>
   <string name="decline">Rifiuta</string>
   <string name="login_request_has_already_expired">La richiesta di accesso è già scaduta.</string>
@@ -799,7 +816,7 @@ Vuoi passare a questo account?</string>
   <string name="this_request_is_no_longer_valid">Invia un\'altra richiesta</string>
   <string name="pending_log_in_requests">Richieste di accesso in sospeso</string>
   <string name="decline_all_requests">Rifiuta tutte le richieste</string>
-  <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Sei sicuro di voler rifiutare tutte le richieste di accesso in sospeso?</string>
+  <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">Vuoi davvero rifiutare tutte le richieste di accesso in sospeso?</string>
   <string name="requests_declined">Richieste rifiutate</string>
   <string name="no_pending_requests">Nessuna richiesta in sospeso</string>
   <string name="enable_camer_permission_to_use_the_scanner">Consenti a Bitwarden l\'accesso alla fotocamera per scansionare il codice QR</string>
@@ -810,15 +827,15 @@ Vuoi passare a questo account?</string>
   <string name="important">Importante</string>
   <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Inserisci un password lunga almeno %1$s caratteri. Questa non può essere recuperata nel caso in cui la dimenticassi.</string>
   <string name="weak_master_password">Password debole</string>
-  <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Questa password è debole. Usa una password forte e unica per proteggere l\'account. Sei sicuro di voler usare questa password?</string>
+  <string name="weak_password_identified_use_a_strong_password_to_protect_your_account">Hai scelto una password debole. È altamente consigliato impostare una password forte e unica per proteggere l\'account. Vuoi davvero usare questa password?</string>
   <string name="weak">Debole</string>
   <string name="good">Buona</string>
   <string name="strong">Forte</string>
   <string name="check_known_data_breaches_for_this_password">Controlla la presenza della password nelle violazioni di dati note</string>
   <string name="exposed_master_password">Password principale violata</string>
-  <string name="password_found_in_a_data_breach_alert_description">Questa password è stata trovata in una violazione di dati. Usa una password forte e unica per proteggere l\'account. Sei sicuro di voler usare questa password?</string>
+  <string name="password_found_in_a_data_breach_alert_description">Questa password è stata rilevata in una violazione di dati. È altamente consigliato impostare una password forte e unica per proteggere l\'account. Vuoi davvero usare questa password?</string>
   <string name="weak_and_exposed_master_password">Password debole e violata</string>
-  <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Questa password è debole ed è stata trovata in una violazione di dati. Usa una password forte e unica per proteggere l\'account. Sei sicuro di voler usare questa password?</string>
+  <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Questa password è debole ed è stata rilevata in una violazione di dati. È altamente consigliato impostare una password forte e unica per proteggere l\'account. Vuoi davvero usare questa password?</string>
   <string name="organization_sso_identifier_required">Compila il campo \"Identificativo dell\'organizzazione\".</string>
   <string name="add_the_key_to_an_existing_or_new_item">Aggiungi la chiave a un elemento nuovo o esistente</string>
   <string name="there_are_no_items_in_your_vault_that_match_x">Nessun elemento nella cassaforte corrispondente a \"%1$s\"</string>
@@ -830,7 +847,7 @@ Vuoi passare a questo account?</string>
   <string name="data_region">Area dati</string>
   <string name="region">Regione</string>
   <string name="update_weak_master_password_warning">La tua password principale non soddisfa uno o più politiche della tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un\'ora.</string>
-  <string name="current_master_password_required">Current master password (required)</string>
+  <string name="current_master_password_required">Parola d\'accesso principale attuale (obbligatoria)</string>
   <string name="logged_in">Accesso effettuato</string>
   <string name="approve_with_my_other_device">Approva con un altro dispositivo</string>
   <string name="request_admin_approval">Richiedi l\'approvazione dell\'amministratore</string>
@@ -841,10 +858,10 @@ Vuoi passare a questo account?</string>
   <string name="passkeys">Passkey</string>
   <string name="application">Applicazione</string>
   <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">Non puoi modificare l\'applicazione della passkey perché invaliderebbe la passkey</string>
-  <string name="passkey_will_not_be_copied">La passkey non verrà copiata</string>
-  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">La passkey non verrà copiata nel nuovo elemento. Sei sicuro di voler copiare questo elemento?</string>
+  <string name="passkey_will_not_be_copied">La passkey non sarà copiata</string>
+  <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">La passkey non sarà copiata nel nuovo elemento. Vuoi davvero creare una copia?</string>
   <string name="copy_application">Copia l\'applicazione</string>
-  <string name="available_for_two_step_login">Disponibile per l\'autenticazione a due fattori</string>
+  <string name="available_for_two_step_login">Disponibile per l\'accesso in due passaggi</string>
   <string name="master_password_re_prompt_help">Aiuto per chiedere la password principale di nuovo</string>
   <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Lo sblocco potrebbe non riuscire a causa di memoria insufficiente. Riduci le impostazioni della memoria KDF o imposta lo sbocco biometrico per risolvere il problema.</string>
   <string name="invalid_api_key">Inserisci una chiave API valida</string>
@@ -856,7 +873,7 @@ Vuoi passare a questo account?</string>
   <string name="logging_in_as_x">Stai effettuando l\'accesso a %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Azione timeout cassaforte impostata su uscire</string>
   <string name="block_auto_fill">Blocca riempimento automatico</string>
-  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Il riempimento automatico non verrà utilizzato per questi URL.</string>
+  <string name="auto_fill_will_not_be_offered_for_these_ur_is">Il riempimento automatico non sarà attivo per gli URL specificati.</string>
   <string name="new_blocked_uri">Nuovo URL bloccato</string>
   <string name="uri_saved">URL salvato</string>
   <string name="invalid_format_use_https_http_or_android_app">Usa un formato valido: https:// , http:// o androidapp:// .</string>
@@ -901,8 +918,8 @@ Vuoi passare a questo account?</string>
   <string name="continue_to_privacy_policy">Continuare alla privacy policy?</string>
   <string name="continue_to_app_store">Continua nell\'app store</string>
   <string name="continue_to_device_settings">Continuare alle Impostazioni del dispositivo?</string>
-  <string name="two_step_login_description_long">Sei sicuro di voler configurare l\'autenticazione a due fattori nell\'app web di Bitwarden?</string>
-  <string name="change_master_password_description_long">Sei sicuro di voler cambiare la password principale nell\'app web di Bitwarden?</string>
+  <string name="two_step_login_description_long">Rendi il tuo account più sicuro impostando l\'accesso in due passaggi dalle impostazioni della versione Web di Bitwarden.</string>
+  <string name="change_master_password_description_long">Puoi modificare la tua password principale dalle impostazioni della versione Web di Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Puoi importare i dati nella tua cassaforte su %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Scopri di più su come usare Bitwarden nel centro assistenza.</string>
   <string name="contact_support_description_long">Non riesci a trovare quello che stai cercando? Contatta il supporto Bitwarden su bitwarden.com.</string>
@@ -923,8 +940,8 @@ Vuoi passare a questo account?</string>
   <string name="passkeys_for_x">Passkey per %1$s</string>
   <string name="passwords_for_x">Password per %1$s</string>
   <string name="overwrite_passkey">Sovrascrivi passkey?</string>
-  <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Questo elemento contiene già una passkey. Sei sicuro di voler sovrascrivere la passkey attuale?</string>
-  <string name="duo_two_step_login_is_required_for_your_account">L\'accesso all\'account richiede l\'autenticazione a due fattori DUO.</string>
+  <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Questo elemento contiene già una passkey. Vuoi sovrascriverla?</string>
+  <string name="duo_two_step_login_is_required_for_your_account">L\'accesso all\'account richiede l\'accesso in due passaggi Duo.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Segui i passaggi da DUO per finire di accedere.</string>
   <string name="launch_duo">Avvia DUO</string>
   <string name="verification_required_by_x">Verifica richiesta da %1$s</string>
@@ -939,7 +956,7 @@ Vuoi passare a questo account?</string>
   <string name="set_up_autofill">Imposta riempimento automatico</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Ottieni accesso immediato alle tue password e passkey!</string>
   <string name="set_up_auto_fill_description_long">Per impostare il riempimento automatico delle password e la gestione delle passkey, imposta Bitwarden come fornitore preferito nelle Impostazioni di iOS.</string>
-  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Vai alle Impostazioni del tuo dispositivo &gt; Password &gt; Opzioni delle Password</string>
+  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Vai alle Impostazioni del tuo dispositivo → Password → Opzioni delle password</string>
   <string name="second_dot_turn_on_auto_fill">2. Attiva il riempimento automatico</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Seleziona \"Bitwarden\" da usare per le password e le passkey</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">La tua passkey sarà salvata nella tua cassaforte di Bitwarden</string>
@@ -964,7 +981,7 @@ Vuoi passare a questo account?</string>
   <string name="autofill_suggestion">Suggerimento per il riempimento automatico</string>
   <string name="continue_to_complete_web_authn_verification">Continua per completare la verifica WebAuthn.</string>
   <string name="launch_web_authn">Avvia WebAuthn</string>
-  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Si è verificato un errore nell\'avviare l\'autenticazione a due fattori WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Si è verificato un errore nell\'accesso in due passaggi WebAuthn</string>
   <string name="self_hosted_server_url">URL del server self-hosted</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Verifica dell\'utente non riuscita. Azione annullata.</string>
   <string name="user_verification_direction">Verifica dell\'utente</string>
@@ -1007,29 +1024,29 @@ Vuoi passare a questo account?</string>
   <string name="set_up_unlock">Imposta lo sblocco</string>
   <string name="set_up_later">Impostalo più tardi</string>
   <string name="set_up_unlock_later">Imposta lo sblocco più tardi</string>
-  <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Sei sicuro di voler impostare lo sblocco dell\'app più tardi? Potrai farlo nelle impostazioni di sicurezza dell\'account.</string>
+  <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">Potrai completare la configurazione in qualsiasi momento dalle impostazioni di Bitwarden → Sicurezza dell\'account.</string>
   <string name="confirm">Conferma</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Imposta la biometria o scegli un codice PIN per accedere rapidamente alla tua cassaforte e riempire automaticamente i tuoi login.</string>
   <string name="never_lose_access_to_your_vault">Non perdere l\'accesso alla cassaforte</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">Il modo migliore per assicurarti di accedere sempre alla tua cassaforte è quello di impostare le salvaguardie fin dall\'inizio.</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">Uno dei modi migliori per creare una password sicura e memorizzabile è utilizzare una passphrase. \nEcco come:</string>
   <string name="create_a_hint">Crea un suggerimento</string>
-  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Il tuo suggerimento ti verrà inviato via email quando richiesto.</string>
+  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Riceverai il suggerimento via email quando richiesto.</string>
   <string name="write_your_password_down">Appunta la password</string>
-  <string name="keep_it_secret_keep_it_safe">Mantieni la password scritta in un posto segreto e sicuro.</string>
+  <string name="keep_it_secret_keep_it_safe">Annota la password e conservala in un posto segreto e sicuro.</string>
   <string name="prevent_account_lockout">Evita il blocco dell\'account</string>
   <string name="generate_master_password">Genera la password principale</string>
   <string name="generate_button_label">Genera</string>
-  <string name="write_this_password_down_and_keep_it_somewhere_safe">Appunta questa password e tienila in un posto sicuro.</string>
+  <string name="write_this_password_down_and_keep_it_somewhere_safe">Annota la password e conservala in un posto sicuro.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Scopri di più su come evitare il blocco dell\'account</string>
-  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Learn about ways to prevent account lockout</annotation></string>
+  <string name="learn_about_ways_to_prevent_account_lockout"><annotation link="onPreventAccountLockout">Scopri i modi per prevenire il blocco dell\'account</annotation></string>
   <string name="help_with_server_geolocations">Aiuta con le geolocalizzazioni dei server.</string>
   <string name="email_address_required">Indirizzo email (necessario)</string>
   <string name="select_the_link_in_the_email_to_verify_your_email_address_and_continue_creating_your_account">"Clicca sul link nell'email per verificare il tuo indirizzo di posta e proseguire con la creazione del tuo account. "</string>
   <string name="change_email_address">Modifica l\'indirizzo email</string>
   <string name="next">Continua</string>
   <string name="bitwarden_cannot_recover_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la password principale al posto tuo.</string>
-  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden cannot reset a lost or forgotten master password.</string>
+  <string name="bitwarden_cannot_reset_a_lost_or_forgotten_master_password">Bitwarden non può reimpostare la parola d\'accesso principale al posto tuo.</string>
   <string name="choose_your_master_password">Imposta la password principale</string>
   <string name="choose_a_unique_and_strong_password_to_keep_your_information_safe">Imposta una password forte e unica per proteggere i tuoi dati.</string>
   <string name="minimum_characters">%1$s caratteri</string>
@@ -1044,18 +1061,18 @@ Vuoi passare a questo account?</string>
   <string name="turn_on_later">Attiva più tardi</string>
   <string name="turn_on_autofill_later">Attivare il riempimento automatico più tardi?</string>
   <string name="return_to_complete_this_step_anytime_in_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni.</string>
-  <string name="what_bitwarden_has_to_offer">Ora puoi esplorare tutto ciò che Bitwarden ha da offrire e iniziare a gestire le tue password in modo sicuro.</string>
+  <string name="what_bitwarden_has_to_offer">Esplora tutto ciò che Bitwarden ha da offrire e inizia a gestire le tue credenziali di accesso in modo sicuro.</string>
   <string name="youre_all_set">È tutto pronto!</string>
-  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Errore di connessione con il servizio Duo. Utilizza un metodo di login in due passaggi diverso o contatta Duo per assistenza.</string>
+  <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Errore di connessione al servizio Duo. Utilizza un metodo di accesso in due passaggi diverso o contatta Duo per l\'assistenza.</string>
   <string name="master_password_hint_not_specified">Suggerimento per la password principale</string>
   <string name="master_password_important_hint">La tua password principale non può essere recuperata se la dimentichi! Almeno 12 caratteri.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Nuovo suggerimento parola d\'accesso principale</string>
   <string name="get_started">Inizia</string>
   <string name="save_and_protect_your_data">Salva e proteggi i tuoi dati</string>
-  <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge non solo le password ma anche i login, le identità, le carte e le note in modo sicuro.</string>
+  <string name="the_vault_protects_more_than_just_passwords">La cassaforte protegge e tiene al sicuro non solo le password, ma anche le passkey, i nomi utente, le identità, le carte e le note.</string>
   <string name="new_login">Aggiungi un elemento</string>
-  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Condividi file e dati in modo sicuro con chiunque, su qualsiasi piattaforma. Le tue informazioni rimarranno crittografate end-to-end limitando l\'esposizione.</string>
-  <string name="send_sensitive_information_safely">Invia informazioni sensibili, in modo sicuro</string>
+  <string name="share_files_and_data_securely_with_anyone_on_any_platform">Condividi facilmente file e dati con chiunque, su qualsiasi piattaforma. Le tue informazioni saranno crittografate end-to-end per la massima sicurezza.</string>
+  <string name="send_sensitive_information_safely">Invia informazioni sensibili in modo perfettamente sicuro</string>
   <string name="import_saved_logins">Importa login salvati</string>
   <string name="use_a_computer_to_import_logins">Usa un computer per importare i login da un gestore di password esistente</string>
   <string name="you_can_return_to_complete_this_step_anytime_from_settings">Puoi completare questo passaggio in qualsiasi momento tornando nelle Impostazioni della Cassaforte.</string>
@@ -1064,13 +1081,13 @@ Vuoi passare a questo account?</string>
   <string name="do_you_have_a_computer_available">Hai un computer disponibile?</string>
   <string name="the_following_instructions_will_guide_you_through_importing_logins">Le seguenti istruzioni ti guideranno nell\'importazione di login dal tuo desktop o computer portatile</string>
   <string name="import_logins">Importa Login</string>
-  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Dal tuo computer, segui queste istruzioni per esportare le password salvate dal tuo browser o da un altro gestore di password. Quindi, importale in modo sicuro su Bitwarden.</string>
+  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Segui le istruzioni per esportare le password dal browser del tuo computer o da un altro gestore di credenziali, poi importale in modo sicuro su Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Dai un vantaggio alla tua cassaforte</string>
   <string name="class_3_biometrics_description">Lo sblocca con la biometria richiede una autenticazione biometrica sicura e potrebbe non essere compatibile con tutte le opzioni biometriche di questo dispositivo.</string>
   <string name="class_2_biometrics_description">Lo sblocco con dati biometrici richiede una autenticazione biometrica sicura e potrebbe non essere compatibile con tutte le opzioni biometriche di questo dispositivo.</string>
-  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
-  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
+  <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager"><annotation emphasis="bold">Accedi al browser o al password manager</annotation> sul tuo computer</string>
+  <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Esporta le tue password</annotation>. Questa funzione di solito si trova nelle impostazioni.</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Scegli cosa importare</annotation> dal pannello Web, poi clicca su \'OK\' in basso per sincronizzare.</string>
   <string name="step_1_of_3">Fase 1 di 3</string>
   <string name="export_your_saved_logins">Esporta i tuoi login salvati</string>
   <string name="delete_this_file_after_import_is_complete">Eliminerai questo file dopo aver completato l\'importazione.</string>
@@ -1081,13 +1098,12 @@ Vuoi passare a questo account?</string>
   <string name="step_3_of_3">Fase 3 di 3</string>
   <string name="import_logins_to_bitwarden">Importa login in Bitwarden</string>
   <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">Nella navigazione Bitwarden, <annotation emphasis="bold">trova l\'opzione Strumenti</annotation> e <annotation emphasis="bold">seleziona Importa dati.</annotation></string>
-  <string name="fill_out_the_form_and_import_your_saved_password_file">Fill out the form and <annotation emphasis="bold">import your saved password file.</annotation></string>
-  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">For your security, be sure to <annotation emphasis="bold">delete your saved password file.</annotation></string>
-  <string name="need_help_check_out_import_help">Need help? Check out <annotation link="importHelp">import help</annotation>.</string>
-  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Save the exported file</annotation> somewhere on your computer you can find easily.</string>
+  <string name="fill_out_the_form_and_import_your_saved_password_file">Compila i campi richiesti e <annotation emphasis="bold">importa il tuo file delle password.</annotation></string>
+  <string name="for_your_security_be_sure_to_delete_your_saved_password_file">Per la tua sicurezza, ricorda di <annotation emphasis="bold">eliminare il file delle password</annotation> dopo l\'importazione</string>
+  <string name="need_help_check_out_import_help">Hai bisogno di aiuto? Scopri la <annotation link="importHelp">guida all\'importazione</annotation>.</string>
+  <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Salva il file esportato</annotation> in un percorso del tuo computer dove puoi raggiungerlo facilmente.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Questo non è un server Bitwarden riconosciuto. Potrebbe essere necessario controllare con il tuo provider o aggiornare il server.</string>
   <string name="syncing_logins_loading_message">Sincronizzazione dei login...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Scarica l\'estensione del browser</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Vai su bitwarden.com/download per integrare Bitwarden nel tuo browser preferito e avere un\'esperienza senza interruzioni.</string>
   <string name="use_the_web_app">Usa l\'app web</string>
@@ -1111,13 +1127,13 @@ Vuoi passare a questo account?</string>
   <string name="copy_fingerprint">Copia impronta</string>
   <string name="enable_notifications">Abilita le notifiche</string>
   <string name="log_in_quickly_and_easily_across_devices">Accedi rapidamente e facilmente su più dispositivi</string>
-  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
+  <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden può inviarti una notifica ogni volta che ricevi una richiesta di accesso da un nuovo dispositivo.</string>
   <string name="skip_for_now">Salta per ora</string>
-  <string name="done_text">Fatto</string>
+  <string name="done_text">OK</string>
   <string name="page_number_x_of_y">%1$s di %2$s</string>
   <string name="copy_identity_name">Copia nome identità</string>
   <string name="copy_company">Copia azienda</string>
-  <string name="copy_ssn">Copy social security number</string>
+  <string name="copy_ssn">Copia il codice fiscale</string>
   <string name="copy_passport_number">Copia numero passaporto</string>
   <string name="copy_license_number">Copia numero licenza</string>
   <string name="copy_email">Copia email</string>
@@ -1131,21 +1147,21 @@ Vuoi passare a questo account?</string>
   <string name="biometrics_no_longer_supported">Sei stato disconnesso perché la biometria del tuo dispositivo non soddisfa gli ultimi requisiti di sicurezza. Per aggiornare le impostazioni, effettuare nuovamente il login o contatta l\'amministratore per accedere.</string>
   <string name="cxp_import">Importazione CXP</string>
   <string name="cxp_export">Esportazione CXP</string>
-  <string name="set_up_two_step_login">Imposta accesso in due passaggi</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">You can set up two-step login as an alternative way to protect your account or change your email to one you can access.</string>
-  <string name="turn_on_two_step_login">Attiva accesso in due passaggi</string>
+  <string name="set_up_two_step_login">Configura l\'accesso in due passaggi</string>
+  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Puoi impostare l\'accesso in due passaggi come metodo alternativo per proteggere il tuo account, oppure cambiare l\'email, impostandone una alla quale puoi accedere.</string>
+  <string name="turn_on_two_step_login">Attiva l\'accesso in due passaggi</string>
   <string name="change_account_email">Cambia l\'email dell\'account</string>
   <string name="choose_three_or_four_random_words">Scegli tre o quattro parole casuali</string>
-  <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
+  <string name="pick_three_or_four_random_unrelated_words">Scegli tre o quattro parole casuali e non correlate che sarai in grado di ricordare. Pensa a <annotation emphasis="bold">oggetti, luoghi o cose</annotation> che ti piacciono.</string>
   <string name="combine_those_words_together">Combina queste parole insieme</string>
-  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
+  <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Metti insieme le parole in qualsiasi ordine per formare la tua passphrase. <annotation emphasis="bold">Usa trattini, spazi, o mettile in fila come una parola unica</annotation>.</string>
   <string name="make_it_yours">Rendilo tuo</string>
-  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
+  <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Aggiungi un numero o un simbolo</annotation> per renderla ancora più forte, e otterrai una passphrase unica, sicura e memorabile!</string>
   <string name="need_some_inspiration">"Hai bisogno di ispirazione?"</string>
   <string name="check_out_the_passphrase_generator">"Controlla il generatore di passphrase"</string>
   <string name="copied_to_clipboard">Copiato negli appunti.</string>
-  <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
-  <string name="review_flow_launched">Review flow launched!</string>
+  <string name="we_couldnt_verify_the_servers_certificate">Non è stato possibile verificare il certificato del server. La catena di certificati o le impostazioni proxy del tuo dispositivo o del tuo server Bitwarden potrebbero non essere configurati correttamente.</string>
+  <string name="review_flow_launched">Flusso di revisione avviato.</string>
   <string name="copy_private_key">Copia chiave privata</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Puoi modificare l\'email del tuo account sull\'app web Bitwarden.</string>
   <string name="login_credentials">Credenziali di accesso</string>
@@ -1153,7 +1169,7 @@ Vuoi passare a questo account?</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Usa questo pulsante per generare una nuova parola d\'accesso univoca.</string>
   <string name="coachmark_1_of_3">1 di 3</string>
   <string name="coachmark_2_of_3">2 di 3</string>
-  <string name="you_ll_only_need_to_set_up_authenticator_key">Dovrai solo impostare la chiave di autenticazione per gli accessi che richiedono l\'autenticazione a due fattori con un codice. La chiave genera continuamente codici a sei cifre che puoi usare per accedere.</string>
+  <string name="you_ll_only_need_to_set_up_authenticator_key">Dovrai impostare la chiave di autenticazione per i login che richiedono l\'accesso in due passaggi con un codice. La chiave genera continuamente codici a sei cifre che puoi usare per accedere.</string>
   <string name="coachmark_3_of_3">3 di 3</string>
   <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Devi aggiungere un indirizzo web per usare l\'auto-riempimento per accedere a questo account.</string>
   <string name="mutual_tls">TLS reciproco</string>
@@ -1177,6 +1193,7 @@ Vuoi passare a questo account?</string>
   <string name="coachmark_6_of_6">6 DI 6</string>
   <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Usa queste opzioni per adattare la tua parola d\'accesso alle specifiche del tuo account.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"Dopo aver salvato la tua nuova parola d'accesso in Bitwarden, non dimenticare di aggiornarla sul sito web del tuo account. "</string>
+  <string name="verify_your_identity">Verifica la tua identità</string>
   <string name="error_loading_certificate">Errore caricamento certificato</string>
   <string name="certificate_alias">Alias del certificato</string>
   <string name="import_certificate">Importa certificato</string>
@@ -1187,7 +1204,7 @@ Vuoi passare a questo account?</string>
   <string name="unsupported_certificate_type">Tipo di certificato non supportato</string>
   <string name="certificate_password_incorrect">Parola d\'accesso del certificato errata</string>
   <string name="invalid_certificate_chain">Serie di certificati non valida</string>
-  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Usare un certificato di sistema è meno sicuro che memorizzare il certificato con Bitwarden. Continuare mostrerà un elenco di certificati di sistema disponibili se uno è già installato.</string>
+  <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Potrai consultare una lista dei certificati di sistema, se almeno uno è disponibile. Ricorda che usare un certificato di sistema è meno sicuro rispetto al certificato memorizzato con Bitwarden.</string>
   <string name="certificate_alias_already_exists">L\'alias del certificato esiste già</string>
   <string name="link">Link</string>
   <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operazione chiave d\'accesso non riuscita perché l\'app è firmata in modo errato.</string>
@@ -1202,4 +1219,14 @@ Vuoi passare a questo account?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operazione parola d\'accesso non riuscita perché la richiesta non è valida.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operazione chiave d\'accesso non riuscita perché i tentativi di verifica dell\'utente sono stati superati.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
+  <string name="self_host_server_url">URL server autogestito</string>
+  <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Migliora il riempimento di accesso per i siti web supportati su Chrome. Una volta abilitato, sarai indirizzato alle impostazioni di Chrome per abilitare l\'auto-riempimento di terze parti.</string>
+  <string name="show_more">Mostra di più</string>
+  <string name="no_folder">Nessuna cartella</string>
+  <string name="show_less">Mostra meno</string>
+  <string name="add_field">Aggiungi campo</string>
+  <string name="x_ellipses">%s…</string>
+  <string name="share_error_details">Condividi dettagli dell\'errore</string>
 </resources>

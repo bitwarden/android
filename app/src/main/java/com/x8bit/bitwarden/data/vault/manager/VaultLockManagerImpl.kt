@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
@@ -167,7 +169,7 @@ class VaultLockManagerImpl(
                     .fold(
                         onFailure = {
                             incrementInvalidUnlockCount(userId = userId)
-                            VaultUnlockResult.GenericError
+                            VaultUnlockResult.GenericError(error = it)
                         },
                         onSuccess = { initializeCryptoResult ->
                             initializeCryptoResult
@@ -605,9 +607,11 @@ class VaultLockManagerImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Private key"),
+            )
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
             userId = userId,

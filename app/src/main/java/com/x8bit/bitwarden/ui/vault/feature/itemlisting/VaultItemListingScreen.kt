@@ -54,10 +54,12 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -69,14 +71,10 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItem: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (
-        vaultItemCipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToAddFolder: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -106,7 +104,7 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemListingEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItem(event.id)
+                onNavigateToVaultItemScreen(VaultItemArgs(event.id, event.type))
             }
 
             is VaultItemListingEvent.ShowShareSheet -> {
@@ -119,14 +117,22 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen(
-                    event.vaultItemCipherType,
-                    event.selectedFolderId,
-                    event.selectedCollectionId,
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = event.vaultItemCipherType,
+                        selectedFolderId = event.selectedFolderId,
+                        selectedCollectionId = event.selectedCollectionId,
+                    ),
                 )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
-                onNavigateToVaultEditItemScreen(event.cipherId)
+                onNavigateToVaultEditItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.cipherId),
+                        vaultItemCipherType = event.cipherType,
+                    ),
+                )
             }
 
             is VaultItemListingEvent.NavigateToUrl -> {
@@ -272,9 +278,7 @@ fun VaultItemListingScreen(
         onVaultItemTypeSelected = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.ItemToAddToFolderSelected(
-                        itemType = it,
-                    ),
+                    VaultItemListingsAction.ItemTypeToAddSelected(itemType = it),
                 )
             }
         },
@@ -313,6 +317,7 @@ private fun VaultItemListingDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
@@ -400,6 +405,7 @@ private fun VaultItemListingDialogs(
             VaultItemSelectionDialog(
                 onDismissRequest = onDismissRequest,
                 onOptionSelected = onVaultItemTypeSelected,
+                excludedOptions = dialogState.excludedOptions,
             )
         }
 

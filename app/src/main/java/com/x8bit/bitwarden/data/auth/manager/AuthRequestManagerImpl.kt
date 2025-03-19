@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.util.isSso
 import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
@@ -51,7 +52,9 @@ class AuthRequestManagerImpl(
     override fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult> = flow {
         while (currentCoroutineContext().isActive) {
             when (val result = getAuthRequests()) {
-                AuthRequestsResult.Error -> emit(AuthRequestsUpdatesResult.Error)
+                is AuthRequestsResult.Error -> {
+                    emit(AuthRequestsUpdatesResult.Error(error = result.error))
+                }
 
                 is AuthRequestsResult.Success -> {
                     emit(AuthRequestsUpdatesResult.Update(authRequests = result.authRequests))
@@ -70,9 +73,8 @@ class AuthRequestManagerImpl(
             email = email,
             authRequestType = authRequestType.toAuthRequestTypeJson(),
         )
-            .getOrNull()
-            ?: run {
-                emit(CreateAuthRequestResult.Error)
+            .getOrElse {
+                emit(CreateAuthRequestResult.Error(error = it))
                 return@flow
             }
         var authRequest = initialResult.authRequest
@@ -103,7 +105,7 @@ class AuthRequestManagerImpl(
                     )
                 }
                 .fold(
-                    onFailure = { emit(CreateAuthRequestResult.Error) },
+                    onFailure = { emit(CreateAuthRequestResult.Error(error = it)) },
                     onSuccess = { updateAuthRequest ->
                         when {
                             updateAuthRequest.requestApproved -> {
@@ -182,7 +184,7 @@ class AuthRequestManagerImpl(
                     )
                 }
                 .fold(
-                    onFailure = { emit(AuthRequestUpdatesResult.Error) },
+                    onFailure = { emit(AuthRequestUpdatesResult.Error(error = it)) },
                     onSuccess = { updateAuthRequest ->
                         when {
                             updateAuthRequest.requestApproved -> {
@@ -218,13 +220,18 @@ class AuthRequestManagerImpl(
         fingerprint: String,
     ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
         when (val authRequestsResult = getAuthRequests()) {
-            AuthRequestsResult.Error -> AuthRequestUpdatesResult.Error
+            is AuthRequestsResult.Error -> {
+                AuthRequestUpdatesResult.Error(error = authRequestsResult.error)
+            }
+
             is AuthRequestsResult.Success -> {
                 authRequestsResult
                     .authRequests
                     .firstOrNull { it.fingerprint == fingerprint }
                     ?.let { AuthRequestUpdatesResult.Update(it) }
-                    ?: AuthRequestUpdatesResult.Error
+                    ?: AuthRequestUpdatesResult.Error(
+                        error = IllegalStateException("Could not find the auth request."),
+                    )
             }
         }
     }
@@ -234,30 +241,28 @@ class AuthRequestManagerImpl(
     ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
         authRequestsService
             .getAuthRequest(requestId)
-            .map { response ->
-                getFingerprintPhrase(response.publicKey).getOrNull()?.let { fingerprint ->
-                    AuthRequest(
-                        id = response.id,
-                        publicKey = response.publicKey,
-                        platform = response.platform,
-                        ipAddress = response.ipAddress,
-                        key = response.key,
-                        masterPasswordHash = response.masterPasswordHash,
-                        creationDate = response.creationDate,
-                        responseDate = response.responseDate,
-                        requestApproved = response.requestApproved ?: false,
-                        originUrl = response.originUrl,
-                        fingerprint = fingerprint,
-                    )
-                }
+            .mapCatching { response ->
+                getFingerprintPhrase(response.publicKey)
+                    .getOrThrow()
+                    .let { fingerprint ->
+                        AuthRequest(
+                            id = response.id,
+                            publicKey = response.publicKey,
+                            platform = response.platform,
+                            ipAddress = response.ipAddress,
+                            key = response.key,
+                            masterPasswordHash = response.masterPasswordHash,
+                            creationDate = response.creationDate,
+                            responseDate = response.responseDate,
+                            requestApproved = response.requestApproved ?: false,
+                            originUrl = response.originUrl,
+                            fingerprint = fingerprint,
+                        )
+                    }
             }
             .fold(
-                onFailure = { AuthRequestUpdatesResult.Error },
-                onSuccess = { authRequest ->
-                    authRequest
-                        ?.let { AuthRequestUpdatesResult.Update(it) }
-                        ?: AuthRequestUpdatesResult.Error
-                },
+                onFailure = { AuthRequestUpdatesResult.Error(error = it) },
+                onSuccess = { AuthRequestUpdatesResult.Update(authRequest = it) },
             )
     }
 
@@ -309,7 +314,7 @@ class AuthRequestManagerImpl(
                 }
             }
             .fold(
-                onFailure = { AuthRequestsResult.Error },
+                onFailure = { AuthRequestsResult.Error(error = it) },
                 onSuccess = { AuthRequestsResult.Success(authRequests = it) },
             )
 
@@ -319,7 +324,7 @@ class AuthRequestManagerImpl(
         publicKey: String,
         isApproved: Boolean,
     ): AuthRequestResult {
-        val userId = activeUserId ?: return AuthRequestResult.Error
+        val userId = activeUserId ?: return AuthRequestResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .getAuthRequestKey(
                 publicKey = publicKey,
@@ -350,7 +355,7 @@ class AuthRequestManagerImpl(
                 )
             }
             .fold(
-                onFailure = { AuthRequestResult.Error },
+                onFailure = { AuthRequestResult.Error(error = it) },
                 onSuccess = { AuthRequestResult.Success(authRequest = it) },
             )
     }
@@ -462,7 +467,7 @@ class AuthRequestManagerImpl(
         publicKey: String,
     ): Result<String> {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return IllegalStateException("No active account").asFailure()
+            ?: return NoActiveUserException().asFailure()
         return authSdkSource.getUserFingerprint(
             email = profile.email,
             publicKey = publicKey,

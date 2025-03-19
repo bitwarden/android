@@ -246,7 +246,6 @@ class StartRegistrationViewModel @Inject constructor(
         result: ReceiveSendVerificationEmailResult,
     ) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
-
             is SendVerificationEmailResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -256,6 +255,7 @@ class StartRegistrationViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = sendVerificationEmailResult.error,
                         ),
                     )
                 }
@@ -314,6 +314,7 @@ sealed class StartRegistrationDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : StartRegistrationDialog()
 }
 

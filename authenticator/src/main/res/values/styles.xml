@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
+    </style>
+
+    <!-- Launch theme (for auto dark/light based on system) -->
+    <style name="LaunchTheme" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/BaseTheme</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_rounded</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+    </style>
+</resources>

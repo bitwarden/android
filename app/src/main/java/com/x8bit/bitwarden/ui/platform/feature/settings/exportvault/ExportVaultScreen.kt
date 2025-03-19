@@ -124,6 +124,7 @@ fun ExportVaultScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
+                throwable = dialog.error,
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(ExportVaultAction.DialogDismiss) }
                 },

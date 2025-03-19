@@ -28,7 +28,7 @@ class WelcomeScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             WelcomeScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { onNavigateToLoginCalled = true },

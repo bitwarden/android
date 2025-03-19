@@ -53,11 +53,12 @@ class ImportLoginsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContentWithBackDispatcher {
+        setContent(
+            intentManager = intentManager,
+        ) {
             ImportLoginsScreen(
                 onNavigateBack = { navigateBackCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

@@ -5,6 +5,7 @@ import android.security.KeyChain
 import android.security.KeyChainException
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import timber.log.Timber
 import java.io.IOException
@@ -24,7 +25,7 @@ class KeyManagerImpl(
     private val context: Context,
 ) : KeyManager {
 
-    @Suppress("CyclomaticComplexMethod")
+    @Suppress("LongMethod", "CyclomaticComplexMethod")
     override fun importMutualTlsCertificate(
         key: ByteArray,
         alias: String,
@@ -35,28 +36,29 @@ class KeyManagerImpl(
             .inputStream()
             .use { stream ->
                 try {
-                    KeyStore.getInstance(KEYSTORE_TYPE_PKCS12)
+                    KeyStore
+                        .getInstance(KEYSTORE_TYPE_PKCS12)
                         .also { it.load(stream, password.toCharArray()) }
                 } catch (e: KeyStoreException) {
                     Timber.Forest.e(e, "Failed to load PKCS12 bytes")
-                    return ImportPrivateKeyResult.Error.UnsupportedKey
+                    return ImportPrivateKeyResult.Error.UnsupportedKey(throwable = e)
                 } catch (e: IOException) {
                     Timber.Forest.e(e, "Format or password error while loading PKCS12 bytes")
                     return when (e.cause) {
                         is UnrecoverableKeyException -> {
-                            ImportPrivateKeyResult.Error.UnrecoverableKey
+                            ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = e)
                         }
 
                         else -> {
-                            ImportPrivateKeyResult.Error.KeyStoreOperationFailed
+                            ImportPrivateKeyResult.Error.KeyStoreOperationFailed(throwable = e)
                         }
                     }
                 } catch (e: CertificateException) {
                     Timber.Forest.e(e, "Unable to load certificate chain")
-                    return ImportPrivateKeyResult.Error.InvalidCertificateChain
+                    return ImportPrivateKeyResult.Error.InvalidCertificateChain(throwable = e)
                 } catch (e: NoSuchAlgorithmException) {
                     Timber.Forest.e(e, "Cryptographic algorithm not supported")
-                    return ImportPrivateKeyResult.Error.UnsupportedKey
+                    return ImportPrivateKeyResult.Error.UnsupportedKey(throwable = e)
                 }
             }
 
@@ -64,22 +66,29 @@ class KeyManagerImpl(
         val internalAlias = pkcs12KeyStore.aliases()
             ?.takeIf { it.hasMoreElements() }
             ?.nextElement()
-            ?: return ImportPrivateKeyResult.Error.UnsupportedKey
+            ?: return ImportPrivateKeyResult.Error.UnsupportedKey(
+                throwable = MissingPropertyException("Internal Alias"),
+            )
 
         // Step 3: Extract PrivateKey and X.509 certificate from the KeyStore and verify
         // certificate alias.
         val privateKey = try {
-            pkcs12KeyStore.getKey(internalAlias, password.toCharArray())
-                ?: return ImportPrivateKeyResult.Error.UnrecoverableKey
+            pkcs12KeyStore
+                .getKey(internalAlias, password.toCharArray())
+                ?: return ImportPrivateKeyResult.Error.UnrecoverableKey(
+                    throwable = MissingPropertyException("Private Key"),
+                )
         } catch (e: UnrecoverableKeyException) {
             Timber.Forest.e(e, "Failed to get private key")
-            return ImportPrivateKeyResult.Error.UnrecoverableKey
+            return ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = e)
         }
 
         val certChain: Array<Certificate> = pkcs12KeyStore
             .getCertificateChain(internalAlias)
             ?.takeUnless { it.isEmpty() }
-            ?: return ImportPrivateKeyResult.Error.InvalidCertificateChain
+            ?: return ImportPrivateKeyResult.Error.InvalidCertificateChain(
+                throwable = MissingPropertyException("Certificate Chain"),
+            )
 
         // Step 4: Store the private key and X.509 certificate in the AndroidKeyStore if the alias
         // does not exists.
@@ -92,7 +101,7 @@ class KeyManagerImpl(
                 setKeyEntry(alias, privateKey, null, certChain)
             } catch (e: KeyStoreException) {
                 Timber.Forest.e(e, "Failed to import key into Android KeyStore")
-                return ImportPrivateKeyResult.Error.KeyStoreOperationFailed
+                return ImportPrivateKeyResult.Error.KeyStoreOperationFailed(throwable = e)
             }
         }
         return ImportPrivateKeyResult.Success(alias)

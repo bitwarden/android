@@ -130,7 +130,7 @@ class GeneratorRepositoryImpl(
                     }
                     GeneratedPasswordResult.Success(generatedPassword)
                 },
-                onFailure = { GeneratedPasswordResult.InvalidRequest },
+                onFailure = { GeneratedPasswordResult.InvalidRequest(error = it) },
             )
 
     override suspend fun generatePassphrase(
@@ -149,7 +149,7 @@ class GeneratorRepositoryImpl(
                     }
                     GeneratedPassphraseResult.Success(generatedPassphrase)
                 },
-                onFailure = { GeneratedPassphraseResult.InvalidRequest },
+                onFailure = { GeneratedPassphraseResult.InvalidRequest(error = it) },
             )
 
     override suspend fun generatePlusAddressedEmail(
@@ -161,7 +161,7 @@ class GeneratorRepositoryImpl(
                     GeneratedPlusAddressedUsernameResult.Success(generatedEmail)
                 },
                 onFailure = {
-                    GeneratedPlusAddressedUsernameResult.InvalidRequest
+                    GeneratedPlusAddressedUsernameResult.InvalidRequest(error = it)
                 },
             )
 
@@ -174,7 +174,7 @@ class GeneratorRepositoryImpl(
                     GeneratedCatchAllUsernameResult.Success(generatedEmail)
                 },
                 onFailure = {
-                    GeneratedCatchAllUsernameResult.InvalidRequest
+                    GeneratedCatchAllUsernameResult.InvalidRequest(error = it)
                 },
             )
 
@@ -187,7 +187,7 @@ class GeneratorRepositoryImpl(
                     GeneratedRandomWordUsernameResult.Success(generatedUsername)
                 },
                 onFailure = {
-                    GeneratedRandomWordUsernameResult.InvalidRequest
+                    GeneratedRandomWordUsernameResult.InvalidRequest(error = it)
                 },
             )
 
@@ -200,7 +200,7 @@ class GeneratorRepositoryImpl(
                     GeneratedForwardedServiceUsernameResult.Success(generatedEmail)
                 },
                 onFailure = {
-                    GeneratedForwardedServiceUsernameResult.InvalidRequest(it.message)
+                    GeneratedForwardedServiceUsernameResult.InvalidRequest(it.message, error = it)
                 },
             )
     }

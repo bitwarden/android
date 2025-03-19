@@ -27,7 +27,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `sdkFeatureFlags should return set feature flags`() {
-        val expected = mapOf("enableCipherKeyEncryption" to true)
+        val expected = mapOf("enableCipherKeyEncryption" to false)
 
         val actual = manager.sdkFeatureFlags
 

@@ -11,7 +11,6 @@ import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -51,8 +50,11 @@ import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
@@ -74,8 +76,8 @@ import org.junit.Test
 class VaultScreenTest : BaseComposeTest() {
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToVaultItemId: String? = null
-    private var onNavigateToVaultEditItemId: String? = null
+    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
+    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
@@ -96,12 +98,16 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            appReviewManager = appReviewManager,
+        ) {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
-                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemArgs = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
@@ -114,9 +120,6 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
-                exitManager = exitManager,
-                intentManager = intentManager,
-                appReviewManager = appReviewManager,
             )
         }
     }
@@ -699,15 +702,28 @@ class VaultScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToVaultItem event should call onNavigateToVaultItemScreen`() {
         val id = "id4321"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultItemId)
+        val type = VaultItemCipherType.LOGIN
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id, type = type))
+        assertEquals(
+            VaultItemArgs(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemArgs,
+        )
     }
 
     @Test
     fun `NavigateToEditVaultItem event should call onNavigateToVaultEditItemScreen`() {
         val id = "id1234"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToEditVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultEditItemId)
+        val type = VaultItemCipherType.CARD
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToEditVaultItem(itemId = id, type = type),
+        )
+        assertEquals(
+            VaultAddEditArgs(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
+                vaultItemCipherType = type,
+            ),
+            onNavigateToVaultEditItemArgs,
+        )
     }
 
     @Test
@@ -1260,7 +1276,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key group is displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     sshKeyItemsCount = count,
                 ),
@@ -1270,12 +1285,6 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("SSH key")
             .assertTextEquals("SSH key", count.toString())
             .assertIsDisplayed()
-
-        // Verify SSH key group is hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("SSH key")
-            .assertIsNotDisplayed()
     }
 
     @Test
@@ -1283,7 +1292,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key vault items are displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     noFolderItems = listOf(
                         VaultState.ViewState.VaultItem.SshKey(
@@ -1302,12 +1310,6 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
             .isDisplayed()
-
-        // Verify SSH key vault items are hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("mockSshKey")
-            .isNotDisplayed()
     }
 
     @Test
@@ -1424,7 +1426,6 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasMasterPassword = true,
     isRefreshing = false,
     showImportActionCard = false,
-    showSshKeys = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

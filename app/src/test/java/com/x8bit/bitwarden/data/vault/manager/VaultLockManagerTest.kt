@@ -1059,6 +1059,7 @@ class VaultLockManagerTest {
             val userKey = "12345"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
@@ -1072,7 +1073,7 @@ class VaultLockManagerTest {
                         ),
                     ),
                 )
-            } returns InitializeCryptoResult.AuthenticationError().asSuccess()
+            } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -1095,7 +1096,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError(), result)
+            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1144,12 +1145,13 @@ class VaultLockManagerTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
-            } returns InitializeCryptoResult.AuthenticationError().asSuccess()
+            } returns InitializeCryptoResult.AuthenticationError(error = error).asSuccess()
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -1172,7 +1174,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError(), result)
+            assertEquals(VaultUnlockResult.AuthenticationError(error = error), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1213,6 +1215,7 @@ class VaultLockManagerTest {
             val userKey = "12345"
             val privateKey = "54321"
             val organizationKeys = mapOf("orgId1" to "orgKey1")
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
@@ -1226,7 +1229,7 @@ class VaultLockManagerTest {
                         ),
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1248,7 +1251,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(VaultUnlockResult.GenericError(error = error), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1297,12 +1300,13 @@ class VaultLockManagerTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1324,7 +1328,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(VaultUnlockResult.GenericError(error = error), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1379,12 +1383,13 @@ class VaultLockManagerTest {
                     ),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1412,7 +1417,7 @@ class VaultLockManagerTest {
             )
             verify { userLogoutManager.logout(userId = USER_ID) }
 
-            assertEquals(VaultUnlockResult.GenericError, result)
+            assertEquals(VaultUnlockResult.GenericError(error = error), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,

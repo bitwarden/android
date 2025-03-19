@@ -54,7 +54,9 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             StartRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToCompleteRegistration = { _, _ ->
@@ -62,7 +64,6 @@ class StartRegistrationScreenTest : BaseComposeTest() {
                 },
                 onNavigateToCheckEmail = { _ -> onNavigateToCheckEmailCalled = true },
                 onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
-                intentManager = intentManager,
                 viewModel = viewModel,
             )
         }

@@ -170,12 +170,13 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     fun `SubmitClicked with error for validating current password shows error alert`() {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
+        val error = Throwable("Fail!")
         coEvery {
             authRepository.validatePasswordAgainstPolicies(password)
         } returns true
         coEvery {
             authRepository.validatePassword(currentPassword)
-        } returns ValidatePasswordResult.Error
+        } returns ValidatePasswordResult.Error(error = error)
         coEvery {
             authRepository.getPasswordStrength(password = any())
         } returns PasswordStrengthResult.Success(passwordStrength = PasswordStrength.LEVEL_0)
@@ -192,6 +193,7 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
                 dialogState = ResetPasswordState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
                 currentPasswordInput = currentPassword,
                 passwordInput = password,

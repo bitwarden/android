@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
@@ -27,6 +29,17 @@ fun LazyListScope.vaultAddEditIdentityItems(
     identityState: VaultAddEditState.ViewState.Content.ItemType.Identity,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
 ) {
+    item {
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.personal_details),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+    }
+
     item {
         Spacer(modifier = Modifier.height(8.dp))
         TitleMultiSelectButton(
@@ -92,11 +105,22 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.company,
             onValueChange = identityItemTypeHandlers.onCompanyTextChange,
             textFieldTestTag = "IdentityCompanyEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
+    }
+    item {
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.identification),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
     item {
         BitwardenTextField(
@@ -104,7 +128,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.ssn,
             onValueChange = identityItemTypeHandlers.onSsnTextChange,
             textFieldTestTag = "IdentitySsnEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -128,11 +152,22 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.licenseNumber,
             onValueChange = identityItemTypeHandlers.onLicenseNumberTextChange,
             textFieldTestTag = "IdentityLicenseNumberEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
+    }
+    item {
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.contact_info),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
     item {
         BitwardenTextField(
@@ -140,7 +175,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.email,
             onValueChange = identityItemTypeHandlers.onEmailTextChange,
             textFieldTestTag = "IdentityEmailEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -152,11 +187,22 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.phone,
             onValueChange = identityItemTypeHandlers.onPhoneTextChange,
             textFieldTestTag = "IdentityPhoneEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
+    }
+    item {
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.address),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
     }
     item {
         BitwardenTextField(
@@ -164,7 +210,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
             value = identityState.address1,
             onValueChange = identityItemTypeHandlers.onAddress1TextChange,
             textFieldTestTag = "IdentityAddressOneEntry",
-            cardStyle = CardStyle.Middle(),
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),

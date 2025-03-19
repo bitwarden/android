@@ -12,17 +12,19 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorAction.MainType.U
  * Each lambda corresponds to a specific user action, allowing for easy delegation of
  * logic when user input is detected.
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "LongMethod")
 data class ForwardedEmailAliasHandlers(
     val onServiceChange: (ForwardedEmailAlias.ServiceTypeOption) -> Unit,
     val onAddyIoAccessTokenTextChange: (String) -> Unit,
     val onAddyIoDomainNameTextChange: (String) -> Unit,
+    val onAddyIoSelfHostServerUrlChange: (String) -> Unit,
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
     val onFastMailApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
     val onForwardEmailApiKeyTextChange: (String) -> Unit,
     val onForwardEmailDomainNameTextChange: (String) -> Unit,
     val onSimpleLoginApiKeyTextChange: (String) -> Unit,
+    val onSimpleLoginSelfHostServerUrlChange: (String) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -30,6 +32,7 @@ data class ForwardedEmailAliasHandlers(
          * Creates an instance of [ForwardedEmailAliasHandlers] by binding actions to the provided
          * [GeneratorViewModel].
          */
+        @Suppress("LongMethod")
         fun create(
             viewModel: GeneratorViewModel,
         ): ForwardedEmailAliasHandlers = ForwardedEmailAliasHandlers(
@@ -50,6 +53,11 @@ data class ForwardedEmailAliasHandlers(
             onAddyIoDomainNameTextChange = { newDomainName ->
                 viewModel.trySendAction(
                     ForwardedEmailAliasAction.AddyIo.DomainTextChange(domain = newDomainName),
+                )
+            },
+            onAddyIoSelfHostServerUrlChange = { newServerUrl ->
+                viewModel.trySendAction(
+                    ForwardedEmailAliasAction.AddyIo.SelfHostServerUrlChange(url = newServerUrl),
                 )
             },
             onDuckDuckGoApiKeyTextChange = { newApiKey ->
@@ -84,6 +92,13 @@ data class ForwardedEmailAliasHandlers(
             onSimpleLoginApiKeyTextChange = { newApiKey ->
                 viewModel.trySendAction(
                     ForwardedEmailAliasAction.SimpleLogin.ApiKeyTextChange(apiKey = newApiKey),
+                )
+            },
+            onSimpleLoginSelfHostServerUrlChange = { newServerUrl ->
+                viewModel.trySendAction(
+                    ForwardedEmailAliasAction.SimpleLogin.SelfHostServerUrlChange(
+                        url = newServerUrl,
+                    ),
                 )
             },
         )

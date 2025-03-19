@@ -12,7 +12,14 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
+import com.x8bit.bitwarden.data.platform.util.deviceData
+import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.composition.LocalFeatureFlagsState
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -20,15 +27,20 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param title The optional title to be displayed by the dialog.
  * @param message The message to be displayed under the [title] by the dialog.
+ * @param throwable An optional [Throwable] that can be shared from this dialog.
  * @param onDismissRequest A lambda that is invoked when the user has requested to dismiss the
  * dialog, whether by tapping "OK", tapping outside the dialog, or pressing the back button.
  */
 @OptIn(ExperimentalComposeUiApi::class)
+@Suppress("LongMethod")
 @Composable
 fun BitwardenBasicDialog(
     title: String?,
     message: String,
     onDismissRequest: () -> Unit,
+    throwable: Throwable? = null,
+    intentManager: IntentManager = LocalIntentManager.current,
+    featureFlagsState: FeatureFlagsState = LocalFeatureFlagsState.current,
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -39,6 +51,31 @@ fun BitwardenBasicDialog(
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
             )
         },
+        dismissButton = throwable
+            ?.takeIf { featureFlagsState.isErrorReportingDialogEnabled }
+            ?.let { error ->
+                {
+                    BitwardenTextButton(
+                        label = stringResource(id = R.string.share_error_details),
+                        onClick = {
+                            intentManager.shareText(
+                                text = StringBuilder()
+                                    .append("Stacktrace:\n")
+                                    .append("$error\n")
+                                    .apply { error.stackTrace.forEach { append("\t$it\n") } }
+                                    .append("\n")
+                                    .append("Version: $versionData\n")
+                                    .append("Device: $deviceData\n")
+                                    .apply { ciBuildInfo?.let { append("CI: $it\n") } }
+                                    .append("\n")
+                                    .toString(),
+                            )
+                            onDismissRequest()
+                        },
+                        modifier = Modifier.testTag(tag = "ShareErrorDetailsAlertButton"),
+                    )
+                }
+            },
         title = title?.let {
             {
                 Text(

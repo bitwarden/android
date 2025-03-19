@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
+import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForNetworkResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
@@ -34,7 +35,6 @@ class IdentityServiceImpl(
             .preLogin(PreLoginRequestJson(email = email))
             .toResult()
 
-    @Suppress("MagicNumber")
     override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
         unauthenticatedIdentityApi
             .register(body)
@@ -43,17 +43,19 @@ class IdentityServiceImpl(
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError
                     .parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                        codes = listOf(400, 429),
+                        codes = listOf(
+                            NetworkErrorCode.BAD_REQUEST,
+                            NetworkErrorCode.TOO_MANY_REQUESTS,
+                        ),
                         json = json,
                     )
                     ?: throw throwable
             }
 
-    @Suppress("MagicNumber")
     override suspend fun getToken(
         uniqueAppId: String,
         email: String,
@@ -85,16 +87,20 @@ class IdentityServiceImpl(
         .toResult()
         .recoverCatching { throwable ->
             val bitwardenError = throwable.toBitwardenError()
-            bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
-                code = 400,
-                json = json,
-            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
-                code = 400,
-                json = json,
-            ) ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
-                code = 400,
-                json = json,
-            ) ?: throw throwable
+            bitwardenError
+                .parseErrorBodyOrNull<GetTokenResponseJson.CaptchaRequired>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.TwoFactorRequired>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: bitwardenError.parseErrorBodyOrNull<GetTokenResponseJson.Invalid>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: throw throwable
         }
 
     override suspend fun prevalidateSso(
@@ -104,6 +110,15 @@ class IdentityServiceImpl(
             organizationIdentifier = organizationIdentifier,
         )
         .toResult()
+        .recoverCatching { throwable ->
+            val bitwardenError = throwable.toBitwardenError()
+            bitwardenError
+                .parseErrorBodyOrNull<PrevalidateSsoResponseJson.Error>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: throw throwable
+        }
 
     override fun refreshTokenSynchronously(
         refreshToken: String,
@@ -116,7 +131,6 @@ class IdentityServiceImpl(
         .executeForNetworkResult()
         .toResult()
 
-    @Suppress("MagicNumber")
     override suspend fun registerFinish(
         body: RegisterFinishRequestJson,
     ): Result<RegisterResponseJson> =
@@ -127,7 +141,10 @@ class IdentityServiceImpl(
                 val bitwardenError = throwable.toBitwardenError()
                 bitwardenError
                     .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                        codes = listOf(400, 429),
+                        codes = listOf(
+                            NetworkErrorCode.BAD_REQUEST,
+                            NetworkErrorCode.TOO_MANY_REQUESTS,
+                        ),
                         json = json,
                     )
                     ?: throw throwable
@@ -144,7 +161,7 @@ class IdentityServiceImpl(
                 throwable
                     .toBitwardenError()
                     .parseErrorBodyOrNull<SendVerificationEmailResponseJson.Invalid>(
-                        code = 400,
+                        code = NetworkErrorCode.BAD_REQUEST,
                         json = json,
                     )
                     ?: throw throwable
@@ -163,7 +180,7 @@ class IdentityServiceImpl(
             val bitwardenError = throwable.toBitwardenError()
             bitwardenError
                 .parseErrorBodyOrNull<VerifyEmailTokenResponseJson.Invalid>(
-                    code = 400,
+                    code = NetworkErrorCode.BAD_REQUEST,
                     json = json,
                 )
                 ?.checkForExpiredMessage()

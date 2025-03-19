@@ -168,7 +168,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.register(registerRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -287,25 +287,29 @@ class IdentityServiceTest : BaseServiceTest() {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-            assertEquals(LEGACY_INVALID_LOGIN.asSuccess(), result)
+            assertEquals(INVALID_LOGIN.asSuccess(), result)
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `prevalidateSso when response is success should return PrevalidateSsoResponseJson`() =
+    fun `prevalidateSso when response is success should return PrevalidateSsoResponseJson Success`() =
         runTest {
             val organizationId = "organizationId"
-            server.enqueue(MockResponse().setResponseCode(200).setBody(PREVALIDATE_SSO_JSON))
+            server.enqueue(
+                MockResponse().setResponseCode(200).setBody(PREVALIDATE_SSO_SUCCESS_JSON),
+            )
             val result = identityService.prevalidateSso(organizationId)
-            assertEquals(PREVALIDATE_SSO_BODY.asSuccess(), result)
+            assertEquals(PREVALIDATE_SSO_SUCCESS_BODY.asSuccess(), result)
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `prevalidateSso when response is an error should return an error`() =
+    fun `prevalidateSso when response is an error should return PrevalidateSsoResponseJson error`() =
         runTest {
             val organizationId = "organizationId"
-            server.enqueue(MockResponse().setResponseCode(400))
+            server.enqueue(MockResponse().setResponseCode(400).setBody(PREVALIDATE_SSO_ERROR_JSON))
             val result = identityService.prevalidateSso(organizationId)
-            assertTrue(result.isFailure)
+            assertEquals(PREVALIDATE_SSO_ERROR_BODY.asSuccess(), result)
         }
 
     @Suppress("MaxLineLength")
@@ -359,7 +363,7 @@ class IdentityServiceTest : BaseServiceTest() {
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
             RegisterResponseJson.Invalid(
-                errorMessage = "Slow down! Too many requests. Try again soon.",
+                invalidMessage = "Slow down! Too many requests. Try again soon.",
                 validationErrors = null,
             ),
             result.getOrThrow(),
@@ -496,14 +500,24 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 }
 
-private const val PREVALIDATE_SSO_JSON = """
+private const val PREVALIDATE_SSO_SUCCESS_JSON = """
 {
   "token": "2ff00750-e2d6-47a6-ae54-67b981e78030"
 }
 """
 
-private val PREVALIDATE_SSO_BODY = PrevalidateSsoResponseJson(
+private const val PREVALIDATE_SSO_ERROR_JSON = """
+{
+  "message": "Organization not found from identifier."
+}
+"""
+
+private val PREVALIDATE_SSO_SUCCESS_BODY = PrevalidateSsoResponseJson.Success(
     token = "2ff00750-e2d6-47a6-ae54-67b981e78030",
+)
+
+private val PREVALIDATE_SSO_ERROR_BODY = PrevalidateSsoResponseJson.Error(
+    message = "Organization not found from identifier.",
 )
 
 private const val REFRESH_TOKEN_JSON = """
@@ -637,7 +651,7 @@ private const val INVALID_LOGIN_JSON = """
 private const val LEGACY_INVALID_LOGIN_JSON = """
 {
   "errorModel": {
-    "message": "Legacy-123"
+    "message": "123"
   }
 }
 """
@@ -673,14 +687,6 @@ private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
-    ),
-    legacyErrorModel = null,
-)
-
-private val LEGACY_INVALID_LOGIN = GetTokenResponseJson.Invalid(
-    errorModel = null,
-    legacyErrorModel = GetTokenResponseJson.Invalid.LegacyErrorModel(
-        errorMessage = "Legacy-123",
     ),
 )
 

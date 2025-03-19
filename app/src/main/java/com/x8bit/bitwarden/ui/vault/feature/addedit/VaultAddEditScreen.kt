@@ -1,11 +1,24 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,11 +27,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,10 +42,14 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
 import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoachMarkState
@@ -41,7 +61,11 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -53,6 +77,7 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
@@ -61,6 +86,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 /**
@@ -368,14 +395,6 @@ fun VaultAddEditScreen(
                     VaultAddEditContent(
                         state = viewState,
                         isAddItemMode = state.isAddItemMode,
-                        typeOptions = state.supportedItemTypes,
-                        onTypeOptionClicked = remember(viewModel) {
-                            {
-                                viewModel.trySendAction(
-                                    VaultAddEditAction.Common.TypeOptionSelect(it),
-                                )
-                            }
-                        },
                         loginItemTypeHandlers = loginItemTypeHandlers,
                         commonTypeHandlers = commonTypeHandlers,
                         permissionsManager = permissionsManager,
@@ -401,6 +420,12 @@ fun VaultAddEditScreen(
                         modifier = Modifier
                             .imePadding()
                             .fillMaxSize(),
+                    )
+
+                    BottomSheetViews(
+                        bottomSheetState = state.bottomSheetState,
+                        viewState = viewState.common,
+                        handlers = commonTypeHandlers,
                     )
                 }
 
@@ -446,6 +471,7 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
             )
         }
@@ -523,5 +549,278 @@ private fun VaultAddEditItemDialogs(
         }
 
         null -> Unit
+    }
+}
+
+@Composable
+private fun BottomSheetViews(
+    bottomSheetState: VaultAddEditState.BottomSheetState?,
+    viewState: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    modifier: Modifier = Modifier,
+) {
+    when (bottomSheetState) {
+        is VaultAddEditState.BottomSheetState.FolderSelection -> {
+            FolderSelectionBottomSheet(
+                state = viewState,
+                handlers = handlers,
+                modifier = modifier,
+            )
+        }
+
+        is VaultAddEditState.BottomSheetState.OwnerSelection -> {
+            OwnerSelectionBottomSheet(
+                state = viewState,
+                handlers = handlers,
+                modifier = modifier,
+            )
+        }
+
+        null -> Unit
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FolderSelectionBottomSheet(
+    state: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    modifier: Modifier = Modifier,
+) {
+    var selectedOptionState by rememberSaveable {
+        mutableStateOf(state.selectedFolder?.name.orEmpty())
+    }
+    BitwardenModalBottomSheet(
+        sheetTitle = stringResource(R.string.folders),
+        onDismiss = handlers.onDismissBottomSheet,
+        topBarActions = { animatedOnDismiss ->
+            BitwardenTextButton(
+                label = stringResource(R.string.save),
+                onClick = {
+                    handlers.onDismissBottomSheet()
+                    state
+                        .availableFolders
+                        .firstOrNull {
+                            it.name == selectedOptionState
+                        }
+                        ?.run {
+                            handlers.onChangeToExistingFolder(this.id)
+                        }
+                        ?: run {
+                            handlers.onOnAddFolder(selectedOptionState)
+                        }
+                    animatedOnDismiss()
+                },
+                isEnabled = selectedOptionState.isNotBlank(),
+            )
+        },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        modifier = modifier.statusBarsPadding(),
+    ) {
+        FolderSelectionBottomSheetContent(
+            options = state.availableFolders.map { it.name }.toImmutableList(),
+            selectedOption = selectedOptionState,
+            onOptionSelected = {
+                selectedOptionState = it
+            },
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun FolderSelectionBottomSheetContent(
+    options: ImmutableList<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+            .standardHorizontalMargin(),
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+        itemsIndexed(options) { index, option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cardStyle(
+                        cardStyle = if (index == 0) {
+                            CardStyle.Top()
+                        } else {
+                            CardStyle.Middle()
+                        },
+                        onClick = {
+                            onOptionSelected(option)
+                        },
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = option,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                )
+                BitwardenRadioButton(
+                    isSelected = selectedOption == option,
+                    onClick = {
+                        onOptionSelected(option)
+                    },
+                )
+            }
+        }
+        item {
+            var inEditMode by rememberSaveable {
+                mutableStateOf(false)
+            }
+            var addFolderText by rememberSaveable {
+                mutableStateOf("")
+            }
+            val cardStyle = if (options.isEmpty()) CardStyle.Full else CardStyle.Bottom
+            if (inEditMode) {
+                BitwardenTextField(
+                    label = stringResource(R.string.add_folder),
+                    value = addFolderText,
+                    onValueChange = {
+                        addFolderText = it
+                        onOptionSelected(it)
+                    },
+                    autoFocus = true,
+                    cardStyle = cardStyle,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    actions = {
+                        BitwardenRadioButton(
+                            isSelected = selectedOption == addFolderText,
+                            onClick = {
+                                onOptionSelected(addFolderText)
+                            },
+                        )
+                    },
+                )
+            } else {
+                BitwardenClickableText(
+                    label = stringResource(id = R.string.add_folder),
+                    onClick = {
+                        onOptionSelected(addFolderText)
+                        inEditMode = true
+                    },
+                    leadingIcon = painterResource(id = R.drawable.ic_plus_small),
+                    style = BitwardenTheme.typography.labelMedium,
+                    innerPadding = PaddingValues(all = 16.dp),
+                    cornerSize = 0.dp,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .cardStyle(cardStyle = cardStyle, paddingVertical = 0.dp),
+                )
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OwnerSelectionBottomSheet(
+    state: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    modifier: Modifier = Modifier,
+) {
+
+    var selectedOptionState by rememberSaveable {
+        mutableStateOf(state.selectedOwner?.name.orEmpty())
+    }
+    BitwardenModalBottomSheet(
+        sheetTitle = stringResource(R.string.owner),
+        onDismiss = handlers.onDismissBottomSheet,
+        topBarActions = { animatedOnDismiss ->
+            BitwardenTextButton(
+                label = stringResource(R.string.save),
+                onClick = {
+                    handlers.onDismissBottomSheet()
+                    state
+                        .availableOwners
+                        .firstOrNull {
+                            it.name == selectedOptionState
+                        }
+                        ?.run {
+                            handlers.onOwnerSelected(this.id)
+                        }
+                    animatedOnDismiss()
+                },
+                isEnabled = selectedOptionState.isNotBlank(),
+            )
+        },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        modifier = modifier.statusBarsPadding(),
+    ) {
+        OwnerSelectionBottomSheetContent(
+            options = state.availableOwners.map { it.name }.toImmutableList(),
+            selectedOption = selectedOptionState,
+            onOptionSelected = {
+                selectedOptionState = it
+            },
+        )
+    }
+}
+
+@Composable
+private fun OwnerSelectionBottomSheetContent(
+    options: ImmutableList<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+            .standardHorizontalMargin(),
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+        itemsIndexed(options) { index, option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cardStyle(
+                        cardStyle = options.toListItemCardStyle(index = index),
+                        onClick = {
+                            onOptionSelected(option)
+                        },
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = option,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                BitwardenRadioButton(
+                    isSelected = selectedOption == option,
+                    onClick = {
+                        onOptionSelected(option)
+                    },
+                )
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
     }
 }

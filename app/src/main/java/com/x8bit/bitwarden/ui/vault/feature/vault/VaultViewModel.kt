@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -53,7 +54,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
+import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -83,6 +86,7 @@ class VaultViewModel @Inject constructor(
     private val reviewPromptManager: ReviewPromptManager,
     private val featureFlagManager: FeatureFlagManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -94,7 +98,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val showSshKeys = featureFlagManager.getFeatureFlag(FlagKey.SshKeyCipherItems)
         VaultState(
             appBarTitle = appBarTitle,
             initials = activeAccountSummary.initials,
@@ -109,7 +112,6 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
-            showSshKeys = showSshKeys,
         )
     },
 ) {
@@ -137,15 +139,9 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        combine(
-            vaultRepository.vaultDataStateFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems),
-        ) { vaultData, sshKeyCipherItemsEnabled ->
-            VaultAction.Internal.VaultDataReceive(
-                vaultData = vaultData,
-                showSshKeys = sshKeyCipherItemsEnabled,
-            )
-        }
+        vaultRepository
+            .vaultDataStateFlow
+            .map { VaultAction.Internal.VaultDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -262,7 +258,6 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
@@ -361,10 +356,21 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.Syncing)
+        if (networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultState.DialogState.Syncing)
+            }
+            vaultRepository.sync(forced = true)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
         }
-        vaultRepository.sync(forced = true)
     }
 
     private fun handleLockClick() {
@@ -390,7 +396,6 @@ class VaultViewModel @Inject constructor(
         // Re-process the current vault data with the new filter
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
@@ -407,7 +412,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.vaultItem.id,
+                type = action.vaultItem.type,
+            ),
+        )
     }
 
     private fun handleTryAgainClick() {
@@ -420,11 +430,17 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
-        // The Pull-To-Refresh composable is already in the refreshing state.
-        // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepository.sync(forced = false)
+        viewModelScope.launch {
+            delay(250)
+            if (networkConnectionManager.isNetworkConnected) {
+                vaultRepository.sync(forced = false)
+            } else {
+                sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            }
+        }
     }
 
     private fun handleOverflowOptionClick(action: VaultAction.OverflowOptionClick) {
@@ -540,7 +556,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
-        sendEvent(VaultEvent.NavigateToEditVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToEditVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleLaunchClick(action: ListingItemOverflowAction.VaultAction.LaunchClick) {
@@ -548,7 +569,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleViewClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleInternalAction(action: VaultAction.Internal) {
@@ -572,6 +598,22 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
+
+            VaultAction.Internal.InternetConnectionErrorReceived -> {
+                handleInternetConnectionErrorReceived()
+            }
+        }
+    }
+
+    private fun handleInternetConnectionErrorReceived() {
+        mutableStateFlow.update {
+            it.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            )
         }
     }
 
@@ -642,22 +684,19 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = action.vaultData,
-            showSshKeys = action.showSshKeys,
         )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>, showSshKeys: Boolean) {
+    private fun updateViewState(vaultData: DataState<VaultData>) {
         when (vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(
                 vaultData = vaultData,
-                showSshKeys = showSshKeys,
             )
 
             is DataState.Loading -> vaultLoadingReceive()
             is DataState.NoNetwork -> vaultNoNetworkReceive(
                 vaultData = vaultData,
-                showSshKeys = showSshKeys,
             )
 
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
@@ -678,7 +717,7 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>, showSshKeys: Boolean) {
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(
                 VaultEvent.ShowToast(
@@ -686,12 +725,11 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
-        updateVaultState(vaultData.data, showSshKeys)
+        updateVaultState(vaultData.data)
     }
 
     private fun updateVaultState(
         vaultData: VaultData,
-        showSshKeys: Boolean,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -701,11 +739,9 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = showSshKeys,
                 ),
                 dialog = null,
                 isRefreshing = false,
-                showSshKeys = showSshKeys,
             )
         }
     }
@@ -716,7 +752,6 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultNoNetworkReceive(
         vaultData: DataState.NoNetwork<VaultData>,
-        showSshKeys: Boolean,
     ) {
         val data = vaultData.data ?: VaultData(
             cipherViewList = emptyList(),
@@ -726,7 +761,6 @@ class VaultViewModel @Inject constructor(
         )
         updateVaultState(
             vaultData = data,
-            showSshKeys = showSshKeys,
         )
     }
 
@@ -739,7 +773,6 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = state.showSshKeys,
                 ),
             )
         }
@@ -749,12 +782,13 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.ValidatePasswordResultReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -810,7 +844,6 @@ data class VaultState(
     val isIconLoadingDisabled: Boolean,
     val isRefreshing: Boolean,
     val showImportActionCard: Boolean,
-    val showSshKeys: Boolean,
 ) : Parcelable {
 
     /**
@@ -988,6 +1021,11 @@ data class VaultState(
             abstract val shouldShowMasterPasswordReprompt: Boolean
 
             /**
+             * The [VaultItemCipherType] this item represents.
+             */
+            abstract val type: VaultItemCipherType
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -1004,6 +1042,7 @@ data class VaultState(
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
+                override val type: VaultItemCipherType get() = VaultItemCipherType.LOGIN
             }
 
             /**
@@ -1033,6 +1072,8 @@ data class VaultState(
                         lastFourDigits != null -> "*".asText().concat(lastFourDigits)
                         else -> null
                     }
+
+                override val type: VaultItemCipherType get() = VaultItemCipherType.CARD
             }
 
             /**
@@ -1054,6 +1095,7 @@ data class VaultState(
                 val fullName: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = fullName
+                override val type: VaultItemCipherType get() = VaultItemCipherType.IDENTITY
             }
 
             /**
@@ -1071,6 +1113,7 @@ data class VaultState(
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SECURE_NOTE
             }
 
             /**
@@ -1094,6 +1137,7 @@ data class VaultState(
                 val fingerprint: Text,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
         }
     }
@@ -1122,6 +1166,7 @@ data class VaultState(
         data class Error(
             val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
     }
 }
@@ -1147,6 +1192,7 @@ sealed class VaultEvent {
      */
     data class NavigateToVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**
@@ -1154,6 +1200,7 @@ sealed class VaultEvent {
      */
     data class NavigateToEditVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**
@@ -1392,6 +1439,11 @@ sealed class VaultAction {
         ) : Internal()
 
         /**
+         * Indicates that the there is not internet connection.
+         */
+        data object InternetConnectionErrorReceived : Internal()
+
+        /**
          * Indicates a result for generating a verification code has been received.
          */
         data class GenerateTotpResultReceive(
@@ -1416,7 +1468,6 @@ sealed class VaultAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
-            val showSshKeys: Boolean,
         ) : Internal()
 
         /**
@@ -1457,7 +1508,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
-                    showSshKeys = it.showSshKeys,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

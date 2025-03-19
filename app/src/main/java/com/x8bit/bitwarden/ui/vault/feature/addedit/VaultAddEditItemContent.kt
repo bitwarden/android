@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
@@ -17,11 +18,12 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextSelectionButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
-import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
@@ -30,7 +32,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonH
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The top level content UI state for the [VaultAddEditScreen].
@@ -40,8 +41,6 @@ import kotlinx.collections.immutable.toImmutableList
 fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     state: VaultAddEditState.ViewState.Content,
     isAddItemMode: Boolean,
-    typeOptions: List<VaultAddEditState.ItemTypeOption>,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
     commonTypeHandlers: VaultAddEditCommonHandlers,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
@@ -107,13 +106,12 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         }
         if (isAddItemMode) {
             item {
-                TypeOptionsItem(
-                    entries = typeOptions,
-                    itemType = state.type,
-                    onTypeOptionClicked = onTypeOptionClicked,
+                BitwardenListHeaderText(
+                    label = stringResource(id = R.string.item_details),
                     modifier = Modifier
-                        .testTag("ItemTypePicker")
-                        .standardHorizontalMargin(),
+                        .fillMaxWidth()
+                        .standardHorizontalMargin()
+                        .padding(horizontal = 16.dp),
                 )
             }
         }
@@ -150,15 +148,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
 
         item {
             Spacer(modifier = Modifier.height(height = 8.dp))
-            BitwardenMultiSelectButton(
+            BitwardenTextSelectionButton(
                 label = stringResource(id = R.string.folder),
-                options = state.common.availableFolders.map { it.name }.toImmutableList(),
                 selectedOption = state.common.selectedFolder?.name,
-                onOptionSelected = { selectedFolderName ->
-                    commonTypeHandlers.onFolderSelected(
-                        state.common.availableFolders.first { it.name == selectedFolderName },
-                    )
-                },
+                onClick = commonTypeHandlers.onSelectOrAddFolderForItem,
                 cardStyle = if (isAddItemMode && state.common.hasOrganizations) {
                     CardStyle.Top(dividerPadding = 0.dp)
                 } else {
@@ -174,15 +167,10 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
         if (isAddItemMode && state.common.hasOrganizations) {
             val collections = state.common.selectedOwner?.collections.orEmpty()
             item {
-                BitwardenMultiSelectButton(
-                    label = stringResource(id = R.string.who_owns_this_item),
-                    options = state.common.availableOwners.map { it.name }.toImmutableList(),
+                BitwardenTextSelectionButton(
+                    label = stringResource(id = R.string.owner),
                     selectedOption = state.common.selectedOwner?.name,
-                    onOptionSelected = { selectedOwnerName ->
-                        commonTypeHandlers.onOwnerSelected(
-                            state.common.availableOwners.first { it.name == selectedOwnerName },
-                        )
-                    },
+                    onClick = commonTypeHandlers.onPresentOwnerOptions,
                     cardStyle = if (collections.isNotEmpty()) {
                         CardStyle.Middle()
                     } else {
@@ -267,31 +255,6 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
-}
-
-@Composable
-private fun TypeOptionsItem(
-    entries: List<VaultAddEditState.ItemTypeOption>,
-    itemType: VaultAddEditState.ViewState.Content.ItemType,
-    onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val optionsWithStrings = entries.associateWith { stringResource(id = it.labelRes) }
-
-    BitwardenMultiSelectButton(
-        label = stringResource(id = R.string.type),
-        options = optionsWithStrings.values.toImmutableList(),
-        selectedOption = stringResource(id = itemType.itemTypeOption.labelRes),
-        onOptionSelected = { selectedOption ->
-            val selectedOptionId = optionsWithStrings
-                .entries
-                .first { it.value == selectedOption }
-                .key
-            onTypeOptionClicked(selectedOptionId)
-        },
-        cardStyle = CardStyle.Full,
-        modifier = modifier,
-    )
 }
 
 /**

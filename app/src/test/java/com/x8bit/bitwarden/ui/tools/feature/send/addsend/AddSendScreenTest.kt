@@ -66,12 +66,13 @@ class AddSendScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContentWithBackDispatcher {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            permissionsManager = permissionsManager,
+        ) {
             AddSendScreen(
                 viewModel = viewModel,
-                exitManager = exitManager,
-                intentManager = intentManager,
-                permissionsManager = permissionsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }

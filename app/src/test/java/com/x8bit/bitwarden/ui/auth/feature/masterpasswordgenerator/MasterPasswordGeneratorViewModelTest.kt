@@ -37,7 +37,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `With no saved state and failed generator result, initial password state is default value`() {
         fakeGeneratorRepository.setMockGeneratePassphraseResult(
-            result = GeneratedPassphraseResult.InvalidRequest,
+            result = GeneratedPassphraseResult.InvalidRequest(error = Throwable("Fail")),
         )
         val viewModel = createViewModel()
 
@@ -91,7 +91,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         fakeGeneratorRepository.setMockGeneratePassphraseResult(
-            GeneratedPassphraseResult.InvalidRequest,
+            GeneratedPassphraseResult.InvalidRequest(error = Throwable("Fail")),
         )
 
         viewModel.eventFlow.test {

@@ -30,10 +30,6 @@ class FlagKeyTest {
             "import-logins-flow",
         )
         assertEquals(
-            FlagKey.SshKeyCipherItems.keyName,
-            "ssh-key-vault-item",
-        )
-        assertEquals(
             FlagKey.VerifiedSsoDomainEndpoint.keyName,
             "pm-12337-refactor-sso-details-endpoint",
         )
@@ -81,6 +77,10 @@ class FlagKeyTest {
             FlagKey.AnonAddySelfHostAlias.keyName,
             "anon-addy-self-host-alias",
         )
+        assertEquals(
+            FlagKey.ChromeAutofill.keyName,
+            "android-chrome-autofill",
+        )
     }
 
     @Test
@@ -92,7 +92,6 @@ class FlagKeyTest {
                 FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.SshKeyCipherItems,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
@@ -103,12 +102,12 @@ class FlagKeyTest {
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
+                FlagKey.CipherKeyEncryption,
+                FlagKey.ChromeAutofill,
             ).all {
                 !it.defaultValue
             },
         )
-
-        assertTrue(FlagKey.CipherKeyEncryption.defaultValue)
     }
 
     @Test
@@ -120,7 +119,6 @@ class FlagKeyTest {
                 FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.SshKeyCipherItems,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
@@ -133,6 +131,7 @@ class FlagKeyTest {
                 FlagKey.MutualTls,
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
+                FlagKey.ChromeAutofill,
             ).all {
                 it.isRemotelyConfigured
             },
