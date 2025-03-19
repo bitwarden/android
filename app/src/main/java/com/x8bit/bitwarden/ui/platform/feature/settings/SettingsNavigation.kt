@@ -15,6 +15,10 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestina
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.blockAutoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.navigateToBlockAutoFillScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.aboutPrivilegedAppsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.navigateToPrivilegedAppsList
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.privilegedAppsListDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
@@ -66,6 +70,10 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
             onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
+            onNavigateToTrustedAppsScreen = { navController.navigateToPrivilegedAppsList() },
+            onNavigateToAboutPrivilegedAppsScreen = {
+                navController.navigateToAboutPrivilegedAppsScreen()
+            },
         )
         otherDestination(onNavigateBack = { navController.popBackStack() })
         vaultSettingsDestination(
@@ -75,6 +83,8 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToImportLogins = onNavigateToImportLogins,
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
+        privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
+        aboutPrivilegedAppsDestination(navigateBack = { navController.popBackStack() })
     }
 }
 
