@@ -152,7 +152,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound,
+            Fido2ValidateOriginResult.Error.PrivilegedAppError.PrivilegedAppSignatureNotFound,
             appInfo.validatePrivilegedApp(
                 allowList = INVALID_ALLOW_LIST,
             ),
@@ -168,7 +168,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed,
+            Fido2ValidateOriginResult.Error.PrivilegedAppError.PackageNameNotFound,
             appInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),

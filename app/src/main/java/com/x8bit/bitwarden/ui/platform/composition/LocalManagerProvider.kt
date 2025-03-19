@@ -47,7 +47,6 @@ fun LocalManagerProvider(
     intentManager: IntentManager = IntentManagerImpl(context = activity),
     fido2CompletionManager: Fido2CompletionManager = createFido2CompletionManager(
         activity = activity,
-        intentManager = intentManager,
     ),
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
     nfcManager: NfcManager = NfcManagerImpl(activity = activity),
@@ -71,12 +70,11 @@ fun LocalManagerProvider(
 
 private fun createFido2CompletionManager(
     activity: Activity,
-    intentManager: IntentManager,
 ): Fido2CompletionManager =
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         Fido2CompletionManagerUnsupportedApiImpl
     } else {
-        Fido2CompletionManagerImpl(activity, intentManager)
+        Fido2CompletionManagerImpl(activity)
     }
 
 /**

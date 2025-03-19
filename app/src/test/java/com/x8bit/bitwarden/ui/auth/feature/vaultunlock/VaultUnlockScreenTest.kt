@@ -20,11 +20,11 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2AssertionCompletion
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2GetCredentialsCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -137,7 +137,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         )
         verify(exactly = 1) {
             fido2CompletionManager.completeFido2GetCredentialRequest(
-                result = Fido2GetCredentialsResult.Error(
+                result = Fido2GetCredentialsCompletion.Error(
                     R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
@@ -150,7 +150,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError("".asText()))
         verify(exactly = 1) {
             fido2CompletionManager.completeFido2Assertion(
-                result = Fido2CredentialAssertionResult.Error("".asText()),
+                result = Fido2AssertionCompletion.Error("".asText()),
             )
         }
     }

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.content.pm.SigningInfo
 import android.net.Uri
-import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherRepromptType
@@ -23,11 +22,13 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2OriginManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -61,6 +62,8 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2AssertionCompletion
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.Fido2RegistrationCompletion
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -79,7 +82,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -180,6 +182,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { authenticationAttempts = any() } just runs
         every { hasAuthenticationAttemptsRemaining() } returns true
         every { getPasskeyAttestationOptionsOrNull(any()) } returns mockk(relaxed = true)
+        every {
+            getCredentialsForRelyingParty(any(), any())
+        } returns Fido2GetCredentialsResult.Error
     }
     private val fido2OriginManager: Fido2OriginManager = mockk {
         coEvery { validateOrigin(any(), any()) } returns Fido2ValidateOriginResult.Success(null)
@@ -191,6 +196,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     private val networkConnectionManager: NetworkConnectionManager = mockk {
         every { isNetworkConnected } returns true
+    }
+    private val fido2PrivilegedAppRepo = mockk<PrivilegedAppRepository> {
     }
 
     private val initialState = createVaultItemListingState()
@@ -1832,7 +1839,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
-                fido2OriginManager.validateOrigin(any(), any())
             }
         }
 
@@ -2559,271 +2565,24 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Test
-    fun `Fido2Request should be evaluated before observing vault data`() {
-        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-            "mockUserId",
-            "{}",
-            "com.x8bit.bitwarden",
-            SigningInfo(),
-            origin = "com.x8bit.bitwarden",
-            isUserVerified = true,
-        )
-        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest,
-        )
-
-        createVaultItemListingViewModel()
-
-        coVerify(ordering = Ordering.ORDERED) {
-            fido2OriginManager.validateOrigin(any(), any())
-            vaultRepository.vaultDataStateFlow
-        }
-    }
-
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on Unknown error`() = runTest {
-        val mockCallingAppInfo = mockk<CallingAppInfo>(relaxed = true)
-        val mock = mockk<Fido2CreateCredentialRequest> {
-            every { callingAppInfo } returns mockCallingAppInfo
-            every { requestJson } returns "{}"
-        }
-
-        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CreateCredentialRequest = mock,
-        )
-
-        coEvery {
-            fido2OriginManager.validateOrigin(any(), any())
-        } returns Fido2ValidateOriginResult.Error.Unknown
-
-        val viewModel = createVaultItemListingViewModel()
-
-        assertEquals(
-            VaultItemListingState.DialogState.Fido2OperationFail(
-                R.string.an_error_has_occurred.asText(),
-                R.string.generic_error_message.asText(),
-            ),
-            viewModel.stateFlow.value.dialogState,
-        )
-    }
-
     @Suppress("MaxLineLength")
     @Test
-    fun `Fido2ValidateOriginResult should update dialog state on PrivilegedAppNotAllowed error`() =
+    fun `Fido2RegisterCredentialResult Error should show toast and show FIDO 2 error dialog`() =
         runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_browser_is_not_privileged.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on PrivilegedAppSignatureNotFound error`() =
-        runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_browser_signature_does_not_match.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on PasskeyNotSupportedForApp error`() =
-        runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkeys_not_supported_for_this_app.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on ApplicationNotFound error`() =
-        runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.ApplicationNotFound
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_app_not_found_in_asset_links.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on AssetLinkNotFound error`() =
-        runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.AssetLinkNotFound
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_of_missing_asset_links.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2ValidateOriginResult should update dialog state on ApplicationNotVerified error`() =
-        runTest {
-            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = "{}",
-                packageName = "com.x8bit.bitwarden",
-                signingInfo = SigningInfo(),
-                origin = null,
-                isUserVerified = true,
-            )
-
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
-            )
-
-            coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified
-
-            val viewModel = createVaultItemListingViewModel()
-
-            assertEquals(
-                VaultItemListingState.DialogState.Fido2OperationFail(
-                    R.string.an_error_has_occurred.asText(),
-                    R.string.passkey_operation_failed_because_app_could_not_be_verified.asText(),
-                ),
-                viewModel.stateFlow.value.dialogState,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
-        runTest {
-            val mockResult = Fido2RegisterCredentialResult.Error("".asText())
-
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
-                    mockResult,
+                    Fido2RegisterCredentialResult.Error.Internal,
                 ),
             )
 
-            viewModel.eventFlow.test {
-                assertEquals(
-                    VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()),
-                    awaitItem(),
-                )
-
-                assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
-                    awaitItem(),
-                )
-            }
+            assertEquals(
+                VaultItemListingState.DialogState.Fido2OperationFail(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -2848,7 +2607,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
 
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
+                    VaultItemListingEvent.CompleteFido2Registration(
+                        Fido2RegistrationCompletion.Success("mockResponse"),
+                    ),
                     awaitItem(),
                 )
             }
@@ -2869,7 +2630,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
+                    VaultItemListingEvent.CompleteFido2Registration(
+                        result = Fido2RegistrationCompletion.Cancelled,
+                    ),
                     awaitItem(),
                 )
             }
@@ -2892,9 +2655,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Error(
-                            "".asText(),
-                        ),
+                        result = Fido2RegistrationCompletion.Error("".asText()),
                     ),
                     awaitItem(),
                 )
@@ -2927,7 +2688,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Assertion(
-                        result = Fido2CredentialAssertionResult.Error("".asText()),
+                        result = Fido2AssertionCompletion.Error("".asText()),
                     ),
                     awaitItem(),
                 )
@@ -3219,6 +2980,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             relyingPartyId = null,
         )
 
+        coEvery {
+            fido2CredentialManager.authenticateFido2Credential(
+                userId = "activeUserId",
+                request = mockAssertionRequest,
+                selectedCipherView = mockCipherView,
+            )
+        } returns Fido2CredentialAssertionResult.Error.InvalidRpId
+
         val dataState = DataState.Loaded(
             data = VaultData(
                 cipherViewList = listOf(mockCipherView),
@@ -3233,11 +3002,16 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                message =
+                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                        .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
-        verify(exactly = 0) { fido2CredentialManager.isUserVerified }
+        verify(exactly = 1) {
+            fido2CredentialManager.isUserVerified
+            fido2CredentialManager.isUserVerified = false
+        }
     }
 
     @Test
@@ -3270,8 +3044,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns mockAssertionOptions
             coEvery {
-                fido2OriginManager.validateOrigin(any(), any())
-            } returns Fido2ValidateOriginResult.Error.Unknown
+                fido2CredentialManager.authenticateFido2Credential(
+                    userId = "activeUserId",
+                    request = mockAssertionRequest,
+                    selectedCipherView = mockCipherView,
+                )
+            } returns Fido2CredentialAssertionResult.Error.Internal
 
             val dataState = DataState.Loaded(
                 data = VaultData(
@@ -3284,15 +3062,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             mutableVaultDataStateFlow.value = dataState
 
-            viewModel.stateFlow.test {
-                assertEquals(
-                    VaultItemListingState.DialogState.Fido2OperationFail(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
-                    ),
-                    awaitItem().dialogState,
-                )
-            }
+            assertEquals(
+                VaultItemListingState.DialogState.Fido2OperationFail(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -3697,7 +3473,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Registration(
-                        result = Fido2RegisterCredentialResult.Cancelled,
+                        result = Fido2RegistrationCompletion.Cancelled,
                     ),
                     awaitItem(),
                 )
@@ -4624,6 +4400,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             organizationEventManager = organizationEventManager,
             fido2OriginManager = fido2OriginManager,
             networkConnectionManager = networkConnectionManager,
+            privilegedAppRepository = fido2PrivilegedAppRepo,
         )
 
     @Suppress("MaxLineLength")
