@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.BitwardenPackageManager
+import com.x8bit.bitwarden.data.platform.manager.BitwardenPackageManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -366,4 +368,10 @@ object PlatformManagerModule {
             clock = clock,
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideBitwardenPackageManager(
+        @ApplicationContext context: Context,
+    ): BitwardenPackageManager = BitwardenPackageManagerImpl(context = context)
 }

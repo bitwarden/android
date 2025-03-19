@@ -1244,4 +1244,10 @@ Do you want to switch to this account?</string>
   <string name="trusted_by_the_community">Trusted by the Community</string>
   <string name="trusted_by_google">Trusted by Google</string>
   <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+  <string name="google">Google</string>
+  <string name="the_community">the Community</string>
+  <string name="you">YOU</string>
+  <string name="installed_apps">Installed apps</string>
+  <string name="trusted_by_x">Trusted by %s</string>
+  <string name="all_trusted_apps">All trusted apps</string>
 </resources>
