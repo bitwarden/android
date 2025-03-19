@@ -167,7 +167,7 @@ private fun PrivilegedAppsListContent(
                         .animateItem(),
                 ) {
                     BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_send_pending_delete,
+                        vectorIconRes = R.drawable.ic_delete,
                         contentDescription = "",
                         onClick = remember(item) {
                             { onDeleteClick(item) }
