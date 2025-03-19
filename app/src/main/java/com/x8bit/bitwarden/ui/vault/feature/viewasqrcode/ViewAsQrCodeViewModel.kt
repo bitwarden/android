@@ -57,25 +57,19 @@ class ViewAsQrCodeViewModel @Inject constructor(
 ) {
     private val args = ViewAsQrCodeArgs(savedStateHandle)
 
+
     init {
         //TODO get args.vaultItemCipherType and auto-map
-//        val qrCodeTypes = QrCodeType.entries
-//        val selectedQrCodeType = qrCodeTypes.first()
-//        mutableStateFlow.update {
-//            it.copy(
-//                viewState = ViewAsQrCodeState.ViewState.Content(
-//                    selectedQrCodeType = selectedQrCodeType,
-//                    qrCodeTypes = qrCodeTypes,
-//                    qrCodeTypeFields = selectedQrCodeType.fields,
-//                    cipherFields = emptyList(),
-//                )
-//            )
-//        }
-//        vaultRepository
-//            .getVaultItemStateFlow(args.vaultItemId)
-//            .map { ViewAsQrCodeAction.Internal.CipherReceive(it) }
-//            .onEach(::sendAction)
-//            .launchIn(viewModelScope)
+        mutableStateFlow.update {
+            it.copy(
+                cipherFields = cipherFieldsFor(it.cipherType),
+            )
+        }
+        vaultRepository
+            .getVaultItemStateFlow(args.vaultItemId)
+            .map { ViewAsQrCodeAction.Internal.CipherReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: ViewAsQrCodeAction) {
@@ -104,15 +98,16 @@ class ViewAsQrCodeViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         cipher = dataState.data!!,
-                        cipherFields = dataState.data?.fields!!
                     )
                 }
 
             }
-            is DataState.Error -> TODO()
-            is DataState.Loading -> TODO()
-            is DataState.NoNetwork<*> -> TODO()
-            is DataState.Pending<*> -> TODO()
+
+            //TODO do we need to handle these?
+            is DataState.Error -> {}
+            is DataState.Loading -> {}
+            is DataState.NoNetwork<*> -> {}
+            is DataState.Pending -> {}
 //            is DataState.Error -> {
 //                mutableStateFlow.update {
 //                    it.copy(
@@ -161,7 +156,10 @@ class ViewAsQrCodeViewModel @Inject constructor(
 
     private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
         mutableStateFlow.update {
-            it.copy(selectedQrCodeType = action.qrCodeType )
+            it.copy(
+                selectedQrCodeType = action.qrCodeType,
+                qrCodeTypeFields = action.qrCodeType.fields
+            )
         }
 //        val currentState = state as? ViewAsQrCodeState.Content ?: return
 //        val cipher = currentState.cipher
@@ -197,7 +195,37 @@ class ViewAsQrCodeViewModel @Inject constructor(
 //            )
 //        }
     }
+
+    private fun cipherFieldsFor(cipherType: VaultItemCipherType) :List<Text> = when(cipherType){
+        VaultItemCipherType.LOGIN -> listOf(
+            R.string.name.asText(),
+            R.string.username.asText(),
+            R.string.password.asText(),
+            R.string.notes.asText(),
+            )
+        VaultItemCipherType.CARD -> listOf(
+
+            R.string.cardholder_name.asText(),
+            R.string.number.asText(),
+            //TODO finish
+        )
+        VaultItemCipherType.IDENTITY -> listOf(
+            R.string.title.asText(),
+            R.string.first_name.asText(),
+            //TODO finish
+        )
+        VaultItemCipherType.SECURE_NOTE -> listOf(
+            R.string.name.asText(),
+            R.string.notes.asText(),
+        )
+        VaultItemCipherType.SSH_KEY -> listOf(
+            R.string.public_key.asText(),
+            //TODO finish
+        )
+    }
+
 }
+
 
 /**
  * Represents the state for viewing attachments.
@@ -211,7 +239,7 @@ data class ViewAsQrCodeState(
     val qrCodeTypes: List<QrCodeType>,
     val qrCodeTypeFields: Map<String, QrCodeTypeField>,
     @IgnoredOnParcel
-    val cipherFields: List<FieldView> =  emptyList(),
+    val cipherFields: List<Text> =  emptyList(),
     @IgnoredOnParcel
     val cipher: CipherView? = null, //TODO do we need to use null?
     ) : Parcelable

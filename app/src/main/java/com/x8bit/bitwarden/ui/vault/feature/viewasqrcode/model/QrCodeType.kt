@@ -38,12 +38,12 @@ enum class QrCodeType(val displayName: Text) {
     /**
      * vCard contact QR code.
      */
-    CONTACT_VCARD(R.string.contact.asText()),
+    CONTACT_VCARD(R.string.contact_vcard.asText()),
 
     /**
      * meCard contact QR code.
      */
-    CONTACT_MECARD(R.string.contact.asText());
+    CONTACT_MECARD(R.string.contact_mecard.asText());
 
     /**
      * Map of field keys to their definitions for this QR code type.
@@ -86,14 +86,14 @@ enum class QrCodeType(val displayName: Text) {
 /**
  * Defines a field for a QR code type.
  *
- * @property label The human-readable label for this field
+ * @property displayName The human-readable label for this field
  * @property isRequired Whether this field is required
  * @property options List of valid options if this is a selection field
  * @property defaultValue Default value for this field
  */
 @Parcelize
 data class QrCodeTypeField(
-    val label: Text,
+    val displayName: Text,
     val isRequired: Boolean = false,
     val options: List<String> = emptyList(),
     val defaultValue: String = ""

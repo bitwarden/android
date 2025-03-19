@@ -1242,5 +1242,6 @@ Do you want to switch to this account?</string>
   <string name="hidden">Hidden</string>
   <string name="sms">SMS</string>
   <string name="wifi">WiFi</string>
-  <string name="contact">Contact</string>
+  <string name="contact_vcard">Contact (vCard)</string>
+  <string name="contact_mecard">Contact (MeCard)</string>
 </resources>

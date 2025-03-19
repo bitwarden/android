@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -32,19 +30,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
-import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.attachments.handlers.AttachmentsHandlers
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.handlers.ViewAsQrCodeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -129,300 +123,39 @@ fun ViewAsQrCodeScreen(
                     .fillMaxWidth(),
             )
 
+            //QR Code Type dropdowns
             Spacer(modifier = Modifier.height(16.dp))
-//        when (val viewState = state) {
-//            is ViewAsQrCodeState.ViewState.Loading -> BitwardenLoadingContent(
-//                modifier = Modifier.fillMaxSize(),
-//            )
-//
-//            is ViewAsQrCodeState.ViewState.Error -> BitwardenErrorContent(
-//                message = "ERROR",
-//                onTryAgainClick = remember(viewModel) {
-//                    { viewModel.trySendAction(ViewAsQrCodeAction.BackClick) }
-//                },
-//                modifier = Modifier.fillMaxSize(),
-//            )
-//
-//            is ViewAsQrCodeState.ViewState.Content -> {
-                //TODO add ViewAsQrCodeContent
+            viewState.qrCodeTypeFields.values.forEachIndexed { i, field ->
+                val cipherFieldsTextList = viewState.cipherFields.map { it() }.toImmutableList()
+                val fieldsListSize = viewState.qrCodeTypeFields.values.size
+                val lastFieldIndex = fieldsListSize - 1;
+                BitwardenMultiSelectButton(
+                    label = field.displayName(),
+                    options = cipherFieldsTextList,
+                    selectedOption = cipherFieldsTextList[0], //TODO select from VM
+                    onOptionSelected = { selectedOption ->
+                        val selectedField = viewState.cipherFields.first {
+                            selectedOption.asText() == it
+                        }
+                        //TODO finish wiring value change
+                        //viewModel.trySendAction(ViewAsQrCodeAction.FieldValueChange(selectedField))
+                    },
+                    cardStyle = when (i) {
+                        0 -> when (fieldsListSize) {
+                            1 -> CardStyle.Full
+                            else -> CardStyle.Top()
+                        }
 
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .verticalScroll(rememberScrollState())
-//                        .padding(16.dp),
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                ) {
-//                    // QR Code display
-//                    Box(
-//                        modifier = Modifier
-//                            .size(250.dp)
-//                            .background(Color.White)
-//                            .padding(8.dp),
-//                        contentAlignment = Alignment.Center,
-//                    ) {
-//                        Image(
-//                            //TODO set qrcode image
-//                            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
-//                            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-//
-//                            //bitmap = contentState.qrCodeBitmap.asImageBitmap(),
-//                            contentDescription = stringResource(id = R.string.qr_code),
-//                            modifier = Modifier.fillMaxSize(),
-//                        )
-//                    }
-//
-//                    Spacer(modifier = Modifier.height(24.dp))
-//
-//                    // QR Code type selector
-//                    val resources = LocalContext.current.resources
-//                    BitwardenMultiSelectButton(
-//                        label = stringResource(id = R.string.qr_code_type),
-//                        options = viewState.qrCodeTypes.map { it.displayName() }.toImmutableList(),
-//                        selectedOption = viewState.selectedQrCodeType.displayName(),
-//                        onOptionSelected = { selectedOption ->
-//                            val selectedType = viewState.qrCodeTypes.first {
-//                                it.displayName.toString(resources) == selectedOption
-//                            }
-//                            viewModel.trySendAction(ViewAsQrCodeAction.QrCodeTypeSelect(selectedType))
-//                        },
-//                        supportingText = stringResource(id = R.string.default_uri_match_detection_description),
-//                        cardStyle = CardStyle.Full,
-//                        modifier = Modifier
-//                            .testTag("QRCodeType")
-//                            .standardHorizontalMargin()
-//                            .fillMaxWidth(),
-//                    )
-//
-//                    Spacer(modifier = Modifier.height(16.dp))
-//
-//                    // Dynamic fields based on selected QR code type
-//                    when (contentState.selectedQrCodeType) {
-//                        QrCodeType.Text -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.text),
-//                                value = contentState.fields["text"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("text", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.Url -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.url),
-//                                value = contentState.fields["url"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("url", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.Email -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.email),
-//                                value = contentState.fields["email"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("email", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.subject),
-//                                value = contentState.fields["subject"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("subject", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.body),
-//                                value = contentState.fields["body"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("body", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.Phone -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.phone),
-//                                value = contentState.fields["phone"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("phone", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.SMS -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.phone),
-//                                value = contentState.fields["phone"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("phone", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.message),
-//                                value = contentState.fields["message"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("message", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.WiFi -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.ssid),
-//                                value = contentState.fields["ssid"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("ssid", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.password),
-//                                value = contentState.fields["password"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("password", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenMultiSelectButton(
-//                                label = stringResource(id = R.string.encryption_type),
-//                                options = listOf("WPA", "WEP", "None").toImmutableList(),
-//                                selectedOption = contentState.fields["type"] ?: "WPA",
-//                                onOptionSelected = { selectedOption ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("type", selectedOption)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenMultiSelectButton(
-//                                label = stringResource(id = R.string.hidden),
-//                                options = listOf("true", "false").toImmutableList(),
-//                                selectedOption = contentState.fields["hidden"] ?: "false",
-//                                onOptionSelected = { selectedOption ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("hidden", selectedOption)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//
-//                        QrCodeType.Contact -> {
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.name),
-//                                value = contentState.fields["name"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("name", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.phone),
-//                                value = contentState.fields["phone"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("phone", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.email),
-//                                value = contentState.fields["email"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("email", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.organization),
-//                                value = contentState.fields["organization"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("organization", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//
-//                            Spacer(modifier = Modifier.height(8.dp))
-//
-//                            BitwardenTextField(
-//                                label = stringResource(id = R.string.address),
-//                                value = contentState.fields["address"] ?: "",
-//                                onValueChange = { newValue ->
-//                                    viewModel.trySendAction(
-//                                        ViewAsQrCodeAction.FieldValueChange("address", newValue)
-//                                    )
-//                                },
-//                                modifier = Modifier.fillMaxWidth(),
-//                            )
-//                        }
-//                    }
-//                }
-//            }
+                        lastFieldIndex -> CardStyle.Bottom
+                        else -> CardStyle.Middle()
+
+                    },
+                    modifier = Modifier
+                        .testTag("QRCodeField")
+                        .standardHorizontalMargin()
+                        .fillMaxWidth(),
+                )
+            }
         }
     }
 }
