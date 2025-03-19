@@ -9,63 +9,92 @@ import kotlinx.parcelize.Parcelize
 /**
  * Represents the different types of QR codes that can be generated.
  */
-sealed class QrCodeType(val displayName: Text) : Parcelable {
-
+enum class QrCodeType(val displayName: Text) {
     /**
-     * Plain text QR code.
+     * WiFi network QR code.
      */
-    @Parcelize
-    data object PlainText : QrCodeType(R.string.text.asText())
+    WIFI(R.string.wifi.asText()),
 
     /**
      * URL QR code.
      */
-    @Parcelize
-    data object Url : QrCodeType(R.string.url.asText())
+    URL(R.string.url.asText()),
+
+    /**
+     * Plain text QR code.
+     */
+    PLAIN_TEXT(R.string.text.asText()),
 
     /**
      * Email QR code.
      */
-    @Parcelize
-    data object Email : QrCodeType(R.string.email.asText())
+    EMAIL(R.string.email.asText()),
 
     /**
      * Phone number QR code.
      */
-    @Parcelize
-    data object Phone : QrCodeType(R.string.phone.asText())
-
-    /**
-     * SMS QR code.
-     */
-    @Parcelize
-    data object SMS : QrCodeType(R.string.sms.asText())
-
-    /**
-     * WiFi network QR code.
-     */
-    @Parcelize
-    data object WiFi : QrCodeType(R.string.wifi.asText())
+    PHONE(R.string.phone.asText()),
 
     /**
      * vCard contact QR code.
      */
-    @Parcelize
-    data object Contact : QrCodeType(R.string.contact.asText())
+    CONTACT_VCARD(R.string.contact.asText()),
 
-    companion object {
-        /**
-         * List of all available QR code types.
-         */
-        val ALL = listOf(PlainText, Url, Email, Phone, SMS, WiFi, Contact)
-    }
+    /**
+     * meCard contact QR code.
+     */
+    CONTACT_MECARD(R.string.contact.asText());
+
+    /**
+     * Map of field keys to their definitions for this QR code type.
+     */
+    val fields: Map<String, QrCodeTypeField>
+        get() = when (this) {
+            WIFI -> mapOf(
+                "ssid" to QrCodeTypeField(R.string.ssid.asText(), isRequired = true),
+                "password" to QrCodeTypeField(R.string.password.asText(), isRequired = false),
+//                "encryption" to QrCodeTypeField(R.string.encryption_type.asText(), isRequired = false,
+//                    options = listOf("WPA", "None"), defaultValue = "WPA"),
+//                "hidden" to QrCodeTypeField(R.string.hidden.asText(), isRequired = false,
+//                    options = listOf("true", "false"), defaultValue = "false")
+            )
+            URL -> mapOf(
+                "url" to QrCodeTypeField(R.string.url.asText(), isRequired = true)
+            )
+            PLAIN_TEXT -> mapOf(
+                "text" to QrCodeTypeField(R.string.text.asText(), isRequired = true)
+            )
+            EMAIL -> mapOf(
+                "email" to QrCodeTypeField(R.string.email.asText(), isRequired = true),
+                "subject" to QrCodeTypeField(R.string.subject.asText(), isRequired = false),
+                "body" to QrCodeTypeField(R.string.body.asText(), isRequired = false)
+            )
+            PHONE -> mapOf(
+                "phone" to QrCodeTypeField(R.string.phone.asText(), isRequired = true)
+            )
+            CONTACT_VCARD, CONTACT_MECARD -> mapOf(
+                "name" to QrCodeTypeField(R.string.name.asText(), isRequired = true),
+                "phone" to QrCodeTypeField(R.string.phone.asText(), isRequired = false),
+                "email" to QrCodeTypeField(R.string.email.asText(), isRequired = false),
+                "organization" to QrCodeTypeField(R.string.organization.asText(), isRequired = false),
+                "address" to QrCodeTypeField(R.string.address.asText(), isRequired = false),
+                "website" to QrCodeTypeField(R.string.url.asText(), isRequired = false)
+            )
+        }
 }
 
 /**
- * Represents the configuration options for a QR code.
+ * Defines a field for a QR code type.
+ *
+ * @property label The human-readable label for this field
+ * @property isRequired Whether this field is required
+ * @property options List of valid options if this is a selection field
+ * @property defaultValue Default value for this field
  */
 @Parcelize
-data class QrCodeConfig(
-    val type: QrCodeType,
-    val fields: Map<String, String> = emptyMap()
+data class QrCodeTypeField(
+    val label: Text,
+    val isRequired: Boolean = false,
+    val options: List<String> = emptyList(),
+    val defaultValue: String = ""
 ) : Parcelable
