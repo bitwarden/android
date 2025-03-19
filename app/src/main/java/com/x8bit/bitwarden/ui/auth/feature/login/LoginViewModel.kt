@@ -108,7 +108,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClicked(action: LoginAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClicked(action: LoginAction.LogoutAccountClick) {

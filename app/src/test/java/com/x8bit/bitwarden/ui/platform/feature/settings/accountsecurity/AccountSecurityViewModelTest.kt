@@ -383,10 +383,10 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on LockNowClick should call lockVaultForCurrentUser`() {
-        every { vaultRepository.lockVaultForCurrentUser() } just runs
+        every { vaultRepository.lockVaultForCurrentUser(any()) } just runs
         val viewModel = createViewModel()
         viewModel.trySendAction(AccountSecurityAction.LockNowClick)
-        verify { vaultRepository.lockVaultForCurrentUser() }
+        verify { vaultRepository.lockVaultForCurrentUser(any()) }
     }
 
     @Test

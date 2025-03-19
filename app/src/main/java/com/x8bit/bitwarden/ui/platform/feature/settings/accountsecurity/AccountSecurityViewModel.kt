@@ -265,7 +265,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleLockNowClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handlePushNotificationConfirm() {

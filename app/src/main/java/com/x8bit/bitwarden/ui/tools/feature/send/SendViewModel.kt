@@ -258,7 +258,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepo.lockVaultForCurrentUser()
+        vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleRefreshClick() {

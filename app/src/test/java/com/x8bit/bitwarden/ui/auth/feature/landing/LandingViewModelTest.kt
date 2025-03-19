@@ -35,7 +35,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { logout(any()) } just runs
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
-        every { lockVault(any()) } just runs
+        every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -126,7 +126,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LandingAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Test

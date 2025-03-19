@@ -131,8 +131,8 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { vaultDataStateFlow } returns mutableVaultDataStateFlow
             every { sync(forced = any()) } just runs
             every { syncIfNecessary() } just runs
-            every { lockVaultForCurrentUser() } just runs
-            every { lockVault(any()) } just runs
+            every { lockVaultForCurrentUser(any()) } just runs
+            every { lockVault(any(), any()) } just runs
         }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -382,7 +382,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Suppress("MaxLineLength")
@@ -520,7 +520,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultAction.LockClick)
         verify {
-            vaultRepository.lockVaultForCurrentUser()
+            vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 

@@ -165,7 +165,7 @@ class VaultLockManagerTest {
             verifyUnlockedVault(userId = USER_ID)
 
             vaultLockManager.vaultStateEventFlow.test {
-                vaultLockManager.lockVault(userId = USER_ID)
+                vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
                 assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
                 fakeAuthDiskSource.assertLastLockTimestamp(
                     userId = USER_ID,
@@ -178,10 +178,10 @@ class VaultLockManagerTest {
     fun `vaultStateEventFlow should not emit Locked event when vault state remains locked`() =
         runTest {
             // Ensure the vault is locked
-            vaultLockManager.lockVault(userId = USER_ID)
+            vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
 
             vaultLockManager.vaultStateEventFlow.test {
-                vaultLockManager.lockVault(userId = USER_ID)
+                vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
                 expectNoEvents()
             }
         }
@@ -190,7 +190,7 @@ class VaultLockManagerTest {
     fun `vaultStateEventFlow should emit Unlocked event when vault state changes to unlocked`() =
         runTest {
             // Ensure the vault is locked
-            vaultLockManager.lockVault(userId = USER_ID)
+            vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
 
             vaultLockManager.vaultStateEventFlow.test {
                 verifyUnlockedVault(userId = USER_ID)
@@ -786,7 +786,7 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
 
-            vaultLockManager.lockVault(userId = USER_ID)
+            vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -811,7 +811,7 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
 
-            vaultLockManager.lockVault(userId = USER_ID)
+            vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -837,7 +837,7 @@ class VaultLockManagerTest {
                 vaultLockManager.vaultUnlockDataStateFlow.value,
             )
 
-            vaultLockManager.lockVaultForCurrentUser()
+            vaultLockManager.lockVaultForCurrentUser(isUserInitiated = true)
 
             assertEquals(
                 emptyList<VaultUnlockData>(),

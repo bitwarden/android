@@ -101,6 +101,8 @@ class VaultLockManagerImpl(
     override val vaultStateEventFlow: Flow<VaultStateEvent>
         get() = mutableVaultStateEventSharedFlow.asSharedFlow()
 
+    override var isFromLockFlow: Boolean = false
+
     init {
         observeAppCreationChanges()
         observeAppForegroundChanges()
@@ -119,13 +121,17 @@ class VaultLockManagerImpl(
     override fun isVaultUnlocking(userId: String): Boolean =
         mutableVaultUnlockDataStateFlow.value.statusFor(userId) == VaultUnlockData.Status.UNLOCKING
 
-    override fun lockVault(userId: String) {
+    override fun lockVault(userId: String, isUserInitiated: Boolean) {
+        isFromLockFlow = isUserInitiated
         setVaultToLocked(userId = userId)
     }
 
-    override fun lockVaultForCurrentUser() {
+    override fun lockVaultForCurrentUser(isUserInitiated: Boolean) {
         activeUserId?.let {
-            lockVault(it)
+            lockVault(
+                userId = it,
+                isUserInitiated = isUserInitiated,
+            )
         }
     }
 
