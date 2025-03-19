@@ -1233,9 +1233,6 @@ Do you want to switch to this account?</string>
   <string name="unknown">Unknown</string>
   <string name="application_not_trusted">Application not trusted</string>
   <string name="privileged_apps">Privileged apps</string>
-  <string name="trusted_by_google_x">Trusted by Google (%d)</string>
-  <string name="trusted_by_you_x">Trusted by you (%d)</string>
-  <string name="trusted_by_the_community_c">Trusted by the community (%d)</string>
   <string name="are_you_sure_you_want_to_stop_trusting_x">Are you sure you want to stop trusting %s?</string>
   <string name="learn_more_about_using_passkeys_with_bitwarden">Learn more about using passkeys with Bitwarden.</string>
   <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
