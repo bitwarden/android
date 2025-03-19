@@ -47,7 +47,9 @@ fun CipherView.determineListingPredicate(
 ): Boolean =
     when (itemListingType) {
         is VaultItemListingState.ItemListingType.Vault.Card -> {
-            type == CipherType.CARD && deletedDate == null
+            type == CipherType.CARD &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
@@ -55,27 +57,41 @@ fun CipherView.determineListingPredicate(
         }
 
         is VaultItemListingState.ItemListingType.Vault.Folder -> {
-            folderId == itemListingType.folderId && deletedDate == null
+            folderId == itemListingType.folderId &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> {
-            type == CipherType.IDENTITY && deletedDate == null
+            type == CipherType.IDENTITY &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Login -> {
-            type == CipherType.LOGIN && deletedDate == null
+            type == CipherType.LOGIN &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> {
-            type == CipherType.SECURE_NOTE && deletedDate == null
+            type == CipherType.SECURE_NOTE &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.SshKey -> {
-            type == CipherType.SSH_KEY && deletedDate == null
+            type == CipherType.SSH_KEY &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Trash -> {
             deletedDate != null
+        }
+
+        is VaultItemListingState.ItemListingType.Vault.Archive -> {
+            archivedDate != null
         }
     }
 
@@ -150,6 +166,7 @@ fun VaultData.toViewState(
                     count = this.cipherViewList
                         .count {
                             it.deletedDate == null &&
+                                it.archivedDate == null &&
                                 !it.id.isNullOrBlank() &&
                                 folderView.id == it.folderId
                         },
@@ -212,12 +229,17 @@ fun VaultData.toViewState(
                     VaultItemListingState.ItemListingType.Vault.SshKey -> {
                         R.string.no_ssh_keys
                     }
+
+                    VaultItemListingState.ItemListingType.Vault.Archive -> {
+                        R.string.no_items_archive
+                    }
                 }
                     .asText()
             }
         val shouldShowAddButton = when (itemListingType) {
             VaultItemListingState.ItemListingType.Vault.Trash,
             VaultItemListingState.ItemListingType.Vault.SshKey,
+            VaultItemListingState.ItemListingType.Vault.Archive,
                 -> false
 
             else -> true
@@ -330,6 +352,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendFile -> this
         is VaultItemListingState.ItemListingType.Send.SendText -> this
         is VaultItemListingState.ItemListingType.Vault.SshKey -> this
+        is VaultItemListingState.ItemListingType.Vault.Archive -> this
     }
 
 @Suppress("LongParameterList")

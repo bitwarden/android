@@ -1233,4 +1233,5 @@ Do you want to switch to this account?</string>
   <string name="item_archived">Item has been sent to archive.</string>
   <string name="do_you_really_want_to_archive_cipher">Do you really want to send to the archive?</string>
   <string name="hidden_items">Hidden items</string>
+  <string name="no_items_archive">There are no items in the archive.</string>
 </resources>

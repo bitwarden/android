@@ -91,5 +91,10 @@ sealed class SearchType : Parcelable {
          * Indicates that we should be searching only for verification code items.
          */
         data object VerificationCodes : Vault()
+
+        /**
+         * Indicates that we should be searching only ciphers in the archive.
+         */
+        data object Archive : Vault()
     }
 }

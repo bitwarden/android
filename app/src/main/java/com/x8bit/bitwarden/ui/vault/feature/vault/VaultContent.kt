@@ -350,8 +350,8 @@ fun VaultContent(
             BitwardenGroupItem(
                 startIcon = rememberVectorPainter(id = R.drawable.archive_icon),
                 label = stringResource(id = R.string.archive),
-                supportingLabel = state.trashItemsCount.toString(),
-                onClick = vaultHandlers.trashClick,
+                supportingLabel = state.archiveItemsCount.toString(),
+                onClick = vaultHandlers.archiveClick,
                 showDivider = false,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier

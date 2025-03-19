@@ -1044,6 +1044,16 @@ sealed class SearchTypeData : Parcelable {
                     .concat(" ".asText())
                     .concat(R.string.verification_codes.asText())
         }
+
+        /**
+         * Indicates that we should be searching only ciphers in the trash.
+         */
+        data object Archive : Vault() {
+            override val title: Text
+                get() = R.string.search.asText()
+                    .concat(" ".asText())
+                    .concat(R.string.archive.asText())
+        }
     }
 }
 

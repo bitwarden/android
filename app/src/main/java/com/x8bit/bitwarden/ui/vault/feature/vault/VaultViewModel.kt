@@ -203,6 +203,7 @@ class VaultViewModel @Inject constructor(
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
             VaultAction.LifecycleResumed -> handleLifecycleResumed()
             VaultAction.SelectAddItemType -> handleSelectAddItemType()
+            is VaultAction.ArchiveClick -> handleArchiveClick()
         }
     }
 
@@ -401,6 +402,10 @@ class VaultViewModel @Inject constructor(
 
     private fun handleTrashClick() {
         sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Trash))
+    }
+
+    private fun handleArchiveClick() {
+        sendEvent(VaultEvent.NavigateToItemListing(VaultItemListingType.Archive))
     }
 
     private fun handleSecureNoteClick() {
@@ -1398,6 +1403,11 @@ sealed class VaultAction {
      * The user has clicked the import action card.
      */
     data object ImportActionCardClick : VaultAction()
+
+    /**
+     * User clicked the archive button.
+     */
+    data object ArchiveClick : VaultAction()
 
     /**
      * User clicked an overflow action.

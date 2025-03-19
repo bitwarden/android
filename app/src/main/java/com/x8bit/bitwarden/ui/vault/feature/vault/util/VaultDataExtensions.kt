@@ -41,11 +41,11 @@ fun VaultData.toViewState(
     vaultFilterType: VaultFilterType,
 ): VaultState.ViewState {
 
-    val filteredCipherViewListWithDeletedItems =
+    val filteredCipherViewListWithAllItems =
         cipherViewList.toFilteredList(vaultFilterType)
 
-    val filteredCipherViewList = filteredCipherViewListWithDeletedItems
-        .filter { it.deletedDate == null }
+    val filteredCipherViewList = filteredCipherViewListWithAllItems
+        .filter { it.deletedDate == null && it.archivedDate == null }
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
@@ -63,7 +63,7 @@ fun VaultData.toViewState(
 
     val itemTypesCount: Int = CipherType.entries.size
 
-    return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
+    return if (filteredCipherViewListWithAllItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
@@ -139,11 +139,12 @@ fun VaultData.toViewState(
                             },
                     )
                 },
-            trashItemsCount = filteredCipherViewListWithDeletedItems.count {
+            trashItemsCount = filteredCipherViewListWithAllItems.count {
                 it.deletedDate != null
             },
-            // TODO update when SDK is updated
-            archiveItemsCount = 0,
+            archiveItemsCount = filteredCipherViewListWithAllItems.count {
+                it.archivedDate != null
+            },
         )
     }
 }

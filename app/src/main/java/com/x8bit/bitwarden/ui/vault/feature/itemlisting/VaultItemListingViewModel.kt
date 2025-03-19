@@ -2310,6 +2310,14 @@ data class VaultItemListingState(
             }
 
             /**
+             * A Secure Archive item listing.
+             */
+            data object Archive : Vault() {
+                override val titleText: Text get() = R.string.archive.asText()
+                override val hasFab: Boolean get() = false
+            }
+
+            /**
              * A Folder item listing.
              *
              * @property folderId the id of the folder.

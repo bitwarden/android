@@ -36,6 +36,11 @@ sealed class VaultItemListingType {
     data object Trash : VaultItemListingType()
 
     /**
+     * An Archive listing.
+     */
+    data object Archive : VaultItemListingType()
+
+    /**
      * A Folder listing.
      *
      * @param folderId the id of the folder, a null value indicates a, "no folder" grouping.

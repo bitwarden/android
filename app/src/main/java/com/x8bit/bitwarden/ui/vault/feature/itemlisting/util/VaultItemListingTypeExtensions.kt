@@ -24,4 +24,5 @@ fun VaultItemListingType.toItemListingType(): VaultItemListingState.ItemListingT
 
         is VaultItemListingType.SendFile -> VaultItemListingState.ItemListingType.Send.SendFile
         is VaultItemListingType.SendText -> VaultItemListingState.ItemListingType.Send.SendText
+        is VaultItemListingType.Archive -> VaultItemListingState.ItemListingType.Vault.Archive
     }

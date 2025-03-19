@@ -21,6 +21,7 @@ fun VaultItemListingState.ItemListingType.toSearchType(): SearchType =
         is VaultItemListingState.ItemListingType.Vault.SecureNote -> SearchType.Vault.SecureNotes
         is VaultItemListingState.ItemListingType.Vault.SshKey -> SearchType.Vault.SshKeys
         is VaultItemListingState.ItemListingType.Vault.Trash -> SearchType.Vault.Trash
+        is VaultItemListingState.ItemListingType.Vault.Archive -> SearchType.Vault.Archive
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
             SearchType.Vault.Collection(collectionId = collectionId)
         }
@@ -42,6 +43,7 @@ fun VaultItemListingState.ItemListingType.Vault.toVaultItemCipherType(): VaultIt
         is VaultItemListingState.ItemListingType.Vault.Collection -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Folder -> VaultItemCipherType.LOGIN
         is VaultItemListingState.ItemListingType.Vault.Trash,
+        is VaultItemListingState.ItemListingType.Vault.Archive,
             -> {
             throw IllegalStateException(
                 "Cannot create vault item from this VaultItemListingState!",

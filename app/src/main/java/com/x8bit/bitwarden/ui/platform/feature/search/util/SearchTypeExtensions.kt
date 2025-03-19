@@ -22,4 +22,5 @@ fun SearchType.toSearchTypeData(): SearchTypeData =
         SearchType.Vault.Trash -> SearchTypeData.Vault.Trash
         SearchType.Vault.VerificationCodes -> SearchTypeData.Vault.VerificationCodes
         SearchType.Vault.SshKeys -> SearchTypeData.Vault.SshKeys
+        SearchType.Vault.Archive -> SearchTypeData.Vault.Archive
     }

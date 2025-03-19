@@ -38,6 +38,7 @@ private const val SEND_ITEM_LISTING_PREFIX: String = "send_item_listing"
 private const val SEND_ITEM_LISTING_ROUTE: String =
     "$SEND_ITEM_LISTING_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
         "?$ID={$ID}"
+private const val ARCHIVE: String = "archive"
 
 /**
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
@@ -245,6 +246,7 @@ private fun VaultItemListingType.toTypeString(): String {
         is VaultItemListingType.SendFile -> SEND_FILE
         is VaultItemListingType.SendText -> SEND_TEXT
         is VaultItemListingType.SshKey -> SSH_KEY
+        is VaultItemListingType.Archive -> ARCHIVE
     }
 }
 
@@ -260,6 +262,7 @@ private fun VaultItemListingType.toIdOrNull(): String? =
         is VaultItemListingType.SendFile -> null
         is VaultItemListingType.SendText -> null
         is VaultItemListingType.SshKey -> null
+        is VaultItemListingType.Archive -> null
     }
 
 private fun determineVaultItemListingType(
@@ -277,6 +280,7 @@ private fun determineVaultItemListingType(
         COLLECTION -> VaultItemListingType.Collection(collectionId = requireNotNull(id))
         SEND_FILE -> VaultItemListingType.SendFile
         SEND_TEXT -> VaultItemListingType.SendText
+        ARCHIVE -> VaultItemListingType.Archive
         // This should never occur, vaultItemListingTypeString must match
         else -> throw IllegalStateException()
     }

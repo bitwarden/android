@@ -39,8 +39,9 @@ data class VaultHandlers(
     val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
     val dismissImportActionCard: () -> Unit,
     val importActionCardClick: () -> Unit,
+    val archiveClick: () -> Unit,
 ) {
-    @Suppress("UndocumentedPublicClass")
+    @Suppress("UndocumentedPublicClass", "LongMethod")
     companion object {
         /**
          * Creates an instance of [VaultHandlers] by binding actions to the provided
@@ -103,6 +104,9 @@ data class VaultHandlers(
                 },
                 importActionCardClick = {
                     viewModel.trySendAction(VaultAction.ImportActionCardClick)
+                },
+                archiveClick = {
+                    viewModel.trySendAction(VaultAction.ArchiveClick)
                 },
             )
     }

@@ -29,6 +29,7 @@ private const val SEARCH_TYPE_VAULT_VERIFICATION_CODES: String =
     "search_type_vault_verification_codes"
 private const val SEARCH_TYPE_ID: String = "search_type_id"
 private const val SEARCH_TYPE_VAULT_SSH_KEYS: String = "search_type_vault_ssh_keys"
+private const val SEARCH_TYPE_VAULT_ARCHIVE: String = "search_type_vault_archive"
 
 private const val SEARCH_ROUTE_PREFIX: String = "search"
 private const val SEARCH_ROUTE: String = "$SEARCH_ROUTE_PREFIX/{$SEARCH_TYPE}/{$SEARCH_TYPE_ID}"
@@ -127,6 +128,7 @@ private fun SearchType.toTypeString(): String =
         SearchType.Vault.Trash -> SEARCH_TYPE_VAULT_TRASH
         SearchType.Vault.VerificationCodes -> SEARCH_TYPE_VAULT_VERIFICATION_CODES
         SearchType.Vault.SshKeys -> SEARCH_TYPE_VAULT_SSH_KEYS
+        SearchType.Vault.Archive -> SEARCH_TYPE_VAULT_ARCHIVE
     }
 
 private fun SearchType.toIdOrNull(): String? =
@@ -145,4 +147,5 @@ private fun SearchType.toIdOrNull(): String? =
         SearchType.Vault.Trash -> null
         SearchType.Vault.VerificationCodes -> null
         SearchType.Vault.SshKeys -> null
+        SearchType.Vault.Archive -> null
     }

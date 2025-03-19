@@ -64,6 +64,7 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
         SearchTypeData.Vault.Trash -> this
         SearchTypeData.Vault.VerificationCodes -> this
         SearchTypeData.Vault.SshKeys -> this
+        SearchTypeData.Vault.Archive -> this
     }
 
 /**
@@ -105,20 +106,53 @@ private fun CipherView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> deletedDate == null
-        is SearchTypeData.Vault.Cards -> type == CipherType.CARD && deletedDate == null
+        SearchTypeData.Vault.All -> deletedDate == null && archivedDate == null
+        is SearchTypeData.Vault.Cards ->
+            type == CipherType.CARD &&
+                deletedDate == null &&
+                archivedDate == null
+
         is SearchTypeData.Vault.Collection -> {
             searchTypeData.collectionId in this.collectionIds && deletedDate == null
         }
 
-        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
-        SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
-        is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
-        is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
-        is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
-        is SearchTypeData.Vault.SshKeys -> type == CipherType.SSH_KEY && deletedDate == null
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
+        is SearchTypeData.Vault.Folder ->
+            folderId == searchTypeData.folderId &&
+                deletedDate == null &&
+                archivedDate == null
+
+        SearchTypeData.Vault.NoFolder ->
+            folderId == null &&
+                deletedDate == null &&
+                archivedDate == null
+
+        is SearchTypeData.Vault.Identities ->
+            type == CipherType.IDENTITY &&
+                deletedDate == null &&
+                archivedDate == null
+
+        is SearchTypeData.Vault.Logins ->
+            type == CipherType.LOGIN &&
+                deletedDate == null &&
+                archivedDate == null
+
+        is SearchTypeData.Vault.SecureNotes ->
+            type == CipherType.SECURE_NOTE &&
+                deletedDate == null &&
+                archivedDate == null
+
+        is SearchTypeData.Vault.SshKeys ->
+            type == CipherType.SSH_KEY &&
+                deletedDate == null &&
+                archivedDate == null
+
+        is SearchTypeData.Vault.VerificationCodes ->
+            login?.totp != null &&
+                deletedDate == null &&
+                archivedDate == null
+
         is SearchTypeData.Vault.Trash -> deletedDate != null
+        is SearchTypeData.Vault.Archive -> archivedDate != null
     }
 
 /**
