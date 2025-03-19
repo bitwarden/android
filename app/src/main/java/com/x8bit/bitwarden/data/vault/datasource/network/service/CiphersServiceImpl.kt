@@ -241,7 +241,7 @@ class CiphersServiceImpl(
             .archiveCipher(cipherId = cipherId)
             .toResult()
 
-    override suspend fun unarchiveCipher(cipherId: String): Result<SyncResponseJson.Cipher> =
+    override suspend fun unarchiveCipher(cipherId: String): Result<Unit> =
         ciphersApi
             .unarchiveCipher(cipherId = cipherId)
             .toResult()

@@ -363,12 +363,25 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): UnarchiveCipherResult {
         val userId = activeUserId ?: return UnarchiveCipherResult.Error
-        return ciphersService
-            .unarchiveCipher(cipherId = cipherId)
+        return cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
+            .flatMap { cipher ->
+                ciphersService
+                    .unarchiveCipher(cipherId = cipherId)
+                    .flatMap { vaultSdkSource.decryptCipher(userId = userId, cipher = cipher) }
+            }
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = it.copy(
+                        archivedDate = null,
+                    ),
+                )
+            }
             .onSuccess {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = it.copy(collectionIds = cipherView.collectionIds),
+                    cipher = it.toEncryptedNetworkCipherResponse(),
                 )
             }
             .fold(

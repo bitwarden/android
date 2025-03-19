@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.DateTime
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -1598,7 +1599,7 @@ data class VaultItemState(
     val isCipherArchived: Boolean
         get() = viewState.asContentOrNull()
             ?.common
-            ?.canEdit == true
+            ?.currentCipher?.archivedDate is DateTime
 
     /**
      * Whether or not the fab is visible.
