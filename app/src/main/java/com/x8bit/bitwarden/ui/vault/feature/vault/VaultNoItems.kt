@@ -35,7 +35,7 @@ fun VaultNoItems(
     addItemClickAction: () -> Unit,
     policyDisablesSend: Boolean,
     message: String,
-    buttonText: String,
+    buttonText: String?,
     modifier: Modifier = Modifier,
     @DrawableRes vectorRes: Int? = null,
     headerText: String? = null,
@@ -90,12 +90,14 @@ fun VaultNoItems(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        BitwardenFilledButton(
-            icon = rememberVectorPainter(R.drawable.ic_plus_small),
-            modifier = Modifier.standardHorizontalMargin(),
-            onClick = addItemClickAction,
-            label = buttonText,
-        )
+        buttonText?.let {
+            BitwardenFilledButton(
+                icon = rememberVectorPainter(R.drawable.ic_plus_small),
+                modifier = Modifier.standardHorizontalMargin(),
+                onClick = addItemClickAction,
+                label = it,
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1F))
         Spacer(modifier = Modifier.navigationBarsPadding())

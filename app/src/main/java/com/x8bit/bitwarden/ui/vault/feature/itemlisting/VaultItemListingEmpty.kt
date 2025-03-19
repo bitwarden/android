@@ -26,13 +26,18 @@ fun VaultItemListingEmpty(
     addItemClickAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (state.shouldShowAddButton) {
+    if (state.shouldShowAddButton || state.vectorRes != null) {
         VaultNoItems(
             policyDisablesSend = policyDisablesSend,
             vectorRes = state.vectorRes,
             headerText = state.header?.invoke(),
             message = state.message(),
-            buttonText = state.buttonText(),
+            buttonText =
+                if (state.shouldShowAddButton) {
+                    state.buttonText()
+                } else {
+                    null
+                },
             modifier = modifier,
             addItemClickAction = addItemClickAction,
         )

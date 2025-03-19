@@ -231,7 +231,7 @@ fun VaultData.toViewState(
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Archive -> {
-                        R.string.no_items_archive
+                        R.string.no_items_archive_description
                     }
                 }
                     .asText()
@@ -246,7 +246,16 @@ fun VaultData.toViewState(
         }
         VaultItemListingState.ViewState.NoItems(
             header = totpData
-                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") },
+                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "") }
+                ?: run {
+                    when (itemListingType) {
+                        VaultItemListingState.ItemListingType.Vault.Archive -> {
+                            R.string.no_items_archive.asText()
+                        }
+
+                        else -> null
+                    }
+                },
             message = message,
             shouldShowAddButton = shouldShowAddButton,
             buttonText = fido2CreationData
@@ -278,7 +287,13 @@ fun VaultData.toViewState(
                         .asText()
                 },
             vectorRes = totpData
-                ?.let { R.drawable.img_folder_question },
+                ?.let { R.drawable.img_folder_question }
+                ?: when (itemListingType) {
+                    VaultItemListingState.ItemListingType.Vault.Archive ->
+                        R.drawable.no_archives_icon
+
+                    else -> null
+                },
         )
     }
 }
