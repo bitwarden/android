@@ -1,20 +1,18 @@
 package com.x8bit.bitwarden.ui.vault.feature.viewasqrcode
 
+//import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.toViewState
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.FieldView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeTypeField
-//import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -47,6 +45,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
             selectedQrCodeType = selectedQrCodeType,
             qrCodeTypes = qrCodeTypes,
             qrCodeTypeFields = selectedQrCodeType.fields,
+//            selectedCipherFields = autoMapByQr
             cipherFields = emptyList(),
             cipher = null,
 
@@ -56,7 +55,6 @@ class ViewAsQrCodeViewModel @Inject constructor(
     },
 ) {
     private val args = ViewAsQrCodeArgs(savedStateHandle)
-
 
     init {
         //TODO get args.vaultItemCipherType and auto-map
@@ -153,7 +151,6 @@ class ViewAsQrCodeViewModel @Inject constructor(
         }
     }
 
-
     private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
         mutableStateFlow.update {
             it.copy(
@@ -161,63 +158,40 @@ class ViewAsQrCodeViewModel @Inject constructor(
                 qrCodeTypeFields = action.qrCodeType.fields
             )
         }
-//        val currentState = state as? ViewAsQrCodeState.Content ?: return
-//        val cipher = currentState.cipher
-//
-//
-//
-//        val config = QrCodeConfig(action.qrCodeType, fields)
-//        val qrCodeBitmap = QrCodeGenerator.generateQrCode(config)
-//
-//        updateState {
-//            (it as ViewAsQrCodeState.Content).copy(
-//                selectedQrCodeType = action.qrCodeType,
-//                fields = fields,
-//                qrCodeBitmap = qrCodeBitmap
-//            )
-//        }
     }
 
     private fun handleFieldValueChange(action: ViewAsQrCodeAction.FieldValueChange) {
-//        val currentState = state as? ViewAsQrCodeState.Content ?: return
-//
-//        val updatedFields = currentState.fields.toMutableMap().apply {
-//            put(action.fieldKey, action.value)
-//        }
-//
-//        val config = QrCodeConfig(currentState.selectedQrCodeType, updatedFields)
-//        val qrCodeBitmap = QrCodeGenerator.generateQrCode(config)
-//
-//        updateState {
-//            (it as ViewAsQrCodeState.Content).copy(
-//                fields = updatedFields,
-//                qrCodeBitmap = qrCodeBitmap
-//            )
-//        }
+
+        val field = action.field
+
     }
 
-    private fun cipherFieldsFor(cipherType: VaultItemCipherType) :List<Text> = when(cipherType){
+    private fun cipherFieldsFor(cipherType: VaultItemCipherType): List<Text> = when (cipherType) {
         VaultItemCipherType.LOGIN -> listOf(
             R.string.name.asText(),
             R.string.username.asText(),
             R.string.password.asText(),
             R.string.notes.asText(),
-            )
+        )
+
         VaultItemCipherType.CARD -> listOf(
 
             R.string.cardholder_name.asText(),
             R.string.number.asText(),
             //TODO finish
         )
+
         VaultItemCipherType.IDENTITY -> listOf(
             R.string.title.asText(),
             R.string.first_name.asText(),
             //TODO finish
         )
+
         VaultItemCipherType.SECURE_NOTE -> listOf(
             R.string.name.asText(),
             R.string.notes.asText(),
         )
+
         VaultItemCipherType.SSH_KEY -> listOf(
             R.string.public_key.asText(),
             //TODO finish
@@ -225,7 +199,6 @@ class ViewAsQrCodeViewModel @Inject constructor(
     }
 
 }
-
 
 /**
  * Represents the state for viewing attachments.
@@ -237,12 +210,12 @@ data class ViewAsQrCodeState(
     //        val qrCodeBitmap: Bitmap,
     val selectedQrCodeType: QrCodeType,
     val qrCodeTypes: List<QrCodeType>,
-    val qrCodeTypeFields: Map<String, QrCodeTypeField>,
+    val qrCodeTypeFields: List<QrCodeTypeField>,
     @IgnoredOnParcel
-    val cipherFields: List<Text> =  emptyList(),
+    val cipherFields: List<Text> = emptyList(),
     @IgnoredOnParcel
     val cipher: CipherView? = null, //TODO do we need to use null?
-    ) : Parcelable
+) : Parcelable
 
 /**
  * Models events for the [ViewAsQrCodeScreen].
@@ -271,7 +244,8 @@ sealed class ViewAsQrCodeAction {
     /**
      * User changed a field value.
      */
-    data class FieldValueChange(val fieldKey: String, val value: String) : ViewAsQrCodeAction()
+    data class FieldValueChange(val field: QrCodeTypeField, val value: String) :
+        ViewAsQrCodeAction()
 
     /**
      * Internal ViewModel actions.

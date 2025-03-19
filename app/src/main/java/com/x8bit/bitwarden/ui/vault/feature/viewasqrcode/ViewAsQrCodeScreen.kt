@@ -30,7 +30,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
@@ -125,20 +124,22 @@ fun ViewAsQrCodeScreen(
 
             //QR Code Type dropdowns
             Spacer(modifier = Modifier.height(16.dp))
-            viewState.qrCodeTypeFields.values.forEachIndexed { i, field ->
-                val cipherFieldsTextList = viewState.cipherFields.map { it() }.toImmutableList()
-                val fieldsListSize = viewState.qrCodeTypeFields.values.size
+            viewState.qrCodeTypeFields.forEachIndexed { i, field ->
+                val cipherFieldsTextList =
+                    viewState.cipherFields.map { it() }.toImmutableList()
+                val fieldsListSize = viewState.qrCodeTypeFields.size
                 val lastFieldIndex = fieldsListSize - 1;
                 BitwardenMultiSelectButton(
                     label = field.displayName(),
                     options = cipherFieldsTextList,
-                    selectedOption = cipherFieldsTextList[0], //TODO select from VM
+                    selectedOption = cipherFieldsTextList.firstOrNull() ?: "",
                     onOptionSelected = { selectedOption ->
-                        val selectedField = viewState.cipherFields.first {
-                            selectedOption.asText() == it
-                        }
-                        //TODO finish wiring value change
-                        //viewModel.trySendAction(ViewAsQrCodeAction.FieldValueChange(selectedField))
+                        viewModel.trySendAction(
+                            ViewAsQrCodeAction.FieldValueChange(
+                                field, //TODO memory leak?
+                                selectedOption
+                            )
+                        )
                     },
                     cardStyle = when (i) {
                         0 -> when (fieldsListSize) {
@@ -148,10 +149,9 @@ fun ViewAsQrCodeScreen(
 
                         lastFieldIndex -> CardStyle.Bottom
                         else -> CardStyle.Middle()
-
                     },
                     modifier = Modifier
-                        .testTag("QRCodeField")
+                        .testTag("QRCodeField_${field.key}")
                         .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
