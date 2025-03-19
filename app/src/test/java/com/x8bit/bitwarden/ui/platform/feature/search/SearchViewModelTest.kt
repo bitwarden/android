@@ -275,6 +275,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherView = setupForAutofill()
         val cipherId = CIPHER_ID
         val errorMessage = "Server error"
+        val error = Throwable("Oof")
         val updatedCipherView = cipherView.copy(
             login = createMockLoginView(number = 1, clock = clock).copy(
                 uris = listOf(createMockUriView(number = 1)) +
@@ -291,7 +292,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 cipherId = cipherId,
                 cipherView = updatedCipherView,
             )
-        } returns UpdateCipherResult.Error(errorMessage)
+        } returns UpdateCipherResult.Error(errorMessage = errorMessage, error = error)
 
         viewModel.stateFlow.test {
             assertEquals(INITIAL_STATE_FOR_AUTOFILL, awaitItem())
@@ -314,6 +315,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = errorMessage.asText(),
+                            throwable = error,
                         ),
                     ),
                 awaitItem(),
@@ -442,9 +444,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             setupForAutofill()
             val cipherId = CIPHER_ID
             val password = "password"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
             val viewModel = createViewModel()
             assertEquals(
                 INITIAL_STATE_FOR_AUTOFILL,
@@ -465,6 +468,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     dialogState = SearchState.DialogState.Error(
                         title = null,
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -715,8 +719,11 @@ class SearchViewModelTest : BaseViewModelTest() {
     @Test
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
         runTest {
+            val error = Throwable("Ahhh")
             val sendId = "sendId1234"
-            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+            coEvery {
+                vaultRepository.deleteSend(sendId)
+            } returns DeleteSendResult.Error(error = error)
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -739,6 +746,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -787,7 +795,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val sendId = "sendId1234"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -910,10 +918,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode failure should not call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = error)
 
             val viewModel = createViewModel()
             viewModel.trySendAction(

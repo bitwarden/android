@@ -18,5 +18,7 @@ sealed class VerifiedOrganizationDomainSsoDetailsResult {
     /**
      * The request failed.
      */
-    data object Failure : VerifiedOrganizationDomainSsoDetailsResult()
+    data class Failure(
+        val error: Throwable,
+    ) : VerifiedOrganizationDomainSsoDetailsResult()
 }

@@ -46,10 +46,11 @@ class AttachmentsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AttachmentsScreen(
                 viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }
@@ -216,6 +217,7 @@ class AttachmentsScreenTest : BaseComposeTest() {
                 dialogState = AttachmentsState.DialogState.Error(
                     title = null,
                     message = errorMessage.asText(),
+                    throwable = null,
                 ),
             )
         }

@@ -1193,17 +1193,25 @@ class VaultItemViewModel @Inject constructor(
     private fun handlePasswordBreachReceive(
         action: VaultItemAction.Internal.PasswordBreachReceive,
     ) {
-        val message = when (val result = action.result) {
-            BreachCountResult.Error -> R.string.generic_error_message.asText()
+        val dialogState = when (val result = action.result) {
+            is BreachCountResult.Error -> {
+                VaultItemState.DialogState.Generic(
+                    message = R.string.generic_error_message.asText(),
+                    error = result.error,
+                )
+            }
+
             is BreachCountResult.Success -> {
-                if (result.breachCount > 0) {
-                    R.string.password_exposed.asText(result.breachCount)
-                } else {
-                    R.string.password_safe.asText()
-                }
+                VaultItemState.DialogState.Generic(
+                    message = if (result.breachCount > 0) {
+                        R.string.password_exposed.asText(result.breachCount)
+                    } else {
+                        R.string.password_safe.asText()
+                    },
+                )
             }
         }
-        updateDialogState(VaultItemState.DialogState.Generic(message = message))
+        updateDialogState(dialogState)
     }
 
     @Suppress("LongMethod")
@@ -1294,10 +1302,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.ValidatePasswordReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1327,11 +1336,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultItemAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1353,11 +1363,12 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleRestoreCipherReceive(action: VaultItemAction.Internal.RestoreCipherReceive) {
-        when (action.result) {
-            RestoreCipherResult.Error -> {
+        when (val result = action.result) {
+            is RestoreCipherResult.Error -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1374,10 +1385,11 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.AttachmentDecryptReceive,
     ) {
         when (val result = action.result) {
-            DownloadAttachmentResult.Failure -> {
+            is DownloadAttachmentResult.Failure -> {
                 updateDialogState(
                     VaultItemState.DialogState.Generic(
                         message = R.string.unable_to_download_file.asText(),
+                        error = result.error,
                     ),
                 )
             }
@@ -1982,6 +1994,7 @@ data class VaultItemState(
         @Parcelize
         data class Generic(
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

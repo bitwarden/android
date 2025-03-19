@@ -99,6 +99,8 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -467,7 +469,7 @@ class AuthRepositoryImpl(
         masterPassword: String,
     ): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return DeleteAccountResult.Error(message = null)
+            ?: return DeleteAccountResult.Error(message = null, error = NoActiveUserException())
         mutableHasPendingAccountDeletionStateFlow.value = true
         return authSdkSource
             .hashPassword(
@@ -501,18 +503,13 @@ class AuthRepositoryImpl(
         fold(
             onFailure = {
                 clearPendingAccountDeletion()
-                DeleteAccountResult.Error(message = null)
+                DeleteAccountResult.Error(error = it, message = null)
             },
             onSuccess = { response ->
                 when (response) {
                     is DeleteAccountResponseJson.Invalid -> {
                         clearPendingAccountDeletion()
-                        DeleteAccountResult.Error(
-                            message = response.validationErrors
-                                ?.values
-                                ?.firstOrNull()
-                                ?.firstOrNull(),
-                        )
+                        DeleteAccountResult.Error(message = response.message, error = null)
                     }
 
                     DeleteAccountResponseJson.Success -> {
@@ -524,8 +521,10 @@ class AuthRepositoryImpl(
         )
 
     override suspend fun createNewSsoUser(): NewSsoUserResult {
-        val account = authDiskSource.userState?.activeAccount ?: return NewSsoUserResult.Failure
-        val orgIdentifier = rememberedOrgIdentifier ?: return NewSsoUserResult.Failure
+        val account = authDiskSource.userState?.activeAccount
+            ?: return NewSsoUserResult.Failure(error = NoActiveUserException())
+        val orgIdentifier = rememberedOrgIdentifier
+            ?: return NewSsoUserResult.Failure(error = MissingPropertyException("OrgIdentifier"))
         val userId = account.profile.userId
         return organizationService
             .getOrganizationAutoEnrollStatus(orgIdentifier)
@@ -577,7 +576,7 @@ class AuthRepositoryImpl(
             }
             .fold(
                 onSuccess = { NewSsoUserResult.Success },
-                onFailure = { NewSsoUserResult.Failure },
+                onFailure = { NewSsoUserResult.Failure(error = it) },
             )
     }
 
@@ -586,10 +585,13 @@ class AuthRepositoryImpl(
         asymmetricalKey: String,
     ): LoginResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return LoginResult.Error(errorMessage = null)
+            ?: return LoginResult.Error(errorMessage = null, error = NoActiveUserException())
         val userId = profile.userId
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return LoginResult.Error(errorMessage = null)
+            ?: return LoginResult.Error(
+                errorMessage = null,
+                error = MissingPropertyException("Private Key"),
+            )
 
         checkForVaultUnlockError(
             onVaultUnlockError = { error ->
@@ -639,7 +641,7 @@ class AuthRepositoryImpl(
             onFailure = { throwable ->
                 when {
                     throwable.isSslHandShakeError() -> LoginResult.CertificateError
-                    else -> LoginResult.Error(errorMessage = null)
+                    else -> LoginResult.Error(errorMessage = null, error = throwable)
                 }
             },
             onSuccess = { it },
@@ -688,7 +690,10 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(errorMessage = null)
+        ?: LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Identity Token Auth Model"),
+        )
 
     override suspend fun login(
         email: String,
@@ -708,7 +713,10 @@ class AuthRepositoryImpl(
                 orgIdentifier = orgIdentifier,
             )
         }
-        ?: LoginResult.Error(errorMessage = null)
+        ?: LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Identity Token Auth Model"),
+        )
 
     override suspend fun login(
         email: String,
@@ -767,7 +775,7 @@ class AuthRepositoryImpl(
     override suspend fun requestOneTimePasscode(): RequestOtpResult =
         accountsService.requestOneTimePasscode()
             .fold(
-                onFailure = { RequestOtpResult.Error(it.message) },
+                onFailure = { RequestOtpResult.Error(message = it.message, error = it) },
                 onSuccess = { RequestOtpResult.Success },
             )
 
@@ -777,7 +785,7 @@ class AuthRepositoryImpl(
                 passcode = oneTimePasscode,
             )
             .fold(
-                onFailure = { VerifyOtpResult.NotVerified(it.message) },
+                onFailure = { VerifyOtpResult.NotVerified(errorMessage = it.message, error = it) },
                 onSuccess = { VerifyOtpResult.Verified },
             )
 
@@ -785,21 +793,27 @@ class AuthRepositoryImpl(
         resendEmailRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
-                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
                     onSuccess = { ResendEmailResult.Success },
                 )
             }
-            ?: ResendEmailResult.Error(message = null)
+            ?: ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend Email Request"),
+            )
 
     override suspend fun resendNewDeviceOtp(): ResendEmailResult =
         resendNewDeviceOtpRequestJson
             ?.let { jsonRequest ->
                 accountsService.resendNewDeviceOtp(body = jsonRequest).fold(
-                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onFailure = { ResendEmailResult.Error(message = it.message, error = it) },
                     onSuccess = { ResendEmailResult.Success },
                 )
             }
-            ?: ResendEmailResult.Error(message = null)
+            ?: ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend New Device OTP Request"),
+            )
 
     override fun switchAccount(userId: String): SwitchAccountResult {
         val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
@@ -901,7 +915,10 @@ class AuthRepositoryImpl(
                         is RegisterResponseJson.CaptchaRequired -> {
                             it.validationErrors.captchaKeys.firstOrNull()
                                 ?.let { key -> RegisterResult.CaptchaRequired(captchaId = key) }
-                                ?: RegisterResult.Error(errorMessage = null)
+                                ?: RegisterResult.Error(
+                                    errorMessage = null,
+                                    error = MissingPropertyException("Captcha ID"),
+                                )
                         }
 
                         is RegisterResponseJson.Success -> {
@@ -910,11 +927,11 @@ class AuthRepositoryImpl(
                         }
 
                         is RegisterResponseJson.Invalid -> {
-                            RegisterResult.Error(errorMessage = it.message)
+                            RegisterResult.Error(errorMessage = it.message, error = null)
                         }
                     }
                 },
-                onFailure = { RegisterResult.Error(errorMessage = null) },
+                onFailure = { RegisterResult.Error(errorMessage = null, error = it) },
             )
     }
 
@@ -922,11 +939,15 @@ class AuthRepositoryImpl(
         return accountsService.requestPasswordHint(email).fold(
             onSuccess = {
                 when (it) {
-                    is PasswordHintResponseJson.Error -> PasswordHintResult.Error(it.errorMessage)
+                    is PasswordHintResponseJson.Error -> PasswordHintResult.Error(
+                        message = it.errorMessage,
+                        error = null,
+                    )
+
                     PasswordHintResponseJson.Success -> PasswordHintResult.Success
                 }
             },
-            onFailure = { PasswordHintResult.Error(null) },
+            onFailure = { PasswordHintResult.Error(message = null, error = it) },
         )
     }
 
@@ -934,12 +955,12 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(error = NoActiveUserException())
         val profile = activeAccount.profile
         val userId = profile.userId
         val userKey = authDiskSource
             .getUserKey(userId = userId)
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
         val keyConnectorUrl = organizations
             .find {
                 it.shouldUseKeyConnector &&
@@ -947,7 +968,9 @@ class AuthRepositoryImpl(
                     it.type != OrganizationType.ADMIN
             }
             ?.keyConnectorUrl
-            ?: return RemovePasswordResult.Error
+            ?: return RemovePasswordResult.Error(
+                error = MissingPropertyException("Key Connector URL"),
+            )
         return keyConnectorManager
             .migrateExistingUserToKeyConnector(
                 userId = userId,
@@ -965,7 +988,7 @@ class AuthRepositoryImpl(
                 settingsRepository.setDefaultsIfNecessary(userId = userId)
             }
             .fold(
-                onFailure = { RemovePasswordResult.Error },
+                onFailure = { RemovePasswordResult.Error(error = it) },
                 onSuccess = { RemovePasswordResult.Success },
             )
     }
@@ -978,7 +1001,7 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return ResetPasswordResult.Error
+            ?: return ResetPasswordResult.Error(error = NoActiveUserException())
         val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
@@ -988,7 +1011,7 @@ class AuthRepositoryImpl(
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
                 .fold(
-                    onFailure = { return ResetPasswordResult.Error },
+                    onFailure = { return ResetPasswordResult.Error(error = it) },
                     onSuccess = { it },
                 )
         }
@@ -1034,7 +1057,7 @@ class AuthRepositoryImpl(
                     // Return the success.
                     ResetPasswordResult.Success
                 },
-                onFailure = { ResetPasswordResult.Error },
+                onFailure = { ResetPasswordResult.Error(error = it) },
             )
     }
 
@@ -1047,7 +1070,7 @@ class AuthRepositoryImpl(
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
-            ?: return SetPasswordResult.Error
+            ?: return SetPasswordResult.Error(error = NoActiveUserException())
         val userId = activeAccount.profile.userId
 
         // Update the saved master password hash.
@@ -1058,7 +1081,7 @@ class AuthRepositoryImpl(
                 kdf = activeAccount.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-            .getOrElse { return@setPassword SetPasswordResult.Error }
+            .getOrElse { return@setPassword SetPasswordResult.Error(error = it) }
 
         return when (activeAccount.profile.forcePasswordResetReason) {
             ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
@@ -1108,7 +1131,7 @@ class AuthRepositoryImpl(
                     }
             }
             .flatMap {
-                when (vaultRepository.unlockVaultWithMasterPassword(password)) {
+                when (val result = vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
                             userId = userId,
@@ -1117,12 +1140,9 @@ class AuthRepositoryImpl(
                         )
                     }
 
-                    is VaultUnlockResult.AuthenticationError,
-                    VaultUnlockResult.BiometricDecodingError,
-                    VaultUnlockResult.InvalidStateError,
-                    VaultUnlockResult.GenericError,
-                        -> {
-                        IllegalStateException("Failed to unlock vault").asFailure()
+                    is VaultUnlockError -> {
+                        (result.error ?: IllegalStateException("Failed to unlock vault"))
+                            .asFailure()
                     }
                 }
             }
@@ -1132,7 +1152,7 @@ class AuthRepositoryImpl(
                 this.organizationIdentifier = null
             }
             .fold(
-                onFailure = { SetPasswordResult.Error },
+                onFailure = { SetPasswordResult.Error(error = it) },
                 onSuccess = { SetPasswordResult.Success },
             )
     }
@@ -1167,7 +1187,7 @@ class AuthRepositoryImpl(
                     verifiedDate = it.verifiedDate,
                 )
             },
-            onFailure = { OrganizationDomainSsoDetailsResult.Failure },
+            onFailure = { OrganizationDomainSsoDetailsResult.Failure(error = it) },
         )
 
     override suspend fun getVerifiedOrganizationDomainSsoDetails(
@@ -1182,7 +1202,7 @@ class AuthRepositoryImpl(
                     verifiedOrganizationDomainSsoDetails = it.verifiedOrganizationDomainSsoDetails,
                 )
             },
-            onFailure = { VerifiedOrganizationDomainSsoDetailsResult.Failure },
+            onFailure = { VerifiedOrganizationDomainSsoDetailsResult.Failure(error = it) },
         )
 
     override suspend fun prevalidateSso(
@@ -1195,19 +1215,19 @@ class AuthRepositoryImpl(
             onSuccess = {
                 when (it) {
                     is PrevalidateSsoResponseJson.Error -> {
-                        PrevalidateSsoResult.Failure(message = it.message)
+                        PrevalidateSsoResult.Failure(message = it.message, error = null)
                     }
 
                     is PrevalidateSsoResponseJson.Success -> {
                         if (it.token.isNullOrBlank()) {
-                            PrevalidateSsoResult.Failure()
+                            PrevalidateSsoResult.Failure(error = MissingPropertyException("Token"))
                         } else {
                             PrevalidateSsoResult.Success(token = it.token)
                         }
                     }
                 }
             },
-            onFailure = { PrevalidateSsoResult.Failure() },
+            onFailure = { PrevalidateSsoResult.Failure(error = it) },
         )
 
     override fun setSsoCallbackResult(result: SsoCallbackResult) {
@@ -1221,15 +1241,15 @@ class AuthRepositoryImpl(
                 deviceId = authDiskSource.uniqueAppId,
             )
             .fold(
-                onFailure = { KnownDeviceResult.Error },
-                onSuccess = { KnownDeviceResult.Success(it) },
+                onFailure = { KnownDeviceResult.Error(error = it) },
+                onSuccess = { KnownDeviceResult.Success(isKnownDevice = it) },
             )
 
     override suspend fun getPasswordBreachCount(password: String): BreachCountResult =
         haveIBeenPwnedService
             .getPasswordBreachCount(password)
             .fold(
-                onFailure = { BreachCountResult.Error },
+                onFailure = { BreachCountResult.Error(error = it) },
                 onSuccess = { BreachCountResult.Success(it) },
             )
 
@@ -1249,11 +1269,11 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = { PasswordStrengthResult.Success(passwordStrength = it) },
-                onFailure = { PasswordStrengthResult.Error },
+                onFailure = { PasswordStrengthResult.Error(error = it) },
             )
 
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
-        val userId = activeUserId ?: return ValidatePasswordResult.Error
+        val userId = activeUserId ?: return ValidatePasswordResult.Error(NoActiveUserException())
         return authDiskSource
             .getMasterPasswordHash(userId = userId)
             ?.let { masterPasswordHash ->
@@ -1265,13 +1285,13 @@ class AuthRepositoryImpl(
                     )
                     .fold(
                         onSuccess = { ValidatePasswordResult.Success(isValid = it) },
-                        onFailure = { ValidatePasswordResult.Error },
+                        onFailure = { ValidatePasswordResult.Error(error = it) },
                     )
             }
             ?: run {
                 val encryptedKey = authDiskSource
                     .getUserKey(userId)
-                    ?: return ValidatePasswordResult.Error
+                    ?: return ValidatePasswordResult.Error(MissingPropertyException("UserKey"))
                 vaultSdkSource
                     .validatePasswordUserKey(
                         userId = userId,
@@ -1301,10 +1321,12 @@ class AuthRepositoryImpl(
             .userState
             ?.activeAccount
             ?.profile
-            ?: return ValidatePinResult.Error
+            ?: return ValidatePinResult.Error(error = NoActiveUserException())
         val pinProtectedUserKey = authDiskSource
             .getPinProtectedUserKey(userId = activeAccount.userId)
-            ?: return ValidatePinResult.Error
+            ?: return ValidatePinResult.Error(
+                error = MissingPropertyException("Pin Protected User Key"),
+            )
         return vaultSdkSource
             .validatePin(
                 userId = activeAccount.userId,
@@ -1313,7 +1335,7 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = { ValidatePinResult.Success(isValid = it) },
-                onFailure = { ValidatePinResult.Error },
+                onFailure = { ValidatePinResult.Error(error = it) },
             )
     }
 
@@ -1339,7 +1361,10 @@ class AuthRepositoryImpl(
                 onSuccess = {
                     when (it) {
                         is SendVerificationEmailResponseJson.Invalid -> {
-                            SendVerificationEmailResult.Error(it.message)
+                            SendVerificationEmailResult.Error(
+                                errorMessage = it.message,
+                                error = null,
+                            )
                         }
 
                         is SendVerificationEmailResponseJson.Success -> {
@@ -1347,9 +1372,7 @@ class AuthRepositoryImpl(
                         }
                     }
                 },
-                onFailure = {
-                    SendVerificationEmailResult.Error(null)
-                },
+                onFailure = { SendVerificationEmailResult.Error(errorMessage = null, error = it) },
             )
 
     override suspend fun validateEmailToken(email: String, token: String): EmailTokenResult {
@@ -1365,15 +1388,13 @@ class AuthRepositoryImpl(
                     when (val json = it) {
                         VerifyEmailTokenResponseJson.Valid -> EmailTokenResult.Success
                         is VerifyEmailTokenResponseJson.Invalid -> {
-                            EmailTokenResult.Error(json.message)
+                            EmailTokenResult.Error(message = json.message, error = null)
                         }
 
                         VerifyEmailTokenResponseJson.TokenExpired -> EmailTokenResult.Expired
                     }
                 },
-                onFailure = {
-                    EmailTokenResult.Error(message = null)
-                },
+                onFailure = { EmailTokenResult.Error(message = null, error = it) },
             )
     }
 
@@ -1645,7 +1666,10 @@ class AuthRepositoryImpl(
                         LoginResult.UnofficialServerError
                     }
 
-                    else -> LoginResult.Error(errorMessage = null)
+                    else -> LoginResult.Error(
+                        errorMessage = null,
+                        error = throwable,
+                    )
                 }
             },
             onSuccess = { loginResponse ->
@@ -1681,6 +1705,7 @@ class AuthRepositoryImpl(
                             is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
                                 LoginResult.Error(
                                     errorMessage = loginResponse.errorMessage,
+                                    error = null,
                                 )
                             }
                         }
@@ -1883,7 +1908,7 @@ class AuthRepositoryImpl(
                 }
                 .fold(
                     // If the request failed, we want to abort the login process
-                    onFailure = { VaultUnlockResult.GenericError },
+                    onFailure = { VaultUnlockResult.GenericError(error = it) },
                     onSuccess = { it },
                 )
         } else {
@@ -1923,7 +1948,7 @@ class AuthRepositoryImpl(
                 }
                 .fold(
                     // If the request failed, we want to abort the login process
-                    onFailure = { VaultUnlockResult.GenericError },
+                    onFailure = { VaultUnlockResult.GenericError(error = it) },
                     onSuccess = { it },
                 )
         }

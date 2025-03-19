@@ -72,9 +72,9 @@ class AuthenticatorBridgeRepositoryImpl(
 
                     when (unlockResult) {
                         is VaultUnlockResult.AuthenticationError,
-                        VaultUnlockResult.BiometricDecodingError,
-                        VaultUnlockResult.GenericError,
-                        VaultUnlockResult.InvalidStateError,
+                        is VaultUnlockResult.BiometricDecodingError,
+                        is VaultUnlockResult.GenericError,
+                        is VaultUnlockResult.InvalidStateError,
                             -> {
                             // Not being able to unlock the user's vault with the
                             // decrypted unlock key is an unexpected case, but if it does
@@ -116,7 +116,10 @@ class AuthenticatorBridgeRepositoryImpl(
 
                 // Lock the user's vault if we unlocked it for this operation:
                 if (!isVaultAlreadyUnlocked) {
-                    vaultRepository.lockVault(userId)
+                    vaultRepository.lockVault(
+                        userId = userId,
+                        isUserInitiated = false,
+                    )
                 }
 
                 SharedAccountData.Account(

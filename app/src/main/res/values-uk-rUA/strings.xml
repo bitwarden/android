@@ -892,7 +892,7 @@
   <string name="logging_in_on">Увійти на</string>
   <string name="logging_in_on_with_colon">Вхід на:</string>
   <string name="vault">Сховище</string>
-  <string name="appearance">Вигляд</string>
+  <string name="appearance">Подання</string>
   <string name="account_security">Безпека облікового запису</string>
   <string name="bitwarden_help_center">Довідковий центр Bitwarden</string>
   <string name="contact_bitwarden_support">Звернутися до служби підтримки Bitwarden</string>
@@ -1220,10 +1220,13 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з ключем доступу через перевищення спроб перевірки користувача.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
   <string name="self_host_server_url">URL-адреса власного сервера</string>
-  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
-  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
-  <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
-  <string name="show_more">Show more</string>
-  <string name="no_folder">No folder</string>
-  <string name="show_less">Show less</string>
+  <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome (бета-версія)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Покращення заповнення даних входу на підтримуваних вебсайтах у Chrome. Після увімкнення вас буде спрямовано в налаштування Chrome для активації автозаповнення третіх сторін.</string>
+  <string name="show_more">Розгорнути</string>
+  <string name="no_folder">Без теки</string>
+  <string name="show_less">Згорнути</string>
+  <string name="add_field">Додати поле</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Поширити подробиці про помилку</string>
 </resources>

@@ -271,7 +271,7 @@
   <string name="unable_to_download_file">Không thể tải về tệp tin.</string>
   <string name="unable_to_open_file">Thiết bị của bạn không thể mở loại tệp này.</string>
   <string name="downloading">Đang tải xuống...</string>
-  <string name="attachment_large_warning">Tập tin đính kèm này có kích thước %1$s. Bạn có chắc chắn muốn tải nó xuống thiết bị của mình?</string>
+  <string name="attachment_large_warning">Tệp tin đính kèm này có kích thước %1$s. Bạn có chắc muốn tải nó xuống thiết bị của mình?</string>
   <string name="authenticator_key">Khóa xác thực (TOTP)</string>
   <string name="verification_code_totp">Mã xác thực (TOTP)</string>
   <string name="authenticator_key_added">Đã thêm khóa xác thực.</string>
@@ -288,8 +288,8 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="attachement_added">Đã thêm tệp đính kèm</string>
   <string name="attachment_deleted">Đã xóa tệp đính kèm</string>
   <string name="choose_file">Chọn tệp</string>
-  <string name="file">Tập tin</string>
-  <string name="no_file_chosen">Chưa chọn tập tin</string>
+  <string name="file">Tệp tin</string>
+  <string name="no_file_chosen">Chưa chọn tệp tin</string>
   <string name="no_attachments">Không có tệp đính kèm.</string>
   <string name="file_source">Tệp nguồn</string>
   <string name="feature_unavailable">Tính năng không có sẵn</string>
@@ -317,7 +317,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="number">Số thẻ</string>
   <string name="security_code">Mã bảo mật</string>
   <string name="type_card">Thẻ</string>
-  <string name="type_identity">Danh tính</string>
+  <string name="type_identity">Danh bạ</string>
   <string name="type_login">Đăng nhập</string>
   <string name="type_secure_note">Ghi chú</string>
   <string name="address1">Địa chỉ 1</string>
@@ -342,7 +342,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="june">Tháng 6</string>
   <string name="last_name">Họ</string>
   <string name="full_name">Họ tên đầy đủ</string>
-  <string name="license_number">Số giấy phép</string>
+  <string name="license_number">Biển số xe</string>
   <string name="march">Tháng 3</string>
   <string name="may">Tháng 5</string>
   <string name="middle_name">Tên lót</string>
@@ -388,7 +388,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="field_type_hidden">Ẩn</string>
   <string name="field_type_linked">Đã liên kết</string>
   <string name="field_type_text">Văn bản</string>
-  <string name="new_custom_field">Trường tùy chỉnh mới</string>
+  <string name="new_custom_field">Thêm trường tùy chỉnh</string>
   <string name="select_type_field">Bạn muốn thêm loại trường tùy chỉnh nào?</string>
   <string name="remove">Xoá</string>
   <string name="new_uri">URL Mới</string>
@@ -510,7 +510,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="solarized_dark">Tối</string>
   <string name="autofill_blocked_uris">Tự động điền các URI đã chặn</string>
   <string name="ask_to_add_login">Hỏi khi thêm thông tin đăng nhập</string>
-  <string name="ask_to_add_login_description">Yêu cầu thêm mục nếu không tìm thấy nó trong kho của bạn.</string>
+  <string name="ask_to_add_login_description">Gợi ý thêm mục nếu trong kho của bạn chưa có nó.</string>
   <string name="on_restart">Khi khởi động lại ứng dụng</string>
   <string name="autofill_service_not_enabled">Điền tự động giúp dễ dàng an toàn truy cập kho Bitwarden của bạn từ các trang web và ứng dụng khác. Hãy bật nó trong mục \"Cài đặt\".</string>
   <string name="theme_applied_on_restart">Chủ đề sẽ được áp dụng khi khởi động lại ứng dụng.</string>
@@ -538,7 +538,7 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="code_sent">Đã gửi mã!</string>
   <string name="confirm_your_identity">Xác minh danh tính để tiếp tục.</string>
   <string name="export_vault_warning">Tệp trích xuất này chứa dữ liệu kho của bạn dưới một định dạng không được mã hóa. Bạn không nên lưu trữ hay gửi tệp này thông qua phương thức không an toàn (như email). Xóa nó ngay lập tức khi bạn đã dùng xong.</string>
-  <string name="export_vault_file_pw_protect_info">Tập tin xuất này sẽ được bảo vệ bằng mật khẩu và yêu cầu mật khẩu để giải mã.</string>
+  <string name="export_vault_file_pw_protect_info">Tệp tin xuất này sẽ được bảo vệ bằng mật khẩu và yêu cầu mật khẩu để giải mã.</string>
   <string name="export_vault_confirmation_title">Xác nhận xuất kho</string>
   <string name="warning">Cảnh báo</string>
   <string name="export_vault_failure">Xảy ra lỗi khi xuất kho của bạn. Nếu vấn đề vẫn tiếp diễn, hãy xuất trên bản web.</string>
@@ -602,15 +602,15 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="personal_ownership_submit_error">Do chính sách của tổ chức, bạn không được lưu trữ mục trong kho mật khẩu cá nhân.</string>
   <string name="personal_ownership_policy_in_effect">Chính sách của tổ chức đang ảnh hưởng đến các tùy chọn quyền sở hữu của bạn.</string>
   <string name="send">Gửi</string>
-  <string name="send_details">Gửi chi tiết</string>
+  <string name="send_details">Chi tiết gửi</string>
   <string name="all_sends">Tất cả mục Gửi</string>
   <string name="sends">Gửi</string>
   <string name="text">Văn bản</string>
   <string name="text_to_share">Nội dung muốn chia sẻ</string>
   <string name="type_text">Văn bản</string>
-  <string name="hide_text_by_default">Khi truy cập vào phần Gửi, văn bản sẽ được ẩn theo mặc định</string>
-  <string name="type_file">Tập tin</string>
-  <string name="type_file_info">Tập tin bạn muốn gửi.</string>
+  <string name="hide_text_by_default">Khi truy cập vào mục Gửi, văn bản sẽ được ẩn theo mặc định</string>
+  <string name="type_file">Tệp tin</string>
+  <string name="type_file_info">Tệp tin bạn muốn gửi.</string>
   <string name="file_type_is_selected">Loại tệp được chọn.</string>
   <string name="file_type_is_not_selected">Loại tệp chưa được chọn, nhấn để chọn.</string>
   <string name="text_type_is_selected">Loại văn bản được chọn.</string>
@@ -621,11 +621,11 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="pending_delete">Đang chờ xóa</string>
   <string name="expired">Đã hết hạn</string>
   <string name="maximum_access_count">Số lần truy cập tối đa</string>
-  <string name="maximum_access_count_info">Nếu được thiết lập, khi đã đạt tới số lượng truy cập tối đa, người dùng sẽ không thể truy cập mục Gửi này nữa.</string>
+  <string name="maximum_access_count_info">Nếu được thiết lập, người dùng sẽ không thể truy cập mục Gửi này khi đã đạt tới số lần truy cập tối đa.</string>
   <string name="maximum_access_count_reached">Đã vượt số lần truy cập tối đa</string>
   <string name="current_access_count">Số lần truy cập hiện tại</string>
   <string name="new_password">Mật khẩu mới</string>
-  <string name="password_info">Yêu cầu nhập mật khẩu khi người dùng truy cập vào phần Gửi này.</string>
+  <string name="password_info">Yêu cầu nhập mật khẩu này để truy cập mục Gửi.</string>
   <string name="remove_password">Xóa mật khẩu</string>
   <string name="are_you_sure_remove_send_password">Bạn có chắc muốn xóa mật khẩu này?</string>
   <string name="removing_send_password">Đang xóa mật khẩu</string>
@@ -898,8 +898,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="contact_bitwarden_support">Liên hệ với bộ phận hỗ trợ Bitwarden</string>
   <string name="copy_app_information">Sao chép thông tin ứng dụng</string>
   <string name="sync_now">Đồng bộ ngay</string>
-  <string name="unlock_options">Tùy chọn mở khóa</string>
-  <string name="session_timeout">Thời gian dùng phiên</string>
+  <string name="unlock_options">Mở khóa kho</string>
+  <string name="session_timeout">Thời gian hết phiên</string>
   <string name="session_timeout_action">Hành động sau khi hết phiên</string>
   <string name="account_fingerprint_phrase">Cụm vân tay tài khoản</string>
   <string name="one_hour_and_one_minute">Một giờ một phút</string>
@@ -907,7 +907,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="x_hours_and_one_minute">%1$s giờ một phút</string>
   <string name="x_hours_and_y_minutes">%1$s giờ %2$s phút</string>
   <string name="x_hours">%1$s giờ</string>
-  <string name="passkey_management_explanation_long">Sử dụng Bitwarden để lưu các mã khoá mới và đăng nhập bằng các mã khoá được lưu trong kho của bạn.</string>
+  <string name="passkey_management_explanation_long">Dùng Bitwarden để lưu các mã khoá mới và đăng nhập bằng các mã khoá được lưu trong kho của bạn.</string>
   <string name="autofill_services_explanation_long">Dùng Android Autofill Framework để điền thông tin đăng nhập vào các ứng dụng trên điện thoại.</string>
   <string name="use_inline_autofill_explanation_long">Dùng tính năng tự động điền nội tuyến nếu bàn phím hỗ trợ. Nếu không, sẽ dùng lớp phủ mặc định.</string>
   <string name="additional_options">Tùy chọn bổ sung</string>
@@ -971,13 +971,13 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Thao tác mã khóa không thành công vì liên kết tài sản bị thiếu</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Thao tác mã khóa không thành công vì không tìm thấy app trong tài sản liên kết</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Thao tác mã khóa không thành công vì không thể xác minh ứng dụng</string>
-  <string name="confirm_file_password">Nhập lại mật khẩu tập tin</string>
+  <string name="confirm_file_password">Nhập lại mật khẩu tệp tin</string>
   <string name="continue_to_give_feedback">Tiếp tục phản hồi?</string>
   <string name="continue_to_provide_feedback">Chọn tiếp tục để phản hồi về app mới!</string>
-  <string name="file_password">Mật khẩu tập tin</string>
+  <string name="file_password">Mật khẩu tệp tin</string>
   <string name="give_feedback">Gửi phản hồi</string>
   <string name="password_protected">Được bảo vệ bởi mật khẩu</string>
-  <string name="password_used_to_export">Mật khẩu này sẽ được sử dụng để xuất và nhập tập tin này</string>
+  <string name="password_used_to_export">Mật khẩu này sẽ được sử dụng để xuất và nhập tệp tin này</string>
   <string name="autofill_suggestion">Gợi ý điền tự động</string>
   <string name="continue_to_complete_web_authn_verification">Tiếp tục xác thực với WebAuthn.</string>
   <string name="launch_web_authn">Khởi chạy WebAuthn</string>
@@ -1083,8 +1083,8 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="import_logins">Nhập đăng nhập</string>
   <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Từ máy tính của bạn, hãy làm theo các hướng dẫn sau để xuất mật khẩu đã lưu từ trình duyệt hoặc trình quản lý mật khẩu khác. Sau đó, nhập chúng một cách an toàn vào Bitwarden.</string>
   <string name="give_your_vault_a_head_start">Tạo khởi đầu cho kho</string>
-  <string name="class_3_biometrics_description">Yêu cầu xác thực sinh trắc học mạnh và có thể không tương thích với tất cả các tùy chọn sinh trắc học trên thiết bị này.</string>
-  <string name="class_2_biometrics_description">Yêu cầu xác thực sinh trắc học mạnh và có thể không tương thích với tất cả các tùy chọn sinh trắc học trên thiết bị này.</string>
+  <string name="class_3_biometrics_description">Mở khóa bằng xác thực sinh trắc học có thể không tương thích với các tùy chọn sinh trắc học trên thiết bị này.</string>
+  <string name="class_2_biometrics_description">Mở khóa bằng xác thực sinh trắc học có thể không tương thích với các tùy chọn sinh trắc học trên thiết bị này.</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">Trên máy tính, đăng nhập vào trình duyệt hoặc trình quản lý mật khẩu.</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings">Xuất mật khẩu. Tùy chọn này thường có trong cài đặt.</string>
   <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">Chọn nhập dữ liệu trong web app, sau đó Xong để hoàn tất đồng bộ.</string>
@@ -1131,11 +1131,11 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="skip_for_now">Bỏ qua</string>
   <string name="done_text">Xong</string>
   <string name="page_number_x_of_y">%1$s trên %2$s</string>
-  <string name="copy_identity_name">Sao chép tên danh tính</string>
+  <string name="copy_identity_name">Sao chép tên danh bạ</string>
   <string name="copy_company">Sao chép công ty</string>
   <string name="copy_ssn">Sao chép số an sinh xã hội</string>
   <string name="copy_passport_number">Sao chép số hộ chiếu</string>
-  <string name="copy_license_number">Sao chép số giấy phép</string>
+  <string name="copy_license_number">Sao chép biển số xe</string>
   <string name="copy_email">Sao chép email</string>
   <string name="copy_phone">Sao chép số điện thoại</string>
   <string name="copy_address">Sao chép địa chỉ</string>
@@ -1165,7 +1165,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="copy_private_key">Chép khóa riêng tư</string>
   <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Bạn có thể thay đổi email trên Bitwarden bản web.</string>
   <string name="login_credentials">Thông tin đăng nhập</string>
-  <string name="autofill_options">Tùy chọn tự động điền</string>
+  <string name="autofill_options">Tự động điền</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Sử dụng nút này để tạo mật khẩu mới duy nhất.</string>
   <string name="coachmark_1_of_3">1 trong 3</string>
   <string name="coachmark_2_of_3">2 trong 3</string>
@@ -1226,4 +1226,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="show_more">Xem thêm</string>
   <string name="no_folder">Chưa phân loại</string>
   <string name="show_less">Thu gọn</string>
+  <string name="add_field">Thêm trường</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

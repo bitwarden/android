@@ -32,11 +32,12 @@ class CheckEmailScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             CheckEmailScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

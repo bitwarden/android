@@ -16,5 +16,5 @@ sealed class DecryptFido2CredentialAutofillViewResult {
     /**
      * Generic error while decrypting credentials.
      */
-    data object Error : DecryptFido2CredentialAutofillViewResult()
+    data class Error(val error: Throwable) : DecryptFido2CredentialAutofillViewResult()
 }

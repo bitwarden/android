@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 /**
  * Creates a list item for a [FlagKey].
  */
-@Suppress("UNCHECKED_CAST")
 @Composable
 fun <T : Any> FlagKey<T>.ListItemContent(
     currentValue: T,
@@ -43,15 +42,31 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.AnonAddySelfHostAlias,
     FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.ChromeAutofill,
+    FlagKey.MobileErrorReporting,
+        -> {
+        @Suppress("UNCHECKED_CAST")
+        BooleanFlagItem(
+            label = flagKey.getDisplayLabel(),
+            key = flagKey as FlagKey<Boolean>,
+            currentValue = currentValue as Boolean,
+            onValueChange = onValueChange as (FlagKey<Boolean>, Boolean) -> Unit,
+            cardStyle = cardStyle,
+            modifier = modifier,
+        )
+    }
+
     FlagKey.ArchiveItem,
-        -> BooleanFlagItem(
-        label = flagKey.getDisplayLabel(),
-        key = flagKey as FlagKey<Boolean>,
-        currentValue = currentValue as Boolean,
-        onValueChange = onValueChange as (FlagKey<Boolean>, Boolean) -> Unit,
-        cardStyle = cardStyle,
-        modifier = modifier,
-    )
+        -> {
+        @Suppress("UNCHECKED_CAST")
+        BooleanFlagItem(
+            label = flagKey.getDisplayLabel(),
+            key = flagKey as FlagKey<Boolean>,
+            currentValue = currentValue as Boolean,
+            onValueChange = onValueChange as (FlagKey<Boolean>, Boolean) -> Unit,
+            cardStyle = cardStyle,
+            modifier = modifier,
+        )
+    }
 }
 
 /**
@@ -97,11 +112,13 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.IgnoreEnvironmentCheck -> stringResource(R.string.ignore_environment_check)
     FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
     FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)
-    FlagKey.SingleTapPasskeyAuthentication ->
+    FlagKey.SingleTapPasskeyAuthentication -> {
         stringResource(R.string.single_tap_passkey_authentication)
+    }
 
     FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
+    FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
     FlagKey.ArchiveItem -> stringResource(R.string.archive_item)
 }

@@ -1226,4 +1226,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="show_more">Meer weergeven</string>
   <string name="no_folder">Geen map</string>
   <string name="show_less">Minder weergeven</string>
+  <string name="add_field">Veld toevoegen</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Foutdetails delen</string>
 </resources>

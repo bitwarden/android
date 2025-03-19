@@ -255,6 +255,7 @@ private fun AddSendDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is AddSendState.DialogState.Loading -> BitwardenLoadingDialog(

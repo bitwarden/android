@@ -13,5 +13,8 @@ sealed class RequestOtpResult {
     /**
      * Represents a failure to send the one-time passcode.
      */
-    data class Error(val message: String?) : RequestOtpResult()
+    data class Error(
+        val message: String?,
+        val error: Throwable,
+    ) : RequestOtpResult()
 }

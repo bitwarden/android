@@ -286,7 +286,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     //region VaultItemListing Handlers
     private fun handleLockAccountClick(action: VaultItemListingsAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultItemListingsAction.LogoutAccountClick) {
@@ -1023,7 +1023,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleSyncClick() {
@@ -1206,13 +1206,14 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: VaultItemListingsAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1238,6 +1239,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1304,12 +1306,13 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
 
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -1378,7 +1381,7 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 showFido2UserVerificationErrorDialog()
             }
 
@@ -1406,7 +1409,7 @@ class VaultItemListingViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePinResult.Error -> {
+            is ValidatePinResult.Error -> {
                 showFido2UserVerificationErrorDialog()
             }
 
@@ -2025,6 +2028,7 @@ data class VaultItemListingState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

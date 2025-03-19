@@ -7,6 +7,11 @@ const val LEGACY_ACCESSIBILITY_SERVICE_NAME: String =
     "com.x8bit.bitwarden.Accessibility.AccessibilityService"
 
 /**
+ * The short form legacy name for the accessibility service.
+ */
+const val LEGACY_SHORT_ACCESSIBILITY_SERVICE_NAME: String = ".Accessibility.AccessibilityService"
+
+/**
  * The legacy name for the autofill service.
  */
 const val LEGACY_AUTOFILL_SERVICE_NAME: String = "com.x8bit.bitwarden.Autofill.AutofillService"

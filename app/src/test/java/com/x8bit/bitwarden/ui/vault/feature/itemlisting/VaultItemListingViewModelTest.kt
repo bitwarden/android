@@ -139,14 +139,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val mutableVaultDataStateFlow =
         MutableStateFlow<DataState<VaultData>>(DataState.Loading)
+    private val defaultError = Throwable("Fail")
     private val vaultRepository: VaultRepository = mockk {
         every { vaultFilterType } returns VaultFilterType.AllVaults
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
-        every { lockVault(any()) } just runs
+        every { lockVault(any(), any()) } just runs
         every { sync(forced = any()) } just runs
         coEvery {
             getDecryptedFido2CredentialAutofillViews(any())
-        } returns DecryptFido2CredentialAutofillViewResult.Error
+        } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -246,7 +247,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultItemListingsAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Test
@@ -359,13 +360,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LockClick should call lockVaultForCurrentUser`() {
-        every { vaultRepository.lockVaultForCurrentUser() } just runs
+        every { vaultRepository.lockVaultForCurrentUser(any()) } just runs
         val viewModel = createVaultItemListingViewModel()
 
         viewModel.trySendAction(VaultItemListingsAction.LockClick)
 
         verify(exactly = 1) {
-            vaultRepository.lockVaultForCurrentUser()
+            vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 
@@ -422,7 +423,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView),
                 )
-            } returns DecryptFido2CredentialAutofillViewResult.Error
+            } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AutofillSelection(
                 autofillSelectionData = AutofillSelectionData(
                     type = AutofillSelectionData.Type.LOGIN,
@@ -469,7 +470,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView),
                 )
-            } returns DecryptFido2CredentialAutofillViewResult.Error
+            } returns DecryptFido2CredentialAutofillViewResult.Error(error = defaultError)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AutofillSelection(
                     autofillSelectionData = AutofillSelectionData(
@@ -817,6 +818,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val cipherView = createMockCipherView(number = 1)
             val cipherId = "mockId-1"
             val password = "password"
+            val error = Throwable("Fail!")
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),
@@ -828,7 +830,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
             val initialState = createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
@@ -858,6 +860,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     dialogState = VaultItemListingState.DialogState.Error(
                         title = null,
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1232,7 +1235,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
         runTest {
             val sendId = "sendId1234"
-            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+            val error = Throwable("Oops")
+            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error(
+                error = error,
+            )
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
@@ -1255,6 +1261,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -1301,9 +1308,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Send RemovePasswordClick with removePasswordSend error should display error dialog`() =
         runTest {
             val sendId = "sendId1234"
+            val error = Throwable("Oops")
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = error)
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
@@ -1326,6 +1334,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         dialogState = VaultItemListingState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -1483,7 +1492,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = defaultError)
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
@@ -4035,7 +4044,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(password = password)
-        } returns ValidatePasswordResult.Error
+        } returns ValidatePasswordResult.Error(error = Throwable("Fail!"))
 
         viewModel.trySendAction(
             VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
@@ -4207,7 +4216,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val pin = "PIN"
         coEvery {
             authRepository.validatePin(pin = pin)
-        } returns ValidatePinResult.Error
+        } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
         viewModel.trySendAction(
             VaultItemListingsAction.PinFido2VerificationSubmit(

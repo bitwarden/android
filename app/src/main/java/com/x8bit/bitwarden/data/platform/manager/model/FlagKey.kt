@@ -44,13 +44,14 @@ sealed class FlagKey<out T : Any> {
                 AnonAddySelfHostAlias,
                 SimpleLoginSelfHostAlias,
                 ChromeAutofill,
+                MobileErrorReporting,
                 ArchiveItem,
             )
         }
     }
 
     /**
-     *  Data object holding the key for syncing with the Bitwarden Authenticator app.
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
      */
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-bwa-sync"
@@ -65,6 +66,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "email-verification"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
+     */
+    data object MobileErrorReporting : FlagKey<Boolean>() {
+        override val keyName: String = "mobile-error-reporting"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
     }
 
     /**

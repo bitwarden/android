@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -301,8 +300,8 @@ class FirstTimeActionManagerImpl @Inject constructor(
     }
 
     /**
-     * Maps the receiver Flow to `false` if a personal (non-org) Login cipher exists,
-     * unless an `ONLY_ORG` policy is active, in which case it remains `true`.
+     *  If there are any existing "Login" type ciphers then we'll map the current value
+     *  of the receiver Flow to `false`.
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun Flow<Boolean>.mapFalseIfAnyLoginCiphersAvailable(): Flow<Boolean> =
@@ -313,14 +312,10 @@ class FirstTimeActionManagerImpl @Inject constructor(
                 combine(
                     flow = this,
                     flow2 = vaultDiskSource.getCiphers(activeUserId),
-                    flow3 = authDiskSource.getPoliciesFlow(activeUserId),
-                ) { receiverCurrentValue, ciphers, policies ->
-                    val hasLoginsWithNoOrganizations = ciphers.any {
+                ) { receiverCurrentValue, ciphers ->
+                    receiverCurrentValue && ciphers.none {
                         it.login != null && it.organizationId == null
                     }
-                    val onlyOrgPolicy = policies?.any { it.type == PolicyTypeJson.ONLY_ORG } == true
-
-                    receiverCurrentValue && (!hasLoginsWithNoOrganizations || onlyOrgPolicy)
                 }
             }
             .distinctUntilChanged()

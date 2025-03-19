@@ -108,6 +108,7 @@ fun CompleteRegistrationScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
+                throwable = dialog.error,
                 onDismissRequest = handler.onDismissErrorDialog,
             )
         }
@@ -141,7 +142,8 @@ fun CompleteRegistrationScreen(
                 title = stringResource(
                     id = R.string.create_account
                         .takeIf { state.onboardingEnabled }
-                        ?: R.string.set_password),
+                        ?: R.string.set_password,
+                ),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),

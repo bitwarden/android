@@ -328,7 +328,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {
@@ -375,7 +375,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleExitConfirmationClick() {
@@ -787,12 +787,13 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.ValidatePasswordResultReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -1171,6 +1172,7 @@ data class VaultState(
         data class Error(
             val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
     }
 }

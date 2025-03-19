@@ -193,6 +193,7 @@ private fun SetPasswordDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
             )
         }

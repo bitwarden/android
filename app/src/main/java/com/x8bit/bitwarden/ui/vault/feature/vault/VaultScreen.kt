@@ -419,6 +419,7 @@ private fun VaultDialogs(
         is VaultState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 

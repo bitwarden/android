@@ -113,11 +113,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `LogInClick with valid organization and failed prevalidation should show a loading dialog, and then show an error`() =
         runTest {
             val organizationId = "Test"
+            val error = Throwable("Fail!")
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
 
             coEvery {
                 authRepository.prevalidateSso(organizationId)
-            } returns PrevalidateSsoResult.Failure()
+            } returns PrevalidateSsoResult.Failure(error = error)
 
             val viewModel = createViewModel(state)
             viewModel.stateFlow.test {
@@ -138,6 +139,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.login_sso_error.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
@@ -321,9 +323,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error when server is an official Bitwarden server`() =
         runTest {
             val orgIdentifier = "Bitwarden"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
-            } returns LoginResult.Error(null)
+            } returns LoginResult.Error(errorMessage = null, error = error)
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
@@ -364,6 +367,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.login_sso_error.asText(),
+                            error = error,
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),
@@ -753,7 +757,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 authRepository.getOrganizationDomainSsoDetails(any())
-            } returns OrganizationDomainSsoDetailsResult.Failure
+            } returns OrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
 
             coEvery {
                 authRepository.rememberedOrgIdentifier
@@ -981,7 +985,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 authRepository.getVerifiedOrganizationDomainSsoDetails(any())
-            } returns VerifiedOrganizationDomainSsoDetailsResult.Failure
+            } returns VerifiedOrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
 
             coEvery {
                 featureFlagManager.getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)

@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
-import com.x8bit.bitwarden.ui.platform.feature.debugmenu.setupDebugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
@@ -104,7 +103,6 @@ fun RootNavScreen(
         trustedDeviceGraph(navController)
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
-        setupDebugMenuDestination(onNavigateBack = { navController.popBackStack() })
         setupUnlockDestinationAsRoot()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()

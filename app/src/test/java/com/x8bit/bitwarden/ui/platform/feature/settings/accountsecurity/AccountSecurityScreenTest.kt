@@ -83,15 +83,16 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+            intentManager = intentManager,
+        ) {
             AccountSecurityScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccount = { onNavigateToDeleteAccountCalled = true },
                 onNavigateToPendingRequests = { onNavigateToPendingRequestsCalled = true },
                 onNavigateToSetupUnlockScreen = { onNavigateToUnlockSetupScreenCalled = true },
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
-                intentManager = intentManager,
             )
         }
     }

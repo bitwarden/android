@@ -265,6 +265,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
                 dialogState = TrustedDeviceState.DialogState.Error(
                     title = "Hello".asText(),
                     message = "World".asText(),
+                    error = null,
                 ),
             )
         }

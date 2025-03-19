@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
@@ -25,9 +26,11 @@ import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
@@ -110,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider {
+            LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
                         {
@@ -121,10 +124,19 @@ class MainActivity : AppCompatActivity() {
                     },
                 )
                 BitwardenTheme(theme = state.theme) {
-                    RootNavScreen(
-                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                    NavHost(
                         navController = navController,
-                    )
+                        startDestination = ROOT_ROUTE,
+                    ) {
+                        // Nothing else should end up at this top level, we just want the ability
+                        // to have the debug menu appear on top of the rest of the app without
+                        // interacting with the state-based navigation used by the RootNavScreen.
+                        rootNavDestination { shouldShowSplashScreen = false }
+                        debugMenuDestination(
+                            onNavigateBack = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                    }
                 }
             }
         }

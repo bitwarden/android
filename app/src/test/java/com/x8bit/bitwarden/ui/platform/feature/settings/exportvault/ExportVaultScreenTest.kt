@@ -45,11 +45,12 @@ class ExportVaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             ExportVaultScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

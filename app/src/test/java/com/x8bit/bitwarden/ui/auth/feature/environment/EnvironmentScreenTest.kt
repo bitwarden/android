@@ -47,11 +47,12 @@ class EnvironmentScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = mockIntentManager,
+            keyChainManager = mockKeyChainManager,
+        ) {
             EnvironmentScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                intentManager = mockIntentManager,
-                keyChainManager = mockKeyChainManager,
                 viewModel = viewModel,
             )
         }

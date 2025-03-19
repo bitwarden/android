@@ -74,13 +74,14 @@ class TrustedDeviceViewModel @Inject constructor(
     private fun handleReceiveNewSsoUserResult(
         action: TrustedDeviceAction.Internal.ReceiveNewSsoUserResult,
     ) {
-        when (action.result) {
-            NewSsoUserResult.Failure -> {
+        when (val result = action.result) {
+            is NewSsoUserResult.Failure -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TrustedDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -163,6 +164,7 @@ data class TrustedDeviceState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val error: Throwable?,
         ) : DialogState()
 
         /**

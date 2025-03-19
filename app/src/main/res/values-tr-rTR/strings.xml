@@ -165,12 +165,12 @@
   <string name="no_cards">Kasanızda hiç kart yok.</string>
   <string name="new_card">Yeni kart</string>
   <string name="no_logins">Kasanızda hiç hesap yok.</string>
-  <string name="no_identities">There are no identities in your vault.</string>
+  <string name="no_identities">Kasanızda hiç kimlik yok.</string>
   <string name="new_identity">Yeni kimlik</string>
-  <string name="no_notes">There are no notes in your vault.</string>
-  <string name="new_note">New note</string>
-  <string name="new_passkey">New passkey</string>
-  <string name="new_item">New item</string>
+  <string name="no_notes">Kasanızda hiç not yok.</string>
+  <string name="new_note">Yeni not</string>
+  <string name="new_passkey">Yeni passkey</string>
+  <string name="new_item">Yeni kayıt</string>
   <string name="new_ssh_key">Yeni SSH anahtarı</string>
   <string name="no_text_sends">There are no text Sends in your vault.</string>
   <string name="no_file_sends">There are no file Sends in your vault.</string>
@@ -1093,7 +1093,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">On your computer, open a new browser tab and <annotation emphasis="bold">go to <annotation arg="0">%1$s</annotation></annotation></string>
   <string name="log_in_to_the_bitwarden_web_app">Log in to the Bitwarden web app.</string>
   <string name="step_2_of_3">Step 2 of 3</string>
-  <string name="log_in_to_bitwarden">Log in to Bitwarden</string>
+  <string name="log_in_to_bitwarden">Bitwarden\'a giriş yap</string>
   <string name="step_3_of_3">Step 3 of 3</string>
   <string name="import_logins_to_bitwarden">Import logins to Bitwarden</string>
   <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">In the Bitwarden navigation, <annotation emphasis="bold">find the Tools</annotation> option and <annotation emphasis="bold">select Import data.</annotation></string>
@@ -1225,4 +1225,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="show_more">Daha fazla göster</string>
   <string name="no_folder">Klasör yok</string>
   <string name="show_less">Daha az göster</string>
+  <string name="add_field">Alan ekle</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Share error details</string>
 </resources>

@@ -31,10 +31,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -100,12 +97,11 @@ fun ItemListingScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
-    var shouldShowPermissionDialog by rememberSaveable { mutableStateOf(false) }
     val launcher = permissionsManager.getLauncher { isGranted ->
         if (isGranted) {
             viewModel.trySendAction(ItemListingAction.ScanQrCodeClick)
         } else {
-            shouldShowPermissionDialog = true
+            viewModel.trySendAction(ItemListingAction.EnterSetupKeyClick)
         }
     }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -149,20 +145,6 @@ fun ItemListingScreen(
                 snackbarHostState.showSnackbar("")
             }
         }
-    }
-
-    if (shouldShowPermissionDialog) {
-        BitwardenTwoButtonDialog(
-            message = stringResource(id = R.string.enable_camera_permission_to_use_the_scanner),
-            confirmButtonText = stringResource(id = R.string.settings),
-            dismissButtonText = stringResource(id = R.string.no_thanks),
-            onConfirmClick = remember(viewModel) {
-                { viewModel.trySendAction(ItemListingAction.SettingsClick) }
-            },
-            onDismissClick = { shouldShowPermissionDialog = false },
-            onDismissRequest = { shouldShowPermissionDialog = false },
-            title = null,
-        )
     }
 
     ItemListingDialogs(
@@ -258,7 +240,7 @@ fun ItemListingScreen(
                         launcher.launch(Manifest.permission.CAMERA)
                     }
                 },
-                onScanQuCodeClick = remember(viewModel) {
+                onScanQrCodeClick = remember(viewModel) {
                     {
                         launcher.launch(Manifest.permission.CAMERA)
                     }
@@ -580,7 +562,7 @@ fun EmptyItemListingContent(
         rememberTopAppBarState(),
     ),
     onAddCodeClick: () -> Unit,
-    onScanQuCodeClick: () -> Unit,
+    onScanQrCodeClick: () -> Unit,
     onEnterSetupKeyClick: () -> Unit,
     onDownloadBitwardenClick: () -> Unit,
     onDismissDownloadBitwardenClick: () -> Unit,
@@ -613,7 +595,7 @@ fun EmptyItemListingContent(
                             contentDescription = stringResource(id = R.string.scan_a_qr_code),
                             testTag = "ScanQRCodeButton",
                         ),
-                        onScanQrCodeClick = onScanQuCodeClick,
+                        onScanQrCodeClick = onScanQrCodeClick,
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
                         label = R.string.enter_key_manually.asText(),
@@ -783,7 +765,7 @@ private fun EmptyListingContentPreview() {
         modifier = Modifier.padding(horizontal = 16.dp),
         appTheme = AppTheme.DEFAULT,
         onAddCodeClick = { },
-        onScanQuCodeClick = { },
+        onScanQrCodeClick = { },
         onEnterSetupKeyClick = { },
         actionCardState = ItemListingState.ActionCardState.DownloadBitwardenApp,
         onDownloadBitwardenClick = { },

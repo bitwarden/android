@@ -127,7 +127,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         val input = "abcdefghikl"
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(input))
 
@@ -138,7 +138,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `Passwords not matching should have non-valid state`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(PASSWORD))
 
@@ -178,6 +178,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CallToActionClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             mockAuthRepository.register(
                 email = EMAIL,
@@ -188,7 +189,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(errorMessage = "mock_error")
+        } returns RegisterResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
@@ -202,6 +203,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     dialog = CompleteRegistrationDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -273,7 +275,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(null)
+        } returns RegisterResult.Error(errorMessage = null, error = null)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.ContinueWithBreachedPasswordClick)
         coVerify {
@@ -446,7 +448,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(PASSWORD))
         viewModel.stateFlow.test {
@@ -481,7 +483,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             mutableGeneratorResultFlow.emit(GeneratorResult.Password(PASSWORD))
             viewModel.stateFlow.test {
@@ -600,7 +602,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val input = "abcdefghikl"
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, input)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(input))
             val expectedState = DEFAULT_STATE.copy(
@@ -621,7 +623,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(PASSWORD))
             val expectedState = DEFAULT_STATE.copy(
@@ -642,7 +644,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick with no email not should show dialog`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength("", PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel(
             DEFAULT_STATE.copy(userEmail = ""),
         )

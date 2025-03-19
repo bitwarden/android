@@ -265,13 +265,14 @@ class AttachmentsViewModel @Inject constructor(
     private fun handleCreateAttachmentResultReceive(
         action: AttachmentsAction.Internal.CreateAttachmentResultReceive,
     ) {
-        when (action.result) {
-            CreateAttachmentResult.Error -> {
+        when (val result = action.result) {
+            is CreateAttachmentResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -285,13 +286,14 @@ class AttachmentsViewModel @Inject constructor(
     }
 
     private fun handleDeleteResultReceive(action: AttachmentsAction.Internal.DeleteResultReceive) {
-        when (action.result) {
-            DeleteAttachmentResult.Error -> {
+        when (val result = action.result) {
+            is DeleteAttachmentResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -399,6 +401,7 @@ data class AttachmentsState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

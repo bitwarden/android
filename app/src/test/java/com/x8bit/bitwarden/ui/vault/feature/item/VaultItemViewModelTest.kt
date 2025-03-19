@@ -405,12 +405,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
+                val error = Throwable("Oh dang.")
                 coEvery {
                     vaultRepo.softDeleteCipher(
                         cipherId = VAULT_ITEM_ID,
                         cipherView = createMockCipherView(number = 1),
                     )
-                } returns DeleteCipherResult.Error
+                } returns DeleteCipherResult.Error(error = error)
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
 
@@ -419,6 +420,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         viewState = loginViewState,
                         dialog = VaultItemState.DialogState.Generic(
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     viewModel.stateFlow.value,
@@ -629,12 +631,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             val viewModel = createViewModel(state = DEFAULT_STATE)
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepo.restoreCipher(
                     cipherId = VAULT_ITEM_ID,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns RestoreCipherResult.Error
+            } returns RestoreCipherResult.Error(error = error)
 
             viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
@@ -643,6 +646,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewState = DEFAULT_VIEW_STATE,
                     dialog = VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -900,11 +904,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
-
                 val password = "password"
+                val error = Throwable("Fail!")
                 coEvery {
                     authRepo.validatePassword(password)
-                } returns ValidatePasswordResult.Error
+                } returns ValidatePasswordResult.Error(error = error)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
@@ -933,6 +937,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 message = R.string.generic_error_message.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),
@@ -1707,10 +1712,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     url = "https://example.com",
                     title = "test.mp4",
                 )
-
+                val error = Throwable("Fail")
                 coEvery {
                     vaultRepo.downloadAttachment(any(), any())
-                } returns DownloadAttachmentResult.Failure
+                } returns DownloadAttachmentResult.Failure(error = error)
 
                 viewModel.stateFlow.test {
                     assertEquals(
@@ -1731,6 +1736,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 R.string.unable_to_download_file.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),

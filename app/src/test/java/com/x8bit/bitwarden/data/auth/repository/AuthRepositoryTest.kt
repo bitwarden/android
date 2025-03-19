@@ -105,6 +105,8 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -134,6 +136,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
@@ -295,6 +298,16 @@ class AuthRepositoryTest {
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
         )
+        mockkConstructor(
+            NoActiveUserException::class,
+            MissingPropertyException::class,
+        )
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+        every {
+            anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
+        } returns true
     }
 
     @AfterEach
@@ -302,6 +315,10 @@ class AuthRepositoryTest {
         unmockkStatic(
             GetTokenResponseJson.Success::toUserState,
             UserStateJson::toRemovedPasswordUserStateJson,
+        )
+        mockkConstructor(
+            NoActiveUserException::class,
+            MissingPropertyException::class,
         )
     }
 
@@ -724,7 +741,10 @@ class AuthRepositoryTest {
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(
+            DeleteAccountResult.Error(message = null, error = NoActiveUserException()),
+            result,
+        )
     }
 
     @Test
@@ -732,13 +752,14 @@ class AuthRepositoryTest {
         val masterPassword = "hello world"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        val error = Throwable("Fail")
         coEvery {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         }
@@ -750,6 +771,7 @@ class AuthRepositoryTest {
         val hashedMasterPassword = "dlrow olleh"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        val error = Throwable("Fail")
         coEvery {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
@@ -758,11 +780,11 @@ class AuthRepositoryTest {
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error(message = null), result)
+        assertEquals(DeleteAccountResult.Error(message = null, error = error), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
@@ -883,7 +905,7 @@ class AuthRepositoryTest {
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -893,21 +915,25 @@ class AuthRepositoryTest {
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(
+            NewSsoUserResult.Failure(error = MissingPropertyException("OrgIdentifier")),
+            result,
+        )
     }
 
     @Test
     fun `createNewSsoUser when getOrganizationAutoEnrollStatus fails returns failure`() = runTest {
         val orgIdentifier = "rememberedOrgIdentifier"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         }
@@ -917,6 +943,7 @@ class AuthRepositoryTest {
     fun `createNewSsoUser when getOrganizationKeys fails returns failure`() = runTest {
         val orgIdentifier = "rememberedOrgIdentifier"
         val orgId = "organizationId"
+        val error = Throwable("Fail!")
         val orgAutoEnrollStatusResponse = OrganizationAutoEnrollStatusResponseJson(
             organizationId = orgId,
             isResetPasswordEnabled = false,
@@ -926,11 +953,11 @@ class AuthRepositoryTest {
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         } returns orgAutoEnrollStatusResponse.asSuccess()
-        coEvery { organizationService.getOrganizationKeys(orgId) } returns Throwable().asFailure()
+        coEvery { organizationService.getOrganizationKeys(orgId) } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -952,6 +979,7 @@ class AuthRepositoryTest {
                 privateKey = "privateKey",
                 publicKey = orgPublicKey,
             )
+            val error = Throwable("Fail!")
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
 
@@ -972,11 +1000,11 @@ class AuthRepositoryTest {
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             val result = repository.createNewSsoUser()
 
-            assertEquals(NewSsoUserResult.Failure, result)
+            assertEquals(NewSsoUserResult.Failure(error = error), result)
             coVerify(exactly = 1) {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
                 organizationService.getOrganizationKeys(orgId)
@@ -1012,6 +1040,7 @@ class AuthRepositoryTest {
             adminReset = userAdminReset,
             deviceKey = null,
         )
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         fakeAuthDiskSource.storeShouldTrustDevice(
@@ -1037,11 +1066,11 @@ class AuthRepositoryTest {
                 publicKey = userPublicKey,
                 encryptedPrivateKey = userPrivateKey,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -1081,6 +1110,7 @@ class AuthRepositoryTest {
             adminReset = userAdminReset,
             deviceKey = null,
         )
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
         fakeAuthDiskSource.storeShouldTrustDevice(
@@ -1114,11 +1144,11 @@ class AuthRepositoryTest {
                 passwordHash = null,
                 resetPasswordKey = userAdminReset,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.createNewSsoUser()
 
-        assertEquals(NewSsoUserResult.Failure, result)
+        assertEquals(NewSsoUserResult.Failure(error = error), result)
         coVerify(exactly = 1) {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             organizationService.getOrganizationKeys(orgId)
@@ -1335,7 +1365,10 @@ class AuthRepositoryTest {
             requestPrivateKey = requestPrivateKey,
             asymmetricalKey = asymmetricalKey,
         )
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(
+            LoginResult.Error(errorMessage = null, error = NoActiveUserException()),
+            result,
+        )
     }
 
     @Test
@@ -1347,7 +1380,10 @@ class AuthRepositoryTest {
             requestPrivateKey = requestPrivateKey,
             asymmetricalKey = asymmetricalKey,
         )
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(
+            LoginResult.Error(errorMessage = null, error = MissingPropertyException("Private Key")),
+            result,
+        )
     }
 
     @Test
@@ -1406,6 +1442,7 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
         fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVault(
                 userId = USER_ID_1,
@@ -1418,7 +1455,7 @@ class AuthRepositoryTest {
                 ),
                 organizationKeys = orgKeys,
             )
-        } returns VaultUnlockResult.AuthenticationError(message = null)
+        } returns VaultUnlockResult.AuthenticationError(message = null, error = error)
         coEvery { vaultRepository.syncIfNecessary() } just runs
 
         val result = repository.completeTdeLogin(
@@ -1443,16 +1480,17 @@ class AuthRepositoryTest {
             vaultRepository.syncIfNecessary()
             settingsRepository.storeUserHasLoggedInValue(userId = USER_ID_1)
         }
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
     }
 
     @Test
     fun `login when pre login fails should return Error with no message`() = runTest {
+        val error = RuntimeException()
         coEvery {
             identityService.preLogin(email = EMAIL)
-        } returns RuntimeException().asFailure()
+        } returns error.asFailure()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
     }
@@ -1461,6 +1499,7 @@ class AuthRepositoryTest {
     @Test
     fun `login get token fails should return Error with no message when server is an official Bitwarden server`() =
         runTest {
+            val error = RuntimeException()
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
@@ -1474,9 +1513,9 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            } returns RuntimeException().asFailure()
+            } returns error.asFailure()
             val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-            assertEquals(LoginResult.Error(errorMessage = null), result)
+            assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
             coVerify {
@@ -1578,7 +1617,7 @@ class AuthRepositoryTest {
             .asSuccess()
 
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-        assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
+        assertEquals(LoginResult.Error(errorMessage = "mock_error_message", error = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
         coVerify {
@@ -1734,6 +1773,7 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns successResponse.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -1746,7 +1786,10 @@ class AuthRepositoryTest {
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.AuthenticationError(expectedErrorMessage)
+            } returns VaultUnlockResult.AuthenticationError(
+                message = expectedErrorMessage,
+                error = error,
+            )
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
@@ -1755,7 +1798,10 @@ class AuthRepositoryTest {
                 )
             } returns SINGLE_USER_STATE_1
             val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-            assertEquals(LoginResult.Error(errorMessage = expectedErrorMessage), result)
+            assertEquals(
+                LoginResult.Error(errorMessage = expectedErrorMessage, error = error),
+                result,
+            )
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify { identityService.preLogin(email = EMAIL) }
             fakeAuthDiskSource.assertPrivateKey(
@@ -2200,6 +2246,7 @@ class AuthRepositoryTest {
                     twoFactorData = TWO_FACTOR_DATA,
                 )
             } returns successResponse.asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -2212,7 +2259,7 @@ class AuthRepositoryTest {
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                 )
-            } returns VaultUnlockResult.InvalidStateError
+            } returns VaultUnlockResult.InvalidStateError(error = error)
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -2226,7 +2273,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 orgIdentifier = null,
             )
-            assertEquals(LoginResult.Error(errorMessage = null), finalResult)
+            assertEquals(LoginResult.Error(errorMessage = null, error = error), finalResult)
             assertEquals(twoFactorResponse, repository.twoFactorResponse)
             fakeAuthDiskSource.assertTwoFactorToken(
                 email = EMAIL,
@@ -2338,11 +2385,18 @@ class AuthRepositoryTest {
             captchaToken = null,
             orgIdentifier = null,
         )
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(
+            LoginResult.Error(
+                errorMessage = null,
+                error = MissingPropertyException("Identity Token Auth Model"),
+            ),
+            result,
+        )
     }
 
     @Test
     fun `login with device get token fails should return Error with no message`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2354,7 +2408,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
         val result = repository.login(
             email = EMAIL,
             requestId = DEVICE_REQUEST_ID,
@@ -2364,7 +2418,7 @@ class AuthRepositoryTest {
             masterPasswordHash = PASSWORD_HASH,
             captchaToken = null,
         )
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify {
             identityService.getToken(
@@ -2411,7 +2465,10 @@ class AuthRepositoryTest {
                 masterPasswordHash = PASSWORD_HASH,
                 captchaToken = null,
             )
-            assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
+            assertEquals(
+                LoginResult.Error(errorMessage = "mock_error_message", error = null),
+                result,
+            )
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify {
                 identityService.getToken(
@@ -2813,6 +2870,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `SSO login get token fails should return Error with no message`() = runTest {
+        val error = RuntimeException()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2824,7 +2882,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns RuntimeException().asFailure()
+        } returns error.asFailure()
         val result = repository.login(
             email = EMAIL,
             ssoCode = SSO_CODE,
@@ -2833,7 +2891,7 @@ class AuthRepositoryTest {
             captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
-        assertEquals(LoginResult.Error(errorMessage = null), result)
+        assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify {
             identityService.getToken(
@@ -2878,7 +2936,7 @@ class AuthRepositoryTest {
             captchaToken = null,
             organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
-        assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
+        assertEquals(LoginResult.Error(errorMessage = "mock_error_message", error = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify {
             identityService.getToken(
@@ -3023,6 +3081,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `SSO login get token succeeds with key connector and no master password should return failure`() =
         runTest {
+            val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
@@ -3048,7 +3107,7 @@ class AuthRepositoryTest {
                     url = keyConnectorUrl,
                     accessToken = ACCESS_TOKEN,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -3065,7 +3124,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
-            assertEquals(LoginResult.Error(errorMessage = null), result)
+            assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
@@ -3191,6 +3250,7 @@ class AuthRepositoryTest {
     @Suppress("MaxLineLength")
     fun `SSO login get token succeeds with key connector, no master password, no key and no private key should return failure`() =
         runTest {
+            val error = Throwable("Fail!")
             val keyConnectorUrl = "www.example.com"
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
                 keyConnectorUrl = keyConnectorUrl,
@@ -3223,7 +3283,7 @@ class AuthRepositoryTest {
                     kdfParallelism = PROFILE_1.kdfParallelism,
                     organizationIdentifier = ORGANIZATION_IDENTIFIER,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -3240,7 +3300,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
-            assertEquals(LoginResult.Error(errorMessage = null), result)
+            assertEquals(LoginResult.Error(errorMessage = null, error = error), result)
             fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
             fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
             coVerify(exactly = 1) {
@@ -4240,7 +4300,13 @@ class AuthRepositoryTest {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-            assertEquals(RegisterResult.Error(errorMessage = null), result)
+            assertEquals(
+                RegisterResult.Error(
+                    errorMessage = null,
+                    error = MissingPropertyException("Captcha ID"),
+                ),
+                result,
+            )
         }
 
     @Test
@@ -4286,6 +4352,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register Failure should return Error with no message`() = runTest {
+        val error = RuntimeException()
         coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.register(
@@ -4303,7 +4370,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns RuntimeException().asFailure()
+        } returns error.asFailure()
 
         val result = repository.register(
             email = EMAIL,
@@ -4313,7 +4380,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = null), result)
+        assertEquals(RegisterResult.Error(errorMessage = null, error = error), result)
     }
 
     @Test
@@ -4347,7 +4414,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = "message"), result)
+        assertEquals(RegisterResult.Error(errorMessage = "message", error = null), result)
     }
 
     @Test
@@ -4384,7 +4451,7 @@ class AuthRepositoryTest {
             shouldCheckDataBreaches = false,
             isMasterPasswordStrong = true,
         )
-        assertEquals(RegisterResult.Error(errorMessage = "expected"), result)
+        assertEquals(RegisterResult.Error(errorMessage = "expected", error = null), result)
     }
 
     @Test
@@ -4427,7 +4494,7 @@ class AuthRepositoryTest {
 
         val result = repository.removePassword(masterPassword = PASSWORD)
 
-        assertEquals(RemovePasswordResult.Error, result)
+        assertEquals(RemovePasswordResult.Error(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -4437,7 +4504,10 @@ class AuthRepositoryTest {
 
         val result = repository.removePassword(masterPassword = PASSWORD)
 
-        assertEquals(RemovePasswordResult.Error, result)
+        assertEquals(
+            RemovePasswordResult.Error(error = MissingPropertyException("User Key")),
+            result,
+        )
     }
 
     @Test
@@ -4460,7 +4530,10 @@ class AuthRepositoryTest {
 
         val result = repository.removePassword(masterPassword = PASSWORD)
 
-        assertEquals(RemovePasswordResult.Error, result)
+        assertEquals(
+            RemovePasswordResult.Error(error = MissingPropertyException("Key Connector URL")),
+            result,
+        )
     }
 
     @Test
@@ -4469,6 +4542,7 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
+            val error = Throwable("Fail!")
             val organizations = listOf(
                 mockk<SyncResponseJson.Profile.Organization> {
                     every { id } returns "orgId"
@@ -4491,11 +4565,11 @@ class AuthRepositoryTest {
                     masterPassword = PASSWORD,
                     kdf = PROFILE_1.toSdkParams(),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = repository.removePassword(masterPassword = PASSWORD)
 
-            assertEquals(RemovePasswordResult.Error, result)
+            assertEquals(RemovePasswordResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -4630,6 +4704,7 @@ class AuthRepositoryTest {
         val currentPassword = "currentPassword"
         val currentPasswordHash = "hashedCurrentPassword"
         val newPassword = "newPassword"
+        val error = Throwable("Fail")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
@@ -4644,7 +4719,7 @@ class AuthRepositoryTest {
                 userId = ACCOUNT_1.profile.userId,
                 newPassword = newPassword,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.resetPassword(
             currentPassword = currentPassword,
@@ -4653,7 +4728,7 @@ class AuthRepositoryTest {
         )
 
         assertEquals(
-            ResetPasswordResult.Error,
+            ResetPasswordResult.Error(error = error),
             result,
         )
         coVerify {
@@ -4680,7 +4755,7 @@ class AuthRepositoryTest {
             passwordHint = "passwordHint",
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = NoActiveUserException()), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -4689,6 +4764,7 @@ class AuthRepositoryTest {
     @Test
     fun `setPassword with authSdkSource hashPassword failure should return Error`() = runTest {
         val password = "password"
+        val error = Throwable("Fail")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             authSdkSource.hashPassword(
@@ -4697,7 +4773,7 @@ class AuthRepositoryTest {
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.setPassword(
             organizationIdentifier = "organizationId",
@@ -4705,7 +4781,7 @@ class AuthRepositoryTest {
             passwordHint = "passwordHint",
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -4715,6 +4791,7 @@ class AuthRepositoryTest {
     fun `setPassword with authSdkSource makeRegisterKeys failure should return Error`() = runTest {
         val password = "password"
         val passwordHash = "passwordHash"
+        val error = Throwable("Fail")
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
@@ -4731,7 +4808,7 @@ class AuthRepositoryTest {
                 password = password,
                 kdf = kdf,
             )
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.setPassword(
             organizationIdentifier = "organizationId",
@@ -4739,7 +4816,7 @@ class AuthRepositoryTest {
             passwordHint = "passwordHint",
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -4749,6 +4826,7 @@ class AuthRepositoryTest {
     fun `setPassword with vaultSdkSource updatePassword failure should return Error`() = runTest {
         val password = "password"
         val passwordHash = "passwordHash"
+        val error = Throwable("Fail")
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
             accounts = mapOf(
@@ -4770,7 +4848,7 @@ class AuthRepositoryTest {
         } returns passwordHash.asSuccess()
         coEvery {
             vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.setPassword(
             organizationIdentifier = "organizationId",
@@ -4778,7 +4856,7 @@ class AuthRepositoryTest {
             passwordHint = "passwordHint",
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -4795,6 +4873,7 @@ class AuthRepositoryTest {
         val publicRsaKey = "publicRsaKey"
         val profile = SINGLE_USER_STATE_1.activeAccount.profile
         val kdf = profile.toSdkParams()
+        val error = Throwable("Fail")
         val registerKeyResponse = RegisterKeyResponse(
             masterPasswordHash = passwordHash,
             encryptedUserKey = encryptedUserKey,
@@ -4828,7 +4907,7 @@ class AuthRepositoryTest {
         } returns registerKeyResponse.asSuccess()
         coEvery {
             accountsService.setPassword(body = setPasswordRequestJson)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.setPassword(
             organizationIdentifier = organizationId,
@@ -4836,7 +4915,7 @@ class AuthRepositoryTest {
             passwordHint = passwordHint,
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
@@ -5129,9 +5208,10 @@ class AuthRepositoryTest {
         coEvery {
             accountsService.setPassword(body = setPasswordRequestJson)
         } returns Unit.asSuccess()
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.GenericError
+        } returns VaultUnlockResult.GenericError(error = error)
 
         val result = repository.setPassword(
             organizationIdentifier = organizationIdentifier,
@@ -5139,7 +5219,7 @@ class AuthRepositoryTest {
             passwordHint = passwordHint,
         )
 
-        assertEquals(SetPasswordResult.Error, result)
+        assertEquals(SetPasswordResult.Error(error = error), result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
@@ -5193,19 +5273,18 @@ class AuthRepositoryTest {
 
         val result = repository.passwordHintRequest(email)
 
-        assertEquals(PasswordHintResult.Error(errorMessage), result)
+        assertEquals(PasswordHintResult.Error(message = errorMessage, error = null), result)
     }
 
     @Test
     fun `passwordHintRequest with failure should return Error with null message`() = runTest {
         val email = "failure@example.com"
-        coEvery {
-            accountsService.requestPasswordHint(email)
-        } returns RuntimeException("Network error").asFailure()
+        val error = RuntimeException("Network error")
+        coEvery { accountsService.requestPasswordHint(email) } returns error.asFailure()
 
         val result = repository.passwordHintRequest(email)
 
-        assertEquals(PasswordHintResult.Error(null), result)
+        assertEquals(PasswordHintResult.Error(message = null, error = error), result)
     }
 
     @Test
@@ -5280,12 +5359,12 @@ class AuthRepositoryTest {
     @Test
     fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
         val email = "test@gmail.com"
-        val throwable = Throwable()
+        val throwable = Throwable("Fail!")
         coEvery {
             organizationService.getOrganizationDomainSsoDetails(email)
         } returns throwable.asFailure()
         val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(OrganizationDomainSsoDetailsResult.Failure, result)
+        assertEquals(OrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5343,12 +5422,12 @@ class AuthRepositoryTest {
     @Test
     fun `getVerifiedOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
         val email = "test@gmail.com"
-        val throwable = Throwable()
+        val throwable = Throwable("Fail!")
         coEvery {
             organizationService.getVerifiedOrganizationDomainSsoDetails(email)
         } returns throwable.asFailure()
         val result = repository.getVerifiedOrganizationDomainSsoDetails(email)
-        assertEquals(VerifiedOrganizationDomainSsoDetailsResult.Failure, result)
+        assertEquals(VerifiedOrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5359,7 +5438,7 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns throwable.asFailure()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(), result)
+        assertEquals(PrevalidateSsoResult.Failure(error = throwable), result)
     }
 
     @Test
@@ -5369,7 +5448,7 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns PrevalidateSsoResponseJson.Error(message = "Fail").asSuccess()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(message = "Fail"), result)
+        assertEquals(PrevalidateSsoResult.Failure(message = "Fail", error = null), result)
     }
 
     @Test
@@ -5379,7 +5458,10 @@ class AuthRepositoryTest {
             identityService.prevalidateSso(organizationId)
         } returns PrevalidateSsoResponseJson.Success(token = "").asSuccess()
         val result = repository.prevalidateSso(organizationId)
-        assertEquals(PrevalidateSsoResult.Failure(), result)
+        assertEquals(
+            PrevalidateSsoResult.Failure(error = MissingPropertyException("Token")),
+            result,
+        )
     }
 
     @Test
@@ -5417,13 +5499,14 @@ class AuthRepositoryTest {
     @Test
     fun `requestOneTimePasscode with error response should return Error`() = runTest {
         val errorMessage = "Error message"
+        val error = Throwable(errorMessage)
         coEvery {
             accountsService.requestOneTimePasscode()
-        } returns Throwable(errorMessage).asFailure()
+        } returns error.asFailure()
 
         val result = repository.requestOneTimePasscode()
 
-        assertEquals(RequestOtpResult.Error(errorMessage), result)
+        assertEquals(RequestOtpResult.Error(message = errorMessage, error = error), result)
     }
 
     @Test
@@ -5442,13 +5525,17 @@ class AuthRepositoryTest {
     fun `verifyOneTimePasscode with error response should return NotVerified result`() = runTest {
         val errorMessage = "Error message"
         val passcode = "passcode"
+        val error = Throwable(errorMessage)
         coEvery {
             accountsService.verifyOneTimePasscode(passcode)
-        } returns Throwable(errorMessage).asFailure()
+        } returns error.asFailure()
 
         val result = repository.verifyOneTimePasscode(passcode)
 
-        assertEquals(VerifyOtpResult.NotVerified(errorMessage), result)
+        assertEquals(
+            VerifyOtpResult.NotVerified(errorMessage = errorMessage, error = error),
+            result,
+        )
     }
 
     @Test
@@ -5517,7 +5604,13 @@ class AuthRepositoryTest {
     @Test
     fun `resendVerificationCodeEmail returns error if no request data cached`() = runTest {
         val result = repository.resendVerificationCodeEmail()
-        assertEquals(ResendEmailResult.Error(message = null), result)
+        assertEquals(
+            ResendEmailResult.Error(
+                message = null,
+                error = MissingPropertyException("Resend Email Request"),
+            ),
+            result,
+        )
     }
 
     @Test
@@ -5640,16 +5733,17 @@ class AuthRepositoryTest {
 
     @Test
     fun `getIsKnownDevice should return failure when service returns failure`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.getIsKnownDevice(EMAIL)
 
         coVerify(exactly = 1) {
             devicesService.getIsKnownDevice(EMAIL, UNIQUE_APP_ID)
         }
-        assertEquals(KnownDeviceResult.Error, result)
+        assertEquals(KnownDeviceResult.Error(error = error), result)
     }
 
     @Test
@@ -5670,16 +5764,17 @@ class AuthRepositoryTest {
     @Test
     fun `getPasswordBreachCount should return failure when service returns failure`() = runTest {
         val password = "password"
+        val error = Throwable("Fail")
         coEvery {
             haveIBeenPwnedService.getPasswordBreachCount(password)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.getPasswordBreachCount(password)
 
         coVerify(exactly = 1) {
             haveIBeenPwnedService.getPasswordBreachCount(password)
         }
-        assertEquals(BreachCountResult.Error, result)
+        assertEquals(BreachCountResult.Error(error = error), result)
     }
 
     @Test
@@ -5748,25 +5843,13 @@ class AuthRepositoryTest {
 
     @Test
     fun `validatePassword with no current user returns ValidatePasswordResult Error`() = runTest {
-        val userId = "userId"
         val password = "password"
-        val passwordHash = "passwordHash"
         fakeAuthDiskSource.userState = null
-        coEvery {
-            vaultSdkSource.validatePassword(
-                userId = userId,
-                password = password,
-                passwordHash = passwordHash,
-            )
-        } returns true.asSuccess()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
-            ValidatePasswordResult.Error,
+            ValidatePasswordResult.Error(error = NoActiveUserException()),
             result,
         )
     }
@@ -5787,13 +5870,10 @@ class AuthRepositoryTest {
                 )
             } returns true.asSuccess()
 
-            val result = repository
-                .validatePassword(
-                    password = password,
-                )
+            val result = repository.validatePassword(password = password)
 
             assertEquals(
-                ValidatePasswordResult.Error,
+                ValidatePasswordResult.Error(error = MissingPropertyException("UserKey")),
                 result,
             )
         }
@@ -5803,6 +5883,7 @@ class AuthRepositoryTest {
         val userId = USER_ID_1
         val password = "password"
         val passwordHash = "passwordHash"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
         coEvery {
@@ -5811,15 +5892,12 @@ class AuthRepositoryTest {
                 password = password,
                 passwordHash = passwordHash,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
-            ValidatePasswordResult.Error,
+            ValidatePasswordResult.Error(error = error),
             result,
         )
     }
@@ -5839,10 +5917,7 @@ class AuthRepositoryTest {
             )
         } returns true.asSuccess()
 
-        val result = repository
-            .validatePassword(
-                password = password,
-            )
+        val result = repository.validatePassword(password = password)
 
         assertEquals(
             ValidatePasswordResult.Success(isValid = true),
@@ -5907,7 +5982,7 @@ class AuthRepositoryTest {
         val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePinResult.Error,
+            ValidatePinResult.Error(error = NoActiveUserException()),
             result,
         )
     }
@@ -5925,7 +6000,7 @@ class AuthRepositoryTest {
             val result = repository.validatePin(pin = pin)
 
             assertEquals(
-                ValidatePinResult.Error,
+                ValidatePinResult.Error(MissingPropertyException("Pin Protected User Key")),
                 result,
             )
         }
@@ -5934,6 +6009,7 @@ class AuthRepositoryTest {
     fun `validatePin returns ValidatePinResult Error when SDK validatePin fails`() = runTest {
         val pin = "PIN"
         val pinProtectedUserKey = "pinProtectedUserKey"
+        val error = Throwable("Fail!")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePinProtectedUserKey(
             userId = SINGLE_USER_STATE_1.activeUserId,
@@ -5945,12 +6021,12 @@ class AuthRepositoryTest {
                 pin = pin,
                 pinProtectedUserKey = pinProtectedUserKey,
             )
-        } returns Throwable().asFailure()
+        } returns error.asFailure()
 
         val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePinResult.Error,
+            ValidatePinResult.Error(error = error),
             result,
         )
         coVerify(exactly = 1) {
@@ -6162,7 +6238,7 @@ class AuthRepositoryTest {
             receiveMarketingEmails = true,
         )
         assertEquals(
-            SendVerificationEmailResult.Error(errorMessage = errorMessage),
+            SendVerificationEmailResult.Error(errorMessage = errorMessage, error = null),
             result,
         )
     }
@@ -6215,6 +6291,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `sendVerificationEmail failure should return error`() = runTest {
+        val error = Throwable("fail")
         coEvery {
             identityService.sendVerificationEmail(
                 SendVerificationEmailRequestJson(
@@ -6223,7 +6300,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns Throwable("fail").asFailure()
+        } returns error.asFailure()
 
         val result = repository.sendVerificationEmail(
             email = EMAIL,
@@ -6231,7 +6308,7 @@ class AuthRepositoryTest {
             receiveMarketingEmails = true,
         )
         assertEquals(
-            SendVerificationEmailResult.Error(null),
+            SendVerificationEmailResult.Error(errorMessage = null, error = error),
             result,
         )
     }
@@ -6283,39 +6360,38 @@ class AuthRepositoryTest {
         runTest {
             val errorMessage = "I haven't heard of second breakfast."
             coEvery {
-                identityService
-                    .verifyEmailRegistrationToken(
-                        body = VerifyEmailTokenRequestJson(
-                            email = EMAIL,
-                            token = EMAIL_VERIFICATION_TOKEN,
-                        ),
-                    )
+                identityService.verifyEmailRegistrationToken(
+                    body = VerifyEmailTokenRequestJson(
+                        email = EMAIL,
+                        token = EMAIL_VERIFICATION_TOKEN,
+                    ),
+                )
             } returns VerifyEmailTokenResponseJson.Invalid(message = errorMessage).asSuccess()
 
             val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
             assertEquals(
-                EmailTokenResult.Error(message = errorMessage),
+                EmailTokenResult.Error(message = errorMessage, error = null),
                 emailTokenResult,
             )
         }
 
     @Test
     fun `validateEmailToken should return error result when service returns failure`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
-            identityService
-                .verifyEmailRegistrationToken(
-                    body = VerifyEmailTokenRequestJson(
-                        email = EMAIL,
-                        token = EMAIL_VERIFICATION_TOKEN,
-                    ),
-                )
-        } returns Exception().asFailure()
+            identityService.verifyEmailRegistrationToken(
+                body = VerifyEmailTokenRequestJson(
+                    email = EMAIL,
+                    token = EMAIL_VERIFICATION_TOKEN,
+                ),
+            )
+        } returns error.asFailure()
 
         val emailTokenResult = repository.validateEmailToken(EMAIL, EMAIL_VERIFICATION_TOKEN)
 
         assertEquals(
-            EmailTokenResult.Error(message = null),
+            EmailTokenResult.Error(message = null, error = error),
             emailTokenResult,
         )
     }

@@ -49,12 +49,13 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+            nfcManager = nfcManager,
+        ) {
             TwoFactorLoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
-                nfcManager = nfcManager,
             )
         }
     }

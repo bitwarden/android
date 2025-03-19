@@ -48,7 +48,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState.ViewState.Content.ItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -389,9 +388,11 @@ class VaultAddEditViewModel @Inject constructor(
         } else if (
             !networkConnectionManager.isNetworkConnected
         ) {
-            showErrorDialog(
-                title = R.string.internet_connection_required_title.asText(),
-                message = R.string.internet_connection_required_message.asText(),
+            showDialog(
+                dialogState = VaultAddEditState.DialogState.Generic(
+                    title = R.string.internet_connection_required_title.asText(),
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
             )
             return@onContent
         }
@@ -1553,9 +1554,14 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         clearDialogState()
 
-        when (action.createCipherResult) {
+        when (val result = action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                showGenericErrorDialog()
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
             }
 
             is CreateCipherResult.Success -> {
@@ -1580,11 +1586,15 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
-                showGenericErrorDialog(
-                    message = result
-                        .errorMessage
-                        ?.asText()
-                        ?: R.string.generic_error_message.asText(),
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = result
+                            .errorMessage
+                            ?.asText()
+                            ?: R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
                 )
             }
 
@@ -1601,9 +1611,14 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
-                showErrorDialog(message = R.string.generic_error_message.asText())
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
             }
 
             DeleteCipherResult.Success -> {
@@ -1727,7 +1742,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
-        when (action.totpResult) {
+        when (val result = action.totpResult) {
             is TotpCodeResult.Success -> {
                 sendEvent(
                     event = VaultAddEditEvent.ShowToast(
@@ -1736,14 +1751,17 @@ class VaultAddEditViewModel @Inject constructor(
                 )
 
                 updateLoginContent { loginType ->
-                    loginType.copy(totp = action.totpResult.code)
+                    loginType.copy(totp = result.code)
                 }
             }
 
-            TotpCodeResult.CodeScanningError -> {
-                showErrorDialog(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+            is TotpCodeResult.CodeScanningError -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.authenticator_key_read_error.asText(),
+                        error = result.error,
+                    ),
                 )
             }
         }
@@ -1774,17 +1792,26 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handlePasswordBreachReceive(
         action: VaultAddEditAction.Internal.PasswordBreachReceive,
     ) {
-        val message = when (val result = action.result) {
-            is BreachCountResult.Error -> R.string.generic_error_message.asText()
-            is BreachCountResult.Success -> {
-                if (result.breachCount > 0) {
-                    R.string.password_exposed.asText(result.breachCount)
-                } else {
-                    R.string.password_safe.asText()
+        showDialog(
+            dialogState = when (val result = action.result) {
+                is BreachCountResult.Error -> {
+                    VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    )
                 }
-            }
-        }
-        showErrorDialog(message = message)
+
+                is BreachCountResult.Success -> {
+                    VaultAddEditState.DialogState.Generic(
+                        message = if (result.breachCount > 0) {
+                            R.string.password_exposed.asText(result.breachCount)
+                        } else {
+                            R.string.password_safe.asText()
+                        },
+                    )
+                }
+            },
+        )
     }
 
     private fun handleFido2RegisterCredentialResultReceive(
@@ -1813,7 +1840,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 showFido2ErrorDialog()
             }
 
@@ -1835,7 +1862,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePinResult.Error -> {
+            is ValidatePinResult.Error -> {
                 showFido2ErrorDialog()
             }
 
@@ -1894,21 +1921,16 @@ class VaultAddEditViewModel @Inject constructor(
     private fun showGenericErrorDialog(
         message: Text = R.string.generic_error_message.asText(),
     ) {
-        showErrorDialog(
-            title = R.string.an_error_has_occurred.asText(),
-            message = message,
+        showDialog(
+            dialogState = VaultAddEditState.DialogState.Generic(
+                title = R.string.an_error_has_occurred.asText(),
+                message = message,
+            ),
         )
     }
 
-    private fun showErrorDialog(title: Text? = null, message: Text) {
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultAddEditState.DialogState.Generic(
-                    title = title,
-                    message = message,
-                ),
-            )
-        }
+    private fun showDialog(dialogState: VaultAddEditState.DialogState?) {
+        mutableStateFlow.update { it.copy(dialog = dialogState) }
     }
 
     private inline fun onContent(
@@ -2536,6 +2558,7 @@ data class VaultAddEditState(
         data class Generic(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

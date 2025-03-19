@@ -202,6 +202,7 @@ private fun TwoFactorLoginDialogs(
                 ?.invoke()
                 ?: stringResource(R.string.an_error_has_occurred),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = onDismissRequest,
         )
 

@@ -89,13 +89,14 @@ class RemovePasswordViewModel @Inject constructor(
     private fun handleReceiveRemovePasswordResult(
         action: RemovePasswordAction.Internal.ReceiveRemovePasswordResult,
     ) {
-        when (action.result) {
-            RemovePasswordResult.Error -> {
+        when (val result = action.result) {
+            is RemovePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = RemovePasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -130,6 +131,7 @@ data class RemovePasswordState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

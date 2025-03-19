@@ -140,13 +140,14 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendResultReceive(action: SendAction.Internal.DeleteSendResultReceive) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -257,7 +258,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepo.lockVaultForCurrentUser()
+        vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleRefreshClick() {
@@ -465,6 +466,7 @@ data class SendState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

@@ -592,12 +592,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
+            val error = Throwable("Oh dang.")
             coEvery {
                 vaultRepository.softDeleteCipher(
                     cipherId = "mockId-1",
                     cipherView = cipherView,
                 )
-            } returns DeleteCipherResult.Error
+            } returns DeleteCipherResult.Error(error = error)
 
             viewModel.trySendAction(VaultAddEditAction.Common.ConfirmDeleteClick)
 
@@ -606,6 +607,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = vaultAddEditType,
                     dialogState = VaultAddEditState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                     commonContentViewState = createCommonContentViewState(
                         name = "mockName-1",
@@ -1638,7 +1640,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.createCipherInOrganization(any(), any())
-            } returns CreateCipherResult.Error
+            } returns CreateCipherResult.Error(error = Throwable("Oh dang"))
             viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
             assertEquals(
@@ -1772,9 +1774,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                 )
             } returns stateWithName.viewState
+            val error = Throwable("Oh dang.")
             coEvery {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
-            } returns UpdateCipherResult.Error(errorMessage = null)
+            } returns UpdateCipherResult.Error(errorMessage = null, error = error)
             mutableVaultDataFlow.value = DataState.Loaded(
                 data = createVaultData(cipherView = cipherView),
             )
@@ -1794,6 +1797,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     dialog = VaultAddEditState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1839,7 +1843,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns stateWithName.viewState
             coEvery {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
-            } returns UpdateCipherResult.Error(errorMessage = errorMessage)
+            } returns UpdateCipherResult.Error(errorMessage = errorMessage, error = null)
             mutableVaultDataFlow.value = DataState.Loaded(
                 createVaultData(cipherView = cipherView),
             )
@@ -3969,7 +3973,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val password = "password"
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = Throwable("Fail!"))
 
             viewModel.trySendAction(
                 VaultAddEditAction.Common.MasterPasswordFido2VerificationSubmit(
@@ -4074,7 +4078,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val pin = "PIN"
             coEvery {
                 authRepository.validatePin(pin = pin)
-            } returns ValidatePinResult.Error
+            } returns ValidatePinResult.Error(error = Throwable("Fail!"))
 
             viewModel.trySendAction(
                 VaultAddEditAction.Common.PinFido2VerificationSubmit(

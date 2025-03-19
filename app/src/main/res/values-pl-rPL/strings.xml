@@ -1226,4 +1226,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="show_more">Pokaż więcej</string>
   <string name="no_folder">Brak folderu</string>
   <string name="show_less">Pokaż mniej</string>
+  <string name="add_field">Dodaj pole</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Udostępnij szczegóły błędu</string>
 </resources>

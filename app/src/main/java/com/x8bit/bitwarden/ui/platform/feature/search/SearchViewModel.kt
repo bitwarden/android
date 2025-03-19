@@ -474,13 +474,14 @@ class SearchViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: SearchAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -545,6 +546,7 @@ class SearchViewModel @Inject constructor(
                             title = null,
                             message = result.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -561,13 +563,14 @@ class SearchViewModel @Inject constructor(
     private fun handleValidatePasswordResultReceive(
         action: SearchAction.Internal.ValidatePasswordResultReceive,
     ) {
-        when (action.result) {
-            ValidatePasswordResult.Error -> {
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -857,6 +860,7 @@ data class SearchState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

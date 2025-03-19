@@ -15,9 +15,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -439,67 +437,6 @@ class FirstTimeActionManagerTest {
             }
             firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
                 assertTrue(awaitItem())
-            }
-        }
-
-    @Test
-    fun `if a user has a org only policy with no login items we show coach marks`() =
-        runTest {
-            val userState = MOCK_USER_STATE
-            fakeAuthDiskSource.userState = userState
-            fakeAuthDiskSource.storePolicies(
-                userState.activeUserId,
-                listOf(
-                    createMockPolicy(
-                        isEnabled = true,
-                        number = 2,
-                        organizationId = "1234",
-                        type = PolicyTypeJson.ONLY_ORG,
-                    ),
-                ),
-            )
-            // Enable feature flag so flow emits updates from disk.
-            mutableOnboardingFeatureFlow.update { true }
-
-            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-                assertTrue(awaitItem())
-                // Make sure when we change the disk source that we honor that value.
-                fakeSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
-                assertFalse(awaitItem())
-            }
-        }
-
-    @Test
-    fun `if a user has a org only policy with login items we show coach marks`() =
-        runTest {
-            val userState = MOCK_USER_STATE
-            fakeAuthDiskSource.userState = userState
-            fakeAuthDiskSource.storePolicies(
-                userState.activeUserId,
-                listOf(
-                    createMockPolicy(
-                        isEnabled = true,
-                        number = 2,
-                        organizationId = "1234",
-                        type = PolicyTypeJson.ONLY_ORG,
-                    ),
-                ),
-            )
-            val mockJsonWithLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
-                every { login } returns mockk()
-                every { organizationId } returns "1234"
-            }
-            mutableCiphersListFlow.update {
-                listOf(mockJsonWithLoginAndWithOrganizationId)
-            }
-            // Enable feature flag so flow emits updates from disk.
-            mutableOnboardingFeatureFlow.update { true }
-
-            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-                assertTrue(awaitItem())
-                // Make sure when we change the disk source that we honor that value.
-                fakeSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
-                assertFalse(awaitItem())
             }
         }
 

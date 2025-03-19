@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
@@ -54,6 +55,7 @@ class VaultUnlockViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val appResumeManager: AppResumeManager,
+    private val vaultLockManager: VaultLockManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
@@ -100,6 +102,7 @@ class VaultUnlockViewModel @Inject constructor(
             // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
             fido2CredentialAssertionRequest = null,
             hasMasterPassword = activeAccount.hasMasterPassword,
+            isFromLockFlow = vaultLockManager.isFromLockFlow,
         )
     },
 ) {
@@ -120,6 +123,11 @@ class VaultUnlockViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         promptForBiometricsIfAvailable()
+
+        // only when navigating from vault to lock we should not display biometrics
+        // subsequent views of the lock screen should display biometrics if available
+        vaultLockManager.isFromLockFlow = false
+        mutableStateFlow.update { it.copy(isFromLockFlow = false) }
     }
 
     override fun onCleared() {
@@ -209,7 +217,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultUnlockAction.LockAccountClick) {
-        vaultRepo.lockVault(userId = action.accountSummary.userId)
+        vaultRepo.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {
@@ -324,7 +332,7 @@ class VaultUnlockViewModel @Inject constructor(
         fido2CredentialManager.isUserVerified =
             action.vaultUnlockResult is VaultUnlockResult.Success
 
-        when (action.vaultUnlockResult) {
+        when (val result = action.vaultUnlockResult) {
             is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -335,12 +343,13 @@ class VaultUnlockViewModel @Inject constructor(
                             } else {
                                 state.vaultUnlockType.unlockScreenErrorMessage
                             },
+                            throwable = result.error,
                         ),
                     )
                 }
             }
 
-            VaultUnlockResult.BiometricDecodingError -> {
+            is VaultUnlockResult.BiometricDecodingError -> {
                 biometricsEncryptionManager.clearBiometrics(userId = state.userId)
                 mutableStateFlow.update {
                     it.copy(
@@ -353,14 +362,16 @@ class VaultUnlockViewModel @Inject constructor(
                 }
             }
 
-            VaultUnlockResult.GenericError,
-            VaultUnlockResult.InvalidStateError,
+            is VaultUnlockResult.GenericError,
+            is VaultUnlockResult.InvalidStateError,
                 -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = (result as? VaultUnlockResult.InvalidStateError)?.error
+                                ?: (result as? VaultUnlockResult.GenericError)?.error,
                         ),
                     )
                 }
@@ -422,7 +433,7 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun promptForBiometricsIfAvailable() {
         val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null) {
+        if (state.showBiometricLogin && cipher != null && !state.isFromLockFlow) {
             sendEvent(
                 VaultUnlockEvent.PromptForBiometrics(
                     cipher = cipher,
@@ -455,6 +466,7 @@ data class VaultUnlockState(
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
     private val hasMasterPassword: Boolean,
+    val isFromLockFlow: Boolean,
 ) : Parcelable {
 
     /**
@@ -506,6 +518,7 @@ data class VaultUnlockState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : VaultUnlockDialog()
 
         /**

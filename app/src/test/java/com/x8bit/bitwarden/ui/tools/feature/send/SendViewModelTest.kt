@@ -102,12 +102,12 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `LockClick should lock the vault`() {
         val viewModel = createViewModel()
-        every { vaultRepo.lockVaultForCurrentUser() } just runs
+        every { vaultRepo.lockVaultForCurrentUser(any()) } just runs
 
         viewModel.trySendAction(SendAction.LockClick)
 
         verify {
-            vaultRepo.lockVaultForCurrentUser()
+            vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 
@@ -138,7 +138,8 @@ class SendViewModelTest : BaseViewModelTest() {
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
         }
-        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Error
+        val error = Throwable("Oops")
+        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Error(error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -155,6 +156,7 @@ class SendViewModelTest : BaseViewModelTest() {
                     dialogState = SendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 awaitItem(),
@@ -186,7 +188,7 @@ class SendViewModelTest : BaseViewModelTest() {
             }
             coEvery {
                 vaultRepo.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
