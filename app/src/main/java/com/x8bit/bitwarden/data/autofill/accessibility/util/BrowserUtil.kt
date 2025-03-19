@@ -123,6 +123,7 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(packageName = "org.chromium.chrome", urlFieldId = "url_bar"),
     Browser(packageName = "org.codeaurora.swe.browser", urlFieldId = "url_bar"),
     Browser(packageName = "org.cromite.cromite", urlFieldId = "url_bar"),
+    Browser(packageName = "foundation.e.browser", urlFieldId = "url_bar"),
     Browser(
         packageName = "org.gnu.icecat",
         // 2nd = Anticipation
