@@ -24,17 +24,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -76,63 +80,118 @@ fun ViewAsQrCodeScreen(
             )
         },
     ) {
-        when (val viewState = state.viewState) {
-            is ViewAsQrCodeState.ViewState.Loading -> BitwardenLoadingContent(
-                modifier = Modifier.fillMaxSize(),
-            )
+        val viewState = state
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            // QR Code display
+            Box(
+                modifier = Modifier
+                    .size(250.dp)
+                    .background(Color.White)
+                    .padding(8.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    //TODO set qrcode image
+                    painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+                    colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
 
-            is ViewAsQrCodeState.ViewState.Error -> BitwardenErrorContent(
-                message = "ERROR",
-                onTryAgainClick = remember(viewModel) {
-                    { viewModel.trySendAction(ViewAsQrCodeAction.BackClick) }
-                },
-                modifier = Modifier.fillMaxSize(),
-            )
+                    //bitmap = contentState.qrCodeBitmap.asImageBitmap(),
+                    contentDescription = stringResource(id = R.string.qr_code),
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
 
-            is ViewAsQrCodeState.ViewState.Content -> {
-                //TODO add ViewAsQrCodeContent
-                val contentState = state
+            Spacer(modifier = Modifier.height(24.dp))
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    // QR Code display
-                    Box(
-                        modifier = Modifier
-                            .size(250.dp)
-                            .background(Color.White)
-                            .padding(8.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Image(
-                            //TODO set qrcode image
-                            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
-                            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-
-                            //bitmap = contentState.qrCodeBitmap.asImageBitmap(),
-                            contentDescription = stringResource(id = R.string.qr_code),
-                            modifier = Modifier.fillMaxSize(),
-                        )
+            // QR Code type selector
+            val resources = LocalContext.current.resources
+            BitwardenMultiSelectButton(
+                label = stringResource(id = R.string.qr_code_type),
+                options = viewState.qrCodeTypes.map { it.displayName() }.toImmutableList(),
+                selectedOption = viewState.selectedQrCodeType.displayName(),
+                onOptionSelected = { selectedOption ->
+                    val selectedType = viewState.qrCodeTypes.first {
+                        it.displayName.toString(resources) == selectedOption
                     }
+                    viewModel.trySendAction(ViewAsQrCodeAction.QrCodeTypeSelect(selectedType))
+                },
+                supportingText = stringResource(id = R.string.default_uri_match_detection_description),
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .testTag("QRCodeType")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+//        when (val viewState = state) {
+//            is ViewAsQrCodeState.ViewState.Loading -> BitwardenLoadingContent(
+//                modifier = Modifier.fillMaxSize(),
+//            )
+//
+//            is ViewAsQrCodeState.ViewState.Error -> BitwardenErrorContent(
+//                message = "ERROR",
+//                onTryAgainClick = remember(viewModel) {
+//                    { viewModel.trySendAction(ViewAsQrCodeAction.BackClick) }
+//                },
+//                modifier = Modifier.fillMaxSize(),
+//            )
+//
+//            is ViewAsQrCodeState.ViewState.Content -> {
+                //TODO add ViewAsQrCodeContent
+
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .verticalScroll(rememberScrollState())
+//                        .padding(16.dp),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                ) {
+//                    // QR Code display
+//                    Box(
+//                        modifier = Modifier
+//                            .size(250.dp)
+//                            .background(Color.White)
+//                            .padding(8.dp),
+//                        contentAlignment = Alignment.Center,
+//                    ) {
+//                        Image(
+//                            //TODO set qrcode image
+//                            painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
+//                            colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
+//
+//                            //bitmap = contentState.qrCodeBitmap.asImageBitmap(),
+//                            contentDescription = stringResource(id = R.string.qr_code),
+//                            modifier = Modifier.fillMaxSize(),
+//                        )
+//                    }
+//
+//                    Spacer(modifier = Modifier.height(24.dp))
 //
 //                    // QR Code type selector
+//                    val resources = LocalContext.current.resources
 //                    BitwardenMultiSelectButton(
 //                        label = stringResource(id = R.string.qr_code_type),
-//                        options = contentState.qrCodeTypes.map { it.displayName() }.toImmutableList(),
-//                        selectedOption = contentState.selectedQrCodeType.displayName(),
+//                        options = viewState.qrCodeTypes.map { it.displayName() }.toImmutableList(),
+//                        selectedOption = viewState.selectedQrCodeType.displayName(),
 //                        onOptionSelected = { selectedOption ->
-//                            val selectedType = contentState.qrCodeTypes.first {
-//                                it.displayName() == selectedOption
+//                            val selectedType = viewState.qrCodeTypes.first {
+//                                it.displayName.toString(resources) == selectedOption
 //                            }
 //                            viewModel.trySendAction(ViewAsQrCodeAction.QrCodeTypeSelect(selectedType))
 //                        },
-//                        modifier = Modifier.fillMaxWidth(),
+//                        supportingText = stringResource(id = R.string.default_uri_match_detection_description),
+//                        cardStyle = CardStyle.Full,
+//                        modifier = Modifier
+//                            .testTag("QRCodeType")
+//                            .standardHorizontalMargin()
+//                            .fillMaxWidth(),
 //                    )
 //
 //                    Spacer(modifier = Modifier.height(16.dp))
@@ -362,8 +421,8 @@ fun ViewAsQrCodeScreen(
 //                            )
 //                        }
 //                    }
-                }
-            }
+//                }
+//            }
         }
     }
 }

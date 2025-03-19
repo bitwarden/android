@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FieldView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -11,17 +12,16 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeConfig
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
-import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.QrCodeGenerator
-import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.toViewState
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeTypeField
+//import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -38,11 +38,20 @@ class ViewAsQrCodeViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val args = ViewAsQrCodeArgs(savedStateHandle)
+        val qrCodeTypes = QrCodeType.entries
+        val selectedQrCodeType = qrCodeTypes.first()
+
         ViewAsQrCodeState(
             cipherId = args.vaultItemId,
             cipherType = args.vaultItemCipherType,
-            viewState = ViewAsQrCodeState.ViewState.Loading,
-            dialogState = null,
+            selectedQrCodeType = selectedQrCodeType,
+            qrCodeTypes = qrCodeTypes,
+            qrCodeTypeFields = selectedQrCodeType.fields,
+            cipherFields = emptyList(),
+            cipher = null,
+
+//            viewState = ViewAsQrCodeState.ViewState.Loading,
+//            dialogState = null,
         )
     },
 ) {
@@ -50,11 +59,23 @@ class ViewAsQrCodeViewModel @Inject constructor(
 
     init {
         //TODO get args.vaultItemCipherType and auto-map
-        vaultRepository
-            .getVaultItemStateFlow(args.vaultItemId)
-            .map { ViewAsQrCodeAction.Internal.CipherReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
+//        val qrCodeTypes = QrCodeType.entries
+//        val selectedQrCodeType = qrCodeTypes.first()
+//        mutableStateFlow.update {
+//            it.copy(
+//                viewState = ViewAsQrCodeState.ViewState.Content(
+//                    selectedQrCodeType = selectedQrCodeType,
+//                    qrCodeTypes = qrCodeTypes,
+//                    qrCodeTypeFields = selectedQrCodeType.fields,
+//                    cipherFields = emptyList(),
+//                )
+//            )
+//        }
+//        vaultRepository
+//            .getVaultItemStateFlow(args.vaultItemId)
+//            .map { ViewAsQrCodeAction.Internal.CipherReceive(it) }
+//            .onEach(::sendAction)
+//            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: ViewAsQrCodeAction) {
@@ -78,137 +99,74 @@ class ViewAsQrCodeViewModel @Inject constructor(
 
     private fun handleCipherReceive(action: ViewAsQrCodeAction.Internal.CipherReceive) {
         when (val dataState = action.cipherDataState) {
-            is DataState.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = ViewAsQrCodeState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
-            }
-
             is DataState.Loaded -> {
+                //TODO fix nullable access
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = dataState
-                            .data
-                            ?.toViewState()
-                            ?: ViewAsQrCodeState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
+                        cipher = dataState.data!!,
+                        cipherFields = dataState.data?.fields!!
                     )
                 }
-            }
 
-            DataState.Loading -> {
-                mutableStateFlow.update {
-                    it.copy(viewState = ViewAsQrCodeState.ViewState.Loading)
-                }
             }
+            is DataState.Error -> TODO()
+            is DataState.Loading -> TODO()
+            is DataState.NoNetwork<*> -> TODO()
+            is DataState.Pending<*> -> TODO()
+//            is DataState.Error -> {
+//                mutableStateFlow.update {
+//                    it.copy(
+//                        viewState = ViewAsQrCodeState.ViewState.Error(
+//                            message = R.string.generic_error_message.asText(),
+//                        ),
+//                    )
+//                }
+//            }
 
-            is DataState.NoNetwork -> mutableStateFlow.update {
-                it.copy(
-                    viewState = ViewAsQrCodeState.ViewState.Error(
-                        message = R.string.internet_connection_required_title
-                            .asText()
-                            .concat(
-                                " ".asText(),
-                                R.string.internet_connection_required_message.asText(),
-                            ),
-                    ),
-                )
-            }
+//            is DataState.Loaded -> {
+//                mutableStateFlow.update {
+//                    it.copy(
+//                        viewState = dataState
+//                            .data
+//                            ?.toViewState()
+//                            ?: ViewAsQrCodeState.ViewState.Error(
+//                                message = R.string.generic_error_message.asText(),
+//                            ),
+//                    )
+//                }
+//            }
 
-            is DataState.Pending -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = dataState
-                            .data
-                            ?.toViewState()
-                            ?: ViewAsQrCodeState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
-                    )
-                }
-            }
+//            DataState.Loading -> {
+//                mutableStateFlow.update {
+//                    it.copy(viewState = ViewAsQrCodeState.ViewState.Loading)
+//                }
+//            }
+//
+
+//            is DataState.Pending -> {
+//                mutableStateFlow.update {
+//                    it.copy(
+//                        viewState = dataState
+//                            .data
+//                            ?.toViewState()
+//                            ?: ViewAsQrCodeState.ViewState.Error(
+//                                message = R.string.generic_error_message.asText(),
+//                            ),
+//                    )
+//                }
+//            }
         }
     }
 
 
-        private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
+    private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
+        mutableStateFlow.update {
+            it.copy(selectedQrCodeType = action.qrCodeType )
+        }
 //        val currentState = state as? ViewAsQrCodeState.Content ?: return
 //        val cipher = currentState.cipher
 //
-//        // Generate default fields based on the selected QR code type and cipher data
-//        val fields = when (action.qrCodeType) {
-//            QrCodeType.Text -> mapOf("text" to cipher.name)
-//            QrCodeType.Url -> {
-//                val loginUri = cipher.login?.uris?.firstOrNull()?.uri ?: ""
-//                mapOf("url" to loginUri)
-//            }
-//            QrCodeType.Email -> {
-//                val email = cipher.login?.username.orEmpty()
-//                mapOf(
-//                    "email" to email,
-//                    "subject" to "",
-//                    "body" to ""
-//                )
-//            }
-//            QrCodeType.Phone -> {
-//                val phone = when {
-//                    cipher.identity?.phone != null -> cipher.identity.phone
-//                    cipher.card?.cardholderName != null -> ""
-//                    else -> ""
-//                }
-//                mapOf("phone" to phone)
-//            }
-//            QrCodeType.SMS -> {
-//                val phone = when {
-//                    cipher.identity?.phone != null -> cipher.identity.phone
-//                    else -> ""
-//                }
-//                mapOf(
-//                    "phone" to phone,
-//                    "message" to ""
-//                )
-//            }
-//            QrCodeType.WiFi -> mapOf(
-//                "ssid" to "",
-//                "password" to "",
-//                "type" to "WPA",
-//                "hidden" to "false"
-//            )
-//            QrCodeType.Contact -> {
-//                val name = when {
-//                    cipher.identity != null -> "${cipher.identity.firstName} ${cipher.identity.lastName}"
-//                    cipher.card?.cardholderName != null -> cipher.card.cardholderName
-//                    else -> cipher.name
-//                }
-//                val email = when {
-//                    cipher.identity?.email != null -> cipher.identity.email
-//                    cipher.login?.username != null -> cipher.login.username
-//                    else -> ""
-//                }
-//                val phone = when {
-//                    cipher.identity?.phone != null -> cipher.identity.phone
-//                    else -> ""
-//                }
-//                val organization = cipher.identity?.company ?: ""
-//                val address = when {
-//                    cipher.identity != null -> "${cipher.identity.address1} ${cipher.identity.address2} ${cipher.identity.city} ${cipher.identity.state} ${cipher.identity.postalCode} ${cipher.identity.country}"
-//                    else -> ""
-//                }
 //
-//                mapOf(
-//                    "name" to name,
-//                    "phone" to phone,
-//                    "email" to email,
-//                    "organization" to organization,
-//                    "address" to address
-//                )
-//            }
-//        }
 //
 //        val config = QrCodeConfig(action.qrCodeType, fields)
 //        val qrCodeBitmap = QrCodeGenerator.generateQrCode(config)
@@ -248,66 +206,15 @@ class ViewAsQrCodeViewModel @Inject constructor(
 data class ViewAsQrCodeState(
     val cipherId: String,
     val cipherType: VaultItemCipherType,
-    val viewState: ViewState,
-    val dialogState: DialogState?,
-) : Parcelable {
-    /**
-     * Represents the specific view states for the [ViewAsQrCodeScreen].
-     */
-    sealed class ViewState : Parcelable {
-        /**
-         * Represents an error state for the [ViewAsQrCodeScreen].
-         */
-        @Parcelize
-        data class Error(val message: Text) : ViewState()
-
-        /**
-         * Loading state for the [ViewAsQrCodeScreen], signifying that the content is being
-         * processed.
-         */
-        @Parcelize
-        data object Loading : ViewState()
-
-        /**
-         * Represents a loaded content state for the [ViewAsQrCodeScreen].
-         */
-        @Parcelize
-        data class Content(
-
-            val title: String,
-//        val qrCodeBitmap: Bitmap,
-//        val selectedQrCodeType: QrCodeType,
-//        val qrCodeTypes: ImmutableList<QrCodeType>,
-//        val fields: Map<String, String>,
-//        val cipher: com.x8bit.bitwarden.data.vault.datasource.model.Cipher
-//        ) : ViewAsQrCodeState()
-            //TODO add content?
-        ) : ViewState()
-    }
-    //TODO do we need dialogs?
-    /**
-     * Represents the current state of any dialogs on the screen.
-     */
-    sealed class DialogState : Parcelable {
-        /**
-         * Represents a dismissible dialog with the given error [message].
-         */
-        @Parcelize
-        data class Error(
-            val title: Text?,
-            val message: Text,
-        ) : DialogState()
-
-        /**
-         * Represents a loading dialog with the given [message].
-         */
-        @Parcelize
-        data class Loading(
-            val message: Text,
-        ) : DialogState()
-    }
-}
-
+    //        val qrCodeBitmap: Bitmap,
+    val selectedQrCodeType: QrCodeType,
+    val qrCodeTypes: List<QrCodeType>,
+    val qrCodeTypeFields: Map<String, QrCodeTypeField>,
+    @IgnoredOnParcel
+    val cipherFields: List<FieldView> =  emptyList(),
+    @IgnoredOnParcel
+    val cipher: CipherView? = null, //TODO do we need to use null?
+    ) : Parcelable
 
 /**
  * Models events for the [ViewAsQrCodeScreen].
@@ -328,7 +235,6 @@ sealed class ViewAsQrCodeAction {
      */
     data object BackClick : ViewAsQrCodeAction()
 
-    //TODO deleteme
     /**
      * User selected a QR code type.
      */
