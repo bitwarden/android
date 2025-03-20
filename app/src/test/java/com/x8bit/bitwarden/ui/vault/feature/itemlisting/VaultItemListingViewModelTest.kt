@@ -4578,6 +4578,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.SendFile -> "send_file"
                 is VaultItemListingType.SendText -> "send_text"
                 is VaultItemListingType.SshKey -> "ssh_key"
+                is VaultItemListingType.Archive -> "archive"
             },
         )
         set(
@@ -4593,6 +4594,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 is VaultItemListingType.SendFile -> null
                 is VaultItemListingType.SendText -> null
                 is VaultItemListingType.SshKey -> null
+                is VaultItemListingType.Archive -> null
             },
         )
     }

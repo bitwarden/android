@@ -1151,7 +1151,7 @@ class VaultScreenTest : BaseComposeTest() {
         }
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -1169,7 +1169,7 @@ class VaultScreenTest : BaseComposeTest() {
 
         // Header
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "TRASH (1)")
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
             .assertIsDisplayed()
         // Item
         composeTestRule
@@ -1441,4 +1441,5 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    archiveItemsCount = 0,
 )

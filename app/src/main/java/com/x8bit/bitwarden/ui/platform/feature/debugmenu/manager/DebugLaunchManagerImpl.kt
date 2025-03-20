@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 
 private const val TAP_TIME_THRESHOLD_MILLIS = 500
-private const val POINTERS_REQUIRED = 2
+private const val POINTERS_REQUIRED = 3
 
 /**
  * Default implementation of the [DebugMenuLaunchManager]

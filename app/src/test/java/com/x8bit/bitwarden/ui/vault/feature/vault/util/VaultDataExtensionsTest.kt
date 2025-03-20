@@ -100,6 +100,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -146,6 +147,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -207,6 +209,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -290,6 +293,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -327,6 +331,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -364,6 +369,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -403,6 +409,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -626,6 +633,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -665,6 +673,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -713,6 +722,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 100,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -790,6 +800,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -832,6 +843,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 // Verify item types count includes all CipherTypes when showSshKeys is true.
                 itemTypesCount = CipherType.entries.size,
+                archiveItemsCount = 0,
             ),
             actual,
         )
@@ -902,6 +914,7 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 0,
                 itemTypesCount = CipherType.entries.size,
+                archiveItemsCount = 0,
             ),
             actual,
         )

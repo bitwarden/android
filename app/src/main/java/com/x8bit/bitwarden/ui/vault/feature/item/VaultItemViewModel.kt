@@ -184,16 +184,6 @@ class VaultItemViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        featureFlagManager.getFeatureFlagFlow(FlagKey.ArchiveItem)
-            .map { isArchiveEnabled ->
-                mutableStateFlow.update {
-                    it.copy(
-                        isArchiveItemEnabled = isArchiveEnabled,
-                    )
-                }
-            }
-            .launchIn(viewModelScope)
-
         settingsRepository.isIconLoadingDisabledFlow
             .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
             .onEach(::sendAction)

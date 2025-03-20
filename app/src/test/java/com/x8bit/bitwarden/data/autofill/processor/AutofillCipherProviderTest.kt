@@ -44,6 +44,7 @@ class AutofillCipherProviderTest {
     private val cardCipherView: CipherView = mockk {
         every { card } returns cardView
         every { deletedDate } returns null
+        every { archivedDate } returns null
         every { id } returns CIPHER_ID
         every { name } returns CARD_NAME
         every { reprompt } returns CipherRepromptType.NONE
@@ -56,6 +57,7 @@ class AutofillCipherProviderTest {
     }
     private val loginCipherViewWithoutTotp: CipherView = mockk {
         every { deletedDate } returns null
+        every { archivedDate } returns null
         every { id } returns CIPHER_ID
         every { login } returns loginViewWithoutTotp
         every { name } returns LOGIN_NAME
@@ -69,6 +71,7 @@ class AutofillCipherProviderTest {
     }
     private val loginCipherViewWithTotp: CipherView = mockk {
         every { deletedDate } returns null
+        every { archivedDate } returns null
         every { id } returns CIPHER_ID
         every { login } returns loginViewWithTotp
         every { name } returns LOGIN_NAME
@@ -210,10 +213,12 @@ class AutofillCipherProviderTest {
         runTest {
             val deletedCardCipherView: CipherView = mockk {
                 every { deletedDate } returns mockk()
+                every { archivedDate } returns null
                 every { type } returns CipherType.CARD
             }
             val repromptCardCipherView: CipherView = mockk {
                 every { deletedDate } returns null
+                every { archivedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherType.CARD
             }
@@ -282,10 +287,12 @@ class AutofillCipherProviderTest {
         runTest {
             val deletedLoginCipherView: CipherView = mockk {
                 every { deletedDate } returns mockk()
+                every { archivedDate } returns null
                 every { type } returns CipherType.LOGIN
             }
             val repromptLoginCipherView: CipherView = mockk {
                 every { deletedDate } returns null
+                every { archivedDate } returns null
                 every { reprompt } returns CipherRepromptType.PASSWORD
                 every { type } returns CipherType.LOGIN
             }

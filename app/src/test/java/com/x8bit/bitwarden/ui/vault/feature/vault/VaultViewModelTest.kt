@@ -705,6 +705,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = CipherType.entries.size,
                     sshKeyItemsCount = 1,
+                    archiveItemsCount = 0,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -729,6 +730,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archiveItemsCount = 0,
                 ),
             )
             val viewModel = createViewModel()
@@ -843,6 +845,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     totpItemsCount = 1,
                     itemTypesCount = 5,
                     sshKeyItemsCount = 0,
+                    archiveItemsCount = 0,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -943,6 +946,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archiveItemsCount = 0,
                     ),
                     dialog = VaultState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
@@ -1041,6 +1045,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = 5,
                         sshKeyItemsCount = 0,
+                        archiveItemsCount = 0,
                     ),
                     dialog = null,
                 ),
@@ -1118,6 +1123,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         totpItemsCount = 1,
                         itemTypesCount = CipherType.entries.size,
                         sshKeyItemsCount = 1,
+                        archiveItemsCount = 0,
                     ),
                 ),
                 viewModel.stateFlow.value,
