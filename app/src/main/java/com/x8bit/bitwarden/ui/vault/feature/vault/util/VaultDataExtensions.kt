@@ -143,7 +143,7 @@ fun VaultData.toViewState(
                 it.deletedDate != null
             },
             archiveItemsCount = filteredCipherViewListWithAllItems.count {
-                it.archivedDate != null
+                it.archivedDate != null && it.deletedDate == null
             },
         )
     }

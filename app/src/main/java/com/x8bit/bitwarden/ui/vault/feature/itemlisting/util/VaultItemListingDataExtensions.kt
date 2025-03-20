@@ -91,7 +91,7 @@ fun CipherView.determineListingPredicate(
         }
 
         is VaultItemListingState.ItemListingType.Vault.Archive -> {
-            archivedDate != null
+            archivedDate != null && deletedDate == null
         }
     }
 

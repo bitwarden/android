@@ -152,7 +152,7 @@ private fun CipherView.filterBySearchType(
                 archivedDate == null
 
         is SearchTypeData.Vault.Trash -> deletedDate != null
-        is SearchTypeData.Vault.Archive -> archivedDate != null
+        is SearchTypeData.Vault.Archive -> archivedDate != null && deletedDate == null
     }
 
 /**

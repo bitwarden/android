@@ -187,9 +187,9 @@ fun VaultItemScreen(
                         )
                     }
 
-                    if (state.isCipherArchived) {
+                    if (state.isCipherArchived && !state.isCipherDeleted) {
                         BitwardenTextButton(
-                            label = stringResource(id = R.string.restore),
+                            label = stringResource(id = R.string.unarchive),
                             onClick = remember(viewModel) {
                                 {
                                     viewModel.trySendAction(
@@ -229,7 +229,11 @@ fun VaultItemScreen(
                                     }
                                 },
                             )
-                                .takeUnless { state.isCipherInCollection },
+                                .takeUnless
+                                {
+                                    state.isCipherInCollection ||
+                                        state.isCipherArchived
+                                },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.collections),
                                 onClick = remember(viewModel) {
@@ -256,7 +260,10 @@ fun VaultItemScreen(
                             )
                                 .takeUnless
                                 {
-                                    state.isCipherInCollection || !state.isArchiveItemEnabled
+                                    state.isCipherInCollection ||
+                                        !state.isArchiveItemEnabled ||
+                                        state.isCipherArchived ||
+                                        state.isCipherDeleted
                                 },
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.delete),
@@ -398,7 +405,7 @@ private fun VaultItemDialogs(
 
         is VaultItemState.DialogState.UnarchiveItemDialog -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.restore),
+                title = stringResource(id = R.string.unarchive),
                 message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
                 confirmButtonText = stringResource(id = R.string.ok),
                 dismissButtonText = stringResource(id = R.string.cancel),
