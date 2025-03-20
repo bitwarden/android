@@ -131,6 +131,7 @@ import org.junit.jupiter.api.Test
 import retrofit2.HttpException
 import java.io.File
 import java.net.UnknownHostException
+import java.security.GeneralSecurityException
 import java.security.MessageDigest
 import java.time.Clock
 import java.time.Instant
@@ -1289,6 +1290,33 @@ class VaultRepositoryTest {
                 VaultUnlockResult.BiometricDecodingError(
                     error = MissingPropertyException("Foo"),
                 ),
+                result,
+            )
+            coVerify(exactly = 0) {
+                vaultSdkSource.derivePinProtectedUserKey(any(), any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `unlockVaultWithBiometrics with failure to encode biometrics key should return BiometricDecodingError`() =
+        runTest {
+            val userId = MOCK_USER_STATE.activeUserId
+            val biometricsKey = "asdf1234"
+            val error = GeneralSecurityException()
+            val cipher = mockk<Cipher> {
+                every { doFinal(any()) } throws error
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            fakeAuthDiskSource.storeUserBiometricUnlockKey(
+                userId = userId,
+                biometricsKey = biometricsKey,
+            )
+
+            val result = vaultRepository.unlockVaultWithBiometrics(cipher = cipher)
+
+            assertEquals(
+                VaultUnlockResult.BiometricDecodingError(error = error),
                 result,
             )
             coVerify(exactly = 0) {
