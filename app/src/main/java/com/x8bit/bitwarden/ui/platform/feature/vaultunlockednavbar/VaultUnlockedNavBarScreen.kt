@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.material3.BottomAppBar
@@ -220,8 +219,7 @@ private fun VaultUnlockedNavBarScaffold(
             navController = navController,
             startDestination = VAULT_GRAPH_ROUTE,
             modifier = Modifier
-                .consumeWindowInsets(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-                .consumeWindowInsets(WindowInsets.ime),
+                .consumeWindowInsets(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical)),
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,
