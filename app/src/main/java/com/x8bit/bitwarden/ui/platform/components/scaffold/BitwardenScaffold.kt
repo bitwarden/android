@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -69,7 +70,11 @@ fun BitwardenScaffold(
         contentColor = contentColor,
         contentWindowInsets = WindowInsets(0.dp),
         content = { paddingValues ->
-            Column(modifier = Modifier.padding(paddingValues = paddingValues)) {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues = paddingValues)
+                    .consumeWindowInsets(paddingValues = paddingValues),
+            ) {
                 utilityBar()
                 val internalPullToRefreshState = rememberPullToRefreshState()
                 Box(
@@ -93,7 +98,11 @@ fun BitwardenScaffold(
                     )
                 }
             }
-            Box(modifier = Modifier.padding(paddingValues = paddingValues)) {
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues = paddingValues)
+                    .consumeWindowInsets(paddingValues = paddingValues),
+            ) {
                 overlay()
             }
         },
