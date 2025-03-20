@@ -53,6 +53,7 @@ enum class QrCodeType(val displayName: Text) {
             WIFI -> listOf(
                 QrCodeTypeField("ssid", R.string.ssid.asText(), isRequired = true),
                 QrCodeTypeField("password", R.string.password.asText(), isRequired = false),
+                //QrCodeTypeField("options", R.string.password.asText(), isRequired = false),
             )
 
             URL -> listOf(
@@ -103,5 +104,5 @@ data class QrCodeTypeField(
     val key: String,
     val displayName: Text,
     val isRequired: Boolean = false,
-    val selectedOption: Text = "".asText(),
+    var value: Text = "".asText(),
 ) : Parcelable

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeTypeField
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -92,19 +93,28 @@ class ViewAsQrCodeViewModel @Inject constructor(
     private fun handleCipherReceive(action: ViewAsQrCodeAction.Internal.CipherReceive) {
         when (val dataState = action.cipherDataState) {
             is DataState.Loaded -> {
-                //TODO fix nullable access
+                val cipher = dataState.data
+                val cipherFields = cipherFieldsFor(state.cipherType)
+
+                val updatedQrCodeFields = autoMapFields(
+                    state.qrCodeTypeFields,
+                    state.cipherType,
+                    cipher
+                )
+
                 mutableStateFlow.update {
                     it.copy(
-                        cipher = dataState.data!!,
+                        cipher = cipher,
+                        cipherFields = cipherFields,
+                        qrCodeTypeFields = updatedQrCodeFields
                     )
                 }
-
             }
 
             //TODO do we need to handle these?
             is DataState.Error -> {}
             is DataState.Loading -> {}
-            is DataState.NoNetwork<*> -> {}
+            is DataState.NoNetwork -> {}
             is DataState.Pending -> {}
 //            is DataState.Error -> {
 //                mutableStateFlow.update {
@@ -152,51 +162,126 @@ class ViewAsQrCodeViewModel @Inject constructor(
     }
 
     private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
+
         mutableStateFlow.update {
             it.copy(
                 selectedQrCodeType = action.qrCodeType,
-                qrCodeTypeFields = action.qrCodeType.fields
+                qrCodeTypeFields = autoMapFields(
+                    action.qrCodeType.fields,
+                    state.cipherType,
+                    state.cipher
+                )
             )
         }
     }
 
+    private fun autoMapFields(
+        qrCodeTypeFields: List<QrCodeTypeField>,
+        cipherType: VaultItemCipherType,
+        cipher: CipherView?,
+    ): List<QrCodeTypeField> {
+        return qrCodeTypeFields.map { field ->
+            field.copy(value = autoMapField(field, cipherType, cipher))
+        }
+    }
+
     private fun handleFieldValueChange(action: ViewAsQrCodeAction.FieldValueChange) {
-
         val field = action.field
+        val value = action.value
 
+        // Create a Text object from the selected value
+        val selectedText = value.asText()
+
+        //TODO should we transition qrCodeTypeFields to a map again*2 and update using key?
+        val updatedFields = state.qrCodeTypeFields.map { currentField ->
+            if (currentField.key == field.key) {
+                currentField.copy(value = selectedText)
+            } else {
+                currentField
+            }
+        }
+
+        mutableStateFlow.update {
+            it.copy(qrCodeTypeFields = updatedFields)
+        }
     }
 
-    private fun cipherFieldsFor(cipherType: VaultItemCipherType): List<Text> = when (cipherType) {
-        VaultItemCipherType.LOGIN -> listOf(
-            R.string.name.asText(),
-            R.string.username.asText(),
-            R.string.password.asText(),
-            R.string.notes.asText(),
-        )
+    private fun autoMapField(
+        qrCodeTypeField: QrCodeTypeField,
+        cipherType: VaultItemCipherType,
+        cipher: CipherView?,
+    ): Text {
+        val defaultText = SELECT_TEXT
+        return when (qrCodeTypeField.key) {
+            "ssid" -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> automapSsidToLoginItem(cipher, defaultText)
+                else -> defaultText
+            }
 
-        VaultItemCipherType.CARD -> listOf(
+            "password" -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> automapPasswordToLoginItem(cipher, defaultText)
+                else -> defaultText
+            }
 
-            R.string.cardholder_name.asText(),
-            R.string.number.asText(),
-            //TODO finish
-        )
+            //TODO automap everything else
+            else -> defaultText
 
-        VaultItemCipherType.IDENTITY -> listOf(
-            R.string.title.asText(),
-            R.string.first_name.asText(),
-            //TODO finish
-        )
-
-        VaultItemCipherType.SECURE_NOTE -> listOf(
-            R.string.name.asText(),
-            R.string.notes.asText(),
-        )
-
-        VaultItemCipherType.SSH_KEY -> listOf(
-            R.string.public_key.asText(),
-            //TODO finish
-        )
+        }
     }
+
+    private fun automapPasswordToLoginItem(cipher: CipherView?, defaultText: Text): Text =
+        if (cipher?.login?.password?.isNotEmpty() == true) R.string.password.asText() else defaultText
+
+    private fun automapSsidToLoginItem(
+        cipher: CipherView?,
+        defaultText: Text,
+    ): Text = if (cipher?.login?.username?.isNotEmpty() == true)
+        R.string.username.asText() //TODO transition cipherFieldsFor to a map and get field with key?
+    else {
+        val customSsid = cipher?.fields?.find { it.name == "Custom: SSID" }
+        if (customSsid?.value?.isNotEmpty() == true)
+            "Custom: SSID".asText()
+        else
+            defaultText
+    }
+
+    //TODO create list with common fields first like SELECT_TEXT
+    private fun cipherFieldsFor(cipherType: VaultItemCipherType): List<Text> =
+        when (cipherType) {
+            VaultItemCipherType.LOGIN -> listOf(
+                SELECT_TEXT,
+                R.string.name.asText(),
+                R.string.username.asText(),
+                R.string.password.asText(),
+                R.string.notes.asText(),
+            )
+
+            VaultItemCipherType.CARD -> listOf(
+                SELECT_TEXT,
+                R.string.cardholder_name.asText(),
+                R.string.number.asText(),
+                //TODO finish
+            )
+
+            VaultItemCipherType.IDENTITY -> listOf(
+                SELECT_TEXT,
+                R.string.title.asText(),
+                R.string.first_name.asText(),
+                //TODO finish
+            )
+
+            VaultItemCipherType.SECURE_NOTE -> listOf(
+                SELECT_TEXT,
+                R.string.name.asText(),
+                R.string.notes.asText(),
+            )
+
+            VaultItemCipherType.SSH_KEY -> listOf(
+                SELECT_TEXT,
+                R.string.public_key.asText(),
+                //TODO finish
+            )
+        }
 
 }
 

@@ -132,7 +132,7 @@ fun ViewAsQrCodeScreen(
                 BitwardenMultiSelectButton(
                     label = field.displayName(),
                     options = cipherFieldsTextList,
-                    selectedOption = cipherFieldsTextList.firstOrNull() ?: "",
+                    selectedOption = field.value(),
                     onOptionSelected = { selectedOption ->
                         viewModel.trySendAction(
                             ViewAsQrCodeAction.FieldValueChange(
