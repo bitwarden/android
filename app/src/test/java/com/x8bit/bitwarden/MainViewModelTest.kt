@@ -90,6 +90,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
+    private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -97,6 +98,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
         every { storeUserHasLoggedInValue(any()) } just runs
+        every { isDynamicColorsEnabled } returns false
+        every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -1115,6 +1118,7 @@ class MainViewModelTest : BaseViewModelTest() {
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
+    isDynamicColorsEnabled = false,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
