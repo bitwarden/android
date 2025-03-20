@@ -557,31 +557,46 @@ class VaultRepositoryImpl(
                 error = MissingPropertyException("Biometric key"),
             )
         val iv = authDiskSource.getUserBiometricInitVector(userId = userId)
+        val decryptedUserKey = iv
+            ?.let {
+                try {
+                    cipher
+                        .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
+                        .decodeToString()
+                } catch (e: GeneralSecurityException) {
+                    return VaultUnlockResult.BiometricDecodingError(error = e)
+                }
+            }
+            ?: biometricsKey
+        val encryptedBiometricsKey = if (iv == null) {
+            // Attempting to setup an encrypted pin before unlocking, if this fails we send back
+            // the biometrics error and users will need to sign in another way and re-setup
+            // biometrics.
+            try {
+                cipher
+                    .doFinal(biometricsKey.encodeToByteArray())
+                    .toString(Charsets.ISO_8859_1)
+            } catch (e: GeneralSecurityException) {
+                return VaultUnlockResult.BiometricDecodingError(error = e)
+            }
+        } else {
+            null
+        }
         return this
             .unlockVaultForUser(
                 userId = userId,
                 initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                    decryptedUserKey = iv
-                        ?.let {
-                            try {
-                                cipher
-                                    .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
-                                    .decodeToString()
-                            } catch (e: GeneralSecurityException) {
-                                return VaultUnlockResult.BiometricDecodingError(error = e)
-                            }
-                        }
-                        ?: biometricsKey,
+                    decryptedUserKey = decryptedUserKey,
                 ),
             )
             .also {
                 if (it is VaultUnlockResult.Success) {
-                    if (iv == null) {
+                    encryptedBiometricsKey?.let {
+                        // If this key is present, we store it and the associated IV for future use
+                        // since we want to migrate the user to a more secure form of biometrics.
                         authDiskSource.storeUserBiometricUnlockKey(
                             userId = userId,
-                            biometricsKey = cipher
-                                .doFinal(biometricsKey.encodeToByteArray())
-                                .toString(Charsets.ISO_8859_1),
+                            biometricsKey = it,
                         )
                         authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
                     }
