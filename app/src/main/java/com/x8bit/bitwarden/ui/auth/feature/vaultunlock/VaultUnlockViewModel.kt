@@ -343,7 +343,7 @@ class VaultUnlockViewModel @Inject constructor(
                             } else {
                                 state.vaultUnlockType.unlockScreenErrorMessage
                             },
-                            throwable = result.error,
+                            throwable = result.error?.takeIf { _ -> action.isBiometricLogin },
                         ),
                     )
                 }
@@ -483,13 +483,6 @@ data class VaultUnlockState(
      * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
      */
     val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
-
-    /**
-     * Indicates if the vault is being unlocked as a result of receiving a FIDO 2 request.
-     */
-    val isUnlockingForFido2Request: Boolean
-        get() = fido2GetCredentialsRequest != null ||
-            fido2CredentialAssertionRequest != null
 
     /**
      * Returns the user ID present in the current FIDO 2 request, or null when no FIDO 2 request is
