@@ -1228,5 +1228,5 @@
   <string name="show_less">Показване на по-малко</string>
   <string name="add_field">Добавяне на поле</string>
   <string name="x_ellipses">%s…</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Споделяне на подробностите за грешката</string>
 </resources>

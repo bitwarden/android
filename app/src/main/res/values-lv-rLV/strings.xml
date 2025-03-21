@@ -1226,7 +1226,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="show_more">Rādīt vairāk</string>
   <string name="no_folder">Nav mapes</string>
   <string name="show_less">Rādīt mazāk</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Pievienot lauku</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Kopīgot informāciju par kļūdu</string>
 </resources>

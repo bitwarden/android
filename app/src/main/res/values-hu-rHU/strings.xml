@@ -49,7 +49,7 @@
   <string name="account_already_added">A fiók már hozzáadásra került.</string>
   <string name="switch_to_already_added_account_confirmation">Szeretnénk most átkapcsolni erre?</string>
   <string name="master_password">Mesterjelszó</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Mesterjelszó (kötelező)</string>
   <string name="new_master_password_required">Új mesterjelszó (kötelező)</string>
   <string name="more">Továbbiak</string>
   <string name="my_vault">Saját széf</string>
@@ -194,7 +194,7 @@
   <string name="regenerate_password">Jelszó újragenerálása</string>
   <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
   <string name="retype_new_master_password_required">Az új mesterjelszó ismételt megadása (kötelező)</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Adja meg újra a mesterjelszót (kötelező)</string>
   <string name="search_vault">Keresés a széfben</string>
   <string name="security">Biztonság</string>
   <string name="select">Kijelölés</string>
@@ -600,7 +600,7 @@
   <string name="draw_over_description3">Engedélyezve a a Kisegítő felbukkanó ablakot jelenít meg az Automatikus Kitöltési Szolgáltatás kibővítéséhez olyan régebbi alkalmazások számára, amelyek nem támogatják az Android automatikus kitöltés keretrendszerét.</string>
   <string name="personal_ownership_submit_error">Egy vállalati házirend miatt korlátozható az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül.</string>
   <string name="personal_ownership_policy_in_effect">Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</string>
-  <string name="send">Send</string>
+  <string name="send">Küldés</string>
   <string name="send_details">Send részletek</string>
   <string name="all_sends">Összes Send</string>
   <string name="sends">Küldések</string>
@@ -1227,5 +1227,5 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="show_less">Kevesebb megjelenítése</string>
   <string name="add_field">Mező hozzáadása</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Hiba részletek megosztása</string>
 </resources>
