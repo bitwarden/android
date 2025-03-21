@@ -212,8 +212,6 @@ fun SettingsScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             AboutSettings(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
                 state = state,
                 onSubmitCrashLogsCheckedChange = remember(viewModel) {
                     { viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it)) }
@@ -560,11 +558,12 @@ private fun AboutSettings(
     onVersionClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 16.dp),
         label = stringResource(id = R.string.about),
     )
     BitwardenWideSwitch(
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .semantics { testTag = "SubmitCrashLogs" },
         label = stringResource(id = R.string.submit_crash_logs),
         isChecked = state.isSubmitCrashLogsEnabled,
