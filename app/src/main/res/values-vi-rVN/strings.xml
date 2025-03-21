@@ -1228,5 +1228,5 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="show_less">Thu gọn</string>
   <string name="add_field">Thêm trường</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Chia sẻ chi tiết lỗi</string>
 </resources>

@@ -1225,7 +1225,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="show_more">Mehr anzeigen</string>
   <string name="no_folder">Kein Ordner</string>
   <string name="show_less">Weniger anzeigen</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Feld hinzufügen</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Fehlerdetails teilen</string>
 </resources>

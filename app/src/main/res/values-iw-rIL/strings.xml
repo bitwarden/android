@@ -641,7 +641,7 @@
   <string name="add_send">סֵנְד חדש</string>
   <string name="are_you_sure_delete_send">האם אתה בטוח שברצונך למחוק סֵנְד זה?</string>
   <string name="send_deleted">הסֵנְד נמחק</string>
-  <string name="send_updated">הסֵנְד נשמר</string>
+  <string name="send_updated">סֵנְד נשמר</string>
   <string name="new_send_created">סֵנְד נוצר</string>
   <string name="one_day">יום 1</string>
   <string name="two_days">2 ימים</string>
@@ -815,7 +815,7 @@
   <string name="view_all_login_options">הצג את כל אפשרויות הכניסה</string>
   <string name="this_request_is_no_longer_valid">בקשה זו אינה תקפה עוד</string>
   <string name="pending_log_in_requests">בקשות כניסה ממתינות</string>
-  <string name="decline_all_requests">דחה את כל הבקשות</string>
+  <string name="decline_all_requests">סרב לכל הבקשות</string>
   <string name="are_you_sure_you_want_to_decline_all_pending_log_in_requests">האם אתה בטוח שברצונך לדחות את כל בקשות הכניסה הממתינות?</string>
   <string name="requests_declined">הבקשות נדחו</string>
   <string name="no_pending_requests">אין בקשות ממתינות</string>
@@ -1226,7 +1226,7 @@
   <string name="show_more">הצג עוד</string>
   <string name="no_folder">ללא תיקייה</string>
   <string name="show_less">הצג פחות</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">הוסף שדה</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">שתף פרטי שגיאה</string>
 </resources>
