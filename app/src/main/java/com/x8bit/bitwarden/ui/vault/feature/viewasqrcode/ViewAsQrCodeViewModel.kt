@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.viewasqrcode
 
 //import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.toViewState
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeTypeField
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.util.QrCodeGenerator
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -43,10 +45,10 @@ class ViewAsQrCodeViewModel @Inject constructor(
         ViewAsQrCodeState(
             cipherId = args.vaultItemId,
             cipherType = args.vaultItemCipherType,
+            qrCodeBitmap = QrCodeGenerator.generateQrCodeBitmap("↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,"),
             selectedQrCodeType = selectedQrCodeType,
             qrCodeTypes = qrCodeTypes,
             qrCodeTypeFields = selectedQrCodeType.fields,
-//            selectedCipherFields = autoMapByQr
             cipherFields = emptyList(),
             cipher = null,
 
@@ -61,7 +63,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
         //TODO get args.vaultItemCipherType and auto-map
         mutableStateFlow.update {
             it.copy(
-                cipherFields = cipherFieldsFor(it.cipherType),
+                cipherFields = cipherFieldsFor(it.cipherType, null),
             )
         }
         vaultRepository
@@ -94,7 +96,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
         when (val dataState = action.cipherDataState) {
             is DataState.Loaded -> {
                 val cipher = dataState.data
-                val cipherFields = cipherFieldsFor(state.cipherType)
+                val cipherFields = cipherFieldsFor(state.cipherType, cipher)
 
                 val updatedQrCodeFields = autoMapFields(
                     state.qrCodeTypeFields,
@@ -246,8 +248,10 @@ class ViewAsQrCodeViewModel @Inject constructor(
     }
 
     //TODO create list with common fields first like SELECT_TEXT
-    private fun cipherFieldsFor(cipherType: VaultItemCipherType): List<Text> =
-        when (cipherType) {
+    private fun cipherFieldsFor(cipherType: VaultItemCipherType, cipher: CipherView?): List<Text> {
+        //TODO add additional cipher fields like web links and custom fields
+        //TODO filter base list depending on the cipher data
+        return when (cipherType) {
             VaultItemCipherType.LOGIN -> listOf(
                 SELECT_TEXT,
                 R.string.name.asText(),
@@ -282,6 +286,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
                 //TODO finish
             )
         }
+    }
 
 }
 
@@ -292,7 +297,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
 data class ViewAsQrCodeState(
     val cipherId: String,
     val cipherType: VaultItemCipherType,
-    //        val qrCodeBitmap: Bitmap,
+    val qrCodeBitmap: Bitmap,
     val selectedQrCodeType: QrCodeType,
     val qrCodeTypes: List<QrCodeType>,
     val qrCodeTypeFields: List<QrCodeTypeField>,

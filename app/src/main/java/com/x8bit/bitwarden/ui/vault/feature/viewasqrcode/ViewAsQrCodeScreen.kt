@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -30,13 +28,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.handlers.ViewAsQrCodeHandlers
 import kotlinx.collections.immutable.toImmutableList
 
@@ -77,30 +75,28 @@ fun ViewAsQrCodeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
             // QR Code display
             Box(
                 modifier = Modifier
-                    .size(250.dp)
-                    .background(Color.White)
-                    .padding(8.dp),
+                    .standardHorizontalMargin()
+                    .cardStyle(CardStyle.Full)
+                    .fillMaxSize()
+                    .background(Color.White),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
-                    //TODO set qrcode image
-                    painter = rememberVectorPainter(id = R.drawable.bitwarden_logo),
-                    colorFilter = ColorFilter.tint(BitwardenTheme.colorScheme.icon.secondary),
-
-                    //bitmap = contentState.qrCodeBitmap.asImageBitmap(),
+                    bitmap = state.qrCodeBitmap.asImageBitmap(),
                     contentDescription = stringResource(id = R.string.qr_code),
                     modifier = Modifier.fillMaxSize(),
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             // QR Code type selector
             val resources = LocalContext.current.resources
@@ -114,7 +110,7 @@ fun ViewAsQrCodeScreen(
                     }
                     viewModel.trySendAction(ViewAsQrCodeAction.QrCodeTypeSelect(selectedType))
                 },
-                supportingText = stringResource(id = R.string.default_uri_match_detection_description),
+                //supportingText = stringResource(id = R.string.default_uri_match_detection_description),
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("QRCodeType")
@@ -123,7 +119,7 @@ fun ViewAsQrCodeScreen(
             )
 
             //QR Code Type dropdowns
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             viewState.qrCodeTypeFields.forEachIndexed { i, field ->
                 val cipherFieldsTextList =
                     viewState.cipherFields.map { it() }.toImmutableList()
