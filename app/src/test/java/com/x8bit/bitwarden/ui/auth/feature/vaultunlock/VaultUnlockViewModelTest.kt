@@ -767,10 +767,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
         )
         val viewModel = createViewModel(state = initialState)
-        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.AuthenticationError(error = error)
+        } returns VaultUnlockResult.AuthenticationError(error = Throwable("Fail"))
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
@@ -778,7 +777,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
                     R.string.an_error_has_occurred.asText(),
                     R.string.invalid_master_password.asText(),
-                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -937,10 +935,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             vaultUnlockType = VaultUnlockType.PIN,
         )
         val viewModel = createViewModel(state = initialState)
-        val error = Throwable("Fail")
         coEvery {
             vaultRepository.unlockVaultWithPin(pin)
-        } returns VaultUnlockResult.AuthenticationError(error = error)
+        } returns VaultUnlockResult.AuthenticationError(error = Throwable("Fail"))
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
@@ -948,7 +945,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 dialog = VaultUnlockState.VaultUnlockDialog.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.invalid_pin.asText(),
-                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
