@@ -42,7 +42,7 @@ googleProtoBufPlugin = "0.9.4"
 googleServices = "4.4.2"
 googleReview = "2.0.2"
 hilt = "2.55"
-junit5 = "5.11.4"
+junit5 = "5.12.1"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.1.10"
@@ -115,8 +115,10 @@ google-play-review = { module = "com.google.android.play:review", version.ref = 
 google-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "googleProtoBufJava" }
 # Included so that Renovate tracks updates since protoc is not referenced directly in `dependency {}` blocks.
 google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "googleProtoBufJava" }
-junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
-junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
+junit-junit5 = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-vintage = { module = "org.junit.vintage:junit-vintage-engine" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
