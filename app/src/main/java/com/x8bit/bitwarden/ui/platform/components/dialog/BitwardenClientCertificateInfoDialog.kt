@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,7 +86,7 @@ fun BitwardenClientCertificateDialog(
                     autoFocus = true,
                     cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                     textFieldTestTag = "AlertClientCertificateAliasInputField",
-                    modifier = Modifier.imePadding(),
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
                 BitwardenPasswordField(
@@ -95,7 +95,7 @@ fun BitwardenClientCertificateDialog(
                     onValueChange = { password = it },
                     cardStyle = CardStyle.Bottom,
                     passwordFieldTestTag = "AlertClientCertificatePasswordInputField",
-                    modifier = Modifier.imePadding(),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         },
