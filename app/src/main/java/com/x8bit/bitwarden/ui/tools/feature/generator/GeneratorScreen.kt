@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -386,8 +385,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     LazyColumn(
         state = lazyListState,
         modifier = modifier
-            .fillMaxHeight()
-            .imePadding(),
+            .fillMaxHeight(),
     ) {
         item {
             Spacer(modifier = Modifier.height(12.dp))
