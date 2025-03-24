@@ -1222,7 +1222,7 @@ private fun ForwardedEmailAliasTypeContent(
         when (usernameTypeState.selectedServiceType) {
             is ServiceType.AddyIo -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_access_token),
+                    label = stringResource(id = R.string.api_access_token_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiAccessToken,
                     onValueChange = forwardedEmailAliasHandlers.onAddyIoAccessTokenTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
@@ -1292,7 +1292,7 @@ private fun ForwardedEmailAliasTypeContent(
 
             is ServiceType.FirefoxRelay -> {
                 BitwardenPasswordField(
-                    label = stringResource(id = R.string.api_access_token),
+                    label = stringResource(id = R.string.api_access_token_required_parenthesis),
                     value = usernameTypeState.selectedServiceType.apiAccessToken,
                     onValueChange = forwardedEmailAliasHandlers.onFirefoxRelayAccessTokenTextChange,
                     showPasswordTestTag = "ShowForwardedEmailApiSecretButton",

@@ -2,9 +2,10 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 internal class ServiceTypeExtensionsTest {
@@ -21,7 +22,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_access_token.asText()),
+            request,
+        )
     }
 
     @Test
@@ -36,7 +40,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.domain_name.asText()),
+            request,
+        )
     }
 
     @Test
@@ -49,13 +56,15 @@ internal class ServiceTypeExtensionsTest {
         val website = "bitwarden.com"
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.AddyIo(
-                    apiToken = "testToken",
-                    domain = "test.com",
-                    baseUrl = "http://test.com",
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.AddyIo(
+                        apiToken = "testToken",
+                        domain = "test.com",
+                        baseUrl = "http://test.com",
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             addyIoServiceType.toUsernameGeneratorRequest(
                 website = website,
@@ -66,13 +75,15 @@ internal class ServiceTypeExtensionsTest {
 
         // Verify the correct request is returned when allowAddyIoSelfHostUrl is false
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.AddyIo(
-                    apiToken = "testToken",
-                    domain = "test.com",
-                    baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.AddyIo(
+                        apiToken = "testToken",
+                        domain = "test.com",
+                        baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             addyIoServiceType.toUsernameGeneratorRequest(
                 website = website,
@@ -97,13 +108,15 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.AddyIo(
-                    apiToken = "testToken",
-                    domain = "test.com",
-                    baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.AddyIo(
+                        apiToken = "testToken",
+                        domain = "test.com",
+                        baseUrl = ServiceType.AddyIo.DEFAULT_ADDY_IO_URL,
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             request,
         )
@@ -118,7 +131,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            request,
+        )
     }
 
     @Test
@@ -132,9 +148,11 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.DuckDuckGo(token = "testKey"),
-                website = website,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.DuckDuckGo(token = "testKey"),
+                    website = website,
+                ),
             ),
             request,
         )
@@ -149,7 +167,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_access_token.asText()),
+            request,
+        )
     }
 
     @Test
@@ -163,9 +184,11 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.Firefox(apiToken = "testToken"),
-                website = website,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.Firefox(apiToken = "testToken"),
+                    website = website,
+                ),
             ),
             request,
         )
@@ -180,7 +203,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            request,
+        )
     }
 
     @Test
@@ -196,9 +222,11 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.Fastmail(apiToken = "testKey"),
-                website = "bitwarden.com",
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.Fastmail(apiToken = "testKey"),
+                    website = "bitwarden.com",
+                ),
             ),
             request,
         )
@@ -216,7 +244,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            request,
+        )
     }
 
     @Test
@@ -231,7 +262,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.domain_name.asText()),
+            request,
+        )
     }
 
     @Test
@@ -248,12 +282,14 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.ForwardEmail(
-                    apiToken = "apiKey",
-                    domain = "domainName",
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.ForwardEmail(
+                        apiToken = "apiKey",
+                        domain = "domainName",
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             request,
         )
@@ -268,7 +304,10 @@ internal class ServiceTypeExtensionsTest {
             allowSimpleLoginSelfHostUrl = true,
         )
 
-        assertNull(request)
+        assertEquals(
+            GeneratorRequestResult.MissingField(R.string.api_key.asText()),
+            request,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -283,12 +322,14 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.SimpleLogin(
-                    apiKey = "testKey",
-                    ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.SimpleLogin(
+                        apiKey = "testKey",
+                        ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             request,
         )
@@ -306,12 +347,14 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.SimpleLogin(
-                    apiKey = "testKey",
-                    ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.SimpleLogin(
+                        apiKey = "testKey",
+                        ServiceType.SimpleLogin.DEFAULT_SIMPLE_LOGIN_URL,
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             request,
         )
@@ -332,12 +375,14 @@ internal class ServiceTypeExtensionsTest {
         )
 
         assertEquals(
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.SimpleLogin(
-                    apiKey = "testKey",
-                    baseUrl = "https://simplelogin.local",
+            GeneratorRequestResult.Success(
+                result = UsernameGeneratorRequest.Forwarded(
+                    service = ForwarderServiceType.SimpleLogin(
+                        apiKey = "testKey",
+                        baseUrl = "https://simplelogin.local",
+                    ),
+                    website = website,
                 ),
-                website = website,
             ),
             request,
         )
