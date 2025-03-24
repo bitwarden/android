@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -70,6 +71,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
     )
 
     var isAdditionalOptionsExpanded = rememberSaveable { mutableStateOf(value = false) }
+    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
     LazyColumn(modifier = modifier, state = lazyListState) {
         item {
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -196,6 +198,7 @@ fun CoachMarkScope<AddEditItemCoachMark>.VaultAddEditContent(
                 vaultAddEditLoginItems(
                     loginState = state.type,
                     loginItemTypeHandlers = loginItemTypeHandlers,
+                    windowAdaptiveInfo = windowAdaptiveInfo,
                     onTotpSetupClick = {
                         if (permissionsManager.checkPermission(Manifest.permission.CAMERA)) {
                             loginItemTypeHandlers.onSetupTotpClick(true)

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -54,8 +52,9 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * Top level composable for the setup unlock screen.
@@ -146,15 +145,13 @@ private fun SetupUnlockScreenContent(
     handler: SetupUnlockHandler,
     modifier: Modifier = Modifier,
     biometricsManager: BiometricsManager,
-    config: Configuration = LocalConfiguration.current,
 ) {
     Column(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
-        if (config.isPortrait) {
-            SetupUnlockHeaderPortrait()
-        } else {
-            SetupUnlockHeaderLandscape()
+        when (rememberWindowSize()) {
+            WindowSize.Compact -> SetupUnlockHeaderCompact()
+            WindowSize.Medium -> SetupUnlockHeaderMedium()
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
@@ -243,7 +240,7 @@ private fun SetUpLaterButton(
 }
 
 @Composable
-private fun ColumnScope.SetupUnlockHeaderPortrait() {
+private fun ColumnScope.SetupUnlockHeaderCompact() {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
         painter = rememberVectorPainter(id = R.drawable.account_setup),
@@ -281,7 +278,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
 }
 
 @Composable
-private fun SetupUnlockHeaderLandscape(
+private fun SetupUnlockHeaderMedium(
     modifier: Modifier = Modifier,
 ) {
     Row(
