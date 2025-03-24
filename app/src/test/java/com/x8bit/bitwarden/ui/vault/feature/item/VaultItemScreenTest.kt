@@ -1878,6 +1878,312 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `menu Archive option should be displayed based on state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(
+                        currentCipher =
+                            createMockCipherView(1).copy(
+                                collectionIds = emptyList(),
+                            ),
+                    ),
+                ),
+            )
+        }
+
+        // Confirm overflow is closed on initial load
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        // Open the overflow menu
+        composeTestRule
+            .onNodeWithContentDescription("More")
+            .performClick()
+
+        // Confirm Archive option is present
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filterToOne(hasAnyAncestor(isPopup()))
+            .assertIsDisplayed()
+
+        // Confirm Archive option is not present when cipher has archivedDate
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher =
+                                    createMockCipherView(1).copy(
+                                        archivedDate = Instant.MIN,
+                                    ),
+                            ),
+                    ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        // Confirm Archive option is not present when cipher has deletedDate
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher =
+                                    createMockCipherView(1).copy(
+                                        deletedDate = Instant.MIN,
+                                    ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+
+        // Confirm Archive option is not present when cipher is in a Collection
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_LOGIN_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher =
+                                    createMockCipherView(1).copy(
+                                        collectionIds = listOf("collection-id"),
+                                    ),
+                            ),
+                    ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filter(hasAnyAncestor(isPopup()))
+            .assertCountEquals(0)
+    }
+
+    @Test
+    fun `Arcjove dialog ok click should send ConfirmArchiveClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultItemState
+                    .DialogState
+                    .ArchiveConfirmationPrompt,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Archive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Ok")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmArchiveClick)
+        }
+    }
+
+    @Test
+    fun `Clicking Unarchive should send UnarchiveVaultItemClick ViewModel action`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    archivedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithText("Unarchive")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemAction.Common.UnarchiveVaultItemClick,
+            )
+        }
+    }
+
+    @Test
+    fun `Unarchive dialog should display correctly when dialog state changes`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    archivedDate = Instant.MIN,
+                                    collectionIds = emptyList(),
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.UnarchiveItemDialog)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Do you really want to restore this item?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Unarchive")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Unarchive dialog should hide unarchive confirmation menu if dialog state changes`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    archivedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Do you really want to restore this item?")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Restore")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `Unarchive dialog ok click should send ConfirmUnarchiveClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    archivedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.UnarchiveItemDialog)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmUnarchiveClick)
+        }
+    }
+
+    @Test
+    fun `Unarchive dialog cancel click should send DismissDialogClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    archivedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.UnarchiveItemDialog)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
+        }
+    }
+
     //endregion common
 
     //region login
@@ -3140,7 +3446,7 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     dialog = null,
     baseIconUrl = "https://example.com/",
     isIconLoadingDisabled = true,
-    isArchiveItemEnabled = false,
+    isArchiveItemEnabled = true,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

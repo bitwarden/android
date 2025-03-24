@@ -413,6 +413,130 @@ class VaultItemListingDataExtensionsTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archived Login cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isArchived = true,
+            isDeleted = false,
+            cipherType = CipherType.LOGIN,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archived SecureNote cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isArchived = true,
+            isDeleted = false,
+            cipherType = CipherType.SECURE_NOTE,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archive Identity cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isArchived = true,
+            isDeleted = false,
+            cipherType = CipherType.IDENTITY,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for archive Card cipherView`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isArchived = true,
+            isDeleted = false,
+            cipherType = CipherType.CARD,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to false,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Archive to true,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = "mockId-1") to false,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to false,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
     fun `toViewState should transform a list of CipherViews into a ViewState when not autofill`() {
         mockkStatic(CipherView::subtitle)
         mockkStatic(Uri::class)
@@ -716,6 +840,29 @@ class VaultItemListingDataExtensionsTest {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
                     folderId = "folderId",
                 ),
+                vaultFilterType = VaultFilterType.AllVaults,
+                hasMasterPassword = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                autofillSelectionData = null,
+                fido2CreationData = null,
+                fido2CredentialAutofillViews = null,
+                totpData = null,
+                isPremiumUser = true,
+            ),
+        )
+
+        // Archive
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                header = R.string.no_items_archive.asText(),
+                message = R.string.no_items_archive_description.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.new_item.asText(),
+                vectorRes = R.drawable.no_archives_icon,
+            ),
+            vaultData.toViewState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Archive,
                 vaultFilterType = VaultFilterType.AllVaults,
                 hasMasterPassword = true,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,

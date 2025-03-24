@@ -686,6 +686,14 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Add item")
             .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Archive)
+        }
+
+        composeTestRule
+            .onNodeWithContentDescription("Add item")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -1265,6 +1273,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText(text = "mockName")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(itemListingType = VaultItemListingState.ItemListingType.Vault.Archive)
+        }
+        composeTestRule
+            .onNodeWithText(text = "Archive")
             .assertIsDisplayed()
     }
 

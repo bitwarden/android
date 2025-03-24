@@ -1968,6 +1968,18 @@ class VaultViewModelTest : BaseViewModelTest() {
             )
         }
 
+    @Test
+    fun `ArchiveClick should emit NavigateToItemListing event with archive type`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+            assertEquals(
+                VaultEvent.NavigateToItemListing(VaultItemListingType.Archive),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun createViewModel(): VaultViewModel =
         VaultViewModel(
             authRepository = authRepository,

@@ -919,6 +919,49 @@ class VaultDataExtensionsTest {
             actual,
         )
     }
+
+    @Test
+    fun `toViewState should count only archived items for the archived count`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(number = 2, isDeleted = false, isArchived = false),
+                createMockCipherView(number = 1, isDeleted = true),
+                createMockCipherView(number = 2, isDeleted = true, isArchived = true),
+                createMockCipherView(number = 3, isDeleted = false, isArchived = true),
+                createMockCipherView(number = 2, isArchived = true),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 2,
+                totpItemsCount = 1,
+                itemTypesCount = 5,
+                sshKeyItemsCount = 0,
+                archiveItemsCount = 2,
+            ),
+            actual,
+        )
+    }
 }
 
 private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultItem.SshKey =

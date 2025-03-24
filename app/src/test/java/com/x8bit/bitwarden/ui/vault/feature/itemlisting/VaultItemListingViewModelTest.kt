@@ -4560,6 +4560,91 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+    @Test
+    fun `vaultDataStateFlow Loaded with archived items should update ViewState to NoItems`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1, isArchived = true)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+            assertEquals(
+                createVaultItemListingState(
+                    viewState = VaultItemListingState.ViewState.NoItems(
+                        header = null,
+                        message = R.string.no_logins.asText(),
+                        shouldShowAddButton = true,
+                        buttonText = R.string.new_login.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Pending with archived data should update state to NoItems`() = runTest {
+        mutableVaultDataStateFlow.tryEmit(
+            value = DataState.Pending(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1, isArchived = true)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            ),
+        )
+
+        val viewModel = createVaultItemListingViewModel()
+
+        assertEquals(
+            createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    header = null,
+                    message = R.string.no_logins.asText(),
+                    shouldShowAddButton = true,
+                    buttonText = R.string.new_login.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow Error with archived data should update state to NoItems`() = runTest {
+        val dataState = DataState.Error(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isArchived = true)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+            error = IllegalStateException(),
+        )
+
+        val viewModel = createVaultItemListingViewModel()
+
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+
+        assertEquals(
+            createVaultItemListingState(
+                viewState = VaultItemListingState.ViewState.NoItems(
+                    header = null,
+                    message = R.string.no_logins.asText(),
+                    shouldShowAddButton = true,
+                    buttonText = R.string.new_login.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(

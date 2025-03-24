@@ -545,6 +545,11 @@ class SearchScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule.onNodeWithText(text = "Search mockName").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(searchType = SearchTypeData.Vault.Archive)
+        }
+        composeTestRule.onNodeWithText(text = "Search Archive").assertIsDisplayed()
     }
 
     @Test

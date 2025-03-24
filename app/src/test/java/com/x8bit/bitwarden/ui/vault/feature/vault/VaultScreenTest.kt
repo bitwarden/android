@@ -1372,6 +1372,54 @@ class VaultScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Test
+    fun `archive count should update according to state`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, 0.toString())
+
+        val archiveCount = 5
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    archiveItemsCount = archiveCount,
+                ),
+            )
+        }
+
+        // Header
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "HIDDEN ITEMS (2)")
+            .assertIsDisplayed()
+        // Item
+        composeTestRule
+            .onNodeWithTextAfterScroll(rowText)
+            .assertTextEquals(rowText, archiveCount.toString())
+    }
+
+    @Test
+    fun `clicking archive item should send ArchiveClick action`() {
+        val rowText = "Archive"
+        mutableStateFlow.update {
+            it.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
+        }
+
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(rowText))
+        composeTestRule.onAllNodes(hasText(rowText)).filterToOne(hasClickAction()).performClick()
+        verify {
+            viewModel.trySendAction(VaultAction.ArchiveClick)
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(

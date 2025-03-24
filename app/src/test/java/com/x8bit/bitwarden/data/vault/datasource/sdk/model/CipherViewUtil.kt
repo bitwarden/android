@@ -37,6 +37,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
  * @param number the number to create the cipher with.
  * @param isDeleted whether or not the cipher has been deleted.
  * @param cipherType the type of cipher to create.
+ * @param isArchived whether or not the cipher has been deleted.
  */
 @Suppress("LongParameterList")
 fun createMockCipherView(
@@ -50,6 +51,7 @@ fun createMockCipherView(
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
+    isArchived: Boolean = false,
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -90,7 +92,11 @@ fun createMockCipherView(
         viewPassword = true,
         localData = null,
         permissions = null,
-        archivedDate = null,
+        archivedDate = if (isArchived) {
+            clock.instant()
+        } else {
+            null
+        },
     )
 
 /**

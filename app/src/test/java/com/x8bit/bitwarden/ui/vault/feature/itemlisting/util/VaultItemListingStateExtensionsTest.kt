@@ -122,6 +122,16 @@ class VaultItemListingStateExtensionsTest {
     }
 
     @Test
+    fun `toSearchType should return Archive when item type is Archive`() {
+        val expected = SearchType.Vault.Archive
+        val itemType = VaultItemListingState.ItemListingType.Vault.Archive
+
+        val result = itemType.toSearchType()
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `toVaultItemCipherType should return the correct response`() {
         val itemListingTypes = listOf(
             VaultItemListingState.ItemListingType.Vault.Card,

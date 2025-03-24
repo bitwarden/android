@@ -1512,6 +1512,100 @@ class SearchViewModelTest : BaseViewModelTest() {
         assertTrue(viewModel.stateFlow.value.isIconLoadingDisabled)
     }
 
+    @Test
+    fun `vaultDataStateFlow Loaded with archived items should update ViewState to Empty`() =
+        runTest {
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(createMockCipherView(number = 1, isDeleted = true)),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+            val viewModel = createViewModel()
+
+            mutableVaultDataStateFlow.tryEmit(value = dataState)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = SearchState.ViewState.Empty(null),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `vaultDataStateFlow Pending with archived data should update state to Empty`() =
+        runTest {
+            mutableVaultDataStateFlow.tryEmit(
+                value = DataState.Pending(
+                    data = VaultData(
+                        cipherViewList = listOf(
+                            createMockCipherView(
+                                number = 1,
+                                isArchived = true,
+                            ),
+                        ),
+                        folderViewList = listOf(createMockFolderView(number = 1)),
+                        collectionViewList = listOf(createMockCollectionView(number = 1)),
+                        sendViewList = listOf(createMockSendView(number = 1)),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel()
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = SearchState.ViewState.Empty(message = null)),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `vaultDataStateFlow Error with archived data should update state to Empty`() = runTest {
+        val dataState = DataState.Error(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isArchived = true)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+            error = IllegalStateException(),
+        )
+
+        val viewModel = createViewModel()
+
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = SearchState.ViewState.Empty(message = null),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `vaultDataStateFlow NoNetwork with archived data should update state to Empty`() = runTest {
+        val dataState = DataState.NoNetwork(
+            data = VaultData(
+                cipherViewList = listOf(createMockCipherView(number = 1, isArchived = true)),
+                folderViewList = listOf(createMockFolderView(number = 1)),
+                collectionViewList = listOf(createMockCollectionView(number = 1)),
+                sendViewList = listOf(createMockSendView(number = 1)),
+            ),
+        )
+
+        val viewModel = createViewModel()
+
+        mutableVaultDataStateFlow.tryEmit(value = dataState)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = SearchState.ViewState.Empty(message = null),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createViewModel(
         initialState: SearchState? = null,

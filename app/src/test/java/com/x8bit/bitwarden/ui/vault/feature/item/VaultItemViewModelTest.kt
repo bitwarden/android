@@ -31,9 +31,11 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ArchiveCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.UnarchiveCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -2888,6 +2890,277 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+        @Test
+        fun `ArchiveClick should update state when re-prompt is not required`() =
+            runTest {
+                val loginState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON
+                        .copy(requiresReprompt = false),
+                )
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                    )
+                } returns loginState
+
+                val expected = DEFAULT_STATE.copy(
+                    viewState = DEFAULT_VIEW_STATE.copy(
+                        common = DEFAULT_COMMON.copy(
+                            requiresReprompt = false,
+                        ),
+                    ),
+                    dialog = VaultItemState.DialogState.ArchiveConfirmationPrompt,
+                )
+
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                viewModel.trySendAction(VaultItemAction.Common.ArchiveClick)
+                assertEquals(expected, viewModel.stateFlow.value)
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmArchiveClick with ArchiveCipherResult Success should should ShowToast and NavigateBack`() =
+            runTest {
+                val loginViewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                    )
+                } returns loginViewState
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value =
+                    DataState.Loaded(data = createVerificationCodeItem())
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.archiveCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns ArchiveCipherResult.Success
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmArchiveClick)
+
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultItemEvent.ShowToast(R.string.item_archived.asText()),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        VaultItemEvent.NavigateBack,
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `ConfirmArchiveClick with ArchiveCipherResult Failure should should Show generic error`() =
+            runTest {
+                val loginViewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                )
+                every {
+                    mockCipherView.toViewState(
+                        previousState = null,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                        canDelete = true,
+                        canAssignToCollections = true,
+                        canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
+                    )
+                } returns loginViewState
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+                mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+                val viewModel = createViewModel(state = DEFAULT_STATE)
+                coEvery {
+                    vaultRepo.archiveCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
+                } returns ArchiveCipherResult.Error
+
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmArchiveClick)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        viewState = loginViewState,
+                        dialog = VaultItemState.DialogState.Generic(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnarchiveItemClick updates pendingCipher state correctly`() =
+        runTest {
+            val viewState =
+                DEFAULT_VIEW_STATE.copy(common = DEFAULT_COMMON.copy(requiresReprompt = false))
+            every {
+                mockCipherView.toViewState(
+                    previousState = any(),
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                )
+            } returns viewState
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value =
+                DataState.Loaded(data = createVerificationCodeItem())
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+            val loginState = DEFAULT_STATE.copy(viewState = viewState)
+            val viewModel = createViewModel(state = loginState)
+            assertEquals(loginState, viewModel.stateFlow.value)
+
+            // show dialog
+            viewModel.trySendAction(VaultItemAction.Common.UnarchiveVaultItemClick)
+            assertEquals(
+                loginState.copy(dialog = VaultItemState.DialogState.UnarchiveItemDialog),
+                viewModel.stateFlow.value,
+            )
+
+            // dismiss dialog
+            viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
+            assertEquals(
+                // setting this to be explicit.
+                loginState.copy(dialog = null),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ConfirmUnarchiveClick with UnarchiveCipherResult Success should should ShowToast and NavigateBack`() =
+        runTest {
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = createTotpCodeData(),
+                    canDelete = true,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
+                )
+            } returns DEFAULT_VIEW_STATE
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(
+                data = createVerificationCodeItem(),
+            )
+            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            coEvery {
+                vaultRepo.unarchiveCipher(
+                    cipherId = VAULT_ITEM_ID,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns UnarchiveCipherResult.Success
+
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmUnarchiveClick)
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemEvent.ShowToast(R.string.item_restored.asText()),
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultItemEvent.NavigateBack,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ConfirmUnarchiveClick with UnarchiveCipherResult Failure should should Show generic error`() {
+        every {
+            mockCipherView.toViewState(
+                previousState = null,
+                isPremiumUser = true,
+                hasMasterPassword = true,
+                totpCodeItemData = createTotpCodeData(),
+                canDelete = true,
+                canAssignToCollections = true,
+                canEdit = true,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                isIconLoadingDisabled = false,
+                relatedLocations = persistentListOf(),
+            )
+        } returns DEFAULT_VIEW_STATE
+        mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+        mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+        mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+        mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
+
+        val viewModel = createViewModel(state = DEFAULT_STATE)
+        coEvery {
+            vaultRepo.unarchiveCipher(
+                cipherId = VAULT_ITEM_ID,
+                cipherView = createMockCipherView(number = 1),
+            )
+        } returns UnarchiveCipherResult.Error
+
+        viewModel.trySendAction(VaultItemAction.Common.ConfirmUnarchiveClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                viewState = DEFAULT_VIEW_STATE,
+                dialog = VaultItemState.DialogState.Generic(
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Nested

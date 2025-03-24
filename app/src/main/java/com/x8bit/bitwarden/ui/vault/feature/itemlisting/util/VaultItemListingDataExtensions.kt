@@ -53,7 +53,9 @@ fun CipherView.determineListingPredicate(
         }
 
         is VaultItemListingState.ItemListingType.Vault.Collection -> {
-            itemListingType.collectionId in this.collectionIds && deletedDate == null
+            itemListingType.collectionId in this.collectionIds &&
+                deletedDate == null &&
+                archivedDate == null
         }
 
         is VaultItemListingState.ItemListingType.Vault.Folder -> {
