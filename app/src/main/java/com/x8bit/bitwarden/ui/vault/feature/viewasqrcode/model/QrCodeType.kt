@@ -104,5 +104,6 @@ data class QrCodeTypeField(
     val key: String,
     val displayName: Text,
     val isRequired: Boolean = false,
-    var value: Text = "".asText(),
+    val value: Text = "".asText(),
+    val cipherValue: String = "",
 ) : Parcelable

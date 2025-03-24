@@ -10,6 +10,8 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeType
+import com.x8bit.bitwarden.ui.vault.feature.viewasqrcode.model.QrCodeTypeField
 
 /**
  * Utility class for generating QR codes.
@@ -19,6 +21,104 @@ object QrCodeGenerator {
 
     private const val QR_CODE_SIZE = 512 + 256
     private const val UTF_8 = "UTF-8"
+
+    fun createContentFor(qrCodeType: QrCodeType, qrCodeFields: List<QrCodeTypeField>): String {
+        return when (qrCodeType) {
+            QrCodeType.WIFI -> createContentForWifi(qrCodeFields)
+            QrCodeType.URL -> createContentForText(qrCodeFields)
+            QrCodeType.PLAIN_TEXT -> createContentForText(qrCodeFields)
+            QrCodeType.EMAIL -> createContentForEmail(qrCodeFields)
+            QrCodeType.PHONE -> createContentForPhone(qrCodeFields)
+            QrCodeType.CONTACT_VCARD -> createContentForContactVcard(qrCodeFields)
+            QrCodeType.CONTACT_MECARD -> createContentForContactMecard(qrCodeFields)
+        }
+    }
+
+    fun generateQrCode(qrCodeType: QrCodeType, qrCodeFields: List<QrCodeTypeField>): Bitmap {
+        val content = createContentFor(qrCodeType, qrCodeFields)
+        return generateQrCodeBitmap(content)
+    }
+
+    fun createContentForContactMecard(qrCodeFields: List<QrCodeTypeField>): String {
+        val firstName = "firstName"
+        val lastName = "lastName"
+        val phone = "phone"
+        val email = "email"
+        val address = "address"
+
+        val addName = lastName.isNotEmpty() || firstName.isNotEmpty()
+        return buildString {
+            append("MECARD:")
+            if (addName) {
+                append("N:")
+                if (lastName.isNotEmpty()) append(lastName)
+                if (firstName.isNotEmpty()) append(",$firstName")
+                append(";")
+            }
+
+            if (phone.isNotEmpty()) append("TEL:$phone;")
+            if (email.isNotEmpty()) append("EMAIL:$email;")
+            if (address.isNotEmpty()) append("ADR:$address;")
+            append(";")
+        }
+    }
+
+    fun createContentForContactVcard(qrCodeFields: List<QrCodeTypeField>): String {
+        val name = "name"
+        val phone = "phone"
+        val email = "email"
+        val organization = "organization"
+        val address = "address"
+
+        return buildString {
+            append("BEGIN:VCARD\n")
+            append("VERSION:3.0\n")
+            if (name.isNotEmpty()) append("N:$name\n")
+            if (name.isNotEmpty()) append("FN:$name\n")
+            if (organization.isNotEmpty()) append("ORG:$organization\n")
+            if (phone.isNotEmpty()) append("TEL:$phone\n")
+            if (email.isNotEmpty()) append("EMAIL:$email\n")
+            if (address.isNotEmpty()) append("ADR:;;$address\n")
+            append("END:VCARD")
+        }
+    }
+
+    fun createContentForWifi(qrCodeFields: List<QrCodeTypeField>): String {
+        var ssid = String()
+        var password = String()
+        var additionalOptions = String()
+
+        qrCodeFields.forEach {
+            when (it.key) {
+                "ssid" -> ssid = it.cipherValue
+                "password" -> password = it.cipherValue
+                "additionalOptions" -> additionalOptions = it.cipherValue
+            }
+        }
+
+        return buildString {
+            append("WIFI:")
+            if (password.isNotEmpty() && !additionalOptions.contains("T:")) append("T:WPA;")
+            append("ssid:$ssid;")
+            if (password.isNotEmpty()) append("P:$password;")
+            if (additionalOptions.isNotEmpty()) append(additionalOptions)
+            append(";")
+        }
+    }
+
+    fun createContentForText(qrCodeFields: List<QrCodeTypeField>): String {
+        return qrCodeFields.firstOrNull()?.cipherValue ?: ""
+    }
+
+    fun createContentForEmail(qrCodeFields: List<QrCodeTypeField>): String {
+        val value = qrCodeFields.firstOrNull()?.cipherValue ?: ""
+        return "email:$value"
+    }
+
+    fun createContentForPhone(qrCodeFields: List<QrCodeTypeField>): String {
+        val value = qrCodeFields.firstOrNull()?.cipherValue ?: ""
+        return "phone:$value"
+    }
 //
 //    /**
 //     * Generate a QR code bitmap from the given configuration.
@@ -140,7 +240,7 @@ object QrCodeGenerator {
         val contentColor = "#165DDC".toColorInt() // bitwarden blue
         val finderPatternColor = "#030E65".toColorInt() // dark blue
         val backgroundColor = Color.WHITE
-        
+
         for (x in 0 until width) {
             for (y in 0 until height) {
                 val bit = bitMatrix[x, y]

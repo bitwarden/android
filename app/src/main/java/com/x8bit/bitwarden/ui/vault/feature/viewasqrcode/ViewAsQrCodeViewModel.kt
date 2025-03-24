@@ -27,6 +27,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+private const val DEFAULT_QR_CODE_DATA = "https://bitwarden.com"
 
 /**
  * ViewModel responsible for handling user interactions in the attachments screen.
@@ -45,13 +46,13 @@ class ViewAsQrCodeViewModel @Inject constructor(
         ViewAsQrCodeState(
             cipherId = args.vaultItemId,
             cipherType = args.vaultItemCipherType,
-            qrCodeBitmap = QrCodeGenerator.generateQrCodeBitmap("↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,↑, ↑, ↓, ↓, ←, →, ←, →, B, A,"),
+            qrCodeBitmap = QrCodeGenerator.generateQrCodeBitmap(DEFAULT_QR_CODE_DATA),
             selectedQrCodeType = selectedQrCodeType,
             qrCodeTypes = qrCodeTypes,
             qrCodeTypeFields = selectedQrCodeType.fields,
             cipherFields = emptyList(),
             cipher = null,
-
+            qrCodeContent = DEFAULT_QR_CODE_DATA,
 //            viewState = ViewAsQrCodeState.ViewState.Loading,
 //            dialogState = null,
         )
@@ -61,11 +62,11 @@ class ViewAsQrCodeViewModel @Inject constructor(
 
     init {
         //TODO get args.vaultItemCipherType and auto-map
-        mutableStateFlow.update {
-            it.copy(
-                cipherFields = cipherFieldsFor(it.cipherType, null),
-            )
-        }
+//        mutableStateFlow.update {
+//            it.copy(
+//                cipherFields = cipherFieldsFor(it.cipherType, null),
+//            )
+//        }
         vaultRepository
             .getVaultItemStateFlow(args.vaultItemId)
             .map { ViewAsQrCodeAction.Internal.CipherReceive(it) }
@@ -118,61 +119,32 @@ class ViewAsQrCodeViewModel @Inject constructor(
             is DataState.Loading -> {}
             is DataState.NoNetwork -> {}
             is DataState.Pending -> {}
-//            is DataState.Error -> {
-//                mutableStateFlow.update {
-//                    it.copy(
-//                        viewState = ViewAsQrCodeState.ViewState.Error(
-//                            message = R.string.generic_error_message.asText(),
-//                        ),
-//                    )
-//                }
-//            }
-
-//            is DataState.Loaded -> {
-//                mutableStateFlow.update {
-//                    it.copy(
-//                        viewState = dataState
-//                            .data
-//                            ?.toViewState()
-//                            ?: ViewAsQrCodeState.ViewState.Error(
-//                                message = R.string.generic_error_message.asText(),
-//                            ),
-//                    )
-//                }
-//            }
-
-//            DataState.Loading -> {
-//                mutableStateFlow.update {
-//                    it.copy(viewState = ViewAsQrCodeState.ViewState.Loading)
-//                }
-//            }
-//
-
-//            is DataState.Pending -> {
-//                mutableStateFlow.update {
-//                    it.copy(
-//                        viewState = dataState
-//                            .data
-//                            ?.toViewState()
-//                            ?: ViewAsQrCodeState.ViewState.Error(
-//                                message = R.string.generic_error_message.asText(),
-//                            ),
-//                    )
-//                }
-//            }
         }
     }
 
     private fun handleQrCodeTypeSelect(action: ViewAsQrCodeAction.QrCodeTypeSelect) {
 
+        val updatedFields = autoMapFields(
+            action.qrCodeType.fields,
+            state.cipherType,
+            state.cipher
+        )
+
+        setCipherValues(state.cipher, state.selectedQrCodeType, updatedFields)
+
+        val updatedQrCodeContent = if (validateRequiredFields(updatedFields))
+            QrCodeGenerator.createContentFor(state.selectedQrCodeType, updatedFields)
+        else
+            DEFAULT_QR_CODE_DATA
+
+        val updatedQrCodeBitmap = QrCodeGenerator.generateQrCodeBitmap(updatedQrCodeContent)
+
         mutableStateFlow.update {
             it.copy(
                 selectedQrCodeType = action.qrCodeType,
-                qrCodeTypeFields = autoMapFields(
-                    action.qrCodeType.fields,
-                    state.cipherType,
-                    state.cipher
-                )
+                qrCodeTypeFields = updatedFields,
+                qrCodeBitmap = updatedQrCodeBitmap,
+                qrCodeContent = updatedQrCodeContent,
             )
         }
     }
@@ -195,7 +167,7 @@ class ViewAsQrCodeViewModel @Inject constructor(
         val selectedText = value.asText()
 
         //TODO should we transition qrCodeTypeFields to a map again*2 and update using key?
-        val updatedFields = state.qrCodeTypeFields.map { currentField ->
+        var updatedFields = state.qrCodeTypeFields.map { currentField ->
             if (currentField.key == field.key) {
                 currentField.copy(value = selectedText)
             } else {
@@ -203,9 +175,54 @@ class ViewAsQrCodeViewModel @Inject constructor(
             }
         }
 
+        updatedFields = setCipherValues(state.cipher, state.selectedQrCodeType, updatedFields)
+
+        val updatedQrCodeContent = if (validateRequiredFields(updatedFields))
+            QrCodeGenerator.createContentFor(state.selectedQrCodeType, updatedFields)
+        else
+            DEFAULT_QR_CODE_DATA
+
+        val updatedQrCodeBitmap = QrCodeGenerator.generateQrCodeBitmap(updatedQrCodeContent)
         mutableStateFlow.update {
-            it.copy(qrCodeTypeFields = updatedFields)
+            it.copy(
+                qrCodeTypeFields = updatedFields,
+                qrCodeBitmap = updatedQrCodeBitmap,
+                qrCodeContent = updatedQrCodeContent
+            )
         }
+    }
+
+    private fun setCipherValues(
+        cipher: CipherView?,
+        qrCodeType: QrCodeType,
+        qrCodeTypeFields: List<QrCodeTypeField>,
+    ): List<QrCodeTypeField> {
+        if (cipher == null) {
+            return qrCodeTypeFields
+        }
+
+        //TODO figure a way to reuse autoMapField code, by returning (field Text + Cipher value) perhaps
+        return qrCodeTypeFields.map { field ->
+            field.copy(cipherValue = getCipherValueForField(cipher, field))
+        }
+    }
+
+    private fun getCipherValueForField(cipher: CipherView, qrCodeField: QrCodeTypeField): String {
+        //TODO refactor - currently failing because asText() creates a different object
+        return when (qrCodeField.value) {
+            R.string.name.asText() -> cipher.name
+            R.string.username.asText() -> cipher.login?.username ?: ""
+            R.string.password.asText() -> cipher.login?.username ?: ""
+            R.string.notes.asText() -> cipher.notes ?: ""
+            "Custom: SSID".asText() -> cipher.fields?.find { it.name == "Custom: SSID" }?.value
+                ?: ""
+
+            else -> "TODO()" //TODO
+        }
+    }
+
+    private fun validateRequiredFields(qrCodeTypeFields: List<QrCodeTypeField>): Boolean {
+        return true // TODO
     }
 
     private fun autoMapField(
@@ -304,7 +321,8 @@ data class ViewAsQrCodeState(
     @IgnoredOnParcel
     val cipherFields: List<Text> = emptyList(),
     @IgnoredOnParcel
-    val cipher: CipherView? = null, //TODO do we need to use null?
+    val cipher: CipherView? = null,
+    val qrCodeContent: String = "",
 ) : Parcelable
 
 /**

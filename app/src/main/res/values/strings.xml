@@ -1231,6 +1231,7 @@ Do you want to switch to this account?</string>
   <string name="share_error_details">Share error details</string>
 
   <string name="view_as_qr_code">View as QR code</string>
+  <string name="data_to_share">Data to share</string>
   <string name="qr_code">QR code</string>
   <string name="qr_code_type">QR code type</string>
   <string name="url">URL</string>

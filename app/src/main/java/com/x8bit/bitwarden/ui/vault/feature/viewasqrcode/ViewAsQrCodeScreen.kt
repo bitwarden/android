@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -96,10 +99,25 @@ fun ViewAsQrCodeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            //TODO debug - remove this
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenTextField(
+                label = "Debug - QRCode Content",
+                value = state.qrCodeContent,
+                onValueChange = { },
+                readOnly = true,
+                singleLine = false,
+                textFieldTestTag = "LoginUsernameEntry",
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .testTag("QRCodeType")
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
 
             // QR Code type selector
             val resources = LocalContext.current.resources
+            Spacer(modifier = Modifier.height(12.dp))
             BitwardenMultiSelectButton(
                 label = stringResource(id = R.string.qr_code_type),
                 options = viewState.qrCodeTypes.map { it.displayName() }.toImmutableList(),
@@ -119,7 +137,15 @@ fun ViewAsQrCodeScreen(
             )
 
             //QR Code Type dropdowns
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenListHeaderText(
+                label = stringResource(id = R.string.data_to_share),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
             viewState.qrCodeTypeFields.forEachIndexed { i, field ->
                 val cipherFieldsTextList =
                     viewState.cipherFields.map { it() }.toImmutableList()
