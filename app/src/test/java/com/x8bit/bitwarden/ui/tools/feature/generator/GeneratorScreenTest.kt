@@ -1064,7 +1064,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 
@@ -1306,7 +1306,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 

@@ -773,7 +773,9 @@ select Add TOTP to store the key safely</string>
   <string name="forwarded_email_alias">Forwarded email alias</string>
   <string name="random_word">Random word</string>
   <string name="email_required_parenthesis">Email (required)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Domain name (required)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API key (required)</string>
   <string name="service">Service</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ select Add TOTP to store the key safely</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API access token</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Are you sure you want to overwrite the current username?</string>
   <string name="generate_username">Generate username</string>
