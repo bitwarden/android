@@ -39,9 +39,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -504,8 +504,8 @@ private fun VaultItemListingScaffold(
                     vaultItemClick = vaultItemListingHandlers.itemClick,
                     collectionClick = vaultItemListingHandlers.collectionClick,
                     folderClick = vaultItemListingHandlers.folderClick,
-                    masterPasswordRepromptSubmit =
-                    vaultItemListingHandlers.masterPasswordRepromptSubmit,
+                    masterPasswordRepromptSubmit = vaultItemListingHandlers
+                        .masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
                     modifier = Modifier.fillMaxSize(),
                 )

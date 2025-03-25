@@ -128,6 +128,38 @@ fun Modifier.nullableTestTag(
 ): Modifier = this.run { tag?.let { testTag(tag = it) } ?: this }
 
 /**
+ * This is a [Modifier] extension for drawing a divider at the top of the composable.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.topDivider(
+    paddingStart: Dp = 0.dp,
+    paddingEnd: Dp = 0.dp,
+    thickness: Dp = (0.5).dp,
+    color: Color = BitwardenTheme.colorScheme.stroke.divider,
+    enabled: Boolean = true,
+    alpha: Float = 1f,
+): Modifier = drawWithCache {
+    onDrawWithContent {
+        drawContent()
+        if (enabled) {
+            val (startX, endX) = when (layoutDirection) {
+                LayoutDirection.Ltr -> paddingStart.toPx() to (size.width - paddingEnd.toPx())
+                LayoutDirection.Rtl -> (size.width - paddingEnd.toPx()) to paddingStart.toPx()
+            }
+            drawLine(
+                alpha = alpha,
+                color = color,
+                strokeWidth = thickness.toPx(),
+                start = Offset(x = startX, y = thickness.toPx() / 2),
+                end = Offset(x = endX, y = thickness.toPx() / 2),
+            )
+        }
+    }
+}
+
+/**
  * This is a [Modifier] extension for drawing a divider at the bottom of the composable.
  */
 @OmitFromCoverage
@@ -142,29 +174,50 @@ fun Modifier.bottomDivider(
     alpha: Float = 1f,
 ): Modifier = drawWithCache {
     onDrawWithContent {
-        val (startX, endX) = when (layoutDirection) {
-            LayoutDirection.Ltr -> {
-                paddingStart.toPx() to (size.width - paddingEnd.toPx())
-            }
-
-            LayoutDirection.Rtl -> {
-                (size.width - paddingEnd.toPx()) to paddingStart.toPx()
-            }
-        }
         drawContent()
         if (enabled) {
+            val (startX, endX) = when (layoutDirection) {
+                LayoutDirection.Ltr -> paddingStart.toPx() to (size.width - paddingEnd.toPx())
+                LayoutDirection.Rtl -> (size.width - paddingEnd.toPx()) to paddingStart.toPx()
+            }
             drawLine(
                 alpha = alpha,
                 color = color,
                 strokeWidth = thickness.toPx(),
-                start = Offset(
-                    x = startX,
-                    y = size.height - thickness.toPx() / 2,
-                ),
-                end = Offset(
-                    x = endX,
-                    y = size.height - thickness.toPx() / 2,
-                ),
+                start = Offset(x = startX, y = size.height - thickness.toPx() / 2),
+                end = Offset(x = endX, y = size.height - thickness.toPx() / 2),
+            )
+        }
+    }
+}
+
+/**
+ * This is a [Modifier] extension for drawing a divider at the end of the composable.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.endDivider(
+    paddingTop: Dp = 0.dp,
+    paddingBottom: Dp = 0.dp,
+    thickness: Dp = (0.5).dp,
+    color: Color = BitwardenTheme.colorScheme.stroke.divider,
+    enabled: Boolean = true,
+    alpha: Float = 1f,
+): Modifier = drawWithCache {
+    onDrawWithContent {
+        drawContent()
+        if (enabled) {
+            val startX = when (layoutDirection) {
+                LayoutDirection.Ltr -> size.width - thickness.toPx() / 2
+                LayoutDirection.Rtl -> thickness.toPx() / 2
+            }
+            drawLine(
+                alpha = alpha,
+                color = color,
+                strokeWidth = thickness.toPx(),
+                start = Offset(x = startX, y = paddingTop.toPx()),
+                end = Offset(x = startX, y = size.height - paddingBottom.toPx()),
             )
         }
     }
