@@ -347,21 +347,6 @@ class VaultItemViewModel @Inject constructor(
                 )
                 return@onContent
             }
-            mutableStateFlow.update { currentState ->
-                currentState.copy(
-                    viewState = content.copy(
-                        common = content.common.copy(
-                            customFields = content.common.customFields.map { customField ->
-                                if (customField == action.field) {
-                                    action.field.copy(isVisible = action.isVisible)
-                                } else {
-                                    customField
-                                }
-                            },
-                        ),
-                    ),
-                )
-            }
             if (action.isVisible) {
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1615,7 +1600,6 @@ data class VaultItemState(
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
-                        val isVisible: Boolean,
                     ) : Custom()
 
                     /**

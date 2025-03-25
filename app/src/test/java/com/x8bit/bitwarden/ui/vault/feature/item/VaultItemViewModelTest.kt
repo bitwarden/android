@@ -1073,7 +1073,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     name = "hidden",
                     value = "value",
                     isCopyable = true,
-                    isVisible = false,
                 )
                 every {
                     mockCipherView.toViewState(
@@ -1138,7 +1137,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         name = "hidden",
                         value = "value",
                         isCopyable = true,
-                        isVisible = false,
                     )
                 val loginViewState = VaultItemState.ViewState.Content(
                     common = createCommonContent(
@@ -1182,7 +1180,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         viewState = loginViewState.copy(
                             common = createCommonContent(isEmpty = true, isPremiumUser = true).copy(
                                 requiresReprompt = false,
-                                customFields = listOf(hiddenField.copy(isVisible = true)),
+                                customFields = listOf(hiddenField),
                             ),
                         ),
                     ),
@@ -3710,7 +3708,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         name = "hidden",
                         value = "value",
                         isCopyable = true,
-                        isVisible = false,
                     ),
                     VaultItemState.ViewState.Content.Common.Custom.BooleanField(
                         name = "boolean",

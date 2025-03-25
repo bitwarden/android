@@ -779,7 +779,6 @@ class VaultItemScreenTest : BaseComposeTest() {
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
-            isVisible = false,
         )
 
         EMPTY_VIEW_STATES
@@ -817,7 +816,6 @@ class VaultItemScreenTest : BaseComposeTest() {
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
-            isVisible = false,
         )
 
         EMPTY_VIEW_STATES
@@ -858,7 +856,6 @@ class VaultItemScreenTest : BaseComposeTest() {
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
-            isVisible = false,
         )
 
         EMPTY_VIEW_STATES
@@ -3157,7 +3154,6 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
                 name = "hidden",
                 value = "hidden password",
                 isCopyable = true,
-                isVisible = false,
             ),
             VaultItemState.ViewState.Content.Common.Custom.BooleanField(
                 name = "boolean",

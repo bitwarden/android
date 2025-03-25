@@ -1,6 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.component
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -30,6 +34,8 @@ fun CustomField(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
+    var isVisible by rememberSaveable { mutableStateOf(false) }
+
     when (customField) {
         is VaultItemState.ViewState.Content.Common.Custom.BooleanField -> {
             BitwardenSwitch(
@@ -47,8 +53,11 @@ fun CustomField(
                 BitwardenPasswordField(
                     label = customField.name,
                     value = customField.value,
-                    showPasswordChange = { onShowHiddenFieldClick(customField, it) },
-                    showPassword = customField.isVisible,
+                    showPasswordChange = {
+                        onShowHiddenFieldClick(customField, it)
+                        isVisible = it
+                    },
+                    showPassword = isVisible,
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
@@ -69,8 +78,11 @@ fun CustomField(
                 BitwardenPasswordField(
                     label = customField.name,
                     value = customField.value,
-                    showPasswordChange = { onShowHiddenFieldClick(customField, it) },
-                    showPassword = customField.isVisible,
+                    showPasswordChange = {
+                        onShowHiddenFieldClick(customField, it)
+                        isVisible = it
+                    },
+                    showPassword = isVisible,
                     onValueChange = { },
                     readOnly = true,
                     singleLine = false,
