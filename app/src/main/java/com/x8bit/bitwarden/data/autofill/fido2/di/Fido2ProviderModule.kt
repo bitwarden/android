@@ -74,7 +74,6 @@ object Fido2ProviderModule {
         Fido2CredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
-            fido2OriginManager = fido2OriginManager,
             json = json,
         )
 
