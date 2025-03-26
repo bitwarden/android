@@ -197,6 +197,7 @@ fun createCommonContent(
                     name = "hidden",
                     value = "value",
                     isCopyable = true,
+                    isVisible = false,
                 ),
                 VaultItemState.ViewState.Content.Common.Custom.BooleanField(
                     name = "boolean",

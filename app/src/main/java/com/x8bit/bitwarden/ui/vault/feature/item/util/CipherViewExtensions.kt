@@ -57,9 +57,7 @@ fun CipherView.toViewState(
             name = name,
             requiresReprompt = (reprompt == CipherRepromptType.PASSWORD && hasMasterPassword) &&
                 previousState?.common?.requiresReprompt != false,
-            customFields = fields.orEmpty().map { fieldView ->
-                fieldView.toCustomField()
-            },
+            customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = revisionDate.toFormattedPattern(
                 pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                 clock = clock,
@@ -209,6 +207,7 @@ private fun FieldView.toCustomField(): VaultItemState.ViewState.Content.Common.C
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
+            isVisible = false,
         )
 
         FieldType.BOOLEAN -> VaultItemState.ViewState.Content.Common.Custom.BooleanField(
