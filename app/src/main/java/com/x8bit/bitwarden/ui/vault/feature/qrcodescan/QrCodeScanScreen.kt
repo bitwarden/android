@@ -39,7 +39,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -58,10 +57,11 @@ import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import java.util.concurrent.Executors
@@ -76,9 +76,9 @@ import kotlin.coroutines.suspendCoroutine
 @Composable
 fun QrCodeScanScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToManualCodeEntryScreen: () -> Unit,
     viewModel: QrCodeScanViewModel = hiltViewModel(),
     qrCodeAnalyzer: QrCodeAnalyzer = QrCodeAnalyzerImpl(),
-    onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
@@ -131,22 +131,25 @@ fun QrCodeScanScreen(
                 },
                 qrCodeAnalyzer = qrCodeAnalyzer,
             )
+            when (rememberWindowSize()) {
+                WindowSize.Compact -> {
+                    QrCodeContentCompact(
+                        onEnterKeyManuallyClick = onEnterKeyManuallyClick,
+                    )
+                }
 
-            if (LocalConfiguration.current.isPortrait) {
-                PortraitQRCodeContent(
-                    onEnterKeyManuallyClick = onEnterKeyManuallyClick,
-                )
-            } else {
-                LandscapeQRCodeContent(
-                    onEnterKeyManuallyClick = onEnterKeyManuallyClick,
-                )
+                WindowSize.Medium -> {
+                    QrCodeContentMedium(
+                        onEnterKeyManuallyClick = onEnterKeyManuallyClick,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun PortraitQRCodeContent(
+private fun QrCodeContentCompact(
     onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -186,7 +189,7 @@ private fun PortraitQRCodeContent(
 }
 
 @Composable
-private fun LandscapeQRCodeContent(
+private fun QrCodeContentMedium(
     onEnterKeyManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -294,7 +297,7 @@ private fun CameraPreview(
             } else {
                 cameraErrorReceive()
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             cameraErrorReceive()
         }
     }

@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -48,13 +47,14 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * The custom horizontal margin that is specific to this screen.
  */
-private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 128.dp
+private val HORIZONTAL_MARGIN_MEDIUM: Dp = 128.dp
 
 /**
  * Top level composable for the welcome screen.
@@ -106,6 +106,7 @@ fun WelcomeScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun WelcomeScreenContent(
     state: WelcomeState,
@@ -119,7 +120,6 @@ private fun WelcomeScreenContent(
     LaunchedEffect(pagerState.currentPage) {
         onPagerSwipe(pagerState.currentPage)
     }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -132,17 +132,21 @@ private fun WelcomeScreenContent(
             val pagerSemanticsModifier = Modifier.semantics(mergeDescendants = true) {
                 contentDescription = pageNumberContentDescription
             }
-            if (LocalConfiguration.current.isPortrait) {
-                WelcomeCardPortrait(
-                    state = state.pages[index],
-                    modifier = pagerSemanticsModifier.standardHorizontalMargin(),
-                )
-            } else {
-                WelcomeCardLandscape(
-                    state = state.pages[index],
-                    modifier = pagerSemanticsModifier
-                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN),
-                )
+            when (rememberWindowSize()) {
+                WindowSize.Compact -> {
+                    WelcomeCardCompact(
+                        state = state.pages[index],
+                        modifier = pagerSemanticsModifier.standardHorizontalMargin(),
+                    )
+                }
+
+                WindowSize.Medium -> {
+                    WelcomeCardMedium(
+                        state = state.pages[index],
+                        modifier = pagerSemanticsModifier
+                            .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM),
+                    )
+                }
             }
         }
 
@@ -161,7 +165,7 @@ private fun WelcomeScreenContent(
             label = stringResource(id = R.string.create_account),
             onClick = onCreateAccountClick,
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)
                 .fillMaxWidth()
                 .testTag("ChooseAccountCreationButton"),
         )
@@ -170,7 +174,7 @@ private fun WelcomeScreenContent(
             label = stringResource(id = R.string.log_in_verb),
             onClick = onLoginClick,
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin(medium = HORIZONTAL_MARGIN_MEDIUM)
                 .fillMaxWidth()
                 .testTag("ChooseLoginButton"),
         )
@@ -181,7 +185,7 @@ private fun WelcomeScreenContent(
 }
 
 @Composable
-private fun WelcomeCardLandscape(
+private fun WelcomeCardMedium(
     state: WelcomeState.WelcomeCard,
     modifier: Modifier = Modifier,
 ) {
@@ -218,7 +222,7 @@ private fun WelcomeCardLandscape(
 }
 
 @Composable
-private fun WelcomeCardPortrait(
+private fun WelcomeCardCompact(
     state: WelcomeState.WelcomeCard,
     modifier: Modifier = Modifier,
 ) {

@@ -17,6 +17,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -382,6 +383,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
     onCoachMarkComplete: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val windowAdaptiveInfo = currentWindowAdaptiveInfo()
     LazyColumn(
         state = lazyListState,
         modifier = modifier
@@ -461,7 +463,7 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                     onActionClick = onCoachMarkComplete,
                 )
             },
-            modifier = Modifier.standardHorizontalMargin(),
+            modifier = Modifier.standardHorizontalMargin(windowAdaptiveInfo = windowAdaptiveInfo),
         ) {
             BitwardenFilledButton(
                 label = stringResource(id = R.string.copy),
@@ -507,7 +509,8 @@ private fun CoachMarkScope<ExploreGeneratorCoachMark>.ScrollContent(
                             onActionClick = onShowNextCoachMark,
                         )
                     },
-                    modifier = Modifier.standardHorizontalMargin(),
+                    modifier = Modifier
+                        .standardHorizontalMargin(windowAdaptiveInfo = windowAdaptiveInfo),
                 ) {
                     PasswordTypeContent(
                         passwordTypeState = selectedType,
