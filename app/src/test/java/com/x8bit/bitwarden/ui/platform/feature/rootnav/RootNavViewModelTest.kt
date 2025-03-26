@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
-import android.content.pm.SigningInfo
+import androidx.core.os.bundleOf
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -664,11 +664,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "activeUserId",
-            requestJson = "{}",
-            packageName = "com.x8bit.bitwarden",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-            isUserVerified = true,
+            requestData = bundleOf(),
         )
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.Fido2Save(fido2CreateCredentialRequest)

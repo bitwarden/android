@@ -1,38 +1,50 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
-import android.content.pm.SigningInfo
+import android.os.Bundle
 import android.os.Parcelable
+import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
+import androidx.credentials.provider.ProviderGetCredentialRequest
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
  * Models a FIDO 2 credential authentication request parsed from the launching intent.
  *
- * @param userId The ID of the Bitwarden user to authenticate.
- * @param cipherId The ID of the cipher that contains the passkey to authenticate.
- * @param credentialId The ID of the credential to authenticate.
- * @param requestJson The JSON representation of the FIDO 2 request.
- * @param clientDataHash The hash of the client data.
- * @param packageName The package name of the calling app.
- * @param signingInfo The signing info of the calling app.
- * @param origin The origin of the calling app. Only populated if the calling application is a
- * privileged application. I.e., a web browser.
- * @param isUserVerified Whether the user has been verified prior to receiving this request. Only
- * populated if device biometric verification was performed. If null, the application is responsible
- * for prompting user verification when it is deemed necessary.
+ * @param userId ID of the user requesting credential authentication.
+ * @param cipherId ID of the cipher to be authenticated against.
+ * @param credentialId ID of the credential to authenticate.
+ * @param requestData Provider request data in the form of a [Bundle].
  */
 @Parcelize
 data class Fido2CredentialAssertionRequest(
     val userId: String,
-    val cipherId: String?,
-    val credentialId: String?,
-    val requestJson: String,
-    val clientDataHash: ByteArray?,
-    val packageName: String,
-    val signingInfo: SigningInfo,
-    val origin: String?,
-    val isUserVerified: Boolean?,
+    val cipherId: String,
+    val credentialId: String,
+    private val requestData: Bundle,
 ) : Parcelable {
-    val callingAppInfo: CallingAppInfo
-        get() = CallingAppInfo(packageName, signingInfo, origin)
+
+    /**
+     * The [ProviderGetCredentialRequest] from the [requestData].
+     */
+    @IgnoredOnParcel
+    val providerRequest: ProviderGetCredentialRequest by lazy {
+        ProviderGetCredentialRequest.fromBundle(requestData)
+    }
+
+    /**
+     * The [CallingAppInfo] from the [providerRequest].
+     */
+    @IgnoredOnParcel
+    val callingAppInfo: CallingAppInfo by lazy { providerRequest.callingAppInfo }
+
+    /**
+     * The [GetPublicKeyCredentialOption] from the [providerRequest], or null if one is not found
+     * in the request options list.
+     */
+    @IgnoredOnParcel
+    val option: GetPublicKeyCredentialOption? by lazy {
+        providerRequest.credentialOptions
+            .firstNotNullOfOrNull { it as? GetPublicKeyCredentialOption }
+    }
 }

@@ -36,8 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
@@ -45,6 +43,8 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboard
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -130,13 +130,13 @@ fun VaultUnlockScreen(
 
             is VaultUnlockEvent.Fido2CredentialAssertionError -> {
                 fido2CompletionManager.completeFido2Assertion(
-                    result = Fido2CredentialAssertionResult.Error(event.message),
+                    result = AssertFido2CredentialResult.Error(message = event.message),
                 )
             }
 
             is VaultUnlockEvent.Fido2GetCredentialsError -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(
-                    result = Fido2GetCredentialsResult.Error(message = event.message),
+                fido2CompletionManager.completeFido2GetCredentialsRequest(
+                    result = GetFido2CredentialsResult.Error(message = event.message),
                 )
             }
         }
