@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -58,8 +55,9 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * Top level composable for the complete registration screen.
@@ -162,7 +160,6 @@ fun CompleteRegistrationScreen(
     ) {
         Column(
             modifier = Modifier
-                .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -343,21 +340,24 @@ private fun CompleteRegistrationContent(
 @Composable
 private fun CompleteRegistrationContentHeader(
     modifier: Modifier = Modifier,
-    configuration: Configuration = LocalConfiguration.current,
 ) {
-    if (configuration.isPortrait) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            OrderedHeaderContent()
+    when (rememberWindowSize()) {
+        WindowSize.Compact -> {
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                OrderedHeaderContent()
+            }
         }
-    } else {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            OrderedHeaderContent()
+
+        WindowSize.Medium -> {
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                OrderedHeaderContent()
+            }
         }
     }
 }

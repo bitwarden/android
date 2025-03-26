@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.union
@@ -73,7 +74,8 @@ fun BitwardenScaffold(
             Column(
                 modifier = Modifier
                     .padding(paddingValues = paddingValues)
-                    .consumeWindowInsets(paddingValues = paddingValues),
+                    .consumeWindowInsets(paddingValues = paddingValues)
+                    .imePadding(),
             ) {
                 utilityBar()
                 val internalPullToRefreshState = rememberPullToRefreshState()

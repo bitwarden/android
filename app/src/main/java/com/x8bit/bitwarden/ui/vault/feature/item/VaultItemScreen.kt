@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -262,7 +261,6 @@ fun VaultItemScreen(
         VaultItemContent(
             viewState = state.viewState,
             modifier = Modifier
-                .imePadding()
                 .fillMaxSize(),
             vaultCommonItemTypeHandlers = remember(viewModel) {
                 VaultCommonItemTypeHandlers.create(viewModel = viewModel)

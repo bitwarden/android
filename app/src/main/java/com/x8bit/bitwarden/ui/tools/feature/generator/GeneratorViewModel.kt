@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.tools.feature.generator.util.GeneratorRequestResult
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRequest
@@ -170,7 +171,7 @@ class GeneratorViewModel @Inject constructor(
             is GeneratorAction.PasswordHistoryClick -> handlePasswordHistoryClick()
             is GeneratorAction.CloseClick -> handleCloseClick()
             is GeneratorAction.SaveClick -> handleSaveClick()
-            is GeneratorAction.RegenerateClick -> handleRegenerationClick()
+            is GeneratorAction.RegenerateClick -> handleRegenerateClick()
             is GeneratorAction.CopyClick -> handleCopyClick()
             is GeneratorAction.MainTypeOptionSelect -> handleMainTypeOptionSelect(action)
             is GeneratorAction.MainType -> handleMainTypeAction(action)
@@ -711,10 +712,13 @@ class GeneratorViewModel @Inject constructor(
 
     //region Generated Field Handlers
 
-    private fun handleRegenerationClick() {
+    private fun handleRegenerateClick() {
         // Go through the update process with the current state to trigger a
         // regeneration of the generated text for the same state.
-        updateGeneratorMainType(forceRegeneration = true) { state.selectedType }
+        updateGeneratorMainType(
+            allowErrorsWhenMissingValues = true,
+            forceRegeneration = true,
+        ) { state.selectedType }
     }
 
     private fun handleCopyClick() {
@@ -1511,7 +1515,9 @@ class GeneratorViewModel @Inject constructor(
 
     //region Utility Functions
 
+    @Suppress("LongMethod")
     private inline fun updateGeneratorMainType(
+        allowErrorsWhenMissingValues: Boolean = false,
         forceRegeneration: Boolean = false,
         crossinline block: (GeneratorState.MainType) -> GeneratorState.MainType?,
     ) {
@@ -1523,21 +1529,26 @@ class GeneratorViewModel @Inject constructor(
         generateTextJob = viewModelScope.launch {
             when (updatedMainType) {
                 is GeneratorState.MainType.Passphrase -> {
-                    savePassphraseOptionsToDisk(updatedMainType)
-                    generatePassphrase(updatedMainType)
+                    savePassphraseOptionsToDisk(passphrase = updatedMainType)
+                    generatePassphrase(passphrase = updatedMainType)
                 }
 
                 is GeneratorState.MainType.Password -> {
-                    savePasswordOptionsToDisk(updatedMainType)
-                    generatePassword(updatedMainType)
+                    savePasswordOptionsToDisk(password = updatedMainType)
+                    generatePassword(password = updatedMainType)
                 }
 
                 is GeneratorState.MainType.Username -> {
                     when (val selectedType = updatedMainType.selectedType) {
                         is ForwardedEmailAlias -> {
-                            saveForwardedEmailAliasServiceTypeToDisk(selectedType)
+                            saveForwardedEmailAliasServiceTypeToDisk(
+                                forwardedEmailAlias = selectedType,
+                            )
                             if (forceRegeneration) {
-                                generateForwardedEmailAlias(selectedType)
+                                generateForwardedEmailAlias(
+                                    allowErrorsWhenMissingValues = allowErrorsWhenMissingValues,
+                                    alias = selectedType,
+                                )
                             } else {
                                 mutableStateFlow.update {
                                     it.copy(generatedText = NO_GENERATED_TEXT)
@@ -1546,9 +1557,12 @@ class GeneratorViewModel @Inject constructor(
                         }
 
                         is CatchAllEmail -> {
-                            saveCatchAllEmailOptionsToDisk(selectedType)
+                            saveCatchAllEmailOptionsToDisk(catchAllEmail = selectedType)
                             if (forceRegeneration) {
-                                generateCatchAllEmail(selectedType)
+                                generateCatchAllEmail(
+                                    catchAllEmail = selectedType,
+                                    allowErrorsWhenMissingValues = allowErrorsWhenMissingValues,
+                                )
                             } else {
                                 mutableStateFlow.update {
                                     it.copy(generatedText = NO_GENERATED_TEXT)
@@ -1557,9 +1571,9 @@ class GeneratorViewModel @Inject constructor(
                         }
 
                         is PlusAddressedEmail -> {
-                            savePlusAddressedEmailOptionsToDisk(selectedType)
+                            savePlusAddressedEmailOptionsToDisk(plusAddressedEmail = selectedType)
                             if (forceRegeneration) {
-                                generatePlusAddressedEmail(selectedType)
+                                generatePlusAddressedEmail(plusAddressedEmail = selectedType)
                             } else {
                                 mutableStateFlow.update {
                                     it.copy(generatedText = NO_GENERATED_TEXT)
@@ -1568,8 +1582,8 @@ class GeneratorViewModel @Inject constructor(
                         }
 
                         is RandomWord -> {
-                            saveRandomWordOptionsToDisk(selectedType)
-                            generateRandomWordUsername(selectedType)
+                            saveRandomWordOptionsToDisk(randomWord = selectedType)
+                            generateRandomWordUsername(randomWord = selectedType)
                         }
                     }
                 }
@@ -1577,7 +1591,10 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private suspend fun generateForwardedEmailAlias(alias: ForwardedEmailAlias) {
+    private suspend fun generateForwardedEmailAlias(
+        alias: ForwardedEmailAlias,
+        allowErrorsWhenMissingValues: Boolean,
+    ) {
         val request = alias
             .selectedServiceType
             ?.toUsernameGeneratorRequest(
@@ -1589,8 +1606,27 @@ class GeneratorViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                 return
             }
-        val result = generatorRepository.generateForwardedServiceUsername(request)
-        sendAction(GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult(result))
+        when (request) {
+            is GeneratorRequestResult.MissingField -> {
+                mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+                if (allowErrorsWhenMissingValues) {
+                    sendEvent(
+                        event = GeneratorEvent.ShowSnackbar(
+                            message = R.string.validation_field_required.asText(request.fieldName),
+                        ),
+                    )
+                }
+            }
+
+            is GeneratorRequestResult.Success -> {
+                val result = generatorRepository.generateForwardedServiceUsername(request.result)
+                sendAction(
+                    action = GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult(
+                        result = result,
+                    ),
+                )
+            }
+        }
     }
 
     private suspend fun generatePlusAddressedEmail(plusAddressedEmail: PlusAddressedEmail) {
@@ -1603,9 +1639,21 @@ class GeneratorViewModel @Inject constructor(
         sendAction(GeneratorAction.Internal.UpdateGeneratedPlusAddressedUsernameResult(result))
     }
 
-    private suspend fun generateCatchAllEmail(catchAllEmail: CatchAllEmail) {
+    private suspend fun generateCatchAllEmail(
+        catchAllEmail: CatchAllEmail,
+        allowErrorsWhenMissingValues: Boolean,
+    ) {
         val domainName = catchAllEmail.domainName.orNullIfBlank() ?: run {
             mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+            if (allowErrorsWhenMissingValues) {
+                sendEvent(
+                    event = GeneratorEvent.ShowSnackbar(
+                        message = R.string.validation_field_required.asText(
+                            R.string.domain_name.asText(),
+                        ),
+                    ),
+                )
+            }
             return
         }
         val result = generatorRepository.generateCatchAllEmail(
