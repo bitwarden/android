@@ -175,7 +175,7 @@ fun VaultData.toViewState(
             ?.toHostOrPathOrNull()
             ?.let { R.string.no_items_for_uri.asText(it) }
             ?: fido2CreationData
-                ?.origin
+                ?.relyingPartyIdOrNull
                 ?.toHostOrPathOrNull()
                 ?.let { R.string.no_items_for_uri.asText(it) }
             ?: totpData?.let { R.string.search_for_a_login_or_add_a_new_login.asText() }
