@@ -65,10 +65,6 @@ fun AboutScreen(
 
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
 
-            AboutEvent.NavigateToFeedbackForm -> {
-                intentManager.launchUri("https://livefrontinc.typeform.com/to/irgrRu4a".toUri())
-            }
-
             AboutEvent.NavigateToHelpCenter -> {
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
@@ -79,13 +75,6 @@ fun AboutScreen(
 
             AboutEvent.NavigateToLearnAboutOrganizations -> {
                 intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
-            }
-
-            AboutEvent.NavigateToRateApp -> {
-                intentManager.launchUri(
-                    uri =
-                        "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
-                )
             }
         }
     }
@@ -119,12 +108,6 @@ fun AboutScreen(
             onLearnAboutOrgsClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick) }
             },
-            onRateTheAppClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.RateAppClick) }
-            },
-            onGiveFeedbackClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.GiveFeedbackClick) }
-            },
             onSubmitCrashLogsCheckedChange = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
             },
@@ -145,8 +128,6 @@ private fun ContentColumn(
     onHelpCenterClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
-    onRateTheAppClick: () -> Unit,
-    onGiveFeedbackClick: () -> Unit,
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
     onVersionClick: () -> Unit,
     onWebVaultClick: () -> Unit,
@@ -229,18 +210,6 @@ private fun ContentColumn(
                 .standardHorizontalMargin()
                 .fillMaxWidth()
                 .testTag(tag = "LearnAboutOrganizationsRow"),
-        )
-        BitwardenExternalLinkRow(
-            text = stringResource(R.string.give_feedback),
-            onConfirmClick = onGiveFeedbackClick,
-            dialogTitle = stringResource(R.string.continue_to_give_feedback),
-            dialogMessage = stringResource(R.string.continue_to_provide_feedback),
-            withDivider = false,
-            cardStyle = CardStyle.Middle(),
-            modifier = Modifier
-                .standardHorizontalMargin()
-                .fillMaxWidth()
-                .testTag(tag = "GiveFeedbackRow"),
         )
         CopyRow(
             text = state.version,
