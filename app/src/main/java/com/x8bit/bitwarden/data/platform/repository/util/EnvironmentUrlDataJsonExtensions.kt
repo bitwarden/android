@@ -59,8 +59,13 @@ val EnvironmentUrlDataJson.baseWebSendUrl: String
     get() =
         this
             .baseWebVaultUrlOrNull
-            ?.let { "$it/#/send/" }
-            ?: DEFAULT_WEB_SEND_URL
+            ?.let {
+                if (it == DEFAULT_WEB_VAULT_URL) {
+                    DEFAULT_WEB_SEND_URL
+                } else {
+                    "$it/#/send/"
+                }
+            } ?: DEFAULT_WEB_SEND_URL
 
 /**
  * Returns the base web vault import URL or the default value if one is not present.
