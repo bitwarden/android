@@ -474,30 +474,36 @@ class CipherManagerImpl(
         userId: String,
         cipherId: String,
     ): Result<Cipher> =
-        if (this.key == null) {
-            vaultSdkSource
-                .encryptCipher(userId = userId, cipherView = this)
-                .flatMap {
-                    ciphersService.updateCipher(
-                        cipherId = cipherId,
-                        body = it.toEncryptedNetworkCipher(),
-                    )
-                }
-                .flatMap { response ->
-                    when (response) {
-                        is UpdateCipherResponseJson.Invalid -> {
-                            IllegalStateException(response.message).asFailure()
-                        }
+        vaultSdkSource
+            .encryptCipher(userId = userId, cipherView = this)
+            .flatMap {
+                // We only migrate the cipher if the original cipher did not have a key and the
+                // new cipher does. This means the SDK created the key and migration is required.
+                if (it.key != null && this.key == null) {
+                    ciphersService
+                        .updateCipher(
+                            cipherId = cipherId,
+                            body = it.toEncryptedNetworkCipher(),
+                        )
+                        .flatMap { response ->
+                            when (response) {
+                                is UpdateCipherResponseJson.Invalid -> {
+                                    IllegalStateException(response.message).asFailure()
+                                }
 
-                        is UpdateCipherResponseJson.Success -> {
-                            vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
-                            response.cipher.toEncryptedSdkCipher().asSuccess()
+                                is UpdateCipherResponseJson.Success -> {
+                                    vaultDiskSource.saveCipher(
+                                        userId = userId,
+                                        cipher = response.cipher,
+                                    )
+                                    response.cipher.toEncryptedSdkCipher().asSuccess()
+                                }
+                            }
                         }
-                    }
+                } else {
+                    it.asSuccess()
                 }
-        } else {
-            vaultSdkSource.encryptCipher(userId = userId, cipherView = this)
-        }
+            }
 
     private suspend fun migrateAttachments(
         userId: String,
