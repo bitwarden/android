@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunch
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
@@ -171,9 +172,11 @@ class MainActivity : AppCompatActivity() {
             settingsRepository.appLanguage
         }
 
-        appSpecificLanguage?.let {
-            mainViewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(it))
-        }
+        mainViewModel.trySendAction(
+            action = MainAction.AppSpecificLanguageUpdate(
+                appLanguage = appSpecificLanguage ?: AppLanguage.DEFAULT,
+            ),
+        )
     }
 
     override fun onStop() {
