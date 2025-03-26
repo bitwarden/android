@@ -3,17 +3,6 @@
 # Updates the ci.properties file with additional info from the CI build.
 #
 # Prerequisites:
-#   - Git command line tools installed
-#   - Write access to ci.properties file
-
-if [ $# -ne 5 ]; then
-    echo "Usage: $0 <repository> <branch> <commit_hash> <ci_run_number> <ci_run_attempt>"
-    echo "E.g: ./scripts/$0 bitwarden/android main abc123 123 1"
-    exit 1
-fi
-
-set -euo pipefail
-
 repository=$1
 branch=$2
 commit_hash=$3
