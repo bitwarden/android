@@ -169,7 +169,10 @@ class VaultSdkSourceImpl(
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is an incorrect key/password.
-                InitializeCryptoResult.AuthenticationError(message = exception.message)
+                InitializeCryptoResult.AuthenticationError(
+                    message = exception.message,
+                    error = exception,
+                )
             }
         }
 
@@ -187,6 +190,7 @@ class VaultSdkSourceImpl(
                 // The only truly expected error from the SDK is for incorrect keys.
                 InitializeCryptoResult.AuthenticationError(
                     message = exception.message,
+                    error = exception,
                 )
             }
         }

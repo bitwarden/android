@@ -16,7 +16,6 @@ data class VaultLoginItemTypeHandlers(
     val onCopyUriClick: (String) -> Unit,
     val onCopyUsernameClick: () -> Unit,
     val onLaunchUriClick: (String) -> Unit,
-    val onPasswordHistoryClick: () -> Unit,
     val onShowPasswordClick: (isVisible: Boolean) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
@@ -51,9 +50,6 @@ data class VaultLoginItemTypeHandlers(
                 },
                 onLaunchUriClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Login.LaunchClick(it))
-                },
-                onPasswordHistoryClick = {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
                 },
                 onShowPasswordClick = {
                     viewModel.trySendAction(

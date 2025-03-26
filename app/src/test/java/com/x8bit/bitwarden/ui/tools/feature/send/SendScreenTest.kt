@@ -65,7 +65,10 @@ class SendScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+            appResumeStateManager = appResumeStateManager,
+        ) {
             SendScreen(
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
@@ -73,8 +76,6 @@ class SendScreenTest : BaseComposeTest() {
                 onNavigateToSendFilesList = { onNavigateToSendFilesListCalled = true },
                 onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
                 onNavigateToSearchSend = { onNavigateToSendSearchCalled = true },
-                intentManager = intentManager,
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }

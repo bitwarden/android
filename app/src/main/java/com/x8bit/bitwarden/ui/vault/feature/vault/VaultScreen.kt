@@ -352,7 +352,6 @@ private fun VaultScreenScaffold(
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
-                    showSshKeys = state.showSshKeys,
                     vaultHandlers = vaultHandlers,
                     onOverflowOptionClick = { masterPasswordRepromptAction = it },
                     modifier = Modifier.fillMaxSize(),
@@ -420,6 +419,7 @@ private fun VaultDialogs(
         is VaultState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 

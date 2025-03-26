@@ -1104,7 +1104,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Запазете изнесения файл някъде в компютъра си, така че да може да го намерите лесно.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Това не изглежда да е познат сървър на Битуорден. Може да се наложи да го проверите при доставчика си или да обновите сървъра си.</string>
   <string name="syncing_logins_loading_message">Синхронизиране на елементите за вписване…</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Свалете добавката за браузър</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Посетете bitwarden.com/download, за да вградите Битуорден в любимия си браузър и да използвате възможностите му по-лесно.</string>
   <string name="use_the_web_app">Използвайте приложението по уеб</string>
@@ -1221,4 +1220,13 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
   <string name="self_host_server_url">Адрес на собствения сървър</string>
+  <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome (бета)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Подобрява попълването на данни за вписване в Chrome за поддържаните уеб сайтове. Ако го включите, ще бъдете пренасочени към настройките на Chrome, за да включите автоматичното попълване чрез добавка.</string>
+  <string name="show_more">Показване на повече</string>
+  <string name="no_folder">Няма папка</string>
+  <string name="show_less">Показване на по-малко</string>
+  <string name="add_field">Добавяне на поле</string>
+  <string name="x_ellipses">%s…</string>
+  <string name="share_error_details">Споделяне на подробностите за грешката</string>
 </resources>

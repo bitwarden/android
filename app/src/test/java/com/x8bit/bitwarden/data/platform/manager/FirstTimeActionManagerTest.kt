@@ -303,10 +303,10 @@ class FirstTimeActionManagerTest {
 
     @Test
     fun `shouldShowAddLoginCoachMarkFlow updates when disk source updates`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         // Enable the feature for this test.
         mutableOnboardingFeatureFlow.update { true }
         firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
-            // Null will be mapped to false.
             assertTrue(awaitItem())
             fakeSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
             assertFalse(awaitItem())
@@ -316,12 +316,44 @@ class FirstTimeActionManagerTest {
     @Test
     fun `shouldShowAddLoginCoachMarkFlow updates when feature flag for onboarding updates`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
-                // Null will be mapped to false but feature being "off" will override to true.
                 assertFalse(awaitItem())
                 mutableOnboardingFeatureFlow.update { true }
-                // Will use the value from disk source (null ?: false).
                 assertTrue(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `if there are any login ciphers available for the active user should not show add login coach marks`() =
+        runTest {
+            val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
+                every { login } returns null
+                every { organizationId } returns null
+            }
+            val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
+                every { login } returns mockk()
+                every { organizationId } returns null
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            // Enable feature flag so flow emits updates from disk.
+            mutableOnboardingFeatureFlow.update { true }
+            mutableCiphersListFlow.update {
+                listOf(
+                    mockJsonWithNoLogin,
+                    mockJsonWithNoLogin,
+                )
+            }
+            firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
+                assertTrue(awaitItem())
+                mutableCiphersListFlow.update {
+                    listOf(
+                        mockJsonWithLogin,
+                        mockJsonWithNoLogin,
+                    )
+                }
+                assertFalse(awaitItem())
             }
         }
 
@@ -335,10 +367,10 @@ class FirstTimeActionManagerTest {
 
     @Test
     fun `shouldShowGeneratorCoachMarkFlow updates when disk source updates`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
         // Enable feature flag so flow emits updates from disk.
         mutableOnboardingFeatureFlow.update { true }
         firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-            // Null will be mapped to false.
             assertTrue(awaitItem())
             fakeSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
             assertFalse(awaitItem())
@@ -348,11 +380,62 @@ class FirstTimeActionManagerTest {
     @Test
     fun `shouldShowGeneratorCoachMarkFlow updates when onboarding feature value changes`() =
         runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
             firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-                // Null will be mapped to false
                 assertFalse(awaitItem())
                 mutableOnboardingFeatureFlow.update { true }
                 // Take the value from disk.
+                assertTrue(awaitItem())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `if there are any login ciphers available for the active user should not show generator coach marks`() =
+        runTest {
+            val mockJsonWithNoLogin = mockk<SyncResponseJson.Cipher> {
+                every { login } returns null
+                every { organizationId } returns null
+            }
+            val mockJsonWithLogin = mockk<SyncResponseJson.Cipher> {
+                every { login } returns mockk()
+                every { organizationId } returns null
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            // Enable feature flag so flow emits updates from disk.
+            mutableOnboardingFeatureFlow.update { true }
+            mutableCiphersListFlow.update {
+                listOf(
+                    mockJsonWithNoLogin,
+                    mockJsonWithNoLogin,
+                )
+            }
+            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
+                assertTrue(awaitItem())
+                mutableCiphersListFlow.update {
+                    listOf(
+                        mockJsonWithLogin,
+                        mockJsonWithNoLogin,
+                    )
+                }
+                assertFalse(awaitItem())
+            }
+        }
+
+    @Test
+    fun `if there are login ciphers attached to an organization we should show coach marks`() =
+        runTest {
+            val mockJsonWithLoginAndWithOrganizationId = mockk<SyncResponseJson.Cipher> {
+                every { login } returns mockk()
+                every { organizationId } returns "1234"
+            }
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            // Enable feature flag so flow emits updates from disk.
+            mutableOnboardingFeatureFlow.update { true }
+            mutableCiphersListFlow.update {
+                listOf(mockJsonWithLoginAndWithOrganizationId)
+            }
+            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
                 assertTrue(awaitItem())
             }
         }

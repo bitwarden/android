@@ -192,6 +192,7 @@ class AddSendViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -199,20 +200,12 @@ class AddSendViewModel @Inject constructor(
 
             is CreateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                if (state.isShared) {
-                    navigateBack()
-                    clipboardManager.setText(
-                        result.sendView.toSendUrl(state.baseWebSendUrl),
-                        toastDescriptorOverride = R.string.send_link.asText(),
-                    )
-                } else {
-                    navigateBack()
-                    sendEvent(
-                        AddSendEvent.ShowShareSheet(
-                            message = result.sendView.toSendUrl(state.baseWebSendUrl),
-                        ),
-                    )
-                }
+                navigateBack()
+                sendEvent(
+                    AddSendEvent.ShowShareSheet(
+                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                    ),
+                )
             }
         }
     }
@@ -230,6 +223,7 @@ class AddSendViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -250,13 +244,14 @@ class AddSendViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: AddSendAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -283,6 +278,7 @@ class AddSendViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            result.error,
                         ),
                     )
                 }
@@ -844,6 +840,7 @@ data class AddSendState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

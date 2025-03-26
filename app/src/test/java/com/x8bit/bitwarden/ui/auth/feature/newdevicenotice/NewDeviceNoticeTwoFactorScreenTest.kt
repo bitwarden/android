@@ -40,11 +40,12 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             NewDeviceNoticeTwoFactorScreen(
                 onNavigateBackToVault = { onNavigateBackToVaultCalled = true },
                 onNavigateBack = { onNavigateBackCalled = true },
-                intentManager,
                 viewModel = viewModel,
             )
         }

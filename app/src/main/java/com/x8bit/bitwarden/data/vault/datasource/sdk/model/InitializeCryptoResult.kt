@@ -15,5 +15,6 @@ sealed class InitializeCryptoResult {
      */
     data class AuthenticationError(
         val message: String? = null,
+        val error: Throwable,
     ) : InitializeCryptoResult()
 }

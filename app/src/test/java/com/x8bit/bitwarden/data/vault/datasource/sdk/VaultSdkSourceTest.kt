@@ -415,7 +415,12 @@ class VaultSdkSourceTest {
                 request = mockInitCryptoRequest,
             )
             assertEquals(
-                InitializeCryptoResult.AuthenticationError(expectedErrorMessage).asSuccess(),
+                InitializeCryptoResult
+                    .AuthenticationError(
+                        message = expectedErrorMessage,
+                        error = expectedException,
+                    )
+                    .asSuccess(),
                 result,
             )
             coVerify {
@@ -496,7 +501,12 @@ class VaultSdkSourceTest {
                 request = mockInitCryptoRequest,
             )
             assertEquals(
-                InitializeCryptoResult.AuthenticationError(expectedErrorMessage).asSuccess(),
+                InitializeCryptoResult
+                    .AuthenticationError(
+                        message = expectedErrorMessage,
+                        error = expectedException,
+                    )
+                    .asSuccess(),
                 result,
             )
             coVerify {

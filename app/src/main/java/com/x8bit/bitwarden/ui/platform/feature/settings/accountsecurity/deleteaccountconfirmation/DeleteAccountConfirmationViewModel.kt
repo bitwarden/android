@@ -132,10 +132,11 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialog = when (action.requestOtpResult) {
+                dialog = when (val result = action.requestOtpResult) {
                     is RequestOtpResult.Error -> {
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         )
                     }
 
@@ -156,6 +157,7 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = result.error,
                         )
                     }
 
@@ -201,6 +203,7 @@ data class DeleteAccountConfirmationState(
         data class Error(
             val title: Text = R.string.an_error_has_occurred.asText(),
             val message: Text,
+            val error: Throwable? = null,
         ) : DeleteAccountConfirmationDialog()
 
         /**

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -208,6 +207,7 @@ private fun LoginDialogs(
         is LoginState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = onDismissRequest,
         )
 
@@ -233,7 +233,6 @@ private fun LoginScreenContent(
 ) {
     Column(
         modifier = modifier
-            .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -44,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -417,13 +417,13 @@ fun VaultAddEditScreen(
                         onCoachMarkDismissed = scrollBackToTop,
                         shouldShowLearnAboutLoginsCard = state.shouldShowLearnAboutNewLogins,
                         modifier = Modifier
-                            .imePadding()
                             .fillMaxSize(),
                     )
-                    FolderSelectionBottomSheet(
-                        state = viewState.common,
+
+                    BottomSheetViews(
+                        bottomSheetState = state.bottomSheetState,
+                        viewState = viewState.common,
                         handlers = commonTypeHandlers,
-                        showBottomSheet = state.shouldShowFolderSelectionBottomSheet,
                     )
                 }
 
@@ -469,6 +469,7 @@ private fun VaultAddEditItemDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissRequest,
             )
         }
@@ -549,12 +550,39 @@ private fun VaultAddEditItemDialogs(
     }
 }
 
+@Composable
+private fun BottomSheetViews(
+    bottomSheetState: VaultAddEditState.BottomSheetState?,
+    viewState: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    modifier: Modifier = Modifier,
+) {
+    when (bottomSheetState) {
+        is VaultAddEditState.BottomSheetState.FolderSelection -> {
+            FolderSelectionBottomSheet(
+                state = viewState,
+                handlers = handlers,
+                modifier = modifier,
+            )
+        }
+
+        is VaultAddEditState.BottomSheetState.OwnerSelection -> {
+            OwnerSelectionBottomSheet(
+                state = viewState,
+                handlers = handlers,
+                modifier = modifier,
+            )
+        }
+
+        null -> Unit
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FolderSelectionBottomSheet(
     state: VaultAddEditState.ViewState.Content.Common,
     handlers: VaultAddEditCommonHandlers,
-    showBottomSheet: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var selectedOptionState by rememberSaveable {
@@ -562,12 +590,12 @@ private fun FolderSelectionBottomSheet(
     }
     BitwardenModalBottomSheet(
         sheetTitle = stringResource(R.string.folders),
-        onDismiss = handlers.onDismissFolderSelectionSheet,
+        onDismiss = handlers.onDismissBottomSheet,
         topBarActions = { animatedOnDismiss ->
             BitwardenTextButton(
                 label = stringResource(R.string.save),
                 onClick = {
-                    handlers.onDismissFolderSelectionSheet()
+                    handlers.onDismissBottomSheet()
                     state
                         .availableFolders
                         .firstOrNull {
@@ -584,7 +612,6 @@ private fun FolderSelectionBottomSheet(
                 isEnabled = selectedOptionState.isNotBlank(),
             )
         },
-        showBottomSheet = showBottomSheet,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
         modifier = modifier.statusBarsPadding(),
     ) {
@@ -634,7 +661,9 @@ private fun FolderSelectionBottomSheetContent(
                     text = option,
                     color = BitwardenTheme.colorScheme.text.primary,
                     style = BitwardenTheme.typography.bodyLarge,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
                 )
                 BitwardenRadioButton(
                     isSelected = selectedOption == option,
@@ -687,6 +716,101 @@ private fun FolderSelectionBottomSheetContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .cardStyle(cardStyle = cardStyle, paddingVertical = 0.dp),
+                )
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OwnerSelectionBottomSheet(
+    state: VaultAddEditState.ViewState.Content.Common,
+    handlers: VaultAddEditCommonHandlers,
+    modifier: Modifier = Modifier,
+) {
+
+    var selectedOptionState by rememberSaveable {
+        mutableStateOf(state.selectedOwner?.name.orEmpty())
+    }
+    BitwardenModalBottomSheet(
+        sheetTitle = stringResource(R.string.owner),
+        onDismiss = handlers.onDismissBottomSheet,
+        topBarActions = { animatedOnDismiss ->
+            BitwardenTextButton(
+                label = stringResource(R.string.save),
+                onClick = {
+                    handlers.onDismissBottomSheet()
+                    state
+                        .availableOwners
+                        .firstOrNull {
+                            it.name == selectedOptionState
+                        }
+                        ?.run {
+                            handlers.onOwnerSelected(this.id)
+                        }
+                    animatedOnDismiss()
+                },
+                isEnabled = selectedOptionState.isNotBlank(),
+            )
+        },
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        modifier = modifier.statusBarsPadding(),
+    ) {
+        OwnerSelectionBottomSheetContent(
+            options = state.availableOwners.map { it.name }.toImmutableList(),
+            selectedOption = selectedOptionState,
+            onOptionSelected = {
+                selectedOptionState = it
+            },
+        )
+    }
+}
+
+@Composable
+private fun OwnerSelectionBottomSheetContent(
+    options: ImmutableList<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+            .standardHorizontalMargin(),
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+        itemsIndexed(options) { index, option ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .cardStyle(
+                        cardStyle = options.toListItemCardStyle(index = index),
+                        onClick = {
+                            onOptionSelected(option)
+                        },
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = option,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    style = BitwardenTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                BitwardenRadioButton(
+                    isSelected = selectedOption == option,
+                    onClick = {
+                        onOptionSelected(option)
+                    },
                 )
             }
         }

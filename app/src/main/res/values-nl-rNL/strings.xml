@@ -1104,7 +1104,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Sla het geëxporteerde bestand ergens op je computer waar je deze gemakkelijk kunt vinden.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dit is geen herkende Bitwarden-server. Je moet mogelijk controleren met je provider of je server bijwerken.</string>
   <string name="syncing_logins_loading_message">Inloggegevens synchroniseren...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Browserextensie downloaden</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Ga naar bitwarden.com/download om Bitwarden in je favoriete browser te integreren voor een naadloze werking.</string>
   <string name="use_the_web_app">Webapp gebruiken</string>
@@ -1221,4 +1220,13 @@ Wilt u naar dit account wisselen?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
   <string name="self_host_server_url">URL zelfgehoste server</string>
+  <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
+  <string name="use_chrome_beta_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Verbetert het invullen van inloggegevens voor ondersteunde websites op Chrome. Eenmaal ingeschakeld word je doorgestuurd naar Chrome-instellingen voor het inschakelen van automatisch invullen door derden.</string>
+  <string name="show_more">Meer weergeven</string>
+  <string name="no_folder">Geen map</string>
+  <string name="show_less">Minder weergeven</string>
+  <string name="add_field">Veld toevoegen</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Foutdetails delen</string>
 </resources>

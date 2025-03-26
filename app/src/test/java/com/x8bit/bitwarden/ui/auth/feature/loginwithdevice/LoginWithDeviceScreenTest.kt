@@ -47,12 +47,13 @@ class LoginWithDeviceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             LoginWithDeviceScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToTwoFactorLogin = { onNavigateToTwoFactorLoginEmail = it },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

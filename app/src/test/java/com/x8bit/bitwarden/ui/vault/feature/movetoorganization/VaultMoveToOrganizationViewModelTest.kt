@@ -303,6 +303,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         mutableCollectionFlow.tryEmit(value = DataState.Loaded(DEFAULT_COLLECTIONS))
         mutableVaultItemFlow.tryEmit(value = DataState.Loaded(createMockCipherView(number = 1)))
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
@@ -310,7 +311,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
-        } returns ShareCipherResult.Error
+        } returns ShareCipherResult.Error(error = error)
         viewModel.stateFlow.test {
             assertEquals(
                 initialState.copy(
@@ -340,6 +341,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                     viewState = VaultMoveToOrganizationState.ViewState.Content(
                         organizations = createMockOrganizationList(),

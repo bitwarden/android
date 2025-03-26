@@ -11,7 +11,6 @@ import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -99,7 +98,11 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            appReviewManager = appReviewManager,
+        ) {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
@@ -117,9 +120,6 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
-                exitManager = exitManager,
-                intentManager = intentManager,
-                appReviewManager = appReviewManager,
             )
         }
     }
@@ -1276,7 +1276,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key group is displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     sshKeyItemsCount = count,
                 ),
@@ -1286,12 +1285,6 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("SSH key")
             .assertTextEquals("SSH key", count.toString())
             .assertIsDisplayed()
-
-        // Verify SSH key group is hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("SSH key")
-            .assertIsNotDisplayed()
     }
 
     @Test
@@ -1299,7 +1292,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key vault items are displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     noFolderItems = listOf(
                         VaultState.ViewState.VaultItem.SshKey(
@@ -1318,12 +1310,6 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
             .isDisplayed()
-
-        // Verify SSH key vault items are hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("mockSshKey")
-            .isNotDisplayed()
     }
 
     @Test
@@ -1440,7 +1426,6 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasMasterPassword = true,
     isRefreshing = false,
     showImportActionCard = false,
-    showSshKeys = false,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

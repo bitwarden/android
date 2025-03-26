@@ -22,7 +22,10 @@ sealed class LoginResult {
     /**
      * There was an error logging in.
      */
-    data class Error(val errorMessage: String?) : LoginResult()
+    data class Error(
+        val errorMessage: String?,
+        val error: Throwable?,
+    ) : LoginResult()
 
     /**
      * There was an error while logging into an unofficial Bitwarden server.

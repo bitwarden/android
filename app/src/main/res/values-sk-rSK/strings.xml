@@ -1104,7 +1104,6 @@ Chcete prepnúť na tento účet?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Uložte exportovaný súbor na miesto v počítači, ktoré ľahko nájdete.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Toto nie je známy Bitwarden server. Možno bude potrebné overiť si to u svojho poskytovateľa alebo aktualizovať server.</string>
   <string name="syncing_logins_loading_message">Synchronizácia prihlásení...</string>
-  <string name="ssh_key_cipher_item_types">Typy šifrovania pre kľúče SSH</string>
   <string name="download_the_browser_extension">Stiahnuť rozšírenie pre prehliadač</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Pre pohodlné použivanie prejdite na stránku bitwarden.com/download a integrujte Bitwarden do svojho obľúbeného prehliadača.</string>
   <string name="use_the_web_app">Použiť webovú aplikáciu</string>
@@ -1221,4 +1220,13 @@ Chcete prepnúť na tento účet?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operácia prístupového kľúča zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
   <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
+  <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
+  <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chromu (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Vylepšuje vypĺňanie prihlasovacích údajov pre podporované webové stránky v Chrome. Po zapnutí budete presmerovaní do nastavení Chromu, kde môžete povoliť automatické vypĺňanie od tretích strán.</string>
+  <string name="show_more">Zobraziť viac</string>
+  <string name="no_folder">Žiadny priečinok</string>
+  <string name="show_less">Zobraziť menej</string>
+  <string name="add_field">Pridať pole</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Zdieľať podrobnosti o chybe</string>
 </resources>

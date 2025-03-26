@@ -75,7 +75,7 @@
   <string name="uri">URI</string>
   <string name="website_uri">Website (URI)</string>
   <string name="use_fingerprint_to_unlock">Fingerabdruck zum Entsperren nutzen</string>
-  <string name="username">Nutzername</string>
+  <string name="username">Benutzername</string>
   <string name="validation_field_required">Das Feld %1$s ist ein Pflichtfeld.</string>
   <string name="value_has_been_copied">%1$s kopiert</string>
   <string name="verify_fingerprint">Fingerabdruck verifizieren</string>
@@ -109,11 +109,11 @@
   <string name="create_an_account">Ein Konto erstellen</string>
   <string name="creating_account">Konto wird erstellt ...</string>
   <string name="edit_item">Eintrag bearbeiten</string>
-  <string name="edit_login">Edit login</string>
-  <string name="edit_card">Edit card</string>
-  <string name="edit_identity">Edit identity</string>
-  <string name="edit_note">Edit note</string>
-  <string name="edit_passkey">Edit passkey</string>
+  <string name="edit_login">Zugangsdaten bearbeiten</string>
+  <string name="edit_card">Karte bearbeiten</string>
+  <string name="edit_identity">Identität bearbeiten</string>
+  <string name="edit_note">Notiz bearbeiten</string>
+  <string name="edit_passkey">Passkey bearbeiten</string>
   <string name="enable_automatic_syncing">Automatische Synchronisierung zulassen</string>
   <string name="enter_email_for_hint">Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</string>
   <string name="exntesion_reenable">App-Erweiterung reaktivieren</string>
@@ -169,7 +169,7 @@
   <string name="new_identity">Neue Identität</string>
   <string name="no_notes">Du hast keine Notizen in deinem Tresor.</string>
   <string name="new_note">Neue Notiz</string>
-  <string name="new_passkey">New passkey</string>
+  <string name="new_passkey">Neuer Passkey</string>
   <string name="new_item">Neuer Eintrag</string>
   <string name="new_ssh_key">Neuer SSH-Schlüssel</string>
   <string name="no_text_sends">Du hast keine Text-Sends in deinem Tresor.</string>
@@ -215,11 +215,11 @@
   <string name="validating">Validierung</string>
   <string name="verification_code">Verifizierungscode</string>
   <string name="view_item">Eintrag anzeigen</string>
-  <string name="view_login">View login</string>
-  <string name="view_card">View card</string>
-  <string name="view_identity">View identity</string>
-  <string name="view_note">View note</string>
-  <string name="view_passkey">View passkey</string>
+  <string name="view_login">Zugangsdaten anzeigen</string>
+  <string name="view_card">Karte anzeigen</string>
+  <string name="view_identity">Identität anzeigen</string>
+  <string name="view_note">Notiz anzeigen</string>
+  <string name="view_passkey">Passkey anzeigen</string>
   <string name="web_vault">Bitwarden Web-Tresor</string>
   <string name="lost_2fa_app">Authentifizierungs-App verloren?</string>
   <string name="items">Einträge</string>
@@ -771,7 +771,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="catch_all_email">Catch-All E-Mail-Adresse</string>
   <string name="forwarded_email_alias">Weitergeleitetes E-Mail-Alias</string>
   <string name="random_word">Zufälliges Wort</string>
-  <string name="email_required_parenthesis">E-Mail (erforderlich)</string>
+  <string name="email_required_parenthesis">E-Mail-Adresse (erforderlich)</string>
   <string name="domain_name_required_parenthesis">Domainname (erforderlich)</string>
   <string name="api_key_required_parenthesis">API-Schlüssel (erforderlich)</string>
   <string name="service">Dienst</string>
@@ -1103,7 +1103,6 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Speichere die exportierte Datei irgendwo auf deinem Computer, so dass du sie leicht wiederfinden kannst.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Dies ist kein anerkannter Bitwarden-Server. Möglicherweise musst du dich bei deinem Anbieter erkundigen oder deinen Server aktualisieren.</string>
   <string name="syncing_logins_loading_message">Synchronisiere Zugangsdaten...</string>
-  <string name="ssh_key_cipher_item_types">SSH-Schlüssel-Cipher-Eintragsarten</string>
   <string name="download_the_browser_extension">Die Browser-Erweiterung herunterladen</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Gehe zu bitwarden.com/download, um Bitwarden für eine nahtlose Benutzererfahrung in deinen bevorzugten Browser zu integrieren.</string>
   <string name="use_the_web_app">Verwende die Web-App</string>
@@ -1220,4 +1219,13 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Der Passkey-Vorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
   <string name="self_host_server_url">Selbst gehostete Server-URL</string>
+  <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
+  <string name="use_chrome_beta_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Verbessert das Ausfüllen von Zugangsdaten für unterstützte Websites in Chrome. Einmal aktiviert, wirst du zu den Chrome-Einstellungen weitergeleitet, um das Auto-Ausfüllen von Drittanbietern zu aktivieren.</string>
+  <string name="show_more">Mehr anzeigen</string>
+  <string name="no_folder">Kein Ordner</string>
+  <string name="show_less">Weniger anzeigen</string>
+  <string name="add_field">Feld hinzufügen</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Fehlerdetails teilen</string>
 </resources>

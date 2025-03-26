@@ -47,7 +47,9 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToSetPassword = { onNavigateToSetPasswordCalled = true },
@@ -55,7 +57,6 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
                     onNavigateToTwoFactorLoginEmailAndOrgIdentifier = email to orgIdentifier
                 },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }

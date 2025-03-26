@@ -68,6 +68,7 @@ class AuthRequestManagerTest {
         runTest {
             val email = "email@email.com"
             val authRequestResponse = AUTH_REQUEST_RESPONSE
+            val error = Throwable("Fail")
             coEvery {
                 authSdkSource.getNewAuthRequest(email = email)
             } returns authRequestResponse.asSuccess()
@@ -80,7 +81,7 @@ class AuthRequestManagerTest {
                     fingerprint = authRequestResponse.fingerprint,
                     authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             repository
                 .createAuthRequestWithUpdates(
@@ -88,7 +89,7 @@ class AuthRequestManagerTest {
                     authRequestType = AuthRequestType.OTHER_DEVICE,
                 )
                 .test {
-                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    assertEquals(CreateAuthRequestResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
         }
@@ -405,9 +406,10 @@ class AuthRequestManagerTest {
     fun `createAuthRequestWithUpdates with authSdkSource getNewAuthRequest error should emit Error`() =
         runTest {
             val email = "email@email.com"
+            val error = Throwable("Fail")
             coEvery {
                 authSdkSource.getNewAuthRequest(email = email)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             repository
                 .createAuthRequestWithUpdates(
@@ -415,7 +417,7 @@ class AuthRequestManagerTest {
                     authRequestType = AuthRequestType.OTHER_DEVICE,
                 )
                 .test {
-                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    assertEquals(CreateAuthRequestResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
         }
@@ -425,12 +427,13 @@ class AuthRequestManagerTest {
     fun `getAuthRequestByFingerprintFlow should emit failure and cancel flow when getAuthRequests fails`() =
         runTest {
             val fingerprint = "fingerprint"
-            coEvery { authRequestsService.getAuthRequests() } returns Throwable("Fail").asFailure()
+            val error = Throwable("Fail")
+            coEvery { authRequestsService.getAuthRequests() } returns error.asFailure()
 
             repository
                 .getAuthRequestByFingerprintFlow(fingerprint)
                 .test {
-                    assertEquals(AuthRequestUpdatesResult.Error, awaitItem())
+                    assertEquals(AuthRequestUpdatesResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
 
@@ -447,8 +450,9 @@ class AuthRequestManagerTest {
                 authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
             )
             val authRequest = AUTH_REQUEST
+            val error = Throwable("Fail")
             val expectedOne = AuthRequestUpdatesResult.Update(authRequest = authRequest)
-            val expectedTwo = AuthRequestUpdatesResult.Error
+            val expectedTwo = AuthRequestUpdatesResult.Error(error = error)
             coEvery {
                 authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
             } returns FINGER_PRINT.asSuccess()
@@ -457,7 +461,7 @@ class AuthRequestManagerTest {
             } returns authRequestsResponseJson.asSuccess()
             coEvery {
                 authRequestsService.getAuthRequest(requestId = REQUEST_ID)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             fakeAuthDiskSource.userState = SINGLE_USER_STATE
 
             repository
@@ -637,14 +641,13 @@ class AuthRequestManagerTest {
     @Test
     fun `getAuthRequestByIdFlow should emit failure and cancel flow when getAuthRequests fails`() =
         runTest {
-            coEvery {
-                authRequestsService.getAuthRequest(REQUEST_ID)
-            } returns Throwable("Fail").asFailure()
+            val error = Throwable("Fail")
+            coEvery { authRequestsService.getAuthRequest(REQUEST_ID) } returns error.asFailure()
 
             repository
                 .getAuthRequestByIdFlow(REQUEST_ID)
                 .test {
-                    assertEquals(AuthRequestUpdatesResult.Error, awaitItem())
+                    assertEquals(AuthRequestUpdatesResult.Error(error = error), awaitItem())
                     awaitComplete()
                 }
 
@@ -658,10 +661,11 @@ class AuthRequestManagerTest {
     fun `getAuthRequestByIdFlow should emit update then not cancel on failure when initial request succeeds and second fails`() =
         runTest {
             val authRequestResponseOne = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.asSuccess()
-            val authRequestResponseTwo = Throwable("Fail").asFailure()
+            val error = Throwable("Fail")
+            val authRequestResponseTwo = error.asFailure()
             val authRequest = AUTH_REQUEST.copy(id = REQUEST_ID)
             val expectedOne = AuthRequestUpdatesResult.Update(authRequest = authRequest)
-            val expectedTwo = AuthRequestUpdatesResult.Error
+            val expectedTwo = AuthRequestUpdatesResult.Error(error = error)
             coEvery {
                 authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
             } returns FINGER_PRINT.asSuccess()
@@ -848,11 +852,12 @@ class AuthRequestManagerTest {
             val authRequestsResponseJson = AuthRequestsResponseJson(
                 authRequests = listOf(AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE),
             )
-            val expectedOne = AuthRequestsUpdatesResult.Error
+            val error = Throwable("Fail")
+            val expectedOne = AuthRequestsUpdatesResult.Error(error = error)
             val expectedTwo = AuthRequestsUpdatesResult.Update(authRequests = authRequests)
             coEvery {
                 authRequestsService.getAuthRequests()
-            } returns Throwable("Fail").asFailure() andThen authRequestsResponseJson.asSuccess()
+            } returns error.asFailure() andThen authRequestsResponseJson.asSuccess()
             coEvery {
                 authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
             } returns FINGER_PRINT.asSuccess()
@@ -933,14 +938,15 @@ class AuthRequestManagerTest {
 
     @Test
     fun `getAuthRequests should return failure when service returns failure`() = runTest {
-        coEvery { authRequestsService.getAuthRequests() } returns Throwable("Fail").asFailure()
+        val error = Throwable("Fail")
+        coEvery { authRequestsService.getAuthRequests() } returns error.asFailure()
 
         val result = repository.getAuthRequests()
 
         coVerify(exactly = 1) {
             authRequestsService.getAuthRequests()
         }
-        assertEquals(AuthRequestsResult.Error, result)
+        assertEquals(AuthRequestsResult.Error(error = error), result)
     }
 
     @Test
@@ -1025,9 +1031,10 @@ class AuthRequestManagerTest {
 
     @Test
     fun `updateAuthRequest should return failure when sdk returns failure`() = runTest {
+        val error = Throwable("Fail")
         coEvery {
             vaultSdkSource.getAuthRequestKey(publicKey = PUBLIC_KEY, userId = USER_ID)
-        } returns Throwable("Fail").asFailure()
+        } returns error.asFailure()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE
 
         val result = repository.updateAuthRequest(
@@ -1040,7 +1047,7 @@ class AuthRequestManagerTest {
         coVerify(exactly = 1) {
             vaultSdkSource.getAuthRequestKey(publicKey = PUBLIC_KEY, userId = USER_ID)
         }
-        assertEquals(AuthRequestResult.Error, result)
+        assertEquals(AuthRequestResult.Error(error = error), result)
     }
 
     @Test
@@ -1048,6 +1055,7 @@ class AuthRequestManagerTest {
         val requestId = "requestId"
         val passwordHash = "masterPasswordHash"
         val encodedKey = "encodedKey"
+        val error = Throwable("Mission failed")
         coEvery {
             vaultSdkSource.getAuthRequestKey(publicKey = PUBLIC_KEY, userId = USER_ID)
         } returns encodedKey.asSuccess()
@@ -1059,7 +1067,7 @@ class AuthRequestManagerTest {
                 deviceId = UNIQUE_APP_ID,
                 isApproved = false,
             )
-        } returns Throwable("Mission failed").asFailure()
+        } returns error.asFailure()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE
 
         val result = repository.updateAuthRequest(
@@ -1072,7 +1080,7 @@ class AuthRequestManagerTest {
         coVerify(exactly = 1) {
             vaultSdkSource.getAuthRequestKey(publicKey = PUBLIC_KEY, userId = USER_ID)
         }
-        assertEquals(AuthRequestResult.Error, result)
+        assertEquals(AuthRequestResult.Error(error = error), result)
     }
 
     @Test

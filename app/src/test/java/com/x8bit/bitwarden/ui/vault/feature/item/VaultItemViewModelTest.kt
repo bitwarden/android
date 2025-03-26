@@ -5,19 +5,28 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
+import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -28,7 +37,9 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.toViewState
@@ -45,6 +56,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -64,6 +76,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mutableCollectionsStateFlow =
         MutableStateFlow<DataState<List<CollectionView>>>(DataState.Loading)
+    private val mutableFoldersStateFlow =
+        MutableStateFlow<DataState<List<FolderView>>>(DataState.Loading)
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
@@ -75,6 +89,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         every { getAuthCodeFlow(VAULT_ITEM_ID) } returns mutableAuthCodeItemFlow
         every { getVaultItemStateFlow(VAULT_ITEM_ID) } returns mutableVaultItemFlow
         every { collectionsStateFlow } returns mutableCollectionsStateFlow
+        every { foldersStateFlow } returns mutableFoldersStateFlow
     }
 
     private val mockFileManager: FileManager = mockk()
@@ -85,6 +100,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     private val mockCipherView = mockk<CipherView> {
         every { collectionIds } returns emptyList()
         every { edit } returns true
+        every { folderId } returns null
+        every { organizationId } returns null
+    }
+    private val mockEnvironmentRepository = FakeEnvironmentRepository()
+    private val mutableIsIconLoadingDisabledFlow = MutableStateFlow(false)
+    private val mockSettingsRepository = mockk<SettingsRepository> {
+        every { isIconLoadingDisabled } returns false
+        every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
     }
 
     @BeforeEach
@@ -95,6 +118,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(CipherView::toViewState)
+        unmockkStatic(Uri::class)
     }
 
     @Test
@@ -176,11 +200,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
@@ -202,6 +230,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -222,6 +253,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginState
 
@@ -239,6 +273,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                 assertEquals(expected, viewModel.stateFlow.value)
@@ -267,6 +302,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginState
 
@@ -280,6 +318,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.Common.DeleteClick)
                 assertEquals(expected, viewModel.stateFlow.value)
@@ -301,12 +340,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -346,19 +389,24 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
+                val error = Throwable("Oh dang.")
                 coEvery {
                     vaultRepo.softDeleteCipher(
                         cipherId = VAULT_ITEM_ID,
                         cipherView = createMockCipherView(number = 1),
                     )
-                } returns DeleteCipherResult.Error
+                } returns DeleteCipherResult.Error(error = error)
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick)
 
@@ -367,6 +415,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         viewState = loginViewState,
                         dialog = VaultItemState.DialogState.Generic(
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     viewModel.stateFlow.value,
@@ -394,12 +443,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -434,11 +487,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val viewModel = createViewModel(state = loginState)
             assertEquals(loginState, viewModel.stateFlow.value)
@@ -469,12 +526,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns viewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = viewState)
                 val viewModel = createViewModel(state = loginState)
                 assertEquals(loginState, viewModel.stateFlow.value)
@@ -508,6 +569,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
@@ -515,6 +579,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     data = createVerificationCodeItem(),
                 )
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -550,19 +615,24 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             val viewModel = createViewModel(state = DEFAULT_STATE)
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepo.restoreCipher(
                     cipherId = VAULT_ITEM_ID,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns RestoreCipherResult.Error
+            } returns RestoreCipherResult.Error(error = error)
 
             viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
@@ -571,6 +641,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     viewState = DEFAULT_VIEW_STATE,
                     dialog = VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
+                        error = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -601,11 +672,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val viewModel = createViewModel(state = loginState)
             assertEquals(loginState, viewModel.stateFlow.value)
@@ -635,11 +710,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
             val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
             val viewModel = createViewModel(state = loginState)
 
@@ -654,6 +733,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
                 assertEquals(
@@ -683,6 +765,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
 
@@ -693,6 +778,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -748,6 +834,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
 
@@ -758,6 +847,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -804,16 +894,20 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
-
                 val password = "password"
+                val error = Throwable("Fail!")
                 coEvery {
                     authRepo.validatePassword(password)
-                } returns ValidatePasswordResult.Error
+                } returns ValidatePasswordResult.Error(error = error)
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
@@ -838,6 +932,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 message = R.string.generic_error_message.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),
@@ -871,11 +966,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick("field"))
@@ -897,6 +996,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -914,6 +1016,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             every { clipboardManager.setText(text = field) } just runs
@@ -921,6 +1026,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.Common.CopyCustomHiddenFieldClick(field))
 
@@ -934,6 +1040,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedHiddenField(
@@ -975,11 +1084,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -1009,6 +1122,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -1044,11 +1160,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -1078,6 +1198,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
@@ -1100,11 +1223,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.AttachmentsClick)
@@ -1126,6 +1253,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -1147,11 +1277,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1183,11 +1317,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1211,6 +1349,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -1236,11 +1377,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns loginViewState
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
             viewModel.trySendAction(VaultItemAction.Common.CloneClick)
@@ -1286,11 +1431,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(loginState, viewModel.stateFlow.value)
             viewModel.trySendAction(VaultItemAction.Common.CloneClick)
@@ -1312,6 +1461,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = null,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -1333,11 +1485,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1367,11 +1523,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.Common.MoveToOrganizationClick)
@@ -1393,6 +1553,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -1414,11 +1577,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
 
@@ -1458,11 +1625,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1516,11 +1687,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1532,10 +1707,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     url = "https://example.com",
                     title = "test.mp4",
                 )
-
+                val error = Throwable("Fail")
                 coEvery {
                     vaultRepo.downloadAttachment(any(), any())
-                } returns DownloadAttachmentResult.Failure
+                } returns DownloadAttachmentResult.Failure(error = error)
 
                 viewModel.stateFlow.test {
                     assertEquals(
@@ -1556,6 +1731,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         loginState.copy(
                             dialog = VaultItemState.DialogState.Generic(
                                 R.string.unable_to_download_file.asText(),
+                                error = error,
                             ),
                         ),
                         awaitItem(),
@@ -1583,11 +1759,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = null,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
                 val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
                 val viewModel = createViewModel(state = loginState)
 
@@ -1751,12 +1931,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
 
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             val notes = "Lots of notes"
 
@@ -1793,11 +1977,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns DEFAULT_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
             val breachCount = 5
@@ -1835,6 +2023,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             }
             coVerify(exactly = 1) {
@@ -1855,12 +2046,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
@@ -1884,6 +2079,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -1901,12 +2099,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyPasswordClick)
 
@@ -1923,19 +2125,28 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canAssignToCollections = true,
                         canEdit = true,
                         totpCodeItemData = createTotpCodeData(),
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
 
         @Test
         fun `on CopyTotpClick should call setText on the ClipboardManager`() = runTest {
+            setupMockUri()
             mutableVaultItemFlow.value = DataState.Loaded(
                 data = createMockCipherView(1),
             )
             mutableAuthCodeItemFlow.value = DataState.Loaded(
                 data = createVerificationCodeItem(),
             )
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                data = listOf(createMockCollectionView(1)),
+            )
+            mutableFoldersStateFlow.value = DataState.Loaded(
+                data = listOf(createMockFolderView(1)),
+            )
 
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyTotpClick)
 
@@ -1970,12 +2181,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canAssignToCollections = true,
                     canEdit = true,
                     totpCodeItemData = createTotpCodeData(),
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value =
                 DataState.Loaded(data = createVerificationCodeItem())
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.Login.CopyUsernameClick)
 
@@ -1992,6 +2207,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -2033,15 +2251,19 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
-                viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
+                viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
                 assertEquals(
                     loginState.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
@@ -2060,6 +2282,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2077,6 +2302,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
                     .returns(
@@ -2088,9 +2316,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.eventFlow.test {
-                    viewModel.trySendAction(VaultItemAction.ItemType.Login.PasswordHistoryClick)
+                    viewModel.trySendAction(VaultItemAction.Common.PasswordHistoryClick)
                     assertEquals(
                         VaultItemEvent.NavigateToPasswordHistory(VAULT_ITEM_ID),
                         awaitItem(),
@@ -2106,6 +2335,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2124,12 +2356,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns DEFAULT_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2155,6 +2391,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2176,12 +2415,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns loginViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value =
                     DataState.Loaded(data = createVerificationCodeItem())
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(loginState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2210,6 +2453,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledPasswordVisible(
@@ -2246,11 +2492,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
@@ -2274,6 +2524,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2291,6 +2544,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2299,6 +2555,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopyNumberClick)
 
@@ -2315,6 +2572,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2332,11 +2592,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2360,6 +2624,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2377,6 +2644,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2385,6 +2655,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(
                     VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
@@ -2404,6 +2675,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2421,11 +2695,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
@@ -2449,6 +2727,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2466,6 +2747,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2474,6 +2758,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
 
@@ -2490,6 +2775,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2507,11 +2795,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns CARD_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(cardState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2535,6 +2827,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2551,6 +2846,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns createViewState(
                 common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2559,6 +2857,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+            mutableFoldersStateFlow.value = DataState.Loaded(data = emptyList())
 
             viewModel.trySendAction(
                 VaultItemAction.ItemType.Card.CodeVisibilityClick(isVisible = true),
@@ -2578,6 +2877,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             }
         }
@@ -2607,11 +2909,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPublicKeyClick)
 
@@ -2641,11 +2947,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns sshKeyViewState
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(sshKeyState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2671,6 +2981,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2689,11 +3002,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 assertEquals(sshKeyState, viewModel.stateFlow.value)
                 viewModel.trySendAction(
@@ -2718,6 +3035,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 }
             }
@@ -2735,6 +3055,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns createViewState(
                     common = DEFAULT_COMMON.copy(requiresReprompt = false),
@@ -2743,6 +3066,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
 
@@ -2767,11 +3091,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         canDelete = true,
                         canAssignToCollections = true,
                         canEdit = true,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isIconLoadingDisabled = false,
+                        relatedLocations = persistentListOf(),
                     )
                 } returns SSH_KEY_VIEW_STATE
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
                 mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
                 mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+                mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
                 viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyPrivateKeyClick)
 
@@ -2804,11 +3132,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns SSH_KEY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             viewModel.trySendAction(VaultItemAction.ItemType.SshKey.CopyFingerprintClick)
 
@@ -2841,11 +3173,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns IDENTITY_VIEW_STATE
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
             mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
         }
 
         @Test
@@ -2980,6 +3316,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         fun `on VaultDataReceive with Loaded and nonnull data should update the ViewState`() {
             val viewState = mockk<VaultItemState.ViewState>()
+            every { mockCipherView.organizationId } returns "mockOrganizationId"
+            every { mockCipherView.collectionIds } returns listOf("mockId-1")
+            every { mockCipherView.folderId } returns "mockId-1"
             every {
                 mockCipherView.toViewState(
                     previousState = null,
@@ -2989,12 +3328,40 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(
+                        VaultItemLocation.Organization("mockOrganizationName"),
+                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Folder("mockName-1"),
+                    ),
                 )
             } returns viewState
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_USER_ACCOUNT.copy(
+                        organizations = listOf(
+                            Organization(
+                                id = "mockOrganizationId",
+                                name = "mockOrganizationName",
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.OWNER,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
             val viewModel = createViewModel(state = null)
 
             mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-            mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                listOf(createMockCollectionView(number = 1)),
+            )
+            mutableFoldersStateFlow.value = DataState.Loaded(
+                listOf(createMockFolderView(number = 1)),
+            )
 
             assertEquals(
                 DEFAULT_STATE.copy(viewState = viewState),
@@ -3008,6 +3375,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             mutableVaultItemFlow.value = DataState.Loaded(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -3031,12 +3399,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
 
             mutableVaultItemFlow.value = DataState.Pending(data = mockCipherView)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
         }
@@ -3048,6 +3420,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             mutableVaultItemFlow.value = DataState.Pending(data = null)
             mutableCollectionsStateFlow.value = DataState.Loaded(emptyList())
+            mutableFoldersStateFlow.value = DataState.Loaded(emptyList())
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -3071,6 +3444,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3108,6 +3484,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     canDelete = true,
                     canAssignToCollections = true,
                     canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(),
                 )
             } returns viewState
             val viewModel = createViewModel(state = null)
@@ -3160,6 +3539,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         fileManager: FileManager = mockFileManager,
         eventManager: OrganizationEventManager = organizationEventManager,
         tempAttachmentFile: File? = null,
+        environmentRepository: EnvironmentRepository = mockEnvironmentRepository,
+        settingsRepository: SettingsRepository = mockSettingsRepository,
     ): VaultItemViewModel = VaultItemViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
@@ -3181,6 +3562,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         vaultRepository = vaultRepository,
         fileManager = fileManager,
         organizationEventManager = eventManager,
+        environmentRepository = environmentRepository,
+        settingsRepository = settingsRepository,
     )
 
     private fun createViewState(
@@ -3200,6 +3583,13 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             totpCode = "mockTotp-1",
         )
 
+    private fun setupMockUri() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+    }
+
     companion object {
         private const val VAULT_ITEM_ID = "vault_item_id"
         private const val DEFAULT_LOGIN_PASSWORD = "password"
@@ -3210,36 +3600,37 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultItemState.ViewState.Loading,
             dialog = null,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+        )
+
+        private val DEFAULT_USER_ACCOUNT = UserState.Account(
+            userId = "user_id_1",
+            name = "Bit",
+            email = "bitwarden@gmail.com",
+            avatarColorHex = "#ff00ff",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+            hasMasterPassword = true,
+            isUsingKeyConnector = false,
+            onboardingStatus = OnboardingStatus.COMPLETE,
+            firstTimeState = FirstTimeState(showImportLoginsCard = true),
         )
 
         private val DEFAULT_USER_STATE: UserState = UserState(
             activeUserId = "user_id_1",
-            accounts = listOf(
-                UserState.Account(
-                    userId = "user_id_1",
-                    name = "Bit",
-                    email = "bitwarden@gmail.com",
-                    avatarColorHex = "#ff00ff",
-                    environment = Environment.Us,
-                    isPremium = true,
-                    isLoggedIn = true,
-                    isVaultUnlocked = true,
-                    needsPasswordReset = false,
-                    isBiometricsEnabled = false,
-                    organizations = emptyList(),
-                    needsMasterPassword = false,
-                    trustedDevice = null,
-                    hasMasterPassword = true,
-                    isUsingKeyConnector = false,
-                    onboardingStatus = OnboardingStatus.COMPLETE,
-                    firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                ),
-            ),
+            accounts = listOf(DEFAULT_USER_ACCOUNT),
         )
 
         private val DEFAULT_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
             VaultItemState.ViewState.Content.ItemType.Login(
-                passwordHistoryCount = 1,
                 username = DEFAULT_LOGIN_USERNAME,
                 passwordData = VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
                     password = DEFAULT_LOGIN_PASSWORD,
@@ -3279,6 +3670,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     code = "987",
                     isVisible = false,
                 ),
+                paymentCardBrandIconData = IconData.Local(R.drawable.ic_payment_card_brand_visa),
             )
 
         private val DEFAULT_SSH_KEY_TYPE: VaultItemState.ViewState.Content.ItemType.SshKey =
@@ -3350,6 +3742,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 canAssignToCollections = true,
                 canEdit = true,
                 favorite = false,
+                passwordHistoryCount = 1,
+                iconData = IconData.Local(R.drawable.ic_globe),
+                relatedLocations = persistentListOf(),
             )
 
         private val DEFAULT_VIEW_STATE: VaultItemState.ViewState.Content =

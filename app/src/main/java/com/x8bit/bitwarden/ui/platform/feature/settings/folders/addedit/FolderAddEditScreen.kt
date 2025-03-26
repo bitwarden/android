@@ -178,6 +178,7 @@ private fun FolderAddEditItemDialogs(
             title = stringResource(id = R.string.an_error_has_occurred),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         null -> Unit

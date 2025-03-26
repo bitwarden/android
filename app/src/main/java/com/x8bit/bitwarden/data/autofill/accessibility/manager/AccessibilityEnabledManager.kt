@@ -10,4 +10,9 @@ interface AccessibilityEnabledManager {
      * Emits updates that track whether the accessibility autofill service is enabled..
      */
     val isAccessibilityEnabledStateFlow: StateFlow<Boolean>
+
+    /**
+     * Gets the accessibility enabled state from the system settings.
+     */
+    fun refreshAccessibilityEnabledFromSettings()
 }

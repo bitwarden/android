@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -47,8 +48,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkConstructor
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
@@ -93,12 +96,22 @@ class CipherManagerTest {
     @BeforeEach
     fun setup() {
         mockkStatic(Uri::class)
+        mockkConstructor(NoActiveUserException::class)
+        every {
+            anyConstructed<NoActiveUserException>() == any<NoActiveUserException>()
+        } returns true
+        mockkConstructor(IllegalStateException::class)
+        every {
+            anyConstructed<IllegalStateException>() == any<IllegalStateException>()
+        } returns true
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(Uri::class, Instant::class)
         unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkConstructor(NoActiveUserException::class)
+        unmockkConstructor(IllegalStateException::class)
     }
 
     @Test
@@ -107,7 +120,7 @@ class CipherManagerTest {
 
         val result = cipherManager.createCipher(cipherView = mockk())
 
-        assertEquals(CreateCipherResult.Error, result)
+        assertEquals(CreateCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -116,16 +129,17 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
-            assertEquals(CreateCipherResult.Error, result)
+            assertEquals(CreateCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -135,6 +149,7 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
@@ -145,11 +160,11 @@ class CipherManagerTest {
                 ciphersService.createCipher(
                     body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createCipher(cipherView = mockCipherView)
 
-            assertEquals(CreateCipherResult.Error, result)
+            assertEquals(CreateCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -189,7 +204,7 @@ class CipherManagerTest {
                 collectionIds = mockk(),
             )
 
-            assertEquals(CreateCipherResult.Error, result)
+            assertEquals(CreateCipherResult.Error(error = NoActiveUserException()), result)
         }
 
     @Test
@@ -199,19 +214,20 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createCipherInOrganization(
                 cipherView = mockCipherView,
                 collectionIds = mockk(),
             )
 
-            assertEquals(CreateCipherResult.Error, result)
+            assertEquals(CreateCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -221,6 +237,7 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
@@ -234,14 +251,14 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createCipherInOrganization(
                 cipherView = mockCipherView,
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(CreateCipherResult.Error, result)
+            assertEquals(CreateCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -291,7 +308,10 @@ class CipherManagerTest {
             cipherView = mockk(),
         )
 
-        assertEquals(UpdateCipherResult.Error(errorMessage = null), result)
+        assertEquals(
+            UpdateCipherResult.Error(errorMessage = null, error = NoActiveUserException()),
+            result,
+        )
     }
 
     @Test
@@ -301,19 +321,20 @@ class CipherManagerTest {
             val userId = "mockId-1"
             val cipherId = "cipherId1234"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.updateCipher(
                 cipherId = cipherId,
                 cipherView = mockCipherView,
             )
 
-            assertEquals(UpdateCipherResult.Error(errorMessage = null), result)
+            assertEquals(UpdateCipherResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -324,6 +345,7 @@ class CipherManagerTest {
             val userId = "mockId-1"
             val cipherId = "cipherId1234"
             val mockCipherView = createMockCipherView(number = 1)
+            val error = IllegalStateException()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
@@ -335,14 +357,14 @@ class CipherManagerTest {
                     cipherId = cipherId,
                     body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
                 )
-            } returns IllegalStateException().asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.updateCipher(
                 cipherId = cipherId,
                 cipherView = mockCipherView,
             )
 
-            assertEquals(UpdateCipherResult.Error(errorMessage = null), result)
+            assertEquals(UpdateCipherResult.Error(errorMessage = null, error = error), result)
         }
 
     @Test
@@ -377,7 +399,10 @@ class CipherManagerTest {
             )
 
             assertEquals(
-                UpdateCipherResult.Error(errorMessage = "You do not have permission to edit this."),
+                UpdateCipherResult.Error(
+                    errorMessage = "You do not have permission to edit this.",
+                    error = null,
+                ),
                 result,
             )
         }
@@ -428,7 +453,7 @@ class CipherManagerTest {
             cipherId = "cipherId",
         )
 
-        assertEquals(DeleteCipherResult.Error, result)
+        assertEquals(DeleteCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Suppress("MaxLineLength")
@@ -437,13 +462,14 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.hardDeleteCipher(cipherId = cipherId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.hardDeleteCipher(cipherId)
 
-            assertEquals(DeleteCipherResult.Error, result)
+            assertEquals(DeleteCipherResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -470,7 +496,7 @@ class CipherManagerTest {
             cipherView = mockk(),
         )
 
-        assertEquals(DeleteCipherResult.Error, result)
+        assertEquals(DeleteCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Suppress("MaxLineLength")
@@ -482,19 +508,20 @@ class CipherManagerTest {
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
             val cipher = createMockSdkCipher(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
             } returns cipher.asSuccess()
             coEvery {
                 ciphersService.softDeleteCipher(cipherId = cipherId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.softDeleteCipher(
                 cipherId = cipherId,
                 cipherView = cipherView,
             )
 
-            assertEquals(DeleteCipherResult.Error, result)
+            assertEquals(DeleteCipherResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -607,7 +634,10 @@ class CipherManagerTest {
                 cipherView = mockk(),
             )
 
-            assertEquals(DeleteAttachmentResult.Error, result)
+            assertEquals(
+                DeleteAttachmentResult.Error(error = NoActiveUserException()),
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -617,12 +647,13 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
             val attachmentId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.deleteCipherAttachment(
                     cipherId = cipherId,
                     attachmentId = attachmentId,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.deleteCipherAttachment(
                 cipherId = cipherId,
@@ -630,7 +661,7 @@ class CipherManagerTest {
                 cipherView = createMockCipherView(number = 1),
             )
 
-            assertEquals(DeleteAttachmentResult.Error, result)
+            assertEquals(DeleteAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -688,7 +719,7 @@ class CipherManagerTest {
             cipherView = createMockCipherView(number = 1),
         )
 
-        assertEquals(RestoreCipherResult.Error, result)
+        assertEquals(RestoreCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Suppress("MaxLineLength")
@@ -698,16 +729,17 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.restoreCipher(cipherId = cipherId)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.restoreCipher(
                 cipherId = cipherId,
                 cipherView = cipherView,
             )
 
-            assertEquals(RestoreCipherResult.Error, result)
+            assertEquals(RestoreCipherResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -746,7 +778,7 @@ class CipherManagerTest {
             collectionIds = emptyList(),
         )
 
-        assertEquals(ShareCipherResult.Error, result)
+        assertEquals(ShareCipherResult.Error(error = NoActiveUserException()), result)
     }
 
     @Test
@@ -956,6 +988,7 @@ class CipherManagerTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -964,7 +997,7 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
 
             val result = cipherManager.shareCipher(
@@ -974,7 +1007,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -984,13 +1017,14 @@ class CipherManagerTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val organizationId = "organizationId"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.moveToOrganization(
                     userId = userId,
                     organizationId = organizationId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -1009,7 +1043,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1023,7 +1057,7 @@ class CipherManagerTest {
                 collectionIds = emptyList(),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = NoActiveUserException()), result)
         }
 
     @Test
@@ -1071,6 +1105,7 @@ class CipherManagerTest {
                     cipherView = createMockCipherView(number = 1),
                 )
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            val error = Throwable("Fail")
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -1078,7 +1113,7 @@ class CipherManagerTest {
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery { vaultDiskSource.saveCipher(userId, any()) } just runs
 
             val result = cipherManager.updateCipherCollections(
@@ -1089,7 +1124,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1098,12 +1133,13 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -1122,7 +1158,7 @@ class CipherManagerTest {
                 collectionIds = listOf("mockId-1"),
             )
 
-            assertEquals(ShareCipherResult.Error, result)
+            assertEquals(ShareCipherResult.Error(error = error), result)
         }
 
     @Test
@@ -1138,7 +1174,7 @@ class CipherManagerTest {
                 fileUri = mockk(),
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(NoActiveUserException()), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1152,9 +1188,10 @@ class CipherManagerTest {
             val mockCipherView = createMockCipherView(number = 1)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1164,7 +1201,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1186,6 +1223,7 @@ class CipherManagerTest {
                 url = null,
                 key = null,
             )
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1200,7 +1238,7 @@ class CipherManagerTest {
                     decryptedFilePath = mockFile.absolutePath,
                     encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1210,7 +1248,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1225,12 +1263,13 @@ class CipherManagerTest {
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1240,7 +1279,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1263,6 +1302,7 @@ class CipherManagerTest {
             )
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1287,7 +1327,7 @@ class CipherManagerTest {
                         fileSize = mockFileSize,
                     ),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1297,7 +1337,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1321,6 +1361,7 @@ class CipherManagerTest {
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1351,7 +1392,7 @@ class CipherManagerTest {
                     attachmentJsonResponse = mockAttachmentJsonResponse,
                     encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1361,7 +1402,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1389,6 +1430,7 @@ class CipherManagerTest {
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
                 collectionIds = listOf("mockId-1"),
             )
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -1428,7 +1470,7 @@ class CipherManagerTest {
                     userId = userId,
                     cipher = mockUpdatedCipherResponse.toEncryptedSdkCipher(),
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns error.asFailure()
 
             val result = cipherManager.createAttachment(
                 cipherId = cipherId,
@@ -1438,7 +1480,7 @@ class CipherManagerTest {
                 fileUri = mockUri,
             )
 
-            assertEquals(CreateAttachmentResult.Error, result)
+            assertEquals(CreateAttachmentResult.Error(error = error), result)
         }
 
     @Suppress("MaxLineLength")
@@ -1665,6 +1707,7 @@ class CipherManagerTest {
 
         val attachmentId = "mockId-1"
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns emptyList()
             every { id } returns "mockId-1"
         }
@@ -1677,7 +1720,7 @@ class CipherManagerTest {
         } returns cipher.asSuccess()
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1705,6 +1748,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
@@ -1715,13 +1759,14 @@ class CipherManagerTest {
                     cipherView = cipherView,
                 )
             } returns cipher.asSuccess()
+            val error = Throwable()
 
             coEvery {
                 ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             assertEquals(
-                DownloadAttachmentResult.Failure,
+                DownloadAttachmentResult.Failure(error = error),
                 cipherManager.downloadAttachment(
                     cipherView = cipherView,
                     attachmentId = attachmentId,
@@ -1749,6 +1794,7 @@ class CipherManagerTest {
             every { id } returns attachmentId
         }
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
         }
@@ -1768,7 +1814,7 @@ class CipherManagerTest {
         } returns response.asSuccess()
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(error = IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1796,6 +1842,7 @@ class CipherManagerTest {
             every { id } returns attachmentId
         }
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
         }
@@ -1814,13 +1861,12 @@ class CipherManagerTest {
         coEvery {
             ciphersService.getCipherAttachment(cipherId = any(), attachmentId = any())
         } returns response.asSuccess()
-
         coEvery {
             fileManager.downloadFileToCache(url = any())
-        } returns DownloadResult.Failure
+        } returns DownloadResult.Failure(error = Throwable("Fail!"))
 
         assertEquals(
-            DownloadAttachmentResult.Failure,
+            DownloadAttachmentResult.Failure(IllegalStateException()),
             cipherManager.downloadAttachment(
                 cipherView = cipherView,
                 attachmentId = attachmentId,
@@ -1850,6 +1896,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
@@ -1875,7 +1922,7 @@ class CipherManagerTest {
             coEvery {
                 fileManager.downloadFileToCache(url = any())
             } returns DownloadResult.Success(file)
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -1884,10 +1931,10 @@ class CipherManagerTest {
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )
-            } returns Throwable().asFailure()
+            } returns error.asFailure()
 
             assertEquals(
-                DownloadAttachmentResult.Failure,
+                DownloadAttachmentResult.Failure(error = error),
                 cipherManager.downloadAttachment(
                     cipherView = cipherView,
                     attachmentId = attachmentId,
@@ -1925,6 +1972,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }

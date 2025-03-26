@@ -199,7 +199,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generatePassword(request, true)
 
-        assertEquals(GeneratedPasswordResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedPasswordResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generatePassword(request) }
     }
 
@@ -257,7 +259,9 @@ class GeneratorRepositoryTest {
 
             val result = repository.generatePassphrase(request)
 
-            assertEquals(GeneratedPassphraseResult.InvalidRequest, result)
+            assertEquals(
+                GeneratedPassphraseResult.InvalidRequest(error = exception), result,
+            )
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
 
@@ -296,7 +300,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generatePlusAddressedEmail(request)
 
-        assertEquals(GeneratedPlusAddressedUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedPlusAddressedUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
     }
 
@@ -331,7 +337,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generateCatchAllEmail(request)
 
-        assertEquals(GeneratedCatchAllUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedCatchAllUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generateCatchAllEmail(request) }
     }
 
@@ -366,7 +374,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generateRandomWordUsername(request)
 
-        assertEquals(GeneratedRandomWordUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedRandomWordUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generateRandomWord(request) }
     }
 
@@ -409,7 +419,10 @@ class GeneratorRepositoryTest {
             val result = repository.generateForwardedServiceUsername(request)
 
             assertEquals(
-                GeneratedForwardedServiceUsernameResult.InvalidRequest(exception.message),
+                GeneratedForwardedServiceUsernameResult.InvalidRequest(
+                    message = exception.message,
+                    error = exception,
+                ),
                 result,
             )
             coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }

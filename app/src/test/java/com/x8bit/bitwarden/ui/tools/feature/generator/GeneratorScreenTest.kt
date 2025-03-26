@@ -66,16 +66,15 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+            appResumeStateManager = appResumeStateManager,
+        ) {
             GeneratorScreen(
                 viewModel = viewModel,
-                onNavigateToPasswordHistory = {
-                    onNavigateToPasswordHistoryScreenCalled = true
-                },
+                onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
                 onNavigateBack = {},
                 onDimNavBarRequest = { onDimNavBarRequest = it },
-                intentManager = intentManager,
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }
@@ -1065,7 +1064,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 
@@ -1307,7 +1306,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 

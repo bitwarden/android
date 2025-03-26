@@ -38,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
+private const val MINIMUM_PIN_LENGTH: Int = 4
+
 /**
  * A dialog for setting a user's PIN.
  *
@@ -138,6 +140,7 @@ fun PinInputDialog(
 
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.submit),
+                    isEnabled = !isPinCreation || pin.length >= MINIMUM_PIN_LENGTH,
                     onClick = { onSubmitClick(pin) },
                     modifier = Modifier.testTag(tag = "AcceptAlertButton"),
                 )

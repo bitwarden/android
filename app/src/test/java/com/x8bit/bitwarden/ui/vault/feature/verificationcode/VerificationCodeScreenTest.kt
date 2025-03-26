@@ -48,13 +48,14 @@ class VerificationCodeScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            appResumeStateManager = appResumeStateManager,
+        ) {
             VerificationCodeScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
                 onNavigateToSearch = { onNavigateToSearchCalled = true },
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }

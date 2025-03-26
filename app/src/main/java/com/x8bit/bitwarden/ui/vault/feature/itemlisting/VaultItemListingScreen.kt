@@ -317,6 +317,7 @@ private fun VaultItemListingDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(

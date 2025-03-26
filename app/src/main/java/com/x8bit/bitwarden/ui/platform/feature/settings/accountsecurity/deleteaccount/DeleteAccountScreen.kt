@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -81,6 +80,7 @@ fun DeleteAccountScreen(
         is DeleteAccountState.DeleteAccountDialog.Error -> BitwardenBasicDialog(
             title = stringResource(id = R.string.an_error_has_occurred),
             message = dialog.message(),
+            throwable = dialog.error,
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(DeleteAccountAction.DismissDialog) }
             },
@@ -112,7 +112,6 @@ fun DeleteAccountScreen(
     ) {
         Column(
             modifier = Modifier
-                .imePadding()
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {

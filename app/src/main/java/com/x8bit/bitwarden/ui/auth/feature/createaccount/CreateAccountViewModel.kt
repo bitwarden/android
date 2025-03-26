@@ -128,7 +128,7 @@ class CreateAccountViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> {
+            is PasswordStrengthResult.Error -> {
                 // Leave UI the same
             }
         }
@@ -180,6 +180,7 @@ class CreateAccountViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = registerAccountResult.error,
                         ),
                     )
                 }
@@ -464,6 +465,7 @@ sealed class CreateAccountDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : CreateAccountDialog()
 }
 

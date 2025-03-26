@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.ui.platform.composition
 
+import android.app.Activity
 import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
@@ -30,35 +31,53 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManagerImpl
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 
 /**
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].
  */
 @Composable
 fun LocalManagerProvider(
+    featureFlagsState: FeatureFlagsState,
+    activity: Activity = requireNotNull(LocalActivity.current),
+    appResumeStateManager: AppResumeStateManager = AppResumeStateManagerImpl(),
+    appReviewManager: AppReviewManager = AppReviewManagerImpl(activity = activity),
+    biometricsManager: BiometricsManager = BiometricsManagerImpl(activity = activity),
+    exitManager: ExitManager = ExitManagerImpl(activity = activity),
+    intentManager: IntentManager = IntentManagerImpl(context = activity),
+    fido2CompletionManager: Fido2CompletionManager = createFido2CompletionManager(
+        activity = activity,
+        intentManager = intentManager,
+    ),
+    keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
+    nfcManager: NfcManager = NfcManagerImpl(activity = activity),
+    permissionsManager: PermissionsManager = PermissionsManagerImpl(activity = activity),
     content: @Composable () -> Unit,
 ) {
-    val activity = requireNotNull(LocalActivity.current)
-    val fido2IntentManager: IntentManager = IntentManagerImpl(activity)
-    val fido2CompletionManager = if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+    CompositionLocalProvider(
+        LocalFeatureFlagsState provides featureFlagsState,
+        LocalAppResumeStateManager provides appResumeStateManager,
+        LocalAppReviewManager provides appReviewManager,
+        LocalBiometricsManager provides biometricsManager,
+        LocalExitManager provides exitManager,
+        LocalFido2CompletionManager provides fido2CompletionManager,
+        LocalIntentManager provides intentManager,
+        LocalKeyChainManager provides keyChainManager,
+        LocalNfcManager provides nfcManager,
+        LocalPermissionsManager provides permissionsManager,
+        content = content,
+    )
+}
+
+private fun createFido2CompletionManager(
+    activity: Activity,
+    intentManager: IntentManager,
+): Fido2CompletionManager =
+    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         Fido2CompletionManagerUnsupportedApiImpl
     } else {
-        Fido2CompletionManagerImpl(activity, fido2IntentManager)
+        Fido2CompletionManagerImpl(activity, intentManager)
     }
-    CompositionLocalProvider(
-        LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides fido2IntentManager,
-        LocalExitManager provides ExitManagerImpl(activity),
-        LocalBiometricsManager provides BiometricsManagerImpl(activity),
-        LocalNfcManager provides NfcManagerImpl(activity),
-        LocalFido2CompletionManager provides fido2CompletionManager,
-        LocalAppReviewManager provides AppReviewManagerImpl(activity),
-        LocalAppResumeStateManager provides AppResumeStateManagerImpl(),
-        LocalKeyChainManager provides KeyChainManagerImpl(activity),
-    ) {
-        content()
-    }
-}
 
 /**
  * Provides access to the biometrics manager throughout the app.
@@ -72,6 +91,13 @@ val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = comp
  */
 val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
     error("CompositionLocal ExitManager not present")
+}
+
+/**
+ * Provides access to the feature flags throughout the app.
+ */
+val LocalFeatureFlagsState: ProvidableCompositionLocal<FeatureFlagsState> = compositionLocalOf {
+    error("CompositionLocal FeatureFlagsState not present")
 }
 
 /**

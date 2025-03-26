@@ -15,5 +15,5 @@ sealed class CreateFolderResult {
     /**
      * Generic error while creating a folder.
      */
-    data object Error : CreateFolderResult()
+    data class Error(val error: Throwable) : CreateFolderResult()
 }

@@ -98,7 +98,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val showSshKeys = featureFlagManager.getFeatureFlag(FlagKey.SshKeyCipherItems)
         VaultState(
             appBarTitle = appBarTitle,
             initials = activeAccountSummary.initials,
@@ -113,7 +112,6 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
-            showSshKeys = showSshKeys,
         )
     },
 ) {
@@ -141,15 +139,9 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        combine(
-            vaultRepository.vaultDataStateFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems),
-        ) { vaultData, sshKeyCipherItemsEnabled ->
-            VaultAction.Internal.VaultDataReceive(
-                vaultData = vaultData,
-                showSshKeys = sshKeyCipherItemsEnabled,
-            )
-        }
+        vaultRepository
+            .vaultDataStateFlow
+            .map { VaultAction.Internal.VaultDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -266,7 +258,6 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
@@ -336,7 +327,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {
@@ -383,7 +374,7 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleExitConfirmationClick() {
@@ -405,7 +396,6 @@ class VaultViewModel @Inject constructor(
         // Re-process the current vault data with the new filter
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
@@ -694,22 +684,19 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = action.vaultData,
-            showSshKeys = action.showSshKeys,
         )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>, showSshKeys: Boolean) {
+    private fun updateViewState(vaultData: DataState<VaultData>) {
         when (vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(
                 vaultData = vaultData,
-                showSshKeys = showSshKeys,
             )
 
             is DataState.Loading -> vaultLoadingReceive()
             is DataState.NoNetwork -> vaultNoNetworkReceive(
                 vaultData = vaultData,
-                showSshKeys = showSshKeys,
             )
 
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
@@ -730,7 +717,7 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>, showSshKeys: Boolean) {
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(
                 VaultEvent.ShowToast(
@@ -738,12 +725,11 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
-        updateVaultState(vaultData.data, showSshKeys)
+        updateVaultState(vaultData.data)
     }
 
     private fun updateVaultState(
         vaultData: VaultData,
-        showSshKeys: Boolean,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -753,11 +739,9 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = showSshKeys,
                 ),
                 dialog = null,
                 isRefreshing = false,
-                showSshKeys = showSshKeys,
             )
         }
     }
@@ -768,7 +752,6 @@ class VaultViewModel @Inject constructor(
 
     private fun vaultNoNetworkReceive(
         vaultData: DataState.NoNetwork<VaultData>,
-        showSshKeys: Boolean,
     ) {
         val data = vaultData.data ?: VaultData(
             cipherViewList = emptyList(),
@@ -778,7 +761,6 @@ class VaultViewModel @Inject constructor(
         )
         updateVaultState(
             vaultData = data,
-            showSshKeys = showSshKeys,
         )
     }
 
@@ -791,7 +773,6 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = state.showSshKeys,
                 ),
             )
         }
@@ -801,12 +782,13 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.ValidatePasswordResultReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -862,7 +844,6 @@ data class VaultState(
     val isIconLoadingDisabled: Boolean,
     val isRefreshing: Boolean,
     val showImportActionCard: Boolean,
-    val showSshKeys: Boolean,
 ) : Parcelable {
 
     /**
@@ -1185,6 +1166,7 @@ data class VaultState(
         data class Error(
             val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
     }
 }
@@ -1486,7 +1468,6 @@ sealed class VaultAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
-            val showSshKeys: Boolean,
         ) : Internal()
 
         /**
@@ -1527,7 +1508,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
-                    showSshKeys = it.showSshKeys,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

@@ -223,6 +223,7 @@ private fun TrustedDeviceDialogs(
         is TrustedDeviceState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = handlers.onDismissDialog,
         )
 

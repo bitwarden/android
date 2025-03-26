@@ -38,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.components.ListItemContent
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
 
 /**
  * Top level screen for the debug menu.
@@ -136,7 +138,7 @@ fun DebugMenuScreen(
 
 @Composable
 private fun FeatureFlagContent(
-    featureFlagMap: Map<FlagKey<Any>, Any>,
+    featureFlagMap: ImmutableMap<FlagKey<Any>, Any>,
     onValueChange: (key: FlagKey<Any>, value: Any) -> Unit,
     onResetValues: () -> Unit,
     modifier: Modifier = Modifier,
@@ -238,7 +240,7 @@ private fun OnboardingOverrideContent(
 private fun FeatureFlagContent_preview() {
     BitwardenTheme {
         FeatureFlagContent(
-            featureFlagMap = mapOf(
+            featureFlagMap = persistentMapOf(
                 FlagKey.EmailVerification to true,
                 FlagKey.OnboardingCarousel to true,
                 FlagKey.OnboardingFlow to false,

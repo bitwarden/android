@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,9 +67,7 @@ fun BitwardenPinDialog(
                 autoFocus = true,
                 passwordFieldTestTag = "AlertInputField",
                 cardStyle = CardStyle.Full,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .imePadding(),
+                modifier = Modifier.fillMaxWidth(),
             )
         },
         shape = BitwardenTheme.shapes.dialog,

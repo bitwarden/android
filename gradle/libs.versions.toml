@@ -5,14 +5,15 @@
 compileSdk = "35"
 targetSdk = "35"
 minSdk = "29"
+minSdkBwa = "28"
 
 # Dependency Versions
-androidGradlePlugin = "8.8.1"
-androidxActivity = "1.10.0"
+androidGradlePlugin = "8.9.0"
+androidxActivity = "1.10.1"
 androidXBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.8.0"
 androidxCamera = "1.4.1"
-androidxComposeBom = "2025.02.00"
+androidxComposeBom = "2025.03.00"
 androidxCore = "1.15.0"
 # Versions >= 1.5.0-alpha05 introduce breaking changes and bugs that are not suitable for
 # production. Do not update until https://issuetracker.google.com/issues/355141766 is resolved.
@@ -23,31 +24,39 @@ androidxNavigation = "2.8.0"
 androidxRoom = "2.6.1"
 androidXSecurityCrypto = "1.1.0-alpha06"
 androidxSplash = "1.1.0-rc01"
+androidxTest = "1.6.2"
+androidxTestRules = "1.6.1"
 androidXAppCompat = "1.7.0"
 androdixAutofill = "1.1.0"
 androidxWork = "2.10.0"
-bitwardenSdk = "1.0.0-20250213.181812-113"
+bitwardenSdk = "1.0.0-20250225.125021-120"
 crashlytics = "3.0.3"
-detekt = "1.23.7"
-firebaseBom = "33.9.0"
+detekt = "1.23.8"
+firebaseBom = "33.11.0"
+espresso = "3.6.1"
+fastlaneScreengrab = "2.1.1"
 glide = "1.0.0-beta01"
+googleGuava = "33.4.0-jre"
+googleProtoBufJava = "4.30.1"
+googleProtoBufPlugin = "0.9.4"
 googleServices = "4.4.2"
 googleReview = "2.0.2"
 hilt = "2.55"
-junit5 = "5.11.3"
+junit5 = "5.12.1"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 kotlinxCollectionsImmutable = "0.3.8"
 kotlinxCoroutines = "1.10.1"
 kotlinxSerialization = "1.8.0"
 kotlinxKover = "0.9.1"
-ksp = "2.1.0-1.0.29"
-mockk = "1.13.13"
+ksp = "2.1.10-1.0.30"
+mockk = "1.13.17"
 okhttp = "4.12.0"
 retrofitBom = "2.11.0"
 robolectric = "4.14.1"
 sonarqube = "6.0.1.5171"
+testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.0"
 zxcvbn4j = "1.9.0"
@@ -66,6 +75,7 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material3-adaptive = { module = "androidx.compose.material3.adaptive:adaptive" }
 androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -86,25 +96,36 @@ androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidx
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidXSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTest" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
+androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android-temp", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+fastlane-screengrab = { module = "tools.fastlane:screengrab", version.ref = "fastlaneScreengrab" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-google-play-review = { module = "com.google.android.play:review", version.ref = "googleReview"}
-junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
-junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
+google-play-review = { module = "com.google.android.play:review", version.ref = "googleReview" }
+google-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "googleProtoBufJava" }
+# Included so that Renovate tracks updates since protoc is not referenced directly in `dependency {}` blocks.
+google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "googleProtoBufJava" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
+junit-junit5 = { module = "org.junit.jupiter:junit-jupiter" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+junit-vintage = { module = "org.junit.vintage:junit-vintage-engine" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 nulab-zxcvbn4j = { module = "com.nulab-inc:zxcvbn", version.ref = "zxcvbn4j" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
@@ -117,12 +138,14 @@ square-retrofit-kotlinx-serialization = { module = "com.squareup.retrofit2:conve
 square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
+testng = { group = "org.testng", name = "testng", version.ref = "testng" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

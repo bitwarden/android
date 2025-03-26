@@ -403,7 +403,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             fakeGeneratorRepository.setMockGeneratePasswordResult(
-                GeneratedPasswordResult.InvalidRequest,
+                GeneratedPasswordResult.InvalidRequest(error = Throwable("Fail")),
             )
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
@@ -465,7 +465,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialPassphraseState)
 
             fakeGeneratorRepository.setMockGeneratePassphraseResult(
-                GeneratedPassphraseResult.InvalidRequest,
+                GeneratedPassphraseResult.InvalidRequest(error = Throwable("Fail")),
             )
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
@@ -490,15 +490,14 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
-            val expectedState =
-                initialPasscodeState.copy(
-                    generatedText = "email+abcd1234@address.com",
-                    selectedType = GeneratorState.MainType.Username(
-                        GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
-                            email = "currentEmail",
-                        ),
+            val expectedState = initialPasscodeState.copy(
+                generatedText = "email+abcd1234@address.com",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
+                        email = "currentEmail",
                     ),
-                )
+                ),
+            )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -514,16 +513,37 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
-            val expectedState =
-                initialCatchAllEmailState.copy(
-                    generatedText = "DifferentUsername",
-                    selectedType = GeneratorState.MainType.Username(
-                        GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
-                            domainName = "defaultDomain",
+            val expectedState = initialCatchAllEmailState.copy(
+                generatedText = "DifferentUsername",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.CatchAllEmail(
+                        domainName = "defaultDomain",
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `RegenerateClick for catch all email state should update the catch all email correctly when domain name is blank`() =
+        runTest {
+            val initialState = createCatchAllEmailState(domain = "")
+            val viewModel = createViewModel(createSavedStateHandleWithState(initialState))
+            val expectedState = initialState.copy(generatedText = "-")
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(GeneratorAction.RegenerateClick)
+                assertEquals(
+                    GeneratorEvent.ShowSnackbar(
+                        message = R.string.validation_field_required.asText(
+                            R.string.domain_name.asText(),
                         ),
                     ),
+                    awaitItem(),
                 )
-
+            }
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
@@ -539,13 +559,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
-            val expectedState =
-                initialCatchAllEmailState.copy(
-                    generatedText = "DifferentUsername",
-                    selectedType = GeneratorState.MainType.Username(
-                        GeneratorState.MainType.Username.UsernameType.RandomWord(),
-                    ),
-                )
+            val expectedState = initialCatchAllEmailState.copy(
+                generatedText = "DifferentUsername",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.RandomWord(),
+                ),
+            )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }

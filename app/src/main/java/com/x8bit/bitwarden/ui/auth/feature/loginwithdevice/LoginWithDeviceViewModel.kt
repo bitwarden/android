@@ -153,6 +153,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -235,6 +236,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -478,6 +480,7 @@ data class LoginWithDeviceState(
         @Parcelize
         data class Error(
             val title: Text? = null,
+            val error: Throwable? = null,
             val message: Text,
         ) : DialogState()
     }

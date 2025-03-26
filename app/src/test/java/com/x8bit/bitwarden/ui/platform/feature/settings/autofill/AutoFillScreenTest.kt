@@ -55,13 +55,14 @@ class AutoFillScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AutoFillScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
-                viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                viewModel = viewModel,
             )
         }
     }

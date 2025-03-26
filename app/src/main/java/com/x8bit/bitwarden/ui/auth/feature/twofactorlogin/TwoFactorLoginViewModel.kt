@@ -189,10 +189,12 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Update the state with the new text and enable or disable the continue button.
      */
     private fun handleCodeInputChanged(action: TwoFactorLoginAction.CodeInputChanged) {
+        @Suppress("MagicNumber")
+        val minLength = if (state.isNewDeviceVerification) 8 else 6
         mutableStateFlow.update {
             it.copy(
                 codeInput = action.input,
-                isContinueButtonEnabled = action.input.length >= 6,
+                isContinueButtonEnabled = action.input.length >= minLength,
             )
         }
     }
@@ -306,6 +308,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.invalid_verification_code.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -427,7 +430,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
 
-        when (action.resendEmailResult) {
+        when (val result = action.resendEmailResult) {
             // Display a dialog for an error result.
             is ResendEmailResult.Error -> {
                 mutableStateFlow.update {
@@ -435,6 +438,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -656,6 +660,7 @@ data class TwoFactorLoginState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

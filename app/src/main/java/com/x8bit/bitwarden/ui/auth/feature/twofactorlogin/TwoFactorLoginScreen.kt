@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -202,6 +201,7 @@ private fun TwoFactorLoginDialogs(
                 ?.invoke()
                 ?: stringResource(R.string.an_error_has_occurred),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = onDismissRequest,
         )
 
@@ -226,10 +226,9 @@ private fun TwoFactorLoginScreenContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-        if (state.authMethod == TwoFactorAuthMethod.EMAIL) {
+        if (state.authMethod != TwoFactorAuthMethod.YUBI_KEY) {
             state.imageRes?.let {
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(
@@ -237,7 +236,7 @@ private fun TwoFactorLoginScreenContent(
                     contentDescription = null,
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .size(100.dp),
+                        .size(124.dp),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -261,7 +260,7 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
+        if (state.authMethod == TwoFactorAuthMethod.YUBI_KEY) {
             state.imageRes?.let {
                 Spacer(modifier = Modifier.height(12.dp))
                 Image(

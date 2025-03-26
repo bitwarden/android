@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
   <string name="about">О Bitwarden</string>
   <string name="add">Добавить</string>
-  <string name="add_folder">Добавление папки</string>
+  <string name="add_folder">Добавить папку</string>
   <string name="add_item">Добавить элемент</string>
   <string name="an_error_has_occurred">Произошла ошибка.</string>
   <string name="back">Назад</string>
@@ -111,7 +111,7 @@
   <string name="edit_item">Изменение элемента</string>
   <string name="edit_login">Изменить логин</string>
   <string name="edit_card">Редактировать карту</string>
-  <string name="edit_identity">Редактировать личные данные</string>
+  <string name="edit_identity">Редактировать личность</string>
   <string name="edit_note">Редактировать заметку</string>
   <string name="edit_passkey">Редактировать passkey</string>
   <string name="enable_automatic_syncing">Разрешить автоматическую синхронизацию</string>
@@ -146,7 +146,7 @@
   <string name="vault_timeout_action">Действие по тайм-ауту хранилища</string>
   <string name="vault_timeout_log_out_confirmation">По истечении тайм-аута будет выполнен выход, что приведет к отмене всех прав доступа к вашему хранилищу и потребует онлайн-аутентификации. Вы уверены, что хотите использовать этот параметр?</string>
   <string name="logging_in">Вход...</string>
-  <string name="login_to_bitwarden">Войдите на Bitwarden</string>
+  <string name="login_to_bitwarden">Войти в Bitwarden</string>
   <string name="manage">Управление</string>
   <string name="master_password_confirmation_val_message">Неверное подтверждение пароля.</string>
   <string name="master_password_description">Мастер-пароль – это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</string>
@@ -165,8 +165,8 @@
   <string name="no_cards">В вашем хранилище нет карт.</string>
   <string name="new_card">Новая карта</string>
   <string name="no_logins">В вашем хранилище нет логинов.</string>
-  <string name="no_identities">В вашем хранилище нет личных данных.</string>
-  <string name="new_identity">Новое удостоверение личности</string>
+  <string name="no_identities">В вашем хранилище нет личностей.</string>
+  <string name="new_identity">Новая личность</string>
   <string name="no_notes">В вашем хранилище нет заметок.</string>
   <string name="new_note">Новая заметка</string>
   <string name="new_passkey">Новый passkey</string>
@@ -217,7 +217,7 @@
   <string name="view_item">Просмотр элемента</string>
   <string name="view_login">Просмотр логина</string>
   <string name="view_card">Просмотр карты</string>
-  <string name="view_identity">Просмотр личных данных</string>
+  <string name="view_identity">Просмотр личности</string>
   <string name="view_note">Просмотр заметки</string>
   <string name="view_passkey">Просмотр passkey</string>
   <string name="web_vault">Веб-хранилище Bitwarden</string>
@@ -259,7 +259,7 @@
   <string name="recovery_code_title">Код восстановления</string>
   <string name="remember">Запомнить</string>
   <string name="remember_email">Запомнить email</string>
-  <string name="send_verification_code_again">Отправить код подтверждения еще раз</string>
+  <string name="send_verification_code_again">Отправить код повторно</string>
   <string name="two_step_login_options">Настройки двухэтапной аутентификации</string>
   <string name="use_another_two_step_method">Использовать другой метод двухэтапной аутентификации</string>
   <string name="verification_email_not_sent">Не удалось отправить письмо подтверждения. Повторить.</string>
@@ -272,7 +272,7 @@
   <string name="unable_to_open_file">Устройство не может открыть файл этого типа.</string>
   <string name="downloading">Загрузка...</string>
   <string name="attachment_large_warning">Размер этого вложения - %1$s. Вы действительно хотите загрузить его на устройство?</string>
-  <string name="authenticator_key">Ключ аутентификатора (TOTP)</string>
+  <string name="authenticator_key">Ключ аутентификатора</string>
   <string name="verification_code_totp">Код подтверждения (TOTP)</string>
   <string name="authenticator_key_added">Ключ аутентификатора добавлен.</string>
   <string name="authenticator_key_read_error">Не удается прочитать ключ аутентификатора.</string>
@@ -317,7 +317,7 @@
   <string name="number">Номер</string>
   <string name="security_code">Код безопасности</string>
   <string name="type_card">Карта</string>
-  <string name="type_identity">Личная информация</string>
+  <string name="type_identity">Личность</string>
   <string name="type_login">Логин</string>
   <string name="type_secure_note">Защищенная заметка</string>
   <string name="address1">Строка адреса 1</string>
@@ -362,7 +362,7 @@
   <string name="address">Адрес</string>
   <string name="expiration">Срок действия</string>
   <string name="show_website_icons">Показать значки сайтов</string>
-  <string name="show_website_icons_description">Отображать узнаваемое изображение рядом с каждым логином.</string>
+  <string name="show_website_icons_description">Отображать узнаваемое изображение рядом с каждым логином</string>
   <string name="icons_url">URL сервера значков</string>
   <string name="autofill_with_bitwarden">Автозаполнение Bitwarden</string>
   <string name="vault_is_locked">Хранилище заблокировано</string>
@@ -497,7 +497,7 @@
   <string name="default_uri_match_detection">Обнаружение совпадения URI по умолчанию</string>
   <string name="default_uri_match_detection_description">Выберите стандартный способ определения соответствия URI для логинов при выполнении таких действий, как автоматическое заполнение.</string>
   <string name="theme">Тема</string>
-  <string name="theme_description">Изменение цветовой темы приложения.</string>
+  <string name="theme_description">Изменение цветовой темы приложения</string>
   <string name="theme_default">По умолчанию (системная)</string>
   <string name="default_dark_theme">Темная тема по умолчанию</string>
   <string name="copy_notes">Скопировать заметку</string>
@@ -989,7 +989,7 @@
   <string name="user_verification_direction">Верификация пользователя</string>
   <string name="create_account_on">Создать аккаунт на</string>
   <string name="create_account_on_with_colon">Создать аккаунт на:</string>
-  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям в письме, отправленном на %1$s, чтобы продолжить создание аккаунта.</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям из письма, отправленного <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, чтобы продолжить создание аккаунта.</string>
   <string name="we_sent_an_email_to">Мы отправили письмо <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
   <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">При активации этого переключателя, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
@@ -1106,7 +1106,6 @@
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">Сохраните экспортированный файл</annotation> на компьютере, где его можно будет легко найти.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Этот сервер Bitwarden не распознан. Возможно вам следует связаться с провайдером или изменить свой сервер.</string>
   <string name="syncing_logins_loading_message">Синхронизация логинов...</string>
-  <string name="ssh_key_cipher_item_types">Типы элементов ключей шифрования SSH</string>
   <string name="download_the_browser_extension">Скачать расширение браузера</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Перейдите на bitwarden.com/download для интеграции Bitwarden в ваш любимый браузер для удобной работы.</string>
   <string name="use_the_web_app">Использовать веб-приложение</string>
@@ -1194,7 +1193,7 @@
   <string name="coachmark_4_of_6">4 ИЗ 6</string>
   <string name="coachmark_5_of_6">5 ИЗ 6</string>
   <string name="coachmark_6_of_6">6 ИЗ 6</string>
-  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Используйте эти параметры, чтобы настроить пароль в соответствии с требованиями вашего аккаунта.</string>
+  <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Используйте эти параметры, чтобы настроить пароль в соответствии с требованиями сайтов для вашего аккаунта.</string>
   <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"После того как вы сохраните новый пароль в Bitwarden, не забудьте обновить его на сайте вашего аккаунта. "</string>
   <string name="verify_your_identity">Подтвердите вашу личность</string>
   <string name="error_loading_certificate">Ошибка загрузки сертификата</string>
@@ -1210,11 +1209,11 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Использование системного сертификата менее безопасно, чем хранение сертификата в Bitwarden. При продолжении появится список доступных системных сертификатов, если один из них уже установлен.</string>
   <string name="certificate_alias_already_exists">Псевдоним сертификата уже существует</string>
   <string name="link">Ссылка</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
+  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Операция с Passkey не удалась, поскольку приложение подписано неверно.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операция с Passkey не удалась, поскольку URL хоста отсутствует в запросе.</string>
-  <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
+  <string name="passkey_operation_failed_because_app_signature_is_invalid">Операция с Passkey не удалась, поскольку подпись приложения недействительна.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Регистрация Passkey не удалась из-за внутренней ошибки.</string>
-  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
+  <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операция с Passkey не удалась, поскольку не удалось идентифицировать доверяющую сторону.</string>
   <string name="passkey_authentication_failed_due_to_an_internal_error">Аутентификация Passkey не удалась из-за внутренней ошибки.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Операция с Passkey не удалась, поскольку выбранный элемент не существует.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Операция с Passkey не удалась, поскольку пользователь заблокирован.</string>
@@ -1223,4 +1222,13 @@
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операция с Passkey не удалась, поскольку превышено количество попыток верификации пользователя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
   <string name="self_host_server_url">URL собственного сервера</string>
+  <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
+  <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome (Beta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Улучшает заполнение логина на поддерживаемых сайтах в Chrome. После включения вы будете направлены в настройки Chrome, чтобы включить автозаполнение сторонних сайтов.</string>
+  <string name="show_more">Больше</string>
+  <string name="no_folder">Без папки</string>
+  <string name="show_less">Меньше</string>
+  <string name="add_field">Добавить поле</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Поделиться информацией об ошибке</string>
 </resources>

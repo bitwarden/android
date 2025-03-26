@@ -1,9 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -110,31 +108,17 @@ class AboutViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on VersionClick should call setText on the ClipboardManager with specific Text`() {
-        val versionName = BuildConfig.VERSION_NAME
-        val versionCode = BuildConfig.VERSION_CODE
-
-        val deviceBrandModel = "\uD83D\uDCF1 ${Build.BRAND} ${Build.MODEL}"
-        val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
-        val buildInfo = "\uD83D\uDCE6 dev"
-        val ciInfo = BuildConfig.CI_INFO
-
-        val expectedText = "© Bitwarden Inc. 2015-"
-            .asText()
-            .concat(Year.now(fixedClock).value.toString().asText())
+        val state = DEFAULT_ABOUT_STATE
+        val expectedText = state.copyrightInfo
             .concat("\n\n".asText())
-            .concat("Version: $versionName ($versionCode)".asText())
+            .concat(state.version)
             .concat("\n".asText())
-            .concat("$deviceBrandModel $osInfo $buildInfo".asText())
-            .concat(
-                "\n$ciInfo"
-                    .takeUnless { ciInfo.isEmpty() }
-                    .orEmpty()
-                    .asText(),
-            )
+            .concat(state.deviceData)
+            .concat(state.ciData)
 
         every { clipboardManager.setText(expectedText, true, null) } just runs
 
-        val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
+        val viewModel = createViewModel(state)
         viewModel.trySendAction(AboutAction.VersionClick)
 
         verify(exactly = 1) {
@@ -175,10 +159,10 @@ private val fixedClock = Clock.fixed(
     ZoneId.systemDefault(),
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
-    version = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText(),
+    version = "Version: <version_name> (<version_code>)".asText(),
+    deviceData = "<device_data>".asText(),
+    ciData = "\n<ci_info>".asText(),
     isSubmitCrashLogsEnabled = false,
-    copyrightInfo = "© Bitwarden Inc. 2015-"
-        .asText()
-        .concat(Year.now(fixedClock).value.toString().asText()),
+    copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(fixedClock).value}".asText(),
     shouldShowCrashLogsButton = true,
 )

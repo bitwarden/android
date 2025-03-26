@@ -67,7 +67,17 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 import javax.crypto.Cipher
+
+/**
+ * Time slice to delay auto-focusing on the password/pin field. Because of the refresh that
+ * takes place when switching accounts or changing the lock status we want to delay this
+ * longer than the delay in place for sending those actions in [com.x8bit.bitwarden.MainViewModel]
+ * defined by `ANIMATION_REFRESH_DELAY`. We need to  ensure this value is
+ * always greater.
+ */
+private const val AUTO_FOCUS_DELAY = 575L
 
 /**
  * The top level composable for the Vault Unlock screen.
@@ -146,6 +156,7 @@ fun VaultUnlockScreen(
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
             },
+            throwable = dialog.throwable,
         )
 
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
@@ -251,6 +262,18 @@ fun VaultUnlockScreen(
         ) {
             Spacer(modifier = Modifier.height(12.dp))
             if (!state.hideInput) {
+                // When switching from an unlocked account to a locked account, the
+                // current activity is recreated and therefore the composition takes place
+                // twice. Adding this delay prevents the MP or Pin field
+                // from auto focusing on the first composition which creates a visual jank where
+                // the keyboard shows, disappears, and then shows again.
+                var autoFocusDelayCompleted by rememberSaveable {
+                    mutableStateOf(false)
+                }
+                LaunchedEffect(Unit) {
+                    delay(AUTO_FOCUS_DELAY)
+                    autoFocusDelayCompleted = true
+                }
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
                     value = state.input,
@@ -261,7 +284,7 @@ fun VaultUnlockScreen(
                     showPasswordTestTag = state
                         .vaultUnlockType
                         .inputFieldVisibilityToggleTestTag,
-                    autoFocus = state.showKeyboard,
+                    autoFocus = state.showKeyboard && autoFocusDelayCompleted,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
                         onDone = remember(viewModel) {

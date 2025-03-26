@@ -70,15 +70,16 @@ class SearchScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            appResumeStateManager = appResumeStateManager,
+            intentManager = intentManager,
+        ) {
             SearchScreen(
                 viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
                 onNavigateToEditCipher = { onNavigateToEditCipherArgs = it },
                 onNavigateToViewCipher = { onNavigateToViewCipherArgs = it },
-                appResumeStateManager = appResumeStateManager,
             )
         }
     }

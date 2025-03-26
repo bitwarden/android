@@ -187,7 +187,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> Unit
+            is PasswordStrengthResult.Error -> Unit
         }
     }
 
@@ -210,6 +210,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = registerAccountResult.error,
                         ),
                     )
                 }
@@ -525,6 +526,7 @@ sealed class CompleteRegistrationDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : CompleteRegistrationDialog()
 }
 

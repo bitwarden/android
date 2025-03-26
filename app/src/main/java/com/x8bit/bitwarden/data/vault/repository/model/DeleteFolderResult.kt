@@ -13,5 +13,5 @@ sealed class DeleteFolderResult {
     /**
      * Generic error while deleting a folder.
      */
-    data object Error : DeleteFolderResult()
+    data class Error(val error: Throwable) : DeleteFolderResult()
 }

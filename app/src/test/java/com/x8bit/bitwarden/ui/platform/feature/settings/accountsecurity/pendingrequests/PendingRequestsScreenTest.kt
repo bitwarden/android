@@ -55,12 +55,13 @@ class PendingRequestsScreenTest : BaseComposeTest() {
         mockkStatic(::isBuildVersionBelow)
         every { isFdroid } returns false
         every { isBuildVersionBelow(any()) } returns false
-        composeTestRule.setContent {
+        setContent(
+            permissionsManager = permissionsManager,
+        ) {
             PendingRequestsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLoginApproval = { _ -> onNavigateToLoginApprovalCalled = true },
                 viewModel = viewModel,
-                permissionsManager = permissionsManager,
             )
         }
     }

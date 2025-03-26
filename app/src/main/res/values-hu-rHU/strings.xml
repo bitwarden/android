@@ -49,7 +49,7 @@
   <string name="account_already_added">A fiók már hozzáadásra került.</string>
   <string name="switch_to_already_added_account_confirmation">Szeretnénk most átkapcsolni erre?</string>
   <string name="master_password">Mesterjelszó</string>
-  <string name="master_password_required">Master password (required)</string>
+  <string name="master_password_required">Mesterjelszó (kötelező)</string>
   <string name="new_master_password_required">Új mesterjelszó (kötelező)</string>
   <string name="more">Továbbiak</string>
   <string name="my_vault">Saját széf</string>
@@ -194,7 +194,7 @@
   <string name="regenerate_password">Jelszó újragenerálása</string>
   <string name="retype_master_password">Mesterjelszó ismételt beírása</string>
   <string name="retype_new_master_password_required">Az új mesterjelszó ismételt megadása (kötelező)</string>
-  <string name="retype_master_password_required">Re-type master password (required)</string>
+  <string name="retype_master_password_required">Adja meg újra a mesterjelszót (kötelező)</string>
   <string name="search_vault">Keresés a széfben</string>
   <string name="security">Biztonság</string>
   <string name="select">Kijelölés</string>
@@ -600,7 +600,7 @@
   <string name="draw_over_description3">Engedélyezve a a Kisegítő felbukkanó ablakot jelenít meg az Automatikus Kitöltési Szolgáltatás kibővítéséhez olyan régebbi alkalmazások számára, amelyek nem támogatják az Android automatikus kitöltés keretrendszerét.</string>
   <string name="personal_ownership_submit_error">Egy vállalati házirend miatt korlátozható az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül.</string>
   <string name="personal_ownership_policy_in_effect">Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</string>
-  <string name="send">Send</string>
+  <string name="send">Küldés</string>
   <string name="send_details">Send részletek</string>
   <string name="all_sends">Összes Send</string>
   <string name="sends">Küldések</string>
@@ -1103,7 +1103,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily">Mentsük el az exportált fájlt olyan helyre a számítógépen, ahol könnyen megtalálhatjuk.</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">Ez nem egy felismert Bitwarden szerver. Konzultálhatunk a szolgáltatóval vagy frissítsük a szervert.</string>
   <string name="syncing_logins_loading_message">Bejelentkezések szinkronizálása...</string>
-  <string name="ssh_key_cipher_item_types">SSH Key Cipher Item Types</string>
   <string name="download_the_browser_extension">Böngésző bővítmény letöltése</string>
   <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">Keressük fel  a bitwarden.com/download webhelyet és integráljuk a Bitwardent kedvenc böngészőbe a zökkenőmentes élmény érdekében.</string>
   <string name="use_the_web_app">Webalkalmazás használata</string>
@@ -1220,4 +1219,13 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzések száma átlépésre került.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
   <string name="self_host_server_url">Saját üzemeltetésű szerver webcím</string>
+  <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
+  <string name="use_chrome_beta_autofill_integration">Chrome automatikus kitöltés integráció használata (Béta)</string>
+  <string name="improves_login_filling_for_supported_websites_on_chrome">Javítja a bejelentkezési adatok kitöltését a támogatott webhelyeken a Chrome-ban. Az engedélyezést követően a Chrome beállításaiba kerülünk, ahol engedélyezhetjük a harmadik féltől származó automatikus kitöltést.</string>
+  <string name="show_more">Több megjelenítése</string>
+  <string name="no_folder">Nincs mappa</string>
+  <string name="show_less">Kevesebb megjelenítése</string>
+  <string name="add_field">Mező hozzáadása</string>
+  <string name="x_ellipses">%s...</string>
+  <string name="share_error_details">Hiba részletek megosztása</string>
 </resources>

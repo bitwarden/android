@@ -38,7 +38,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             OtherScreen(
                 viewModel = viewModel,
                 onNavigateBack = { haveCalledNavigateBack = true },

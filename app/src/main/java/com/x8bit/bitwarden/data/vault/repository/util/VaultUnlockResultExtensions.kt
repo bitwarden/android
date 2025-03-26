@@ -11,6 +11,7 @@ fun InitializeCryptoResult.toVaultUnlockResult(): VaultUnlockResult =
         is InitializeCryptoResult.AuthenticationError -> {
             VaultUnlockResult.AuthenticationError(
                 message = this.message,
+                error = error,
             )
         }
 
