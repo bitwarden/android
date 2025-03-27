@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bitwardenBoldSpanStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin

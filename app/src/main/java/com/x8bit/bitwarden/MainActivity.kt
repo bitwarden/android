@@ -18,10 +18,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect

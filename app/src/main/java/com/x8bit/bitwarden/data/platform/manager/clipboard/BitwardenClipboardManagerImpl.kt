@@ -11,8 +11,8 @@ import androidx.core.os.persistableBundleOf
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString

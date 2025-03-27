@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val VAULT_MOVE_TO_ORGANIZATION_PREFIX = "vault_move_to_organization"

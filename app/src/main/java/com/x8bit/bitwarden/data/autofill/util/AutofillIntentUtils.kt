@@ -11,13 +11,13 @@ import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
 import kotlin.random.Random
 

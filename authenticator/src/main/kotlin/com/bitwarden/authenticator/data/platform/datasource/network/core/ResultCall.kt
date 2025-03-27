@@ -2,9 +2,9 @@
 
 package com.bitwarden.authenticator.data.platform.datasource.network.core
 
-import com.bitwarden.authenticator.data.platform.annotation.OmitFromCoverage
 import com.bitwarden.authenticator.data.platform.util.asFailure
 import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.core.annotation.OmitFromCoverage
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout

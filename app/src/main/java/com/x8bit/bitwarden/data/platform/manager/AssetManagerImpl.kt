@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.content.Context
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import kotlinx.coroutines.withContext
 
