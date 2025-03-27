@@ -78,6 +78,7 @@ class VaultItemViewModel @Inject constructor(
             vaultItemId = args.vaultItemId,
             cipherType = args.cipherType,
             viewState = VaultItemState.ViewState.Loading,
+            totpCodeItemData = null,
             dialog = null,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -101,7 +102,6 @@ class VaultItemViewModel @Inject constructor(
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
-            vaultRepository.getAuthCodeFlow(state.vaultItemId),
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
         ) { cipherViewState, userState, collectionsState, folderState ->
