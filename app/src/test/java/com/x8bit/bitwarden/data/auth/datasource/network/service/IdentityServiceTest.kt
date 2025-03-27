@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.core.data.util.asSuccess
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedIdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
