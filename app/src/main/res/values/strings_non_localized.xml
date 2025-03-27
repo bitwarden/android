@@ -30,5 +30,6 @@
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>
     <string name="enable_chrome_autofill">Enable chrome autofill</string>
     <string name="enable_error_reporting_dialog">Enable error reporting dialog</string>
+    <string name="enable_flight_recorder">Enable flight recorder</string>
     <!-- /Debug Menu -->
 </resources>
