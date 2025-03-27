@@ -34,4 +34,10 @@ android {
     }
 }
 
-dependencies { }
+dependencies {
+    implementation(libs.kotlinx.serialization)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.vintage)
+}

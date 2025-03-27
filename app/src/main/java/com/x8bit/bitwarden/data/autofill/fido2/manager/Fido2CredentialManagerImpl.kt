@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.provider.CallingAppInfo
+import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
