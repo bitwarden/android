@@ -165,6 +165,17 @@ class EnvironmentUrlsDataJsonExtensionsTest {
     }
 
     @Test
+    fun `baseWebSendUrl should return the default when webvault matches default webvault`() {
+        val result = DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
+            .copy(
+                webVault = "https://vault.bitwarden.com",
+                base = "",
+            )
+            .baseWebSendUrl
+        assertEquals("https://send.bitwarden.com/#", result)
+    }
+
+    @Test
     fun `labelOrBaseUrlHost should correctly convert US environment to the correct label`() {
         val environment = EnvironmentUrlDataJson.DEFAULT_US
         assertEquals(

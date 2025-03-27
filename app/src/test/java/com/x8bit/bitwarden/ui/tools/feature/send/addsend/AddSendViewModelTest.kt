@@ -1062,7 +1062,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             selectedType = DEFAULT_SELECTED_TYPE_STATE,
         )
 
-        private const val DEFAULT_ENVIRONMENT_URL = "https://vault.bitwarden.com/#/send/"
+        private const val DEFAULT_ENVIRONMENT_URL = "https://send.bitwarden.com/#"
 
         private val DEFAULT_STATE = AddSendState(
             addSendType = AddSendType.AddItem,

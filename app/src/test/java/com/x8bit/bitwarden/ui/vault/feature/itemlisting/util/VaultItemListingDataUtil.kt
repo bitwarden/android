@@ -301,10 +301,10 @@ fun createMockDisplayItemForSend(
                 overflowOptions = listOf(
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
                     ),
                     ListingItemOverflowAction.SendAction.ShareUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
                     ),
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
@@ -344,10 +344,10 @@ fun createMockDisplayItemForSend(
                 overflowOptions = listOf(
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
                     ),
                     ListingItemOverflowAction.SendAction.ShareUrlClick(
-                        sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
+                        sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
                     ),
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
