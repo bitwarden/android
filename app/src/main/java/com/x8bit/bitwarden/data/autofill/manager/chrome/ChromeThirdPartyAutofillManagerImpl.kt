@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.data.autofill.manager.chrome
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 private const val CONTENT_PROVIDER_NAME = ".AutofillThirdPartyModeContentProvider"
 private const val THIRD_PARTY_MODE_COLUMN = "autofill_third_party_state"

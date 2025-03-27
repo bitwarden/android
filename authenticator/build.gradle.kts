@@ -153,6 +153,8 @@ dependencies {
 
     implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
 
+    implementation(project(":core"))
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.autofill)
@@ -239,7 +241,7 @@ kover {
                     // Compose previews
                     "androidx.compose.ui.tooling.preview.Preview",
                     // Manually excluded classes/files/etc.
-                    "com.bitwarden.authenticator.data.platform.annotation.OmitFromCoverage",
+                    "com.bitwarden.core.annotation.OmitFromCoverage",
                 )
                 classes(
                     // Navigation helpers

@@ -14,8 +14,8 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.CredentialProviderService
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

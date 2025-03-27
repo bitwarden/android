@@ -6,8 +6,8 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import javax.crypto.Cipher
 
 /**

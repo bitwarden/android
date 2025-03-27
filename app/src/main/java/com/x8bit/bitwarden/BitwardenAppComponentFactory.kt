@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.Keep
 import androidx.core.app.AppComponentFactory
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
 import com.x8bit.bitwarden.data.autofill.fido2.BitwardenFido2ProviderService
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenVaultTileService

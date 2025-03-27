@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val ENTERPRISE_SIGN_ON_PREFIX = "enterprise_sign_on "
