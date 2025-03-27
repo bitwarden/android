@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -33,7 +34,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map

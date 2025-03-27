@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -213,9 +213,10 @@ class VerificationCodeViewModel @Inject constructor(
         verificationCodeData:
         DataState.NoNetwork<List<VerificationCodeItem>>,
     ) {
-        if (verificationCodeData.data != null) {
+        val data = verificationCodeData.data
+        if (data != null) {
             updateStateWithVerificationCodeData(
-                verificationCodeData = verificationCodeData.data,
+                verificationCodeData = data,
                 clearDialogState = true,
             )
         } else {
@@ -261,9 +262,10 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun vaultErrorReceive(vaultData: DataState.Error<List<VerificationCodeItem>>) {
-        if (vaultData.data != null) {
+        val data = vaultData.data
+        if (data != null) {
             updateStateWithVerificationCodeData(
-                verificationCodeData = vaultData.data,
+                verificationCodeData = data,
                 clearDialogState = true,
             )
         } else {

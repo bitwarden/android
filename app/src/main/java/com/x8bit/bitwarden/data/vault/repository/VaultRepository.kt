@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -10,7 +11,6 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
