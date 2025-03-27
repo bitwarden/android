@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -19,6 +20,8 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+
+private const val SUCCESS_DIALOG_DELAY = 550L
 
 /**
  * View model for the [DeleteAccountScreen].
@@ -115,7 +118,17 @@ class DeleteAccountViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             DeleteAccountResult.Success -> {
-                updateDialogState(DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
+                viewModelScope.launch {
+                    // When deleting an account, the current activity is recreated and therefore
+                    // the composition takes place twice. Adding this delay prevents the dialog
+                    // from flashing when it is re-created.
+                    delay(timeMillis = SUCCESS_DIALOG_DELAY)
+                    sendAction(
+                        action = DeleteAccountAction.Internal.UpdateDialogState(
+                            dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess,
+                        ),
+                    )
+                }
             }
 
             is DeleteAccountResult.Error -> {
