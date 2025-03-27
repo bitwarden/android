@@ -571,6 +571,142 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.Island",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "D9:C3:39:AC:9C:3A:EE:E1:75:1D:85:8C:35:D9:BA:C5:CC:87:B3:CE:76:30:93:F0:F5:10:64:F5:A2:F6:9B:04"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.IslandCanary",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "90:17:13:23:45:6E:6F:39:CB:FD:CF:B2:56:BE:1D:CF:F3:BC:1C:59:8A:15:93:30:E4:97:73:D0:4C:B9:C9:05"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.IslandBeta",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "35:31:83:1A:9E:2B:21:1D:E6:AA:C3:69:4B:45:83:6E:56:09:B9:D7:D0:04:C3:1B:21:87:40:FB:77:17:38:D1"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.IslandDev",
+        "signatures": [
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.island.intune",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "C2:38:24:15:41:20:A0:8F:C3:95:42:AC:D8:2A:E9:24:94:78:80:1E:47:FD:6C:66:2B:18:1C:28:CA:7E:59:4E"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.island.canary.intune",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "1E:16:74:BB:79:EA:09:FB:37:CF:9F:1B:07:1B:1D:51:8D:46:03:0E:D3:EE:F2:C1:4E:AD:93:9E:C6:EE:3A:4C"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.island.beta.intune",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "D2:5E:AD:F6:1C:E6:36:6C:A4:23:A4:7F:C4:DB:9B:8C:9C:8A:35:B4:B0:19:E8:D9:82:FB:D0:8A:D9:DB:49:5A"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "io.island.island.dev.intune",
+        "signatures": [
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "6C:65:BD:B0:33:F5:CE:B1:74:09:EF:F9:99:48:D5:58:9F:55:63:9A:63:78:D5:A5:00:EB:95:FC:01:BC:6D:44"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "net.quetta.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "BE:FE:E7:31:12:6A:A5:6E:7E:FD:AE:AF:5E:F3:FA:EA:44:1C:19:CC:E0:CA:EC:42:6B:65:BB:F8:2C:59:46:80"
+          },
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "F1:38:00:4F:38:04:51:D4:8A:05:2B:B3:A3:EF:17:24:23:D4:B0:D0:C8:A3:AA:DD:FB:DB:66:30:31:48:EC:A4"
+          }
+        ]
+      }
     }
   ]
 }

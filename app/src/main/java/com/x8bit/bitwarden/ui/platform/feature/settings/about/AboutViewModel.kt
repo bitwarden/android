@@ -56,11 +56,9 @@ class AboutViewModel @Inject constructor(
 
     override fun handleAction(action: AboutAction): Unit = when (action) {
         AboutAction.BackClick -> handleBackClick()
-        AboutAction.GiveFeedbackClick -> handleGiveFeedbackClick()
         AboutAction.HelpCenterClick -> handleHelpCenterClick()
         AboutAction.PrivacyPolicyClick -> handlePrivacyPolicyClick()
         AboutAction.LearnAboutOrganizationsClick -> handleLearnAboutOrganizationsClick()
-        AboutAction.RateAppClick -> handleRateAppClick()
         is AboutAction.SubmitCrashLogsClick -> handleSubmitCrashLogsClick(action)
         AboutAction.VersionClick -> handleVersionClick()
         AboutAction.WebVaultClick -> handleWebVaultClick()
@@ -74,20 +72,12 @@ class AboutViewModel @Inject constructor(
         sendEvent(AboutEvent.NavigateToHelpCenter)
     }
 
-    private fun handleGiveFeedbackClick() {
-        sendEvent(AboutEvent.NavigateToFeedbackForm)
-    }
-
     private fun handlePrivacyPolicyClick() {
         sendEvent(AboutEvent.NavigateToPrivacyPolicy)
     }
 
     private fun handleLearnAboutOrganizationsClick() {
         sendEvent(AboutEvent.NavigateToLearnAboutOrganizations)
-    }
-
-    private fun handleRateAppClick() {
-        sendEvent(AboutEvent.NavigateToRateApp)
     }
 
     private fun handleSubmitCrashLogsClick(action: AboutAction.SubmitCrashLogsClick) {
@@ -140,11 +130,6 @@ sealed class AboutEvent {
     data object NavigateBack : AboutEvent()
 
     /**
-     * Navigate to the feedback form.
-     */
-    data object NavigateToFeedbackForm : AboutEvent()
-
-    /**
      * Navigates to the help center.
      */
     data object NavigateToHelpCenter : AboutEvent()
@@ -163,11 +148,6 @@ sealed class AboutEvent {
      * Navigates to the web vault.
      */
     data class NavigateToWebVault(val vaultUrl: String) : AboutEvent()
-
-    /**
-     * Navigates to rate the app.
-     */
-    data object NavigateToRateApp : AboutEvent()
 }
 
 /**
@@ -178,11 +158,6 @@ sealed class AboutAction {
      * User clicked back button.
      */
     data object BackClick : AboutAction()
-
-    /**
-     * User clicked the give feedback row.
-     */
-    data object GiveFeedbackClick : AboutAction()
 
     /**
      *  User clicked the helper center row.
@@ -198,11 +173,6 @@ sealed class AboutAction {
      * User clicked the learn about organizations row.
      */
     data object LearnAboutOrganizationsClick : AboutAction()
-
-    /**
-     * User clicked the rate the app row.
-     */
-    data object RateAppClick : AboutAction()
 
     /**
      * User clicked the submit crash logs toggle.

@@ -1707,6 +1707,7 @@ class CipherManagerTest {
 
         val attachmentId = "mockId-1"
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns emptyList()
             every { id } returns "mockId-1"
         }
@@ -1747,6 +1748,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
@@ -1792,6 +1794,7 @@ class CipherManagerTest {
             every { id } returns attachmentId
         }
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
         }
@@ -1839,6 +1842,7 @@ class CipherManagerTest {
             every { id } returns attachmentId
         }
         val cipher = mockk<Cipher> {
+            every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
         }
@@ -1892,6 +1896,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
@@ -1967,6 +1972,7 @@ class CipherManagerTest {
                 every { id } returns attachmentId
             }
             val cipher = mockk<Cipher> {
+                every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
