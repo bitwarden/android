@@ -34,4 +34,6 @@ android {
     }
 }
 
-dependencies { }
+dependencies {
+    implementation(libs.kotlinx.coroutines.android)
+}

@@ -4,6 +4,7 @@ import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -24,7 +25,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson

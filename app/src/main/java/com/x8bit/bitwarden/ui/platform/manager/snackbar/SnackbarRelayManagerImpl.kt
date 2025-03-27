@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

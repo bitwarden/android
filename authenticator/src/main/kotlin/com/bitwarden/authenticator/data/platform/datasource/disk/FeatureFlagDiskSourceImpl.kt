@@ -3,11 +3,10 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 import android.content.SharedPreferences
 import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.util.decodeFromStringOrNull
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private const val KEY_FEATURE_FLAGS = "$BASE_KEY:featureFlags"
