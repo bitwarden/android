@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.event
 
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -10,7 +11,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEv
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.util.FakeLifecycleOwner
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
