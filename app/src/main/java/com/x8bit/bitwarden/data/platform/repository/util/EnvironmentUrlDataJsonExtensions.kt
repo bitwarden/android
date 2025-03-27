@@ -60,6 +60,8 @@ val EnvironmentUrlDataJson.baseWebSendUrl: String
         this
             .baseWebVaultUrlOrNull
             ?.let {
+                // Only on US Cloud we should use the default web send URL
+                // On all other server instances we should use the base web send URL
                 if (it == DEFAULT_WEB_VAULT_URL) {
                     DEFAULT_WEB_SEND_URL
                 } else {
