@@ -185,7 +185,7 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
+                fido2CompletionManager.completeFido2GetCredentialsRequest(event.result)
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
