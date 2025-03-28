@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.repository.util
+package com.bitwarden.core.data.repository.util
 
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.core.data.repository.model.DataState

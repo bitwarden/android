@@ -34,4 +34,21 @@ android {
     }
 }
 
-dependencies { }
+dependencies {
+    implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit.vintage)
+    testImplementation(libs.kotlinx.coroutines.test)
+}
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+    }
+}
