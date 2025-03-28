@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.core.data.util
 
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
