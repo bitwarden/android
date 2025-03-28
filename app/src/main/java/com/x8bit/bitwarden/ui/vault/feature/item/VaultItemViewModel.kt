@@ -1210,7 +1210,6 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
-            totpCodeItemData = state.totpCodeItemData
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1362,15 +1361,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleTotpDataReceive(
         action: VaultItemAction.Internal.TotpDataReceive,
     ) {
-        onLoginContent { content, login ->
-            mutableStateFlow.update { currentState ->
-                currentState.copy(
-                    viewState = content.copy(
-                        type = login.copy(totpCodeItemData = action.totpData),
-                    ),
-                )
-            }
-        }
+        mutableStateFlow.update { it.copy(totpCodeItemData = action.totpData) }
     }
 
     //endregion Internal Type Handlers
@@ -1693,7 +1684,6 @@ data class VaultItemState(
                     val passwordData: PasswordData?,
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
-                    val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
                     val canViewTotpCode: Boolean,
                     val fido2CredentialCreationDateText: Text?,
@@ -1705,8 +1695,7 @@ data class VaultItemState(
                     val hasLoginCredentials: Boolean
                         get() = username != null ||
                             passwordData != null ||
-                            fido2CredentialCreationDateText != null ||
-                            totpCodeItemData != null
+                            fido2CredentialCreationDateText != null
 
                     /**
                      * A wrapper for the password data.
