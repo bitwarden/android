@@ -11,9 +11,6 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
-import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.authenticator.data.platform.repository.util.takeUntilLoaded
-import com.bitwarden.authenticator.ui.authenticator.feature.edititem.AuthenticatorRefreshPeriodOption.entries
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
@@ -22,6 +19,8 @@ import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
 import com.bitwarden.authenticator.ui.platform.base.util.isBase32
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.takeUntilLoaded
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
