@@ -13,7 +13,6 @@ plugins {
     // Crashlytics is enabled for all builds initially but removed for FDroid builds in gradle and
     // standardDebug builds in the merged manifest.
     alias(libs.plugins.crashlytics)
-    alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
@@ -22,7 +21,6 @@ plugins {
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.sonarqube)
 }
 
 /**
@@ -102,6 +100,7 @@ android {
             applicationIdSuffix = ".beta"
             isDebuggable = false
             isMinifyEnabled = true
+            matchingFallbacks += listOf("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -282,90 +281,20 @@ dependencies {
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
-
-    detektPlugins(libs.detekt.detekt.formatting)
-    detektPlugins(libs.detekt.detekt.rules)
-}
-
-detekt {
-    autoCorrect = true
-    config.from(files("$rootDir/detekt-config.yml"))
 }
 
 kover {
     currentProject {
-        sources {
-            excludeJava = true
+        createVariant("standard") {
+            add("standardDebug")
         }
-    }
-    reports {
-        filters {
-            excludes {
-                androidGeneratedClasses()
-                annotatedBy(
-                    // Compose previews
-                    "androidx.compose.ui.tooling.preview.Preview",
-                    "androidx.compose.ui.tooling.preview.PreviewScreenSizes",
-                    // Manually excluded classes/files/etc.
-                    "com.bitwarden.core.annotation.OmitFromCoverage",
-                )
-                classes(
-                    // Navigation helpers
-                    "*.*NavigationKt*",
-                    // Composable singletons
-                    "*.*ComposableSingletons*",
-                    // Generated classes related to interfaces with default values
-                    "*.*DefaultImpls*",
-                    // Databases
-                    "*.database.*Database*",
-                    "*.dao.*Dao*",
-                    // Dagger Hilt
-                    "dagger.hilt.*",
-                    "hilt_aggregated_deps.*",
-                    "*_Factory",
-                    "*_Factory\$*",
-                    "*_*Factory",
-                    "*_*Factory\$*",
-                    "*.Hilt_*",
-                    "*_HiltModules",
-                    "*_HiltModules*",
-                    "*_HiltModules\$*",
-                    "*_Impl",
-                    "*_Impl\$*",
-                    "*_MembersInjector",
-                )
-                packages(
-                    // Dependency injection
-                    "*.di",
-                    // Models
-                    "*.model",
-                    // Custom UI components
-                    "com.x8bit.bitwarden.ui.platform.components",
-                    // Theme-related code
-                    "com.x8bit.bitwarden.ui.platform.theme",
-                )
-            }
+        createVariant("fdroid") {
+            add("fdroidDebug")
         }
     }
 }
 
 tasks {
-    getByName("check") {
-        // Add detekt with type resolution to check
-        dependsOn("detekt")
-    }
-
-    getByName("sonar") {
-        dependsOn("check")
-    }
-
-    withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
-    withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
-
     withType<Test> {
         useJUnitPlatform()
         maxHeapSize = "2g"
@@ -383,18 +312,6 @@ afterEvaluate {
     fdroidTasksToDisable
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
-}
-
-sonar {
-    properties {
-        property("sonar.projectKey", "bitwarden_android")
-        property("sonar.organization", "bitwarden")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "app/src/")
-        property("sonar.tests", "app/src/")
-        property("sonar.test.inclusions", "app/src/test/")
-        property("sonar.exclusions", "app/src/test/")
-    }
 }
 
 private fun renameFile(path: String, newName: String) {

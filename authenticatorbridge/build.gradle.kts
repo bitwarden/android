@@ -28,7 +28,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -46,7 +46,7 @@ android {
         outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "authenticatorbridge-${version}-${variant.baseName}.aar"
+                val outputFileName = "authenticatorbridge-$version-${variant.baseName}.aar"
                 output.outputFileName = outputFileName
             }
     }

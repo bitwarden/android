@@ -79,8 +79,15 @@ jobs:
         with:
           name: test-reports
           path: |
+            build/reports/kover/reportMergedCoverage.xml
+            app/build/reports/kover/reportMergedCoverage.xml
             app/build/reports/tests/
-            app/build/reports/kover/reportStandardDebug.xml
+            authenticator/build/reports/kover/reportMergedCoverage.xml
+            authenticator/build/reports/tests/
+            authenticatorbridge/build/reports/kover/reportMergedCoverage.xml
+            authenticatorbridge/build/reports/tests/
+            core/build/reports/kover/reportMergedCoverage.xml
+            core/build/reports/tests/
 
   report:
     name: Process Test Reports
@@ -106,8 +113,9 @@ jobs:
         continue-on-error: true
         with:
           os: linux
-          files: kover/reportStandardDebug.xml
+          files: build/reports/kover/reportMergedCoverage.xml
           fail_ci_if_error: true
+          disable_search: true
 
       - name: Comment PR if tests failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
