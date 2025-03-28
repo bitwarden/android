@@ -772,7 +772,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="forwarded_email_alias">Yönləndirilən e-poçt ləqəbi</string>
   <string name="random_word">Təsadüfi söz</string>
   <string name="email_required_parenthesis">E-poçt (tələb olunur)</string>
+  <string name="domain_name">domen adı</string>
   <string name="domain_name_required_parenthesis">Domen adı (tələb olunur)</string>
+  <string name="api_key">API açarı</string>
   <string name="api_key_required_parenthesis">API açarı (tələb olunur)</string>
   <string name="service">Xidmət</string>
   <string name="addy_io">addy.io</string>
@@ -781,6 +783,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (tələb olunur)</string>
   <string name="api_access_token">API müraciət tokeni</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Hazırkı istifadəçi adının üzərinə yazmaq istədiyinizə əminsiniz?</string>
   <string name="generate_username">İstifadəçi adı yarat</string>
@@ -971,10 +974,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Varlıq keçidlərində tətbiq tapılmadığına görə keçid açarı əməliyyatı uğursuz oldu</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Tətbiq doğrulana bilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu</string>
   <string name="confirm_file_password">Fayl parolunu təsdiqlə</string>
-  <string name="continue_to_give_feedback">\"Əks-əlaqə ver\" ilə davam edilsin?</string>
-  <string name="continue_to_provide_feedback">Yeni tətbiq haqqında əks-əlaqə vermək üçün \"Davam et\"i seçin!</string>
   <string name="file_password">Fayl parolu</string>
-  <string name="give_feedback">Əks-əlaqə ver</string>
   <string name="password_protected">Parolla qorunur</string>
   <string name="password_used_to_export">Bu parol, bu faylı daxilə və xaricə köçürmək üçün istifadə olunacaq</string>
   <string name="autofill_suggestion">Avto-doldurma təklifləri</string>
@@ -1225,7 +1225,7 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="show_more">Daha çox göstər</string>
   <string name="no_folder">Qovluq yoxdur</string>
   <string name="show_less">Daha az göstər</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Xana əlavə et</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Xəta detallarını paylaş</string>
 </resources>

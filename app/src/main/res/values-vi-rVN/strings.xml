@@ -773,7 +773,9 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
   <string name="forwarded_email_alias">Email bí danh chuyển tiếp</string>
   <string name="random_word">Từ ngẫu nhiên</string>
   <string name="email_required_parenthesis">Email (bắt buộc)</string>
+  <string name="domain_name">tên miền</string>
   <string name="domain_name_required_parenthesis">Tên miền (bắt buộc)</string>
+  <string name="api_key">Khóa API</string>
   <string name="api_key_required_parenthesis">Khóa API (bắt buộc)</string>
   <string name="service">Dịch vụ</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ chọn Thêm TOTP để lưu khóa an toàn</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Mã truy cập API (bắt buộc)</string>
   <string name="api_access_token">Khoá truy cập API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bạn có chắc muốn ghi đè lên tên người dùng hiện tại không?</string>
   <string name="generate_username">Tạo tên người dùng</string>
@@ -972,10 +975,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Thao tác mã khóa không thành công vì không tìm thấy app trong tài sản liên kết</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Thao tác mã khóa không thành công vì không thể xác minh ứng dụng</string>
   <string name="confirm_file_password">Nhập lại mật khẩu tệp tin</string>
-  <string name="continue_to_give_feedback">Tiếp tục phản hồi?</string>
-  <string name="continue_to_provide_feedback">Chọn tiếp tục để phản hồi về app mới!</string>
   <string name="file_password">Mật khẩu tệp tin</string>
-  <string name="give_feedback">Gửi phản hồi</string>
   <string name="password_protected">Được bảo vệ bởi mật khẩu</string>
   <string name="password_used_to_export">Mật khẩu này sẽ được sử dụng để xuất và nhập tệp tin này</string>
   <string name="autofill_suggestion">Gợi ý điền tự động</string>

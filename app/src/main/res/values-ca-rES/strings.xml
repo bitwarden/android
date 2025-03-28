@@ -773,7 +773,9 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</string>
   <string name="forwarded_email_alias">Àlies de correu electrònic reenviat</string>
   <string name="random_word">Paraula aleatòria</string>
   <string name="email_required_parenthesis">Correu electrònic (obligatori)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Nom de domini (obligatori)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Clau API (obligatòria)</string>
   <string name="service">Servei</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Token d\'accés a l\'API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Segur que voleu sobreescriure el nom d\'usuari actual?</string>
   <string name="generate_username">Genera un nom d\'usuari</string>
@@ -972,10 +975,7 @@ Voleu canviar a aquest compte?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">L\'operació de la clau de pas ha fallat perquè l\'aplicació no s\'ha trobat als enllaços de recursos</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">L\'operació de la clau de pas ha fallat perquè l\'aplicació no s\'ha pogut verificar</string>
   <string name="confirm_file_password">Confirma la contrasenya del fitxer</string>
-  <string name="continue_to_give_feedback">Voleu continuar donant comentaris?</string>
-  <string name="continue_to_provide_feedback">Seleccioneu Continua per donar comentaris sobre la nova aplicació!</string>
   <string name="file_password">Contrasenya del fitxer</string>
-  <string name="give_feedback">Donar comentaris</string>
   <string name="password_protected">Protegit amb contrasenya</string>
   <string name="password_used_to_export">Aquesta contrasenya s\'utilitzarà per exportar i importar aquest fitxer</string>
   <string name="autofill_suggestion">Suggeriment d\'emplenament automàtic</string>

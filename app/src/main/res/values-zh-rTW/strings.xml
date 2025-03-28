@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">轉寄的電子郵件別名</string>
   <string name="random_word">隨機單字</string>
   <string name="email_required_parenthesis">Email（必填）</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">網域名稱（必填）</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API 金鑰（必填）</string>
   <string name="service">服務</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API 存取權杖</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">您確定要覆寫目前的使用者名稱嗎？</string>
   <string name="generate_username">產生使用者名稱</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">由於未在資源連結中找到此應用程式，密碼金鑰動作失敗</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">由於無法驗證此應用程式，密碼金鑰動作失敗</string>
   <string name="confirm_file_password">確認檔案密碼</string>
-  <string name="continue_to_give_feedback">前往提供回饋資訊嗎？</string>
-  <string name="continue_to_provide_feedback">選擇繼續來對我們的新應用程式提供回饋！</string>
   <string name="file_password">檔案密碼</string>
-  <string name="give_feedback">提供意見回饋</string>
   <string name="password_protected">密碼保護</string>
   <string name="password_used_to_export">此密碼將用於此檔案的匯出和匯入</string>
   <string name="autofill_suggestion">自動填寫建議</string>

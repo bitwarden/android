@@ -773,7 +773,9 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
   <string name="forwarded_email_alias">Doorgestuurd e-mailalias</string>
   <string name="random_word">Willekeurig woord</string>
   <string name="email_required_parenthesis">E-mailadres (verplicht)</string>
+  <string name="domain_name">domeinnaam</string>
   <string name="domain_name_required_parenthesis">Domeinnaam (verplicht)</string>
+  <string name="api_key">API-sleutel</string>
   <string name="api_key_required_parenthesis">API-sleutel (verplicht)</string>
   <string name="service">Dienst</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ kies je TOTP toevoegen om de sleutel veilig op te slaan</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API-toegangstoken (verplicht)</string>
   <string name="api_access_token">API-toegangstoken</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Weet je zeker dat je de huidige gebruikersnaam wilt overschrijven?</string>
   <string name="generate_username">Gebruikersnaam genereren</string>
@@ -972,10 +975,7 @@ Wilt u naar dit account wisselen?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey-bewerking mislukt omdat de app niet is gevonden in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-bewerking mislukt omdat de app niet geverifieerd kon worden</string>
   <string name="confirm_file_password">Bestandswachtwoord bevestigen</string>
-  <string name="continue_to_give_feedback">Doorgaan met feedback geven?</string>
-  <string name="continue_to_provide_feedback">Kies doorgaan om feedback op de nieuwe app te geven!</string>
   <string name="file_password">Bestandswachtwoord</string>
-  <string name="give_feedback">Feedback geven</string>
   <string name="password_protected">Beveiligd met een wachtwoord</string>
   <string name="password_used_to_export">We gebruiken dit wachtwoord bij het exporteren en importeren van dit bestand</string>
   <string name="autofill_suggestion">Suggesties voor automatisch invullen</string>

@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">Forwarded email alias</string>
   <string name="random_word">무작위 단어</string>
   <string name="email_required_parenthesis">이메일 (필수)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">도메인 이름 (필수)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API 키 (필수)</string>
   <string name="service">서비스</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API 액세스 토큰</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">정말 현재 사용자 이름을 덮어쓰시겠습니까?</string>
   <string name="generate_username">사용자 이름 생성</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
   <string name="confirm_file_password">Confirm file password</string>
-  <string name="continue_to_give_feedback">피드백을 보내시겠어요?</string>
-  <string name="continue_to_provide_feedback">계속해서 새 앱에 대한 피드백을 보내실 수 있습니다!</string>
   <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
   <string name="password_protected">Password Protected</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Autofill suggestion</string>

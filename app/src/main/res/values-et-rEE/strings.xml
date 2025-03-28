@@ -773,7 +773,9 @@ Skaneerimine toimub automaatselt.</string>
   <string name="forwarded_email_alias">Edastav e-posti alias</string>
   <string name="random_word">Juhuslik sõna</string>
   <string name="email_required_parenthesis">E-post (vajalik)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Domeeni nimi (vajalik)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API võti (vajalik)</string>
   <string name="service">Teenus</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ Skaneerimine toimub automaatselt.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API ligipääsu võti</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Oled kindel, et soovid praegust kasutajanime üle kirjutada?</string>
   <string name="generate_username">Genereeri kasutajanimi</string>
@@ -972,10 +975,7 @@ Soovid selle konto peale lülituda?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
   <string name="confirm_file_password">Confirm file password</string>
-  <string name="continue_to_give_feedback">Kas soovid jätkata tagasiside andmist?</string>
-  <string name="continue_to_provide_feedback">Vajuta jätka, et anda ka edaspidi tagasisidet uuele rakendusele!</string>
   <string name="file_password">Faili parool</string>
-  <string name="give_feedback">Anna tagasisidet</string>
   <string name="password_protected">Parooliga Kaitstud</string>
   <string name="password_used_to_export">Seda parooli kasutatakse selle faili eksportimiseks ja importimiseks</string>
   <string name="autofill_suggestion">Autofill soovitab</string>

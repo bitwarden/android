@@ -773,7 +773,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="forwarded_email_alias">Alias de correo reenviado</string>
   <string name="random_word">Palabra aleatoria</string>
   <string name="email_required_parenthesis">Email (obligatorio)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Nombre de dominio (requerido)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Clave API (requerida)</string>
   <string name="service">Servicio</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Token de acceso API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">¿Está seguro que desea sobrescribir el nombre de usuario actual?</string>
   <string name="generate_username">Generar nombre de usuario</string>
@@ -973,10 +976,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Falló la operación de la clave de acceso porque la aplicación no encontró los enlaces de recursos</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Falló la operación de la clave de acceso porque la aplicación no pudo ser verificada</string>
   <string name="confirm_file_password">Confirm file password</string>
-  <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
-  <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
   <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
   <string name="password_protected">Password Protected</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Autofill suggestion</string>
