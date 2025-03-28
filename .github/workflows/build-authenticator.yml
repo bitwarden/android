@@ -78,7 +78,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Check Authenticator
-        run: bundle exec fastlane checkAuthenticator
+        run: bundle exec fastlane check
 
       - name: Build Authenticator
         run: bundle exec fastlane buildAuthenticatorDebug
