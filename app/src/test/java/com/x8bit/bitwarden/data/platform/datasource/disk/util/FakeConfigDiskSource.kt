@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 

@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.repository.util
+package com.bitwarden.core.data.repository.util
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 

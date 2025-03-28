@@ -4,13 +4,13 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialAction
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialEvent
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialScreen
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialState
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialViewModel
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

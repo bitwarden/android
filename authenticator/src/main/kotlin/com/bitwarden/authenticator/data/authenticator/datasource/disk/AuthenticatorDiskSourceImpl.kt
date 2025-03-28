@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.data.authenticator.datasource.disk
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.dao.ItemDao
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.merge
 import javax.inject.Inject
