@@ -9,7 +9,7 @@ import com.bitwarden.authenticator.data.platform.datasource.network.model.Config
 import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.authenticator.data.platform.datasource.network.service.ConfigService
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
-import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.core.data.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
