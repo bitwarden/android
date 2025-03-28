@@ -23,7 +23,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDat
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.map
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat

@@ -4,13 +4,13 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -23,7 +23,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction.Internal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn

@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.repository.model
+package com.bitwarden.core.data.repository.model
 
 /**
  * A data state that can be used as a template for data in the repository layer.

@@ -24,6 +24,7 @@ import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -38,7 +39,6 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess

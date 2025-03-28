@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson

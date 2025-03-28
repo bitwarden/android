@@ -9,7 +9,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -40,7 +41,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsReque
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.map
@@ -1497,8 +1497,9 @@ class VaultItemListingViewModel @Inject constructor(
     //endregion VaultItemListing Handlers
 
     private fun vaultErrorReceive(vaultData: DataState.Error<VaultData>) {
-        if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+        val data = vaultData.data
+        if (data != null) {
+            updateStateWithVaultData(vaultData = data, clearDialogState = true)
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -1558,8 +1559,9 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        if (vaultData.data != null) {
-            updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
+        val data = vaultData.data
+        if (data != null) {
+            updateStateWithVaultData(vaultData = data, clearDialogState = true)
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(

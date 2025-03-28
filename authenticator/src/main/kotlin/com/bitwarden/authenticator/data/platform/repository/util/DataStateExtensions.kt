@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository.util
 
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.transformWhile
 
