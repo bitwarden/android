@@ -13,13 +13,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
@@ -79,16 +78,12 @@ fun LazyListScope.vaultAddEditAdditionalOptions(
                         label = stringResource(id = R.string.password_prompt),
                         isChecked = commonState.masterPasswordReprompt,
                         onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                        actions = {
-                            BitwardenStandardIconButton(
-                                vectorIconRes = R.drawable.ic_question_circle_small,
-                                contentDescription = stringResource(
-                                    id = R.string.master_password_re_prompt_help,
-                                ),
-                                onClick = commonTypeHandlers.onTooltipClick,
-                                contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                            )
-                        },
+                        tooltip = TooltipData(
+                            onClick = commonTypeHandlers.onTooltipClick,
+                            contentDescription = stringResource(
+                                id = R.string.master_password_re_prompt_help,
+                            ),
+                        ),
                         cardStyle = CardStyle.Full,
                         modifier = Modifier
                             .testTag(tag = "MasterPasswordRepromptToggle")
