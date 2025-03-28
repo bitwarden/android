@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">إعادة توجيه الاسم المستعار للبريد الإلكتروني</string>
   <string name="random_word">كلمة عشوائية</string>
   <string name="email_required_parenthesis">البريد الإلكتروني (مطلوب)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">اسم المجال (مطلوب)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">مفتاح API (مطلوب)</string>
   <string name="service">الخدمة</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">رمز الوصول API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</string>
   <string name="generate_username">إنشاء اسم المستخدم</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">فشلت عملية مفتاح المرور لأن التطبيق لم يتم العثور عليه في روابط أصلية</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">فشلت عملية مفتاح المرور لأنه تعذر التحقق من التطبيق</string>
   <string name="confirm_file_password">تأكيد كلمة مرور الملف</string>
-  <string name="continue_to_give_feedback">هل تريد الاستمرار في إعطاء الملاحظات؟</string>
-  <string name="continue_to_provide_feedback">حدد استمرار لتقديم تعليقات على التطبيق الجديد!</string>
   <string name="file_password">كلمة مرور الملف</string>
-  <string name="give_feedback">تقديم ملاحظات</string>
   <string name="password_protected">كلمة السر محمية</string>
   <string name="password_used_to_export">ستُستخدم كلمة المرور هذه لتصدير واستيراد هذا الملف</string>
   <string name="autofill_suggestion">اقتراح التعبئة التلقائية</string>

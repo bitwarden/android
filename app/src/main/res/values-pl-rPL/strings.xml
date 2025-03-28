@@ -773,7 +773,9 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</string>
   <string name="forwarded_email_alias">Alias przekierowania</string>
   <string name="random_word">Losowe słowo</string>
   <string name="email_required_parenthesis">Adres e-mail (wymagany)</string>
+  <string name="domain_name">nazwa domeny</string>
   <string name="domain_name_required_parenthesis">Nazwa domeny (wymagana)</string>
+  <string name="api_key">Klucz API</string>
   <string name="api_key_required_parenthesis">Klucz API (wymagany)</string>
   <string name="service">Usługa</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Token dostępu API (wymagany)</string>
   <string name="api_access_token">Token dostępu API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Czy na pewno chcesz nadpisać obecną nazwę użytkownika?</string>
   <string name="generate_username">Wygeneruj nazwę użytkownika</string>
@@ -972,10 +975,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operacja klucza dostępu nie powiodła się, ponieważ nie znaleziono aplikacji w połączonych zasobach</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operacja z kluczem dostępu nie powiodła się, ponieważ aplikacja nie mogła zostać zweryfikowana</string>
   <string name="confirm_file_password">Potwierdź hasło do pliku</string>
-  <string name="continue_to_give_feedback">Kontynuować przekazywanie opinii?</string>
-  <string name="continue_to_provide_feedback">Wybierz kontynuuj, aby przekazać opinie na temat nowej aplikacji!</string>
   <string name="file_password">Hasło do pliku</string>
-  <string name="give_feedback">Podziel się opinią</string>
   <string name="password_protected">Zabezpieczone hasłem</string>
   <string name="password_used_to_export">Hasło będzie używane do eksportowania i importowania pliku</string>
   <string name="autofill_suggestion">Sugestia autouzupełnienia</string>

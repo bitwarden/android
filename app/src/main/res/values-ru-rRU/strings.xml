@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">Псевдоним электронной почты для пересылки</string>
   <string name="random_word">Случайное слово</string>
   <string name="email_required_parenthesis">Email (требуется)</string>
+  <string name="domain_name">доменное имя</string>
   <string name="domain_name_required_parenthesis">Доменное имя (требуется)</string>
+  <string name="api_key">Ключ API</string>
   <string name="api_key_required_parenthesis">Ключ API (требуется)</string>
   <string name="service">Служба</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Токен доступа к API (обязательно)</string>
   <string name="api_access_token">Токен доступа к API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Вы хотите перезаписать текущее имя пользователя?</string>
   <string name="generate_username">Создать имя пользователя</string>
@@ -974,10 +977,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Операция с Passkey не удалась, поскольку приложение не найдено в ссылках на ресурсы</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Операция с Passkey не удалась, поскольку не удалось проверить приложение</string>
   <string name="confirm_file_password">Подтвердите пароль к файлу</string>
-  <string name="continue_to_give_feedback">Продолжить оставлять отзыв?</string>
-  <string name="continue_to_provide_feedback">Выберите \'Продолжить\', чтобы оставить отзыв о новом приложении!</string>
   <string name="file_password">Пароль к файлу</string>
-  <string name="give_feedback">Оставить отзыв</string>
   <string name="password_protected">Защищено паролем</string>
   <string name="password_used_to_export">Этот пароль будет использоваться для экспорта и импорта этого файла</string>
   <string name="autofill_suggestion">Предложения по автозаполнению</string>

@@ -772,7 +772,9 @@ A leitura será efetuada automaticamente.</string>
   <string name="forwarded_email_alias">Alias de e-mail reencaminhado</string>
   <string name="random_word">Palavra aleatória</string>
   <string name="email_required_parenthesis">E-mail (obrigatório)</string>
+  <string name="domain_name">nome do domínio</string>
   <string name="domain_name_required_parenthesis">Nome do domínio (obrigatório)</string>
+  <string name="api_key">Chave API</string>
   <string name="api_key_required_parenthesis">Chave da API (obrigatório)</string>
   <string name="service">Serviço</string>
   <string name="addy_io">addy.io</string>
@@ -781,6 +783,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Token de acesso à API (obrigatório)</string>
   <string name="api_access_token">Token de acesso à API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem a certeza de que pretende substituir o nome de utilizador atual?</string>
   <string name="generate_username">Gerar nome de utilizador</string>
@@ -971,10 +974,7 @@ Pretende mudar para esta conta?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">A operação da chave de acesso falhou porque a aplicação não foi encontrada nos links ativos</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">A operação da chave de acesso falhou porque a aplicação não pôde ser verificada</string>
   <string name="confirm_file_password">Confirmar a palavra-passe do ficheiro</string>
-  <string name="continue_to_give_feedback">Continuar para dar feedback?</string>
-  <string name="continue_to_provide_feedback">Selecione continuar para dar feedback sobre a nova app!</string>
   <string name="file_password">Palavra-passe do ficheiro</string>
-  <string name="give_feedback">Dar feedback</string>
   <string name="password_protected">Protegido por palavra-passe</string>
   <string name="password_used_to_export">Esta palavra-passe será utilizada para exportar e importar este ficheiro</string>
   <string name="autofill_suggestion">Sugestão de preenchimento automático</string>

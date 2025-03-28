@@ -773,7 +773,9 @@ selecciona Engadir TOTP para gardar a clave de forma segura</string>
   <string name="forwarded_email_alias">Alias de correo redirixido</string>
   <string name="random_word">Palabra aleatoria</string>
   <string name="email_required_parenthesis">Correo electrónico (obrigatorio)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Nome do dominio (obrigatorio)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Clave da API (obrigatorio)</string>
   <string name="service">Servizo</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ selecciona Engadir TOTP para gardar a clave de forma segura</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Token de acceso á API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Seguro que queres sobrescribir o nome de usuario actual?</string>
   <string name="generate_username">Xerar nome de usuario</string>
@@ -972,10 +975,7 @@ Queres comprobalo dende esa conta?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operación de Clave de acceso fallida porque a app non se atopou nos enlaces de contido</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operación de Clave de acceso fallida porque a app non se puido verificar</string>
   <string name="confirm_file_password">Repetir contrasinal do arquivo</string>
-  <string name="continue_to_give_feedback">Ir a Dar retroalimantación?</string>
-  <string name="continue_to_provide_feedback">Pulsa continuar para darnos retroalimentación sobra a nova app!</string>
   <string name="file_password">Contrasinal do arquivo</string>
-  <string name="give_feedback">Deixar retroalimentación</string>
   <string name="password_protected">Protexido con contrasinal</string>
   <string name="password_used_to_export">Este contrasinal empregarase para exportar e importar o arquivo</string>
   <string name="autofill_suggestion">Suxestión de autoenchido</string>

@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">Псевдоним на препратена е-поща</string>
   <string name="random_word">Произволна дума</string>
   <string name="email_required_parenthesis">Е-поща (задължително)</string>
+  <string name="domain_name">име на домейн</string>
   <string name="domain_name_required_parenthesis">Име на домейн (задължително)</string>
+  <string name="api_key">Ключ за ППИ</string>
   <string name="api_key_required_parenthesis">Ключ за API (задължително)</string>
   <string name="service">Услуга</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Идентификатор за достъп до ППИ (задължително)</string>
   <string name="api_access_token">Идентификатор за достъп до API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Наистина ли искате да замените текущото потребителско име?</string>
   <string name="generate_username">Генериране на потр. име</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Операцията със секретния ключ беше неуспешна, тъй като приложението не е намерено измежду връзките към ресурси</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Операцията със секретния ключ беше неуспешна, тъй като приложението не може да бъде потвърдено</string>
   <string name="confirm_file_password">Потвърждаване на паролата на файла</string>
-  <string name="continue_to_give_feedback">Продължаване към даването на отзив?</string>
-  <string name="continue_to_provide_feedback">Изберете „Продължаване“, за да дадете отзива си за новото приложение!</string>
   <string name="file_password">Парола на файла</string>
-  <string name="give_feedback">Дайте отзив</string>
   <string name="password_protected">Защитен с парола</string>
   <string name="password_used_to_export">Паролата ще се използва при изнасянето и при внасянето на този файл</string>
   <string name="autofill_suggestion">Авт. попълване на предложение</string>

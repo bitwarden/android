@@ -480,7 +480,7 @@
   <string name="unlock">解锁​​​​</string>
   <string name="unlock_vault">解锁密码库</string>
   <string name="thirty_minutes">30 分钟</string>
-  <string name="set_pin_description">设置用于解锁 Bitwarden 的 PIN 码。您的 PIN 设置将在您完全注销应用程序时被重置。</string>
+  <string name="set_pin_description">您的 PIN 码必须至少包含 4 个字符。 如果您完全注销应用程序，您的 PIN 设置将被重置。</string>
   <string name="logged_in_as_on">已在 %2$s 上以 %1$s 身份登录。</string>
   <string name="vault_locked_master_password">您的密码库已锁定，请验证您的主密码以继续。</string>
   <string name="vault_locked_pin">您的密码库已锁定。请验证您的 PIN 码以继续。</string>
@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">转发的电子邮箱别名</string>
   <string name="random_word">随机单词</string>
   <string name="email_required_parenthesis">电子邮箱（必填）</string>
+  <string name="domain_name">域名</string>
   <string name="domain_name_required_parenthesis">域名（必填）</string>
+  <string name="api_key">API 密钥</string>
   <string name="api_key_required_parenthesis">API 密钥（必填）</string>
   <string name="service">服务</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API 访问令牌（必填）</string>
   <string name="api_access_token">API 访问令牌</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">确定要覆盖当前用户名吗？</string>
   <string name="generate_username">生成用户名</string>
@@ -806,7 +809,7 @@
   <string name="logging_in_as_x_on_y">在 %2$s 上以 %1$s 身份登录</string>
   <string name="not_you">不是您吗？</string>
   <string name="log_in_with_master_password">使用主密码登录</string>
-  <string name="log_in_with_another_device">使用其他设备登录</string>
+  <string name="log_in_with_another_device">使用设备登录</string>
   <string name="log_in_initiated">登录已发起</string>
   <string name="a_notification_has_been_sent_to_your_device">通知已发送到您的设备。</string>
   <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">请确保您的密码库已解锁，并且指纹短语与其他设备上的相匹配。</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">由于在资源链接中找不到 App，通行密钥操作失败</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">由于无法验证 App，通行密钥操作失败</string>
   <string name="confirm_file_password">确认文件密码</string>
-  <string name="continue_to_give_feedback">前往提供反馈信息吗？</string>
-  <string name="continue_to_provide_feedback">选择继续以提供针对此新 App 的反馈信息！</string>
   <string name="file_password">文件密码</string>
-  <string name="give_feedback">提供反馈信息</string>
   <string name="password_protected">密码保护</string>
   <string name="password_used_to_export">此密码将用于导出和导入此文件</string>
   <string name="autofill_suggestion">自动填充建议</string>

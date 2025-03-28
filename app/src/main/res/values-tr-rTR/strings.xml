@@ -772,7 +772,9 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="forwarded_email_alias">İletilen e-posta maskesi</string>
   <string name="random_word">Rastgele kelime</string>
   <string name="email_required_parenthesis">E-posta (gerekli)</string>
+  <string name="domain_name">alan adı</string>
   <string name="domain_name_required_parenthesis">Alan adı (gerekli)</string>
+  <string name="api_key">API anahtarı</string>
   <string name="api_key_required_parenthesis">API anahtarı (gerekli)</string>
   <string name="service">Servis</string>
   <string name="addy_io">addy.io</string>
@@ -781,6 +783,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API erişim token\'ı (gerekli)</string>
   <string name="api_access_token">API erişim token\'ı</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Kullanıcı adının üzerine kaydetmek istediğinizden emin misiniz?</string>
   <string name="generate_username">Kullanıcı adı oluştur</string>
@@ -971,10 +974,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama varlık bağlantılarında bulunamadı</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama doğrulanamadı</string>
   <string name="confirm_file_password">Dosya parolasını onaylayın</string>
-  <string name="continue_to_give_feedback">Puanlamaya devam etmek istiyor musunuz?</string>
-  <string name="continue_to_provide_feedback">Devam ederek yeni uygulamamıza puan verin!</string>
   <string name="file_password">Dosya parolası</string>
-  <string name="give_feedback">Geribildirim Gönder</string>
   <string name="password_protected">Parola Korumalı</string>
   <string name="password_used_to_export">Bu parola, bu dosyayı dışa ve içe aktarmak için kullanılacaktır</string>
   <string name="autofill_suggestion">Öneriyi otomatik doldur</string>

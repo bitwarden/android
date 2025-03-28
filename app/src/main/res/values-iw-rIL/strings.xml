@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">כינוי דוא\"ל מועבר</string>
   <string name="random_word">מילה אקראית</string>
   <string name="email_required_parenthesis">דוא\"ל (נדרש)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">שם דומיין (נדרש)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">מפתח API (נדרש)</string>
   <string name="service">שירות</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">אסימון גישה ל־API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">האם אתה בטוח שברצונך לדרוס את שם המשתמש הנוכחי?</string>
   <string name="generate_username">צור שם משתמש</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">פעולת מפתח גישה נכשלה בגלל שהיישום לא נמצא בקישורי נכסים</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">פעולת מפתח גישה נכשלה בגלל שלא היה ניתן לאמת את היישום</string>
   <string name="confirm_file_password">אשר סיסמת קובץ</string>
-  <string name="continue_to_give_feedback">להמשיך אל תן משוב?</string>
-  <string name="continue_to_provide_feedback">בחר המשך כדי לתת משוב על היישום החדש!</string>
   <string name="file_password">סיסמת קובץ</string>
-  <string name="give_feedback">תן משוב</string>
   <string name="password_protected">מוגן סיסמה</string>
   <string name="password_used_to_export">סיסמה זו תשמש כדי לייצא ולייבא קובץ זה</string>
   <string name="autofill_suggestion">הצעות למילוי אוטומטי</string>

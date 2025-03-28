@@ -773,7 +773,9 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</string>
   <string name="forwarded_email_alias">Alias de e-mail redirecționat</string>
   <string name="random_word">Cuvânt aleatoriu</string>
   <string name="email_required_parenthesis">E-mail (obligatoriu)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Nume de domeniu (obligatoriu)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Cheia API (necesară)</string>
   <string name="service">Serviciu</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">FastMail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Token de acces API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Sunteți sigur că doriți să suprascrieți numele de utilizator curent?</string>
   <string name="generate_username">Generare nume de utilizator</string>
@@ -972,10 +975,7 @@ Doriți să comutați la acest cont?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operațiunea cheie de acces a eșuat deoarece aplicația nu a fost găsită în legăturile de active</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operațiunea cheie de acces a eșuat deoarece aplicația nu a putut fi verificată</string>
   <string name="confirm_file_password">Confirmați parola fișierului</string>
-  <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
-  <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
   <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
   <string name="password_protected">Password Protected</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Sugestie autocompletare</string>

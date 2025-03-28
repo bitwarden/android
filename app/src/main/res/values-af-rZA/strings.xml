@@ -773,7 +773,9 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
   <string name="forwarded_email_alias">E-posalias vir aanstuur</string>
   <string name="random_word">Lukrake woord</string>
   <string name="email_required_parenthesis">E-pos (vereis)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Domeinnaam (vereis)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API-sleutel (vereis)</string>
   <string name="service">Diens</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ kies u Voeg TOTP toe om die sleutel veilig te bewaar</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API-toegangsteken</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Is u seker u wil oor die huidige gebruikersnaam skryf?</string>
   <string name="generate_username">Genereer gebruikersnaam</string>
@@ -972,10 +975,7 @@ Wil u na die rekening omskakel?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
   <string name="confirm_file_password">Confirm file password</string>
-  <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
-  <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
   <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
   <string name="password_protected">Password Protected</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Autofill suggestion</string>

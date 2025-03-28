@@ -773,7 +773,9 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="forwarded_email_alias">Videresendt e-mailalias</string>
   <string name="random_word">Tilfældigt ord</string>
   <string name="email_required_parenthesis">E-mail (obligatorisk)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Domænenavn (obligatorisk)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API-nøgle (obligatorisk)</string>
   <string name="service">Tjeneste</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API-adgangstoken</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Sikker på, at det aktuelle brugernavn skal overskrives?</string>
   <string name="generate_username">Generér brugernavn</string>
@@ -972,10 +975,7 @@ Skift til denne konto?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Adgangsnøglehandling mislykkedes, da appen ikke fandtes i aktivlinks</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Adgangsnøglehandling mislykkedes, da appen ikke kunne bekræftes</string>
   <string name="confirm_file_password">Bekræft filadgangskode</string>
-  <string name="continue_to_give_feedback">Fortsæt til Giv feedback?</string>
-  <string name="continue_to_provide_feedback">Vælg Fortsæt, for at give feedback på den nye app!</string>
   <string name="file_password">Filadgangskode</string>
-  <string name="give_feedback">Giv feedback</string>
   <string name="password_protected">Kodeordsbeskyttet</string>
   <string name="password_used_to_export">Denne adgangskode vil blive brugt ved eksport og import af denne fil</string>
   <string name="autofill_suggestion">Autoudfyldningsforslag</string>
