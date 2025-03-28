@@ -64,7 +64,11 @@ fun BitwardenScaffold(
             .then(modifier),
         topBar = topBar,
         bottomBar = bottomBar,
-        snackbarHost = snackbarHost,
+        snackbarHost = {
+            Box(modifier = Modifier.imePadding()) {
+                snackbarHost()
+            }
+        },
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
