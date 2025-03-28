@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
+import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -78,7 +79,6 @@ class VaultItemViewModel @Inject constructor(
             vaultItemId = args.vaultItemId,
             cipherType = args.cipherType,
             viewState = VaultItemState.ViewState.Loading,
-            totpCodeItemData = null,
             dialog = null,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -102,9 +102,19 @@ class VaultItemViewModel @Inject constructor(
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
+            vaultRepository.getAuthCodeFlow(state.vaultItemId)
+                .takeUntilLoaded(),
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
-        ) { cipherViewState, userState, collectionsState, folderState ->
+        ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
+            val totpCodeData = authCodeState.data?.let {
+                TotpCodeItemData(
+                    periodSeconds = it.periodSeconds,
+                    timeLeftSeconds = it.timeLeftSeconds,
+                    totpCode = it.totpCode,
+                    verificationCode = it.code,
+                )
+            }
             VaultItemAction.Internal.VaultDataReceive(
                 userState = userState,
                 vaultDataState = combineDataStates(
@@ -156,6 +166,7 @@ class VaultItemViewModel @Inject constructor(
 
                         VaultItemStateData(
                             cipher = cipherView,
+                            totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
@@ -1210,7 +1221,7 @@ class VaultItemViewModel @Inject constructor(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
             relatedLocations = this.data?.relatedLocations.orEmpty().toImmutableList(),
-            totpCodeItemData = state.totpCodeItemData
+            totpCodeItemData = this.data?.totpCodeItemData
         )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
@@ -1460,7 +1471,6 @@ data class VaultItemState(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,
     val viewState: ViewState,
-    val totpCodeItemData: TotpCodeItemData?,
     val dialog: DialogState?,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,

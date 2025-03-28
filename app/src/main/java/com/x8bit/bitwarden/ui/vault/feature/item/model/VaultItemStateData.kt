@@ -14,6 +14,7 @@ import kotlinx.collections.immutable.ImmutableList
  */
 data class VaultItemStateData(
     val cipher: CipherView?,
+    val totpCodeItemData: TotpCodeItemData?,
     val canDelete: Boolean,
     val canAssociateToCollections: Boolean,
     val canEdit: Boolean,
