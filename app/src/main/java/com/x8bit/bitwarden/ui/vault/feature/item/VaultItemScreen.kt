@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHan
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
-import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 /**
@@ -261,7 +260,6 @@ fun VaultItemScreen(
     ) {
         VaultItemContent(
             viewState = state.viewState,
-            totpCodeItemData = state.totpCodeItemData,
             modifier = Modifier
                 .fillMaxSize(),
             vaultCommonItemTypeHandlers = remember(viewModel) {
@@ -352,7 +350,6 @@ private fun VaultItemDialogs(
 @Composable
 private fun VaultItemContent(
     viewState: VaultItemState.ViewState,
-    totpCodeItemData: TotpCodeItemData?,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     vaultCardItemTypeHandlers: VaultCardItemTypeHandlers,
@@ -373,7 +370,6 @@ private fun VaultItemContent(
                     VaultItemLoginContent(
                         commonState = viewState.common,
                         loginItemState = viewState.type,
-                        totpCodeItemData = totpCodeItemData,
                         vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultLoginItemTypeHandlers = vaultLoginItemTypeHandlers,
                         modifier = modifier,

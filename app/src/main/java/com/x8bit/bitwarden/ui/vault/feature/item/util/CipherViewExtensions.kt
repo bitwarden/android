@@ -42,6 +42,7 @@ fun CipherView.toViewState(
     previousState: VaultItemState.ViewState.Content?,
     isPremiumUser: Boolean,
     hasMasterPassword: Boolean,
+    totpCodeItemData: TotpCodeItemData?,
     clock: Clock = Clock.systemDefaultZone(),
     canDelete: Boolean,
     canAssignToCollections: Boolean,
@@ -124,7 +125,8 @@ fun CipherView.toViewState(
                         ),
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
-                    fido2CredentialCreationDateText = loginValues
+                    totpCodeItemData = totpCodeItemData,
+                fido2CredentialCreationDateText = loginValues
                         .fido2Credentials
                         ?.firstOrNull()
                         ?.getCreationDateText(clock),
