@@ -195,7 +195,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -224,7 +224,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -243,7 +243,7 @@ class AuthenticatorBridgeManagerTest {
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
-                SYMMETRIC_KEY.toFingerprint().getOrNull()
+                SYMMETRIC_KEY.toFingerprint().getOrNull(),
             )
         } returns true
         val serviceConnection = slot<ServiceConnection>()
@@ -257,7 +257,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -278,7 +278,7 @@ class AuthenticatorBridgeManagerTest {
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
-                SYMMETRIC_KEY.toFingerprint().getOrNull()
+                SYMMETRIC_KEY.toFingerprint().getOrNull(),
             )
         } returns false
         every {
@@ -295,7 +295,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -313,7 +313,7 @@ class AuthenticatorBridgeManagerTest {
     @Suppress("MaxLineLength")
     fun `onAccountsSync should set AccountSyncState to decrypted response`() {
         val expectedAccounts = listOf<SharedAccountData.Account>(
-            mockk()
+            mockk(),
         )
         val encryptedAccounts: EncryptedSharedAccountData = mockk()
         val decryptedAccounts: SharedAccountData = mockk {
@@ -323,7 +323,7 @@ class AuthenticatorBridgeManagerTest {
         every { encryptedAccounts.decrypt(SYMMETRIC_KEY) } returns Result.success(decryptedAccounts)
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
-                SYMMETRIC_KEY.toFingerprint().getOrNull()
+                SYMMETRIC_KEY.toFingerprint().getOrNull(),
             )
         } returns true
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
@@ -340,7 +340,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -363,7 +363,7 @@ class AuthenticatorBridgeManagerTest {
         val encryptedAccounts: EncryptedSharedAccountData = mockk()
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
-                SYMMETRIC_KEY.toFingerprint().getOrNull()
+                SYMMETRIC_KEY.toFingerprint().getOrNull(),
             )
         } returns true
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
@@ -380,7 +380,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 
@@ -406,7 +406,7 @@ class AuthenticatorBridgeManagerTest {
         every { encryptedAccounts.decrypt(SYMMETRIC_KEY) } returns Result.failure(RuntimeException())
         every {
             mockBridgeService.checkSymmetricEncryptionKeyFingerprint(
-                SYMMETRIC_KEY.toFingerprint().getOrNull()
+                SYMMETRIC_KEY.toFingerprint().getOrNull(),
             )
         } returns true
         fakeSymmetricKeyStorageProvider.symmetricKey = SYMMETRIC_KEY
@@ -423,7 +423,7 @@ class AuthenticatorBridgeManagerTest {
             context.bindService(
                 any(),
                 capture(serviceConnection),
-                Context.BIND_AUTO_CREATE
+                Context.BIND_AUTO_CREATE,
             )
         } returns true
 

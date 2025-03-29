@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -46,7 +45,8 @@ private const val AUTHENTICATOR_BRIDGE_SERVICE_CLASS =
 internal class AuthenticatorBridgeManagerImpl(
     private val connectionType: AuthenticatorBridgeConnectionType,
     private val symmetricKeyStorageProvider: SymmetricKeyStorageProvider,
-    callbackProvider: AuthenticatorBridgeCallbackProvider = StubAuthenticatorBridgeCallbackProvider(),
+    callbackProvider: AuthenticatorBridgeCallbackProvider =
+        StubAuthenticatorBridgeCallbackProvider(),
     context: Context,
     processLifecycleOwner: LifecycleOwner = ProcessLifecycleOwner.get(),
 ) : AuthenticatorBridgeManager {
@@ -67,7 +67,7 @@ internal class AuthenticatorBridgeManagerImpl(
                 isBuildVersionBelow(Build.VERSION_CODES.S) -> AccountSyncState.OsVersionNotSupported
                 !isBitwardenAppInstalled() -> AccountSyncState.AppNotInstalled
                 else -> AccountSyncState.Loading
-            }
+            },
         )
 
     /**
@@ -117,7 +117,7 @@ internal class AuthenticatorBridgeManagerImpl(
             }
             ?.fold(
                 onFailure = { false },
-                onSuccess = { true }
+                onSuccess = { true },
             )
             ?: false
 
@@ -201,7 +201,6 @@ internal class AuthenticatorBridgeManagerImpl(
                         return
                     },
                 )
-
         }
 
         if (symmetricKeyStorageProvider.symmetricKey == null) {
