@@ -18,7 +18,6 @@ plugins {
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
 }
@@ -281,17 +280,6 @@ dependencies {
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
-}
-
-kover {
-    currentProject {
-        createVariant("standard") {
-            add("standardDebug")
-        }
-        createVariant("fdroid") {
-            add("fdroidDebug")
-        }
-    }
 }
 
 tasks {
