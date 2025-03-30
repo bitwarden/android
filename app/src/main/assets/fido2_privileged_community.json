@@ -71,6 +71,18 @@
           }
         ]
       }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.klar",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "62:03:A4:73:BE:36:D6:4E:E3:7F:87:FA:50:0E:DB:C7:9E:AB:93:06:10:AB:9B:9F:A4:CA:7D:5C:1F:1B:4F:FC"
+          }
+        ]
+      }
     }
   ]
 }
