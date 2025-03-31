@@ -38,7 +38,10 @@ class EncryptionUtilTest {
     @Test
     fun `toFingerprint should return success when there are no internal exceptions`() {
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer(),
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isSuccess)
@@ -49,7 +52,10 @@ class EncryptionUtilTest {
         mockkStatic(MessageDigest::class)
         every { MessageDigest.getInstance("SHA-256") } throws NoSuchAlgorithmException()
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer(),
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isFailure)
@@ -123,7 +129,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    @Suppress("MaxLIneLength")
+    @Suppress("MaxLineLength")
     fun `decrypt EncryptedAddTotpLoginItemData should return success when there are no internal exceptions`() {
         val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
