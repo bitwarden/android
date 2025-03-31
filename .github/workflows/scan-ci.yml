@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Scan with Checkmarx
-        uses: checkmarx/ast-github-action@184bf2f64f55d1c93fd6636d539edf274703e434 # 2.0.41
+        uses: checkmarx/ast-github-action@7b7c2fd5b562de70e53fd3256b47c64e7e1951bd # 2.0.45
         with:
           project_name: ${{ github.repository }}
           cx_tenant: ${{ secrets.CHECKMARX_TENANT }}
@@ -34,7 +34,7 @@ jobs:
             --output-path .
 
       - name: Upload Checkmarx results to GitHub
-        uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
+        uses: github/codeql-action/upload-sarif@5f8171a638ada777af81d42b55959a643bb29017 # v3.28.12
         with:
           sarif_file: cx_result.sarif
           sha: ${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.sha || github.sha }}
