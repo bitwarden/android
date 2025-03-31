@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       packages: read
+      pull-requests: write
 
     steps:
       - name: Check out repo
@@ -79,25 +80,11 @@ jobs:
         with:
           name: test-reports
           path: |
+            build/reports/kover/reportMergedCoverage.xml
             app/build/reports/tests/
-            app/build/reports/kover/reportStandardDebug.xml
-
-  report:
-    name: Process Test Reports
-    needs: test
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
-    if: success()
-
-    steps:
-      - name: Download test artifacts
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
-        with:
-          name: test-reports
+            authenticator/build/reports/tests/
+            authenticatorbridge/build/reports/tests/
+            core/build/reports/tests/
 
       - name: Upload to codecov.io
         id: upload-to-codecov
@@ -106,8 +93,9 @@ jobs:
         continue-on-error: true
         with:
           os: linux
-          files: kover/reportStandardDebug.xml
+          files: build/reports/kover/reportMergedCoverage.xml
           fail_ci_if_error: true
+          disable_search: true
 
       - name: Comment PR if tests failed
         if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')

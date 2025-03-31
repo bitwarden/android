@@ -105,10 +105,17 @@ platform :android do
     )
   end
 
-  desc "Runs Standard Debug tests and generates Kover report"
+  desc "Runs lint, tests and generates Kover reports for all project modules"
   lane :check do
     gradle(
-        tasks: ["app:testStandardDebug", "app:lintStandardDebug", "app:detekt", "app:koverXmlReportStandardDebug"]
+        tasks: [
+          "detekt",
+          "lintStandardDebug",
+          "lintDebug",
+          "testStandardDebug",
+          "testDebug",
+          "koverXmlReportMergedCoverage",
+        ]
     )
   end
 
@@ -259,11 +266,6 @@ platform :android do
   end
 
   # Authenticator
-  desc "Runs tests"
-  lane :checkAuthenticator do
-    gradle(tasks: ["authenticator:testDebug", "authenticator:lintDebug", "authenticator:detekt","authenticator:koverXmlReportDebug"])
-  end
-
   desc "Apply build version information"
   fastlane_require "time"
   lane :setAuthenticatorBuildVersionInfo do |options|
