@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 class MainViewModelTest : BaseViewModelTest() {
 
@@ -33,6 +34,7 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
     fun `on AppThemeChanged should update state`() {
         assertEquals(
             MainState(
@@ -58,6 +60,7 @@ class MainViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         mainViewModel.trySendAction(MainAction.OpenDebugMenu)
 
