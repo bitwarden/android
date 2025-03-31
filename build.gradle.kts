@@ -26,10 +26,10 @@ detekt {
     autoCorrect = true
     config.from(files("detekt-config.yml"))
     source.from(
-        "app/src/main",
-        "authenticator/src/main",
-        "authenticatorbridge/src/main",
-        "core/src/main",
+        "app/src",
+        "authenticator/src",
+        "authenticatorbridge/src",
+        "core/src",
     )
 }
 

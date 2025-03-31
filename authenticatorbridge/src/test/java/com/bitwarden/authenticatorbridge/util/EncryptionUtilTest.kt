@@ -35,6 +35,7 @@ class EncryptionUtilTest {
         unmockkStatic(KeyGenerator::class)
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toFingerprint should return success when there are no internal exceptions`() {
         val keyData = SymmetricEncryptionKeyData(
@@ -44,6 +45,7 @@ class EncryptionUtilTest {
         assertTrue(result.isSuccess)
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toFingerprint should return failure when MessageDigest getInstance fails`() {
         mockkStatic(MessageDigest::class)
@@ -123,7 +125,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    @Suppress("MaxLIneLength")
+    @Suppress("MaxLineLength")
     fun `decrypt EncryptedAddTotpLoginItemData should return success when there are no internal exceptions`() {
         val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
