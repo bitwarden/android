@@ -849,8 +849,7 @@ class VaultDataExtensionsTest {
                         name = R.string.folder_none.asText(),
                         itemCount = 0,
                     ),
-
-                    ),
+                ),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
                 totpItemsCount = 1,
