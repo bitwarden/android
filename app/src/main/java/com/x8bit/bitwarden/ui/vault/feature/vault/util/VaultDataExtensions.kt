@@ -67,6 +67,8 @@ fun VaultData.toViewState(
         VaultState.ViewState.NoItems
     } else {
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
+        val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
+            noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -103,7 +105,7 @@ fun VaultData.toViewState(
                     )
                 }
                 .let { folderItems ->
-                    if (noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD) {
+                    if (shouldShowUnGroupedItems) {
                         folderItems
                     } else {
                         folderItems.plus(
@@ -124,7 +126,7 @@ fun VaultData.toViewState(
                         isPremiumUser = isPremium,
                     )
                 }
-                .takeIf { it.size < NO_FOLDER_ITEM_THRESHOLD }
+                .takeIf { shouldShowUnGroupedItems }
                 .orEmpty(),
             collectionItems = filteredCollectionViewList
                 .filter { it.id != null }
