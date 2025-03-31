@@ -110,14 +110,10 @@ platform :android do
     gradle(
         tasks: [
           "detekt",
-          "app:lintStandardDebug",
-          "authenticator:lintDebug",
-          "authenticatorbridge:lintDebug",
-          "core:lintDebug",
-          "app:testStandardDebug",
-          "authenticator:testDebug",
-          "authenticatorbridge:testDebug",
-          "core:testDebug",
+          "lintStandardDebug",
+          "lintDebug",
+          "testStandardDebug",
+          "testDebug",
           "koverXmlReportMergedCoverage",
         ]
     )
