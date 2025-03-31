@@ -1,22 +1,17 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
@@ -25,7 +20,6 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -155,38 +149,21 @@ private fun CustomFieldBoolean(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .semantics(mergeDescendants = true) {}
-            .defaultMinSize(minHeight = 60.dp)
-            .cardStyle(
-                cardStyle = cardStyle,
-                onClick = { onValueChanged(!value) },
-                paddingEnd = 4.dp,
-                paddingTop = 6.dp,
-                paddingBottom = 6.dp,
-            ),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        BitwardenSwitch(
-            label = label,
-            isChecked = value,
-            onCheckedChange = null,
-            cardStyle = null,
-            modifier = Modifier.weight(1f),
-        )
-
-        BitwardenRowOfActions(
-            actions = {
-                BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_cog,
-                    contentDescription = stringResource(id = R.string.edit),
-                    onClick = onEditValue,
-                    modifier = Modifier.testTag("CustomFieldSettingsButton"),
-                )
-            },
-        )
-    }
+    BitwardenSwitch(
+        modifier = modifier,
+        label = label,
+        isChecked = value,
+        onCheckedChange = onValueChanged,
+        cardStyle = cardStyle,
+        actions = {
+            BitwardenStandardIconButton(
+                vectorIconRes = R.drawable.ic_cog,
+                contentDescription = stringResource(id = R.string.edit),
+                onClick = onEditValue,
+                modifier = Modifier.testTag(tag = "CustomFieldSettingsButton"),
+            )
+        },
+    )
 }
 
 /**
