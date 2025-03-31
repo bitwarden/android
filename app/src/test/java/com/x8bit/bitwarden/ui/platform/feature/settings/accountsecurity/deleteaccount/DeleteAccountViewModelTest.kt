@@ -87,18 +87,23 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
                 authRepo.deleteAccountWithMasterPassword(masterPassword)
             } returns DeleteAccountResult.Success
 
-            viewModel.trySendAction(
-                DeleteAccountAction.DeleteAccountConfirmDialogClick(
-                    masterPassword,
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess),
-                viewModel.stateFlow.value,
-            )
-
-            coVerify {
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(
+                    action = DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
                 authRepo.deleteAccountWithMasterPassword(masterPassword)
             }
         }

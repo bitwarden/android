@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

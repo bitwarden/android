@@ -12,7 +12,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
@@ -21,6 +20,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

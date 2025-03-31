@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.PassphraseGeneratorRequest
@@ -8,7 +9,6 @@ import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.GeneratorClients
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

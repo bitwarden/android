@@ -19,7 +19,7 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem

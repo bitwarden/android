@@ -7,7 +7,7 @@ import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.platform.PlatformTextInputMethodRequest
 import androidx.compose.ui.platform.PlatformTextInputSession
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * Interceptor that disables the [EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING] flag on text inputs.

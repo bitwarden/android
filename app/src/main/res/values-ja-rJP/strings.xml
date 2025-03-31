@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">転送されたメールエイリアス</string>
   <string name="random_word">ランダムな単語</string>
   <string name="email_required_parenthesis">メールアドレス（必須）</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">ドメイン名（必須）</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API キー (必須)</string>
   <string name="service">サービス</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API アクセストークン</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">現在のユーザー名を上書きしてもよろしいですか？</string>
   <string name="generate_username">ユーザー名を生成</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">アセットリンクにアプリが見つからないため、パスキーの操作に失敗しました</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">アプリを確認できなかったため、パスキーの操作に失敗しました</string>
   <string name="confirm_file_password">ファイルパスワードの確認</string>
-  <string name="continue_to_give_feedback">フィードバックに進みますか？</string>
-  <string name="continue_to_provide_feedback">新しいアプリにフィードバックを与えるには、続行を選択してください！</string>
   <string name="file_password">ファイルパスワード</string>
-  <string name="give_feedback">フィードバックを送る</string>
   <string name="password_protected">パスワード保護あり</string>
   <string name="password_used_to_export">このパスワードはこのファイルのエクスポートとインポート時に使用します</string>
   <string name="autofill_suggestion">候補を自動入力する</string>

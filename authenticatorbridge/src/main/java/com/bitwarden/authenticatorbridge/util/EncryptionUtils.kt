@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.bitwarden.authenticatorbridge.util
 
 import android.security.keystore.KeyProperties
@@ -11,7 +13,6 @@ import com.bitwarden.authenticatorbridge.model.SharedAccountDataJson
 import com.bitwarden.authenticatorbridge.model.SymmetricEncryptionKeyData
 import com.bitwarden.authenticatorbridge.model.SymmetricEncryptionKeyFingerprintData
 import com.bitwarden.authenticatorbridge.model.toByteArrayContainer
-import kotlinx.serialization.encodeToString
 import java.security.MessageDigest
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -25,6 +26,7 @@ import javax.crypto.spec.SecretKeySpec
  * This is intended to be used for implementing
  * [IAuthenticatorBridgeService.getSymmetricEncryptionKeyData].
  */
+@Suppress("MagicNumber")
 fun generateSecretKey(): Result<SecretKey> = runCatching {
     val keygen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES)
     keygen.init(256)
@@ -35,8 +37,9 @@ fun generateSecretKey(): Result<SecretKey> = runCatching {
  * Generate a fingerprint for the given symmetric key.
  *
  * This is intended to be used for implementing
- * [IAuthenticatorBridgeService.checkSymmetricEncryptionKeyFingerprint], which allows callers of the service
- * to verify that they have the correct symmetric key without actually having to send the key.
+ * [IAuthenticatorBridgeService.checkSymmetricEncryptionKeyFingerprint], which allows callers of the
+ * service to verify that they have the correct symmetric key without actually having to send the
+ * key.
  */
 fun SymmetricEncryptionKeyData.toFingerprint(): Result<SymmetricEncryptionKeyFingerprintData> =
     runCatching {
@@ -87,7 +90,7 @@ internal fun EncryptedSharedAccountData.decrypt(
     val cipher = generateCipher()
     cipher.init(Cipher.DECRYPT_MODE, key, iv)
     val decryptedModel = JSON.decodeFromString<SharedAccountDataJson>(
-        cipher.doFinal(this.encryptedAccountsJson.byteArray).decodeToString()
+        cipher.doFinal(this.encryptedAccountsJson.byteArray).decodeToString(),
     )
     decryptedModel.toDomainModel()
 }
@@ -130,7 +133,7 @@ fun EncryptedAddTotpLoginItemData.decrypt(
     val cipher = generateCipher()
     cipher.init(Cipher.DECRYPT_MODE, key, iv)
     val decryptedModel = JSON.decodeFromString<AddTotpLoginItemDataJson>(
-        cipher.doFinal(this.encryptedTotpUriJson.byteArray).decodeToString()
+        cipher.doFinal(this.encryptedTotpUriJson.byteArray).decodeToString(),
     )
     decryptedModel.toDomainModel()
 }
@@ -158,7 +161,7 @@ private fun generateCipher(): Cipher =
     Cipher.getInstance(
         KeyProperties.KEY_ALGORITHM_AES + "/" +
             KeyProperties.BLOCK_MODE_CBC + "/" +
-            "PKCS5PADDING"
+            "PKCS5PADDING",
     )
 
 /**
@@ -173,7 +176,7 @@ private fun SharedAccountData.toJsonModel() = SharedAccountDataJson(
             email = account.email,
             totpUris = account.totpUris,
         )
-    }
+    },
 )
 
 /**
@@ -188,7 +191,7 @@ private fun SharedAccountDataJson.toDomainModel() = SharedAccountData(
             email = account.email,
             totpUris = account.totpUris,
         )
-    }
+    },
 )
 
 /**
@@ -199,7 +202,8 @@ private fun AddTotpLoginItemDataJson.toDomainModel() = AddTotpLoginItemData(
 )
 
 /**
- * Helper function for converting [AddTotpLoginItemData] to a serializable [AddTotpLoginItemDataJson].
+ * Helper function for converting [AddTotpLoginItemData] to a serializable
+ * [AddTotpLoginItemDataJson].
  */
 private fun AddTotpLoginItemData.toJsonModel() = AddTotpLoginItemDataJson(
     totpUri = totpUri,

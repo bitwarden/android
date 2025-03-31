@@ -7,7 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 
 private const val VAULT_UNLOCK_TYPE: String = "unlock_type"

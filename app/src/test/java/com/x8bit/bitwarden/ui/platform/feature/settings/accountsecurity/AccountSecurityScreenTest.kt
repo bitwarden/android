@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
@@ -19,9 +20,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
@@ -352,8 +353,8 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(
-                "Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if " +
-                    "you ever fully log out of the application.",
+                text = "Your PIN must be at least 4 characters. Your PIN settings will be reset " +
+                    "if you ever fully log out of the application.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -402,9 +403,8 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `PIN input dialog Submit click with empty pin should clear the dialog and send UnlockWithPinToggle Disabled`() {
+    fun `PIN input dialog with empty pin should disable the Submit button`() {
         mutableStateFlow.update {
             it.copy(isUnlockWithPinEnabled = false)
         }
@@ -414,16 +414,9 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Submit")
+            .onAllNodesWithText(text = "Submit")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
-            )
-        }
-        composeTestRule.assertNoDialogExists()
+            .assertIsNotEnabled()
     }
 
     @Suppress("MaxLineLength")

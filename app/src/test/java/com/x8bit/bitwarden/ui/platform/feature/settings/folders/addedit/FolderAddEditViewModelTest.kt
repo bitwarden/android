@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult

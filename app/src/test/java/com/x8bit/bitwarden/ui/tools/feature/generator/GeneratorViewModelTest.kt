@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult

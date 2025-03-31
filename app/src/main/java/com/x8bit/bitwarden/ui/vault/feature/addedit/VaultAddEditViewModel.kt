@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
@@ -30,7 +31,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult

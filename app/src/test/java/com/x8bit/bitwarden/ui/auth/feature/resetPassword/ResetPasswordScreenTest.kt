@@ -11,8 +11,8 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordAction
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent

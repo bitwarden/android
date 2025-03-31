@@ -1,7 +1,7 @@
-package com.bitwarden.authenticator.data.platform.util
+package com.bitwarden.core.data.repository.util
 
+import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 
 class SpecialCharWithPrecedenceComparatorTest {
 

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository.util
 
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.core.data.repository.model.DataState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.transformWhile

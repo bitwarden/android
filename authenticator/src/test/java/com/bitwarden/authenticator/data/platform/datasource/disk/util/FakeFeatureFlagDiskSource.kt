@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.data.platform.datasource.disk.util
 
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.FeatureFlagsConfiguration
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 

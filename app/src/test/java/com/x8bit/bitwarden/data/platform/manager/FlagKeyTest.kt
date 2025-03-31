@@ -81,6 +81,14 @@ class FlagKeyTest {
             FlagKey.ChromeAutofill.keyName,
             "android-chrome-autofill",
         )
+        assertEquals(
+            FlagKey.MobileErrorReporting.keyName,
+            "mobile-error-reporting",
+        )
+        assertEquals(
+            FlagKey.FlightRecorder.keyName,
+            "enable-pm-flight-recorder",
+        )
     }
 
     @Test
@@ -104,6 +112,8 @@ class FlagKeyTest {
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.ChromeAutofill,
+                FlagKey.MobileErrorReporting,
+                FlagKey.FlightRecorder,
             ).all {
                 !it.defaultValue
             },
@@ -140,6 +150,8 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
+                FlagKey.MobileErrorReporting,
+                FlagKey.FlightRecorder,
             ).all {
                 !it.isRemotelyConfigured
             },

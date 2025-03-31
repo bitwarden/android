@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android

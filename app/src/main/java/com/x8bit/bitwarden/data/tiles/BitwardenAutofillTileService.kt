@@ -8,12 +8,12 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.Keep
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.AccessibilityActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.isAccessibilityServiceEnabled
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

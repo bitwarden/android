@@ -10,7 +10,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.flow.Flow

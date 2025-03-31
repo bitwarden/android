@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.util
 import android.os.Build
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.util.deviceData
+import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.platform.util.versionData
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -14,7 +15,11 @@ class BuildConfigTest {
         val osInfo = "\uD83E\uDD16 ${Build.VERSION.RELEASE}@${Build.VERSION.SDK_INT}"
         val buildInfo = "\uD83D\uDCE6 dev"
 
-        assertEquals("$deviceBrandModel $osInfo $buildInfo", deviceData)
+        if (isFdroid) {
+            assertEquals("$deviceBrandModel $osInfo $buildInfo -fdroid", deviceData)
+        } else {
+            assertEquals("$deviceBrandModel $osInfo $buildInfo", deviceData)
+        }
     }
 
     @Test

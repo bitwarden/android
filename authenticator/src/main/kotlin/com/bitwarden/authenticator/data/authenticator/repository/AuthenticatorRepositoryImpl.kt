@@ -23,13 +23,13 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDat
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.data.platform.repository.model.DataState
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.map
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
@@ -48,7 +48,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 

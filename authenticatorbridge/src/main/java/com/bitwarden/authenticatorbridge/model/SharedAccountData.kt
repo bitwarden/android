@@ -1,7 +1,5 @@
 package com.bitwarden.authenticatorbridge.model
 
-import java.time.Instant
-
 /**
  * Domain level model representing shared account data.
  *

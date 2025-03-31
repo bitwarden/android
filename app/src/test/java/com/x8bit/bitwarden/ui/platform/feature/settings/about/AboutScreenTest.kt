@@ -13,7 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -73,22 +73,6 @@ class AboutScreenTest : BaseComposeTest() {
     fun `on back click should send BackClick`() {
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(AboutAction.BackClick) }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on give feedback click should display confirmation dialog and confirm click should emit GiveFeedbackClick`() {
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Give Feedback").performScrollTo().performClick()
-        composeTestRule.onNode(isDialog()).assertExists()
-        composeTestRule
-            .onAllNodesWithText("Continue")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verify {
-            viewModel.trySendAction(AboutAction.GiveFeedbackClick)
-        }
     }
 
     @Suppress("MaxLineLength")
@@ -191,16 +175,6 @@ class AboutScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(AboutEvent.NavigateToWebVault(testUrl))
         verify {
             intentManager.launchUri(testUrl.toUri())
-        }
-    }
-
-    @Test
-    fun `on NavigateToAboutSend should call launchUri on intentManager`() {
-        mutableEventFlow.tryEmit(AboutEvent.NavigateToRateApp)
-        verify {
-            intentManager.launchUri(
-                "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
-            )
         }
     }
 

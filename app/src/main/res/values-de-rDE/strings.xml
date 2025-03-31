@@ -772,7 +772,9 @@ Das Scannen erfolgt automatisch.</string>
   <string name="forwarded_email_alias">Weitergeleitetes E-Mail-Alias</string>
   <string name="random_word">Zufälliges Wort</string>
   <string name="email_required_parenthesis">E-Mail-Adresse (erforderlich)</string>
+  <string name="domain_name">Domainname</string>
   <string name="domain_name_required_parenthesis">Domainname (erforderlich)</string>
+  <string name="api_key">API-Schlüssel</string>
   <string name="api_key_required_parenthesis">API-Schlüssel (erforderlich)</string>
   <string name="service">Dienst</string>
   <string name="addy_io">addy.io</string>
@@ -781,6 +783,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API-Zugriffstoken (erforderlich)</string>
   <string name="api_access_token">API-Zugriffstoken</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bist Du sicher, dass Du den aktuellen Benutzernamen überschreiben möchtest?</string>
   <string name="generate_username">Benutzername generieren</string>
@@ -971,10 +974,7 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht in den Asset-Links gefunden wurde</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</string>
   <string name="confirm_file_password">Dateipasswort bestätigen</string>
-  <string name="continue_to_give_feedback">Fortfahren, um Feedback zu geben?</string>
-  <string name="continue_to_provide_feedback">Wähle Fortfahren, um Feedback zur neuen App abzugeben!</string>
   <string name="file_password">Dateipasswort</string>
-  <string name="give_feedback">Feedback geben</string>
   <string name="password_protected">Passwortgeschützt</string>
   <string name="password_used_to_export">Dieses Passwort wird zum Exportieren und Importieren dieser Datei verwendet</string>
   <string name="autofill_suggestion">Vorschläge zum Auto-Ausfüllen</string>

@@ -12,8 +12,9 @@ class TestAuthenticatorBridgeCallbackProvider : AuthenticatorBridgeCallbackProvi
 
     override fun getCallback(
         onAccountsSync: (EncryptedSharedAccountData) -> Unit,
-    ): IAuthenticatorBridgeServiceCallback = object : IAuthenticatorBridgeServiceCallback.Default() {
-
-        override fun onAccountsSync(data: EncryptedSharedAccountData) = onAccountsSync.invoke(data)
-    }
+    ): IAuthenticatorBridgeServiceCallback =
+        object : IAuthenticatorBridgeServiceCallback.Default() {
+            override fun onAccountsSync(data: EncryptedSharedAccountData) =
+                onAccountsSync.invoke(data)
+        }
 }

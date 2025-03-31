@@ -480,7 +480,7 @@ Skanning skjer automatisk.</string>
   <string name="unlock">Lås opp</string>
   <string name="unlock_vault">Lås opp kvelvet</string>
   <string name="thirty_minutes">30 minutt</string>
-  <string name="set_pin_description">Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</string>
+  <string name="set_pin_description">Your PIN must be at least 4 characters. Your PIN settings will be reset if you ever fully log out of the application.</string>
   <string name="logged_in_as_on">Logga inn som %1$s på %2$s.</string>
   <string name="vault_locked_master_password">Kvelvet ditt er låst. Stadfesta hovudpassordet ditt for å halda fram.</string>
   <string name="vault_locked_pin">Kvelvet ditt er låst. Stadfesta PIN-koden din for å halda fram.</string>
@@ -773,7 +773,9 @@ select Add TOTP to store the key safely</string>
   <string name="forwarded_email_alias">Forwarded email alias</string>
   <string name="random_word">Random word</string>
   <string name="email_required_parenthesis">Email (required)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Domain name (required)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">API key (required)</string>
   <string name="service">Service</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ select Add TOTP to store the key safely</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">API access token</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Are you sure you want to overwrite the current username?</string>
   <string name="generate_username">Generate username</string>
@@ -972,10 +975,7 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey-operasjonen feila fordi appen ikkje vart funnen blant ressurslenkene</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-operasjonen feila fordi appen ikkje kunne verifiserast</string>
   <string name="confirm_file_password">Stadfest filpassord</string>
-  <string name="continue_to_give_feedback">Gå vidare til Gje tilbakemelding?</string>
-  <string name="continue_to_provide_feedback">Vel fortset for å gje tilbakemelding på den nye appen!</string>
   <string name="file_password">Filpassord</string>
-  <string name="give_feedback">Gje tilbakemelding</string>
   <string name="password_protected">Passordbeskytta</string>
   <string name="password_used_to_export">Dette passordet vil verte nytta til å eksportere og importere denne fila</string>
   <string name="autofill_suggestion">Autofyll-forslag</string>

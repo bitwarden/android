@@ -772,7 +772,9 @@ Načtení proběhne automaticky.</string>
   <string name="forwarded_email_alias">Alias přeposílaného e-mailu</string>
   <string name="random_word">Náhodné slovo</string>
   <string name="email_required_parenthesis">E-mail (vyžadován)</string>
+  <string name="domain_name">název domény</string>
   <string name="domain_name_required_parenthesis">Název domény (vyžadován)</string>
+  <string name="api_key">Klíč API</string>
   <string name="api_key_required_parenthesis">Klíč API (vyžadován)</string>
   <string name="service">Služba</string>
   <string name="addy_io">addy.io</string>
@@ -781,6 +783,7 @@ Načtení proběhne automaticky.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API přístupového tokenu (povinné)</string>
   <string name="api_access_token">Přístupový token API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Opravdu chcete přepsat aktuální uživatelské jméno?</string>
   <string name="generate_username">Vygenerovat uživatelské jméno</string>
@@ -971,10 +974,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operace přístupového klíče se nezdařila, protože v odkazech na aktivum nebyla nalezena aplikace</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operace přístupového klíče se nezdařila, protože aplikaci nelze ověřit</string>
   <string name="confirm_file_password">Potvrdit heslo souboru</string>
-  <string name="continue_to_give_feedback">Pokračovat pro zanechání zpětné vazby?</string>
-  <string name="continue_to_provide_feedback">Pokračujte v poskytování zpětné vazby na novou aplikaci!</string>
   <string name="file_password">Heslo souboru</string>
-  <string name="give_feedback">Zanechat zpětnou vazbu</string>
   <string name="password_protected">Chráněno heslem</string>
   <string name="password_used_to_export">Toto heslo bude použito pro export a import tohoto souboru</string>
   <string name="autofill_suggestion">Návrh automatického vyplňování</string>

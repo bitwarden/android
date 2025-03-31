@@ -773,7 +773,9 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="forwarded_email_alias">Pārvirzīto e-pastu aizstājvārds</string>
   <string name="random_word">Nejaušs vārds</string>
   <string name="email_required_parenthesis">E-pasta adrese (nepieciešama)</string>
+  <string name="domain_name">domēna vārds</string>
   <string name="domain_name_required_parenthesis">Domēna vārds (nepieciešams)</string>
+  <string name="api_key">API atslēga</string>
   <string name="api_key_required_parenthesis">API atslēga (nepieciešama)</string>
   <string name="service">Pakalpojums</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API piekļuves pilnvara (nepieciešama)</string>
   <string name="api_access_token">API piekļuves pilnvara</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</string>
   <string name="generate_username">Izveidot lietotājvārdu</string>
@@ -972,10 +975,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Darbība ar piekļuves atslēgu neizdevās, jo lietotne netika atrasta līdzekļu saitēs</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Darbība ar piekļuves atslēgu neizdevās, jo lietotni nevarēja apliecināt</string>
   <string name="confirm_file_password">Apstiprināt datnes paroli</string>
-  <string name="continue_to_give_feedback">Turpināt, lai sniegtu atgriezenisko saiti?</string>
-  <string name="continue_to_provide_feedback">Jāatlasa \"Turpināt\", lai sniegtu atgriezenisko saiti par jauno lietotni.</string>
   <string name="file_password">Datnes parole</string>
-  <string name="give_feedback">Sniegt atgriezenisko saiti</string>
   <string name="password_protected">Aizsargāts ar paroli</string>
   <string name="password_used_to_export">Šī parole tiks izmantota, lai izgūtu un ievietotu šo datni</string>
   <string name="autofill_suggestion">Automātiskās aizpildes ieteikums</string>

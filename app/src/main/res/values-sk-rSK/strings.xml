@@ -773,7 +773,9 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="forwarded_email_alias">Alias presmerovaného e-mailu</string>
   <string name="random_word">Náhodné slovo</string>
   <string name="email_required_parenthesis">E-mail (povinné)</string>
+  <string name="domain_name">názov domény</string>
   <string name="domain_name_required_parenthesis">Názov domény (povinné)</string>
+  <string name="api_key">Kľúč API</string>
   <string name="api_key_required_parenthesis">Kľúč API (povinné)</string>
   <string name="service">Služba</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ Pridať TOTP, aby ste kľúč bezpečne uložili</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">Prístupový token API (povinné)</string>
   <string name="api_access_token">Prístupový token API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Naozaj chcete prepísať aktuálne používateľské meno?</string>
   <string name="generate_username">Vygenerovať používateľské meno</string>
@@ -972,10 +975,7 @@ Chcete prepnúť na tento účet?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operácia prístupového kľúča zlyhala, pretože sa aplikácia nenašla v súbore s protokolom Digital Asset Links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože aplikácia sa nedá overiť</string>
   <string name="confirm_file_password">Potvrdiť heslo súboru</string>
-  <string name="continue_to_give_feedback">Pokračovať na Poskytnúť spätnú väzbu?</string>
-  <string name="continue_to_provide_feedback">Vyberte pokračovať v poskytovaní spätnej väzby na novú aplikáciu!</string>
   <string name="file_password">Heslo súboru</string>
-  <string name="give_feedback">Poskytnúť spätnú väzbu</string>
   <string name="password_protected">Chránené heslom</string>
   <string name="password_used_to_export">Toto heslo sa použije na export a import tohto súboru</string>
   <string name="autofill_suggestion">Návrhy automatického vypĺňania</string>

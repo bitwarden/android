@@ -773,7 +773,9 @@
   <string name="forwarded_email_alias">Псевдонім е-пошти для пересилання</string>
   <string name="random_word">Випадкове слово</string>
   <string name="email_required_parenthesis">Е-пошти (обов\'язково)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Ім\'я домену (обов\'язково)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Ключ API (обов\'язково)</string>
   <string name="service">Послуга</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Токен доступу до API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Ви дійсно бажаєте перезаписати поточне ім\'я користувача?</string>
   <string name="generate_username">Генерувати ім\'я користувача</string>
@@ -972,10 +975,7 @@
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Не вдалося виконати операцію з ключем доступу, оскільки програму не знайдено в посиланнях на ресурси</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Не вдалося виконати операцію з ключем доступу, оскільки неможливо перевірити програму</string>
   <string name="confirm_file_password">Підтвердьте пароль файлу</string>
-  <string name="continue_to_give_feedback">Перейти до написання відгуку?</string>
-  <string name="continue_to_provide_feedback">Виберіть \"Продовжити\" для написання відгуку про нову програму!</string>
   <string name="file_password">Пароль файлу</string>
-  <string name="give_feedback">Написати відгук</string>
   <string name="password_protected">Захищено паролем</string>
   <string name="password_used_to_export">Цей пароль буде використано для експортування та імпортування цього файлу</string>
   <string name="autofill_suggestion">Пропозиція автозаповнення</string>

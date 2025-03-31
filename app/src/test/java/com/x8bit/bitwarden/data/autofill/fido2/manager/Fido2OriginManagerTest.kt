@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 import android.content.pm.Signature
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -315,7 +315,7 @@ private const val FAIL_ALLOW_LIST = """
       }
     }
   ]
-} 
+}
 """
 private val DEFAULT_STATEMENT = DigitalAssetLinkResponseJson(
     relation = listOf(

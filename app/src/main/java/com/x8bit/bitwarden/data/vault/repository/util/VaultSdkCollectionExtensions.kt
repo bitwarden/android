@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 
 /**

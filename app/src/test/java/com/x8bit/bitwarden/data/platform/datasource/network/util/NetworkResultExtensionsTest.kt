@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.util
 
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

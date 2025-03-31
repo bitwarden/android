@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -22,8 +24,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

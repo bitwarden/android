@@ -773,7 +773,9 @@ usa \'Aggiungi TOTP\' per salvarla in modo sicuro.</string>
   <string name="forwarded_email_alias">Alias</string>
   <string name="random_word">Parola casuale</string>
   <string name="email_required_parenthesis">Indirizzo email (necessario)</string>
+  <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Nome dominio (necessario)</string>
+  <string name="api_key">API key</string>
   <string name="api_key_required_parenthesis">Chiave API (necessaria)</string>
   <string name="service">Servizio</string>
   <string name="addy_io">addy.io</string>
@@ -782,6 +784,7 @@ usa \'Aggiungi TOTP\' per salvarla in modo sicuro.</string>
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
+  <string name="api_access_token_required_parenthesis">API access token (required)</string>
   <string name="api_access_token">Token API (necessario)</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vuoi davvero sovrascrivere il nome utente attuale?</string>
   <string name="generate_username">Genera nome utente</string>
@@ -972,10 +975,7 @@ Vuoi passare a questo account?</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">L\'operazione della passkey non è riuscita perché l\'app non è stata trovata nei collegamenti alle risorse</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">L\'operazione della passkey non è riuscita perché non è stato possibile verificare l\'app</string>
   <string name="confirm_file_password">Conferma la password</string>
-  <string name="continue_to_give_feedback">Proseguire su Dai un Feedback?</string>
-  <string name="continue_to_provide_feedback">Seleziona continua per dare un feedback sulla nuova app!</string>
   <string name="file_password">Password del file</string>
-  <string name="give_feedback">Invia un feedback</string>
   <string name="password_protected">Protetto con password</string>
   <string name="password_used_to_export">La password sarà utilizzata per importare ed esportare questo file</string>
   <string name="autofill_suggestion">Suggerimento per il riempimento automatico</string>

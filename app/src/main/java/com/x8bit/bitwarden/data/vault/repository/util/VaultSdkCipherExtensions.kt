@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
@@ -19,7 +20,6 @@ import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson

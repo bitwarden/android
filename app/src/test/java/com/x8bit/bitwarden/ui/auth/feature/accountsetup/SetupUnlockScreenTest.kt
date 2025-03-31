@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
@@ -14,7 +15,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
@@ -257,8 +258,8 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(
-                text = "Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if " +
-                    "you ever fully log out of the application.",
+                text = "Your PIN must be at least 4 characters. Your PIN settings will be reset " +
+                    "if you ever fully log out of the application.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -306,9 +307,8 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `PIN input dialog Submit click with empty pin should clear the dialog and send UnlockWithPinToggle Disabled`() {
+    fun `PIN input dialog with empty pin should disable submit button`() {
         mutableStateFlow.update {
             it.copy(isUnlockWithPinEnabled = false)
         }
@@ -320,14 +320,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "Submit")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                SetupUnlockAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
-            )
-        }
-        composeTestRule.assertNoDialogExists()
+            .assertIsNotEnabled()
     }
 
     @Suppress("MaxLineLength")
