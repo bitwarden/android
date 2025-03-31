@@ -78,7 +78,6 @@ class VaultItemViewModel @Inject constructor(
             vaultItemId = args.vaultItemId,
             cipherType = args.cipherType,
             viewState = VaultItemState.ViewState.Loading,
-            totpCodeItemData = null,
             dialog = null,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -102,16 +101,26 @@ class VaultItemViewModel @Inject constructor(
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
+            vaultRepository.getAuthCodeFlow(state.vaultItemId),
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
-        ) { cipherViewState, userState, collectionsState, folderState ->
+        ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
+            val totpCodeData = authCodeState.data?.let {
+                TotpCodeItemData(
+                    periodSeconds = it.periodSeconds,
+                    timeLeftSeconds = it.timeLeftSeconds,
+                    totpCode = it.totpCode,
+                    verificationCode = it.code,
+                )
+            }
             VaultItemAction.Internal.VaultDataReceive(
                 userState = userState,
                 vaultDataState = combineDataStates(
                     cipherViewState,
+                    authCodeState,
                     collectionsState,
                     folderState,
-                ) { _, _, _ ->
+                ) { _, _, _, _ ->
                     // We are only combining the DataStates to know the overall state,
                     // we map it to the appropriate value below.
                 }
@@ -156,6 +165,7 @@ class VaultItemViewModel @Inject constructor(
 
                         VaultItemStateData(
                             cipher = cipherView,
+                            totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
@@ -171,21 +181,6 @@ class VaultItemViewModel @Inject constructor(
             .map { VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
-
-        vaultRepository.getAuthCodeFlow(state.vaultItemId)
-            .map {
-                VaultItemAction.Internal.TotpDataReceive(
-                    totpData = TotpCodeItemData(
-                        periodSeconds = it.data?.periodSeconds ?: 0,
-                        timeLeftSeconds = it.data?.timeLeftSeconds ?: 0,
-                        totpCode = it.data?.totpCode ?: "",
-                        verificationCode = it.data?.code ?: "",
-                    )
-                )
-            }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
-
     }
 
     override fun handleAction(action: VaultItemAction) {
@@ -607,7 +602,7 @@ class VaultItemViewModel @Inject constructor(
             }
 
             is VaultItemAction.ItemType.Login.CopyTotpClick -> {
-                handleCopyTotpClick(action)
+                handleCopyTotpClick()
             }
 
             is VaultItemAction.ItemType.Login.CopyUriClick -> {
@@ -668,11 +663,14 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleCopyTotpClick(action: VaultItemAction.ItemType.Login.CopyTotpClick) {
-        clipboardManager.setText(
-            text = action.code,
-            toastDescriptorOverride = R.string.totp.asText(),
-        )
+    private fun handleCopyTotpClick() {
+        onLoginContent { _, login ->
+            val code = login.totpCodeItemData?.verificationCode ?: return@onLoginContent
+            clipboardManager.setText(
+                text = code,
+                toastDescriptorOverride = R.string.totp.asText(),
+            )
+        }
     }
 
     private fun handleCopyUriClick(action: VaultItemAction.ItemType.Login.CopyUriClick) {
@@ -1095,10 +1093,6 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Internal.IsIconLoadingDisabledUpdateReceive -> {
                 handleIsIconLoadingDisabledUpdateReceive(action)
             }
-
-            is VaultItemAction.Internal.TotpDataReceive -> {
-                handleTotpDataReceive(action)
-            }
         }
     }
 
@@ -1204,6 +1198,7 @@ class VaultItemViewModel @Inject constructor(
             previousState = state.viewState.asContentOrNull(),
             isPremiumUser = account.isPremium,
             hasMasterPassword = account.hasMasterPassword,
+            totpCodeItemData = this.data?.totpCodeItemData,
             canDelete = this.data?.canDelete == true,
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
@@ -1358,12 +1353,6 @@ class VaultItemViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isIconLoadingDisabled = action.isDisabled) }
     }
 
-    private fun handleTotpDataReceive(
-        action: VaultItemAction.Internal.TotpDataReceive,
-    ) {
-        mutableStateFlow.update { it.copy(totpCodeItemData = action.totpData) }
-    }
-
     //endregion Internal Type Handlers
 
     private fun updateDialogState(dialog: VaultItemState.DialogState?) {
@@ -1451,7 +1440,6 @@ data class VaultItemState(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,
     val viewState: ViewState,
-    val totpCodeItemData: TotpCodeItemData?,
     val dialog: DialogState?,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
@@ -1609,11 +1597,14 @@ data class VaultItemState(
                  * Represents a custom field, TextField, HiddenField, BooleanField, or LinkedField.
                  */
                 sealed class Custom : Parcelable {
+                    abstract val id: String
+
                     /**
                      * Represents the data for displaying a custom text field.
                      */
                     @Parcelize
                     data class TextField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1624,6 +1615,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class HiddenField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1635,6 +1627,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class BooleanField(
+                        override val id: String,
                         val name: String,
                         val value: Boolean,
                     ) : Custom()
@@ -1644,6 +1637,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class LinkedField(
+                        override val id: String,
                         val vaultLinkedFieldType: VaultLinkedFieldType,
                         val name: String,
                     ) : Custom()
@@ -1684,6 +1678,7 @@ data class VaultItemState(
                     val passwordData: PasswordData?,
                     val uris: List<UriData>,
                     val passwordRevisionDate: String?,
+                    val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
                     val canViewTotpCode: Boolean,
                     val fido2CredentialCreationDateText: Text?,
@@ -1695,7 +1690,9 @@ data class VaultItemState(
                     val hasLoginCredentials: Boolean
                         get() = username != null ||
                             passwordData != null ||
+                            totpCodeItemData != null ||
                             fido2CredentialCreationDateText != null
+
 
                     /**
                      * A wrapper for the password data.
@@ -2136,9 +2133,7 @@ sealed class VaultItemAction {
             /**
              * The user has clicked the copy button for the TOTP code.
              */
-            data class CopyTotpClick(
-                val code: String,
-            ) : Login()
+            data object CopyTotpClick : Login()
 
             /**
              * The user has clicked the copy button for a URI.
@@ -2294,10 +2289,6 @@ sealed class VaultItemAction {
         data class VaultDataReceive(
             val userState: UserState?,
             val vaultDataState: DataState<VaultItemStateData>,
-        ) : Internal()
-
-        data class TotpDataReceive(
-            val totpData: TotpCodeItemData?,
         ) : Internal()
 
         /**

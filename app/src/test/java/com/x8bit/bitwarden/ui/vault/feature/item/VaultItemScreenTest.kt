@@ -776,6 +776,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `on show hidden field click should send HiddenFieldVisibilityClicked`() {
         val textField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            id = "12345",
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
@@ -814,6 +815,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `copy hidden field button should be displayed according to state`() {
         val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            id = "12345",
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
@@ -855,6 +857,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `on copy hidden field click should send CopyCustomHiddenFieldClick`() {
         val hiddenField = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            id = "12345",
             name = "hidden",
             value = "hidden password",
             isCopyable = true,
@@ -890,6 +893,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `on copy text field click should send CopyCustomTextFieldClick`() {
         val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = "12345",
             name = "text",
             value = "value",
             isCopyable = true,
@@ -924,6 +928,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `text field copy button should be displayed according to state`() {
         val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = "12345",
             name = "text",
             value = "value",
             isCopyable = true,
@@ -1552,6 +1557,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         // Adding a custom field so that we can scroll to it
         // So we can see the Copy notes button but not have it covered by the FAB
         val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = "12345",
             name = "text",
             value = "value",
             isCopyable = true,
@@ -1587,6 +1593,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         // Adding a custom field so that we can scroll to it
         // So we can see the Copy notes button but not have it covered by the FAB
         val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = "12345",
             name = "text",
             value = "value",
             isCopyable = true,
@@ -1642,6 +1649,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         // Adding a custom field so that we can scroll to it
         // So we can see the Copy notes button but not have it covered by the FAB
         val textField = VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = "12345",
             name = "text",
             value = "value",
             isCopyable = true,
@@ -1885,11 +1893,13 @@ class VaultItemScreenTest : BaseComposeTest() {
     fun `in login state, linked custom fields should be displayed according to state`() {
         val linkedFieldUserName =
             VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                id = "12345",
                 name = "linked username",
                 vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
             )
 
         val linkedFieldsPassword = VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+            id = "12345",
             name = "linked password",
             vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
         )
@@ -3149,17 +3159,20 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
         notes = "Lots of notes",
         customFields = listOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
+                id = "12345",
                 name = "text",
                 value = "value",
                 isCopyable = true,
             ),
             VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                id = "12345",
                 name = "hidden",
                 value = "hidden password",
                 isCopyable = true,
                 isVisible = false,
             ),
             VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                id = "12345",
                 name = "boolean",
                 value = true,
             ),

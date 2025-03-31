@@ -50,7 +50,6 @@ private const val AUTH_CODE_SPACING_INTERVAL = 3
 fun VaultItemLoginContent(
     commonState: VaultItemState.ViewState.Content.Common,
     loginItemState: VaultItemState.ViewState.Content.ItemType.Login,
-    totpCodeItemData: TotpCodeItemData?,
     vaultCommonItemTypeHandlers: VaultCommonItemTypeHandlers,
     vaultLoginItemTypeHandlers: VaultLoginItemTypeHandlers,
     modifier: Modifier = Modifier,
@@ -137,7 +136,7 @@ fun VaultItemLoginContent(
             }
         }
 
-        totpCodeItemData?.let { totpCodeItemData ->
+        loginItemState.totpCodeItemData?.let { totpCodeItemData ->
             item(key = "totpCode") {
                 Spacer(modifier = Modifier.height(8.dp))
                 TotpField(
@@ -423,7 +422,7 @@ private fun PasswordField(
 private fun TotpField(
     totpCodeItemData: TotpCodeItemData,
     enabled: Boolean,
-    onCopyTotpClick: (String) -> Unit,
+    onCopyTotpClick: () -> Unit,
     onAuthenticatorHelpToolTipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -449,7 +448,7 @@ private fun TotpField(
                 BitwardenStandardIconButton(
                     vectorIconRes = R.drawable.ic_copy,
                     contentDescription = stringResource(id = R.string.copy_totp),
-                    onClick = { onCopyTotpClick(totpCodeItemData.totpCode) },
+                    onClick = onCopyTotpClick,
                     modifier = Modifier.testTag(tag = "LoginCopyTotpButton"),
                 )
             },
