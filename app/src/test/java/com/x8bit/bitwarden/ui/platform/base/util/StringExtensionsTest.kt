@@ -9,26 +9,26 @@ import org.junit.jupiter.api.Test
 class StringExtensionsTest {
 
     @Test
-    fun `emails without an @ character should be invalid`() {
+    fun `isValidEmail should return appropriate value for possible email addresses`() {
         val invalidEmails = listOf(
-            "",
-            " ",
-            "test.com",
+            "" to false,
+            " " to false,
+            "test.com" to false,
+            "@" to false,
+            "@." to false,
+            "@.aa" to false,
+            "a@.aa" to false,
+            "test@test.com" to true,
+            " test@test " to false,
+            "test@test.c" to false,
+            "a@a.aa" to true,
+            "test@test.com" to true,
+            "test@test.test.com" to true,
+            "test.test@test.com" to true,
+            "test.test@test.test.com" to true,
         )
         invalidEmails.forEach {
-            assertFalse(it.isValidEmail())
-        }
-    }
-
-    @Test
-    fun `emails with an @ character should be valid`() {
-        val validEmails = listOf(
-            "@",
-            "test@test.com",
-            " test@test ",
-        )
-        validEmails.forEach {
-            assertTrue(it.isValidEmail())
+            assertEquals(it.first.isValidEmail(), it.second)
         }
     }
 
