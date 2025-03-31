@@ -105,13 +105,19 @@ platform :android do
     )
   end
 
-  desc "Runs Standard Debug tests and generates Kover report"
+  desc "Runs lint, tests and generates Kover reports for all project modules"
   lane :check do
     gradle(
         tasks: [
-          "lintDebug",
-          "testDebug",
           "detekt",
+          "app:lintStandardDebug",
+          "authenticator:lintDebug",
+          "authenticatorbridge:lintDebug",
+          "core:lintDebug",
+          "app:testStandardDebug",
+          "authenticator:testDebug",
+          "authenticatorbridge:testDebug",
+          "core:testDebug",
           "koverXmlReportMergedCoverage",
         ]
     )
