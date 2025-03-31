@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * The response body for sending a verification email.
@@ -26,20 +28,24 @@ sealed class SendVerificationEmailResponseJson {
      * The values in the array should be used for display to the user, since the keys tend to come
      * back as nonsense. (eg: empty string key)
      */
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializable
     data class Invalid(
-        @SerialName("message")
-        private val invalidMessage: String? = null,
-
+        @JsonNames("message")
         @SerialName("Message")
         private val errorMessage: String? = null,
 
         @SerialName("validationErrors")
-        val validationErrors: Map<String, List<String>>?,
+        private val validationErrors: Map<String, List<String>>?,
     ) : SendVerificationEmailResponseJson() {
         /**
          * A generic error message.
          */
-        val message: String? get() = invalidMessage ?: errorMessage
+        val message: String?
+            get() = validationErrors
+                ?.values
+                ?.firstOrNull()
+                ?.firstOrNull()
+                ?: errorMessage
     }
 }

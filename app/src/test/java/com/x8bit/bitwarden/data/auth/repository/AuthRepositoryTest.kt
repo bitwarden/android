@@ -5474,7 +5474,6 @@ class AuthRepositoryTest {
         assertEquals(PrevalidateSsoResult.Success(token = "token"), result)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `logout for an inactive account should call logout on the UserLogoutManager`() {
         val userId = USER_ID_2
@@ -6229,7 +6228,7 @@ class AuthRepositoryTest {
                 ),
             )
         } returns SendVerificationEmailResponseJson
-            .Invalid(invalidMessage = errorMessage, validationErrors = null)
+            .Invalid(errorMessage = errorMessage, validationErrors = null)
             .asSuccess()
 
         val result = repository.sendVerificationEmail(
