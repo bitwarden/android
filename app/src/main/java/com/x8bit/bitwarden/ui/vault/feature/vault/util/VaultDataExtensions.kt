@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
-import androidx.annotation.VisibleForTesting
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -198,9 +197,8 @@ fun List<LoginUriView>?.toLoginIconData(
 /**
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
-@VisibleForTesting
 @Suppress("MagicNumber", "LongMethod")
-fun CipherView.toVaultItemOrNull(
+private fun CipherView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,

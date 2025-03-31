@@ -19,6 +19,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
+import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
@@ -735,11 +737,9 @@ class VaultDataExtensionsTest {
         val uriMock = mockk<Uri>()
         every { Uri.parse(any()) } returns uriMock
         every { uriMock.host } returns "www.mockuri1.com"
-        val cipherViewList = List(99) {
-            createMockCipherView(number = it, folderId = null)
-        }
+        val mockCipher = createMockCipherView(number = 1, folderId = null)
         val vaultData = VaultData(
-            cipherViewList = cipherViewList,
+            cipherViewList = listOf(mockCipher),
             collectionViewList = listOf(),
             folderViewList = listOf(),
             sendViewList = listOf(),
@@ -755,23 +755,33 @@ class VaultDataExtensionsTest {
 
         assertEquals(
             VaultState.ViewState.Content(
-                loginItemsCount = 99,
+                loginItemsCount = 1,
                 cardItemsCount = 0,
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 favoriteItems = listOf(),
                 folderItems = listOf(),
                 collectionItems = listOf(),
-                noFolderItems = cipherViewList.mapNotNull {
-                    it.toVaultItemOrNull(
-                        hasMasterPassword = true,
-                        isIconLoadingDisabled = false,
-                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
-                        isPremiumUser = true,
-                    )
-                },
+                noFolderItems = listOf(
+                    VaultState.ViewState.VaultItem.Login(
+                        id = "mockId-1",
+                        name = mockCipher.name.asText(),
+                        startIcon = IconData.Network(
+                            uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
+                            fallbackIconRes = R.drawable.ic_globe,
+                        ),
+                        startIconTestTag = "LoginCipherIcon",
+                        extraIconList = mockCipher.toLabelIcons(),
+                        overflowOptions = mockCipher.toOverflowActions(
+                            hasMasterPassword = true,
+                            isPremiumUser = true,
+                        ),
+                        shouldShowMasterPasswordReprompt = false,
+                        username = "mockUsername-1".asText(),
+                    ),
+                ),
                 trashItemsCount = 0,
-                totpItemsCount = 99,
+                totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
             ),

@@ -672,6 +672,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                             name = "mockName-5".asText(),
                             itemCount = 1,
                         ),
+                        VaultState.ViewState.FolderItem(
+                            id = null,
+                            name = R.string.folder_none.asText(),
+                            itemCount = 0,
+                        ),
                     ),
                     collectionItems = listOf(
                         VaultState.ViewState.CollectionItem(
@@ -830,6 +835,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                             name = "mockName-1".asText(),
                             itemCount = 1,
                         ),
+                        VaultState.ViewState.FolderItem(
+                            id = null,
+                            name = R.string.folder_none.asText(),
+                            itemCount = 0,
+                        ),
                     ),
                     collectionItems = listOf(
                         VaultState.ViewState.CollectionItem(
@@ -930,6 +940,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 name = "mockName-1".asText(),
                                 itemCount = 1,
                             ),
+                            VaultState.ViewState.FolderItem(
+                                id = null,
+                                name = R.string.folder_none.asText(),
+                                itemCount = 0,
+                            ),
                         ),
                         collectionItems = listOf(
                             VaultState.ViewState.CollectionItem(
@@ -1027,6 +1042,11 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 id = "mockId-1",
                                 name = "mockName-1".asText(),
                                 itemCount = 1,
+                            ),
+                            VaultState.ViewState.FolderItem(
+                                id = null,
+                                name = R.string.folder_none.asText(),
+                                itemCount = 0,
                             ),
                         ),
                         collectionItems = listOf(
