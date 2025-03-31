@@ -4,7 +4,7 @@ import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.manager.getFlagValueOrDefault
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
-import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 

@@ -39,9 +39,9 @@ import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
