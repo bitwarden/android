@@ -1659,6 +1659,7 @@ data class VaultItemState(
                  * @property uris The URI associated with the login item.
                  * @property passwordRevisionDate An optional string indicating the last time the
                  * password was changed.
+                 * @property totpCodeItemData The optional data related the TOTP code.
                  * @property isPremiumUser Indicates if the user has subscribed to a premium
                  * account.
                  * @property canViewTotpCode Indicates if the user can view an associated TOTP code.
@@ -1667,7 +1668,7 @@ data class VaultItemState(
                  *
                  * **NOTE** [canViewTotpCode] currently supports a deprecated edge case where an
                  * organization supports TOTP but not through the current premium model.
-                 * This additional field is added to allow for [] to be an independent
+                 * This additional field is added to allow for [isPremiumUser] to be an independent
                  * value.
                  * @see [CipherView.organizationUseTotp]
                  *
@@ -1690,8 +1691,8 @@ data class VaultItemState(
                     val hasLoginCredentials: Boolean
                         get() = username != null ||
                             passwordData != null ||
-                            totpCodeItemData != null ||
-                            fido2CredentialCreationDateText != null
+                            fido2CredentialCreationDateText != null ||
+                            totpCodeItemData != null
 
 
                     /**
