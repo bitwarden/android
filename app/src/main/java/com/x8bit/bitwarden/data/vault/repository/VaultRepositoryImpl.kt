@@ -6,6 +6,9 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -41,9 +44,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse

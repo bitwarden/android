@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.KeyConnectorResponse
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
-import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 
 /**

@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import androidx.core.net.toUri
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
@@ -11,8 +13,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest

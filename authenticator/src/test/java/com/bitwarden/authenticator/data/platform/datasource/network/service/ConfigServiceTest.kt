@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.data.platform.datasource.network.service
 import com.bitwarden.authenticator.data.platform.base.BaseServiceTest
 import com.bitwarden.authenticator.data.platform.datasource.network.api.ConfigApi
 import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
-import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.core.data.util.asSuccess
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.mockwebserver.MockResponse
@@ -43,7 +43,7 @@ private const val CONFIG_RESPONSE_JSON = """
   "featureStates": {
     "feature one": false
   }
-}    
+}
 """
 private val CONFIG_RESPONSE = ConfigResponseJson(
     type = "config",

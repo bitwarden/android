@@ -9,6 +9,8 @@ import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
@@ -120,8 +122,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
