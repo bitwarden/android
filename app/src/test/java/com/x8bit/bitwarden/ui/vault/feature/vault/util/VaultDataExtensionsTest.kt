@@ -86,8 +86,12 @@ class VaultDataExtensionsTest {
                         name = "Folder".asText(),
                         itemCount = 0,
                     ),
-
+                    VaultState.ViewState.FolderItem(
+                        id = null,
+                        name = R.string.folder_none.asText(),
+                        itemCount = 0,
                     ),
+                ),
                 collectionItems = listOf(
                     VaultState.ViewState.CollectionItem(
                         id = "mockId-1",
@@ -193,6 +197,11 @@ class VaultDataExtensionsTest {
                         id = "mockId-1",
                         name = "mockName-1".asText(),
                         itemCount = 1,
+                    ),
+                    VaultState.ViewState.FolderItem(
+                        id = null,
+                        name = R.string.folder_none.asText(),
+                        itemCount = 0,
                     ),
                 ),
                 collectionItems = listOf(
@@ -719,6 +728,58 @@ class VaultDataExtensionsTest {
         unmockkStatic(Uri::class)
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState with under 100 no folder items and no collections should not show no folder option`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri1.com"
+        val cipherViewList = List(99) {
+            createMockCipherView(number = it, folderId = null)
+        }
+        val vaultData = VaultData(
+            cipherViewList = cipherViewList,
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 99,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = cipherViewList.mapNotNull {
+                    it.toVaultItemOrNull(
+                        hasMasterPassword = true,
+                        isIconLoadingDisabled = false,
+                        baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                        isPremiumUser = true,
+                    )
+                },
+                trashItemsCount = 0,
+                totpItemsCount = 99,
+                itemTypesCount = 5,
+                sshKeyItemsCount = 0,
+            ),
+            actual,
+        )
+        unmockkStatic(Uri::class)
+    }
+
     @Test
     fun `toViewState should properly filter nested items out`() {
         val vaultData = VaultData(
@@ -781,6 +842,11 @@ class VaultDataExtensionsTest {
                     VaultState.ViewState.FolderItem(
                         id = "5",
                         name = "Folder".asText(),
+                        itemCount = 0,
+                    ),
+                    VaultState.ViewState.FolderItem(
+                        id = null,
+                        name = R.string.folder_none.asText(),
                         itemCount = 0,
                     ),
 
