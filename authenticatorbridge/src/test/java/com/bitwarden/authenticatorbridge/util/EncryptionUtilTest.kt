@@ -35,23 +35,27 @@ class EncryptionUtilTest {
         unmockkStatic(KeyGenerator::class)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toFingerprint should return success when there are no internal exceptions`() {
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer(),
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isSuccess)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toFingerprint should return failure when MessageDigest getInstance fails`() {
         mockkStatic(MessageDigest::class)
         every { MessageDigest.getInstance("SHA-256") } throws NoSuchAlgorithmException()
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer(),
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isFailure)
