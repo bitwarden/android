@@ -1693,8 +1693,7 @@ data class VaultItemState(
                             passwordData != null ||
                             fido2CredentialCreationDateText != null ||
                             totpCodeItemData != null
-
-
+                    
                     /**
                      * A wrapper for the password data.
                      *
