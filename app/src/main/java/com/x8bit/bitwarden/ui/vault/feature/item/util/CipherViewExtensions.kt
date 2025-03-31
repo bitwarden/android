@@ -202,7 +202,6 @@ fun CipherView.toViewState(
         },
     )
 
-
 /**
  * Transforms [FieldView] into [VaultItemState.ViewState.Content.Common.Custom].
  */
