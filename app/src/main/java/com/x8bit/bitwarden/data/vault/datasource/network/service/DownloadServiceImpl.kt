@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
+import com.bitwarden.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.DownloadApi
 import okhttp3.ResponseBody
 

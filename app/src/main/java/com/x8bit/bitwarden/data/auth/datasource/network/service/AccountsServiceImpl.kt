@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.network.util.toResult
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
-import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 import kotlinx.serialization.json.Json
 
 /**

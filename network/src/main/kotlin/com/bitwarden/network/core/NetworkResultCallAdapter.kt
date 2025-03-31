@@ -1,12 +1,12 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.core
+package com.bitwarden.network.core
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import java.lang.reflect.Type
 
 /**
- * A [CallAdapter] for wrapping network requests into [NetworkResult].
+ * A [retrofit2.CallAdapter] for wrapping network requests into [NetworkResult].
  */
 class NetworkResultCallAdapter<T>(
     private val successType: Type,

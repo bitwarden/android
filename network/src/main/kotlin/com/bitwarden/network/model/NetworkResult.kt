@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.model
+package com.bitwarden.network.model
 
 import androidx.annotation.Keep
 

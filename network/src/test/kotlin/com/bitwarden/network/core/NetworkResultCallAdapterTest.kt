@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.core
+package com.bitwarden.network.core
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

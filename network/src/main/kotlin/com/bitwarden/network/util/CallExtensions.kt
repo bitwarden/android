@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
-import com.x8bit.bitwarden.data.platform.datasource.network.core.NetworkResultCall
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.core.NetworkResultCall
+import com.bitwarden.network.model.NetworkResult
 import retrofit2.Call
 
 /**

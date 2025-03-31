@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import io.mockk.every
 import io.mockk.mockk
 import okhttp3.HttpUrl

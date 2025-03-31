@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.POST
 

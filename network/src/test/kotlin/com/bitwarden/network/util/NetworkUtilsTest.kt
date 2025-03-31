@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNull
 import java.net.UnknownHostException
 import java.security.cert.CertPathValidatorException
 import javax.net.ssl.SSLHandshakeException

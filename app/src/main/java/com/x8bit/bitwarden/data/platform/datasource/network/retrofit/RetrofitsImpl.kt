@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
+import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.core.NetworkResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors

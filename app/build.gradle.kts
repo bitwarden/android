@@ -214,6 +214,7 @@ dependencies {
     implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
 
     implementation(project(":core"))
+    implementation(project(":network"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

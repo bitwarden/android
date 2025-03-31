@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -102,7 +103,6 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager

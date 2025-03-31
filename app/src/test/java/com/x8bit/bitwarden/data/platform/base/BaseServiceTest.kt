@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.base
 
-import com.x8bit.bitwarden.data.platform.datasource.network.core.NetworkResultCallAdapterFactory
+import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
