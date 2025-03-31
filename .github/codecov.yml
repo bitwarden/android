@@ -1,4 +1,2 @@
 ignore:
   - "src/test/**" # Tests
-fixes:
-  - "::app/src/"
