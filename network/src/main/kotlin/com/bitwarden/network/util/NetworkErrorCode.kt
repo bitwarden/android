@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
 /**
  * An enum that represents HTTP error codes that we may need to parse for specific responses.

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
+import com.bitwarden.network.model.toBitwardenError
+import com.bitwarden.network.util.NetworkErrorCode
+import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
-import com.x8bit.bitwarden.data.platform.datasource.network.util.NetworkErrorCode
-import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.api.FoldersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
