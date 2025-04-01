@@ -35,8 +35,6 @@ sealed class FlagKey<out T : Any> {
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 AppReviewPrompt,
-                NewDevicePermanentDismiss,
-                NewDeviceTemporaryDismiss,
                 IgnoreEnvironmentCheck,
                 MutualTls,
                 SingleTapPasskeyCreation,
@@ -156,24 +154,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
-    }
-
-    /**
-     * Data object holding the feature flag key for the New Device Temporary Dismiss feature.
-     */
-    data object NewDeviceTemporaryDismiss : FlagKey<Boolean>() {
-        override val keyName: String = "new-device-temporary-dismiss"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
-    }
-
-    /**
-     * Data object holding the feature flag key for the New Device Permanent Dismiss feature.
-     */
-    data object NewDevicePermanentDismiss : FlagKey<Boolean>() {
-        override val keyName: String = "new-device-permanent-dismiss"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
