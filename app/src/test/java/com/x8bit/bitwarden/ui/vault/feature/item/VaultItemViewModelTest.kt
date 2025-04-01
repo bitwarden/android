@@ -1070,6 +1070,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             runTest {
                 val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
                 val field = VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                    id = "12345",
                     name = "hidden",
                     value = "value",
                     isCopyable = true,
@@ -1135,6 +1136,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             runTest {
                 val hiddenField =
                     VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                        id = "12345",
                         name = "hidden",
                         value = "value",
                         isCopyable = true,
@@ -3702,25 +3704,30 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 notes = "Lots of notes",
                 customFields = listOf(
                     VaultItemState.ViewState.Content.Common.Custom.TextField(
+                        id = "12345",
                         name = "text",
                         value = "value",
                         isCopyable = true,
                     ),
                     VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                        id = "12345",
                         name = "hidden",
                         value = "value",
                         isCopyable = true,
                         isVisible = false,
                     ),
                     VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                        id = "12345",
                         name = "boolean",
                         value = true,
                     ),
                     VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                        id = "12345",
                         name = "linked username",
                         vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
                     ),
                     VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                        id = "12345",
                         name = "linked password",
                         vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
                     ),

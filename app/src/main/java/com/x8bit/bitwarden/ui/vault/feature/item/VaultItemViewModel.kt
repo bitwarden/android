@@ -1598,10 +1598,16 @@ data class VaultItemState(
                  */
                 sealed class Custom : Parcelable {
                     /**
+                     * The unique ID of the custom field.
+                     */
+                    abstract val id: String
+
+                    /**
                      * Represents the data for displaying a custom text field.
                      */
                     @Parcelize
                     data class TextField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1612,6 +1618,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class HiddenField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1623,6 +1630,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class BooleanField(
+                        override val id: String,
                         val name: String,
                         val value: Boolean,
                     ) : Custom()
@@ -1632,6 +1640,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class LinkedField(
+                        override val id: String,
                         val vaultLinkedFieldType: VaultLinkedFieldType,
                         val name: String,
                     ) : Custom()
