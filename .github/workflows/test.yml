@@ -85,6 +85,7 @@ jobs:
             authenticator/build/reports/tests/
             authenticatorbridge/build/reports/tests/
             core/build/reports/tests/
+            network/build/reports/tests/
 
       - name: Upload to codecov.io
         id: upload-to-codecov
