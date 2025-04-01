@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.base
 
 import com.bitwarden.authenticator.data.platform.datasource.network.core.ResultCallAdapterFactory
-import com.bitwarden.authenticator.data.platform.datasource.network.di.PlatformNetworkModule
+import com.bitwarden.core.di.CoreModule
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
@@ -14,7 +14,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
  */
 abstract class BaseServiceTest {
 
-    protected val json = PlatformNetworkModule.providesJson()
+    protected val json = CoreModule.providesJson()
 
     protected val server = MockWebServer().apply { start() }
 

@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.google.hilt.android)
+    ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
 
@@ -52,6 +56,5 @@ tasks {
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
-        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }
