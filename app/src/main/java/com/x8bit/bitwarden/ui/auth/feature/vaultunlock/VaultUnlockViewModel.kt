@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
@@ -73,7 +74,9 @@ class VaultUnlockViewModel @Inject constructor(
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
         if (!activeAccount.hasManualUnlockMechanism) {
             // There is no valid way to unlock this app.
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "VaultUnlockViewModel"),
+            )
         }
 
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
@@ -173,7 +176,7 @@ class VaultUnlockViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Biometrics.NoLongerSupported)
         authRepository.hasPendingAccountAddition = true
     }
 
@@ -207,7 +210,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleConfirmLogoutClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "VaultUnlockViewModel"))
     }
 
     private fun handleInputChanged(action: VaultUnlockAction.InputChanged) {
@@ -221,7 +224,10 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "VaultUnlockViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClick(action: VaultUnlockAction.SwitchAccountClick) {
@@ -229,7 +235,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleBiometricsLockOut() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Biometrics.Lockout)
     }
 
     private fun handleBiometricsUnlockClick() {

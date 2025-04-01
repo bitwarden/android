@@ -74,6 +74,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -5477,11 +5478,12 @@ class AuthRepositoryTest {
     @Test
     fun `logout for an inactive account should call logout on the UserLogoutManager`() {
         val userId = USER_ID_2
+        val reason = LogoutReason.Timeout
         fakeAuthDiskSource.userState = MULTI_USER_STATE
 
-        repository.logout(userId = userId)
+        repository.logout(userId = userId, reason = reason)
 
-        verify { userLogoutManager.logout(userId = userId) }
+        verify { userLogoutManager.logout(userId = userId, reason = reason) }
     }
 
     @Test
@@ -6113,7 +6115,7 @@ class AuthRepositoryTest {
         mutableLogoutFlow.tryEmit(NotificationLogoutData(userId = userId))
 
         coVerify(exactly = 1) {
-            userLogoutManager.logout(userId = userId)
+            userLogoutManager.logout(userId = userId, reason = LogoutReason.Notification)
         }
     }
 

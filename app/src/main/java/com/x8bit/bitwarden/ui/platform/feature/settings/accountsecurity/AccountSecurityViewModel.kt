@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
@@ -225,7 +226,9 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleConfirmLogoutClick() {
         mutableStateFlow.update { it.copy(dialog = null) }
-        authRepository.logout()
+        authRepository.logout(
+            reason = LogoutReason.Click(source = "AccountSecurityViewModel"),
+        )
     }
 
     private fun handleDeleteAccountClick() {

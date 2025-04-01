@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -253,7 +254,7 @@ class VaultLockManagerImpl(
         )
 
         if (invalidUnlockAttempts >= MAXIMUM_INVALID_UNLOCK_ATTEMPTS) {
-            userLogoutManager.logout(userId = userId)
+            userLogoutManager.logout(userId = userId, reason = LogoutReason.TooManyUnlockAttempts)
         }
     }
 
@@ -603,7 +604,7 @@ class VaultLockManagerImpl(
             }
 
             VaultTimeoutAction.LOGOUT -> {
-                userLogoutManager.softLogout(userId = userId)
+                userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
             }
         }
     }

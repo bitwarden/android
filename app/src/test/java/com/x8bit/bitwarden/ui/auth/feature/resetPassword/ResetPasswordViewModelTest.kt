@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -37,12 +38,16 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ConfirmLogoutClick logs out`() = runTest {
-        every { authRepository.logout() } just runs
+        every { authRepository.logout(reason = any()) } just runs
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.ConfirmLogoutClick)
 
-        verify { authRepository.logout() }
+        verify(exactly = 1) {
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "ResetPasswordViewModel"),
+            )
+        }
     }
 
     @Test

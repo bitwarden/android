@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Primary implementation of [UserLogoutManager].
@@ -42,9 +44,10 @@ class UserLogoutManagerImpl(
         bufferedMutableSharedFlow()
     override val logoutEventFlow: SharedFlow<LogoutEvent> = mutableLogoutEventFlow.asSharedFlow()
 
-    override fun logout(userId: String, isExpired: Boolean) {
+    override fun logout(userId: String, reason: LogoutReason) {
         authDiskSource.userState ?: return
-
+        Timber.i("logout reason=$reason")
+        val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
             showToast(message = R.string.login_expired)
         }
@@ -64,7 +67,9 @@ class UserLogoutManagerImpl(
         mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
-    override fun softLogout(userId: String, isExpired: Boolean) {
+    override fun softLogout(userId: String, reason: LogoutReason) {
+        Timber.i("softLogout reason=$reason")
+        val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
             showToast(message = R.string.login_expired)
         }

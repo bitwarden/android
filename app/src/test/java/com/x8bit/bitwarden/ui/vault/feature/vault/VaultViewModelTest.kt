@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -22,7 +24,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
@@ -115,7 +116,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { userStateFlow } returns mutableUserStateFlow
             every { hasPendingAccountAddition } returns false
             every { hasPendingAccountAddition = any() } just runs
-            every { logout(any()) } just runs
+            every { logout(userId = any(), reason = any()) } just runs
             every { switchAccount(any()) } answers { switchAccountResult }
         }
 
@@ -403,7 +404,12 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "VaultViewModel"),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -424,7 +430,12 @@ class VaultViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "VaultViewModel"),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")

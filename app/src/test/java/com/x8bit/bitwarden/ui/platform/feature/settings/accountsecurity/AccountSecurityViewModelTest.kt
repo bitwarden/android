@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
@@ -786,11 +787,15 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on ConfirmLogoutClick should call logout and hide confirm dialog`() = runTest {
-        every { authRepository.logout() } just runs
+        every { authRepository.logout(reason = any()) } just runs
         val viewModel = createViewModel()
         viewModel.trySendAction(AccountSecurityAction.ConfirmLogoutClick)
         assertEquals(DEFAULT_STATE.copy(dialog = null), viewModel.stateFlow.value)
-        verify { authRepository.logout() }
+        verify(exactly = 1) {
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "AccountSecurityViewModel"),
+            )
+        }
     }
 
     @Test

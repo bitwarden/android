@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -139,7 +140,12 @@ class LandingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LandingAction.LogoutAccountClick(accountSummary))
 
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "LandingViewModel"),
+            )
+        }
     }
 
     @Test

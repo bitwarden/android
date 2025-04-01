@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -930,8 +931,8 @@ class VaultRepositoryTest {
 
             vaultRepository.sync()
 
-            coVerify {
-                userLogoutManager.softLogout(userId = userId, isExpired = true)
+            coVerify(exactly = 1) {
+                userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
             }
 
             coVerify(exactly = 0) {
