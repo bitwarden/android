@@ -1597,6 +1597,9 @@ data class VaultItemState(
                  * Represents a custom field, TextField, HiddenField, BooleanField, or LinkedField.
                  */
                 sealed class Custom : Parcelable {
+                    /**
+                     * The unique ID of the custom field.
+                     */
                     abstract val id: String
 
                     /**

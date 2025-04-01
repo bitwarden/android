@@ -192,31 +192,36 @@ fun createCommonContent(
                     value = "value",
                     type = FieldType.TEXT,
                     linkedId = null,
-                ).toCustomField(null),
+                )
+                    .toCustomField(null),
                 FieldView(
                     name = "hidden",
                     value = "value",
                     type = FieldType.HIDDEN,
                     linkedId = null,
-                ).toCustomField(null),
+                )
+                    .toCustomField(null),
                 FieldView(
                     name = "boolean",
                     value = "true",
                     type = FieldType.BOOLEAN,
                     linkedId = null,
-                ).toCustomField(null),
+                )
+                    .toCustomField(null),
                 FieldView(
                     name = "linked username",
                     value = null,
                     type = FieldType.LINKED,
                     linkedId = 100U,
-                ).toCustomField(null),
+                )
+                    .toCustomField(null),
                 FieldView(
                     name = "linked password",
                     value = null,
                     type = FieldType.LINKED,
                     linkedId = 101U,
-                ).toCustomField(null),
+                )
+                    .toCustomField(null),
             ),
             requiresReprompt = true,
             requiresCloneConfirmation = true,
