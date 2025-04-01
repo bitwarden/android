@@ -4,6 +4,7 @@ import android.content.pm.Signature
 import android.content.pm.SigningInfo
 import android.util.Base64
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest

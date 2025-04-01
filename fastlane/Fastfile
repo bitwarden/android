@@ -105,7 +105,7 @@ platform :android do
     )
   end
 
-  desc "Runs lint, tests and generates Kover reports for all project modules"
+  desc "Runs lint, tests, and generates Kover reports for all project modules"
   lane :check do
     gradle(
         tasks: [
