@@ -1,4 +1,4 @@
-name: Scan Pull Requests
+name: Scan
 
 on:
   workflow_dispatch:
