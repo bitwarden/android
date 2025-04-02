@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -232,7 +233,8 @@ fun AccountSecurityScreen(
             val biometricSupportStatus = biometricsManager.biometricSupportStatus
             if (biometricSupportStatus != BiometricSupportStatus.NOT_SUPPORTED ||
                 !state.removeUnlockWithPinPolicyEnabled ||
-                state.isUnlockWithPinEnabled) {
+                state.isUnlockWithPinEnabled
+            ) {
                 Spacer(Modifier.height(16.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.unlock_options),
@@ -433,6 +435,7 @@ fun AccountSecurityScreen(
                     .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -700,7 +703,7 @@ private fun ColumnScope.SyncWithAuthenticatorRow(
         cardStyle = CardStyle.Full,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .standardHorizontalMargin(),
     )
 }
 

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model
 
 import android.os.Parcelable
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.generator.GENERATOR_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.tools.feature.send.SEND_GRAPH_ROUTE
@@ -18,42 +19,7 @@ import kotlinx.parcelize.Parcelize
  * and other essential UI and navigational data.
  */
 @Parcelize
-sealed class VaultUnlockedNavBarTab : Parcelable {
-    /**
-     * The resource ID for the icon representing the tab when it is selected.
-     */
-    abstract val iconResSelected: Int
-
-    /**
-     * Resource id for the icon representing the tab.
-     */
-    abstract val iconRes: Int
-
-    /**
-     * Resource id for the label describing the tab.
-     */
-    abstract val labelRes: Int
-
-    /**
-     * Resource id for the content description describing the tab.
-     */
-    abstract val contentDescriptionRes: Int
-
-    /**
-     * Route of the tab.
-     */
-    abstract val route: String
-
-    /**
-     * The test tag of the tab.
-     */
-    abstract val testTag: String
-
-    /**
-     * The amount of notifications for items that fall under this tab.
-     */
-    abstract val notificationCount: Int
-
+sealed class VaultUnlockedNavBarTab : NavigationItem, Parcelable {
     /**
      * Show the Generator screen.
      */
