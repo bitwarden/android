@@ -4,12 +4,14 @@ import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -100,24 +102,24 @@ class SendDataExtensionsTest {
 
 private const val DEFAULT_BASE_URL: String = "www.test.com/"
 
-private val DEFAULT_SEND_STATUS_ICONS: List<IconRes> = listOf(
-    IconRes(
+private val DEFAULT_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
+    IconData.Local(
         iconRes = SendStatusIcon.DISABLED.iconRes,
         contentDescription = SendStatusIcon.DISABLED.contentDescription,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.PASSWORD.iconRes,
         contentDescription = SendStatusIcon.PASSWORD.contentDescription,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.iconRes,
         contentDescription = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.contentDescription,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.EXPIRED.iconRes,
         contentDescription = SendStatusIcon.EXPIRED.contentDescription,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.PENDING_DELETE.iconRes,
         contentDescription = SendStatusIcon.PENDING_DELETE.contentDescription,
     ),

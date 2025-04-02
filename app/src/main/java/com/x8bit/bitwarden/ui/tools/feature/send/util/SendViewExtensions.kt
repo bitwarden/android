@@ -1,15 +1,17 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 
 /**
  * Creates the list of trailing label icons to be displayed for a [SendView].
  */
-fun SendView.toLabelIcons(clock: Clock = Clock.systemDefaultZone()): List<IconRes> =
+fun SendView.toLabelIcons(clock: Clock = Clock.systemDefaultZone()): ImmutableList<IconData> =
     listOfNotNull(
         SendStatusIcon.DISABLED.takeIf { disabled },
         SendStatusIcon.PASSWORD.takeIf { hasPassword },
@@ -20,12 +22,13 @@ fun SendView.toLabelIcons(clock: Clock = Clock.systemDefaultZone()): List<IconRe
         SendStatusIcon.PENDING_DELETE.takeIf { deletionDate.isBefore(clock.instant()) },
     )
         .map {
-            IconRes(
+            IconData.Local(
                 iconRes = it.iconRes,
                 contentDescription = it.contentDescription,
                 testTag = it.testTag,
             )
         }
+        .toImmutableList()
 
 /**
  * Creates the list of overflow actions to be displayed for a [SendView].

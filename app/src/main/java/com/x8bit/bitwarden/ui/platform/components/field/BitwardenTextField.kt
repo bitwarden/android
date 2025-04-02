@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -62,8 +61,9 @@ import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDiv
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
+import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
@@ -83,7 +83,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param tooltip the optional tooltip to be displayed in the label.
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
- * @param leadingIconResource the optional resource for the leading icon on the text field.
+ * @param leadingIconData the optional resource for the leading icon on the text field.
  * @param supportingText optional supporting text that will appear below the text input.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -112,7 +112,7 @@ fun BitwardenTextField(
     modifier: Modifier = Modifier,
     tooltip: TooltipData? = null,
     placeholder: String? = null,
-    leadingIconResource: IconResource? = null,
+    leadingIconData: IconData? = null,
     supportingText: String? = null,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
@@ -137,7 +137,7 @@ fun BitwardenTextField(
         onValueChange = onValueChange,
         tooltip = tooltip,
         placeholder = placeholder,
-        leadingIconResource = leadingIconResource,
+        leadingIconData = leadingIconData,
         supportingContent = supportingText?.let {
             {
                 Text(
@@ -181,7 +181,7 @@ fun BitwardenTextField(
  * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param placeholder the optional placeholder to be displayed when the text field is in focus and
  * the [value] is empty.
- * @param leadingIconResource the optional resource for the leading icon on the text field.
+ * @param leadingIconData the optional resource for the leading icon on the text field.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
@@ -212,7 +212,7 @@ fun BitwardenTextField(
     tooltip: TooltipData? = null,
     supportingContentPadding: PaddingValues = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
     placeholder: String? = null,
-    leadingIconResource: IconResource? = null,
+    leadingIconData: IconData? = null,
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     enabled: Boolean = true,
@@ -321,11 +321,11 @@ fun BitwardenTextField(
                         }
                     },
                     value = textFieldValue,
-                    leadingIcon = leadingIconResource?.let { iconResource ->
+                    leadingIcon = leadingIconData?.let { iconData ->
                         {
-                            Icon(
-                                painter = iconResource.iconPainter,
-                                contentDescription = iconResource.contentDescription,
+                            BitwardenIcon(
+                                iconData = iconData,
+                                tint = BitwardenTheme.colorScheme.icon.primary,
                             )
                         }
                     },

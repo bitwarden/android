@@ -38,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -54,6 +53,7 @@ import com.x8bit.bitwarden.ui.vault.model.TotpData
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -884,7 +884,7 @@ data class SearchState(
         val subtitleTestTag: String,
         val totpCode: String?,
         val iconData: IconData,
-        val extraIconList: List<IconRes>,
+        val extraIconList: ImmutableList<IconData>,
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,

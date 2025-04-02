@@ -67,7 +67,6 @@ fun VaultVerificationCodeItem(
     ) {
         BitwardenIcon(
             iconData = startIcon,
-            contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier.size(24.dp),
         )

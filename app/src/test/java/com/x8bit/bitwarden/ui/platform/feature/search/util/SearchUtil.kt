@@ -6,9 +6,9 @@ import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Create a mock [SearchState.DisplayItem] with a given [number].
@@ -31,13 +31,13 @@ fun createMockDisplayItemForCipher(
                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                     fallbackIconRes = fallbackIconRes,
                 ),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
@@ -85,13 +85,13 @@ fun createMockDisplayItemForCipher(
                 subtitle = null,
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_note),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
@@ -128,13 +128,13 @@ fun createMockDisplayItemForCipher(
                 subtitle = "mockBrand-$number, *er-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_payment_card),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
@@ -177,13 +177,13 @@ fun createMockDisplayItemForCipher(
                 subtitle = "mockFirstName-${number}mockLastName-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_id_card),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_paperclip,
                         contentDescription = R.string.attachments.asText(),
                         testTag = "CipherWithAttachmentsIcon",
@@ -217,8 +217,8 @@ fun createMockDisplayItemForCipher(
                 subtitle = "mockPublicKey-$number",
                 subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_ssh_key),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_collections,
                         contentDescription = R.string.collections.asText(),
                         testTag = "CipherInCollectionIcon",
@@ -262,13 +262,13 @@ fun createMockDisplayItemForSend(
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(R.drawable.ic_file),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
@@ -302,13 +302,13 @@ fun createMockDisplayItemForSend(
                 subtitle = "Oct 27, 2023, 12:00 PM",
                 subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(R.drawable.ic_file_text),
-                extraIconList = listOf(
-                    IconRes(
+                extraIconList = persistentListOf(
+                    IconData.Local(
                         iconRes = R.drawable.ic_key,
                         contentDescription = R.string.password.asText(),
                         testTag = "PasswordProtectedSendIcon",
                     ),
-                    IconRes(
+                    IconData.Local(
                         iconRes = R.drawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
                         testTag = "MaxAccessSendIcon",
