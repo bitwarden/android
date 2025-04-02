@@ -1003,22 +1003,19 @@ class SettingsRepositoryTest {
     @Test
     fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() =
         runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-            fakeSettingsDiskSource.storeScreenCaptureAllowed(USER_ID, false)
-
+            fakeSettingsDiskSource.screenCaptureAllowed = false
             settingsRepository.isScreenCaptureAllowedStateFlow.test {
                 assertFalse(awaitItem())
 
                 settingsRepository.isScreenCaptureAllowed = true
                 assertTrue(awaitItem())
 
-                assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(USER_ID))
+                assertEquals(true, fakeSettingsDiskSource.screenCaptureAllowed)
 
                 settingsRepository.isScreenCaptureAllowed = false
                 assertFalse(awaitItem())
 
-                assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(USER_ID))
+                assertEquals(false, fakeSettingsDiskSource.screenCaptureAllowed)
             }
         }
 

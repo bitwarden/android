@@ -23,6 +23,8 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private val mutableAppThemeFlow = bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
+    private val mutableScreenCaptureAllowedFlow = bufferedMutableSharedFlow<Boolean?>(replay = 1)
+
     private val mutableLastSyncCallFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
     private val mutableVaultTimeoutActionsFlowMap =
@@ -45,9 +47,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     private val mutableShouldShowAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableScreenCaptureAllowedFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
-
     private val mutableShouldShowGeneratorCoachMarkFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
@@ -67,7 +66,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedIsCrashLoggingEnabled: Boolean? = null
     private var storedHasUserLoggedInOrCreatedAccount: Boolean? = null
     private var storedInitialAutofillDialogShown: Boolean? = null
-    private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
+    private var storedScreenCaptureAllowed: Boolean? = null
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
     private val storedAppResumeScreenData = mutableMapOf<String, String?>()
@@ -115,6 +114,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableAppThemeFlow.onSubscription {
             emit(appTheme)
         }
+
+    override var screenCaptureAllowed: Boolean?
+        get() = storedScreenCaptureAllowed
+        set(value) {
+            storedScreenCaptureAllowed = value
+            mutableScreenCaptureAllowedFlow.tryEmit(value)
+        }
+
+    override val screenCaptureAllowedFlow: Flow<Boolean?>
+        get() = mutableScreenCaptureAllowedFlow.onSubscription { emit(screenCaptureAllowed) }
 
     override var systemBiometricIntegritySource: String?
         get() = storedSystemBiometricIntegritySource
@@ -304,21 +313,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedBlockedAutofillUris[userId] = blockedAutofillUris
     }
 
-    override fun getScreenCaptureAllowed(userId: String): Boolean? =
-        storedScreenCaptureAllowed[userId]
-
-    override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> {
-        return getMutableScreenCaptureAllowedFlow(userId)
-    }
-
-    override fun storeScreenCaptureAllowed(
-        userId: String,
-        isScreenCaptureAllowed: Boolean?,
-    ) {
-        storedScreenCaptureAllowed[userId] = isScreenCaptureAllowed
-        getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
-    }
-
     override fun storeUseHasLoggedInPreviously(userId: String) {
         userSignIns[userId] = true
     }
@@ -437,12 +431,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     }
 
     //region Private helper functions
-    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
-        return mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-    }
-
     private fun getMutableLastSyncTimeFlow(
         userId: String,
     ): MutableSharedFlow<Instant?> =

@@ -148,10 +148,6 @@ class SettingsDiskSourceTest {
             userId = userId,
             lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
         )
-        settingsDiskSource.storeScreenCaptureAllowed(
-            userId = userId,
-            isScreenCaptureAllowed = true,
-        )
         settingsDiskSource.storeClearClipboardFrequencySeconds(userId = userId, frequency = 5)
         val systemBioIntegrityState = "system_biometrics_integrity_state"
         settingsDiskSource.storeAccountBiometricIntegrityValidity(
@@ -166,7 +162,6 @@ class SettingsDiskSourceTest {
         settingsDiskSource.clearData(userId = userId)
 
         // We do not clear these even when you call clear storage
-        assertEquals(true, settingsDiskSource.getScreenCaptureAllowed(userId = userId))
         assertTrue(settingsDiskSource.getShowUnlockSettingBadge(userId = userId) ?: false)
         assertTrue(settingsDiskSource.getShowAutoFillSettingBadge(userId = userId) ?: false)
 
@@ -867,50 +862,31 @@ class SettingsDiskSourceTest {
 
     @Test
     fun `getScreenCaptureAllowed should pull from SharedPreferences`() {
-        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
-        val mockUserId = "mockUserId"
+        val screenCaptureAllowKey = "bwPreferencesStorage:screenCaptureAllowed"
         val isScreenCaptureAllowed = true
         fakeSharedPreferences.edit {
-            putBoolean("${screenCaptureAllowBaseKey}_$mockUserId", isScreenCaptureAllowed)
+            putBoolean(screenCaptureAllowKey, isScreenCaptureAllowed)
         }
-        val actual = settingsDiskSource.getScreenCaptureAllowed(userId = mockUserId)
-        assertEquals(
-            isScreenCaptureAllowed,
-            actual,
-        )
+        val actual = settingsDiskSource.screenCaptureAllowed
+        assertEquals(isScreenCaptureAllowed, actual)
     }
 
     @Test
     fun `storeScreenCaptureAllowed for non-null values should update SharedPreferences`() {
-        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
-        val mockUserId = "mockUserId"
+        val screenCaptureAllowKey = "bwPreferencesStorage:screenCaptureAllowed"
         val isScreenCaptureAllowed = true
-        settingsDiskSource.storeScreenCaptureAllowed(
-            userId = mockUserId,
-            isScreenCaptureAllowed = isScreenCaptureAllowed,
-        )
-        val actual = fakeSharedPreferences.getBoolean(
-            "${screenCaptureAllowBaseKey}_$mockUserId",
-            false,
-        )
-        assertEquals(
-            isScreenCaptureAllowed,
-            actual,
-        )
+        settingsDiskSource.screenCaptureAllowed = isScreenCaptureAllowed
+        val actual = fakeSharedPreferences.getBoolean(screenCaptureAllowKey, false)
+        assertEquals(isScreenCaptureAllowed, actual)
     }
 
     @Test
     fun `storeScreenCaptureAllowed for null values should clear SharedPreferences`() {
-        val screenCaptureAllowBaseKey = "bwPreferencesStorage:screenCaptureAllowed"
-        val mockUserId = "mockUserId"
-        val screenCaptureAllowKey = "${screenCaptureAllowBaseKey}_$mockUserId"
+        val screenCaptureAllowKey = "bwPreferencesStorage:screenCaptureAllowed"
         fakeSharedPreferences.edit {
             putBoolean(screenCaptureAllowKey, true)
         }
-        settingsDiskSource.storeScreenCaptureAllowed(
-            userId = mockUserId,
-            isScreenCaptureAllowed = null,
-        )
+        settingsDiskSource.screenCaptureAllowed = null
         assertFalse(fakeSharedPreferences.contains(screenCaptureAllowKey))
     }
 
