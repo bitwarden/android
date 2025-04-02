@@ -4,6 +4,7 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import io.mockk.every
 import io.mockk.just
@@ -59,7 +60,7 @@ class RefreshAuthenticatorTests {
         verify(exactly = 0) {
             authenticatorProvider.activeUserId
             authenticatorProvider.refreshAccessTokenSynchronously(any())
-            authenticatorProvider.logout(any())
+            authenticatorProvider.logout(userId = any(), reason = LogoutReason.TokenRefreshFail)
         }
     }
 
@@ -71,14 +72,19 @@ class RefreshAuthenticatorTests {
         every {
             authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
         } returns Throwable("Fail").asFailure()
-        every { authenticatorProvider.logout(USER_ID) } just runs
+        every {
+            authenticatorProvider.logout(
+                userId = USER_ID,
+                reason = LogoutReason.TokenRefreshFail,
+            )
+        } just runs
 
         assertNull(authenticator.authenticate(null, RESPONSE_401))
 
         verify(exactly = 1) {
             authenticatorProvider.activeUserId
             authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
-            authenticatorProvider.logout(USER_ID)
+            authenticatorProvider.logout(userId = USER_ID, reason = LogoutReason.TokenRefreshFail)
         }
     }
 

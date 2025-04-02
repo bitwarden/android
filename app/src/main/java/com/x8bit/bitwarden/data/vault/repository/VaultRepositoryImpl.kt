@@ -25,6 +25,7 @@ import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -1477,7 +1478,10 @@ class VaultRepositoryImpl(
                     // Log the user out if the stamps do not match
                     localSecurityStamp?.let {
                         if (serverSecurityStamp != localSecurityStamp) {
-                            userLogoutManager.softLogout(userId = userId, isExpired = true)
+                            userLogoutManager.softLogout(
+                                userId = userId,
+                                reason = LogoutReason.SecurityStamp,
+                            )
                             return SyncVaultDataResult.Error(throwable = null)
                         }
                     }

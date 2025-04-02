@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -411,7 +412,7 @@ class AuthRepositoryImpl(
 
         pushManager
             .logoutFlow
-            .onEach { logout(userId = it.userId) }
+            .onEach { logout(userId = it.userId, reason = LogoutReason.Notification) }
             .launchIn(unconfinedScope)
 
         // When the policies for the user have been set, complete the login process.
@@ -513,7 +514,7 @@ class AuthRepositoryImpl(
                     }
 
                     DeleteAccountResponseJson.Success -> {
-                        logout()
+                        logout(reason = LogoutReason.AccountDelete)
                         DeleteAccountResult.Success
                     }
                 }
@@ -764,12 +765,12 @@ class AuthRepositoryImpl(
             }
     }
 
-    override fun logout() {
-        activeUserId?.let { userId -> logout(userId) }
+    override fun logout(reason: LogoutReason) {
+        activeUserId?.let { userId -> logout(userId = userId, reason = reason) }
     }
 
-    override fun logout(userId: String) {
-        userLogoutManager.logout(userId = userId)
+    override fun logout(userId: String, reason: LogoutReason) {
+        userLogoutManager.logout(userId = userId, reason = reason)
     }
 
     override suspend fun requestOneTimePasscode(): RequestOtpResult =

@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -112,7 +113,10 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLogoutAccountClicked(action: LoginAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "LoginViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -30,7 +31,11 @@ class SetPasswordViewModel @Inject constructor(
 ) : BaseViewModel<SetPasswordState, SetPasswordEvent, SetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val organizationIdentifier = authRepository.ssoOrganizationIdentifier
-        if (organizationIdentifier.isNullOrBlank()) authRepository.logout()
+        if (organizationIdentifier.isNullOrBlank()) {
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "SetPasswordViewModel"),
+            )
+        }
         SetPasswordState(
             dialogState = null,
             organizationIdentifier = organizationIdentifier.orEmpty(),
@@ -71,7 +76,7 @@ class SetPasswordViewModel @Inject constructor(
      * Dismiss the view if the user cancels the set master password functionality.
      */
     private fun handleCancelClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "SetPasswordViewModel"))
     }
 
     /**

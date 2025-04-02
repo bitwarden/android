@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -131,7 +132,10 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleLogoutAccountClicked(action: LandingAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "LandingViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {

@@ -12,6 +12,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -290,7 +291,10 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleLogoutAccountClick(action: VaultItemListingsAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "VaultItemListingViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClick(action: VaultItemListingsAction.SwitchAccountClick) {

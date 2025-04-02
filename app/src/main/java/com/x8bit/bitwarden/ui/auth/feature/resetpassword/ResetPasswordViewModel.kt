@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -160,7 +161,7 @@ class ResetPasswordViewModel @Inject constructor(
      * Dismiss the view if the user confirms logging out.
      */
     private fun handleConfirmLogoutClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "ResetPasswordViewModel"))
     }
 
     /**

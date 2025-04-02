@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -34,7 +35,11 @@ class TrustedDeviceViewModel @Inject constructor(
             val isAuthenticated = authRepository.authStateFlow.value is AuthState.Authenticated
             val account = authRepository.userStateFlow.value?.activeAccount
             val trustedDevice = account?.trustedDevice
-            if (trustedDevice == null || !isAuthenticated) authRepository.logout()
+            if (trustedDevice == null || !isAuthenticated) {
+                authRepository.logout(
+                    reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+                )
+            }
             TrustedDeviceState(
                 dialogState = null,
                 emailAddress = account?.email.orEmpty(),
@@ -95,7 +100,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleBackClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "TrustedDeviceViewModel"))
     }
 
     private fun handleDismissDialog() {
@@ -135,7 +140,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleNotYouClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "TrustedDeviceViewModel"))
     }
 }
 

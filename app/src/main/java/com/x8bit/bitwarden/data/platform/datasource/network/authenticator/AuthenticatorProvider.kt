@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.authenticator
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 
 /**
  * A provider for all the functionality needed to properly refresh the users access token.
@@ -15,7 +16,7 @@ interface AuthenticatorProvider {
     /**
      * Attempts to logout the user based on the [userId].
      */
-    fun logout(userId: String)
+    fun logout(userId: String, reason: LogoutReason)
 
     /**
      * Attempt to refresh the user's access token based on the [userId].

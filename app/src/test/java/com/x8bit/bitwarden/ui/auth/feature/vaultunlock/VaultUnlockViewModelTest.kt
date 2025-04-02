@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -56,8 +57,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { hasPendingAccountAddition } returns false
         every { hasPendingAccountAddition = any() } just runs
-        every { logout() } just runs
-        every { logout(any()) } just runs
+        every { logout(reason = any()) } just runs
+        every { logout(userId = any(), reason = any()) } just runs
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
@@ -139,7 +140,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "VaultUnlockViewModel"),
+            )
         }
     }
 
@@ -158,7 +161,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 0) {
-            authRepository.logout()
+            authRepository.logout(reason = any())
         }
     }
 
@@ -177,7 +180,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 0) {
-            authRepository.logout()
+            authRepository.logout(reason = any())
         }
     }
 
@@ -629,7 +632,11 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on ConfirmLogoutClick should call logout on the AuthRepository`() {
         val viewModel = createViewModel()
         viewModel.trySendAction(VaultUnlockAction.ConfirmLogoutClick)
-        verify { authRepository.logout() }
+        verify(exactly = 1) {
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "VaultUnlockViewModel"),
+            )
+        }
     }
 
     @Test
@@ -666,7 +673,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultUnlockAction.LogoutAccountClick(accountSummary))
 
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "VaultUnlockViewModel"),
+            )
+        }
     }
 
     @Test
@@ -1074,13 +1086,13 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on BiometricsLockOut should log the current user out`() = runTest {
-        every { authRepository.logout() } just runs
+        every { authRepository.logout(reason = any()) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(reason = LogoutReason.Biometrics.Lockout)
         }
     }
 
@@ -1316,7 +1328,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(reason = LogoutReason.Biometrics.NoLongerSupported)
             authRepository.hasPendingAccountAddition = true
         }
     }

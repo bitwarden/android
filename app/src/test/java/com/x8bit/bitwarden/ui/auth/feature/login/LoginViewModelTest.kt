@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
@@ -217,7 +218,12 @@ class LoginViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LoginAction.LogoutAccountClick(accountSummary))
 
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "LoginViewModel"),
+            )
+        }
     }
 
     @Test
