@@ -6,7 +6,6 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSourc
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.network.service.ConfigService
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
@@ -17,6 +16,7 @@ import com.bitwarden.authenticator.data.platform.repository.ServerConfigReposito
 import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepositoryImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
+import com.bitwarden.network.service.ConfigService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

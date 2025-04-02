@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.ConfigApi

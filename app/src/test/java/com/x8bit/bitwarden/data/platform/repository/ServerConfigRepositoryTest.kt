@@ -5,10 +5,10 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
+import com.bitwarden.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import io.mockk.coEvery
 import io.mockk.mockk

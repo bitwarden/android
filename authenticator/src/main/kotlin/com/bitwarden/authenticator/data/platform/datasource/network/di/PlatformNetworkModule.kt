@@ -4,8 +4,8 @@ import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.bitwarden.authenticator.data.platform.datasource.network.retrofit.Retrofits
 import com.bitwarden.authenticator.data.platform.datasource.network.retrofit.RetrofitsImpl
-import com.bitwarden.authenticator.data.platform.datasource.network.service.ConfigService
-import com.bitwarden.authenticator.data.platform.datasource.network.service.ConfigServiceImpl
+import com.bitwarden.network.service.ConfigService
+import com.bitwarden.network.service.ConfigServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
