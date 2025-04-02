@@ -35,17 +35,10 @@ import java.time.ZoneOffset
 
 class AboutScreenTest : BaseComposeTest() {
     private var haveCalledNavigateBack = false
+    private var haveCalledNavigateToFlightRecorder = false
+    private var haveCalledNavigateToRecordedLogs = false
 
-    private val mutableStateFlow = MutableStateFlow(
-        AboutState(
-            version = "Version: 1.0.0 (1)".asText(),
-            deviceData = "device_data".asText(),
-            ciData = "ci_data".asText(),
-            isSubmitCrashLogsEnabled = false,
-            copyrightInfo = "".asText(),
-            shouldShowCrashLogsButton = true,
-        ),
-    )
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<AboutEvent>()
     val viewModel: AboutViewModel = mockk {
         every { stateFlow } returns mutableStateFlow
@@ -65,6 +58,8 @@ class AboutScreenTest : BaseComposeTest() {
             AboutScreen(
                 viewModel = viewModel,
                 onNavigateBack = { haveCalledNavigateBack = true },
+                onNavigateToFlightRecorder = { haveCalledNavigateToFlightRecorder = true },
+                onNavigateToRecordedLogs = { haveCalledNavigateToRecordedLogs = true },
             )
         }
     }
@@ -73,6 +68,39 @@ class AboutScreenTest : BaseComposeTest() {
     fun `on back click should send BackClick`() {
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(AboutAction.BackClick) }
+    }
+
+    @Test
+    fun `on flight recorder tooltip click should emit FlightRecorderTooltipClick`() {
+        composeTestRule
+            .onNodeWithContentDescription("Flight recorder help")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick)
+        }
+    }
+
+    @Test
+    fun `on view recorded logs click should emit ViewRecordedLogsClick`() {
+        composeTestRule
+            .onNodeWithText("View recorded logs")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AboutAction.ViewRecordedLogsClick)
+        }
+    }
+
+    @Test
+    fun `on view recorded logs click should emit FlightRecorderCheckedChange`() {
+        composeTestRule
+            .onNodeWithText("Flight recorder")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(isEnabled = true))
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -127,7 +155,10 @@ class AboutScreenTest : BaseComposeTest() {
     @Test
     fun `on learn about organizations click should display confirmation dialog and confirm click should emit LearnAboutOrganizationsClick`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Learn about organizations").performClick()
+        composeTestRule
+            .onNodeWithText("Learn about organizations")
+            .performScrollTo()
+            .performClick()
         composeTestRule.onNode(isDialog()).assertExists()
         composeTestRule
             .onAllNodesWithText("Continue")
@@ -143,6 +174,26 @@ class AboutScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AboutEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
+    }
+
+    @Test
+    fun `on NavigateToFlightRecorder should call onNavigateToFlightRecorder`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToFlightRecorder)
+        assertTrue(haveCalledNavigateToFlightRecorder)
+    }
+
+    @Test
+    fun `on NavigateToRecordedLogs should call onNavigateToRecordedLogs`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToRecordedLogs)
+        assertTrue(haveCalledNavigateToRecordedLogs)
+    }
+
+    @Test
+    fun `on NavigateToFlightRecorderHelp should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToFlightRecorderHelp)
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help".toUri())
+        }
     }
 
     @Test
@@ -243,3 +294,14 @@ class AboutScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
     }
 }
+
+private val DEFAULT_STATE = AboutState(
+    version = "Version: 1.0.0 (1)".asText(),
+    deviceData = "device_data".asText(),
+    ciData = "ci_data".asText(),
+    isSubmitCrashLogsEnabled = false,
+    shouldShowCrashLogsButton = true,
+    isFlightRecorderEnabled = false,
+    shouldShowFlightRecorder = true,
+    copyrightInfo = "".asText(),
+)

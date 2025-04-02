@@ -57,6 +57,8 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToSetupUnlockScreen = {},
                     onNavigateToImportLogins = {},
                     onNavigateToAddFolderScreen = {},
+                    onNavigateToFlightRecorder = {},
+                    onNavigateToRecordedLogs = {},
                 )
             }
         }

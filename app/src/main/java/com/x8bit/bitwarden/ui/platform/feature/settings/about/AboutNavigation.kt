@@ -12,11 +12,17 @@ private const val ABOUT_ROUTE = "settings_about"
  */
 fun NavGraphBuilder.aboutDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
 ) {
     composableWithPushTransitions(
         route = ABOUT_ROUTE,
     ) {
-        AboutScreen(onNavigateBack = onNavigateBack)
+        AboutScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+        )
     }
 }
 
