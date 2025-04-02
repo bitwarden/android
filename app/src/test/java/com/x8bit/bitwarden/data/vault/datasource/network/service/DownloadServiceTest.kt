@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.DownloadApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse

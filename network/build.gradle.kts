@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -28,8 +30,15 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
+    @Suppress("UnstableApiUsage")
+    testFixtures {
+        enable = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 
@@ -52,6 +61,18 @@ dependencies {
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
+
+    testFixturesImplementation(project(":core"))
+    testFixturesImplementation(platform(libs.junit.bom))
+    testFixturesRuntimeOnly(libs.junit.platform.launcher)
+    testFixturesImplementation(libs.junit.junit5)
+    testFixturesImplementation(libs.junit.vintage)
+    testFixturesImplementation(libs.kotlinx.serialization)
+    testFixturesImplementation(libs.square.okhttp)
+    testFixturesImplementation(platform(libs.square.retrofit.bom))
+    testFixturesImplementation(libs.square.retrofit)
+    testFixturesImplementation(libs.square.retrofit.kotlinx.serialization)
+    testFixturesImplementation(libs.square.okhttp.mockwebserver)
 }
 
 tasks {

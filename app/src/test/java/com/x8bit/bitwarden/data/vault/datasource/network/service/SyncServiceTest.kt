@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import kotlinx.coroutines.test.runTest
@@ -100,7 +100,7 @@ private const val SYNC_SUCCESS_JSON = """
         "familySponsorshipLastSyncDate": "2023-10-27T12:00:00.00Z",
         "name": "mockName-1",
         "useApi": false,
-        "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",  
+        "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",
         "status": 1
       }
     ],
@@ -175,7 +175,7 @@ private const val SYNC_SUCCESS_JSON = """
         "familySponsorshipLastSyncDate": "2023-10-27T12:00:00.00Z",
         "name": "mockName-1",
         "useApi": false,
-        "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",  
+        "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",
         "status": 1
       }
     ]
@@ -364,5 +364,5 @@ private const val SYNC_SUCCESS_JSON = """
       "expirationDate": "2023-10-27T12:00:00.00Z"
     }
   ]
-}    
+}
 """

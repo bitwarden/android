@@ -270,6 +270,9 @@ dependencies {
     standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.play.review)
 
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":network")))
+
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)
     testImplementation(platform(libs.junit.bom))

@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedDevicesApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedDevicesApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceKeysResponseJson
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
