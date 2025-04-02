@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
+import com.bitwarden.core.di.CoreModule
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class ConfigDiskSourceTest {
-    private val json = PlatformNetworkModule.providesJson()
+    private val json = CoreModule.providesJson()
 
     private val fakeSharedPreferences = FakeSharedPreferences()
 

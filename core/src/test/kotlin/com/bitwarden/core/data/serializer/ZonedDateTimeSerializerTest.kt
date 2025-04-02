@@ -1,6 +1,6 @@
-package com.bitwarden.authenticator.data.platform.datasource.network.serializer
+package com.bitwarden.core.data.serializer
 
-import com.bitwarden.authenticator.data.platform.datasource.network.di.PlatformNetworkModule
+import com.bitwarden.core.di.CoreModule
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.encodeToJsonElement
@@ -11,7 +11,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class ZonedDateTimeSerializerTest {
-    private val json = PlatformNetworkModule.providesJson()
+    private val json = CoreModule.providesJson()
 
     @Test
     fun `properly deserializes raw JSON to ZonedDateTime`() {

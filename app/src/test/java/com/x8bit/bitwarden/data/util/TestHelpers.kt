@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.util
 
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import com.bitwarden.core.di.CoreModule
 import io.mockk.MockKMatcherScope
 import io.mockk.every
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 fun assertJsonEquals(
     expected: String,
     actual: String,
-    json: Json = PlatformNetworkModule.providesJson(),
+    json: Json = CoreModule.providesJson(),
 ) {
     assertEquals(
         json.parseToJsonElement(expected),

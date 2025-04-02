@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.core.di.CoreModule
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserD
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
@@ -44,7 +44,7 @@ class AuthDiskSourceTest {
         every { migrateIfNecessary() } just runs
     }
 
-    private val json = PlatformNetworkModule.providesJson()
+    private val json = CoreModule.providesJson()
 
     private val authDiskSource = AuthDiskSourceImpl(
         encryptedSharedPreferences = fakeEncryptedSharedPreferences,
