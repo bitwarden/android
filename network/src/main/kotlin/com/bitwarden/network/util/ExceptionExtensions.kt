@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.x8bit.bitwarden.data.platform.datasource.network.model.BitwardenError
+import com.bitwarden.network.model.BitwardenError
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
