@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.service
 
-import com.bitwarden.authenticator.data.platform.datasource.network.api.ConfigApi
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.api.ConfigApi
+import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.util.toResult
 
 /**

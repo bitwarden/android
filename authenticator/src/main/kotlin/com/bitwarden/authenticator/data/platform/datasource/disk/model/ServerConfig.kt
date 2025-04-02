@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk.model
 
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

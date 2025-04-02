@@ -4,12 +4,12 @@ import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.authenticator.data.platform.datasource.disk.util.FakeConfigDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.authenticator.data.platform.datasource.network.service.ConfigService
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
+import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

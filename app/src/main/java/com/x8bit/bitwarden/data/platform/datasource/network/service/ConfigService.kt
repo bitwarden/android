@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson
 
 /**
  * Provides an API for querying config endpoints.

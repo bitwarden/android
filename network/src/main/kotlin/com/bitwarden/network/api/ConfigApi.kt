@@ -1,6 +1,6 @@
-package com.bitwarden.authenticator.data.platform.datasource.network.api
+package com.bitwarden.network.api
 
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.NetworkResult
 import retrofit2.http.GET
 

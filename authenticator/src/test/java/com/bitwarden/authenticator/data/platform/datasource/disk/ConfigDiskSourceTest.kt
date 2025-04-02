@@ -4,10 +4,10 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
+import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals

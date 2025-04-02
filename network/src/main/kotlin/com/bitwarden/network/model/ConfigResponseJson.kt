@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.datasource.network.model
+package com.bitwarden.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
