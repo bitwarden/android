@@ -15,9 +15,6 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import kotlinx.collections.immutable.ImmutableList
@@ -48,7 +45,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: IconData,
-    trailingLabelIcons: ImmutableList<IconRes>,
+    trailingLabelIcons: ImmutableList<IconData>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -64,14 +61,7 @@ fun SendListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
-        trailingLabelIcons = trailingLabelIcons
-            .map {
-                IconResource(
-                    iconPainter = rememberVectorPainter(it.iconRes),
-                    contentDescription = it.contentDescription(),
-                )
-            }
-            .toPersistentList(),
+        trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
             SelectionItemData(

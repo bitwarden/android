@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSshKeyView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
@@ -27,6 +26,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -1003,13 +1003,13 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
         ),
         startIcon = IconData.Local(iconRes = R.drawable.ic_ssh_key),
         startIconTestTag = "SshKeyCipherIcon",
-        extraIconList = listOf(
-            IconRes(
+        extraIconList = persistentListOf(
+            IconData.Local(
                 iconRes = R.drawable.ic_collections,
                 contentDescription = R.string.collections.asText(),
                 testTag = "CipherInCollectionIcon",
             ),
-            IconRes(
+            IconData.Local(
                 iconRes = R.drawable.ic_paperclip,
                 contentDescription = R.string.attachments.asText(),
                 testTag = "CipherWithAttachmentsIcon",

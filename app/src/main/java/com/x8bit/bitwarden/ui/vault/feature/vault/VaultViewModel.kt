@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -57,6 +56,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -1005,7 +1006,7 @@ data class VaultState(
             /**
              * The icons shown after the item name.
              */
-            abstract val extraIconList: List<IconRes>
+            abstract val extraIconList: ImmutableList<IconData>
 
             /**
              * An optional supporting label for the vault item that provides additional information.
@@ -1040,7 +1041,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val username: Text?,
@@ -1061,7 +1062,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_payment_card),
                 override val startIconTestTag: String = "CardCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 private val brand: VaultCardBrand? = null,
@@ -1093,7 +1094,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val fullName: Text?,
@@ -1112,7 +1113,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
@@ -1133,7 +1134,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val publicKey: Text,

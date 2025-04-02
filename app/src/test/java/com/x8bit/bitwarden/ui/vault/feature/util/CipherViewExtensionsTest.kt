@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockIdentityVie
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSecureNoteView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -396,7 +396,7 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.COLLECTION).map {
-            IconRes(
+            IconData.Local(
                 iconRes = it.iconRes,
                 contentDescription = it.contentDescription,
                 testTag = it.testTag,
@@ -416,7 +416,7 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.COLLECTION).map {
-            IconRes(
+            IconData.Local(
                 iconRes = it.iconRes,
                 contentDescription = it.contentDescription,
                 testTag = it.testTag,
@@ -436,7 +436,7 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.ATTACHMENT).map {
-            IconRes(
+            IconData.Local(
                 iconRes = it.iconRes,
                 contentDescription = it.contentDescription,
                 testTag = it.testTag,
@@ -456,7 +456,7 @@ class CipherViewExtensionsTest {
             VaultTrailingIcon.COLLECTION,
             VaultTrailingIcon.ATTACHMENT,
         ).map {
-            IconRes(
+            IconData.Local(
                 iconRes = it.iconRes,
                 contentDescription = it.contentDescription,
                 testTag = it.testTag,
@@ -476,7 +476,7 @@ class CipherViewExtensionsTest {
             attachments = null,
         )
 
-        val expected = listOf<IconRes>()
+        val expected = listOf<IconData>()
 
         val result = cipher.toLabelIcons()
 

@@ -35,6 +35,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertEquals
@@ -782,7 +783,7 @@ private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =
         name = "mockName-1",
         deletionDate = "1",
         type = SendState.ViewState.Content.SendItem.Type.FILE,
-        iconList = emptyList(),
+        iconList = persistentListOf(),
         shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
         hasPassword = true,
     )
@@ -797,7 +798,7 @@ private val DEFAULT_CONTENT_VIEW_STATE: SendState.ViewState.Content = SendState.
             name = "mockName-2",
             deletionDate = "1",
             type = SendState.ViewState.Content.SendItem.Type.TEXT,
-            iconList = emptyList(),
+            iconList = persistentListOf(),
             shareUrl = "www.test.com/#/send/mockAccessId-1/mockKey-1",
             hasPassword = true,
         ),

@@ -299,7 +299,6 @@ private fun ItemHeaderIcon(
     ) {
         BitwardenIcon(
             iconData = iconData,
-            contentDescription = null,
             tint = if (applyBackgroundFill) {
                 BitwardenTheme.colorScheme.illustration.outline
             } else {

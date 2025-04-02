@@ -62,7 +62,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -2215,7 +2214,7 @@ data class VaultItemListingState(
         val subtitleTestTag: String,
         val iconData: IconData,
         val iconTestTag: String?,
-        val extraIconList: List<IconRes>,
+        val extraIconList: ImmutableList<IconData>,
         val overflowOptions: List<ListingItemOverflowAction>,
         val optionsTestTag: String,
         val isAutofill: Boolean,

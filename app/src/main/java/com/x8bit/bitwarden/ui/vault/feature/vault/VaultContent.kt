@@ -18,12 +18,10 @@ import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val TRASH_TYPES_COUNT: Int = 1
@@ -92,10 +90,7 @@ fun VaultContent(
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
                     startIconTestTag = favoriteItem.startIconTestTag,
-                    trailingLabelIcons = favoriteItem
-                        .extraIconList
-                        .toIconResources()
-                        .toPersistentList(),
+                    trailingLabelIcons = favoriteItem.extraIconList,
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
@@ -269,10 +264,7 @@ fun VaultContent(
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
                     startIconTestTag = noFolderItem.startIconTestTag,
-                    trailingLabelIcons = noFolderItem
-                        .extraIconList
-                        .toIconResources()
-                        .toPersistentList(),
+                    trailingLabelIcons = noFolderItem.extraIconList,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },

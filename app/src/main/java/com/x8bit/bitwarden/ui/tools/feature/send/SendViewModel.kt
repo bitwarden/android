@@ -20,10 +20,11 @@ import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -409,7 +410,7 @@ data class SendState(
                 val name: String,
                 val deletionDate: String,
                 val type: Type,
-                val iconList: List<IconRes>,
+                val iconList: ImmutableList<IconData>,
                 val shareUrl: String,
                 val hasPassword: Boolean,
             ) : Parcelable {
