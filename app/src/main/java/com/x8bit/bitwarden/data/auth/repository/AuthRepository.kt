@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -246,7 +247,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Log out the current user.
      */
-    fun logout()
+    fun logout(reason: LogoutReason)
 
     /**
      * Requests that a one-time passcode be sent to the user's email.

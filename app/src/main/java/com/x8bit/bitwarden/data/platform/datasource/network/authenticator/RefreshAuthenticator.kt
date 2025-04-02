@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.authenticator
 
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
@@ -45,7 +46,10 @@ class RefreshAuthenticator : Authenticator {
                     ?.refreshAccessTokenSynchronously(userId)
                     ?.fold(
                         onFailure = {
-                            authenticatorProvider?.logout(userId)
+                            authenticatorProvider?.logout(
+                                userId = userId,
+                                reason = LogoutReason.TokenRefreshFail,
+                            )
                             null
                         },
                         onSuccess = {

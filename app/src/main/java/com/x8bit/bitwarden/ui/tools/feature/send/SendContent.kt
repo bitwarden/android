@@ -22,7 +22,6 @@ import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 private const val SEND_TYPES_COUNT: Int = 2
 
@@ -112,7 +111,7 @@ fun SendContent(
                 startIcon = IconData.Local(it.type.iconRes),
                 label = it.name,
                 supportingLabel = it.deletionDate,
-                trailingLabelIcons = it.iconList.toImmutableList(),
+                trailingLabelIcons = it.iconList,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },

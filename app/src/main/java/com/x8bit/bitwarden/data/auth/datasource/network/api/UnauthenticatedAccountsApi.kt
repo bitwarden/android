@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendNewDeviceOtpRequestJson
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.Header

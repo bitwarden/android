@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.network.util.toResult
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestUpdateRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
-import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 
 class AuthRequestsServiceImpl(
     private val authenticatedAuthRequestsApi: AuthenticatedAuthRequestsApi,

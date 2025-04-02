@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest

@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
-import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault

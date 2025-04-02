@@ -5,13 +5,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 
 /**
@@ -84,9 +84,9 @@ fun CustomField(
             BitwardenTextField(
                 label = customField.name,
                 value = customField.vaultLinkedFieldType.label.invoke(),
-                leadingIconResource = IconResource(
-                    iconPainter = rememberVectorPainter(id = R.drawable.ic_linked),
-                    contentDescription = stringResource(id = R.string.field_type_linked),
+                leadingIconData = IconData.Local(
+                    iconRes = R.drawable.ic_linked,
+                    contentDescription = R.string.field_type_linked.asText(),
                 ),
                 onValueChange = { },
                 readOnly = true,

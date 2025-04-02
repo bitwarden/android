@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
@@ -34,7 +35,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         every { authStateFlow } returns mutableAuthStateFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { shouldTrustDevice = any() } just runs
-        every { logout() } just runs
+        every { logout(reason = any()) } just runs
     }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -44,7 +45,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -54,7 +57,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -66,7 +71,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -77,7 +84,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(TrustedDeviceAction.BackClick)
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -222,7 +231,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(TrustedDeviceAction.NotYouClick)
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 

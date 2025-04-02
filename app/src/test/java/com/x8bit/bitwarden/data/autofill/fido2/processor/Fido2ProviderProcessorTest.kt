@@ -27,6 +27,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.di.CoreModule
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -35,7 +36,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -102,7 +102,7 @@ class Fido2ProviderProcessorTest {
     }
     private val cancellationSignal: CancellationSignal = mockk()
 
-    private val json = PlatformNetworkModule.providesJson()
+    private val json = CoreModule.providesJson()
     private val clock = FIXED_CLOCK
 
     @BeforeEach

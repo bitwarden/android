@@ -74,6 +74,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -253,8 +254,6 @@ class AuthRepositoryTest {
     }
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
-        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
         every { getFeatureFlag(FlagKey.IgnoreEnvironmentCheck) } returns false
     }
@@ -1580,7 +1579,6 @@ class AuthRepositoryTest {
             coVerify { identityService.preLogin(email = EMAIL) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `prelogin fails should return CertificateError when SSLHandshakeException is thrown`() =
         runTest {
@@ -1753,7 +1751,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `login should return Error result when get token succeeds but unlock vault fails`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
@@ -5389,7 +5386,6 @@ class AuthRepositoryTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getVerifiedOrganizationDomainSsoDetails Success should return Success`() = runTest {
         val email = "test@gmail.com"
@@ -5408,6 +5404,7 @@ class AuthRepositoryTest {
         assertEquals(
             VerifiedOrganizationDomainSsoDetailsResult.Success(
                 verifiedOrganizationDomainSsoDetails = listOf(
+                    @Suppress("MaxLineLength")
                     VerifiedOrganizationDomainSsoDetailsResponse.VerifiedOrganizationDomainSsoDetail(
                         organizationIdentifier = "Test Identifier",
                         organizationName = "Bitwarden",
@@ -5477,11 +5474,12 @@ class AuthRepositoryTest {
     @Test
     fun `logout for an inactive account should call logout on the UserLogoutManager`() {
         val userId = USER_ID_2
+        val reason = LogoutReason.Timeout
         fakeAuthDiskSource.userState = MULTI_USER_STATE
 
-        repository.logout(userId = userId)
+        repository.logout(userId = userId, reason = reason)
 
-        verify { userLogoutManager.logout(userId = userId) }
+        verify { userLogoutManager.logout(userId = userId, reason = reason) }
     }
 
     @Test
@@ -6113,7 +6111,7 @@ class AuthRepositoryTest {
         mutableLogoutFlow.tryEmit(NotificationLogoutData(userId = userId))
 
         coVerify(exactly = 1) {
-            userLogoutManager.logout(userId = userId)
+            userLogoutManager.logout(userId = userId, reason = LogoutReason.Notification)
         }
     }
 
@@ -6483,7 +6481,6 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on successful login does not set onboarding status if feature flag is off`() =
         runTest {
@@ -6677,28 +6674,6 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `checkUserNeedsNewDeviceTwoFactorNotice NewDeviceTemporaryDismiss and NewDevicePermanentDismiss flags are off returns false`() =
-        runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns false
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            } returns false
-            every {
-                policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
-            } returns listOf()
-            fakeEnvironmentRepository.environment = Environment.Us
-
-            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-            val shouldShowNewDeviceNotice = repository.checkUserNeedsNewDeviceTwoFactorNotice()
-
-            assertFalse(shouldShowNewDeviceNotice)
-        }
-
-    @Test
-    @Suppress("MaxLineLength")
     fun `checkUserNeedsNewDeviceTwoFactorNotice IgnoreEnvironmentCheck flag enabled should not check for a cloud environment and return true`() =
         runTest {
             every {
@@ -6719,7 +6694,6 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `checkUserNeedsNewDeviceTwoFactorNotice if environment is selfhosted return false`() =
         runTest {
             every {
@@ -6890,7 +6864,7 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL return permanent flag value`() =
+    fun `checkUserNeedsNewDeviceTwoFactorNotice with NewDeviceNoticeDisplayStatus CAN_ACCESS_EMAIL return true`() =
         runTest {
             every {
                 policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
@@ -6907,12 +6881,6 @@ class AuthRepositoryTest {
             )
 
             assertTrue(repository.checkUserNeedsNewDeviceTwoFactorNotice())
-
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns false
-
-            assertFalse(repository.checkUserNeedsNewDeviceTwoFactorNotice())
         }
 
     @Test

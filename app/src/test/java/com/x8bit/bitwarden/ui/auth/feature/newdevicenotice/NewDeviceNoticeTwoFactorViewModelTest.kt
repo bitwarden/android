@@ -1,11 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -18,10 +14,6 @@ import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.Clock
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     private val environmentRepository = FakeEnvironmentRepository()
@@ -29,32 +21,15 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true
     }
 
-    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns false
-        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
-    }
-
     private val settingsRepository = mockk<SettingsRepository>(relaxed = true)
 
     private val vaultRepository = mockk<VaultRepository>(relaxed = true)
 
     @Test
-    fun `initial state should be correct with NewDevicePermanentDismiss flag false`() = runTest {
+    fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-        }
-    }
-
-    @Test
-    fun `initial state should be correct with NewDevicePermanentDismiss flag true`() = runTest {
-        every { featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
-        val viewModel = createViewModel()
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE.copy(shouldShowRemindMeLater = false),
-                awaitItem(),
-            )
         }
     }
 
@@ -127,26 +102,6 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `RemindMeLaterClick should emit NavigateBackToVault`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.RemindMeLaterClick)
-            assertEquals(
-                NewDeviceNoticeTwoFactorEvent.NavigateBackToVault,
-                awaitItem(),
-            )
-            verify(exactly = 1) {
-                authRepository.setNewDeviceNoticeState(
-                    NewDeviceNoticeState(
-                        displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                        lastSeenDate = ZonedDateTime.now(FIXED_CLOCK),
-                    ),
-                )
-            }
-        }
-    }
-
-    @Test
     fun `NavigateBackClick should send NavigateBack event`() = runTest {
         val viewModel = createViewModel()
         viewModel.trySendAction(NewDeviceNoticeTwoFactorAction.NavigateBackClick)
@@ -207,7 +162,6 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `ContinueDialogClick should return if dialog state is null`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
@@ -223,20 +177,12 @@ class NewDeviceNoticeTwoFactorViewModelTest : BaseViewModelTest() {
         NewDeviceNoticeTwoFactorViewModel(
             authRepository = authRepository,
             environmentRepository = environmentRepository,
-            featureFlagManager = featureFlagManager,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
-            clock = FIXED_CLOCK,
         )
 }
 
 private val DEFAULT_STATE =
     NewDeviceNoticeTwoFactorState(
-        shouldShowRemindMeLater = true,
         dialogState = null,
     )
-
-private val FIXED_CLOCK: Clock = Clock.fixed(
-    Instant.parse("2023-10-27T12:00:00Z"),
-    ZoneOffset.UTC,
-)

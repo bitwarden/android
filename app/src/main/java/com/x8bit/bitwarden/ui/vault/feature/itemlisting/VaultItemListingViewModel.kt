@@ -12,6 +12,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
@@ -61,7 +62,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
@@ -290,7 +290,10 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleLogoutAccountClick(action: VaultItemListingsAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "VaultItemListingViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClick(action: VaultItemListingsAction.SwitchAccountClick) {
@@ -2211,7 +2214,7 @@ data class VaultItemListingState(
         val subtitleTestTag: String,
         val iconData: IconData,
         val iconTestTag: String?,
-        val extraIconList: List<IconRes>,
+        val extraIconList: ImmutableList<IconData>,
         val overflowOptions: List<ListingItemOverflowAction>,
         val optionsTestTag: String,
         val isAutofill: Boolean,

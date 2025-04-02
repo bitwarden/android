@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -55,6 +56,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -102,7 +104,6 @@ import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITER
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -411,7 +412,7 @@ class AuthRepositoryImpl(
 
         pushManager
             .logoutFlow
-            .onEach { logout(userId = it.userId) }
+            .onEach { logout(userId = it.userId, reason = LogoutReason.Notification) }
             .launchIn(unconfinedScope)
 
         // When the policies for the user have been set, complete the login process.
@@ -513,7 +514,7 @@ class AuthRepositoryImpl(
                     }
 
                     DeleteAccountResponseJson.Success -> {
-                        logout()
+                        logout(reason = LogoutReason.AccountDelete)
                         DeleteAccountResult.Success
                     }
                 }
@@ -764,12 +765,12 @@ class AuthRepositoryImpl(
             }
     }
 
-    override fun logout() {
-        activeUserId?.let { userId -> logout(userId) }
+    override fun logout(reason: LogoutReason) {
+        activeUserId?.let { userId -> logout(userId = userId, reason = reason) }
     }
 
-    override fun logout(userId: String) {
-        userLogoutManager.logout(userId = userId)
+    override fun logout(userId: String, reason: LogoutReason) {
+        userLogoutManager.logout(userId = userId, reason = reason)
     }
 
     override suspend fun requestOneTimePasscode(): RequestOtpResult =
@@ -1420,34 +1421,28 @@ class AuthRepositoryImpl(
     }
 
     override fun checkUserNeedsNewDeviceTwoFactorNotice(): Boolean {
-        return activeUserId?.let { userId ->
-            val temporaryFlag = featureFlagManager.getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss)
-            val permanentFlag = featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
+        return activeUserId
+            ?.let { userId ->
+                if (!newDeviceNoticePreConditionsValid()) {
+                    return false
+                }
 
-            // check if feature flags are disabled
-            if (!temporaryFlag && !permanentFlag) {
-                return false
+                val newDeviceNoticeState = authDiskSource.getNewDeviceNoticeState(userId = userId)
+                return when (newDeviceNoticeState.displayStatus) {
+                    // if the user has already attested email access but permanent flag is enabled,
+                    // the notice needs to appear again
+                    NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL -> true
+                    // if the user has already seen but 7 days have already passed,
+                    // the notice needs to appear again
+                    NewDeviceNoticeDisplayStatus.HAS_SEEN -> {
+                        newDeviceNoticeState.shouldDisplayNoticeIfSeen
+                    }
+
+                    NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
+                    // the user never needs to see the notice again
+                    NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false
+                }
             }
-
-            if (!newDeviceNoticePreConditionsValid()) {
-                return false
-            }
-
-            val newDeviceNoticeState = authDiskSource.getNewDeviceNoticeState(userId = userId)
-            return when (newDeviceNoticeState.displayStatus) {
-                // if the user has already attested email access but permanent flag is enabled,
-                // the notice needs to appear again
-                NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL -> permanentFlag
-                // if the user has already seen but 7 days have already passed,
-                // the notice needs to appear again
-                NewDeviceNoticeDisplayStatus.HAS_SEEN ->
-                    newDeviceNoticeState.shouldDisplayNoticeIfSeen
-
-                NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
-                // the user never needs to see the notice again
-                NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false
-            }
-        }
             ?: false
     }
 

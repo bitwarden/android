@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +31,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialo
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -74,7 +72,7 @@ fun BitwardenListItem(
     supportingLabel: String? = null,
     supportingLabelTestTag: String? = null,
     startIconTestTag: String? = null,
-    trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
+    trailingLabelIcons: ImmutableList<IconData> = persistentListOf(),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     Row(
@@ -91,7 +89,6 @@ fun BitwardenListItem(
     ) {
         BitwardenIcon(
             iconData = startIcon,
-            contentDescription = null,
             tint = BitwardenTheme.colorScheme.icon.primary,
             modifier = Modifier
                 .nullableTestTag(tag = startIconTestTag)
@@ -113,15 +110,12 @@ fun BitwardenListItem(
                         .weight(weight = 1f, fill = false),
                 )
 
-                trailingLabelIcons.forEach { iconResource ->
+                trailingLabelIcons.forEach { iconData ->
                     Spacer(modifier = Modifier.width(8.dp))
-                    Icon(
-                        painter = iconResource.iconPainter,
-                        contentDescription = iconResource.contentDescription,
+                    BitwardenIcon(
+                        iconData = iconData,
                         tint = BitwardenTheme.colorScheme.icon.primary,
-                        modifier = Modifier
-                            .nullableTestTag(tag = iconResource.testTag)
-                            .size(size = 16.dp),
+                        modifier = Modifier.size(size = 16.dp),
                     )
                 }
             }

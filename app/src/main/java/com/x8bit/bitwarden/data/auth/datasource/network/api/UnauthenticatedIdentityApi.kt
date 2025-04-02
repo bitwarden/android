@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
@@ -10,7 +11,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body

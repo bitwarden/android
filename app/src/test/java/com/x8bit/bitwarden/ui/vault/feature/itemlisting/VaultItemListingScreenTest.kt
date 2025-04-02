@@ -32,7 +32,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -2275,24 +2274,24 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(R.drawable.ic_payment_card),
-        extraIconList = listOf(
-            IconRes(
+        extraIconList = persistentListOf(
+            IconData.Local(
                 iconRes = R.drawable.ic_send_disabled,
                 contentDescription = R.string.disabled.asText(),
             ),
-            IconRes(
+            IconData.Local(
                 iconRes = R.drawable.ic_key,
                 contentDescription = R.string.password.asText(),
             ),
-            IconRes(
+            IconData.Local(
                 iconRes = R.drawable.ic_send_max_access_count_reached,
                 contentDescription = R.string.maximum_access_count_reached.asText(),
             ),
-            IconRes(
+            IconData.Local(
                 iconRes = R.drawable.ic_send_expired,
                 contentDescription = R.string.expired.asText(),
             ),
-            IconRes(
+            IconData.Local(
                 iconRes = R.drawable.ic_send_pending_delete,
                 contentDescription = R.string.pending_delete.asText(),
             ),
@@ -2323,7 +2322,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "CipherSubTitleLabel",
         iconData = IconData.Local(R.drawable.ic_vault),
-        extraIconList = emptyList(),
+        extraIconList = persistentListOf(),
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.EditClick(
                 cipherId = "mockId-$number",

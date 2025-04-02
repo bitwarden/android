@@ -5,12 +5,14 @@ import android.net.Uri
 import androidx.credentials.provider.CallingAppInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -45,7 +47,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
@@ -133,8 +134,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } answers { mutableUserStateFlow.value?.activeUserId }
         every { userStateFlow } returns mutableUserStateFlow
-        every { logout() } just runs
-        every { logout(any()) } just runs
+        every { logout(reason = any()) } just runs
+        every { logout(userId = any(), reason = any()) } just runs
         every { switchAccount(any()) } returns SwitchAccountResult.AccountSwitched
     }
     private val mutableVaultDataStateFlow =
@@ -260,7 +261,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(VaultItemListingsAction.LogoutAccountClick(accountSummary))
 
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "VaultItemListingViewModel"),
+            )
+        }
     }
 
     @Test

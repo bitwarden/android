@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
-import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.searchItemTestTag
@@ -130,10 +129,7 @@ fun SearchContent(
                         searchHandlers.onItemClick(it.id, it.cipherType)
                     }
                 },
-                trailingLabelIcons = it
-                    .extraIconList
-                    .toIconResources()
-                    .toPersistentList(),
+                trailingLabelIcons = it.extraIconList,
                 selectionDataList = it
                     .overflowOptions
                     .map { option ->
