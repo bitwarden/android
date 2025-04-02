@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.retrofit
 
-import com.bitwarden.authenticator.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -60,7 +60,7 @@ class RetrofitsImpl(
     private val baseRetrofitBuilder: Retrofit.Builder by lazy {
         Retrofit.Builder()
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .addCallAdapterFactory(ResultCallAdapterFactory())
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .client(baseOkHttpClient)
     }
 
