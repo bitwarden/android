@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.core
+package com.bitwarden.network.core
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Retrofit
@@ -8,7 +8,7 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 
 /**
- * A [CallAdapter.Factory] for wrapping network requests into [NetworkResult].
+ * A [retrofit2.CallAdapter.Factory] for wrapping network requests into [NetworkResult].
  */
 class NetworkResultCallAdapterFactory : CallAdapter.Factory() {
     override fun get(

@@ -33,4 +33,30 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.square.okhttp)
+    implementation(libs.square.okhttp.logging)
+    implementation(platform(libs.square.retrofit.bom))
+    implementation(libs.square.retrofit)
+    implementation(libs.square.retrofit.kotlinx.serialization)
+    implementation(libs.timber)
+
+    testImplementation(platform(libs.junit.bom))
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.vintage)
+    testImplementation(libs.mockk.mockk)
+    testImplementation(libs.square.okhttp.mockwebserver)
+    testImplementation(libs.square.turbine)
+}
+
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+        maxHeapSize = "2g"
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+    }
 }

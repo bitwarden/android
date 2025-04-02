@@ -7,8 +7,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
-import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
+import com.bitwarden.network.util.base64UrlDecodeOrNull
+import com.bitwarden.network.util.base64UrlEncode
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS = "email_address"

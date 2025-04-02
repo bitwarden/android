@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.Header

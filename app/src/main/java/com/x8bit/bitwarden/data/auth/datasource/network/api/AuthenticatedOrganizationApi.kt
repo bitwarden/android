@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT

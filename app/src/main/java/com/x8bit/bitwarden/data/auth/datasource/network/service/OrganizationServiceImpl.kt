@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.network.util.toResult
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
@@ -9,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysRe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
-import com.x8bit.bitwarden.data.platform.datasource.network.util.toResult
 
 /**
  * Default implementation of [OrganizationService].

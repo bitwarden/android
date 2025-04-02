@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
 import okio.ByteString.Companion.decodeBase64
 import java.net.UnknownHostException

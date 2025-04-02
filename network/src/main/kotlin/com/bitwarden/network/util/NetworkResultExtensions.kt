@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.util
+package com.bitwarden.network.util
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.x8bit.bitwarden.data.platform.datasource.network.model.NetworkResult
+import com.bitwarden.network.model.NetworkResult
 
 /**
  * Converts the [NetworkResult] to a [Result].
