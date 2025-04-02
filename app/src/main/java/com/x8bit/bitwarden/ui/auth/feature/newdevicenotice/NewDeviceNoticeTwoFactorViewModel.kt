@@ -3,11 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
@@ -16,7 +12,6 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.NavigateBackClick
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.ChangeAccountEmailDialog
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorDialogState.TurnOnTwoFactorDialog
@@ -27,8 +22,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.time.Clock
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /**
@@ -38,19 +31,15 @@ import javax.inject.Inject
 class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
     val authRepository: AuthRepository,
     val environmentRepository: EnvironmentRepository,
-    val featureFlagManager: FeatureFlagManager,
     val settingsRepository: SettingsRepository,
     val vaultRepository: VaultRepository,
-    private val clock: Clock,
 ) : BaseViewModel<
     NewDeviceNoticeTwoFactorState,
     NewDeviceNoticeTwoFactorEvent,
     NewDeviceNoticeTwoFactorAction,
     >(
     initialState = NewDeviceNoticeTwoFactorState(
-        shouldShowRemindMeLater = !featureFlagManager.getFeatureFlag(
-            FlagKey.NewDevicePermanentDismiss,
-        ),
+        dialogState = null,
     ),
 ) {
     init {
@@ -86,24 +75,12 @@ class NewDeviceNoticeTwoFactorViewModel @Inject constructor(
 
             TurnOnTwoFactorClick -> updateDialogState(newState = TurnOnTwoFactorDialog)
 
-            RemindMeLaterClick -> handleRemindMeLater()
-
             DismissDialogClick -> updateDialogState(newState = null)
 
             ContinueDialogClick -> handleContinueDialog()
 
             NavigateBackClick -> sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBack)
         }
-    }
-
-    private fun handleRemindMeLater() {
-        authRepository.setNewDeviceNoticeState(
-            NewDeviceNoticeState(
-                displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-                lastSeenDate = ZonedDateTime.now(clock),
-            ),
-        )
-        sendEvent(NewDeviceNoticeTwoFactorEvent.NavigateBackToVault)
     }
 
     private fun handleContinueDialog() {
@@ -179,11 +156,6 @@ sealed class NewDeviceNoticeTwoFactorAction {
     data object ChangeAccountEmailClick : NewDeviceNoticeTwoFactorAction()
 
     /**
-     * User tapped the remind me later button.
-     */
-    data object RemindMeLaterClick : NewDeviceNoticeTwoFactorAction()
-
-    /**
      * User tapped the dismiss dialog button.
      */
     data object DismissDialogClick : NewDeviceNoticeTwoFactorAction()
@@ -204,8 +176,7 @@ sealed class NewDeviceNoticeTwoFactorAction {
  */
 @Parcelize
 data class NewDeviceNoticeTwoFactorState(
-    val dialogState: NewDeviceNoticeTwoFactorDialogState? = null,
-    val shouldShowRemindMeLater: Boolean,
+    val dialogState: NewDeviceNoticeTwoFactorDialogState?,
 ) : Parcelable
 
 /**

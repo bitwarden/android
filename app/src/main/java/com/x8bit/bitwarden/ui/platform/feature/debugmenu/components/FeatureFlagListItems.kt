@@ -35,8 +35,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.CredentialExchangeProtocolExport,
     FlagKey.AppReviewPrompt,
     FlagKey.CipherKeyEncryption,
-    FlagKey.NewDevicePermanentDismiss,
-    FlagKey.NewDeviceTemporaryDismiss,
     FlagKey.IgnoreEnvironmentCheck,
     FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
@@ -97,8 +95,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
     FlagKey.AppReviewPrompt -> stringResource(R.string.app_review_prompt)
     FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
-    FlagKey.NewDevicePermanentDismiss -> stringResource(R.string.new_device_permanent_dismiss)
-    FlagKey.NewDeviceTemporaryDismiss -> stringResource(R.string.new_device_temporary_dismiss)
     FlagKey.IgnoreEnvironmentCheck -> stringResource(R.string.ignore_environment_check)
     FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
     FlagKey.SingleTapPasskeyCreation -> stringResource(R.string.single_tap_passkey_creation)

@@ -50,14 +50,6 @@ class FlagKeyTest {
             "cipher-key-encryption",
         )
         assertEquals(
-            FlagKey.NewDeviceTemporaryDismiss.keyName,
-            "new-device-temporary-dismiss",
-        )
-        assertEquals(
-            FlagKey.NewDevicePermanentDismiss.keyName,
-            "new-device-permanent-dismiss",
-        )
-        assertEquals(
             FlagKey.SingleTapPasskeyCreation.keyName,
             "single-tap-passkey-creation",
         )
@@ -104,8 +96,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.AppReviewPrompt,
-                FlagKey.NewDeviceTemporaryDismiss,
-                FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
@@ -134,8 +124,6 @@ class FlagKeyTest {
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.AppReviewPrompt,
                 FlagKey.CipherKeyEncryption,
-                FlagKey.NewDeviceTemporaryDismiss,
-                FlagKey.NewDevicePermanentDismiss,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.MutualTls,

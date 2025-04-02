@@ -32,7 +32,6 @@ import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFac
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.ContinueDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.DismissDialogClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.NavigateBackClick
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.RemindMeLaterClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorAction.TurnOnTwoFactorClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateBackToVault
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeTwoFactorEvent.NavigateToChangeAccountEmail
@@ -124,10 +123,6 @@ fun NewDeviceNoticeTwoFactorScreen(
             onChangeAccountEmailClick = {
                 viewModel.trySendAction(ChangeAccountEmailClick)
             },
-            onRemindMeLaterClick = {
-                viewModel.trySendAction(RemindMeLaterClick)
-            },
-            state = state,
         )
     }
 }
@@ -139,8 +134,6 @@ fun NewDeviceNoticeTwoFactorScreen(
 private fun NewDeviceNoticeTwoFactorContent(
     onTurnOnTwoFactorClick: () -> Unit,
     onChangeAccountEmailClick: () -> Unit,
-    onRemindMeLaterClick: () -> Unit,
-    state: NewDeviceNoticeTwoFactorState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -156,8 +149,6 @@ private fun NewDeviceNoticeTwoFactorContent(
         MainContent(
             onTurnOnTwoFactorClick = onTurnOnTwoFactorClick,
             onChangeAccountEmailClick = onChangeAccountEmailClick,
-            onRemindMeLaterClick = onRemindMeLaterClick,
-            state = state,
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -199,8 +190,6 @@ private fun ColumnScope.HeaderContent() {
 private fun ColumnScope.MainContent(
     onTurnOnTwoFactorClick: () -> Unit,
     onChangeAccountEmailClick: () -> Unit,
-    onRemindMeLaterClick: () -> Unit,
-    state: NewDeviceNoticeTwoFactorState,
 ) {
     BitwardenFilledButton(
         label = stringResource(R.string.turn_on_two_step_login),
@@ -217,15 +206,6 @@ private fun ColumnScope.MainContent(
         modifier = Modifier
             .fillMaxWidth(),
     )
-    if (state.shouldShowRemindMeLater) {
-        Spacer(modifier = Modifier.height(12.dp))
-        BitwardenOutlinedButton(
-            label = stringResource(R.string.remind_me_later),
-            onClick = onRemindMeLaterClick,
-            modifier = Modifier
-                .fillMaxWidth(),
-        )
-    }
 }
 
 @PreviewScreenSizes
@@ -235,10 +215,6 @@ private fun NewDeviceNoticeTwoFactorScreen_preview() {
         NewDeviceNoticeTwoFactorContent(
             onTurnOnTwoFactorClick = {},
             onChangeAccountEmailClick = {},
-            onRemindMeLaterClick = {},
-            state = NewDeviceNoticeTwoFactorState(
-                shouldShowRemindMeLater = true,
-            ),
         )
     }
 }

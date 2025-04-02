@@ -3,12 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.newdevicenotice
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.NewDeviceNoticeEmailAccessAction.EmailAccessToggle
@@ -30,7 +27,6 @@ private const val KEY_STATE = "state"
 class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
-    private val featureFlagManager: FeatureFlagManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<
     NewDeviceNoticeEmailAccessState,
@@ -62,16 +58,9 @@ class NewDeviceNoticeEmailAccessViewModel @Inject constructor(
 
     private fun handleContinueClick() {
         if (state.isEmailAccessEnabled) {
-            val displayStatus =
-                if (featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)) {
-                    CAN_ACCESS_EMAIL_PERMANENT
-                } else {
-                    CAN_ACCESS_EMAIL
-                }
-
             authRepository.setNewDeviceNoticeState(
                 NewDeviceNoticeState(
-                    displayStatus = displayStatus,
+                    displayStatus = CAN_ACCESS_EMAIL_PERMANENT,
                     lastSeenDate = null,
                 ),
             )

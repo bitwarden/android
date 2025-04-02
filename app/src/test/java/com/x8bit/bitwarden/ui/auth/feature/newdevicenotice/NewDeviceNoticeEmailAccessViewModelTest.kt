@@ -5,8 +5,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
@@ -26,11 +24,6 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
         )
         every { setNewDeviceNoticeState(any()) } just runs
         every { checkUserNeedsNewDeviceTwoFactorNotice() } returns true
-    }
-
-    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.NewDevicePermanentDismiss) } returns true
-        every { getFeatureFlag(FlagKey.NewDeviceTemporaryDismiss) } returns true
     }
 
     private val vaultRepository = mockk<VaultRepository>(relaxed = true)
@@ -98,33 +91,6 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `ContinueClick should emit NavigateBackToVault if isEmailAccessEnabled and NewDevicePermanentDismiss flag is off`() =
-        runTest {
-            every {
-                featureFlagManager.getFeatureFlag(FlagKey.NewDevicePermanentDismiss)
-            } returns false
-
-            val viewModel = createViewModel()
-            viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.EmailAccessToggle(true))
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.ContinueClick)
-                assertEquals(
-                    NewDeviceNoticeEmailAccessEvent.NavigateBackToVault,
-                    awaitItem(),
-                )
-                verify(exactly = 1) {
-                    authRepository.setNewDeviceNoticeState(
-                        NewDeviceNoticeState(
-                            displayStatus = NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL,
-                            lastSeenDate = null,
-                        ),
-                    )
-                }
-            }
-        }
-
-    @Test
     fun `ContinueClick should emit NavigateToTwoFactorOptions if isEmailAccessEnabled is false`() =
         runTest {
             val viewModel = createViewModel()
@@ -138,14 +104,13 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `LearnMoreClick should emit NavigateToLearnMore`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.LearnMoreClick)
-                assertEquals(NewDeviceNoticeEmailAccessEvent.NavigateToLearnMore, awaitItem())
-            }
+    fun `LearnMoreClick should emit NavigateToLearnMore`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(NewDeviceNoticeEmailAccessAction.LearnMoreClick)
+            assertEquals(NewDeviceNoticeEmailAccessEvent.NavigateToLearnMore, awaitItem())
         }
+    }
 
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = SavedStateHandle().also {
@@ -153,7 +118,6 @@ class NewDeviceNoticeEmailAccessViewModelTest : BaseViewModelTest() {
         },
     ): NewDeviceNoticeEmailAccessViewModel = NewDeviceNoticeEmailAccessViewModel(
         authRepository = authRepository,
-        featureFlagManager = featureFlagManager,
         vaultRepository = vaultRepository,
         savedStateHandle = savedStateHandle,
     )

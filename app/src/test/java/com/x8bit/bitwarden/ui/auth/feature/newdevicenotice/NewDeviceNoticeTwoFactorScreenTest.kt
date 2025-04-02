@@ -95,19 +95,6 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Remind me later click should send RemindMeLaterClick action`() {
-        composeTestRule
-            .onNodeWithText("Remind me later")
-            .performScrollTo()
-            .performClick()
-        verify(exactly = 1) {
-            viewModel.trySendAction(
-                NewDeviceNoticeTwoFactorAction.RemindMeLaterClick,
-            )
-        }
-    }
-
-    @Test
     fun `on NavigateToTurnOnTwoFactor should call launchUri on IntentManager`() {
         mutableEventFlow.tryEmit(
             NewDeviceNoticeTwoFactorEvent.NavigateToTurnOnTwoFactor(
@@ -144,22 +131,6 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `remind me later button visibility should update according to state`() {
-        composeTestRule
-            .onNodeWithText("Remind me later")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(shouldShowRemindMeLater = false)
-        }
-        composeTestRule
-            .onNodeWithText("Remind me later")
-            .assertDoesNotExist()
-    }
-
-    @Test
-    @Suppress("MaxLineLength")
     fun `turn on two factor dialog should be shown or hidden according to the state`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
 
@@ -175,9 +146,10 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
             .onNodeWithText("Continue to web app", substring = true, ignoreCase = true)
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
+        @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithText(
-                "Make your account more secure by setting up two-step login in the Bitwarden web app.",
+                text = "Make your account more secure by setting up two-step login in the Bitwarden web app.",
                 substring = true,
                 ignoreCase = true,
             )
@@ -251,6 +223,5 @@ class NewDeviceNoticeTwoFactorScreenTest : BaseComposeTest() {
 
 private val DEFAULT_STATE =
     NewDeviceNoticeTwoFactorState(
-        shouldShowRemindMeLater = true,
         dialogState = null,
     )
