@@ -2,11 +2,11 @@ package com.bitwarden.authenticator.data.platform.manager
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.util.FakeServerConfigRepository
+import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
+import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Test

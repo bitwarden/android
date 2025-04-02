@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.model
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
