@@ -57,7 +57,14 @@ fun CipherView.toViewState(
             name = name,
             requiresReprompt = (reprompt == CipherRepromptType.PASSWORD && hasMasterPassword) &&
                 previousState?.common?.requiresReprompt != false,
-            customFields = fields.orEmpty().map { it.toCustomField() },
+            customFields = fields.orEmpty().map { fieldView ->
+                fieldView.toCustomField(
+                    previousState = previousState
+                        ?.common
+                        ?.customFields
+                        ?.find { it.id == fieldView.hashCode().toString() },
+                )
+            },
             lastUpdated = revisionDate.toFormattedPattern(
                 pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                 clock = clock,
@@ -195,27 +202,39 @@ fun CipherView.toViewState(
         },
     )
 
-private fun FieldView.toCustomField(): VaultItemState.ViewState.Content.Common.Custom =
+/**
+ * Transforms [FieldView] into [VaultItemState.ViewState.Content.Common.Custom].
+ */
+fun FieldView.toCustomField(
+    previousState: VaultItemState.ViewState.Content.Common.Custom?,
+): VaultItemState.ViewState.Content.Common.Custom =
     when (type) {
         FieldType.TEXT -> VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
         )
 
         FieldType.HIDDEN -> VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
-            isVisible = false,
+            isVisible = (previousState as?
+                VaultItemState.ViewState.Content.Common.Custom.HiddenField)
+                ?.isVisible
+                ?: false,
         )
 
         FieldType.BOOLEAN -> VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value?.toBoolean() ?: false,
         )
 
         FieldType.LINKED -> VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+            id = this.hashCode().toString(),
             vaultLinkedFieldType = VaultLinkedFieldType.fromId(requireNotNull(linkedId)),
             name = name.orEmpty(),
         )

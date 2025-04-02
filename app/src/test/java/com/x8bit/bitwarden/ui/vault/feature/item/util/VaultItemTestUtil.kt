@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.persistentListOf
 import java.time.Instant
 
@@ -188,29 +187,41 @@ fun createCommonContent(
             lastUpdated = "1/1/70 12:16 AM",
             notes = "Lots of notes",
             customFields = listOf(
-                VaultItemState.ViewState.Content.Common.Custom.TextField(
+                FieldView(
                     name = "text",
                     value = "value",
-                    isCopyable = true,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+                    type = FieldType.TEXT,
+                    linkedId = null,
+                )
+                    .toCustomField(null),
+                FieldView(
                     name = "hidden",
                     value = "value",
-                    isCopyable = true,
-                    isVisible = false,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+                    type = FieldType.HIDDEN,
+                    linkedId = null,
+                )
+                    .toCustomField(null),
+                FieldView(
                     name = "boolean",
-                    value = true,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    value = "true",
+                    type = FieldType.BOOLEAN,
+                    linkedId = null,
+                )
+                    .toCustomField(null),
+                FieldView(
                     name = "linked username",
-                    vaultLinkedFieldType = VaultLinkedFieldType.USERNAME,
-                ),
-                VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+                    value = null,
+                    type = FieldType.LINKED,
+                    linkedId = 100U,
+                )
+                    .toCustomField(null),
+                FieldView(
                     name = "linked password",
-                    vaultLinkedFieldType = VaultLinkedFieldType.PASSWORD,
-                ),
+                    value = null,
+                    type = FieldType.LINKED,
+                    linkedId = 101U,
+                )
+                    .toCustomField(null),
             ),
             requiresReprompt = true,
             requiresCloneConfirmation = true,

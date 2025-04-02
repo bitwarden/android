@@ -5,6 +5,8 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.combineDataStates
+import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -17,8 +19,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
-import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -1598,10 +1598,16 @@ data class VaultItemState(
                  */
                 sealed class Custom : Parcelable {
                     /**
+                     * The unique ID of the custom field.
+                     */
+                    abstract val id: String
+
+                    /**
                      * Represents the data for displaying a custom text field.
                      */
                     @Parcelize
                     data class TextField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1612,6 +1618,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class HiddenField(
+                        override val id: String,
                         val name: String,
                         val value: String,
                         val isCopyable: Boolean,
@@ -1623,6 +1630,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class BooleanField(
+                        override val id: String,
                         val name: String,
                         val value: Boolean,
                     ) : Custom()
@@ -1632,6 +1640,7 @@ data class VaultItemState(
                      */
                     @Parcelize
                     data class LinkedField(
+                        override val id: String,
                         val vaultLinkedFieldType: VaultLinkedFieldType,
                         val name: String,
                     ) : Custom()
