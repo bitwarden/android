@@ -2,6 +2,12 @@ name: Scan Pull Requests
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "main"
+      - "release/**"
+      - "rc"
+      - "hotfix-rc"
   pull_request_target:
     types: [opened, synchronize]
 
@@ -75,7 +81,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-          ref: ${{  github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Scan with SonarCloud
         uses: sonarsource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203 # v4.2.1
