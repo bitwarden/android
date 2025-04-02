@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.datasource.network.retrofit
 
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.model.NetworkResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -109,7 +110,7 @@ class RetrofitsTest {
 
 interface TestApi {
     @GET("/test")
-    suspend fun test(): Result<JsonObject>
+    suspend fun test(): NetworkResult<JsonObject>
 }
 
 /**

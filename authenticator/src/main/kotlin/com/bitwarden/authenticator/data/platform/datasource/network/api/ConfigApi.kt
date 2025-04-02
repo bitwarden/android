@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.api
 
 import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
+import com.bitwarden.network.model.NetworkResult
 import retrofit2.http.GET
 
 /**
@@ -9,5 +10,5 @@ import retrofit2.http.GET
 interface ConfigApi {
 
     @GET("config")
-    suspend fun getConfig(): Result<ConfigResponseJson>
+    suspend fun getConfig(): NetworkResult<ConfigResponseJson>
 }
