@@ -53,5 +53,6 @@ include(
     ":authenticator",
     ":authenticatorbridge",
     ":core",
+    ":data",
     ":network",
 )
