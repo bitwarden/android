@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.base
+package com.bitwarden.network.base
 
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.network.core.NetworkResultCallAdapterFactory

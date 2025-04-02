@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.service
 
-import com.bitwarden.authenticator.data.platform.base.BaseServiceTest
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.ConfigApi
+import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.ConfigResponseJson
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive

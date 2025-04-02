@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.api.ConfigApi
 import com.bitwarden.network.model.ConfigResponseJson
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.mockwebserver.MockResponse

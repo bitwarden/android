@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.datasource.network.api.EventApi
 import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType

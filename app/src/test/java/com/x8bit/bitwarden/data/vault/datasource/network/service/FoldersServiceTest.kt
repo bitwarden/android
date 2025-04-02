@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.FoldersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
