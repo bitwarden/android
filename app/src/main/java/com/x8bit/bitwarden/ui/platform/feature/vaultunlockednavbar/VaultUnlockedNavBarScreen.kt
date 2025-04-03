@@ -64,6 +64,8 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
@@ -133,6 +135,8 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+        onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+        onNavigateToRecordedLogs = onNavigateToRecordedLogs,
     )
 }
 
@@ -162,6 +166,8 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
@@ -237,6 +243,8 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
             )
         }
     }

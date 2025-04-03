@@ -4,8 +4,10 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -30,10 +33,12 @@ private const val KEY_STATE = "state"
 /**
  * View model for the about screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
+    featureFlagManager: FeatureFlagManager,
     clock: Clock,
     private val logsManager: LogsManager,
     private val environmentRepository: EnvironmentRepository,
@@ -45,12 +50,19 @@ class AboutViewModel @Inject constructor(
             ciData = ciBuildInfo?.let { "\n$it" }.orEmpty().asText(),
             isSubmitCrashLogsEnabled = logsManager.isEnabled,
             shouldShowCrashLogsButton = !isFdroid,
+            isFlightRecorderEnabled = false,
+            shouldShowFlightRecorder = featureFlagManager.getFeatureFlag(FlagKey.FlightRecorder),
             copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(clock).value}".asText(),
         ),
 ) {
     init {
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
+            .launchIn(viewModelScope)
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.FlightRecorder)
+            .map { AboutAction.Internal.FlightRecorderReceive(isEnabled = it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -62,6 +74,20 @@ class AboutViewModel @Inject constructor(
         is AboutAction.SubmitCrashLogsClick -> handleSubmitCrashLogsClick(action)
         AboutAction.VersionClick -> handleVersionClick()
         AboutAction.WebVaultClick -> handleWebVaultClick()
+        is AboutAction.FlightRecorderCheckedChange -> handleFlightRecorderCheckedChange(action)
+        AboutAction.FlightRecorderTooltipClick -> handleFlightRecorderTooltipClick()
+        AboutAction.ViewRecordedLogsClick -> handleViewRecordedLogsClick()
+        is AboutAction.Internal -> handleInternalAction(action)
+    }
+
+    private fun handleInternalAction(action: AboutAction.Internal) {
+        when (action) {
+            is AboutAction.Internal.FlightRecorderReceive -> handleFlightRecorderReceive(action)
+        }
+    }
+
+    private fun handleFlightRecorderReceive(action: AboutAction.Internal.FlightRecorderReceive) {
+        mutableStateFlow.update { it.copy(shouldShowFlightRecorder = action.isEnabled) }
     }
 
     private fun handleBackClick() {
@@ -105,6 +131,22 @@ class AboutViewModel @Inject constructor(
             ),
         )
     }
+
+    private fun handleFlightRecorderCheckedChange(action: AboutAction.FlightRecorderCheckedChange) {
+        if (action.isEnabled) {
+            sendEvent(AboutEvent.NavigateToFlightRecorder)
+        } else {
+            // TODO: PM-19592 Disable the feature.
+        }
+    }
+
+    private fun handleFlightRecorderTooltipClick() {
+        sendEvent(AboutEvent.NavigateToFlightRecorderHelp)
+    }
+
+    private fun handleViewRecordedLogsClick() {
+        sendEvent(AboutEvent.NavigateToRecordedLogs)
+    }
 }
 
 /**
@@ -117,6 +159,8 @@ data class AboutState(
     val ciData: Text,
     val isSubmitCrashLogsEnabled: Boolean,
     val shouldShowCrashLogsButton: Boolean,
+    val isFlightRecorderEnabled: Boolean,
+    val shouldShowFlightRecorder: Boolean,
     val copyrightInfo: Text,
 ) : Parcelable
 
@@ -128,6 +172,21 @@ sealed class AboutEvent {
      * Navigate back.
      */
     data object NavigateBack : AboutEvent()
+
+    /**
+     * Navigates to the flight recorder configuration.
+     */
+    data object NavigateToFlightRecorder : AboutEvent()
+
+    /**
+     * Navigates to the flight recorder help info.
+     */
+    data object NavigateToFlightRecorderHelp : AboutEvent()
+
+    /**
+     * Navigates to the flight recorder log history.
+     */
+    data object NavigateToRecordedLogs : AboutEvent()
 
     /**
      * Navigates to the help center.
@@ -190,4 +249,31 @@ sealed class AboutAction {
      * User clicked the web vault row.
      */
     data object WebVaultClick : AboutAction()
+
+    /**
+     * User clicked the flight recorder check box.
+     */
+    data class FlightRecorderCheckedChange(
+        val isEnabled: Boolean,
+    ) : AboutAction()
+
+    /**
+     * User clicked the flight recorder tooltip.
+     */
+    data object FlightRecorderTooltipClick : AboutAction()
+
+    /**
+     * User clicked the view recorded logs row.
+     */
+    data object ViewRecordedLogsClick : AboutAction()
+
+    /**
+     * Actions for internal use by the ViewModel.
+     */
+    sealed class Internal : AboutAction() {
+        /**
+         * Indicates that the flight recorder feature has been enabled or disabled.
+         */
+        data class FlightRecorderReceive(val isEnabled: Boolean) : Internal()
+    }
 }

@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -15,6 +17,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -33,6 +36,10 @@ class AboutViewModelTest : BaseViewModelTest() {
         every { isEnabled } returns false
         every { isEnabled = any() } just runs
     }
+    private val featureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.FlightRecorder) } returns true
+        every { getFeatureFlagFlow(FlagKey.FlightRecorder) } returns flowOf(true)
+    }
 
     @Test
     fun `on BackClick should emit NavigateBack`() = runTest {
@@ -40,6 +47,44 @@ class AboutViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(AboutAction.BackClick)
             assertEquals(AboutEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `on FlightRecorderTooltipClick should emit NavigateToFlightRecorderHelp`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick)
+            assertEquals(AboutEvent.NavigateToFlightRecorderHelp, awaitItem())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on FlightRecorderCheckedChange with isEnabled true should emit NavigateToFlightRecorder`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(isEnabled = true))
+                assertEquals(AboutEvent.NavigateToFlightRecorder, awaitItem())
+            }
+        }
+
+    @Test
+    fun `on FlightRecorderCheckedChange with isEnabled false should do nothing`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(isEnabled = false))
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `on ViewRecordedLogsClick should emit NavigateToRecordedLogs`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AboutAction.ViewRecordedLogsClick)
+            assertEquals(AboutEvent.NavigateToRecordedLogs, awaitItem())
         }
     }
 
@@ -133,6 +178,7 @@ class AboutViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         environmentRepository = environmentRepository,
         logsManager = logsManager,
+        featureFlagManager = featureFlagManager,
     )
 }
 
@@ -144,7 +190,9 @@ private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     version = "Version: <version_name> (<version_code>)".asText(),
     deviceData = "<device_data>".asText(),
     ciData = "\n<ci_info>".asText(),
-    isSubmitCrashLogsEnabled = false,
     copyrightInfo = "© Bitwarden Inc. 2015-${Year.now(fixedClock).value}".asText(),
+    isSubmitCrashLogsEnabled = false,
     shouldShowCrashLogsButton = true,
+    isFlightRecorderEnabled = false,
+    shouldShowFlightRecorder = true,
 )
