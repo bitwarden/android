@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.model
+package com.bitwarden.network.model
 
 import androidx.annotation.Keep
 import com.bitwarden.core.data.serializer.BaseEnumeratedIntSerializer

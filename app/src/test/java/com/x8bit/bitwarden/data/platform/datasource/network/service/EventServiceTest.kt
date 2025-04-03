@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
+import com.bitwarden.network.api.EventApi
 import com.bitwarden.network.base.BaseServiceTest
-import com.x8bit.bitwarden.data.platform.datasource.network.api.EventApi
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
+import com.bitwarden.network.model.OrganizationEventJson
+import com.bitwarden.network.model.OrganizationEventType
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals

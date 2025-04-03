@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
+import com.bitwarden.network.api.EventApi
+import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.platform.datasource.network.api.EventApi
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 
 /**
  * The default implementation of the [EventService].
