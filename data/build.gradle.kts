@@ -37,4 +37,6 @@ kotlin {
     }
 }
 
-dependencies { }
+dependencies {
+    implementation(libs.androidx.core.ktx)
+}

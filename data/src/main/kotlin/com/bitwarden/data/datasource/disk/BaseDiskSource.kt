@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.disk
+package com.bitwarden.data.datasource.disk
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -6,7 +6,7 @@ import androidx.core.content.edit
 /**
  * Base class for simplifying interactions with [SharedPreferences].
  */
-@Suppress("UnnecessaryAbstractClass")
+@Suppress("UnnecessaryAbstractClass", "TooManyFunctions")
 abstract class BaseDiskSource(
     private val sharedPreferences: SharedPreferences,
 ) {
@@ -102,6 +102,18 @@ abstract class BaseDiskSource(
         key: String,
         value: String?,
     ): Unit = sharedPreferences.edit { putString(key.withBase(), value) }
+
+    protected fun putStringSet(
+        key: String,
+        value: Set<String>?,
+    ): Unit = sharedPreferences.edit {
+        putStringSet(key.withBase(), value)
+    }
+
+    protected fun getStringSet(
+        key: String,
+        default: Set<String>?,
+    ): Set<String>? = sharedPreferences.getStringSet(key.withBase(), default)
 
     protected fun removeWithPrefix(prefix: String) {
         sharedPreferences

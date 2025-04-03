@@ -21,7 +21,7 @@ class FeatureFlagOverrideDiskSourceTest {
         val key = FlagKey.DummyBoolean
         assertFalse(
             fakeSharedPreferences.getBoolean(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 false,
             ),
         )
@@ -29,7 +29,7 @@ class FeatureFlagOverrideDiskSourceTest {
         featureFlagOverrideDiskSource.saveFeatureFlag(key, value)
         assertTrue(
             fakeSharedPreferences.getBoolean(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 false,
             ),
         )
@@ -39,7 +39,7 @@ class FeatureFlagOverrideDiskSourceTest {
     fun `call to get feature flag should return correct value for booleans`() {
         val key = FlagKey.DummyBoolean
         fakeSharedPreferences.edit {
-            putBoolean(key.keyName, true)
+            putBoolean("$BASE_STORAGE_PREFIX${key.keyName}", true)
         }
 
         val actual = featureFlagOverrideDiskSource.getFeatureFlag(key)
@@ -51,7 +51,7 @@ class FeatureFlagOverrideDiskSourceTest {
         val key = FlagKey.DummyString
         assertNull(
             fakeSharedPreferences.getString(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 null,
             ),
         )
@@ -59,7 +59,7 @@ class FeatureFlagOverrideDiskSourceTest {
         featureFlagOverrideDiskSource.saveFeatureFlag(key, expectedValue)
         assertEquals(
             fakeSharedPreferences.getString(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 null,
             ),
             expectedValue,
@@ -72,7 +72,7 @@ class FeatureFlagOverrideDiskSourceTest {
         assertNull(featureFlagOverrideDiskSource.getFeatureFlag(key))
         val expectedValue = "string"
         fakeSharedPreferences.edit {
-            putString(key.keyName, expectedValue)
+            putString("$BASE_STORAGE_PREFIX${key.keyName}", expectedValue)
         }
 
         val actual = featureFlagOverrideDiskSource.getFeatureFlag(key)
@@ -84,7 +84,7 @@ class FeatureFlagOverrideDiskSourceTest {
         val key = FlagKey.DummyInt()
         assertEquals(
             fakeSharedPreferences.getInt(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 0,
             ),
             0,
@@ -93,7 +93,7 @@ class FeatureFlagOverrideDiskSourceTest {
         featureFlagOverrideDiskSource.saveFeatureFlag(key, expectedValue)
         assertEquals(
             fakeSharedPreferences.getInt(
-                key.keyName,
+                "$BASE_STORAGE_PREFIX${key.keyName}",
                 0,
             ),
             expectedValue,
@@ -106,10 +106,12 @@ class FeatureFlagOverrideDiskSourceTest {
         assertNull(featureFlagOverrideDiskSource.getFeatureFlag(key))
         val expectedValue = 1
         fakeSharedPreferences.edit {
-            putInt(key.keyName, expectedValue)
+            putInt("$BASE_STORAGE_PREFIX${key.keyName}", expectedValue)
         }
 
         val actual = featureFlagOverrideDiskSource.getFeatureFlag(key)
         assertEquals(actual, expectedValue)
     }
 }
+
+private const val BASE_STORAGE_PREFIX = "bwPreferencesStorage:"

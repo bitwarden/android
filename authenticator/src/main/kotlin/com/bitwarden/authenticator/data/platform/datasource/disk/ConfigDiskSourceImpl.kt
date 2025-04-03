@@ -1,15 +1,15 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
+import com.bitwarden.data.datasource.disk.BaseDiskSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.json.Json
 
-private const val SERVER_CONFIGURATIONS = "$BASE_KEY:serverConfigurations"
+private const val SERVER_CONFIGURATIONS = "serverConfigurations"
 
 /**
  * Primary implementation of [ConfigDiskSource].
