@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
 /**

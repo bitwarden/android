@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.network.api.AuthenticatedOrganizationApi
+import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationKeysResponseJson
+import com.bitwarden.network.model.OrganizationResetPasswordEnrollRequestJson
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetPasswordEnrollRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
