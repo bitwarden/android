@@ -139,7 +139,8 @@ fun OtherScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("LastSyncLabel")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
             ) {
@@ -147,7 +148,7 @@ fun OtherScreen(
                     text = stringResource(id = R.string.last_sync),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.padding(start = 16.dp, end = 2.dp),
+                    modifier = Modifier.padding(end = 2.dp),
                 )
                 Text(
                     text = state.lastSyncTime,
