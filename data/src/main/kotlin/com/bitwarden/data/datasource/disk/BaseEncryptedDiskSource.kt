@@ -1,9 +1,8 @@
-package com.x8bit.bitwarden.data.platform.datasource.disk
+package com.bitwarden.data.datasource.disk
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import com.bitwarden.data.datasource.disk.BaseDiskSource
 
 /**
  * Base class for simplifying interactions with [SharedPreferences] and

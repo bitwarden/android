@@ -39,4 +39,5 @@ kotlin {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.security.crypto)
 }
