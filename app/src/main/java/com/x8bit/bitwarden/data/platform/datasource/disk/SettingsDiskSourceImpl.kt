@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseDiskSource
@@ -50,7 +51,7 @@ private const val RESUME_SCREEN = "resumeScreen"
  */
 @Suppress("TooManyFunctions")
 class SettingsDiskSourceImpl(
-    val sharedPreferences: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     SettingsDiskSource {
@@ -87,11 +88,14 @@ class SettingsDiskSourceImpl(
 
     private val mutableHasSeenGeneratorCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableScreenCaptureAllowedFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+    private val mutableScreenCaptureAllowedFlow = MutableSharedFlow<Boolean?>()
 
     private val mutableVaultRegisteredForExportFlow =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    init {
+        migrateScreenCaptureSetting()
+    }
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -108,6 +112,16 @@ class SettingsDiskSourceImpl(
 
     override val appLanguageFlow: Flow<AppLanguage?>
         get() = mutableAppLanguageFlow.onSubscription { emit(appLanguage) }
+
+    override var screenCaptureAllowed: Boolean?
+        get() = getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY)
+        set(value) {
+            putBoolean(key = SCREEN_CAPTURE_ALLOW_KEY, value = value)
+            mutableScreenCaptureAllowedFlow.tryEmit(value)
+        }
+
+    override val screenCaptureAllowedFlow: Flow<Boolean?>
+        get() = mutableScreenCaptureAllowedFlow.onSubscription { emit(screenCaptureAllowed) }
 
     override var initialAutofillDialogShown: Boolean?
         get() = getBoolean(key = INITIAL_AUTOFILL_DIALOG_SHOWN)
@@ -370,25 +384,6 @@ class SettingsDiskSourceImpl(
         )
     }
 
-    override fun getScreenCaptureAllowed(userId: String): Boolean? {
-        return getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId))
-    }
-
-    override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> =
-        getMutableScreenCaptureAllowedFlow(userId)
-            .onSubscription { emit(getScreenCaptureAllowed(userId)) }
-
-    override fun storeScreenCaptureAllowed(
-        userId: String,
-        isScreenCaptureAllowed: Boolean?,
-    ) {
-        putBoolean(
-            key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId),
-            value = isScreenCaptureAllowed,
-        )
-        getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
-    }
-
     override fun storeUseHasLoggedInPreviously(userId: String) {
         putBoolean(
             key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY.appendIdentifier(userId),
@@ -568,11 +563,6 @@ class SettingsDiskSourceImpl(
             bufferedMutableSharedFlow(replay = 1)
         }
 
-    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> =
-        mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
-
     private fun getMutableShowAutoFillSettingBadgeFlow(
         userId: String,
     ): MutableSharedFlow<Boolean?> = mutableShowAutoFillSettingBadgeFlowMap.getOrPut(userId) {
@@ -595,5 +585,21 @@ class SettingsDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<Boolean?> = mutableVaultRegisteredForExportFlow.getOrPut(userId) {
         bufferedMutableSharedFlow(replay = 1)
+    }
+
+    /**
+     * Migrates the user-scoped screen capture state to an app-wide state.
+     *
+     * In the case that multiple users have different values stored for this feature, we will
+     * default to _not_ allowing screen capture.
+     */
+    private fun migrateScreenCaptureSetting() {
+        val screenCaptureSettings = sharedPreferences.all.filter {
+            // The underscore is important to not grab the new app-scoped key
+            it.key.contains(other = "${SCREEN_CAPTURE_ALLOW_KEY}_")
+        }
+        if (screenCaptureSettings.isEmpty()) return
+        screenCaptureAllowed = screenCaptureSettings.all { it.value == true }
+        screenCaptureSettings.forEach { sharedPreferences.edit(commit = true) { remove(it.key) } }
     }
 }

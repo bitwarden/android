@@ -25,6 +25,16 @@ interface SettingsDiskSource {
     val appLanguageFlow: Flow<AppLanguage?>
 
     /**
+     * The currently persisted setting for whether screen capture is allowed.
+     */
+    var screenCaptureAllowed: Boolean?
+
+    /**
+     * Emits updates that track [screenCaptureAllowed].
+     */
+    val screenCaptureAllowedFlow: Flow<Boolean?>
+
+    /**
      * Has the initial autofill dialog been shown to the user.
      */
     var initialAutofillDialogShown: Boolean?
@@ -236,21 +246,6 @@ interface SettingsDiskSource {
         userId: String,
         blockedAutofillUris: List<String>?,
     )
-
-    /**
-     * Gets whether or not the given [userId] has enabled screen capture.
-     */
-    fun getScreenCaptureAllowed(userId: String): Boolean?
-
-    /**
-     * Emits updates that track [getScreenCaptureAllowed] for the given [userId].
-     */
-    fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?>
-
-    /**
-     * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
-     */
-    fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)
 
     /**
      * Records a user sign in for the given [userId]. This data is expected to remain on
