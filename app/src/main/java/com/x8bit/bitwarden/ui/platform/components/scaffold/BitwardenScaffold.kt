@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
@@ -193,7 +194,13 @@ private fun ScaffoldNavigationRail(
     navigationData: ScaffoldNavigationData,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxHeight()) {
+    // We set the z-index to 1f in order to make sure the content transitions
+    // animate in under the navigation rail.
+    Box(
+        modifier = modifier
+            .fillMaxHeight()
+            .zIndex(zIndex = 1f),
+    ) {
         var appBarWidthPx by remember { mutableIntStateOf(0) }
         BitwardenNavigationRail(
             navigationItems = navigationData.navigationItems,
