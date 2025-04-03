@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.service
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
+import com.bitwarden.network.model.OrganizationEventJson
 
 /**
  * Provides an API for submitting events.

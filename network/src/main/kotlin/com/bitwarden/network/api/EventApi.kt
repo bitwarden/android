@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.api
+package com.bitwarden.network.api
 
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
+import com.bitwarden.network.model.OrganizationEventJson
 import retrofit2.http.Body
 import retrofit2.http.POST
 

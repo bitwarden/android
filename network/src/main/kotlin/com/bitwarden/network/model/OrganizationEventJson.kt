@@ -1,6 +1,5 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.model
+package com.bitwarden.network.model
 
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
