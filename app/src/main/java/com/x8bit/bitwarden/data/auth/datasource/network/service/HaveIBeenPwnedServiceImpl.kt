@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.bitwarden.network.api.HaveIBeenPwnedApi
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.api.HaveIBeenPwnedApi
 import java.security.MessageDigest
 
 class HaveIBeenPwnedServiceImpl(private val api: HaveIBeenPwnedApi) : HaveIBeenPwnedService {
