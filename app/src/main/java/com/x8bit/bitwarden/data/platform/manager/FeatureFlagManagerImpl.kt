@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast

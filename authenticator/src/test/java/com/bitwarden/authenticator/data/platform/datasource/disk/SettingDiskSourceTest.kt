@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import kotlinx.serialization.json.Json

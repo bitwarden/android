@@ -1,11 +1,14 @@
-package com.bitwarden.authenticator.data.platform.datasource.disk.util
+package com.bitwarden.data.datasource.disk.util
 
-import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 
+/**
+ * A faked [ConfigDiskSource] that holds data in memory.
+ */
 class FakeConfigDiskSource : ConfigDiskSource {
     private var serverConfigValue: ServerConfig? = null
 

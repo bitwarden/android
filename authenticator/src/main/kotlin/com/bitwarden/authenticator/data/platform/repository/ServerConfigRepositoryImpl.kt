@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.repository
 
-import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.service.ConfigService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted

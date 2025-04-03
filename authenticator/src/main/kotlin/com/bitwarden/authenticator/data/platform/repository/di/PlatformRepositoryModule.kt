@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.data.platform.repository.di
 
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
@@ -16,6 +15,7 @@ import com.bitwarden.authenticator.data.platform.repository.ServerConfigReposito
 import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepositoryImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.network.service.ConfigService
 import dagger.Module
 import dagger.Provides

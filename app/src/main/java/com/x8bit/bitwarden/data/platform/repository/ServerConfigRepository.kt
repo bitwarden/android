@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.repository
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import kotlinx.coroutines.flow.StateFlow
 
 /**

@@ -15,6 +15,8 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
@@ -107,8 +109,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager

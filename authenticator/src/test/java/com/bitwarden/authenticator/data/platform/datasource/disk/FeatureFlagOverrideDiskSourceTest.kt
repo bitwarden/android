@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import androidx.core.content.edit
-import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
