@@ -4,6 +4,7 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -13,7 +14,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson

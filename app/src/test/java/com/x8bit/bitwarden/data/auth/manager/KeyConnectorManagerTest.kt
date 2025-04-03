@@ -5,7 +5,7 @@ import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.model
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
