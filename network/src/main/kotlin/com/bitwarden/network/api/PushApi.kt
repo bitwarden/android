@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.api
+package com.bitwarden.network.api
 
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
+import com.bitwarden.network.model.PushTokenRequest
 import retrofit2.http.Body
 import retrofit2.http.PUT
 import retrofit2.http.Path
