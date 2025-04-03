@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
+import com.bitwarden.data.datasource.di.EncryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSourceImpl

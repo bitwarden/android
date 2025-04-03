@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.di
 
 import android.content.SharedPreferences
+import com.bitwarden.data.datasource.di.EncryptedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSourceImpl
-import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import dagger.Module

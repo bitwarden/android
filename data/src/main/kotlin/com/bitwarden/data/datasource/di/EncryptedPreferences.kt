@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.di
+package com.bitwarden.data.datasource.di
 
 import android.content.SharedPreferences
 import javax.inject.Qualifier
