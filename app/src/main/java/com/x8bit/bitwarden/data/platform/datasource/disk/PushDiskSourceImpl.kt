@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
+import com.bitwarden.data.datasource.disk.BaseDiskSource
 import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
 import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
 import java.time.ZonedDateTime
