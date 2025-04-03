@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager.util
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
+import com.bitwarden.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
