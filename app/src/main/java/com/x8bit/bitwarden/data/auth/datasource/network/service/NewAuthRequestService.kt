@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
+import com.bitwarden.network.model.AuthRequestTypeJson
+import com.bitwarden.network.model.AuthRequestsResponseJson
 
 /**
  * Provides an API for creating a new authentication request.
