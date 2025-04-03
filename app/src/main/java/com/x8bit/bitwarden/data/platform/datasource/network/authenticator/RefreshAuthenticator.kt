@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.authenticator
 
+import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
-import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import okhttp3.Authenticator
 import okhttp3.Request
