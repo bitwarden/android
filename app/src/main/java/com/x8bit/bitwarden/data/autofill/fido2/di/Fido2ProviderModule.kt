@@ -68,13 +68,11 @@ object Fido2ProviderModule {
     fun provideFido2CredentialManager(
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
-        fido2OriginManager: Fido2OriginManager,
         json: Json,
     ): Fido2CredentialManager =
         Fido2CredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
-            fido2OriginManager = fido2OriginManager,
             json = json,
         )
 

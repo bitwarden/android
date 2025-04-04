@@ -17,10 +17,10 @@ fun Fido2CreateCredentialRequest.toDefaultAddTypeContent(
     isIndividualVaultDisabled: Boolean,
 ): VaultAddEditState.ViewState.Content {
 
-    val rpUri = origin
+    val rpUri = providerRequest.callingRequest.origin
         ?.toUriOrNull()
         ?.toString()
-        ?: packageName
+        ?: callingAppInfo.packageName
             .toAndroidAppUriString()
 
     val rpName = attestationOptions
