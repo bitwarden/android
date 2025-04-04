@@ -1,11 +1,11 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.api
+package com.bitwarden.network.api
 
+import com.bitwarden.network.model.CreateAccountKeysRequest
+import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
-import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
+import com.bitwarden.network.model.ResetPasswordRequestJson
+import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.VerifyOtpRequestJson
 import retrofit2.http.Body
 import retrofit2.http.HTTP
 import retrofit2.http.POST
