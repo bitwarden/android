@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.manager
 
 import android.app.Activity
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

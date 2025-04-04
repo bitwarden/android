@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.platform.manager.dispatcher
+package com.bitwarden.data.manager
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class DispatcherManagerTest {
@@ -15,7 +15,7 @@ class DispatcherManagerTest {
 
         val actual = dispatcherManager.io
 
-        assertEquals(expected, actual)
+        Assertions.assertEquals(expected, actual)
     }
 
     @Test
@@ -24,7 +24,7 @@ class DispatcherManagerTest {
 
         val actual = dispatcherManager.main
 
-        assertEquals(expected, actual)
+        Assertions.assertEquals(expected, actual)
     }
 
     @Test
@@ -33,6 +33,6 @@ class DispatcherManagerTest {
 
         val actual = dispatcherManager.default
 
-        assertEquals(expected, actual)
+        Assertions.assertEquals(expected, actual)
     }
 }

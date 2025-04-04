@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.app.Activity
 import android.content.Intent
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilderImpl
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionResultInten
 import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.util.toAutofillCipherProvider
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import kotlinx.coroutines.CoroutineScope
