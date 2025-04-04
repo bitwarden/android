@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.FakeEnvironmentDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import io.mockk.every

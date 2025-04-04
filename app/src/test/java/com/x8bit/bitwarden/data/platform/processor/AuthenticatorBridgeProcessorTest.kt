@@ -18,8 +18,8 @@ import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.authenticatorbridge.util.toFingerprint
 import com.bitwarden.authenticatorbridge.util.toSymmetricEncryptionKeyData
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository

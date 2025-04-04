@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.manager
+package com.bitwarden.data.manager
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.MainCoroutineDispatcher

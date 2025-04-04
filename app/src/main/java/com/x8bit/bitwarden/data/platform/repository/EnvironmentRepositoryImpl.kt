@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
