@@ -966,7 +966,6 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Votre clé d\'accès sera enregistrée votre coffre Bitwarden pour %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Les éléments d\'organisation non assignés ne sont plus visibles dans la vue de Tous les coffres et sont uniquement accessibles via la Console d\'administration. Assignez ces éléments à une collection à partir de la Console d\'administration pour les rendre visibles.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Au 2 mai 2024, les éléments d\'organisation non assignés ne sont plus visibles dans la vue de Tous les coffres et sont uniquement accessibles via la Console d\'administration. Assignez ces éléments à une collection à partir de la Console d\'administration pour les rendre visibles.</string>
-  <string name="remind_me_later">Me le rappeler plus tard</string>
   <string name="notice">Remarque</string>
   <string name="passkeys_not_supported_for_this_app">Clés d\'accès non supportées par cette application</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
@@ -1229,4 +1228,9 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="add_field">Ajouter un champ</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Partager les détails de l\'erreur</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

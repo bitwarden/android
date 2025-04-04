@@ -480,7 +480,7 @@ Načtení proběhne automaticky.</string>
   <string name="unlock">Odemknout</string>
   <string name="unlock_vault">Odemknout trezor</string>
   <string name="thirty_minutes">30 minut</string>
-  <string name="set_pin_description">Nastavte svůj PIN kód pro odemknutí trezoru. Pokud se zcela odhlásíte z aplikace bude Váš aktuální PIN resetován.</string>
+  <string name="set_pin_description">Váš PIN musí mít nejméně 4 znaky. Pokud se z aplikace odhlásíte, nastavení PINu bude resetováno.</string>
   <string name="logged_in_as_on">Přihlášen jako %1$s na %2$s.</string>
   <string name="vault_locked_master_password">Váš trezor je uzamčen. Pro pokračování musíte zadat hlavní heslo.</string>
   <string name="vault_locked_pin">Váš trezor je uzamčen. Pro pokračování musíte zadat PIN.</string>
@@ -965,7 +965,6 @@ Chcete se přepnout na tento účet?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Váš přístupový klíč bude pro %1$s uložen do Vašeho trezoru na Bitwardenu</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nepřiřazené položky organizace již nejsou viditelné ve Vašem zobrazení všech trezorů a jsou nyní přístupné jen v konzoli správce. Přiřaďte tyto položky do kolekce z konzole pro správce, aby byly viditelné.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Dne 16. května 2024 již nebudou nepřiřazené položky organizace viditelné v zobrazení Všechny trezory a budou přístupné jen prostřednictvím konzoly správce. Přiřaďte tyto položky do kolekce z konzoly pro správce, aby byly viditelné.</string>
-  <string name="remind_me_later">Připomenout později</string>
   <string name="notice">Upozornění</string>
   <string name="passkeys_not_supported_for_this_app">Přístupové klíče nejsou pro tuto aplikaci podporovány</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operace přístupového klíče se nezdařila, protože prohlížeč nemá oprávnění</string>
@@ -1228,4 +1227,9 @@ Chcete se přepnout na tento účet?</string>
   <string name="add_field">Přidat pole</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Sdílet podrobnosti o chybě</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

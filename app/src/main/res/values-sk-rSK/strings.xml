@@ -966,7 +966,6 @@ Chcete prepnúť na tento účet?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Váš prístupový kľúč sa uloží do vášho Bitwarden trezoru pre %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nepriradené položky organizácie už nie sú viditeľné v zobrazení Všetky Trezory a sú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">16. mája nepriradené položky organizácie už nebudú viditeľné v zobrazení Všetky Trezory a budú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora.</string>
-  <string name="remind_me_later">Pripomenúť neskôr</string>
   <string name="notice">Upozornenie</string>
   <string name="passkeys_not_supported_for_this_app">Prístupové kľúče nie sú pre túto aplikáciu podporované</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operácia prístupového kľúča zlyhala, pretože prehliadač nemá oprávnenie</string>
@@ -1229,4 +1228,9 @@ Chcete prepnúť na tento účet?</string>
   <string name="add_field">Pridať pole</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Zdieľať podrobnosti o chybe</string>
+  <string name="flight_recorder">Čierna skrinka</string>
+  <string name="flight_recorder_help">Pomocník pre čiernu skrinku</string>
+  <string name="view_recorded_logs">Zobraziť zaznamenané logy</string>
+  <string name="enable_flight_recorder_title">Povoliť čiernu skrinku</string>
+  <string name="recorded_logs_title">Zaznamenané logy</string>
 </resources>
