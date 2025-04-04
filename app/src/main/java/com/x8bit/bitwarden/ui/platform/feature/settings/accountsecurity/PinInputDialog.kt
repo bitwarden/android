@@ -46,9 +46,6 @@ private const val MINIMUM_PIN_LENGTH: Int = 4
  * @param onCancelClick A callback for when the "Cancel" button is clicked.
  * @param onSubmitClick A callback for when the "Submit" button is clicked.
  * @param onDismissRequest A callback for when the dialog is requesting to be dismissed.
- * @param isPinCreation A flag for determining if the dialog is being used for PIN creation. We
- * want to restrict PINs to numeric values but also support any existing PINs with non-numeric
- * characters.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
@@ -57,7 +54,6 @@ fun PinInputDialog(
     onCancelClick: () -> Unit,
     onSubmitClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
-    isPinCreation: Boolean = false,
 ) {
     var pin by remember { mutableStateOf(value = "") }
     Dialog(
@@ -114,10 +110,8 @@ fun PinInputDialog(
                     label = stringResource(id = R.string.pin),
                     value = pin,
                     autoFocus = true,
-                    onValueChange = { newValue ->
-                        pin = newValue.filter { it.isDigit() || !isPinCreation }
-                    },
-                    keyboardType = KeyboardType.Number,
+                    onValueChange = { },
+                    keyboardType = KeyboardType.Password,
                     textFieldTestTag = "AlertInputField",
                     cardStyle = CardStyle.Full,
                     modifier = Modifier.fillMaxWidth(),
