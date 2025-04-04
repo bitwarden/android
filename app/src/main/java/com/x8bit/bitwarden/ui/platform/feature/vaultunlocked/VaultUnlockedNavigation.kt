@@ -8,9 +8,6 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillS
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.navigateToNewDeviceNoticeTwoFactor
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.newDeviceNoticeEmailAccessDestination
-import com.x8bit.bitwarden.ui.auth.feature.newdevicenotice.newDeviceNoticeTwoFactorDestination
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
@@ -226,14 +223,6 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
         )
         importLoginsScreenDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        newDeviceNoticeEmailAccessDestination(
-            onNavigateBackToVault = { navController.navigateToVaultUnlockedGraph() },
-            onNavigateToTwoFactorOptions = { navController.navigateToNewDeviceNoticeTwoFactor() },
-        )
-        newDeviceNoticeTwoFactorDestination(
-            onNavigateBackToVault = { navController.navigateToVaultUnlockedGraph() },
             onNavigateBack = { navController.popBackStack() },
         )
     }

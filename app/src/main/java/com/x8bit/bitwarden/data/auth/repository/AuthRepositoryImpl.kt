@@ -18,8 +18,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
@@ -117,7 +115,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -149,7 +146,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import java.time.ZonedDateTime
 import javax.inject.Singleton
 
 /**
@@ -1406,86 +1402,6 @@ class AuthRepositoryImpl(
                 onboardingStatus = status,
             )
         }
-    }
-
-    override fun getNewDeviceNoticeState(): NewDeviceNoticeState? {
-        return activeUserId?.let { userId ->
-            authDiskSource.getNewDeviceNoticeState(userId = userId)
-        }
-    }
-
-    override fun setNewDeviceNoticeState(newState: NewDeviceNoticeState?) {
-        activeUserId?.let { userId ->
-            authDiskSource.storeNewDeviceNoticeState(userId = userId, newState = newState)
-        }
-    }
-
-    override fun checkUserNeedsNewDeviceTwoFactorNotice(): Boolean {
-        return activeUserId
-            ?.let { userId ->
-                if (!newDeviceNoticePreConditionsValid()) {
-                    return false
-                }
-
-                val newDeviceNoticeState = authDiskSource.getNewDeviceNoticeState(userId = userId)
-                return when (newDeviceNoticeState.displayStatus) {
-                    // if the user has already attested email access but permanent flag is enabled,
-                    // the notice needs to appear again
-                    NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL -> true
-                    // if the user has already seen but 7 days have already passed,
-                    // the notice needs to appear again
-                    NewDeviceNoticeDisplayStatus.HAS_SEEN -> {
-                        newDeviceNoticeState.shouldDisplayNoticeIfSeen
-                    }
-
-                    NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN -> true
-                    // the user never needs to see the notice again
-                    NewDeviceNoticeDisplayStatus.CAN_ACCESS_EMAIL_PERMANENT -> false
-                }
-            }
-            ?: false
-    }
-
-    /**
-     * Checks if the preconditions are met for a user to see a new device notice:
-     * - Must be a Bitwarden cloud user.
-     * - The account must be at least one week old.
-     * - Cannot have an active policy requiring SSO to be enabled.
-     * - Cannot have two-factor authentication enabled.
-     */
-    private fun newDeviceNoticePreConditionsValid(): Boolean {
-        val checkEnvironment = !featureFlagManager.getFeatureFlag(FlagKey.IgnoreEnvironmentCheck)
-        val isSelfHosted = environmentRepository.environment.type == Environment.Type.SELF_HOSTED
-        if (checkEnvironment && isSelfHosted) {
-            return false
-        }
-
-        val userProfile = authDiskSource.userState?.activeAccount?.profile
-        val isProfileAtLeastWeekOld = userProfile
-            ?.let {
-                it.creationDate
-                    ?.plusWeeks(1)
-                    ?.isBefore(
-                        ZonedDateTime.now(),
-                    )
-            }
-            ?: false
-        if (!isProfileAtLeastWeekOld) {
-            return false
-        }
-
-        val hasTwoFactorEnabled = userProfile
-            ?.isTwoFactorEnabled
-            ?: false
-        if (hasTwoFactorEnabled) {
-            return false
-        }
-
-        val hasSSOPolicy =
-            policyManager.getActivePolicies(type = PolicyTypeJson.REQUIRE_SSO)
-                .any { p -> p.isEnabled }
-
-        return !hasSSOPolicy
     }
 
     @Suppress("CyclomaticComplexMethod")
