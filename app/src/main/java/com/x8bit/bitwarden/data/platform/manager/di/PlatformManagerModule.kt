@@ -143,10 +143,6 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideClock(): Clock = Clock.systemDefaultZone()
-
-    @Provides
-    @Singleton
     fun provideBiometricsEncryptionManager(
         authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
