@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.repository
 import app.cash.turbine.test
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.PassphraseGeneratorRequest
@@ -20,7 +21,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource

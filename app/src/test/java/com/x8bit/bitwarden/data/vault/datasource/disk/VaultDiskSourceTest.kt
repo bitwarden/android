@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
 import com.bitwarden.core.di.CoreModule
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao

@@ -5,6 +5,7 @@ import android.app.assist.AssistStructure
 import android.content.Context
 import android.content.Intent
 import android.service.autofill.Dataset
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
@@ -16,7 +17,6 @@ import com.x8bit.bitwarden.data.autofill.util.buildDataset
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionResultIntent
 import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import io.mockk.coEvery

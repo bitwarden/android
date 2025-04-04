@@ -6,7 +6,7 @@ import com.bitwarden.authenticator.data.authenticator.manager.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.FileManagerImpl
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManagerImpl
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

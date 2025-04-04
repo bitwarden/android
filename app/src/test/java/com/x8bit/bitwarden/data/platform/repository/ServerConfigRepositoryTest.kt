@@ -2,14 +2,14 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.network.service.ConfigService
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

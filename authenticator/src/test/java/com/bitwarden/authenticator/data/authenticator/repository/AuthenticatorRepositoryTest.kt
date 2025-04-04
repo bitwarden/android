@@ -9,15 +9,15 @@ import com.bitwarden.authenticator.data.authenticator.manager.model.Verification
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.authenticator.repository.util.toAuthenticatorItems
-import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import com.bitwarden.authenticatorbridge.model.SharedAccountData
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
