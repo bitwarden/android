@@ -29,7 +29,7 @@
   <string name="folder">文件夹</string>
   <string name="folder_created">新文件夹已创建。</string>
   <string name="folder_deleted">文件夹已删除。</string>
-  <string name="folder_none">默认文件夹</string>
+  <string name="folder_none">无文件夹</string>
   <string name="folders">文件夹</string>
   <string name="folder_updated">文件夹已保存</string>
   <string name="go_to_website">前往网站</string>
@@ -161,7 +161,7 @@
   <string name="new_item_created">项目已添加</string>
   <string name="no_favorites">您的密码库中没有收藏。</string>
   <string name="no_items">您的密码库中没有项目。</string>
-  <string name="no_items_tap">您的密码库中没有此网站/App 的登录项目。点击添加一个。</string>
+  <string name="no_items_tap">您的密码库中没有适用于此网站/App 的项目。点击添加一个。</string>
   <string name="no_cards">您的密码库中没有支付卡。</string>
   <string name="new_card">新增支付卡</string>
   <string name="no_logins">您的密码库中没有登录信息。</string>
@@ -548,7 +548,7 @@
   <string name="open">打开</string>
   <string name="unable_to_save_attachment">保存此附件时出现问题。如果问题仍然存在，您可以从网页版密码库中保存它。</string>
   <string name="save_attachment_success">附件保存成功</string>
-  <string name="autofill_tile_accessibility_required">请从 Bitwarden 设置中开启「自动填充无障碍服务」以使用自动填充磁贴。</string>
+  <string name="autofill_tile_accessibility_required">请从 Bitwarden 设置中启用「自动填充无障碍服务」以使用自动填充磁贴。</string>
   <string name="autofill_tile_uri_not_found">未检测到密码字段</string>
   <string name="soft_deleting">正在发送到回收站...</string>
   <string name="item_soft_deleted">项目已发送到回收站。</string>
@@ -584,21 +584,21 @@
   <string name="accept_policies_error">尚未同意服务条款和隐私政策。</string>
   <string name="terms_of_service">服务条款</string>
   <string name="privacy_policy">隐私政策</string>
-  <string name="accessibility_draw_over_permission_alert">Bitwarden 需要注意 - 请在 Bitwarden 设置的「自动填充服务」中开启「Draw-Over」</string>
+  <string name="accessibility_draw_over_permission_alert">Bitwarden 需要注意 - 请在 Bitwarden 设置的「自动填充服务」中启用「Draw-Over」</string>
   <string name="passkey_management">通行密钥管理</string>
   <string name="autofill_services">自动填充服务</string>
   <string name="inline_autofill">使用内嵌自动填充</string>
-  <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌自动填充。如果您的配置不支持（或此选项被关闭），将使用默认的叠加层自动填充。</string>
+  <string name="inline_autofill_description">如果您所选的 IME（键盘）支持，将使用内嵌自动填充。如果您的配置不支持（或此选项被停用），将使用默认的叠加层自动填充。</string>
   <string name="accessibility">使用无障碍功能</string>
   <string name="accessibility_description">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。设置后，选中登录字段时将显示一个弹出窗口。</string>
-  <string name="accessibility_description2">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。（需同时开启 Draw-Over）</string>
-  <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速操作磁贴，和/或使用 Draw-Over（若已开启）来显示弹出窗口。</string>
-  <string name="accessibility_description4">要求使用自动填充快速操作磁贴，或通过使用 Draw-Over （若已开启）来增强自动填充服务。</string>
+  <string name="accessibility_description2">使用 Bitwarden 无障碍服务跨 App 和网站自动填充您的登录信息。（需同时启用 Draw-Over）</string>
+  <string name="accessibility_description3">使用 Bitwarden 无障碍服务来使用自动填充快速操作磁贴，和/或使用 Draw-Over（若已启用）来显示弹出窗口。</string>
+  <string name="accessibility_description4">要求使用自动填充快速操作磁贴，或通过使用 Draw-Over （若已启用）来增强自动填充服务。</string>
   <string name="accessibility_description5">要求使用自动填充快速操作磁贴。</string>
   <string name="draw_over">使用 Draw-Over</string>
   <string name="draw_over_description">允许 Bitwarden 无障碍服务在登录字段选中时显示弹出窗口。</string>
-  <string name="draw_over_description2">开启后，当登录字段被选中时，Bitwarden 无障碍服务将显示一个弹出窗口以协助自动填充您的登录信息。</string>
-  <string name="draw_over_description3">开启后，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧 App 的自动填充服务。</string>
+  <string name="draw_over_description2">启用后，当登录字段被选中时，Bitwarden 无障碍服务将显示一个弹出窗口以协助自动填充您的登录信息。</string>
+  <string name="draw_over_description3">启用后，无障碍将显示一个弹出窗口以增强不支持 Android 自动填充框架的旧 App 的自动填充服务。</string>
   <string name="personal_ownership_submit_error">由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。</string>
   <string name="personal_ownership_policy_in_effect">某个组织策略正影响您的所有权选项。</string>
   <string name="send">Send</string>
@@ -744,7 +744,7 @@
   <string name="environment_page_urls_error">输入的一个或多个 URL 无效。请修改后再次尝试保存。</string>
   <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
   <string name="allow_screen_capture">允许屏幕截图</string>
-  <string name="are_you_sure_you_want_to_enable_screen_capture">确定要开启屏幕截图吗？</string>
+  <string name="are_you_sure_you_want_to_enable_screen_capture">确定要启用屏幕截图吗？</string>
   <string name="log_in_requested">登录请求</string>
   <string name="are_you_trying_to_log_in">您正在尝试登录吗？</string>
   <string name="log_in_attempt_by_x_on_y">%1$s 在 %2$s 上的登录尝试</string>
@@ -966,7 +966,6 @@
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">您的通行密钥将保存在您的 %1$s Bitwarden 密码库中</string>
   <string name="organization_unassigned_items_message_useu_description_long">未分配的组织项目在「所有密码库」视图中不再可见，只能通过管理控制台访问。通过管理控制台将这些项目分配给集合以使其可见。</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">注意：从 2024 年 5 月 16 日起，未分配的组织项目在「所有密码库」视图中将不再可见，只能通过管理控制台访问。通过管理控制台将这些项目分配给集合以使其可见。</string>
-  <string name="remind_me_later">稍后提醒我</string>
   <string name="notice">注意</string>
   <string name="passkeys_not_supported_for_this_app">此 App 不支持通行密钥</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">由于浏览器没有权限，通行密钥操作失败</string>
@@ -1056,10 +1055,10 @@
   <string name="authenticator_sync">验证器同步</string>
   <string name="allow_bitwarden_authenticator_syncing">允许验证器同步</string>
   <string name="there_was_an_issue_validating_the_registration_token">验证注册令牌时出现问题。</string>
-  <string name="turn_on_autofill">开启自动填充</string>
+  <string name="turn_on_autofill">打开自动填充</string>
   <string name="use_autofill_to_log_into_your_accounts">使用自动填充功能，只需点击一次即可登录您的账户。</string>
   <string name="turn_on_later">稍后开启</string>
-  <string name="turn_on_autofill_later">稍后开启自动填充吗？</string>
+  <string name="turn_on_autofill_later">稍后打开自动填充吗？</string>
   <string name="return_to_complete_this_step_anytime_in_settings">您可以随时回到「设置」中完成此步骤。</string>
   <string name="what_bitwarden_has_to_offer">您现在可以探索 Bitwarden 的所有功能了，并开始安全地管理您的密码。</string>
   <string name="youre_all_set">一切就绪！</string>
@@ -1149,7 +1148,7 @@
   <string name="cxp_export">CXP 导出</string>
   <string name="set_up_two_step_login">设置两步登录</string>
   <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">您可以设置两步登录作为保护账户的替代方法，或将您的电子邮箱更改为您可以访问的电子邮箱。</string>
-  <string name="turn_on_two_step_login">开启两步登录</string>
+  <string name="turn_on_two_step_login">启用两步登录</string>
   <string name="change_account_email">更改账户电子邮箱</string>
   <string name="choose_three_or_four_random_words">选择三到四个随机单词</string>
   <string name="pick_three_or_four_random_unrelated_words">挑选三到四个您容易记住的随机的、不相关的单词。想想您喜欢的<annotation emphasis="bold">物品、地点或事物</annotation>。</string>
@@ -1175,7 +1174,7 @@
   <string name="mutual_tls">双向 TLS</string>
   <string name="single_tap_passkey_creation">单击创建通行密钥</string>
   <string name="single_tap_passkey_authentication">单击使用通行密钥登录</string>
-  <string name="learn_about_new_logins">了解新的登录</string>
+  <string name="learn_about_new_logins">了解新版登录</string>
   <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">我们将通过主要功能引导您添加一个新的登录。</string>
   <string name="explore_the_generator">探索生成器</string>
   <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">通过引导式教程，进一步了解有关生成安全登录凭据的信息。</string>
@@ -1224,9 +1223,14 @@
   <string name="use_chrome_beta_autofill_integration">使用 Chrome 自动填充集成 (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">改进 Chrome 上受支持的网站的登录填充。启用后，您将被引导至 Chrome 设置以启用第三方自动填充。</string>
   <string name="show_more">显示更多</string>
-  <string name="no_folder">默认文件夹</string>
+  <string name="no_folder">无文件夹</string>
   <string name="show_less">显示更少</string>
   <string name="add_field">添加字段</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">分享错误详细信息</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

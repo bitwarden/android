@@ -966,7 +966,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Je passkey wordt bewaard in je Bitwarden-kluis voor %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Niet-toegewezen organisatie-items zijn niet meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Vanaf 2 mei 2024 zijn niet-toegewezen organisatie-items niet meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken.</string>
-  <string name="remind_me_later">Herinner me later</string>
   <string name="notice">Kennisgeving</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys zijn niet ondersteund voor deze app</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey-bewerking mislukt omdat de browser niet gemachtigd is</string>
@@ -1229,4 +1228,9 @@ Wilt u naar dit account wisselen?</string>
   <string name="add_field">Veld toevoegen</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Foutdetails delen</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight Recorder-help</string>
+  <string name="view_recorded_logs">Logopnames bekijken</string>
+  <string name="enable_flight_recorder_title">Flight recorder inschakelen</string>
+  <string name="recorded_logs_title">Logopnames</string>
 </resources>

@@ -966,7 +966,6 @@
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">您的密碼金鑰已經儲存在您的 %1$s Bitwarden 密碼庫</string>
   <string name="organization_unassigned_items_message_useu_description_long">未被歸類到組織的項目將不再在所有密碼庫檢視中顯示。在管理主控臺中將這些項目歸類到集合來讓他們顯示。</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">在 2024 年 5 月 16 日之後，未被歸類到組織的項目將不再在所有密碼庫檢視中顯示。在管理主控臺中將這些項目歸類到集合來讓他們顯示。</string>
-  <string name="remind_me_later">稍後再提醒我</string>
   <string name="notice">注意事項</string>
   <string name="passkeys_not_supported_for_this_app">此應用程式不支援密碼金鑰</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">由於您的瀏覽器未獲得權限，密碼金鑰動作失敗</string>
@@ -1229,4 +1228,9 @@
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

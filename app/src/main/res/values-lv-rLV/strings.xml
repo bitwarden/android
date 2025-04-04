@@ -966,7 +966,6 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s piekļuves atslēga tiks saglabāta Bitwarden glabātavā</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nepiešķirti apvienības vienumi vairs nav redzami skatā \"Visas glabātavas\" un ir sasniedzami tikai no pārvaldības konsoles, kur šie vienumi jāpiešķir krājumam, lai padarītu tos redzamus.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">No 2024. gada 16. maija nepiešķirti apvienības vienumi vairs nebūs redzami skatā \"Visas glabātavas\" un būs sasniedzami tikai no pārvaldības konsoles, kur šie vienumi jāpiešķir krājumam, lai padarītu tos redzamus.</string>
-  <string name="remind_me_later">Atgādināt man vēlāk</string>
   <string name="notice">Jāņem vērā</string>
   <string name="passkeys_not_supported_for_this_app">Šai lietotnei netiek nodrošinātas piekļuves atslēgas</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Darbība ar piekļuves atslēgu neizdevās, jo pārlūkam nav atļauju</string>
@@ -1229,4 +1228,9 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="add_field">Pievienot lauku</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Kopīgot informāciju par kļūdu</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

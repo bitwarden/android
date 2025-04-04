@@ -966,7 +966,6 @@ Queres comprobalo dende esa conta?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A Clave de acceso gardarase na túa Caixa forte de %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">As entradas sen asignar a ningunha organización non son visibles dende a vista de Tódalas Caixas Fortes e só son accesibles dende a Consola do Administrador. Asígnaos a algunha colección dende a consola para facelos visibles.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Dende o 16 de maio de 2024, as entradas sen asignar a ningunha organización non serán visibles dende a vista de Tódalas Caixas Fortes e só son accesibles dende a Consola do Administrador. Asígnaos a algunha colección dende a consola para facelos visibles.</string>
-  <string name="remind_me_later">Lembrarmo máis tarde</string>
   <string name="notice">Aviso</string>
   <string name="passkeys_not_supported_for_this_app">Claves de acceso non compatibles con esta app</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operación de Clave de acceso fallida porque o navegador non ten privilexios</string>
@@ -1229,4 +1228,9 @@ Queres comprobalo dende esa conta?</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>
