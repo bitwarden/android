@@ -9,11 +9,6 @@ import com.x8bit.bitwarden.BuildConfig
 const val HEADER_VALUE_BEARER_PREFIX: String = "Bearer "
 
 /**
- * The key used for the 'authorization' headers.
- */
-const val HEADER_KEY_AUTHORIZATION: String = "Authorization"
-
-/**
  * The key used for the 'user-agent' headers.
  */
 const val HEADER_KEY_USER_AGENT: String = "User-Agent"
