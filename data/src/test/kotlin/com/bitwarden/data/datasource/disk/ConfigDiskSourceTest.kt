@@ -1,10 +1,10 @@
-package com.bitwarden.authenticator.data.platform.datasource.disk
+package com.bitwarden.data.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson
@@ -26,8 +26,7 @@ class ConfigDiskSourceTest {
     )
 
     @Test
-    fun `serverConfig should pull from and update SharedPreferences`() =
-        runTest {
+    fun `serverConfig should pull from and update SharedPreferences`() {
         val serverConfigKey = "bwPreferencesStorage:serverConfigurations"
 
         // Shared preferences and the repository start with the same value.

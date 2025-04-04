@@ -207,6 +207,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Pull in test fixtures from other modules.
+    testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
 
     testImplementation(libs.androidx.compose.ui.test)

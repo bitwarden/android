@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.data.platform.repository
 
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.network.model.ConfigResponseJson
 import io.mockk.every
 import io.mockk.just

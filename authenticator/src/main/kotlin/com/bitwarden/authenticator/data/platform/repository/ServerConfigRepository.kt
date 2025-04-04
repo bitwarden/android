@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository
 
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import kotlinx.coroutines.flow.StateFlow
 
 /**

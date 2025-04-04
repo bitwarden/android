@@ -272,6 +272,7 @@ dependencies {
     standardImplementation(libs.google.play.review)
 
     // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
 
     testImplementation(libs.androidx.compose.ui.test)

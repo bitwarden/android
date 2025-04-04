@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.base
+package com.bitwarden.data.datasource.disk.base
 
 import android.content.SharedPreferences
 

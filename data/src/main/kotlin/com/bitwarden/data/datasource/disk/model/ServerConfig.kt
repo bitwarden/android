@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.datasource.disk.model
+package com.bitwarden.data.datasource.disk.model
 
 import com.bitwarden.network.model.ConfigResponseJson
 import kotlinx.serialization.SerialName
@@ -19,4 +19,10 @@ data class ServerConfig(
 
     @SerialName("serverData")
     val serverData: ConfigResponseJson,
-)
+) {
+    /**
+     * Whether the server is an official Bitwarden server or not.
+     */
+    val isOfficialBitwardenServer: Boolean
+        get() = serverData.server == null
+}

@@ -1,10 +1,9 @@
-package com.x8bit.bitwarden.data.platform.datasource.disk
+package com.bitwarden.data.datasource.disk
 
 import android.content.SharedPreferences
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
-import com.bitwarden.data.datasource.disk.BaseDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.json.Json
