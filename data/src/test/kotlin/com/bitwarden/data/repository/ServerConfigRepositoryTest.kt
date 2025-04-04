@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.repository
+package com.bitwarden.data.repository
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.util.asSuccess

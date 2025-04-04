@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.repository
+package com.bitwarden.data.repository
 
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import kotlinx.coroutines.flow.StateFlow

@@ -59,6 +59,7 @@ dependencies {
     testImplementation(libs.junit.junit5)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk.mockk)
     testImplementation(libs.square.turbine)
 
     testFixturesImplementation(project(":core"))

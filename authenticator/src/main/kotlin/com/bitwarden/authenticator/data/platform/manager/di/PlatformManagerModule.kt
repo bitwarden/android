@@ -19,10 +19,10 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

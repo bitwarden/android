@@ -3,10 +3,10 @@ package com.bitwarden.authenticator
 import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
