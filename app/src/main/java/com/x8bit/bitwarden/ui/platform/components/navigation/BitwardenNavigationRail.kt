@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.NavigationRailDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -54,7 +56,8 @@ fun BitwardenNavigationRail(
                 .windowInsetsPadding(insets = windowInsets)
                 .widthIn(min = 80.dp)
                 .padding(vertical = 4.dp)
-                .selectableGroup(),
+                .selectableGroup()
+                .verticalScroll(state = rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(
                 space = 16.dp,
