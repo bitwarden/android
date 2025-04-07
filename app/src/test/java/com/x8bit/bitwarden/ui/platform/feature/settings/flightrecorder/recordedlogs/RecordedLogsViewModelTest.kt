@@ -38,4 +38,7 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         )
 }
 
-private val DEFAULT_STATE: RecordedLogsState = RecordedLogsState
+private val DEFAULT_STATE: RecordedLogsState =
+    RecordedLogsState(
+        viewState = RecordedLogsState.ViewState.Loading,
+    )

@@ -15,15 +15,15 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
  * Represents a Bitwarden icon that is either locally loaded or loaded using glide.
  *
  * @param iconData Label for the text field.
- * @param tint the color to be applied as the tint for the icon.
  * @param modifier A [Modifier] for the composable.
+ * @param tint the color to be applied as the tint for the icon.
  */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun BitwardenIcon(
     iconData: IconData,
-    tint: Color,
     modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified,
 ) {
     when (iconData) {
         is IconData.Network -> {
