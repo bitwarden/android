@@ -1225,4 +1225,5 @@ Do you want to switch to this account?</string>
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
 </resources>
