@@ -11,9 +11,6 @@ on:
   pull_request_target:
     types: [opened, synchronize]
 
-env:
-  _PULL_REQUEST_TARGET_COMPAT_REF: ${{ contains(github.event_name, 'pull_request') && format('refs/pull/{0}/merge', github.event.pull_request.number) || github.ref }}
-
 jobs:
   check-run:
     name: Check PR run
@@ -32,7 +29,7 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ env._PULL_REQUEST_TARGET_COMPAT_REF }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Scan with Checkmarx
         uses: checkmarx/ast-github-action@184bf2f64f55d1c93fd6636d539edf274703e434 # 2.0.41
@@ -54,7 +51,7 @@ jobs:
         with:
           sarif_file: cx_result.sarif
           sha: ${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.sha || github.sha }}
-          ref: ${{ env._PULL_REQUEST_TARGET_COMPAT_REF }}
+          ref: ${{ contains(github.event_name, 'pull_request') && format('refs/pull/{0}/head', github.event.pull_request.number) || github.ref }}
 
   quality:
     name: Quality scan
@@ -69,7 +66,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-          ref: ${{ env._PULL_REQUEST_TARGET_COMPAT_REF }}
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Scan with SonarCloud
         uses: sonarsource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203 # v4.2.1
