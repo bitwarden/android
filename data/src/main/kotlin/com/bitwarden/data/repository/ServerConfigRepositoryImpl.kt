@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.repository
+package com.bitwarden.data.repository
 
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.datasource.disk.model.ServerConfig
@@ -14,7 +14,7 @@ import java.time.Instant
 /**
  * Primary implementation of [ServerConfigRepositoryImpl].
  */
-class ServerConfigRepositoryImpl(
+internal class ServerConfigRepositoryImpl(
     private val configDiskSource: ConfigDiskSource,
     private val configService: ConfigService,
     private val clock: Clock,

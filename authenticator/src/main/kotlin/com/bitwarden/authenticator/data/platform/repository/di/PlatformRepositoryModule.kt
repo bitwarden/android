@@ -7,18 +7,14 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSou
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepositoryImpl
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepositoryImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
-import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.network.service.ConfigService
+import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -43,21 +39,6 @@ object PlatformRepositoryModule {
             dispatcherManager = dispatcherManager,
             biometricsEncryptionManager = biometricsEncryptionManager,
             authenticatorSdkSource = authenticatorSdkSource,
-        )
-
-    @Provides
-    @Singleton
-    fun provideServerConfigRepository(
-        configDiskSource: ConfigDiskSource,
-        configService: ConfigService,
-        clock: Clock,
-        dispatcherManager: DispatcherManager,
-    ): ServerConfigRepository =
-        ServerConfigRepositoryImpl(
-            configDiskSource = configDiskSource,
-            configService = configService,
-            clock = clock,
-            dispatcherManager = dispatcherManager,
         )
 
     @Provides
