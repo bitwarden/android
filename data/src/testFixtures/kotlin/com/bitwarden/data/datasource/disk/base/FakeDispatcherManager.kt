@@ -1,6 +1,6 @@
-package com.bitwarden.authenticator.data.platform.base
+package com.bitwarden.data.datasource.disk.base
 
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

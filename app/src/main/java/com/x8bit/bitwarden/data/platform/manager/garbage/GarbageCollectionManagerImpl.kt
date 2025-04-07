@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.garbage
 
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

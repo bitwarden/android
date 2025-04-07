@@ -1,11 +1,11 @@
 package com.bitwarden.authenticator.data.platform.repository
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.data.platform.base.FakeDispatcherManager
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.datasource.disk.util.FakeConfigDiskSource
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson

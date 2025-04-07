@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.manager.dispatcher
+package com.bitwarden.data.manager
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.runTest

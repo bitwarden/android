@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.garbage
 
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import kotlinx.coroutines.test.StandardTestDispatcher
 import org.junit.jupiter.api.Assertions.assertEquals

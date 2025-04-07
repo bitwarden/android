@@ -5,6 +5,7 @@ import android.service.autofill.FillCallback
 import android.service.autofill.FillRequest
 import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FilledDataBuilder
 import com.x8bit.bitwarden.data.autofill.builder.SaveInfoBuilder
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.CoroutineScope
