@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -23,7 +24,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify

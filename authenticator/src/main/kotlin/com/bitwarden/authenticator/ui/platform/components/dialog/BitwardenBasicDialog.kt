@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
 import kotlinx.parcelize.Parcelize
 
 /**

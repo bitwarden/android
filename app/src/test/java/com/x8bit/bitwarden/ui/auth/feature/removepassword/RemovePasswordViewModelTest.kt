@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.removepassword
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

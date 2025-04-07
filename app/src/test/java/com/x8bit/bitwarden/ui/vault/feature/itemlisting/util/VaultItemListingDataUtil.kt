@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
+import com.bitwarden.core.ui.util.asText
 import com.bitwarden.send.SendType
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction

@@ -6,6 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.map
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
+import com.bitwarden.core.ui.util.concat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -55,9 +58,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary

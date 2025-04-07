@@ -53,7 +53,6 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.Sh
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -77,6 +76,7 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsMa
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.core.ui.util.asText
 
 /**
  * Displays the item listing screen.

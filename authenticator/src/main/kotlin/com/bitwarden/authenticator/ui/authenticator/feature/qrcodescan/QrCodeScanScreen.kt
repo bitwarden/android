@@ -61,13 +61,13 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzer
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.theme.LocalNonMaterialColors
 import com.bitwarden.authenticator.ui.platform.theme.clickableSpanStyle
+import com.bitwarden.core.ui.util.asText
 import java.util.concurrent.Executors
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

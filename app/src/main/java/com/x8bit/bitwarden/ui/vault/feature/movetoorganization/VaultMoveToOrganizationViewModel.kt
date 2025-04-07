@@ -5,6 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
+import com.bitwarden.core.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.R
@@ -13,9 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel

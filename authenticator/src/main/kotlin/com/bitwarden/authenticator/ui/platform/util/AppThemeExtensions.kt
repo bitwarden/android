@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.ui.platform.util
 
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
 
 /**
  * Returns a human-readable display label for the given [AppTheme].

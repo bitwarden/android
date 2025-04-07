@@ -34,9 +34,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.core.ui.util.Text
 
 /**
  * A FAB that expands, when clicked, to display a collection of options that can be clicked.

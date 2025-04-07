@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
+import com.bitwarden.core.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
@@ -15,9 +18,6 @@ import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.platform.util.versionData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map

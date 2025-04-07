@@ -7,9 +7,9 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

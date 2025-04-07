@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.ui.util.asText
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern

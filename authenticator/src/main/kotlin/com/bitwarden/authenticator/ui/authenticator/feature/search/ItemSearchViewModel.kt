@@ -10,12 +10,12 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVer
 import com.bitwarden.authenticator.data.authenticator.repository.util.itemsOrEmpty
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.removeDiacritics
 import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.core.ui.util.Text
+import com.bitwarden.core.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn

@@ -10,10 +10,10 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeR
 import com.bitwarden.authenticator.data.authenticator.repository.util.isSyncWithBitwardenEnabled
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.core.ui.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
