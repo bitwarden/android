@@ -36,6 +36,8 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
     navigation(
@@ -54,7 +56,11 @@ fun NavGraphBuilder.settingsGraph(
                 onNavigateToVault = { navController.navigateToVaultSettings() },
             )
         }
-        aboutDestination(onNavigateBack = { navController.popBackStack() })
+        aboutDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+        )
         accountSecurityDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,

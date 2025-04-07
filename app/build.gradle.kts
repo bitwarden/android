@@ -51,7 +51,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "2024.9.0"
+        versionName = "2025.4.0"
 
         setProperty("archivesBaseName", "com.x8bit.bitwarden")
 
@@ -214,6 +214,7 @@ dependencies {
     implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
 
     implementation(project(":core"))
+    implementation(project(":data"))
     implementation(project(":network"))
 
     implementation(libs.androidx.activity.compose)
@@ -269,6 +270,10 @@ dependencies {
     standardImplementation(platform(libs.google.firebase.bom))
     standardImplementation(libs.google.firebase.crashlytics)
     standardImplementation(libs.google.play.review)
+
+    // Pull in test fixtures from other modules
+    testImplementation(testFixtures(project(":data")))
+    testImplementation(testFixtures(project(":network")))
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)

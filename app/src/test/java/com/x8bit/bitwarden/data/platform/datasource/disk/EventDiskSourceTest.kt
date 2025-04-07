@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.network.model.OrganizationEventJson
+import com.bitwarden.network.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse

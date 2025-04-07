@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.core.data.util.asSuccess
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.api.AuthenticatedAuthRequestsApi
+import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.AuthRequestsResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals

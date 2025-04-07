@@ -1,10 +1,10 @@
 package com.bitwarden.authenticator.data.platform.repository.util
 
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
-import com.bitwarden.authenticator.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
+import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.json.JsonPrimitive

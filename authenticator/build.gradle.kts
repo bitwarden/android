@@ -152,6 +152,7 @@ dependencies {
     implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
 
     implementation(project(":core"))
+    implementation(project(":data"))
     implementation(project(":network"))
 
     implementation(libs.androidx.activity.compose)
@@ -204,6 +205,10 @@ dependencies {
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+
+    // Pull in test fixtures from other modules.
+    testImplementation(testFixtures(project(":data")))
+    testImplementation(testFixtures(project(":network")))
 
     testImplementation(libs.androidx.compose.ui.test)
     testImplementation(libs.google.hilt.android.testing)

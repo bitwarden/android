@@ -966,7 +966,6 @@ Voleu canviar a aquest compte?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">La clau d\'accés es guardarà a la caixa forta de Bitwarden per a %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Els elements de l\'organització no assignats ja no són visibles a la visualització Totes les caixes fortes i només s\'hi poden accedir des de la Consola d\'administració. Assigna aquests elements a una col·lecció des de la Consola d\'administració per fer-los visibles.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">El 16 de maig de 2024, els elements de l\'organització no assignats deixaran de ser visibles a la visualització Totes les caixes fortes i només es podran accedir des de la Consola d\'administració. Assigna aquests elements a una col·lecció des de la Consola d\'administració per fer-los visibles.</string>
-  <string name="remind_me_later">Recorda-m\'ho més tard</string>
   <string name="notice">Avís</string>
   <string name="passkeys_not_supported_for_this_app">Les claus de pas no són compatibles amb aquesta aplicació</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">L\'operació de la clau de pas ha fallat perquè el navegador no té privilegis</string>
@@ -1229,4 +1228,9 @@ Voleu canviar a aquest compte?</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

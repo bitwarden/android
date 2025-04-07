@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import android.net.Uri
-import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest

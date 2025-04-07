@@ -1,15 +1,13 @@
 package com.bitwarden.authenticator.data.platform.datasource.disk.di
 
 import android.content.SharedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.di.UnencryptedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.ConfigDiskSourceImpl
-import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSourceImpl
+import com.bitwarden.data.datasource.disk.ConfigDiskSource
+import com.bitwarden.data.datasource.disk.ConfigDiskSourceImpl
+import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,17 +39,6 @@ object PlatformDiskModule {
         @UnencryptedPreferences sharedPreferences: SharedPreferences,
     ): SettingsDiskSource =
         SettingsDiskSourceImpl(sharedPreferences = sharedPreferences)
-
-    @Provides
-    @Singleton
-    fun provideFeatureFlagDiskSource(
-        @UnencryptedPreferences sharedPreferences: SharedPreferences,
-        json: Json,
-    ): FeatureFlagDiskSource =
-        FeatureFlagDiskSourceImpl(
-            sharedPreferences = sharedPreferences,
-            json = json,
-        )
 
     @Provides
     @Singleton

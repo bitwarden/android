@@ -1,14 +1,11 @@
 package com.bitwarden.authenticator.data.auth.datasource.disk
 
 import android.content.SharedPreferences
-import com.bitwarden.authenticator.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
-import com.bitwarden.authenticator.data.platform.datasource.disk.BaseEncryptedDiskSource
-import com.bitwarden.authenticator.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
+import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
 
-private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY =
-    "$ENCRYPTED_BASE_KEY:authenticatorSyncSymmetricKey"
-private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
-private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
+private const val AUTHENTICATOR_SYNC_SYMMETRIC_KEY = "authenticatorSyncSymmetricKey"
+private const val LAST_ACTIVE_TIME_KEY = "lastActiveTime"
+private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
 
 /**
  * Primary implementation of [AuthDiskSource].

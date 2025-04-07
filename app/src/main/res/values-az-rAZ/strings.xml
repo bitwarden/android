@@ -965,7 +965,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Keçid açarınız %1$s üçün Bitwarden seyfinizdə saxlanılacaq</string>
   <string name="organization_unassigned_items_message_useu_description_long">Təyin edilməmiş təşkilat elementləri artıq Bütün Seyflər görünüşündə görünməyəndir və yalnız Admin Konsolu vasitəsilə əlçatandır. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">16 May 2024-cü ildən etibarən təyin edilməmiş təşkilat elementləri artıq Bütün Seyflər görünüşündə görünməyən və yalnız Admin Konsolu vasitəsilə əlçatan olacaq. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</string>
-  <string name="remind_me_later">Daha sonra xatırlat</string>
   <string name="notice">Xəbərdarlıq</string>
   <string name="passkeys_not_supported_for_this_app">Keçid açarları bu tətbiq üçün dəstəklənmir</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Brauzer, imtiyazlı olmadığı üçün keçid açarı əməliyyatı uğursuz oldu</string>
@@ -1228,4 +1227,9 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="add_field">Xana əlavə et</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Xəta detallarını paylaş</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

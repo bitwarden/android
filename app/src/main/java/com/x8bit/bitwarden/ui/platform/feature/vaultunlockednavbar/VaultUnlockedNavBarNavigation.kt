@@ -40,6 +40,8 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
 ) {
@@ -63,6 +65,8 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
         )
     }
 }

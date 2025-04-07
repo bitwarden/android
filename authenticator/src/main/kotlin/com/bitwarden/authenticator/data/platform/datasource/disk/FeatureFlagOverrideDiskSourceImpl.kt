@@ -2,6 +2,7 @@ package com.bitwarden.authenticator.data.platform.datasource.disk
 
 import android.content.SharedPreferences
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
+import com.bitwarden.data.datasource.disk.BaseDiskSource
 
 /**
  * Default implementation of the [FeatureFlagOverrideDiskSource]

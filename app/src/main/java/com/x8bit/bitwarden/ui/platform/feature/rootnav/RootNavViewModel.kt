@@ -103,11 +103,6 @@ class RootNavViewModel @Inject constructor(
                 }
             }
 
-            userState.activeAccount.isVaultUnlocked &&
-                authRepository.checkUserNeedsNewDeviceTwoFactorNotice() -> RootNavState.NewDeviceTwoFactorNotice(
-                userState.activeAccount.email,
-            )
-
             userState.activeAccount.isVaultUnlocked -> {
                 when (specialCircumstance) {
                     is SpecialCircumstance.AutofillSave -> {
@@ -375,14 +370,6 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object OnboardingStepsComplete : RootNavState()
-
-    /**
-     * App should show the new device two factor notice screen.
-     */
-    @Parcelize
-    data class NewDeviceTwoFactorNotice(
-        val email: String,
-    ) : RootNavState()
 }
 
 /**

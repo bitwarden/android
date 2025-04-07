@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.data.auth.manager
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource

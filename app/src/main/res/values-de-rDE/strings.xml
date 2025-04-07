@@ -480,7 +480,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="unlock">Entsperren</string>
   <string name="unlock_vault">Tresor entsperren</string>
   <string name="thirty_minutes">30 Minuten</string>
-  <string name="set_pin_description">Gebe deinen PIN-Code für das Entsperren von Bitwarden ein. Deine PIN-Einstellungen werden zurückgesetzt, wenn du dich vollständig von der Anwendung abmeldest.</string>
+  <string name="set_pin_description">Deine PIN muss mindestens 4 Zeichen lang sein. Deine PIN-Einstellungen werden zurückgesetzt, wenn du dich jemals vollständig von der Anwendung abmeldest.</string>
   <string name="logged_in_as_on">Als %1$s angemeldet auf %2$s.</string>
   <string name="vault_locked_master_password">Dein Tresor ist gesperrt. Überprüfe dein Master-Passwort um fortzufahren.</string>
   <string name="vault_locked_pin">Dein Tresor ist gesperrt. Gebe deinen PIN-Code ein um fortzufahren.</string>
@@ -965,7 +965,6 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Dein Passkey wird in deinem Bitwarden-Tresor für %1$s gespeichert</string>
   <string name="organization_unassigned_items_message_useu_description_long">Hinweis: Nicht zugeordnete Organisationseinträge sind nicht mehr in der Ansicht aller Tresore sichtbar und nur über die Administrator-Konsole zugänglich. Weise diese Einträge einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Ab dem 16. Mai 2024 werden nicht zugeordnete Organisationseinträge nicht mehr in der Ansicht aller Tresore sichtbar und nur über die Administrator-Konsole zugänglich sein. Weise diese Einträge einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen.</string>
-  <string name="remind_me_later">Später erinnern</string>
   <string name="notice">Hinweis</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys werden für diese App nicht unterstützt</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Der Passkey-Vorgang ist fehlgeschlagen, da der Browser nicht autorisiert ist</string>
@@ -1228,4 +1227,9 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="add_field">Feld hinzufügen</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Fehlerdetails teilen</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

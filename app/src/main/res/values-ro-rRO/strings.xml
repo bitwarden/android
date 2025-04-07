@@ -966,7 +966,6 @@ Doriți să comutați la acest cont?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Cheia de acces va fi salvată în seiful Bitwarden pentru %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Elementele de organizație neatribuite nu mai sunt vizibile în vizualizarea Toate seifurile și sunt accesibile numai prin intermediul Consolei de administrare. Atribuiți aceste elemente unei colecții din Consola de administrare pentru a le face vizibile.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">La 16 mai 2024, elementele de organizație neatribuite nu vor mai fi vizibile în vizualizarea Toate seifurile și vor fi accesibile numai prin intermediul Consolei de administrare. Atribuiți aceste elemente unei colecții din Consola de administrare pentru a le face vizibile.</string>
-  <string name="remind_me_later">Amintește-mi mai târziu</string>
   <string name="notice">Înștiințare</string>
   <string name="passkeys_not_supported_for_this_app">Cheile de acces nu sunt acceptate pentru această aplicație</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operațiunea cheie de acces a eșuat deoarece browserul nu este privilegiat</string>
@@ -1229,4 +1228,9 @@ Doriți să comutați la acest cont?</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

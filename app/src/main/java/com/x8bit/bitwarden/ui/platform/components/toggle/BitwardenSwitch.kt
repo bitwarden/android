@@ -254,7 +254,7 @@ fun BitwardenSwitch(
                 cardStyle = cardStyle,
                 onClick = onCheckedChange?.let { { it(!isChecked) } },
                 clickEnabled = !readOnly && enabled,
-                paddingTop = 12.dp,
+                paddingTop = 6.dp,
                 paddingBottom = 0.dp,
             )
             .semantics(mergeDescendants = true) {
@@ -264,7 +264,7 @@ fun BitwardenSwitch(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.defaultMinSize(minHeight = 36.dp),
+            modifier = Modifier.defaultMinSize(minHeight = 48.dp),
         ) {
             Spacer(modifier = Modifier.width(width = 16.dp))
             Row(
@@ -329,7 +329,7 @@ fun BitwardenSwitch(
                     content = content,
                 )
             }
-            ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 12.dp } ?: 0.dp))
+            ?: Spacer(modifier = Modifier.height(height = cardStyle?.let { 6.dp } ?: 0.dp))
     }
 }
 

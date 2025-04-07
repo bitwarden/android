@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
+import com.bitwarden.network.model.OrganizationEventType
+
 /**
  * A representation of events used for organization tracking.
  */

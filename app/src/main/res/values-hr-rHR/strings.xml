@@ -964,7 +964,6 @@
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tvoj pristupni ključ za %1$s će biti spremljen u trezor</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nedodijeljene stavke organizacije više nisu vidljive u prikazu Svi trezori i dostupne su samo putem Administratorske konzole. Dodijelite ove stavke nekoj zbirci u Administratorskoj konzoli kako biste ih učinili vidljivima.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Od 16. travnja 2024. nedodijeljene stavke organizacije više neće biti vidljive u prikazu Svi trezori i dostupne su samo putem Administratorske konzole. Dodijelite ove stavke nekoj zbirci u Administratorskoj konzoli kako biste ih učinili vidljivima.</string>
-  <string name="remind_me_later">Podsjeti me kasnije</string>
   <string name="notice">Poruka</string>
   <string name="passkeys_not_supported_for_this_app">Pristupni ključ nije podržan za ovu aplikaciju</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacija lozinke nije uspjela jer preglednik nema privilegiju</string>
@@ -1228,4 +1227,9 @@
   <string name="add_field">Dodaj polje</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Podijeli detalje greške</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

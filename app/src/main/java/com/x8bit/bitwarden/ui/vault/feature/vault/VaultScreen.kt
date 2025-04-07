@@ -47,10 +47,10 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants
 
 /**

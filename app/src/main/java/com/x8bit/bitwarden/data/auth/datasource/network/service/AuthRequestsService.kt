@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
+import com.bitwarden.network.model.AuthRequestsResponseJson
 
 /**
  * Provides an API for interacting with login approval / authentication requests.

@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.bitwarden.data.datasource.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

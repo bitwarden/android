@@ -966,7 +966,6 @@ Vuoi passare a questo account?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">La tua passkey sarà salvata nella tua cassaforte di Bitwarden per %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Gli elementi dell\'organizzazione non assegnati non sono più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e sono ora accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Dal 16 maggio 2024, gli elementi dell\'organizzazione non assegnati non saranno più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</string>
-  <string name="remind_me_later">Ricordamelo più tardi</string>
   <string name="notice">Avviso</string>
   <string name="passkeys_not_supported_for_this_app">Passkey non supportate per questa app</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">L\'operazione della passkey non è riuscita perché il browser non dispone dei privilegi necessari</string>
@@ -1229,4 +1228,9 @@ Vuoi passare a questo account?</string>
   <string name="add_field">Aggiungi campo</string>
   <string name="x_ellipses">%s…</string>
   <string name="share_error_details">Condividi dettagli dell\'errore</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

@@ -966,7 +966,6 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Twój klucz dostępu zostanie zapisany w Twoim sejfie Bitwarden dla %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nieprzypisane elementy w organizacji nie są już widoczne w widoku Wszystkie sejfy i są dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">16 maja 2024 r. nieprzypisane elementy w organizacji nie będą już widoczne w widoku Wszystkie sejfy i będą dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</string>
-  <string name="remind_me_later">Przypomnij mi później</string>
   <string name="notice">Zawiadomienie</string>
   <string name="passkeys_not_supported_for_this_app">Klucze dostępu nie są obsługiwane dla tej aplikacji</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacja z kluczem dostępu nie powiodła się, ponieważ przeglądarka nie ma uprawnień</string>
@@ -1229,4 +1228,9 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="add_field">Dodaj pole</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Udostępnij szczegóły błędu</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

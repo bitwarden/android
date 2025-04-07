@@ -112,6 +112,7 @@ fun AppearanceScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

@@ -2,11 +2,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -36,7 +38,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -53,17 +57,23 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun AboutScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     viewModel: AboutViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is AboutEvent.NavigateToWebVault -> {
-                intentManager.launchUri(event.vaultUrl.toUri())
-            }
-
+            is AboutEvent.NavigateToWebVault -> intentManager.launchUri(event.vaultUrl.toUri())
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
+            AboutEvent.NavigateToFlightRecorder -> onNavigateToFlightRecorder()
+            AboutEvent.NavigateToRecordedLogs -> onNavigateToRecordedLogs()
+
+            AboutEvent.NavigateToFlightRecorderHelp -> {
+                // TODO: PM-19809 Update this URL to be specific to the flight recorder
+                intentManager.launchUri("https://bitwarden.com/help".toUri())
+            }
 
             AboutEvent.NavigateToHelpCenter -> {
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
@@ -96,7 +106,7 @@ fun AboutScreen(
             )
         },
     ) {
-        ContentColumn(
+        AboutScreenContent(
             state = state,
             modifier = Modifier.fillMaxSize(),
             onHelpCenterClick = remember(viewModel) {
@@ -111,6 +121,15 @@ fun AboutScreen(
             onSubmitCrashLogsCheckedChange = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
             },
+            onFlightRecorderCheckedChange = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it)) }
+            },
+            onFlightRecorderTooltipClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick) }
+            },
+            onViewRecordedLogsClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.ViewRecordedLogsClick) }
+            },
             onVersionClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.VersionClick) }
             },
@@ -123,12 +142,15 @@ fun AboutScreen(
 
 @Suppress("LongMethod")
 @Composable
-private fun ContentColumn(
+private fun AboutScreenContent(
     state: AboutState,
     onHelpCenterClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderTooltipClick: () -> Unit,
+    onViewRecordedLogsClick: () -> Unit,
     onVersionClick: () -> Unit,
     onWebVaultClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -138,19 +160,18 @@ private fun ContentColumn(
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(height = 12.dp))
-        if (state.shouldShowCrashLogsButton) {
-            BitwardenSwitch(
-                label = stringResource(id = R.string.submit_crash_logs),
-                contentDescription = stringResource(id = R.string.submit_crash_logs),
-                isChecked = state.isSubmitCrashLogsEnabled,
-                onCheckedChange = onSubmitCrashLogsCheckedChange,
-                cardStyle = CardStyle.Top(),
-                modifier = Modifier
-                    .testTag("SubmitCrashLogsSwitch")
-                    .fillMaxWidth()
-                    .standardHorizontalMargin(),
-            )
-        }
+        CrashLogsCard(
+            isVisible = state.shouldShowCrashLogsButton,
+            isEnabled = state.isSubmitCrashLogsEnabled,
+            onSubmitCrashLogsCheckedChange = onSubmitCrashLogsCheckedChange,
+        )
+        FlightRecorderCard(
+            isVisible = state.shouldShowFlightRecorder,
+            isFlightRecorderEnabled = state.isFlightRecorderEnabled,
+            onFlightRecorderCheckedChange = onFlightRecorderCheckedChange,
+            onFlightRecorderTooltipClick = onFlightRecorderTooltipClick,
+            onViewRecordedLogsClick = onViewRecordedLogsClick,
+        )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,
@@ -159,11 +180,7 @@ private fun ContentColumn(
                 id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
             ),
             withDivider = false,
-            cardStyle = if (state.shouldShowCrashLogsButton) {
-                CardStyle.Middle()
-            } else {
-                CardStyle.Top()
-            },
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth()
@@ -233,7 +250,65 @@ private fun ContentColumn(
                 color = BitwardenTheme.colorScheme.text.primary,
             )
         }
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
+}
+
+@Composable
+private fun ColumnScope.CrashLogsCard(
+    isVisible: Boolean,
+    isEnabled: Boolean,
+    onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
+) {
+    if (!isVisible) return
+    BitwardenSwitch(
+        label = stringResource(id = R.string.submit_crash_logs),
+        contentDescription = stringResource(id = R.string.submit_crash_logs),
+        isChecked = isEnabled,
+        onCheckedChange = onSubmitCrashLogsCheckedChange,
+        cardStyle = CardStyle.Full,
+        modifier = Modifier
+            .testTag(tag = "SubmitCrashLogsSwitch")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
+}
+
+@Composable
+private fun ColumnScope.FlightRecorderCard(
+    isVisible: Boolean,
+    isFlightRecorderEnabled: Boolean,
+    onFlightRecorderCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderTooltipClick: () -> Unit,
+    onViewRecordedLogsClick: () -> Unit,
+) {
+    if (!isVisible) return
+    BitwardenSwitch(
+        label = stringResource(id = R.string.flight_recorder),
+        isChecked = isFlightRecorderEnabled,
+        onCheckedChange = onFlightRecorderCheckedChange,
+        tooltip = TooltipData(
+            contentDescription = stringResource(id = R.string.flight_recorder_help),
+            onClick = onFlightRecorderTooltipClick,
+        ),
+        cardStyle = CardStyle.Top(),
+        modifier = Modifier
+            .testTag(tag = "FlightRecorderSwitch")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    BitwardenPushRow(
+        text = stringResource(id = R.string.view_recorded_logs),
+        onClick = onViewRecordedLogsClick,
+        cardStyle = CardStyle.Bottom,
+        modifier = Modifier
+            .testTag(tag = "ViewRecordedLogs")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
 }
 
 @Composable
@@ -260,11 +335,28 @@ private fun CopyRow(
 
 @Preview
 @Composable
-private fun CopyRow_preview() {
+private fun AboutScreenContent_preview() {
     BitwardenTheme {
-        CopyRow(
-            text = "Copyable Text".asText(),
-            onClick = { },
+        AboutScreenContent(
+            state = AboutState(
+                version = "Version: 1.0.0 (1)".asText(),
+                deviceData = "device_data".asText(),
+                ciData = "ci_data".asText(),
+                isSubmitCrashLogsEnabled = false,
+                copyrightInfo = "".asText(),
+                shouldShowCrashLogsButton = true,
+                isFlightRecorderEnabled = true,
+                shouldShowFlightRecorder = true,
+            ),
+            onHelpCenterClick = {},
+            onPrivacyPolicyClick = {},
+            onLearnAboutOrgsClick = {},
+            onSubmitCrashLogsCheckedChange = { },
+            onFlightRecorderCheckedChange = { },
+            onFlightRecorderTooltipClick = {},
+            onViewRecordedLogsClick = {},
+            onVersionClick = {},
+            onWebVaultClick = {},
         )
     }
 }

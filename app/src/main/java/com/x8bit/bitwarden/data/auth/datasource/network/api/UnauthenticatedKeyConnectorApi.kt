@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import androidx.annotation.Keep
+import com.bitwarden.network.model.KeyConnectorMasterKeyRequestJson
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyRequestJson
+import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
-import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

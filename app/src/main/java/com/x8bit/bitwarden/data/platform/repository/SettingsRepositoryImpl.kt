@@ -24,12 +24,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -333,36 +331,19 @@ class SettingsRepositoryImpl(
         autofillEnabledManager.isAutofillEnabledStateFlow
 
     override var isScreenCaptureAllowed: Boolean
-        get() = activeUserId
-            ?.let { settingsDiskSource.getScreenCaptureAllowed(it) }
-            ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
+        get() = settingsDiskSource.screenCaptureAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
         set(value) {
-            val userId = activeUserId ?: return
-            settingsDiskSource.storeScreenCaptureAllowed(
-                userId = userId,
-                isScreenCaptureAllowed = value,
-            )
+            settingsDiskSource.screenCaptureAllowed = value
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
-        get() = authDiskSource
-            .userStateFlow
-            .flatMapLatest { userState ->
-                userState
-                    ?.activeUserId
-                    ?.let {
-                        settingsDiskSource.getScreenCaptureAllowedFlow(userId = it)
-                            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
-                    }
-                    ?: flowOf(DEFAULT_IS_SCREEN_CAPTURE_ALLOWED)
-            }
+        get() = settingsDiskSource
+            .screenCaptureAllowedFlow
+            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Lazily,
-                initialValue = activeUserId
-                    ?.let { settingsDiskSource.getScreenCaptureAllowed(userId = it) }
-                    ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
+                initialValue = isScreenCaptureAllowed,
             )
 
     init {

@@ -4,14 +4,14 @@ import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.AuthRequestTypeJson
+import com.bitwarden.network.model.AuthRequestsResponseJson
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource

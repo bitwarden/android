@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.network.api.AuthenticatedAuthRequestsApi
+import com.bitwarden.network.api.UnauthenticatedAuthRequestsApi
+import com.bitwarden.network.model.AuthRequestRequestJson
+import com.bitwarden.network.model.AuthRequestTypeJson
+import com.bitwarden.network.model.AuthRequestsResponseJson
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
-import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthRequestsApi
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 
 /**
  * The default implementation of the [NewAuthRequestService].

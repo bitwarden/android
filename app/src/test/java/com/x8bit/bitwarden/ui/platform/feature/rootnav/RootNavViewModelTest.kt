@@ -43,7 +43,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         every { userStateFlow } returns mutableUserStateFlow
         every { authStateFlow } returns mutableAuthStateFlow
         every { showWelcomeCarousel } returns false
-        every { checkUserNeedsNewDeviceTwoFactorNotice() } returns false
     }
 
     private val mockAuthRepository = mockk<AuthRepository>(relaxed = true)
@@ -1342,45 +1341,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         assertEquals(
             RootNavState.VaultUnlocked(activeUserId = "activeUserId"),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `when the active user has an unlocked vault and they need to be shown the new device notice the nav state should be NewDeviceTwoFactorNotice`() {
-        every { authRepository.checkUserNeedsNewDeviceTwoFactorNotice() } returns true
-        mutableUserStateFlow.tryEmit(
-            UserState(
-                activeUserId = "activeUserId",
-                accounts = listOf(
-                    UserState.Account(
-                        userId = "activeUserId",
-                        name = "name",
-                        email = "email",
-                        avatarColorHex = "avatarColorHex",
-                        environment = Environment.Us,
-                        isPremium = true,
-                        isLoggedIn = true,
-                        isVaultUnlocked = true,
-                        needsPasswordReset = false,
-                        isBiometricsEnabled = false,
-                        organizations = emptyList(),
-                        needsMasterPassword = false,
-                        trustedDevice = null,
-                        hasMasterPassword = true,
-                        isUsingKeyConnector = false,
-                        onboardingStatus = OnboardingStatus.COMPLETE,
-                        firstTimeState = FirstTimeState(
-                            showImportLoginsCard = true,
-                        ),
-                    ),
-                ),
-            ),
-        )
-        val viewModel = createViewModel()
-        assertEquals(
-            RootNavState.NewDeviceTwoFactorNotice("email"),
             viewModel.stateFlow.value,
         )
     }
