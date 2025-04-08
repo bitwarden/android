@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 import kotlinx.parcelize.Parcelize
 
 /**

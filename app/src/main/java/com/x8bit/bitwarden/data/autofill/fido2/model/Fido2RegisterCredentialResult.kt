@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Models the data returned from creating a FIDO 2 credential.

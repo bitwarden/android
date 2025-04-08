@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.model
 
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * The options displayed to the user when choosing a match type

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.util
 
 import android.content.res.Resources
 import android.os.Parcelable

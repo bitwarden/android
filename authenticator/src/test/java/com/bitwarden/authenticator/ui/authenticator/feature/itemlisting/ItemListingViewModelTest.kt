@@ -17,7 +17,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.Ve
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toDisplayItem
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toSharedCodesDisplayState
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
-import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
 import io.mockk.every
