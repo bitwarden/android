@@ -1,12 +1,10 @@
-package com.x8bit.bitwarden.data.platform.datasource.di
+package com.bitwarden.data.datasource.disk.di
 
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
-import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
-import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
