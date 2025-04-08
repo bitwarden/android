@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.spanStyleOf
 
 /**
  * Uses an annotated string resource to create a string with clickable text.
@@ -30,7 +31,10 @@ fun BitwardenHyperTextLink(
     color: Color = BitwardenTheme.colorScheme.text.secondary,
 ) {
     Text(
-        text = annotatedResId.toAnnotatedString(args = args) { key ->
+        text = annotatedResId.toAnnotatedString(
+            args = args,
+            style = spanStyleOf(color = color, textStyle = style),
+        ) { key ->
             when (key) {
                 annotationKey -> onClick()
             }
