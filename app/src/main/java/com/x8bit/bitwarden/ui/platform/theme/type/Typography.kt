@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -228,6 +229,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Ltr,
     ),
     sensitiveInfoMedium = TextStyle(
         fontSize = 16.sp,
@@ -240,6 +242,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Ltr,
     ),
     eyebrowMedium = TextStyle(
         fontSize = 12.sp,
