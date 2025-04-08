@@ -39,6 +39,11 @@ interface AuthDiskSource {
     var rememberedOrgIdentifier: String?
 
     /**
+     * The currently persisted Key Connector url (or `null` if not set).
+     */
+    var rememberedKeyConnectorUrl: String?
+
+    /**
      * The currently persisted user state information (or `null` if not set).
      */
     var userState: UserStateJson?

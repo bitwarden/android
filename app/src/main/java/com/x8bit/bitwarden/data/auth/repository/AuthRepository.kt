@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -107,6 +108,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * The currently persisted organization identifier (or `null` if not set).
      */
     var rememberedOrgIdentifier: String?
+
+    /**
+     * The currently persisted key connector url (or `null` if not set).
+     */
+    var rememberedKeyConnectorUrl: String?
 
     /**
      * The currently persisted state indicating whether the user has completed login via TDE.
@@ -438,4 +444,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Stores the new device notice state for active user.
      */
     fun setNewDeviceNoticeState(newState: NewDeviceNoticeState?)
+
+    /**
+     * Leaves the organization that matches the given [organizationId]
+     */
+    suspend fun leaveOrganization(
+        organizationId: String,
+    ): LeaveOrganizationResult
 }

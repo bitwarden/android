@@ -113,10 +113,28 @@ class RemovePasswordScreenTest : BaseComposeTest() {
             viewModel.trySendAction(RemovePasswordAction.ContinueClick)
         }
     }
+
+    @Test
+    fun `leave organization button click should emit LeaveOrganizationClick`() {
+        mutableStateFlow.update { it.copy(input = "a") }
+        composeTestRule
+            .onNodeWithText(text = "Leave organization")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE = RemovePasswordState(
     input = "",
     dialogState = null,
     description = "My org".asText(),
+    labelOrg = "Organization name".asText(),
+    orgName = "Org X".asText(),
+    labelDomain = "Confirm Key Connector domain".asText(),
+    domainName = "bitwarden.com".asText(),
+    organizationId = "org-id",
 )

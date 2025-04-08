@@ -23,6 +23,7 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override var rememberedEmailAddress: String? = null
     override var rememberedOrgIdentifier: String? = null
+    override var rememberedKeyConnectorUrl: String? = null
 
     private val mutableShouldUseKeyConnectorFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()

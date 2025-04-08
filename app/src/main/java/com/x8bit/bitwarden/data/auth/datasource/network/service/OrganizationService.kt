@@ -47,4 +47,11 @@ interface OrganizationService {
     suspend fun getVerifiedOrganizationDomainSsoDetails(
         email: String,
     ): Result<VerifiedOrganizationDomainSsoDetailsResponse>
+
+    /**
+     * Make a request to leave the organization
+     */
+    suspend fun leaveOrganization(
+        organizationId: String,
+    ): Result<Unit>
 }

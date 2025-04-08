@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -14,8 +15,11 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -24,7 +28,9 @@ import org.junit.jupiter.api.Test
 class RemovePasswordViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
+        every { rememberedKeyConnectorUrl } returns "bitwarden.com"
         every { userStateFlow } returns mutableUserStateFlow
+        every { logout(reason = any()) } just runs
     }
 
     @Test
@@ -102,6 +108,70 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `ConfirmLeaveOrganizationClick with LeaveOrganizationResult Success should leave organization`() =
+        runTest {
+            coEvery {
+                authRepository.leaveOrganization(
+                    organizationId = "mockId-1",
+                )
+            } returns LeaveOrganizationResult.Success
+            coEvery {
+                authRepository.logout(any())
+            } returns Unit
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
+                coVerify { authRepository.leaveOrganization("mockId-1") }
+
+                viewModel.trySendAction(
+                    RemovePasswordAction.Internal.ReceiveLeaveOrganizationResult(
+                        LeaveOrganizationResult.Success,
+                    ),
+                )
+                coVerify { authRepository.logout(any()) }
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ConfirmLeaveOrganizationClick with LeaveOrganizationResult Error should show error`() =
+        runTest {
+            coEvery {
+                authRepository.leaveOrganization(
+                    organizationId = "mockId-1",
+                )
+            } returns LeaveOrganizationResult.Error(message = "error", error = null)
+            coEvery {
+                authRepository.logout(any())
+            } returns Unit
+
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
+                assertEquals(DEFAULT_STATE, awaitItem())
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = RemovePasswordState.DialogState.Loading("".asText()),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = RemovePasswordState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `InputChanged updates the state`() {
         val input = "123"
         val viewModel = createViewModel()
@@ -136,12 +206,17 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
 }
 
 private const val ORGANIZATION_NAME: String = "My org"
+private const val KEY_CONNECTOR_URL: String = "bitwarden.com"
 private val DEFAULT_STATE = RemovePasswordState(
     input = "",
     dialogState = null,
     description = R.string
-        .organization_is_using_sso_with_a_self_hosted_key_server
-        .asText(ORGANIZATION_NAME),
+        .password_no_longer_required_confirm_domain.asText(),
+    labelOrg = R.string.organization.asText(),
+    orgName = ORGANIZATION_NAME.asText(),
+    labelDomain = R.string.key_connector_domain.asText(),
+    domainName = KEY_CONNECTOR_URL.asText(),
+    organizationId = "mockId-1",
 )
 
 private const val USER_ID: String = "user_id"
@@ -158,7 +233,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isBiometricsEnabled = false,
     organizations = listOf(
         Organization(
-            id = "orgId",
+            id = "mockId-1",
             name = ORGANIZATION_NAME,
             shouldManageResetPassword = false,
             shouldUseKeyConnector = true,

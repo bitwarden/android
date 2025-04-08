@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -348,6 +349,8 @@ class AuthRepositoryImpl(
     override var rememberedEmailAddress: String? by authDiskSource::rememberedEmailAddress
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
+
+    override var rememberedKeyConnectorUrl: String? by authDiskSource::rememberedKeyConnectorUrl
 
     override val tdeLoginComplete: Boolean?
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
@@ -1419,6 +1422,12 @@ class AuthRepositoryImpl(
             authDiskSource.storeNewDeviceNoticeState(userId = userId, newState = newState)
         }
     }
+
+    override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
+        organizationService.leaveOrganization(organizationId).fold(
+            onSuccess = { LeaveOrganizationResult.Success },
+            onFailure = { LeaveOrganizationResult.Error(message = it.message, error = it) },
+        )
 
     override fun checkUserNeedsNewDeviceTwoFactorNotice(): Boolean {
         return activeUserId

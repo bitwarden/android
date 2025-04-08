@@ -38,4 +38,12 @@ interface AuthenticatedOrganizationApi {
     suspend fun getOrganizationKeys(
         @Path("id") organizationId: String,
     ): NetworkResult<OrganizationKeysResponseJson>
+
+    /**
+     * Leaves the organization
+     */
+    @GET("/organizations/{id}/leave")
+    suspend fun leaveOrganization(
+        @Path("id") organizationId: String,
+    ): NetworkResult<Unit>
 }

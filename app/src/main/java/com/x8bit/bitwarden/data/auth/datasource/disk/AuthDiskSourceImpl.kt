@@ -33,6 +33,7 @@ private const val PENDING_ADMIN_AUTH_REQUEST_KEY = "pendingAdminAuthRequest"
 private const val UNIQUE_APP_ID_KEY = "appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "rememberedEmail"
 private const val REMEMBERED_ORG_IDENTIFIER_KEY = "rememberedOrgIdentifier"
+private const val REMEMBERED_KEY_CONNECTOR_URL_KEY = "rememberedKeyConnectorUrl"
 private const val STATE_KEY = "state"
 private const val INVALID_UNLOCK_ATTEMPTS_KEY = "invalidUnlockAttempts"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
@@ -130,6 +131,15 @@ class AuthDiskSourceImpl(
         set(value) {
             putString(
                 key = REMEMBERED_ORG_IDENTIFIER_KEY,
+                value = value,
+            )
+        }
+
+    override var rememberedKeyConnectorUrl: String?
+        get() = getString(key = REMEMBERED_KEY_CONNECTOR_URL_KEY)
+        set(value) {
+            putString(
+                key = REMEMBERED_KEY_CONNECTOR_URL_KEY,
                 value = value,
             )
         }

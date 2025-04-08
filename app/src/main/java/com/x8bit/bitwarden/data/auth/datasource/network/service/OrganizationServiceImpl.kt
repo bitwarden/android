@@ -69,4 +69,9 @@ class OrganizationServiceImpl(
             ),
         )
         .toResult()
+
+    override suspend fun leaveOrganization(organizationId: String): Result<Unit> =
+        authenticatedOrganizationApi
+            .leaveOrganization(organizationId = organizationId)
+            .toResult()
 }
