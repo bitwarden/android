@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * A clickable item that displays a radio button and text.

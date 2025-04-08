@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.manager.snackbar
 
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
