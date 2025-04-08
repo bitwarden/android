@@ -37,6 +37,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     displayMedium = TextStyle(
         fontSize = 44.sp,
@@ -49,6 +50,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     displaySmall = TextStyle(
         fontSize = 36.sp,
@@ -61,6 +63,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     headlineLarge = TextStyle(
         fontSize = 32.sp,
@@ -73,6 +76,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     headlineMedium = TextStyle(
         fontSize = 28.sp,
@@ -85,6 +89,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     headlineSmall = TextStyle(
         fontSize = 18.sp,
@@ -97,6 +102,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     titleLarge = TextStyle(
         fontSize = 19.sp,
@@ -109,6 +115,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     titleMedium = TextStyle(
         fontSize = 16.sp,
@@ -121,6 +128,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     titleSmall = TextStyle(
         fontSize = 14.sp,
@@ -133,6 +141,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     bodyLarge = TextStyle(
         fontSize = 15.sp,
@@ -145,6 +154,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     bodyMedium = TextStyle(
         fontSize = 13.sp,
@@ -157,6 +167,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     bodyMediumEmphasis = TextStyle(
         fontSize = 13.sp,
@@ -169,6 +180,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     bodySmall = TextStyle(
         fontSize = 12.sp,
@@ -181,6 +193,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     labelLarge = TextStyle(
         fontSize = 14.sp,
@@ -193,6 +206,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     labelMedium = TextStyle(
         fontSize = 12.sp,
@@ -205,6 +219,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     labelSmall = TextStyle(
         fontSize = 12.sp,
@@ -217,6 +232,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
     sensitiveInfoSmall = TextStyle(
         fontSize = 14.sp,
@@ -255,6 +271,7 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
             trim = LineHeightStyle.Trim.None,
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
+        textDirection = TextDirection.Content,
     ),
 )
 
