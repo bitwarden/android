@@ -16,7 +16,10 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -30,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.x8bit.bitwarden.ui.platform.theme.type.BitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.bitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.toMaterialTypography
+import com.x8bit.bitwarden.ui.platform.theme.type.updateTextAlign
 
 /**
  * Static wrapper to make accessing the theme components easier.
@@ -100,6 +104,14 @@ fun BitwardenTheme(
         darkTheme -> darkBitwardenColorScheme
         else -> lightBitwardenColorScheme
     }
+
+    val textAlign =
+        if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+            TextAlign.Right
+        } else {
+            TextAlign.Left
+        }
+    val bitwardenTypography = bitwardenTypography.updateTextAlign(textAlign)
 
     // Update status bar according to scheme
     val view = LocalView.current

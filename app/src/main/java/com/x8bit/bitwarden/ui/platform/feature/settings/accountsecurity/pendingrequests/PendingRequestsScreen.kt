@@ -35,9 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -320,7 +322,11 @@ private fun PendingRequestItem(
                 text = timestamp,
                 style = BitwardenTheme.typography.labelSmall,
                 color = BitwardenTheme.colorScheme.text.secondary,
-                textAlign = TextAlign.End,
+                textAlign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+                    TextAlign.Left
+                } else {
+                    TextAlign.Right
+                },
             )
         }
     }
