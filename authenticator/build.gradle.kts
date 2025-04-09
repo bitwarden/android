@@ -154,6 +154,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":network"))
+    implementation(project(":ui"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)

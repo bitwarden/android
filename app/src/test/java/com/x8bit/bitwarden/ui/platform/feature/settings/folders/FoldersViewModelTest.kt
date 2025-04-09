@@ -7,8 +7,8 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 import io.mockk.every
 import io.mockk.mockk

@@ -5,14 +5,11 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOver
 import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOverrideDiskSourceImpl
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSourceImpl
-import com.bitwarden.data.datasource.disk.ConfigDiskSource
-import com.bitwarden.data.datasource.disk.ConfigDiskSourceImpl
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -21,17 +18,6 @@ import javax.inject.Singleton
  * Provides persistence-related dependencies in the platform package.
  */
 object PlatformDiskModule {
-
-    @Provides
-    @Singleton
-    fun provideConfigDiskSource(
-        @UnencryptedPreferences sharedPreferences: SharedPreferences,
-        json: Json,
-    ): ConfigDiskSource =
-        ConfigDiskSourceImpl(
-            sharedPreferences = sharedPreferences,
-            json = json,
-        )
 
     @Provides
     @Singleton

@@ -12,9 +12,9 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import java.util.concurrent.TimeUnit
 

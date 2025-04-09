@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

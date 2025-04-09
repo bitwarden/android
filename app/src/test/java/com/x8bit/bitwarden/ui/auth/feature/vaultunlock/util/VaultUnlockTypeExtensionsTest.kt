@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util
 
 import androidx.compose.ui.text.input.KeyboardType
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

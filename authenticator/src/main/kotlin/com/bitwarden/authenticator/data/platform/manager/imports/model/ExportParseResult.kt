@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.model
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Represents the result of parsing an export file.

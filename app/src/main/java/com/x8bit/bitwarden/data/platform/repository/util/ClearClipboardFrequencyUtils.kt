@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.repository.util
 
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * Provides a human-readable display label for the given [ClearClipboardFrequency].

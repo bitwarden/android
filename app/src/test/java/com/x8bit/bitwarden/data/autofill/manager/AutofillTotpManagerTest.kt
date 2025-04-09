@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.autofill.manager
 
 import android.content.Context
 import android.widget.Toast
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.R
@@ -11,8 +13,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
