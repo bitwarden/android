@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
+import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

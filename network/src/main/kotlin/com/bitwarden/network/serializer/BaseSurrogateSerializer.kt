@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.serializer
+package com.bitwarden.network.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -13,7 +13,7 @@ import kotlinx.serialization.encoding.Encoder
  * See the [official surrogate documentation](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serializers.md#composite-serializer-via-surrogate)
  * for details.
  */
-abstract class BaseSurrogateSerializer<T, R> : KSerializer<T> {
+internal abstract class BaseSurrogateSerializer<T, R> : KSerializer<T> {
 
     /**
      * The [KSerializer] naturally associated with the type [R], which is a typical class annotated

@@ -1,6 +1,5 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.model
+package com.bitwarden.network.model
 
-import com.bitwarden.network.model.KdfTypeJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.manager.util
 
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 
 /**
  * Converts the given [TrustDeviceResponse] to an updated [UserStateJson], given the following

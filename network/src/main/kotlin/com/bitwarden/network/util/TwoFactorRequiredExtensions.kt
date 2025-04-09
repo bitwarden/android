@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.util
+package com.bitwarden.network.util
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.TwoFactorAuthMethod
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
