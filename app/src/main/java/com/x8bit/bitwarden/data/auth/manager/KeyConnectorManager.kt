@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.auth.manager
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
+import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 
 /**
  * Manager used to interface with a key connector.

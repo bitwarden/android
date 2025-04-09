@@ -3,10 +3,12 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.bitwarden.network.api.AuthenticatedAccountsApi
 import com.bitwarden.network.api.AuthenticatedKeyConnectorApi
 import com.bitwarden.network.api.UnauthenticatedAccountsApi
+import com.bitwarden.network.api.UnauthenticatedKeyConnectorApi
 import com.bitwarden.network.model.CreateAccountKeysRequest
 import com.bitwarden.network.model.DeleteAccountRequestJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyRequestJson
+import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.PasswordHintRequestJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
@@ -17,9 +19,7 @@ import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedKeyConnectorApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import kotlinx.serialization.json.Json
