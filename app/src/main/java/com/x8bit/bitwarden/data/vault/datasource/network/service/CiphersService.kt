@@ -34,7 +34,7 @@ interface CiphersService {
      * Attempt to upload an attachment file.
      */
     suspend fun uploadAttachment(
-        attachmentJsonResponse: AttachmentJsonResponse,
+        attachment: AttachmentJsonResponse.Attachment,
         encryptedFile: File,
     ): Result<SyncResponseJson.Cipher>
 

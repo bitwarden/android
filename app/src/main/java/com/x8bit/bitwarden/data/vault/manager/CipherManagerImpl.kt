@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -327,7 +328,12 @@ class CipherManagerImpl(
             fileUri = fileUri,
         )
             .fold(
-                onFailure = { CreateAttachmentResult.Error(error = it) },
+                onFailure = {
+                    CreateAttachmentResult.Error(
+                        error = it,
+                        errorMessage = it.message,
+                    )
+                },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
 
@@ -371,19 +377,30 @@ class CipherManagerImpl(
                                         cipherId = cipherId,
                                         body = attachment.toNetworkAttachmentRequest(),
                                     )
-                                    .flatMap { attachmentJsonResponse ->
-                                        val encryptedFile = File("${cacheFile.absolutePath}.enc")
-                                        ciphersService
-                                            .uploadAttachment(
-                                                attachmentJsonResponse = attachmentJsonResponse,
-                                                encryptedFile = encryptedFile,
-                                            )
-                                            .onSuccess {
-                                                fileManager.delete(cacheFile, encryptedFile)
+                                    .flatMap { attachmentResponse ->
+                                        when (attachmentResponse) {
+                                            is AttachmentJsonResponse.Invalid -> {
+                                                return IllegalStateException(
+                                                    attachmentResponse.message,
+                                                ).asFailure()
                                             }
-                                            .onFailure {
-                                                fileManager.delete(cacheFile, encryptedFile)
+                                            is AttachmentJsonResponse.Success -> {
+                                                val encryptedFile = File(
+                                                    "${cacheFile.absolutePath}.enc",
+                                                )
+                                                ciphersService
+                                                    .uploadAttachment(
+                                                        attachment = attachmentResponse.attachment,
+                                                        encryptedFile = encryptedFile,
+                                                    )
+                                                    .onSuccess {
+                                                        fileManager.delete(cacheFile, encryptedFile)
+                                                    }
+                                                    .onFailure {
+                                                        fileManager.delete(cacheFile, encryptedFile)
+                                                    }
                                             }
+                                        }
                                     }
                             }
                     }
