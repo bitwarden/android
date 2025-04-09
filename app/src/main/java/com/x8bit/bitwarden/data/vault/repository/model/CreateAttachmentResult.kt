@@ -19,6 +19,5 @@ sealed class CreateAttachmentResult {
      */
     data class Error(
         val error: Throwable,
-        val errorMessage: String? = null,
     ) : CreateAttachmentResult()
 }

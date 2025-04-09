@@ -328,12 +328,7 @@ class CipherManagerImpl(
             fileUri = fileUri,
         )
             .fold(
-                onFailure = {
-                    CreateAttachmentResult.Error(
-                        error = it,
-                        errorMessage = it.message,
-                    )
-                },
+                onFailure = { CreateAttachmentResult.Error(error = it) },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
 

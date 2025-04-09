@@ -234,7 +234,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     state.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            message = error.message!!.asText(),
                             throwable = error,
                         ),
                     ),

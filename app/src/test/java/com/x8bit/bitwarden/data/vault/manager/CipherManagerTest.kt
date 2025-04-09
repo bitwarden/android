@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherColle
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -896,7 +897,7 @@ class CipherManagerTest {
             } returns mockAttachmentJsonResponse.asSuccess()
             coEvery {
                 ciphersService.uploadAttachment(
-                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    attachment = createMockAttachmentResponse(number = 1),
                     encryptedFile = File("${cacheFile.absolutePath}.enc"),
                 )
             } returns mockNetworkCipher.asSuccess()
@@ -1389,7 +1390,7 @@ class CipherManagerTest {
             } returns mockAttachmentJsonResponse.asSuccess()
             coEvery {
                 ciphersService.uploadAttachment(
-                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    attachment = createMockAttachmentResponse(number = 1),
                     encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
             } returns error.asFailure()
@@ -1458,7 +1459,7 @@ class CipherManagerTest {
             } returns mockAttachmentJsonResponse.asSuccess()
             coEvery {
                 ciphersService.uploadAttachment(
-                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    attachment = createMockAttachmentResponse(number = 1),
                     encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
             } returns mockCipherResponse.asSuccess()
@@ -1535,7 +1536,7 @@ class CipherManagerTest {
             } returns mockAttachmentJsonResponse.asSuccess()
             coEvery {
                 ciphersService.uploadAttachment(
-                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    attachment = createMockAttachmentResponse(number = 1),
                     encryptedFile = File("${mockFile.absolutePath}.enc"),
                 )
             } returns mockCipherResponse.asSuccess()
@@ -1610,7 +1611,7 @@ class CipherManagerTest {
         } returns mockAttachmentJsonResponse.asSuccess()
         coEvery {
             ciphersService.uploadAttachment(
-                attachmentJsonResponse = mockAttachmentJsonResponse,
+                attachment = createMockAttachmentResponse(number = 1),
                 encryptedFile = File("${mockFile.absolutePath}.enc"),
             )
         } returns mockCipherResponse.asSuccess()
@@ -1683,7 +1684,7 @@ class CipherManagerTest {
         } returns mockAttachmentJsonResponse.asSuccess()
         coEvery {
             ciphersService.uploadAttachment(
-                attachmentJsonResponse = mockAttachmentJsonResponse,
+                attachment = createMockAttachmentResponse(number = 1),
                 encryptedFile = File("${mockFile.absolutePath}.enc"),
             )
         } returns Throwable("Fail").asFailure()

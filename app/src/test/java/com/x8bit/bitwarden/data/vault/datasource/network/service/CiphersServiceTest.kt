@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
@@ -103,15 +104,14 @@ class CiphersServiceTest : BaseServiceTest() {
     fun `uploadAttachment with Azure uploadFile success should return cipher`() = runTest {
         setupMockUri(url = "mockUrl-1", queryParams = mapOf("sv" to "2024-04-03"))
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.AZURE,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.AZURE,
+            ),
             encryptedFile = encryptedFile,
         )
 
@@ -121,15 +121,14 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `uploadAttachment with Direct uploadFile success should return cipher`() = runTest {
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.DIRECT,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.DIRECT,
+            ),
             encryptedFile = encryptedFile,
         )
 
