@@ -72,7 +72,7 @@ sealed class FlagKey<out T : Any> {
     data object MobileErrorReporting : FlagKey<Boolean>() {
         override val keyName: String = "mobile-error-reporting"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -81,7 +81,7 @@ sealed class FlagKey<out T : Any> {
     data object FlightRecorder : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-flight-recorder"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
