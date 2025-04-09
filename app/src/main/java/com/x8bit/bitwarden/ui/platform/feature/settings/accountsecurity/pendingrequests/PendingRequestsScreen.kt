@@ -288,7 +288,6 @@ private fun PendingRequestItem(
             text = stringResource(id = R.string.fingerprint_phrase),
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
         )
 
@@ -298,7 +297,6 @@ private fun PendingRequestItem(
             text = fingerprintPhrase,
             color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
-            textAlign = TextAlign.Start,
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
                 .fillMaxWidth(),
@@ -315,7 +313,6 @@ private fun PendingRequestItem(
                 text = platform,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
-                textAlign = TextAlign.Start,
             )
             Spacer(modifier = Modifier.width(width = 16.dp))
             Text(

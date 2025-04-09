@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -183,7 +182,6 @@ private fun LoginApprovalContent(
 
         Text(
             text = state.fingerprint,
-            textAlign = TextAlign.Start,
             color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
             modifier = Modifier
