@@ -130,6 +130,7 @@ class FlagKeyTest {
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.ChromeAutofill,
+                FlagKey.MobileErrorReporting,
             ).all {
                 it.isRemotelyConfigured
             },
@@ -138,7 +139,6 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
-                FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
             ).all {
                 !it.isRemotelyConfigured
