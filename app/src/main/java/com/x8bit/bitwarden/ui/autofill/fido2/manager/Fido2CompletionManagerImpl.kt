@@ -10,15 +10,16 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlin.random.Random
 
@@ -32,19 +33,21 @@ class Fido2CompletionManagerImpl(
     private val intentManager: IntentManager,
 ) : Fido2CompletionManager {
 
-    override fun completeFido2Registration(result: Fido2RegisterCredentialResult) {
+    override fun completeFido2Registration(result: RegisterFido2CredentialResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is Fido2RegisterCredentialResult.Error -> {
+                is RegisterFido2CredentialResult.Error -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
-                            exception = CreateCredentialUnknownException(),
+                            exception = CreateCredentialUnknownException(
+                                errorMessage = result.message.invoke(it.resources),
+                            ),
                         )
                 }
 
-                is Fido2RegisterCredentialResult.Success -> {
+                is RegisterFido2CredentialResult.Success -> {
                     PendingIntentHandler
                         .setCreateCredentialResponse(
                             intent = intent,
@@ -54,7 +57,7 @@ class Fido2CompletionManagerImpl(
                         )
                 }
 
-                is Fido2RegisterCredentialResult.Cancelled -> {
+                is RegisterFido2CredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
@@ -67,19 +70,21 @@ class Fido2CompletionManagerImpl(
         }
     }
 
-    override fun completeFido2Assertion(result: Fido2CredentialAssertionResult) {
+    override fun completeFido2Assertion(result: AssertFido2CredentialResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is Fido2CredentialAssertionResult.Error -> {
+                is AssertFido2CredentialResult.Error -> {
                     PendingIntentHandler
                         .setGetCredentialException(
                             intent = intent,
-                            exception = GetCredentialUnknownException(),
+                            exception = GetCredentialUnknownException(
+                                errorMessage = result.message.invoke(it.resources),
+                            ),
                         )
                 }
 
-                is Fido2CredentialAssertionResult.Success -> {
+                is AssertFido2CredentialResult.Success -> {
                     PendingIntentHandler
                         .setGetCredentialResponse(
                             intent = intent,
@@ -88,17 +93,25 @@ class Fido2CompletionManagerImpl(
                             ),
                         )
                 }
+
+                is AssertFido2CredentialResult.Cancelled -> {
+                    PendingIntentHandler
+                        .setGetCredentialException(
+                            intent = intent,
+                            exception = GetCredentialCancellationException(),
+                        )
+                }
             }
             it.setResult(Activity.RESULT_OK, intent)
             it.finish()
         }
     }
 
-    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialsResult) {
+    override fun completeFido2GetCredentialsRequest(result: GetFido2CredentialsResult) {
         val resultIntent = Intent()
         val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
-            is Fido2GetCredentialsResult.Success -> {
+            is GetFido2CredentialsResult.Success -> {
                 val entries = result
                     .credentials
                     .map {
@@ -116,7 +129,7 @@ class Fido2CompletionManagerImpl(
                                 username = it.userNameForUi
                                     ?: activity.getString(R.string.no_username),
                                 pendingIntent = pendingIntent,
-                                beginGetPublicKeyCredentialOption = result.options,
+                                beginGetPublicKeyCredentialOption = result.option,
                             )
                             .setIcon(
                                 Icon
@@ -139,11 +152,11 @@ class Fido2CompletionManagerImpl(
                     )
             }
 
-            is Fido2GetCredentialsResult.Error -> {
+            is GetFido2CredentialsResult.Error -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,
                     GetCredentialUnknownException(
-                        errorMessage = result.message.toString(activity.resources),
+                        errorMessage = result.message.invoke(activity.resources),
                     ),
                 )
             }

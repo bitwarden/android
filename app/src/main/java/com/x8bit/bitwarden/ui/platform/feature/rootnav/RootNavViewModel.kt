@@ -133,21 +133,24 @@ class RootNavViewModel @Inject constructor(
                     is SpecialCircumstance.Fido2Save -> {
                         RootNavState.VaultUnlockedForFido2Save(
                             activeUserId = userState.activeUserId,
-                            fido2CreateCredentialRequest = specialCircumstance.fido2CreateCredentialRequest,
+                            fido2CreateCredentialRequest =
+                                specialCircumstance.fido2CreateCredentialRequest,
                         )
                     }
 
                     is SpecialCircumstance.Fido2Assertion -> {
                         RootNavState.VaultUnlockedForFido2Assertion(
                             activeUserId = userState.activeUserId,
-                            fido2CredentialAssertionRequest = specialCircumstance.fido2AssertionRequest,
+                            fido2CredentialAssertionRequest =
+                                specialCircumstance.fido2AssertionRequest,
                         )
                     }
 
                     is SpecialCircumstance.Fido2GetCredentials -> {
                         RootNavState.VaultUnlockedForFido2GetCredentials(
                             activeUserId = userState.activeUserId,
-                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
+                            fido2GetCredentialsRequest =
+                                specialCircumstance.fido2GetCredentialsRequest,
                         )
                     }
 
