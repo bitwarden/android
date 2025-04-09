@@ -73,6 +73,11 @@ const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
+ * Key for the user verification performed during vault unlock while processing a FIDO 2 request.
+ */
+const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
+
+/**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
  * Intents within a given context.
  */
@@ -310,6 +315,7 @@ class IntentManagerImpl(
         userId: String,
         credentialId: String,
         cipherId: String,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent {
         val intent = Intent(action)
@@ -317,6 +323,7 @@ class IntentManagerImpl(
             .putExtra(EXTRA_KEY_USER_ID, userId)
             .putExtra(EXTRA_KEY_CREDENTIAL_ID, credentialId)
             .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
+            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
 
         return PendingIntent.getActivity(
             /* context = */ context,

@@ -128,11 +128,13 @@ interface IntentManager {
      * Creates a pending intent to use when providing
      * [androidx.credentials.provider.CredentialEntry] instances for FIDO 2 credential filling.
      */
+    @Suppress("LongParameterList")
     fun createFido2GetCredentialPendingIntent(
         action: String,
         userId: String,
         credentialId: String,
         cipherId: String,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent
 

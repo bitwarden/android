@@ -8,9 +8,11 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
+import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -39,6 +41,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialReques
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
@@ -3030,13 +3033,20 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 number = 1,
                 fido2Credentials = mockFido2CredentialsList,
             )
+            val mockPasskeyAssertionOptions = mockk<PasskeyAssertionOptions>(relaxed = true)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2GetCredentials(
                     mockGetCredentialsRequest,
                 )
             every {
                 fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockk(relaxed = true)
+            } returns mockPasskeyAssertionOptions
+            coEvery {
+                fido2CredentialManager.getPublicKeyCredentialEntries(
+                    userId = "mockUserId-1",
+                    option = mockBeginGetPublicKeyCredentialOption,
+                )
+            } returns emptyList<PublicKeyCredentialEntry>().asSuccess()
             coEvery {
                 fido2OriginManager.validateOrigin(
                     callingAppInfo = any(),
@@ -3068,7 +3078,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         result = GetFido2CredentialsResult.Success(
                             userId = "mockUserId-1",
                             option = mockBeginGetPublicKeyCredentialOption,
-                            credentials = emptyList(),
+                            credentialEntries = emptyList(),
                         ),
                     ),
                     awaitItem(),
