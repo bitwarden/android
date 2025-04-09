@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject

@@ -11,6 +11,9 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -49,9 +52,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectionView

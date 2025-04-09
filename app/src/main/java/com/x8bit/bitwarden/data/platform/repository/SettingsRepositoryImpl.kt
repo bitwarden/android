@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -18,8 +20,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme

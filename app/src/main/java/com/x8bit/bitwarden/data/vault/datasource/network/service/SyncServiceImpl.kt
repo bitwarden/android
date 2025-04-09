@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.util.toResult
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 
 class SyncServiceImpl(
     private val syncApi: SyncApi,

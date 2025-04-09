@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import app.cash.turbine.test
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -12,8 +14,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

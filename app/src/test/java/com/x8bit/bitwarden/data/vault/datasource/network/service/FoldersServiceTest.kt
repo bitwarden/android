@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.api.FoldersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse

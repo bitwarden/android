@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
 import androidx.annotation.Keep
+import com.bitwarden.network.model.CreateFileSendResponseJson
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.SendJsonRequest
+import com.bitwarden.network.model.SyncResponseJson
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE

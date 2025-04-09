@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
+import com.bitwarden.network.model.createMockSend
+import com.bitwarden.network.model.createMockSendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import org.junit.jupiter.api.Assertions.assertEquals

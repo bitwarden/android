@@ -25,6 +25,8 @@ import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
@@ -35,10 +37,13 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
+import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -121,11 +126,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
