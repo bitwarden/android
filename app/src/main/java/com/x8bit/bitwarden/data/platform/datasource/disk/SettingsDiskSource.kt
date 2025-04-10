@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -83,6 +84,16 @@ interface SettingsDiskSource {
      * Emits updates that track [hasUserLoggedInOrCreatedAccount].
      */
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
+
+    /**
+     * The current status of whether the flight recorder is enabled.
+     */
+    var flightRecorderData: FlightRecorderDataSet?
+
+    /**
+     * Emits updates that track [flightRecorderData].
+     */
+    val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
 
     /**
      * Clears all the settings data for the given user.
