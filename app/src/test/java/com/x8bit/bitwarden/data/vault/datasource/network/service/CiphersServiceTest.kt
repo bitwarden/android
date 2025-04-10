@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
@@ -100,18 +102,36 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `createAttachment with invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setResponseCode(400).setBody(CREATE_ATTACHMENT_INVALID_JSON),
+            )
+            val result = ciphersService.createAttachment(
+                cipherId = "mockId-1",
+                body = createMockAttachmentJsonRequest(number = 1),
+            )
+            assertEquals(
+                AttachmentJsonResponse.Invalid(
+                    message = "You do not have permission.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Test
     fun `uploadAttachment with Azure uploadFile success should return cipher`() = runTest {
         setupMockUri(url = "mockUrl-1", queryParams = mapOf("sv" to "2024-04-03"))
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.AZURE,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.AZURE,
+            ),
             encryptedFile = encryptedFile,
         )
 
@@ -121,15 +141,14 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `uploadAttachment with Direct uploadFile success should return cipher`() = runTest {
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.DIRECT,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.DIRECT,
+            ),
             encryptedFile = encryptedFile,
         )
 
@@ -481,6 +500,13 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "keyFingerprint": "mockKeyFingerprint-1"
     }
   }
+}
+"""
+
+private const val CREATE_ATTACHMENT_INVALID_JSON = """
+{
+  "message": "You do not have permission.",
+  "validationErrors": null
 }
 """
 
