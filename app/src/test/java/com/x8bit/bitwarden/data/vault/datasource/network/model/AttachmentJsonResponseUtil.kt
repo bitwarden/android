@@ -7,22 +7,21 @@ fun createMockAttachmentJsonResponse(
     number: Int,
     fileUploadType: FileUploadType = FileUploadType.AZURE,
 ): AttachmentJsonResponse =
-    AttachmentJsonResponse.Success(AttachmentJsonResponse.Attachment(
+    AttachmentJsonResponse.Success(
         attachmentId = "mockAttachmentId-$number",
         url = "mockUrl-$number",
         fileUploadType = fileUploadType,
         cipherResponse = createMockCipher(number = number),
-        ),
     )
 
 /**
- * Create a mock [AttachmentJsonResponse.Attachment] with a given [number].
+ * Create a mock [AttachmentJsonResponse.Success] with a given [number].
  */
 fun createMockAttachmentResponse(
     number: Int,
     fileUploadType: FileUploadType = FileUploadType.AZURE,
-): AttachmentJsonResponse.Attachment =
-    AttachmentJsonResponse.Attachment(
+): AttachmentJsonResponse.Success =
+    AttachmentJsonResponse.Success(
         attachmentId = "mockAttachmentId-$number",
         url = "mockUrl-$number",
         fileUploadType = fileUploadType,

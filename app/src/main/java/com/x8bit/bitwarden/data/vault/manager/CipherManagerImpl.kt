@@ -379,13 +379,14 @@ class CipherManagerImpl(
                                                     attachmentResponse.message,
                                                 ).asFailure()
                                             }
+
                                             is AttachmentJsonResponse.Success -> {
                                                 val encryptedFile = File(
                                                     "${cacheFile.absolutePath}.enc",
                                                 )
                                                 ciphersService
                                                     .uploadAttachment(
-                                                        attachment = attachmentResponse.attachment,
+                                                        attachment = attachmentResponse,
                                                         encryptedFile = encryptedFile,
                                                     )
                                                     .onSuccess {

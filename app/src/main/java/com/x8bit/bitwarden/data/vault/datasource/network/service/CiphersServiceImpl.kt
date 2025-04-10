@@ -58,7 +58,6 @@ class CiphersServiceImpl(
                 body = body,
             )
             .toResult()
-            .map { AttachmentJsonResponse.Success(attachment = it) }
             .recoverCatching { throwable ->
                 throwable.toBitwardenError()
                     .parseErrorBodyOrNull<AttachmentJsonResponse.Invalid>(
@@ -69,7 +68,7 @@ class CiphersServiceImpl(
             }
 
     override suspend fun uploadAttachment(
-        attachment: AttachmentJsonResponse.Attachment,
+        attachment: AttachmentJsonResponse.Success,
         encryptedFile: File,
     ): Result<SyncResponseJson.Cipher> {
         val cipher = attachment.cipherResponse
