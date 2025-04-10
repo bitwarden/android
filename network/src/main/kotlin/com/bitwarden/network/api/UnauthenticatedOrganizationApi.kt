@@ -1,10 +1,10 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.api
+package com.bitwarden.network.api
 
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsRequest
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
+import com.bitwarden.network.model.OrganizationDomainSsoDetailsRequestJson
+import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
+import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsRequest
+import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -21,7 +21,7 @@ interface UnauthenticatedOrganizationApi {
     ): NetworkResult<OrganizationDomainSsoDetailsResponseJson>
 
     /**
-     * Checks for the verfied organization domains of an email for SSO purposes.
+     * Checks for the verified organization domains of an email for SSO purposes.
      */
     @POST("/organizations/domain/sso/verified")
     suspend fun getVerifiedOrganizationDomainsByEmail(
