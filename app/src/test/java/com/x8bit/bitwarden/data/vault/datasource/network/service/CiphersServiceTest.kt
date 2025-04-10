@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.network.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersJsonRequest
@@ -99,6 +100,25 @@ class CiphersServiceTest : BaseServiceTest() {
             result.getOrThrow(),
         )
     }
+
+    @Test
+    fun `createAttachment with invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setResponseCode(400).setBody(CREATE_ATTACHMENT_INVALID_JSON),
+            )
+            val result = ciphersService.createAttachment(
+                cipherId = "mockId-1",
+                body = createMockAttachmentJsonRequest(number = 1),
+            )
+            assertEquals(
+                AttachmentJsonResponse.Invalid(
+                    message = "You do not have permission.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
 
     @Test
     fun `uploadAttachment with Azure uploadFile success should return cipher`() = runTest {
@@ -480,6 +500,13 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "keyFingerprint": "mockKeyFingerprint-1"
     }
   }
+}
+"""
+
+private const val CREATE_ATTACHMENT_INVALID_JSON = """
+{
+  "message": "You do not have permission.",
+  "validationErrors": null
 }
 """
 
