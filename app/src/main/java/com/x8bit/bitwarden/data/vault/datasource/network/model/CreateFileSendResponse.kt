@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.model
 
+import com.bitwarden.network.model.CreateFileSendResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

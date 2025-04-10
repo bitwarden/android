@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 
 /**

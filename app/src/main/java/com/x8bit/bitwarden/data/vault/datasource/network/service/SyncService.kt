@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.SyncResponseJson
 
 /**
  * Provides an API for querying sync endpoints.

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
+import com.bitwarden.network.model.OrganizationType
 
 /**
  * Represents an organization a user may be a member of.

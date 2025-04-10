@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.SyncResponseJson
 import retrofit2.http.GET
 
 /**
