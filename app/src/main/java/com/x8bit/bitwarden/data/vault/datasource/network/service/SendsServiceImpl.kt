@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import androidx.core.net.toUri
+import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
