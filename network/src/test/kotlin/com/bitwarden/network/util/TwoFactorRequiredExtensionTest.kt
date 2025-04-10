@@ -1,13 +1,13 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.util
+package com.bitwarden.network.util
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.TwoFactorAuthMethod
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertNull
 
 class TwoFactorRequiredExtensionTest {
     @Test

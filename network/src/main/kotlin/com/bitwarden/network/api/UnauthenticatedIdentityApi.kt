@@ -1,16 +1,16 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.api
+package com.bitwarden.network.api
 
+import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.NetworkResult
+import com.bitwarden.network.model.PreLoginRequestJson
+import com.bitwarden.network.model.PreLoginResponseJson
+import com.bitwarden.network.model.PrevalidateSsoResponseJson
+import com.bitwarden.network.model.RefreshTokenResponseJson
+import com.bitwarden.network.model.RegisterFinishRequestJson
 import com.bitwarden.network.model.RegisterRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
+import com.bitwarden.network.model.RegisterResponseJson
+import com.bitwarden.network.model.SendVerificationEmailRequestJson
+import com.bitwarden.network.model.VerifyEmailTokenRequestJson
 import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body

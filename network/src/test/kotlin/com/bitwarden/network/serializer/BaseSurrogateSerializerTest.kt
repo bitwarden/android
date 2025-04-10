@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.serializer
+package com.bitwarden.network.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable

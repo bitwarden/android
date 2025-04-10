@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.util
+package com.bitwarden.network.util
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.TwoFactorAuthMethod
 
 /**
  * The priority, used to determine the default method from a list of available methods.
