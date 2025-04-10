@@ -10,5 +10,6 @@ fun createMockFido2CredentialAssertionRequest(
         userId = userId,
         cipherId = "mockCipherId-$number",
         credentialId = "mockCredentialId-$number",
+        isUserPreVerified = false,
         requestData = bundleOf(),
     )

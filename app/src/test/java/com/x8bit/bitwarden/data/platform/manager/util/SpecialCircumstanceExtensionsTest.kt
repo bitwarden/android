@@ -148,6 +148,7 @@ class SpecialCircumstanceExtensionsTest {
     fun `toFido2RequestOrNull should return a non-null value for Fido2Save`() {
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "mockUserId",
+            isUserPreVerified = false,
             requestData = bundleOf(),
         )
         assertEquals(
