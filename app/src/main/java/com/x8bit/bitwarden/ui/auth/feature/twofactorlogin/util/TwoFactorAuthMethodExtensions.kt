@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 import androidx.annotation.DrawableRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 
 /**
  * Get the title for the given auth method.

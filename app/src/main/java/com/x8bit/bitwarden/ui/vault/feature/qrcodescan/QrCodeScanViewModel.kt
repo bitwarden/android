@@ -4,7 +4,7 @@ import android.net.Uri
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

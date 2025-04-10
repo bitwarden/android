@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.di
 
 import android.content.SharedPreferences
-import com.bitwarden.data.datasource.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
 import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSourceImpl

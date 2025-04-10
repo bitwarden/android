@@ -43,7 +43,7 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem

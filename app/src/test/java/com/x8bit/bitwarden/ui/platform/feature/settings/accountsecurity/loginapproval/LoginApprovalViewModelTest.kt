@@ -17,7 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

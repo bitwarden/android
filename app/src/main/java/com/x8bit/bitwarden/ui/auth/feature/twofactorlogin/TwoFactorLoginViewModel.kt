@@ -30,8 +30,8 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonE
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

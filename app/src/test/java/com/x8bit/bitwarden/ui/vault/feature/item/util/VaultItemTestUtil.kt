@@ -14,7 +14,7 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData

@@ -6,7 +6,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportPar
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.BitwardenExportParser
-import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
