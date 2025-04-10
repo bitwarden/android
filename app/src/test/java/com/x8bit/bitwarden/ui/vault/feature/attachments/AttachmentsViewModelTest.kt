@@ -204,7 +204,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             )
             mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
             mutableUserStateFlow.value = DEFAULT_USER_STATE
-            val error = NoActiveUserException()
+            val error = IllegalStateException("No permissions.")
             coEvery {
                 vaultRepository.createAttachment(
                     cipherId = state.cipherId,
@@ -213,7 +213,10 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     fileName = fileName,
                     fileUri = uri,
                 )
-            } returns CreateAttachmentResult.Error(error = error)
+            } returns CreateAttachmentResult.Error(
+                error = error,
+                message = "No permissions.",
+            )
 
             val viewModel = createViewModel()
             // Need to populate the VM with a file
