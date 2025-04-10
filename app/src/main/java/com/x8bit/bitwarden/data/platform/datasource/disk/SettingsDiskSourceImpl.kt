@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -45,6 +46,7 @@ private const val CREATE_ACTION_COUNT = "createActionCount"
 private const val SHOULD_SHOW_ADD_LOGIN_COACH_MARK = "shouldShowAddLoginCoachMark"
 private const val SHOULD_SHOW_GENERATOR_COACH_MARK = "shouldShowGeneratorCoachMark"
 private const val RESUME_SCREEN = "resumeScreen"
+private const val FLIGHT_RECORDER_KEY = "flightRecorderData"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -83,6 +85,8 @@ class SettingsDiskSourceImpl(
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableFlightRecorderDataFlow = bufferedMutableSharedFlow<FlightRecorderDataSet?>()
 
     private val mutableHasSeenAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
@@ -188,6 +192,20 @@ class SettingsDiskSourceImpl(
     override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
         get() = mutableHasUserLoggedInOrCreatedAccountFlow
             .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
+
+    override var flightRecorderData: FlightRecorderDataSet?
+        get() = getString(key = FLIGHT_RECORDER_KEY)
+            ?.let { json.decodeFromStringOrNull<FlightRecorderDataSet>(it) }
+        set(value) {
+            putString(
+                key = FLIGHT_RECORDER_KEY,
+                value = value?.let { json.encodeToString(it) },
+            )
+            mutableFlightRecorderDataFlow.tryEmit(value)
+        }
+
+    override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
+        get() = mutableFlightRecorderDataFlow.onSubscription { emit(flightRecorderData) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
