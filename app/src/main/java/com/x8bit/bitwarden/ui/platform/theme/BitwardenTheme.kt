@@ -105,6 +105,7 @@ fun BitwardenTheme(
         else -> lightBitwardenColorScheme
     }
 
+    // Update text alignment according to the current layout direction.
     val textAlign =
         if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
             TextAlign.Right
