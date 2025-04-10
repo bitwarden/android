@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
+import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 
 /**
