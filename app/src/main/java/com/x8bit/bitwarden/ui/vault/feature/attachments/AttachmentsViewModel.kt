@@ -271,7 +271,7 @@ class AttachmentsViewModel @Inject constructor(
                     it.copy(
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = result.error.message?.asText()
+                            message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
                             throwable = result.error,
                         ),

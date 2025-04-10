@@ -328,7 +328,15 @@ class CipherManagerImpl(
             fileUri = fileUri,
         )
             .fold(
-                onFailure = { CreateAttachmentResult.Error(error = it) },
+                onFailure = {
+                    CreateAttachmentResult.Error(
+                        error = it,
+                        message = when (it) {
+                            is IllegalStateException -> it.message
+                            else -> null
+                        },
+                    )
+                },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
 
@@ -372,32 +380,32 @@ class CipherManagerImpl(
                                         cipherId = cipherId,
                                         body = attachment.toNetworkAttachmentRequest(),
                                     )
-                                    .flatMap { attachmentResponse ->
-                                        when (attachmentResponse) {
-                                            is AttachmentJsonResponse.Invalid -> {
-                                                return IllegalStateException(
-                                                    attachmentResponse.message,
-                                                ).asFailure()
-                                            }
-
-                                            is AttachmentJsonResponse.Success -> {
-                                                val encryptedFile = File(
-                                                    "${cacheFile.absolutePath}.enc",
-                                                )
-                                                ciphersService
-                                                    .uploadAttachment(
-                                                        attachment = attachmentResponse,
-                                                        encryptedFile = encryptedFile,
-                                                    )
-                                                    .onSuccess {
-                                                        fileManager.delete(cacheFile, encryptedFile)
-                                                    }
-                                                    .onFailure {
-                                                        fileManager.delete(cacheFile, encryptedFile)
-                                                    }
-                                            }
-                                        }
+                            }
+                            .flatMap { attachmentResponse ->
+                                when (attachmentResponse) {
+                                    is AttachmentJsonResponse.Invalid -> {
+                                        return IllegalStateException(
+                                            attachmentResponse.message,
+                                        ).asFailure()
                                     }
+
+                                    is AttachmentJsonResponse.Success -> {
+                                        val encryptedFile = File(
+                                            "${cacheFile.absolutePath}.enc",
+                                        )
+                                        ciphersService
+                                            .uploadAttachment(
+                                                attachment = attachmentResponse,
+                                                encryptedFile = encryptedFile,
+                                            )
+                                            .onSuccess {
+                                                fileManager.delete(cacheFile, encryptedFile)
+                                            }
+                                            .onFailure {
+                                                fileManager.delete(cacheFile, encryptedFile)
+                                            }
+                                    }
+                                }
                             }
                     }
             }

@@ -1175,7 +1175,13 @@ class CipherManagerTest {
                 fileUri = mockk(),
             )
 
-            assertEquals(CreateAttachmentResult.Error(NoActiveUserException()), result)
+            assertEquals(
+                CreateAttachmentResult.Error(
+                    error = NoActiveUserException(),
+                    message = "No current active user!",
+                ),
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
