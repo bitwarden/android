@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
@@ -75,6 +76,7 @@ object PlatformRepositoryModule {
         accessibilityEnabledManager: AccessibilityEnabledManager,
         dispatcherManager: DispatcherManager,
         policyManager: PolicyManager,
+        flightRecorderManager: FlightRecorderManager,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             autofillManager = autofillManager,
@@ -85,6 +87,7 @@ object PlatformRepositoryModule {
             accessibilityEnabledManager = accessibilityEnabledManager,
             dispatcherManager = dispatcherManager,
             policyManager = policyManager,
+            flightRecorderManager = flightRecorderManager,
         )
 
     @Provides
