@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 
 /**
@@ -444,6 +445,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
         return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
+    }
+
+    /**
+     * Asserts that the stored [FlightRecorderDataSet] matches the [expected] one.
+     */
+    fun assertFlightRecorderData(expected: FlightRecorderDataSet) {
+        assertEquals(expected, storedFlightRecorderData)
     }
 
     //region Private helper functions

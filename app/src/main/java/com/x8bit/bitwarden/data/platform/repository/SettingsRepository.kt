@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -17,7 +18,7 @@ import javax.crypto.Cipher
  * Provides an API for observing and modifying settings state.
  */
 @Suppress("TooManyFunctions")
-interface SettingsRepository {
+interface SettingsRepository : FlightRecorderManager {
     /**
      * The [AppLanguage] for the current user.
      */

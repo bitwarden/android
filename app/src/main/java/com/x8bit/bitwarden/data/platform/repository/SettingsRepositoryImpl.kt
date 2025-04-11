@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -49,10 +50,12 @@ class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    flightRecorderManager: FlightRecorderManager,
     accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
-) : SettingsRepository {
+) : SettingsRepository,
+    FlightRecorderManager by flightRecorderManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
