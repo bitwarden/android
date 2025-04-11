@@ -203,6 +203,79 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
     }
 
+    @Test
+    fun `ConfirmKeyConnector dialog should be shown or hidden according to the state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                    keyConnectorDomain = "bitwarden.com",
+                ),
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Confirm Key Connector domain")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(
+                "Please confirm the domain below with your organization administrator." +
+                    "\n\n" +
+                    "Key Connector domain:" +
+                    "\n" +
+                    "bitwarden.com",
+            )
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Confirm")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `ConfirmKeyConnector Confirm click should send ConfirmKeyConnectorDomainClick action`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                    keyConnectorDomain = "bitwarden.com",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Confirm")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick) }
+    }
+
+    @Test
+    fun `ConfirmKeyConnector Cancel click should send CancelKeyConnectorDomainClick action`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                    keyConnectorDomain = "bitwarden.com",
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick) }
+    }
+
     companion object {
         private val DEFAULT_STATE = EnterpriseSignOnState(
             dialogState = null,

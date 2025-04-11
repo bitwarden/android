@@ -20,6 +20,11 @@ sealed class LoginResult {
     data object TwoFactorRequired : LoginResult()
 
     /**
+     * User should confirm KeyConnector domain
+     */
+    data object ConfirmKeyConnectorDomain : LoginResult()
+
+    /**
      * There was an error logging in.
      */
     data class Error(
