@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util
 
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * Validates the URI based on specific criteria.

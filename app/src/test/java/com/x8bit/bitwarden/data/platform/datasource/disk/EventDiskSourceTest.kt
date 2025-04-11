@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.network.model.OrganizationEventJson
 import com.bitwarden.network.model.OrganizationEventType
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
 import kotlinx.coroutines.test.runTest

@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.model
 import android.os.Parcelable
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import kotlinx.parcelize.Parcelize
 
 /**

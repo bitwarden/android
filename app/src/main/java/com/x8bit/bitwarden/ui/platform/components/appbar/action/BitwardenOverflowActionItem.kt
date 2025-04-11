@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.appbar.action
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.DropdownMenu
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -22,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenMenuItemColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -41,8 +44,11 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenOverflowActionItem(
+    menuItemDataList: ImmutableList<OverflowMenuItemData>,
     modifier: Modifier = Modifier,
-    menuItemDataList: ImmutableList<OverflowMenuItemData> = persistentListOf(),
+    @DrawableRes vectorIconRes: Int = R.drawable.ic_ellipsis_vertical,
+    contentDescription: String = stringResource(id = R.string.more),
+    testTag: String? = "HeaderBarOptionsButton",
 ) {
     if (menuItemDataList.isEmpty()) return
     var isOverflowMenuVisible by rememberSaveable { mutableStateOf(false) }
@@ -51,10 +57,10 @@ fun BitwardenOverflowActionItem(
         modifier = modifier,
     ) {
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_ellipsis_vertical,
-            contentDescription = stringResource(id = R.string.more),
+            vectorIconRes = vectorIconRes,
+            contentDescription = contentDescription,
             onClick = { isOverflowMenuVisible = !isOverflowMenuVisible },
-            modifier = Modifier.testTag(tag = "HeaderBarOptionsButton"),
+            modifier = Modifier.nullableTestTag(tag = testTag),
         )
         DropdownMenu(
             shape = BitwardenTheme.shapes.menu,
@@ -73,7 +79,13 @@ fun BitwardenOverflowActionItem(
                 menuItemDataList.forEach { dropdownMenuItemData ->
                     DropdownMenuItem(
                         modifier = Modifier.testTag("FloatingOptionsItem"),
-                        colors = bitwardenMenuItemColors(),
+                        colors = bitwardenMenuItemColors(
+                            textColor = dropdownMenuItemData
+                                .color
+                                .takeUnless { it == Color.Unspecified }
+                                ?: BitwardenTheme.colorScheme.text.primary,
+                        ),
+                        enabled = dropdownMenuItemData.isEnabled,
                         text = {
                             Text(
                                 text = dropdownMenuItemData.text,
@@ -112,8 +124,12 @@ private fun BitwardenOverflowActionItem_preview() {
  *
  * @param text The text displayed for the item in the menu.
  * @param onClick A callback for when the menu item is clicked.
+ * @param isEnabled Indicates that this overflow item is enabled or not.
+ * @param color The color of the content.
  */
 data class OverflowMenuItemData(
     val text: String,
     val onClick: () -> Unit,
+    val isEnabled: Boolean = true,
+    val color: Color = Color.Unspecified,
 )

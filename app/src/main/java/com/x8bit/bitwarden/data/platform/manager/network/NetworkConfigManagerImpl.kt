@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.network
 
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn

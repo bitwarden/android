@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.createMockSyncResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals

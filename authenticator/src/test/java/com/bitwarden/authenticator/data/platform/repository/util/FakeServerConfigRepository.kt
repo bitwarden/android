@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.repository.util
 
-import com.bitwarden.authenticator.data.platform.datasource.disk.model.ServerConfig
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.network.model.ConfigResponseJson
 import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
 import com.bitwarden.network.model.ConfigResponseJson.ServerJson

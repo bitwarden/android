@@ -966,7 +966,6 @@ Skift til denne konto?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Adgangsnøglen gemmes i Bitwarden-boksen til %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Utildelte organisationsemner er ikke længere synlige i Alle Bokse-visningen og er kun tilgængelige via Admin-konsollen. Føj disse emner til en samling fra Admin-konsollen for at gøre dem synlige.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">Pr. 16. maj 2024 er utildelte organisationsemner ikke længere synlige i Alle Bokse-visningen og vil kun være tilgængelige via Admin-konsollen. Tildel disse emner til en samling via Admin-konsollen for at gøre dem synlige.</string>
-  <string name="remind_me_later">Påmind senere</string>
   <string name="notice">Varsling</string>
   <string name="passkeys_not_supported_for_this_app">Adgangsnøgler ikke understøttet til denne app</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Adgangsnøglehandling mislykkedes, da webbrowseren ikke er priviligeret</string>
@@ -1229,4 +1228,9 @@ Skift til denne konto?</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

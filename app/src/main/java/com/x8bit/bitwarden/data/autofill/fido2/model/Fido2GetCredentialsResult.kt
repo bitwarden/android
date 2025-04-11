@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.model
 
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Represents the result of a FIDO 2 Get Credentials request.

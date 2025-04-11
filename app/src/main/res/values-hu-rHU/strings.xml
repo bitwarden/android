@@ -965,7 +965,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A belépőkulcs mentésre kerül a Bitwarden széfbe: %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Megjegyzés: A nem hozzá nem rendelt szervezeti elemek már nem láthatók az Összes széf nézetben és csak az Adminisztrátori konzolon keresztül érhetők el. Rendeljük ezeket az elemeket egy gyűjteményhez az Adminisztrátor konzolból, hogy láthatóvá tegyük azokat.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">2024. május 16-tól a nem hozzá rendelt szervezeti elemek többé nem lesznek láthatók az Összes széf nézetben és csak az Adminisztrátori konzolon keresztül érhetők el. Rendeljük ezeket az elemeket egy gyűjteményhez az Adminisztrátori konzolból, hogy láthatóvá tegyük azokat.</string>
-  <string name="remind_me_later">Emlékeztetés később</string>
   <string name="notice">Megjegyzés</string>
   <string name="passkeys_not_supported_for_this_app">Ennél az alkalmazásnál a belépőkulcsok nem támogatottak.</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">A belépőkulcs művelet nem sikerült, mert a böngésző nem privilegizált.</string>
@@ -1228,4 +1227,9 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="add_field">Mező hozzáadása</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Hiba részletek megosztása</string>
+  <string name="flight_recorder">Adatrögzítő</string>
+  <string name="flight_recorder_help">Adatrögzítő súgó</string>
+  <string name="view_recorded_logs">Adatrögzítő naplók megtekintése</string>
+  <string name="enable_flight_recorder_title">Adatrögzítő engedélyezése</string>
+  <string name="recorded_logs_title">Adatrögzítő naplók</string>
 </resources>

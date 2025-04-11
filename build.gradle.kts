@@ -22,6 +22,7 @@ dependencies {
     kover(project(":core"))
     kover(project(":data"))
     kover(project(":network"))
+    kover(project(":ui"))
 }
 
 detekt {
@@ -34,6 +35,7 @@ detekt {
         "core/src",
         "data/src",
         "network/src",
+        "ui/src",
     )
 }
 

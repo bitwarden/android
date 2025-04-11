@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.util
 
 import com.bitwarden.crypto.Kdf
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
+import com.bitwarden.network.model.PreLoginResponseJson
 
 /**
  * Convert [PreLoginResponseJson.KdfParams] to [Kdf] params for use with Bitwarden SDK.

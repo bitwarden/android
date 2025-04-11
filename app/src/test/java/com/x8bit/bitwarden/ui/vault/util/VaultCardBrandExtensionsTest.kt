@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.util
 
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.SELECT_TEXT
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import org.junit.jupiter.api.Assertions.assertEquals

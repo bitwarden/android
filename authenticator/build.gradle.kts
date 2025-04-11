@@ -154,6 +154,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":network"))
+    implementation(project(":ui"))
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -207,6 +208,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     // Pull in test fixtures from other modules.
+    testImplementation(testFixtures(project(":data")))
     testImplementation(testFixtures(project(":network")))
 
     testImplementation(libs.androidx.compose.ui.test)

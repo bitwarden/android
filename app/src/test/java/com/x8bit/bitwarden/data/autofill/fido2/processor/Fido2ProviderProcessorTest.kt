@@ -22,12 +22,13 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
-import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -35,10 +36,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -134,11 +133,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when user id is null`() {
         val request: BeginCreateCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
             every { candidateQueryData } returns Bundle()
         }
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -162,11 +157,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should invoke callback with error on password create request`() {
         val request: BeginCreatePasswordCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
             every { candidateQueryData } returns Bundle()
         }
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -187,11 +178,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when json is null or empty`() {
         val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -215,11 +202,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when user state null`() {
         val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -244,11 +227,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should invoke callback with result when user state is valid`() {
         val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -286,11 +265,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processCreateCredentialRequest should generate correct entries based on state`() {
         val request: BeginCreatePublicKeyCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
@@ -375,11 +350,7 @@ class Fido2ProviderProcessorTest {
     @Test
     fun `processGetCredentialRequest should invoke callback with error when user state is null`() {
         val request: BeginGetCredentialRequest = mockk {
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
             every {
                 beginGetCredentialOptions
             } returns listOf(
@@ -412,11 +383,7 @@ class Fido2ProviderProcessorTest {
                     every { candidateQueryData } returns Bundle()
                 },
             )
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<BeginGetCredentialResponse>()
@@ -477,11 +444,7 @@ class Fido2ProviderProcessorTest {
                     every { candidateQueryData } returns Bundle()
                 },
             )
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
@@ -508,11 +471,7 @@ class Fido2ProviderProcessorTest {
         )
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         every {
             fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
@@ -542,11 +501,7 @@ class Fido2ProviderProcessorTest {
         )
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
@@ -593,11 +548,7 @@ class Fido2ProviderProcessorTest {
         )
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns CallingAppInfo(
-                packageName = "com.x8bit.bitwarden.dev",
-                signingInfo = mockk(),
-                origin = null,
-            )
+            every { callingAppInfo } returns mockk(relaxed = true)
         }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<BeginGetCredentialResponse>()

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.vault.manager
 import android.content.Context
 import android.net.Uri
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.util.sdkAgnosticTransferTo
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult

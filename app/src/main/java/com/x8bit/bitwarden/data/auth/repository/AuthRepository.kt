@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
@@ -39,7 +39,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -439,21 +438,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Update the value of the onboarding status for the user.
      */
     fun setOnboardingStatus(status: OnboardingStatus)
-
-    /**
-     * Checks if a new device notice should be displayed.
-     */
-    fun checkUserNeedsNewDeviceTwoFactorNotice(): Boolean
-
-    /**
-     * Gets the new device notice state of active user.
-     */
-    fun getNewDeviceNoticeState(): NewDeviceNoticeState?
-
-    /**
-     * Stores the new device notice state for active user.
-     */
-    fun setNewDeviceNoticeState(newState: NewDeviceNoticeState?)
 
     /**
      * Leaves the organization that matches the given [organizationId]

@@ -4,14 +4,12 @@ import android.content.SharedPreferences
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.bitwarden.data.datasource.disk.BaseEncryptedDiskSource
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -50,7 +48,6 @@ private const val TDE_LOGIN_COMPLETE = "tdeLoginComplete"
 private const val USES_KEY_CONNECTOR = "usesKeyConnector"
 private const val ONBOARDING_STATUS_KEY = "onboardingStatus"
 private const val SHOW_IMPORT_LOGINS_KEY = "showImportLogins"
-private const val NEW_DEVICE_NOTICE_STATE = "newDeviceNoticeState"
 private const val LAST_LOCK_TIMESTAMP = "lastLockTimestamp"
 
 /**
@@ -498,22 +495,6 @@ class AuthDiskSourceImpl(
     override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
-
-    override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
-        return getString(key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId))?.let {
-            json.decodeFromStringOrNull(it)
-        } ?: NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            lastSeenDate = null,
-        )
-    }
-
-    override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
-        putString(
-            key = NEW_DEVICE_NOTICE_STATE.appendIdentifier(userId),
-            value = newState?.let { json.encodeToString(it) },
-        )
-    }
 
     override fun getLastLockTimestamp(userId: String): Instant? {
         return getLong(key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId))?.let {

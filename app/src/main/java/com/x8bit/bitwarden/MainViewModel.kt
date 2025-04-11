@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -32,8 +34,6 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -309,10 +309,10 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
-        val fido2CreateCredentialRequestData = intent.getFido2CreateCredentialRequestOrNull()
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
-        val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
+        val fido2CreateCredentialRequest = intent.getFido2CreateCredentialRequestOrNull()
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
+        val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -370,34 +370,39 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2CreateCredentialRequestData != null -> {
+            fido2CreateCredentialRequest != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CreateCredentialRequestData.isUserVerified
+                fido2CreateCredentialRequest.providerRequest
+                    .biometricPromptResult
+                    ?.isSuccessful
                     ?.let { isVerified -> fido2CredentialManager.isUserVerified = isVerified }
+
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
-                        fido2CreateCredentialRequest = fido2CreateCredentialRequestData,
+                        fido2CreateCredentialRequest = fido2CreateCredentialRequest,
                     )
 
                 // Switch accounts if the selected user is not the active user.
                 if (authRepository.activeUserId != null &&
-                    authRepository.activeUserId != fido2CreateCredentialRequestData.userId
+                    authRepository.activeUserId != fido2CreateCredentialRequest.userId
                 ) {
-                    authRepository.switchAccount(fido2CreateCredentialRequestData.userId)
+                    authRepository.switchAccount(fido2CreateCredentialRequest.userId)
                 }
             }
 
-            fido2CredentialAssertionRequest != null -> {
+            fido2AssertCredentialRequest != null -> {
                 // If device biometric verification was performed as part of single-tap
                 // authentication, set the user's verification state to the device result.
                 // Otherwise, retain the verification state as-is.
-                fido2CredentialAssertionRequest.isUserVerified
+                fido2AssertCredentialRequest.providerRequest.biometricPromptResult
+                    ?.isSuccessful
                     ?.let { isVerified -> fido2CredentialManager.isUserVerified = isVerified }
+
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(
-                        fido2AssertionRequest = fido2CredentialAssertionRequest,
+                        fido2AssertionRequest = fido2AssertCredentialRequest,
                     )
             }
 

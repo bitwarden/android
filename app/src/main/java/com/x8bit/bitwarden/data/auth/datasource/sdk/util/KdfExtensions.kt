@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk.util
 
 import com.bitwarden.crypto.Kdf
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.ARGON2_ID
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson.PBKDF2_SHA256
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KdfTypeJson.ARGON2_ID
+import com.bitwarden.network.model.KdfTypeJson.PBKDF2_SHA256
 
 /**
  * Convert a [Kdf] to a [KdfTypeJson].

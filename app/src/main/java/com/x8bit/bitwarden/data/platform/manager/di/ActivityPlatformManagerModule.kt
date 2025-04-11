@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.di
 
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

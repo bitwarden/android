@@ -1,25 +1,22 @@
 package com.x8bit.bitwarden.data.platform.repository.di
 
 import android.view.autofill.AutofillManager
-import com.bitwarden.network.service.ConfigService
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepositoryImpl
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepositoryImpl
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepositoryImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -29,7 +26,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -54,21 +50,6 @@ object PlatformRepositoryModule {
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
     )
-
-    @Provides
-    @Singleton
-    fun provideServerConfigRepository(
-        configDiskSource: ConfigDiskSource,
-        configService: ConfigService,
-        clock: Clock,
-        dispatcherManager: DispatcherManager,
-    ): ServerConfigRepository =
-        ServerConfigRepositoryImpl(
-            configDiskSource = configDiskSource,
-            configService = configService,
-            clock = clock,
-            dispatcherManager = dispatcherManager,
-        )
 
     @Provides
     @Singleton

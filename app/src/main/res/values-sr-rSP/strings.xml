@@ -773,9 +773,9 @@
   <string name="forwarded_email_alias">Прослеђен псеудоним е-поште</string>
   <string name="random_word">Случајна реч</string>
   <string name="email_required_parenthesis">Е-пошта (обавезно)</string>
-  <string name="domain_name">domain name</string>
+  <string name="domain_name">име домена</string>
   <string name="domain_name_required_parenthesis">Име домена (обавезно)</string>
-  <string name="api_key">API key</string>
+  <string name="api_key">API кључ</string>
   <string name="api_key_required_parenthesis">API кључ (обавезно)</string>
   <string name="service">Сервис</string>
   <string name="addy_io">addy.io</string>
@@ -784,7 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
-  <string name="api_access_token_required_parenthesis">API access token (required)</string>
+  <string name="api_access_token_required_parenthesis">API приступ токен (обавезно)</string>
   <string name="api_access_token">Приступни АПИ токен</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Сигурно преписати тренутно име?</string>
   <string name="generate_username">Генериши име</string>
@@ -966,7 +966,6 @@
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Ваш приступни кључ ће бити сачуван у вашем Bitwarden сефу за %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Недодељене ставке организације више нису видљиве у приказу Сви сефови и доступне су само преко Админ конзоле. Доделите ове ставке колекцији са Админ конзолом да бисте их учинили видљивим.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">16. маја 2024. недодељене ставке организације више неће бити видљиве у приказу Сви сефови и биће доступне само преко Админ конзоле. Доделите ове ставке колекцији са Админ конзолом да бисте их учинили видљивим.</string>
-  <string name="remind_me_later">Подсети ме касније</string>
   <string name="notice">Напомена</string>
   <string name="passkeys_not_supported_for_this_app">Приступни кључеви нису подржани за ову апликацију</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Операција лозинке није успела јер прегледач није привилегован</string>
@@ -1226,7 +1225,12 @@
   <string name="show_more">Прикажи више</string>
   <string name="no_folder">Нема фасцикле</string>
   <string name="show_less">Прикажи мање</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Додај поље</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Поделите детаље о грешци</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

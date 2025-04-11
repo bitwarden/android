@@ -1,14 +1,12 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
@@ -65,7 +63,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
-    private val storedNewDeviceNoticeState = mutableMapOf<String, NewDeviceNoticeState?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
 
     override var userState: UserStateJson? = null
@@ -313,17 +310,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
 
-    override fun getNewDeviceNoticeState(userId: String): NewDeviceNoticeState {
-        return storedNewDeviceNoticeState[userId] ?: NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            lastSeenDate = null,
-        )
-    }
-
-    override fun storeNewDeviceNoticeState(userId: String, newState: NewDeviceNoticeState?) {
-        storedNewDeviceNoticeState[userId] = newState
-    }
-
     override fun getLastLockTimestamp(userId: String): Instant? {
         return storedLastLockTimestampState[userId]
     }
@@ -483,7 +469,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
-     * Assert that the [lastLockTimestamp] was stored successfully using the [userId].
+     * Assert that the last lock timestamp was stored successfully using the [userId].
      */
     fun assertLastLockTimestamp(userId: String, expectedValue: Instant?) {
         assertEquals(expectedValue, storedLastLockTimestampState[userId])

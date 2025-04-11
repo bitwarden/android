@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 
 /**

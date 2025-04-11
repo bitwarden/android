@@ -480,7 +480,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="unlock">Desbloquear</string>
   <string name="unlock_vault">Desbloquear cofre</string>
   <string name="thirty_minutes">30 minutos</string>
-  <string name="set_pin_description">Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redefinidas se alguma vez terminar sessão por completo da aplicação.</string>
+  <string name="set_pin_description">O seu PIN tem de ter, pelo menos, 4 caracteres. As suas definições de PIN serão repostas se alguma vez terminar completamente a sessão na aplicação.</string>
   <string name="logged_in_as_on">Sessão iniciada como %1$s em %2$s.</string>
   <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua palavra-passe mestra para continuar.</string>
   <string name="vault_locked_pin">O seu cofre está bloqueado. Verifique o seu código PIN para continuar.</string>
@@ -965,7 +965,6 @@ Pretende mudar para esta conta?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A sua chave de acesso para %1$s será guardada no seu cofre Bitwarden</string>
   <string name="organization_unassigned_items_message_useu_description_long">Os itens da organização não atribuídos já não são visíveis na vista Todos os cofres e só são acessíveis através da consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">A 16 de maio de 2024, os itens da organização não atribuídos deixarão de estar visíveis na vista Todos os cofres e só estarão acessíveis através da Consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</string>
-  <string name="remind_me_later">Lembrar-me mais tarde</string>
   <string name="notice">Aviso</string>
   <string name="passkeys_not_supported_for_this_app">Chaves de acesso não suportadas por esta app</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">A operação da chave de acesso falhou porque o navegador não tem privilégios</string>
@@ -1229,4 +1228,9 @@ Pretende mudar para esta conta?</string>
   <string name="add_field">Adicionar campo</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Partilhar detalhes do erro</string>
+  <string name="flight_recorder">Gravador de voo</string>
+  <string name="flight_recorder_help">Ajuda com o gravador de voo</string>
+  <string name="view_recorded_logs">Ver os registos gravados</string>
+  <string name="enable_flight_recorder_title">Ativar o gravador de voo</string>
+  <string name="recorded_logs_title">Registos gravados</string>
 </resources>

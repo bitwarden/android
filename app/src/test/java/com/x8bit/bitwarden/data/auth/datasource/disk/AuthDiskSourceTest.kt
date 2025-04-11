@@ -4,23 +4,21 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.di.CoreModule
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeDisplayStatus
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.NewDeviceNoticeState
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -1276,64 +1274,6 @@ class AuthDiskSourceTest {
             authDiskSource.storeShowImportLogins(userId = mockUserId, true)
             assertTrue(awaitItem() ?: false)
         }
-    }
-
-    @Test
-    fun `getNewDeviceNoticeState should pull from SharedPreferences`() {
-        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
-        val mockUserId = "mockUserId"
-        val expectedState = NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
-        )
-        fakeSharedPreferences.edit {
-            putString(
-                "${storeKey}_$mockUserId",
-                json.encodeToString(expectedState),
-            )
-        }
-        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
-        assertEquals(
-            expectedState,
-            actual,
-        )
-    }
-
-    @Test
-    fun `getNewDeviceNoticeState should pull default from SharedPreferences if no user is found`() {
-        val mockUserId = "mockUserId"
-        val defaultState = NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_NOT_SEEN,
-            lastSeenDate = null,
-        )
-        val actual = authDiskSource.getNewDeviceNoticeState(userId = mockUserId)
-        assertEquals(
-            defaultState,
-            actual,
-        )
-    }
-
-    @Test
-    fun `setNewDeviceNoticeState should update SharedPreferences`() {
-        val storeKey = "bwPreferencesStorage:newDeviceNoticeState"
-        val mockUserId = "mockUserId"
-        val mockStatus = NewDeviceNoticeState(
-            displayStatus = NewDeviceNoticeDisplayStatus.HAS_SEEN,
-            lastSeenDate = ZonedDateTime.parse("2024-12-25T01:00:00.00Z"),
-        )
-        authDiskSource.storeNewDeviceNoticeState(
-            userId = mockUserId,
-            mockStatus,
-        )
-
-        val actual = fakeSharedPreferences.getString(
-            "${storeKey}_$mockUserId",
-            null,
-        )
-        assertEquals(
-            json.encodeToString(mockStatus),
-            actual,
-        )
     }
 
     @Test

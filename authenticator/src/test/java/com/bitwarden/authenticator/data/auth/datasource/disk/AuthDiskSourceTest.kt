@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.auth.datasource.disk
 
-import com.bitwarden.authenticator.data.platform.base.FakeSharedPreferences
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue

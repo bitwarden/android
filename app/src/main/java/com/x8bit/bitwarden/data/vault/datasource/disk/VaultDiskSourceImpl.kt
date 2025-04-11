@@ -2,7 +2,8 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringWithErrorCallback
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.DomainsDao
@@ -13,7 +14,6 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

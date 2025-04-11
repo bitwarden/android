@@ -4,10 +4,9 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
-import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSourceImpl
+import com.bitwarden.data.datasource.disk.di.EncryptedPreferences
+import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -27,7 +26,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStor
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigratorImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
@@ -53,17 +51,6 @@ object PlatformDiskModule {
         json: Json,
     ): EnvironmentDiskSource =
         EnvironmentDiskSourceImpl(
-            sharedPreferences = sharedPreferences,
-            json = json,
-        )
-
-    @Provides
-    @Singleton
-    fun provideConfigDiskSource(
-        @UnencryptedPreferences sharedPreferences: SharedPreferences,
-        json: Json,
-    ): ConfigDiskSource =
-        ConfigDiskSourceImpl(
             sharedPreferences = sharedPreferences,
             json = json,
         )

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
+import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_BEARER_PREFIX
 import okhttp3.Interceptor
 import okhttp3.Response

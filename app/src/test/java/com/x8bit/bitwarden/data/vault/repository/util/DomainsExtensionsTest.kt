@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

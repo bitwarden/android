@@ -87,6 +87,7 @@ jobs:
             core/build/reports/tests/
             data/build/reports/tests/
             network/build/reports/tests/
+            ui/build/reports/tests/
 
       - name: Upload to codecov.io
         id: upload-to-codecov

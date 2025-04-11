@@ -2,7 +2,13 @@ package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
 import com.bitwarden.core.di.CoreModule
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockCipher
+import com.bitwarden.network.model.createMockCollection
+import com.bitwarden.network.model.createMockDomains
+import com.bitwarden.network.model.createMockFolder
+import com.bitwarden.network.model.createMockSend
 import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCollectionsDao
@@ -14,12 +20,6 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.CollectionEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.FolderEntity
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import kotlinx.coroutines.CoroutineScope

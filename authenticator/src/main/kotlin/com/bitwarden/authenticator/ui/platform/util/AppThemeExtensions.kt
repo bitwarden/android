@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.ui.platform.util
 
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 
 /**

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.model
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * Represents the icons displayed after the cipher name.

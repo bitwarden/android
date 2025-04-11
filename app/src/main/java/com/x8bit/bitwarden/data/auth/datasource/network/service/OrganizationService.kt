@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
+import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
 /**
  * Provides an API for querying organization endpoints.

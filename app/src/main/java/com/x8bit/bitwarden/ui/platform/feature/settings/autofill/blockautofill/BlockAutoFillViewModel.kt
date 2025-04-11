@@ -4,9 +4,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.isValidPattern
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.util.validateUri
 import dagger.hilt.android.lifecycle.HiltViewModel

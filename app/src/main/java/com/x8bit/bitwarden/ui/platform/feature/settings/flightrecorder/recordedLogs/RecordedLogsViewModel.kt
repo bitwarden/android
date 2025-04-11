@@ -15,7 +15,10 @@ class RecordedLogsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<RecordedLogsState, RecordedLogsEvent, RecordedLogsAction>(
     // We load the state from the savedStateHandle for testing purposes.
-    initialState = savedStateHandle[KEY_STATE] ?: RecordedLogsState,
+    initialState = savedStateHandle[KEY_STATE]
+        ?: RecordedLogsState(
+            viewState = RecordedLogsState.ViewState.Loading,
+        ),
 ) {
     override fun handleAction(action: RecordedLogsAction) {
         when (action) {
@@ -31,7 +34,29 @@ class RecordedLogsViewModel @Inject constructor(
 /**
  * Models the UI state for the recorded logs screen.
  */
-data object RecordedLogsState
+data class RecordedLogsState(
+    val viewState: ViewState,
+) {
+    /**
+     * View states for the [RecordedLogsViewModel].
+     */
+    sealed class ViewState {
+        /**
+         * Represents the loading state for the [RecordedLogsViewModel].
+         */
+        data object Loading : ViewState()
+
+        /**
+         * Represents the empty state for the [RecordedLogsViewModel].
+         */
+        data object Empty : ViewState()
+
+        /**
+         * Represents the content state for the [RecordedLogsViewModel].
+         */
+        data object Content : ViewState()
+    }
+}
 
 /**
  * Models events for the recorded logs screen.

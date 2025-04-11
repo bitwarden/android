@@ -55,4 +55,5 @@ include(
     ":core",
     ":data",
     ":network",
+    ":ui",
 )

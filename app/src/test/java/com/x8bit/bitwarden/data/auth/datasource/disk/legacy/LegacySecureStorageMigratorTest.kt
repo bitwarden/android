@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.legacy
 
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorage
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigratorImpl
 import org.junit.jupiter.api.Assertions.assertEquals

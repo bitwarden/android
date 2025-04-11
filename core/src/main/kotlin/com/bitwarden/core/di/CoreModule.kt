@@ -8,6 +8,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -35,4 +36,8 @@ object CoreModule {
         // Respect model default property values.
         coerceInputValues = true
     }
+
+    @Provides
+    @Singleton
+    fun provideClock(): Clock = Clock.systemDefaultZone()
 }

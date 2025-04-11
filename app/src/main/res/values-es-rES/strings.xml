@@ -967,7 +967,6 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Tu clave de acceso se guardará en tu caja fuerte de Bitwarden para %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Los elementos de organización sin asignar ya no están visibles en la vista Todas las cajas fuertes y solo se puede acceder a ellos a través de la consola de administrador. Asigne estos elementos a una colección desde la Consola de Administrador para hacerlos visibles.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">El 16 de mayo de 2024, los elementos de organización no asignados ya no serán visibles en la vista Todas las cajas fuertes y solo serán accesibles a través de la Consola de Administrador. Asigna estos objetos a una colección desde la Consola de Administrador para hacerlos visibles.</string>
-  <string name="remind_me_later">Recuérdamelo más tarde</string>
   <string name="notice">Aviso</string>
   <string name="passkeys_not_supported_for_this_app">Claves de acceso no soportadas para esta aplicación</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Falló la operación de la clave de acceso porque el navegador no tiene privilegios</string>
@@ -1230,4 +1229,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="add_field">Add field</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

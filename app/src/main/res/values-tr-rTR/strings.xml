@@ -965,7 +965,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s için geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
   <string name="organization_unassigned_items_message_useu_description_long">.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long"></string>
-  <string name="remind_me_later">Daha sonra hatırlat</string>
   <string name="notice">Dikkat</string>
   <string name="passkeys_not_supported_for_this_app">Bu uygulamada geçiş anahtarları desteklenmiyor</string>
   <string name="passkey_operation_failed_because_browser_is_not_privileged">Geçiş anahtarı eylemi başarısız oldu çünkü tarayıcı ayrıcalıklı değil</string>
@@ -1228,4 +1227,9 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="add_field">Alan ekle</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Share error details</string>
+  <string name="flight_recorder">Flight recorder</string>
+  <string name="flight_recorder_help">Flight recorder help</string>
+  <string name="view_recorded_logs">View recorded logs</string>
+  <string name="enable_flight_recorder_title">Enable flight recorder</string>
+  <string name="recorded_logs_title">Recorded logs</string>
 </resources>

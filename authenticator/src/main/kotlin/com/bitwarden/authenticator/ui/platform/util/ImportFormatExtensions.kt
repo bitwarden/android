@@ -2,8 +2,8 @@ package com.bitwarden.authenticator.ui.platform.util
 
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.ui.platform.base.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  *  Provides a human-readable label for the export format.

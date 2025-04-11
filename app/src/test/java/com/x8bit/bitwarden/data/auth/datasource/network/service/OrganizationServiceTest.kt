@@ -2,12 +2,12 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.AuthenticatedOrganizationApi
+import com.bitwarden.network.api.UnauthenticatedOrganizationApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
+import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
-import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse
+import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals

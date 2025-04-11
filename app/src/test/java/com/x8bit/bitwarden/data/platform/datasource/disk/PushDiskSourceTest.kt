@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
 import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
 import org.junit.jupiter.api.Assertions.assertEquals

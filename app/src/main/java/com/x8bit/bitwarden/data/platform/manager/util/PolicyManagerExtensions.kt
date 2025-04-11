@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import com.bitwarden.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

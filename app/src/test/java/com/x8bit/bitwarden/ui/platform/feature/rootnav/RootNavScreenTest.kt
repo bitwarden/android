@@ -250,17 +250,6 @@ class RootNavScreenTest : BaseComposeTest() {
                 navOptions = expectedNavOptions,
             )
         }
-
-        // Make sure navigating to new device two factor works as expected:
-        rootNavStateFlow.value = RootNavState.NewDeviceTwoFactorNotice(
-            email = "example@bitwarden.com",
-        )
-        composeTestRule.runOnIdle {
-            fakeNavHostController.assertLastNavigation(
-                route = "new_device_notice/example@bitwarden.com",
-                navOptions = expectedNavOptions,
-            )
-        }
     }
 }
 

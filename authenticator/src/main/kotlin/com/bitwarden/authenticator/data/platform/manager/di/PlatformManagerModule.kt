@@ -10,8 +10,6 @@ import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManage
 import com.bitwarden.authenticator.data.platform.manager.CrashLogsManager
 import com.bitwarden.authenticator.data.platform.manager.CrashLogsManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.DebugMenuFeatureFlagManagerImpl
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
-import com.bitwarden.authenticator.data.platform.manager.DispatcherManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManager
 import com.bitwarden.authenticator.data.platform.manager.FeatureFlagManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
@@ -21,14 +19,15 @@ import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClip
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
 import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.DebugMenuRepository
-import com.bitwarden.authenticator.data.platform.repository.ServerConfigRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.data.repository.ServerConfigRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -51,10 +50,6 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideSdkClientManager(): SdkClientManager = SdkClientManagerImpl()
-
-    @Provides
-    @Singleton
-    fun provideClock(): Clock = Clock.systemDefaultZone()
 
     @Provides
     @Singleton
