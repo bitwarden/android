@@ -176,14 +176,30 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `webAuthResultFlow update with failure should display error dialog`() {
+    fun `webAuthResultFlow failure without message should display generic error dialog`() {
         val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
         val viewModel = createViewModel(state = initialState)
-        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure)
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure(message = null))
         assertEquals(
             initialState.copy(
                 dialogState = TwoFactorLoginState.DialogState.Error(
                     message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `webAuthResultFlow failure with message should display error dialog with message`() {
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
+        val viewModel = createViewModel(state = initialState)
+        val errorMessage = "An error"
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure(message = errorMessage))
+        assertEquals(
+            initialState.copy(
+                dialogState = TwoFactorLoginState.DialogState.Error(
+                    message = errorMessage.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

@@ -773,9 +773,9 @@
   <string name="forwarded_email_alias">Псевдонім е-пошти для пересилання</string>
   <string name="random_word">Випадкове слово</string>
   <string name="email_required_parenthesis">Е-пошти (обов\'язково)</string>
-  <string name="domain_name">domain name</string>
+  <string name="domain_name">доменне ім\'я</string>
   <string name="domain_name_required_parenthesis">Ім\'я домену (обов\'язково)</string>
-  <string name="api_key">API key</string>
+  <string name="api_key">Ключ API</string>
   <string name="api_key_required_parenthesis">Ключ API (обов\'язково)</string>
   <string name="service">Послуга</string>
   <string name="addy_io">addy.io</string>
@@ -784,7 +784,7 @@
   <string name="duck_duck_go">DuckDuckGo</string>
   <string name="fastmail">Fastmail</string>
   <string name="forward_email">ForwardEmail</string>
-  <string name="api_access_token_required_parenthesis">API access token (required)</string>
+  <string name="api_access_token_required_parenthesis">Токен доступу до API (обов\'язково)</string>
   <string name="api_access_token">Токен доступу до API</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Ви дійсно бажаєте перезаписати поточне ім\'я користувача?</string>
   <string name="generate_username">Генерувати ім\'я користувача</string>
@@ -1005,7 +1005,7 @@
   <string name="welcome_message_2">Налаштуйте біометричне розблокування та автозаповнення, щоб миттєво входити в облікові записи.</string>
   <string name="quick_and_easy_login">Швидкий і легкий вхід</string>
   <string name="level_up_your_logins">Вдоскональте свої паролі</string>
-  <string name="welcome_message_3">Використовуйте генератор для створення та збереження надійних, унікальних паролів для всіх облікових записів.</string>
+  <string name="welcome_message_3">Використовуйте генератор, щоб створювати й зберігати надійні, унікальні паролі для всіх облікових записів.</string>
   <string name="your_data_when_and_where_you_need_it">Ваші дані завжди з вами</string>
   <string name="welcome_message_4">Зберігайте скільки завгодно паролів на необмеженій кількості пристроїв, використовуючи Bitwarden для мобільних пристроїв, браузерів та комп\'ютерів.</string>
   <string name="remove_passkey">Вилучити ключ доступу</string>
@@ -1138,17 +1138,10 @@
   <string name="copy_email">Копіювати е-пошту</string>
   <string name="copy_phone">Копіювати номер телефону</string>
   <string name="copy_address">Копіювати адресу</string>
-  <string name="important_notice">Важлива інформація</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden надсилатиме код підтвердження на електронну пошту вашого облікового запису під час входу з нових пристроїв, починаючи з лютого 2025 року.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Ви маєте постійний доступ до своєї електронної пошти <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
-  <string name="yes_i_can_reliably_access_my_email">Так, я маю постійний доступ до своєї електронної пошти</string>
   <string name="biometrics_no_longer_supported_title">Цей пристрій більше не підтримує біометрію</string>
   <string name="biometrics_no_longer_supported">Ви вийшли з системи, оскільки біометрія вашого пристрою не відповідає найновішим вимогам щодо безпеки. Щоб оновити налаштування, увійдіть знову або зверніться до свого адміністратора.</string>
   <string name="cxp_import">Імпорт CXP</string>
   <string name="cxp_export">Експорт CXP</string>
-  <string name="set_up_two_step_login">Налаштувати двоетапну перевірку</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Ви можете налаштувати двоетапну перевірку як альтернативний спосіб захисту свого облікового запису, або змінити електронну пошту на таку, до якої ви маєте доступ.</string>
-  <string name="turn_on_two_step_login">Увімкнути двоетапну перевірку</string>
   <string name="change_account_email">Змінити адресу е-пошти</string>
   <string name="choose_three_or_four_random_words">Оберіть три або чотири випадкові слова</string>
   <string name="pick_three_or_four_random_unrelated_words">Вигадайте три або чотири випадкові, не пов\'язані між собою слова, які ви легко запам\'ятаєте. Подумайте про <annotation emphasis="bold">об\'єкти, місця або улюблені речі</annotation>.</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">Не вдається перевірити сертифікат сервера. Можливо, налаштування ланцюжка сертифікатів, проксі вашого пристрою, або вашого сервера Bitwarden неправильні.</string>
   <string name="review_flow_launched">Розпочато процес відгуку!</string>
   <string name="copy_private_key">Копіювати закритий ключ</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Ви можете змінити електронну пошту у вебпрограмі Bitwarden.</string>
   <string name="login_credentials">Облікові дані для входу</string>
   <string name="autofill_options">Параметри автозаповнення</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Використовуйте цю кнопку, щоб згенерувати новий унікальний пароль.</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Використання сертифіката системи є менш захищеним, ніж зберігання сертифіката з Bitwarden. Якщо продовжити, буде показано список доступних системних сертифікатів, якщо вони вже встановлені.</string>
   <string name="certificate_alias_already_exists">Псевдонім сертифіката вже існує</string>
   <string name="link">Посилання</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Не вдалося виконати операцію з ключем доступу, оскільки програма має некоректний підпис.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Не вдалося виконати операцію з ключем доступу, оскільки в запиті відсутня URL-адреса вузла.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Не вдалося виконати операцію з ключем доступу, оскільки підпис програми недійсний.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Не вдалося зареєструвати ключ доступу через внутрішню помилку.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Не вдалося виконати операцію з ключем доступу, тому що неможливо ідентифікувати відповідну сторону.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Збій автентифікації з ключем доступу через внутрішню помилку.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Не вдалося виконати операцію з ключем доступу, тому що вибраний елемент не існує.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Не вдалося виконати операцію з ключем доступу, тому що користувача заблоковано.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Не вдалося виконати операцію з ключем доступу через скасування перевірки користувача.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Не вдалося виконати операцію з ключем доступу, оскільки запит недійсний.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Не вдалося виконати операцію з ключем доступу через перевищення спроб перевірки користувача.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Не вдалося виконати операцію з ключем доступу, тому що не вибрано жодного елемента.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Не вдалося виконати операцію з ключем доступу, оскільки запит не підтримується.</string>
   <string name="self_host_server_url">URL-адреса власного сервера</string>
   <string name="use_chrome_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Використовувати інтеграцію автозаповнення з Chrome (бета-версія)</string>
@@ -1228,9 +1219,22 @@
   <string name="add_field">Додати поле</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Поширити подробиці про помилку</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Чорна скринька</string>
+  <string name="flight_recorder_help">Довідка щодо чорної скриньки</string>
+  <string name="view_recorded_logs">Перегляд записаних подій</string>
+  <string name="enable_flight_recorder_title">Увімкнути чорну скриньку</string>
+  <string name="recorded_logs_title">Записані події</string>
+  <string name="no_logs_recorded">Немає записаних подій</string>
+  <string name="experiencing_an_issue">Виникли проблеми?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Увімкніть тимчасовий запис подій, щоб вивчити їх локально. Можуть записуватись дані про стан програм і мережеві виклики. Конфіденційна інформація сховища ніколи не записується.</string>
+  <string name="to_get_started_set_a_logging_duration">Для початку встановіть тривалість запису. 
+Запис автоматично вимкнеться після вказаного періоду, забезпечивши час на виявлення дій,
+що могли спричинити проблеми.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Записи автоматично видаляться через 30 днів. Bitwarden може отримати до них доступ лише якщо ви ними поділитесь.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Щоб дізнатися про те, які дані записуються, відвідайте\n<annotation link="helpCenter">Довідковий центр Bitwarden.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

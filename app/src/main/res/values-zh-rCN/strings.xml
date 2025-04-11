@@ -122,9 +122,9 @@
   <string name="extension_in_safari">在 Safari 中，使用共享图标寻找 Bitwarden （提示：在菜单最下面一行的右边）。</string>
   <string name="extension_instant_access">立即访问您的密码！</string>
   <string name="extension_ready">您已经准备好登录了！</string>
-  <string name="extension_setup">您现在可以在 Safari、Chrome 以及其他支持的 App 中方便地访问您的登录信息。</string>
+  <string name="extension_setup">现在，您可以从 Safari、Chrome 以及其他支持的 App 中方便地访问您的登录了。</string>
   <string name="extension_setup2">在 Safari 和 Chrome 中，使用共享图标寻找 Bitwarden（提示：在菜单最下面一行的右边）。</string>
-  <string name="extension_tap_icon">在菜单中点击 Bitwarden 图标来启动扩展。</string>
+  <string name="extension_tap_icon">点击菜单中的 Bitwarden 图标以启动此扩展。</string>
   <string name="extension_turn_on">要在 Safari 和其他 App 中打开 Bitwarden ，请在菜单底部点击「更多」图标。</string>
   <string name="favorite">收藏</string>
   <string name="unfavorite">取消收藏</string>
@@ -739,7 +739,7 @@
   <string name="setup_totp">设置 TOTP</string>
   <string name="set_up_authenticator_key">设置验证器密钥</string>
   <string name="once_the_key_is_successfully_entered">成功输入密钥后，
-选择「添加 TOTP」即可安全地存储密钥</string>
+选择「添加 TOTP」以安全地存储此密钥</string>
   <string name="never_lock_warning">将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</string>
   <string name="environment_page_urls_error">输入的一个或多个 URL 无效。请修改后再次尝试保存。</string>
   <string name="generic_error_message">我们无法处理您的请求。请重试或联系我们。</string>
@@ -875,7 +875,7 @@
   <string name="trouble_logging_in">登录遇到问题吗？</string>
   <string name="logging_in_as_x">正登录为 %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">密码库超时动作已更改为注销</string>
-  <string name="block_auto_fill">阻止自动填充</string>
+  <string name="block_auto_fill">屏蔽自动填充</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">不会为这些 URI 提供自动填充。</string>
   <string name="new_blocked_uri">新增屏蔽的 URI</string>
   <string name="uri_saved">URI 已保存</string>
@@ -988,7 +988,7 @@
   <string name="create_account_on_with_colon">创建账户至：</string>
   <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">按照发送到 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 的电子邮件中的说明继续创建您的账户。</string>
   <string name="we_sent_an_email_to">我们向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 发送了一封电子邮件。</string>
-  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意<annotation link="termsOfService">服务条款</annotation>和<annotation link="privacyPolicy">隐私政策</annotation>。</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
   <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">激活此开关，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
   <string name="set_password">设置密码</string>
   <string name="unsubscribe">取消订阅</string>
@@ -996,9 +996,9 @@
   <string name="open_email_app">打开电子邮箱 App</string>
   <string name="go_back">返回</string>
   <string name="email_verified">电子邮箱已验证</string>
-  <string name="no_email_go_back_to_edit_your_email_address">没收到电子邮件吗？请<annotation link="goBack">返回</annotation>修改您的电子邮箱地址。</string>
-  <string name="or_log_in_you_may_already_have_an_account">或者如果您已经有一个账户，请<annotation link="logIn">登录</annotation>。</string>
-  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时<annotation link="unsubscribe">取消订阅</annotation>。</string>
+  <string name="no_email_go_back_to_edit_your_email_address">没收到电子邮件吗？请 <annotation link="goBack">返回</annotation> 修改您的电子邮箱地址。</string>
+  <string name="or_log_in_you_may_already_have_an_account">或者如果您已经有一个账户，请 <annotation link="logIn">登录</annotation>。</string>
+  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时 <annotation link="unsubscribe">取消订阅</annotation>。</string>
   <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">获取来自 Bitwarden 的建议、公告和调研电子邮件。随时取消订阅。</string>
   <string name="security_prioritized">以安全为首要</string>
   <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
@@ -1027,7 +1027,7 @@
   <string name="confirm">确认</string>
   <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">设置生物识别或选择一个 PIN 码，以快速访问您的密码库并自动填充您的登录信息。</string>
   <string name="never_lose_access_to_your_vault">千万不要失去对密码库的访问权限</string>
-  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">确保您始终可以访问密码库的最佳方法是从一开始就设置好保护措施。</string>
+  <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">确保您始终可以访问您的密码库的最佳方法就是从一开始就设置好安全防护措施。</string>
   <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">创建安全且难忘的密码的最佳方法之一是使用密码短语。\n具体方法如下：</string>
   <string name="create_a_hint">创建提示</string>
   <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">当您请求时，提示将通过电子邮件发送给您。</string>
@@ -1080,17 +1080,17 @@
   <string name="do_you_have_a_computer_available">您是否有可用的计算机？</string>
   <string name="the_following_instructions_will_guide_you_through_importing_logins">以下说明将指导您从台式或笔记本计算机导入登录信息</string>
   <string name="import_logins">导入登录信息</string>
-  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">按照以下说明，从您的计算机上导出您的浏览器或其他密码管理器保存的密码。然后安全地导入到 Bitwarden。</string>
+  <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">在您的计算机上，按照以下说明从浏览器或其他密码管理器中导出已保存的密码。然后，将它们安全地导入到 Bitwarden。</string>
   <string name="give_your_vault_a_head_start">给您的密码库一个领先的开端</string>
   <string name="class_3_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其可能与本设备上的所有生物识别选项不兼容。</string>
   <string name="class_2_biometrics_description">使用生物识别解锁需要强大的生物识别身份验证，其与本设备上提供的生物识别选项不兼容。</string>
   <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">在您的计算机上，<annotation emphasis="bold">登录到当前浏览器或密码管理器</annotation>。</string>
   <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">导出您的密码</annotation>。此选项通常可以在设置中找到。</string>
-  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">在网页 App 中<annotation emphasis="bold">选择「导入数据」</annotation>，点后点击「完成」以完成同步。</string>
+  <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing">在网页 App 中<annotation emphasis="bold">选择「导入数据」</annotation>，点后点击下方的「完成」以完成同步。</string>
   <string name="step_1_of_3">步骤 1 / 3</string>
-  <string name="export_your_saved_logins">导出已保存的登录信息</string>
+  <string name="export_your_saved_logins">导出保存的登录信息</string>
   <string name="delete_this_file_after_import_is_complete">导入完成后您应该删除此文件。</string>
-  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">在您的计算机上，打开一个新的浏览器标签页然后<annotation emphasis="bold">访问 <annotation arg="0">%1$s</annotation></annotation></string>
+  <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">在您的计算机上，打开一个新的浏览器标签页然后<annotation emphasis="bold">访问 <annotation arg="0">%1$s</annotation></annotation>。</string>
   <string name="log_in_to_the_bitwarden_web_app">登录到 Bitwarden 网页 App。</string>
   <string name="step_2_of_3">步骤 2 / 3</string>
   <string name="log_in_to_bitwarden">登录到 Bitwarden</string>
@@ -1099,7 +1099,7 @@
   <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">在 Bitwarden 导航中，<annotation emphasis="bold">找到「工具」</annotation>选项然后<annotation emphasis="bold">选择「导入数据」</annotation>。</string>
   <string name="fill_out_the_form_and_import_your_saved_password_file">填写表单然后<annotation emphasis="bold">导入已保存的密码文件</annotation>。</string>
   <string name="for_your_security_be_sure_to_delete_your_saved_password_file">为了您的安全，请务必<annotation emphasis="bold">删除已保存的密码文件</annotation>。</string>
-  <string name="need_help_check_out_import_help">需要帮助吗？请查看<annotation link="importHelp">导入帮助</annotation>。</string>
+  <string name="need_help_check_out_import_help">需要帮助吗？请查看 <annotation link="importHelp">导入帮助</annotation>。</string>
   <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">保存导出的文件</annotation>到计算机上您可以轻松找到的某个位置。</string>
   <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">这是一个无法识别的 Bitwarden 服务器。您可能需要向您的提供商查询或更新您的服务器。</string>
   <string name="syncing_logins_loading_message">正在同步登录信息...</string>
@@ -1138,17 +1138,10 @@
   <string name="copy_email">复制电子邮箱</string>
   <string name="copy_phone">复制电话号码</string>
   <string name="copy_address">复制地址</string>
-  <string name="important_notice">重要通知</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">从 2025 年 02 月起，当有来自新设备的登录时，Bitwarden 将向您的账户电子邮箱发送验证码。</string>
-  <string name="do_you_have_reliable_access_to_your_email">您能正常访问您的电子邮箱 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 吗？</string>
-  <string name="yes_i_can_reliably_access_my_email">是的，我可以正常访问我的电子邮箱</string>
   <string name="biometrics_no_longer_supported_title">该设备不再支持生物识别</string>
   <string name="biometrics_no_longer_supported">由于您设备的生物识别不符合最新的安全要求，您已被注销。要更新设置，请重新登录或联系管理员获取访问权限。</string>
   <string name="cxp_import">CXP 导入</string>
   <string name="cxp_export">CXP 导出</string>
-  <string name="set_up_two_step_login">设置两步登录</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">您可以设置两步登录作为保护账户的替代方法，或将您的电子邮箱更改为您可以访问的电子邮箱。</string>
-  <string name="turn_on_two_step_login">启用两步登录</string>
   <string name="change_account_email">更改账户电子邮箱</string>
   <string name="choose_three_or_four_random_words">选择三到四个随机单词</string>
   <string name="pick_three_or_four_random_unrelated_words">挑选三到四个您容易记住的随机的、不相关的单词。想想您喜欢的<annotation emphasis="bold">物品、地点或事物</annotation>。</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">我们无法验证服务器的证书。您的设备或 Bitwarden 服务器上的证书链或代理设置可能未正确设置。</string>
   <string name="review_flow_launched">审查流程已发起！</string>
   <string name="copy_private_key">复制私钥</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 网页 App 上更改您的账户电子邮箱。</string>
   <string name="login_credentials">登录凭据</string>
   <string name="autofill_options">自动填充选项</string>
   <string name="use_this_button_to_generate_a_new_unique_password">使用此按钮生成新的唯一密码。</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">使用系统证书不如 Bitwarden 中存储的证书安全。如果已经安装了系统证书，接下来将显示可用的系统证书列表。</string>
   <string name="certificate_alias_already_exists">证书别名已存在</string>
   <string name="link">链接</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">由于 App 签名错误，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">由于请求中不存在主机 URL，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">由于 App 签名无效，通行密钥操作失败。</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">由于内部错误，通行密钥注册失败。</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">由于无法识别依赖方，通行密钥操作失败。</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">由于内部错误，通行密钥身份验证失败。</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">由于所选项目不存在，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">由于用户被锁定，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">由于用户验证被取消，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">由于请求无效，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">由于用户验证尝试超时，通行密钥操作失败。</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">由于没有选择任何项目，通行密钥操作失败。</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">由于请求不受支持，通行密钥操作失败。</string>
   <string name="self_host_server_url">自托管服务器 URL</string>
   <string name="use_chrome_autofill_integration">使用 Chrome 自动填充集成</string>
   <string name="use_chrome_beta_autofill_integration">使用 Chrome 自动填充集成 (Beta)</string>
@@ -1228,9 +1219,20 @@
   <string name="add_field">添加字段</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">分享错误详细信息</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">飞行记录器</string>
+  <string name="flight_recorder_help">飞行记录器帮助</string>
+  <string name="view_recorded_logs">查看记录的日志</string>
+  <string name="enable_flight_recorder_title">启用飞行记录器</string>
+  <string name="recorded_logs_title">记录的日志</string>
+  <string name="no_logs_recorded">没有日志被记录</string>
+  <string name="experiencing_an_issue">遇到问题了吗？</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">启用临时日志记录，以在本地收集和检查日志。启用后，可能会记录应用程序状态和网络调用，但绝不会记录敏感的密码库信息。</string>
+  <string name="to_get_started_set_a_logging_duration">要开始使用，请设置日志记录持续时间。日志记录将在该时间段后自动关闭，方便您在复现问题时捕获相关活动。</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">日志将在 30 天后自动删除。只有当您共享它时，Bitwarden 才能访问您的日志数据。</string>
+  <string name="for_details_on_what_is_and_isnt_logged">要了解哪些内容会被记录、哪些不会被记录，请访问\n<annotation link="helpCenter">Bitwarden 帮助中心</annotation>。</string>
+  <string name="logging_duration">日志记录持续时间</string>
+  <string name="flight_recorder_one_hour">1 小时</string>
+  <string name="flight_recorder_eight_hours">8 小时</string>
+  <string name="flight_recorder_twenty_four_hours">24 小时</string>
+  <string name="flight_recorder_one_week">1 周</string>
 </resources>

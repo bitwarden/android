@@ -1137,17 +1137,10 @@ Chcete se přepnout na tento účet?</string>
   <string name="copy_email">Kopírovat e-mail</string>
   <string name="copy_phone">Kopírovat telefonní číslo</string>
   <string name="copy_address">Kopírovat adresu</string>
-  <string name="important_notice">Důležité upozornění</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden odešle kód na e-mail Vašeho účtu pro ověření přihlášení z nových zařízení počínaje únorem 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Máte spolehlivý přístup ke svému e-mailu <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Ano, ke svému e-mailu mám přístup</string>
   <string name="biometrics_no_longer_supported_title">Biometrika již není v tomto zařízení podporována</string>
   <string name="biometrics_no_longer_supported">Byli jste odhlášeni, protože biometrika Vašeho zařízení nesplňuje nejnovější bezpečnostní požadavky. Chcete-li aktualizovat nastavení, přihlaste se znovu nebo kontaktujte správce pro přístup.</string>
   <string name="cxp_import">Import CXP</string>
   <string name="cxp_export">Exportovat CXP</string>
-  <string name="set_up_two_step_login">Nastavit dvoufázové přihlášení</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Dvoufázové přihlášení můžete nastavit jako alternativní způsob ochrany Vašeho účtu nebo změnit svůj e-mail na ten, k němuž můžete přistupovat.</string>
-  <string name="turn_on_two_step_login">Zapnout dvoufázové přihlášení</string>
   <string name="change_account_email">Změnit e-mail účtu</string>
   <string name="choose_three_or_four_random_words">Vyberte tři nebo čtyři náhodná slova</string>
   <string name="pick_three_or_four_random_unrelated_words">Vyberte tři nebo čtyři náhodná slova, která si snadno pamatujete. Vzpomeňte si na <annotation emphasis="bold">objekty, místa nebo věci,</annotation> které se Vám líbí.</string>
@@ -1161,7 +1154,6 @@ Chcete se přepnout na tento účet?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Certifikát serveru se nám nepodařilo ověřit. Řetězec certifikátů nebo nastavení proxy serveru na Vašem zařízení nebo serveru Bitwardenu nemusí být správně nastaven.</string>
   <string name="review_flow_launched">Přehled byl spuštěn!</string>
   <string name="copy_private_key">Kopírovat soukromý klíč</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu můžete změnit ve webové aplikaci Bitwarden.</string>
   <string name="login_credentials">Přihlašovací údaje</string>
   <string name="autofill_options">Volby automatického vyplňování</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Použijte toto tlačítko pro vytvoření nového jedinečného hesla.</string>
@@ -1205,18 +1197,17 @@ Chcete se přepnout na tento účet?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Použití systémového certifikátu je méně bezpečné než ukládání certifikátu v Bitwardenu. Pokračování zobrazí seznam dostupných systémových certifikátů, pokud jsou již nainstalovány.</string>
   <string name="certificate_alias_already_exists">Alias certifikátu již existuje</string>
   <string name="link">Odkaz</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operace přístupového klíče se nezdařila, protože aplikace je nesprávně podepsána.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operace přístupového klíče se nezdařila, protože v poždavku není přítomna hostitelská URL.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Operace přístupového klíče se nezdařila, protože podpis aplikace je neplatný.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Operace přístupového klíče se nezdařila kvůli vnitřní chybě.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operace přístupového klíče se nezdařila, protože nemůže být identifikována protistrana.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Operace přístupového klíče se nezdařila kvůli vnitřní chybě.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operace přístupového klíče se nezdařila, protože vybraná položka neexistuje.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Operace přístupového klíče se nezdařila, protože byl uživatel uzamčen.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operace přístupového klíče se nezdařila, protože ověření uživatele bylo zrušeno.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operace přístupového klíče se nezdařila, protože je požadavek neplatný.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operace přístupového klíče se nezdařila, protože byly vyčerpány všechny pokusy o ověření uživatele.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operace přístupového klíče se nezdařila, protože nebyla vybrána žádná položka.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Operace přístupového klíče se nezdařila, protože je požadavek nepodporovaný.</string>
   <string name="self_host_server_url">Adresa URL serveru vlastního hostování</string>
   <string name="use_chrome_autofill_integration">Použít integraci automatického vyplňování Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Použít integraci automatického vyplňování Chrome (Beta)</string>
@@ -1227,9 +1218,22 @@ Chcete se přepnout na tento účet?</string>
   <string name="add_field">Přidat pole</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Sdílet podrobnosti o chybě</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Letový zapisovač</string>
+  <string name="flight_recorder_help">Nápověda letového zapisovače</string>
+  <string name="view_recorded_logs">Zobrazit zaznamenané protokoly</string>
+  <string name="enable_flight_recorder_title">Povolit letový zapisovač</string>
+  <string name="recorded_logs_title">Nahrané protokoly</string>
+  <string name="no_logs_recorded">Nebyly zaznamenány žádné logy</string>
+  <string name="experiencing_an_issue">Máte problém?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povolte dočasné logování pro shromažďování a prohlížení logů lokálně. Pokud je povoleno, stav aplikací a síťových hovorů mohou být zaznamenány - ale nikdy citlivé informace o trezoru.</string>
+  <string name="to_get_started_set_a_logging_duration">Chcete-li začít, nastavte dobu trvání logování. Logování 
+se po tomto období automaticky vypne, což Vám poskytne čas pro zachycení aktivity 
+při opakování problémů.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logy budou automaticky smazány po 30 dnech. Bitwarden má přístup k Vašim logům jen pokud je sdílíte.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Pro podrobnosti o tom, co je a není logováno, navštivte\n<annotation link="helpCenter">centrum nápovědy Bitwardenu</annotation>.</string>
+  <string name="logging_duration">Doba logování</string>
+  <string name="flight_recorder_one_hour">1 hodina</string>
+  <string name="flight_recorder_eight_hours">8 hodin</string>
+  <string name="flight_recorder_twenty_four_hours">24 hodin</string>
+  <string name="flight_recorder_one_week">1 týden</string>
 </resources>
