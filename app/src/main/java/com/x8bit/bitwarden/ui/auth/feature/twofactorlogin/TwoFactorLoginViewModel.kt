@@ -404,11 +404,12 @@ class TwoFactorLoginViewModel @Inject constructor(
         action: TwoFactorLoginAction.Internal.ReceiveWebAuthResult,
     ) {
         when (val result = action.webAuthResult) {
-            WebAuthResult.Failure -> {
+            is WebAuthResult.Failure -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }
