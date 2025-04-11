@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -139,7 +138,6 @@ private fun DeleteAccountConfirmationContent(
     ) {
         Text(
             text = stringResource(id = R.string.a_verification_code_was_sent_to_your_email),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
@@ -162,7 +160,6 @@ private fun DeleteAccountConfirmationContent(
         Spacer(modifier = Modifier.height(12.dp))
         Text(
             text = stringResource(id = R.string.confirm_your_identity),
-            textAlign = TextAlign.Start,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
