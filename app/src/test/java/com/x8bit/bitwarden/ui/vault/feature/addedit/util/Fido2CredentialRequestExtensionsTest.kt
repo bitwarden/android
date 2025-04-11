@@ -59,6 +59,7 @@ class Fido2CredentialRequestExtensionsTest {
             ),
             Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
                 .toDefaultAddTypeContent(
@@ -96,6 +97,7 @@ class Fido2CredentialRequestExtensionsTest {
             ),
             Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
                 .toDefaultAddTypeContent(

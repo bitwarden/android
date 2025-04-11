@@ -14,12 +14,15 @@ import kotlinx.parcelize.Parcelize
  * credential manager framework.
  *
  * @property userId The ID of the user creating the passkey.
+ * @property isUserPreVerified Whether the user has already been verified by the OS biometric
+ * prompt.
  * @property requestData Provider request data in the form of a [Bundle].
  */
 @Parcelize
 data class Fido2CreateCredentialRequest(
     val userId: String,
     val requestData: Bundle,
+    val isUserPreVerified: Boolean,
 ) : Parcelable {
 
     /**

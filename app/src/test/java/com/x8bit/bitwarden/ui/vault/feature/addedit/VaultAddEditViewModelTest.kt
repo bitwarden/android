@@ -396,6 +396,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         } returns mockk(relaxed = true)
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "mockUserId-1",
+            isUserPreVerified = false,
             requestData = bundleOf(),
         )
         specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -880,6 +881,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         runTest {
             val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
                 userId = "mockUserId",
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
             specialCircumstanceManager.specialCircumstance =
@@ -959,6 +961,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val mockUserId = "mockUserId"
             val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
                 userId = mockUserId,
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
             specialCircumstanceManager.specialCircumstance =
