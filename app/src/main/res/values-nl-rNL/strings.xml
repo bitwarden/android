@@ -1138,17 +1138,10 @@ Wilt u naar dit account wisselen?</string>
   <string name="copy_email">E-mail kopiëren</string>
   <string name="copy_phone">Telefoonnummer kopiëren</string>
   <string name="copy_address">Adres kopiëren</string>
-  <string name="important_notice">Belangrijke mededeling</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Vanaf februari 2025 stuurt Bitwarden een code naar het e-mailadres van je account om inloggen op nieuwe apparaten te verifiëren.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Heb je betrouwbare toegang tot je e-mail, %1$s? </string>
-  <string name="yes_i_can_reliably_access_my_email">Ja, ik heb betrouwbare toegang tot mijn e-mail</string>
   <string name="biometrics_no_longer_supported_title">Biometrie wordt niet langer ondersteund op dit apparaat</string>
   <string name="biometrics_no_longer_supported">Je bent uitgelogd omdat de biometrische gegevens van je apparaat niet voldoen aan de laatste beveiligingseisen. Log opnieuw in om instellingen bij te werken of neem contact op met je beheerder voor toegang.</string>
   <string name="cxp_import">CXP-import</string>
   <string name="cxp_export">CXP-export</string>
-  <string name="set_up_two_step_login">Tweestapsaanmelding instellen</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Je kunt tweestapsaanmelding instellen als een alternatieve manier om je account te beschermen of je e-mailadres te veranderen naar een waar je toegang toe hebt.</string>
-  <string name="turn_on_two_step_login">Tweestapsaanmelding inschakelen</string>
   <string name="change_account_email">E-mailadres van het account veranderen</string>
   <string name="choose_three_or_four_random_words">Kies drie of vier willekeurige woorden</string>
   <string name="pick_three_or_four_random_unrelated_words">Kies drie of vier willekeurige, niet-gerelateerde woorden die je makkelijk kunt onthouden. Denk aan voorwerpen, plaatsen of dingen die je leuk vindt.</string>
@@ -1162,7 +1155,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="we_couldnt_verify_the_servers_certificate">We konden het certificaat van de server niet verifiëren. De certificaatketen of proxy-instellingen op je apparaat of je Bitwarden-server zijn mogelijk niet correct ingesteld.</string>
   <string name="review_flow_launched">Reviewflow gelanceerd!</string>
   <string name="copy_private_key">Privésleutel kopiëren</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Je kunt het e-mailadres van je account wijzigen in de Bitwarden-webapp.</string>
   <string name="login_credentials">Inloggegevens</string>
   <string name="autofill_options">Opties voor automatisch aanvullen</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Gebruik deze knop voor het genereren van een nieuw uniek wachtwoord.</string>
@@ -1206,18 +1198,17 @@ Wilt u naar dit account wisselen?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Het gebruik van een systeemcertificaat is minder veilig dan het opslaan van het certificaat met Bitwarden. Als je doorgaat, wordt een lijst met beschikbare systeemcertificaten weergegeven als deze al geïnstalleerd zijn.</string>
   <string name="certificate_alias_already_exists">Certificaatalias bestaat al</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey-bewerking mislukt omdat de app verkeerd is ondertekend.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey-bewerking mislukt omdat URL van de host niet in het verzoek staat.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey-bewerking mislukt omdat de handtekening van de app ongeldig is.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey-bewerking mislukt door een interne fout.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey-bewerking mislukt omdat de vertrouwde parij niet geïdentificeerd kan worden.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Inloggen met passkey mislukt door een interne fout.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey-bewerking mislukt omdat het geselecteerde item niet bestaat.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Passkey-bewerking mislukt omdat de gebruiker is buitengesloten.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey-bewerking mislukt omdat de gebruikersverificatie is geannuleerd.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey-bewerking mislukt omdat het verzoek ongeldig is.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey-bewerking mislukt omdat het aantal gebruikersverificatiepogingen is overschreden.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey-bewerking mislukt omdat er geen item geselecteerd is.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey-bewerking mislukt omdat het verzoek niet ondersteund is.</string>
   <string name="self_host_server_url">URL zelfgehoste server</string>
   <string name="use_chrome_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen</string>
   <string name="use_chrome_beta_autofill_integration">Gebruik de Chrome-integratie voor automatisch invullen (Beta)</string>
@@ -1233,4 +1224,15 @@ Wilt u naar dit account wisselen?</string>
   <string name="view_recorded_logs">Logopnames bekijken</string>
   <string name="enable_flight_recorder_title">Flight recorder inschakelen</string>
   <string name="recorded_logs_title">Logopnames</string>
+  <string name="no_logs_recorded">Geen logs opgenomen</string>
+  <string name="experiencing_an_issue">Ervaar je een probleem?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Ttijdelijke logging inschakelen voor het lokaal verzamelen en inspecteren van logs. Wanneer ingeschakeld, kunnen applicatie-staten en netwerkverzoeken worden gelogd—nooit gevoelige kluisinformatie.</string>
+  <string name="to_get_started_set_a_logging_duration">Stel een loginduur in om te beginnen. Loggen zal automatisch uitschakelen na deze periode, waardoor je tijd hebt voor het opnemen van acties tijdens het reproduceren van problemen.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">We verwijderen logs automatisch na 30 dagen. Bitwarden heeft alleen toegang tot je loggegevens als je deze deelt.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Wil je meer weten over wat wel en niet wordt gelogd, bezoek dan het\n<annotation link="helpCenter">Bitwarden helpcentrum.</annotation></string>
+  <string name="logging_duration">Duur van het loggen</string>
+  <string name="flight_recorder_one_hour">1 uur</string>
+  <string name="flight_recorder_eight_hours">8 uur</string>
+  <string name="flight_recorder_twenty_four_hours">24 uur</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

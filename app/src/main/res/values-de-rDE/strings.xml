@@ -1137,17 +1137,10 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="copy_email">E-Mail-Adresse kopieren</string>
   <string name="copy_phone">Telefonnummer kopieren</string>
   <string name="copy_address">Adresse kopieren</string>
-  <string name="important_notice">Wichtiger Hinweis</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Ab Februar 2025 wird Bitwarden einen Code an deine Konto-E-Mail-Adresse senden, um Anmeldungen von neuen Geräten zu verifizieren.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Hast du zuverlässigen Zugriff auf deine E-Mail-Adresse, %1$s?</string>
-  <string name="yes_i_can_reliably_access_my_email">Ja, ich kann zuverlässig auf meine E-Mails zugreifen</string>
   <string name="biometrics_no_longer_supported_title">Biometrie wird auf diesem Gerät nicht mehr unterstützt</string>
   <string name="biometrics_no_longer_supported">Du wurdest abgemeldet, weil die biometrischen Daten deines Geräts nicht den neuesten Sicherheitsanforderungen entsprechen. Um die Einstellungen zu aktualisieren, melde dich erneut an oder kontaktiere deinen Administrator für den Zugriff.</string>
   <string name="cxp_import">CXP-Import</string>
   <string name="cxp_export">CXP-Export</string>
-  <string name="set_up_two_step_login">Zwei-Faktor-Authentifizierung einrichten</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Du kannst die Zwei-Faktor-Authentifizierung als eine alternative Methode einrichten, um dein Konto zu schützen, oder deine E-Mail-Adresse zu einer anderen ändern, auf die du zugreifen kannst.</string>
-  <string name="turn_on_two_step_login">Zwei-Faktor-Authentifizierung aktivieren</string>
   <string name="change_account_email">E-Mail-Adresse des Kontos ändern</string>
   <string name="choose_three_or_four_random_words">Wähle drei oder vier zufällige Wörter aus</string>
   <string name="pick_three_or_four_random_unrelated_words">Wähle drei oder vier zufällige, nicht zusammenhängende Wörter, die du dir leicht merken kannst. Denke an Gegenstände, Orte oder Dinge, die du magst.</string>
@@ -1161,7 +1154,6 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Wir konnten das Zertifikat des Servers nicht verifizieren. Die Zertifikatskette oder die Proxy-Einstellungen auf deinem Gerät oder deinem Bitwarden-Server sind möglicherweise nicht korrekt eingerichtet.</string>
   <string name="review_flow_launched">Überprüfungsablauf gestartet!</string>
   <string name="copy_private_key">Privaten Schlüssel kopieren</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Du kannst deine E-Mail-Adresse in der Bitwarden Web-App ändern.</string>
   <string name="login_credentials">Anmeldedaten</string>
   <string name="autofill_options">Auto-Ausfüllen Optionen</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Verwende diesen Button um ein neues, einzigartiges Passwort zu gernerieren.</string>
@@ -1205,18 +1197,17 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Die Verwendung eines Systemzertifikats ist weniger sicher als die Speicherung des Zertifikats mit Bitwarden. Im Folgenden wird eine Liste der verfügbaren Systemzertifikate angezeigt, wenn eines bereits installiert ist.</string>
   <string name="certificate_alias_already_exists">Zertifikat-Alias existiert bereits</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Der Passkey-Vorgang ist fehlgeschlagen, da die App falsch signiert wurde.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Der Passkey-Vorgang ist fehlgeschlagen, da die Host-URL in der Anfrage nicht vorhanden ist.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Der Passkey-Vorgang ist fehlgeschlagen, da die App-Signatur ungültig ist.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Die Passkey-Registrierung ist aufgrund eines internen Fehlers fehlgeschlagen.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Der Passkey-Vorgang ist fehlgeschlagen, da die vertrauende Partei nicht identifiziert werden kann.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Die Passkey-Authentifizierung ist aufgrund eines internen Fehlers fehlgeschlagen.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Der Passkey-Vorgang ist fehlgeschlagen, da der ausgewählte Eintrag nicht existiert.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer gesperrt ist.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Der Passkey-Vorgang ist fehlgeschlagen, da die Benutzer-Verifizierung abgebrochen wurde.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Der Passkey-Vorgang ist fehlgeschlagen, da die Anfrage ungültig ist.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Der Passkey-Vorgang ist fehlgeschlagen, da die Anzahl der Benutzer-Verifizierungsversuche überschritten wurde.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Der Passkey-Vorgang ist fehlgeschlagen, da kein Eintrag ausgewählt wurde.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Der Passkey-Vorgang ist fehlgeschlagen, weil die Anfrage nicht unterstützt wird.</string>
   <string name="self_host_server_url">Selbst gehostete Server-URL</string>
   <string name="use_chrome_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden</string>
   <string name="use_chrome_beta_autofill_integration">Chrome Auto-Ausfüllen-Integration verwenden (Beta)</string>
@@ -1227,9 +1218,20 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="add_field">Feld hinzufügen</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Fehlerdetails teilen</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Flugschreiber</string>
+  <string name="flight_recorder_help">Flugschreiber-Hilfe</string>
+  <string name="view_recorded_logs">Gespeicherte Protokolle anzeigen</string>
+  <string name="enable_flight_recorder_title">Flugschreiber aktivieren</string>
+  <string name="recorded_logs_title">Gespeicherte Protokolle</string>
+  <string name="no_logs_recorded">Keine Protokolle gespeichert</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 Stunde</string>
+  <string name="flight_recorder_eight_hours">8 Stunden</string>
+  <string name="flight_recorder_twenty_four_hours">24 Stunden</string>
+  <string name="flight_recorder_one_week">1 Woche</string>
 </resources>

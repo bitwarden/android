@@ -1138,17 +1138,10 @@
   <string name="copy_email">העתק דוא\"ל</string>
   <string name="copy_phone">העתק מספר טלפון</string>
   <string name="copy_address">העתק כתובת</string>
-  <string name="important_notice">הודעה חשובה</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden ישלח קוד לדוא\"ל החשבון שלך כדי לאמת כניסות ממכשירים חדשים החל מפברואר 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">יש לך גישה מהימנה לדוא\"ל שלך, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">כן, אני יכול לגשת לדוא\"ל שלי באופן מהימן</string>
   <string name="biometrics_no_longer_supported_title">זיהוי ביומטרי אינו נתמך יותר במכשיר זה</string>
   <string name="biometrics_no_longer_supported">יצאת מהחשבון שלך בגלל שהזיהוי הביומטרי של המכשיר שלך לא עומד בדרישות האבטחה האחרונות. כדי לעדכן הגדרות, היכנס פעם נוספת או פנה אל המנהל שלך עבור גישה.</string>
   <string name="cxp_import">ייבוא CXP</string>
   <string name="cxp_export">ייצוא CXP</string>
-  <string name="set_up_two_step_login">הגדר כניסה דו־שלבית</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">אתה יכול להגדיר כניסה דו־שלבית כדרך חלופית להגן על החשבון שלך או לשנות את הדוא\"ל שלך לאחד שאתה יכול לגשת אליו.</string>
-  <string name="turn_on_two_step_login">הפעל כניסה דו־שלבית</string>
   <string name="change_account_email">שנה את דוא\"ל החשבון</string>
   <string name="choose_three_or_four_random_words">בחר שלוש או ארבע מילים אקראיות</string>
   <string name="pick_three_or_four_random_unrelated_words">בחר שלוש או ארבע מילים אקראיות ולא קשורות שאתה יכול לזכור בקלות. חשוב על <annotation emphasis="bold">חפצים, מקומות, או דברים</annotation> שאתה אוהב.</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">לא יכולנו לאמת את תעודת השרת. ייתכן ששרשרת התעודה או הגדרות הפרוקסי במכשיר שלך או בשרת ה־Bitwarden שלך אינן מוגדרות כראוי.</string>
   <string name="review_flow_launched">סקירת זרימה נפתחה!</string>
   <string name="copy_private_key">העתק מפתח פרטי</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">אתה יכול לשנות את דוא\"ל החשבון שלך ביישום הרשת של Bitwarden.</string>
   <string name="login_credentials">אישורי כניסה</string>
   <string name="autofill_options">אפשרויות מילוי אוטומטי</string>
   <string name="use_this_button_to_generate_a_new_unique_password">השתמש בלחצן זה כדי ליצור סיסמה ייחודית חדשה.</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">שימוש בתעודת מערכת הוא פחות מאובטח מאשר אחסון התעודה עם Bitwarden. בהמשך תוצג רשימה של תעודות מערכת זמינות אם אחת כבר מותקנת.</string>
   <string name="certificate_alias_already_exists">כינוי אישור כבר קיים</string>
   <string name="link">קישור</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">פעולת מפתח גישה נכשלה בגלל שהיישום אינו חתום כראוי.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">פעולת מפתח גישה נכשלה בגלל שכתובת ה־URL של המארח אינה נמצאת בבקשה.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">פעולת מפתח גישה נכשלה בגלל שחתימת היישום אינה חוקית.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">רישום מפתח גישה נכשל עקב שגיאה פנימית.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">פעולת מפתח גישה נכשלה בגלל שהצד המסתמך אינו ניתן לזיהוי.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">אימות מפתח גישה נכשל עקב שגיאה פנימית.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">פעולת מפתח גישה נכשלה בגלל שהפריט שנבחר אינו קיים.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">פעולת מפתח גישה נכשלה בגלל שהמשתמש נעול.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">פעולת מפתח גישה נכשלה בגלל שאימות המשתמש בוטל.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">פעולת מפתח גישה נכשלה בגלל שהבקשה אינה חוקית.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">פעולת מפתח גישה נכשלה בגלל שניסיונות אימות משתמש חרגו.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">פעולת מפתח גישה נכשלה בגלל שלא נבחר פריט.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">URL של שרת אירוח עצמי</string>
   <string name="use_chrome_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome</string>
   <string name="use_chrome_beta_autofill_integration">השתמש בשילוב מילוי אוטומטי של Chrome (בטא)</string>
@@ -1233,4 +1224,15 @@
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

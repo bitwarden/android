@@ -1138,17 +1138,10 @@
   <string name="copy_email">複製電子郵件地址</string>
   <string name="copy_phone">複製手機號碼</string>
   <string name="copy_address">複製地址</string>
-  <string name="important_notice">重要通知</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">從 2025 年 2 月開始，Bitwarden 會傳送代碼到您的帳號電子郵件中來驗證新裝置的登入。</string>
-  <string name="do_you_have_reliable_access_to_your_email">您可以存取您的電子郵件位址<annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>嗎？</string>
-  <string name="yes_i_can_reliably_access_my_email">是，我可以存取我的電子郵件位址</string>
   <string name="biometrics_no_longer_supported_title">此裝置不再支援生物辨識解鎖</string>
   <string name="biometrics_no_longer_supported">您已經被登出，由於您的裝置所提供的生物辨識解鎖方式已不再符合安全要求。要更新設定，請重新登入或聯繫您的管理員。</string>
   <string name="cxp_import">CXP 匯入</string>
   <string name="cxp_export">CXP 匯出</string>
-  <string name="set_up_two_step_login">啟動兩階段登入</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">您可以啟動兩階段認證來保護您的帳號或更改您可以存取的電子郵件位址。</string>
-  <string name="turn_on_two_step_login">啟動兩階段登入</string>
   <string name="change_account_email">更改帳號電子郵件地址</string>
   <string name="choose_three_or_four_random_words">選擇三或四個隨機的單字</string>
   <string name="pick_three_or_four_random_unrelated_words">選擇三或四個您可以記得的隨機、無相關的單字。可以從<annotation emphasis="bold">物件、地點或東西</annotation>中挑選。</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">我們無法驗證伺服器的數位憑證。您裝置上的憑證鍊或代理伺服器設定或您的 Bitwarden 伺服器可能未正確設定。</string>
   <string name="review_flow_launched">已推出審核流程檢視！</string>
   <string name="copy_private_key">複製私密金鑰</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">您可以在 Bitwarden 網頁應用程式上變更帳號電子郵件位址。</string>
   <string name="login_credentials">登入憑證</string>
   <string name="autofill_options">自動填入選項</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
   <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">Self-host server URL</string>
   <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
   <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
@@ -1233,4 +1224,15 @@
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

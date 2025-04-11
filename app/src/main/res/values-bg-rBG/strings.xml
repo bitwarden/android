@@ -1138,17 +1138,10 @@
   <string name="copy_email">Копиране на е-пощата</string>
   <string name="copy_phone">Копиране на телефонен номер</string>
   <string name="copy_address">Копиране на адреса</string>
-  <string name="important_notice">Важно съобщение</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Битуорден ще изпрати код до е-пощата Ви, за потвърждаване на вписването от нови устройства. Това ще започне от февруари 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Имате ли сигурен достъп до е-пощата си – <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Да, имам достъп до е-пощата си</string>
   <string name="biometrics_no_longer_supported_title">На това устройство вече не се поддържат биометрични данни</string>
   <string name="biometrics_no_longer_supported">Бяхте отписан(а), тъй като средствата за проверка на биометрични данни на устройството не отговарят на последните изисквания за сигурност. Ако искате да промените настройките си, впишете се отново или се свържете с администратона си за помощ с достъпа.</string>
   <string name="cxp_import">Внасяне на CXP</string>
   <string name="cxp_export">Изнасяне на CXP</string>
-  <string name="set_up_two_step_login">Настройте двустепенно удостоверяване</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Можете да настроите двустепенно удостоверяване, като различен метод на защита, или ако е необходимо да промените е-пощата си с такава, до която имате достъп.</string>
-  <string name="turn_on_two_step_login">Включване на двустепенното удостоверяване</string>
   <string name="change_account_email">Промяна на е-пощата</string>
   <string name="choose_three_or_four_random_words">Изберете три или четири произволни думи</string>
   <string name="pick_three_or_four_random_unrelated_words">Изберете три или четири произволни думи, които можете лесно да запомните. Това може да са обекти, места или неща, които харесвате.</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">Сертификатът на сървъра не може да бъде потвърден. Възможно е да има проблем в конфигурацията на сертификатите, настройките за сървър-посредник на устройството или на сървъра на Битуорден.</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Копиране на частния ключ</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Може да промените е-пощата на акаунта си в уеб приложението на Битуорден.</string>
   <string name="login_credentials">Данни за вписване</string>
   <string name="autofill_options">Опции за автоматично попълване</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Използвайте този бутон, за да генерирате нова уникална парола.</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Използването на системен сертификат е по-малко сигурно от съхраняването на сертификата в Битуорден. Ако продължите, ще бъде показан списък от наличните системни сертификати, ако вече има инсталиран.</string>
   <string name="certificate_alias_already_exists">Псевдонимът на сертификата вече съществува</string>
   <string name="link">Връзка</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Операцията със секретния ключ беше неуспешна, тъй като приложението е подписано неправилно.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операцията със секретния ключ беше неуспешна, тъй като адресът на сървъра не присъства в заявката.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Операцията със секретния ключ беше неуспешна, тъй като подписът на приложението е грешен.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Регистрацията със секретния ключ беше неуспешна поради вътрешна грешка.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операцията със секретния ключ беше неуспешна, тъй като предаващият сървър не може да бъде идентифициран.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Удостоверяването със секретния ключ беше неуспешно поради вътрешна грешка.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Операцията със секретния ключ беше неуспешна, тъй като избраният елемент не съществува.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Операцията със секретния ключ беше неуспешна, тъй като потребителят е заключен извън системата.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Операцията със секретния ключ беше неуспешна, тъй като потвърждението беше отказано.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Операцията със секретния ключ беше неуспешна, тъй като заявката е грешна.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операцията със секретния ключ беше неуспешна, тъй като е превишен броят на опитите за потвърждение на потребителя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операцията със секретния ключ беше неуспешна, тъй като няма избран елемент.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Операцията със секретния ключ беше неуспешна, тъй като заявката не се поддържа.</string>
   <string name="self_host_server_url">Адрес на собствения сървър</string>
   <string name="use_chrome_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Използване на интеграцията с автоматичното попълване на Chrome (бета)</string>
@@ -1228,9 +1219,22 @@
   <string name="add_field">Добавяне на поле</string>
   <string name="x_ellipses">%s…</string>
   <string name="share_error_details">Споделяне на подробностите за грешката</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Проследяване чрез журнали</string>
+  <string name="flight_recorder_help">Помощ за проследяването чрез журнали</string>
+  <string name="view_recorded_logs">Преглед на записаните журнали</string>
+  <string name="enable_flight_recorder_title">Включване на проследяването чрез журнали</string>
+  <string name="recorded_logs_title">Записани журнали</string>
+  <string name="no_logs_recorded">Няма записани журнали</string>
+  <string name="experiencing_an_issue">Имате проблем?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Включете временно журналите и разгледайте локално какво се случва. Когато това е включено, състоянията на приложението и съобщенията по мрежата може да бъдат записани в журнала – но никога чувствителна информация за трезора.</string>
+  <string name="to_get_started_set_a_logging_duration">За да започнете, изберете продължителност на записа в журнала. 
+Функцията ще се изключи автоматично след като изтече този период, давайки Ви време 
+да прихванете дейността си, докато възпроизвеждате проблема.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Журналите се изтриват автоматично след 30 дни. Битуорден може да получи достъп до информацията в журналите само, ако я споделите.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">За подробности какво се записва в журнала и какво – не, посетете\n<annotation link="helpCenter">помощния център на Битуорден</annotation>.</string>
+  <string name="logging_duration">Продължителност на записа в журнала</string>
+  <string name="flight_recorder_one_hour">1 час</string>
+  <string name="flight_recorder_eight_hours">8 часа</string>
+  <string name="flight_recorder_twenty_four_hours">24 часа</string>
+  <string name="flight_recorder_one_week">1 седмица</string>
 </resources>
