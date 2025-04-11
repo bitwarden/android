@@ -8,7 +8,7 @@ import com.bitwarden.crypto.RsaKeyPair
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
+import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import io.mockk.coEvery
