@@ -54,13 +54,15 @@ class WebAuthUtilsTest : BaseComposeTest() {
 
     @Test
     fun `getWebAuthResultOrNull should return Failure with missing data parameter`() {
+        val message = "An Error!"
         val intent = mockk<Intent> {
             every { data?.getQueryParameter("data") } returns null
+            every { data?.getQueryParameter("error") } returns message
             every { action } returns Intent.ACTION_VIEW
             every { data?.host } returns "webauthn-callback"
         }
         val result = intent.getWebAuthResultOrNull()
-        assertEquals(WebAuthResult.Failure, result)
+        assertEquals(WebAuthResult.Failure(message = message), result)
     }
 
     @Test
