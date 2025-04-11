@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
