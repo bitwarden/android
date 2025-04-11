@@ -1,9 +1,12 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.PushApi
 import com.bitwarden.network.model.PushTokenRequest
 import com.bitwarden.network.util.toResult
 
+/**
+ * Default implementation of [PushService].
+ */
 class PushServiceImpl(
     private val pushApi: PushApi,
     private val appId: String,
