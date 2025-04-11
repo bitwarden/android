@@ -38,7 +38,7 @@ class RemovePasswordViewModel @Inject constructor(
         RemovePasswordState(
             input = "",
             description = R.string.password_no_longer_required_confirm_domain.asText(),
-            labelOrg = R.string.organization.asText(),
+            labelOrg = R.string.key_connector_organization.asText(),
             orgName = org?.name.orEmpty().asText(),
             labelDomain = R.string.key_connector_domain.asText(),
             domainName = keyConnectorDomain.asText(),

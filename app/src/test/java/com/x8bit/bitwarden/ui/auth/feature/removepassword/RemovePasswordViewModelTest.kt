@@ -212,7 +212,7 @@ private val DEFAULT_STATE = RemovePasswordState(
     dialogState = null,
     description = R.string
         .password_no_longer_required_confirm_domain.asText(),
-    labelOrg = R.string.organization.asText(),
+    labelOrg = R.string.key_connector_organization.asText(),
     orgName = ORGANIZATION_NAME.asText(),
     labelDomain = R.string.key_connector_domain.asText(),
     domainName = KEY_CONNECTOR_URL.asText(),
