@@ -8,6 +8,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.PushTokenRequest
+import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
