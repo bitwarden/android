@@ -169,6 +169,9 @@ class LoginViewModel @Inject constructor(
                 )
             }
 
+            // NO-OP: This result should not be possible here
+            is LoginResult.ConfirmKeyConnectorDomain -> Unit
+
             is LoginResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(

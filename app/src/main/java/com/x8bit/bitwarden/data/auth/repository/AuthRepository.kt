@@ -251,6 +251,16 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     ): LoginResult
 
     /**
+     * Continue the previously halted login attempt.
+     */
+    suspend fun continueKeyConnectorLogin(): LoginResult
+
+    /**
+     * Cancel the previously halted login attempt.
+     */
+    fun cancelKeyConnectorLogin()
+
+    /**
      * Log out the current user.
      */
     fun logout(reason: LogoutReason)

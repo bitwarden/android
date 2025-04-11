@@ -131,6 +131,15 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive -> {
                 handleOnVerifiedOrganizationDomainSsoDetailsReceive(action)
             }
+
+            EnterpriseSignOnAction.CancelKeyConnectorDomainClick -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                authRepository.cancelKeyConnectorLogin()
+            }
+
+            EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick -> {
+                handleConfirmKeyConnectorDomainClick()
+            }
         }
     }
 
@@ -197,6 +206,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 showError(
                     message = loginResult.errorMessage?.asText()
                         ?: R.string.login_sso_error.asText(),
+                )
+            }
+
+            is LoginResult.ConfirmKeyConnectorDomain -> {
+                showKeyConnectorDomainConfirmation(
+                    keyConnectorDomain = authRepository.rememberedKeyConnectorUrl.orEmpty(),
                 )
             }
         }
@@ -517,6 +532,24 @@ class EnterpriseSignOnViewModel @Inject constructor(
             )
         }
     }
+
+    private fun showKeyConnectorDomainConfirmation(keyConnectorDomain: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                    keyConnectorDomain = keyConnectorDomain,
+                ),
+            )
+        }
+    }
+
+    private fun handleConfirmKeyConnectorDomainClick() {
+        showLoading()
+        viewModelScope.launch {
+            val result = authRepository.continueKeyConnectorLogin()
+            sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
+        }
+    }
 }
 
 /**
@@ -549,6 +582,14 @@ data class EnterpriseSignOnState(
         @Parcelize
         data class Loading(
             val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that the user needs to confirm the [keyConnectorDomain].
+         */
+        @Parcelize
+        data class KeyConnectorDomain(
+            val keyConnectorDomain: String,
         ) : DialogState()
     }
 }
@@ -604,6 +645,18 @@ sealed class EnterpriseSignOnAction {
      * Indicates that the Log In button has been clicked.
      */
     data object LogInClick : EnterpriseSignOnAction()
+
+    /**
+     * Indicates that the confirm button has been clicked
+     * on the KeyConnector confirmation dialog.
+     */
+    data object ConfirmKeyConnectorDomainClick : EnterpriseSignOnAction()
+
+    /**
+     * Indicates that the cancel button has been clicked
+     * on the KeyConnector confirmation dialog.
+     */
+    data object CancelKeyConnectorDomainClick : EnterpriseSignOnAction()
 
     /**
      * Indicates that the organization identifier input has changed.
