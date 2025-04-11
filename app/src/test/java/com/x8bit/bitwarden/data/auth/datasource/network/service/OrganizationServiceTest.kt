@@ -135,6 +135,22 @@ class OrganizationServiceTest : BaseServiceTest() {
                 organizationService.getVerifiedOrganizationDomainSsoDetails("example@bitwarden.com")
             assertTrue(result.isFailure)
         }
+
+    @Test
+    fun `leaveOrganization should return success when api call is successful`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(200))
+            val result = organizationService.leaveOrganization(organizationId = "mock-Id")
+            assertTrue(result.isSuccess)
+        }
+
+    @Test
+    fun `leaveOrganization should return failure when api call fails with error`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(400))
+            val result = organizationService.leaveOrganization(organizationId = "mock-Id")
+            assertTrue(result.isFailure)
+        }
 }
 
 private const val ORGANIZATION_AUTO_ENROLL_STATUS_JSON = """
