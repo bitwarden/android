@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.EventApi
 import com.bitwarden.network.base.BaseServiceTest
