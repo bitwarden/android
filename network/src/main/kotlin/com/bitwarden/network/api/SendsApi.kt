@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.api
+package com.bitwarden.network.api
 
 import androidx.annotation.Keep
 import com.bitwarden.network.model.CreateFileSendResponseJson
