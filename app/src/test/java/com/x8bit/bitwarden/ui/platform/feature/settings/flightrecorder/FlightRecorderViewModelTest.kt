@@ -2,13 +2,23 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class FlightRecorderViewModelTest : BaseViewModelTest() {
+
+    private val settingsRepository = mockk<SettingsRepository> {
+        every { startFlightRecorder(duration = any()) } just runs
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -26,13 +36,20 @@ class FlightRecorderViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on SaveClick action should do nothing`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(FlightRecorderAction.SaveClick)
-            expectNoEvents()
+    fun `on SaveClick action should start the flight recorder and send the NavigateBack event`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(FlightRecorderAction.SaveClick)
+                assertEquals(FlightRecorderEvent.NavigateBack, awaitItem())
+            }
+
+            verify(exactly = 1) {
+                settingsRepository.startFlightRecorder(
+                    duration = FlightRecorderDuration.TWENTY_FOUR_HOURS,
+                )
+            }
         }
-    }
 
     @Test
     fun `on HelpCenterClick action should send the NavigateToHelpCenter event`() = runTest {
@@ -73,10 +90,11 @@ class FlightRecorderViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle().apply {
                 set("state", state)
             },
+            settingsRepository = settingsRepository,
         )
 }
 
 private val DEFAULT_STATE: FlightRecorderState =
     FlightRecorderState(
-        selectedDuration = FlightRecorderDuration.ONE_HOUR,
+        selectedDuration = FlightRecorderDuration.TWENTY_FOUR_HOURS,
     )

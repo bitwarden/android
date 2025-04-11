@@ -14,8 +14,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -293,6 +293,33 @@ class AboutScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `flight recorder info should update according to the state`() = runTest {
+        mutableStateFlow.update {
+            it.copy(flightRecorderSubtext = "Logging stops on 3/5/25 at 4:33 PM".asText())
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Logging stops on 3/5/25 at 4:33 PM")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `flight recorder switch should update according to the state`() = runTest {
+        mutableStateFlow.update { it.copy(isFlightRecorderEnabled = false) }
+        composeTestRule
+            .onNodeWithText(text = "Flight recorder")
+            .performScrollTo()
+            .assertIsOff()
+
+        mutableStateFlow.update { it.copy(isFlightRecorderEnabled = true) }
+        composeTestRule
+            .onNodeWithText(text = "Flight recorder")
+            .performScrollTo()
+            .assertIsOn()
+    }
 }
 
 private val DEFAULT_STATE = AboutState(
@@ -303,5 +330,6 @@ private val DEFAULT_STATE = AboutState(
     shouldShowCrashLogsButton = true,
     isFlightRecorderEnabled = false,
     shouldShowFlightRecorder = true,
+    flightRecorderSubtext = null,
     copyrightInfo = "".asText(),
 )

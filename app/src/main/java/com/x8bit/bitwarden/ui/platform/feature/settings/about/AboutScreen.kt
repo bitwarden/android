@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -168,6 +168,7 @@ private fun AboutScreenContent(
         FlightRecorderCard(
             isVisible = state.shouldShowFlightRecorder,
             isFlightRecorderEnabled = state.isFlightRecorderEnabled,
+            logExpiration = state.flightRecorderSubtext,
             onFlightRecorderCheckedChange = onFlightRecorderCheckedChange,
             onFlightRecorderTooltipClick = onFlightRecorderTooltipClick,
             onViewRecordedLogsClick = onViewRecordedLogsClick,
@@ -280,6 +281,7 @@ private fun ColumnScope.CrashLogsCard(
 private fun ColumnScope.FlightRecorderCard(
     isVisible: Boolean,
     isFlightRecorderEnabled: Boolean,
+    logExpiration: Text?,
     onFlightRecorderCheckedChange: (Boolean) -> Unit,
     onFlightRecorderTooltipClick: () -> Unit,
     onViewRecordedLogsClick: () -> Unit,
@@ -293,6 +295,7 @@ private fun ColumnScope.FlightRecorderCard(
             contentDescription = stringResource(id = R.string.flight_recorder_help),
             onClick = onFlightRecorderTooltipClick,
         ),
+        subtext = logExpiration?.invoke(),
         cardStyle = CardStyle.Top(),
         modifier = Modifier
             .testTag(tag = "FlightRecorderSwitch")
@@ -347,6 +350,7 @@ private fun AboutScreenContent_preview() {
                 shouldShowCrashLogsButton = true,
                 isFlightRecorderEnabled = true,
                 shouldShowFlightRecorder = true,
+                flightRecorderSubtext = "Expires 3/21/25 at 3:20 PM".asText(),
             ),
             onHelpCenterClick = {},
             onPrivacyPolicyClick = {},
