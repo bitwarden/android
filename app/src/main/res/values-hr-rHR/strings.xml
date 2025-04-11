@@ -1136,17 +1136,10 @@
   <string name="copy_email">Kopiraj e-poštu</string>
   <string name="copy_phone">Kopiraj broj telefona</string>
   <string name="copy_address">Kopiraj adresu</string>
-  <string name="important_notice">Važna napomena</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden će, počevši od veljače 2025., za provjeru prijava s novih uređaja poslati kôd na e-poštu tvog računa.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Imaš li pouzdan pristup svojoj e-pošti: <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
-  <string name="yes_i_can_reliably_access_my_email">Da, pouzdano mogu pristupiti svojoj e-pošti</string>
   <string name="biometrics_no_longer_supported_title">Na ovom uređaju biometrija više nije podržaana</string>
   <string name="biometrics_no_longer_supported">Odjavlili smo te jer biometrijski podaci tvojeg uređaja ne zadovoljavaju najnovije sigurnosne zahtjeve. Za ažuriranje postavki ponovno se prijavi ili kontaktiraj svog administratora za pristup.</string>
   <string name="cxp_import">CXP uvoz</string>
   <string name="cxp_export">CXP izvoz</string>
-  <string name="set_up_two_step_login">Postavi dvostruku autentifikaciju</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Prijavu dvostrukom autentifikacijom možeš postaviti kao alternativni način zaštite svog računa ili promijeni svoju e-poštu u onu kojoj možeš pristupiti.</string>
-  <string name="turn_on_two_step_login">Uključi prijavu dvostrukom autentifikacijom</string>
   <string name="change_account_email">Promjeni e-poštu računa</string>
   <string name="choose_three_or_four_random_words">Odaberi tri ili četiri nasumične riječi</string>
   <string name="pick_three_or_four_random_unrelated_words">Odaberi tri ili četiri nasumične, nevezane riješa koje možeš jednostavno zapamtiti. <annotation emphasis="bold">Stvari, mjesta ili nešto</annotation> 
@@ -1161,7 +1154,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">Nismo mogli provjeriti certifikat poslužitelja. Postavke lanca certifikata ili proxyja na tvom uređaju ili Bitwarden poslužitelju možda nisu ispravno postavljene.</string>
   <string name="review_flow_launched">Pokrenut tok pregleda!</string>
   <string name="copy_private_key">Kopiraj privatni ključ</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">e-poštu svog računa možeš promijeniti u Bitwarden web aplikaciji.</string>
   <string name="login_credentials">Vjerodajnice za prijavu</string>
   <string name="autofill_options">Postavke auto-ispune</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Koristi ovu tipku za generiranje nove, jedinstvene lozinke.</string>
@@ -1205,18 +1197,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Korištenje certifikata sustava manje je sigurno od pohrane certifikata s Bitwardenom. U nastavku će se prikazati popis dostupnih certifikata sustava (ako su instalirani).</string>
   <string name="certificate_alias_already_exists">Certifikat već postoji</string>
   <string name="link">Veza</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operacija pristupnog ključa nije uspjela jer je aplikacija pogrešno potpisana.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operacija pristupnog ključa nije uspjela jer je URL domaćina nije prisutan u zahtjevu.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Operacija pristupnog ključa nije uspjela jer je potpis aplikacije nevažeći.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Registracija pristupnog ključa nije uspjela zbog unutrašnje greške.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operacija pristupnog ključa nije uspjela jer se pouzdajuća strana ne može identificirati.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Operacija pristupnog ključa nije uspjela zbog unutrašnje greške.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operacija pristupnog ključa nije uspjela jer odabrana stavka ne postoji.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Operacija pristupnog ključa nije uspjela jer je korisnik zaključan.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operacija pristupnog ključa nije uspjela jer je potvrda korisnika otkazana.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operacija pristupnog ključa nije uspjela jer je zahtjev nevažeći.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operacija pristupnog ključa nije uspjela jer je prekoračen broj pokušaja potvrde korisnika.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operacija pristupnog ključa nije uspjela jer nije odabrana niti jedna stavka.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">URL vlastitog poslužitelja</string>
   <string name="use_chrome_autofill_integration">Koristi Chrome integraciju auto-ispune</string>
   <string name="use_chrome_beta_autofill_integration">Koristi Chrome integraciju auto-ispune (Beta)</string>
@@ -1232,4 +1223,15 @@
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

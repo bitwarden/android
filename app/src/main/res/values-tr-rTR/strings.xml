@@ -1137,17 +1137,10 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="copy_email">E-postayı kopyala</string>
   <string name="copy_phone">Telefon numarasını kopyala</string>
   <string name="copy_address">Adresi kopyala</string>
-  <string name="important_notice">Önemli uyarı</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Şubat 2025 itibarıyla Bitwarden, yeni cihazlardan yeni girişleri doğrulamanız için e-posta adresinize bir kod gönderecektir.</string>
-  <string name="do_you_have_reliable_access_to_your_email">%1$s adresinize sağlıklı bir şekilde erişebiliyor musunuz? </string>
-  <string name="yes_i_can_reliably_access_my_email">Evet, e-postalarıma sağlıklı bir şekilde erişebiliyorum</string>
   <string name="biometrics_no_longer_supported_title">Artık bu cihazda biyometri desteklenmiyor</string>
   <string name="biometrics_no_longer_supported">Cihazınızın biyometrisi en son güvenlik gereksinimlerini karşılamadığı için oturumunuz kapatıldı. Ayarları güncellemek için yeniden oturum açın veya erişim için yöneticinize başvurun.</string>
   <string name="cxp_import">CXP Import</string>
   <string name="cxp_export">CXP Export</string>
-  <string name="set_up_two_step_login">İki adımlı girişi ayarlayın</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Hesabınızı korumanın alternatif bir yolu olarak iki adımlı girişi etkinleştirebilirsiniz. Aksi halde e-posta adresinizin doğru olduğundan emin olmalısınız.</string>
-  <string name="turn_on_two_step_login">İki adımlı girişi etkinleştir</string>
   <string name="change_account_email">Hesap e-postasını değiştir</string>
   <string name="choose_three_or_four_random_words">Choose three or four random words</string>
   <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
@@ -1161,7 +1154,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Copy private key</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Hesap e-postanızı Bitwarden web uygulamasında değiştirebilirsiniz.</string>
   <string name="login_credentials">Hesap Bilgileri</string>
   <string name="autofill_options">Otomatik Doldurma Seçenekleri</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Yeni ve benzersiz bir parola üretmek için bu düğmeyi kullanın.</string>
@@ -1205,18 +1197,17 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
   <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">İstek desteklenmediği için geçiş anahtarı işlemi başarısız oldu.</string>
   <string name="self_host_server_url">Kendi kendine barındırılan sunucu URL\'si</string>
   <string name="use_chrome_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan</string>
   <string name="use_chrome_beta_autofill_integration">Chrome otomatik doldurma entegrasyonunu kullan (Beta)</string>
@@ -1232,4 +1223,15 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Sorun mu yaşıyorsunuz?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Log kayıt süresi</string>
+  <string name="flight_recorder_one_hour">1 saat</string>
+  <string name="flight_recorder_eight_hours">8 saat</string>
+  <string name="flight_recorder_twenty_four_hours">24 saat</string>
+  <string name="flight_recorder_one_week">1 hafta</string>
 </resources>

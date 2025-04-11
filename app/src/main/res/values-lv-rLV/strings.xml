@@ -1138,17 +1138,10 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="copy_email">Ievietot e-pasta adresi starpliktuvē</string>
   <string name="copy_phone">Ievietot tālruņa numuru starpliktuvē</string>
   <string name="copy_address">Ievietot adresi starpliktuvē</string>
-  <string name="important_notice">Svarīgs paziņojums</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden, sākot ar 2025. gada februāri, nosūtīs kodu uz konta e-pasta adresi, lai apliecinātu pieteikšanos no jaunām ierīcēm.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Vai ir uzticama piekļuve savai e-pasta adresei <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Jā, varu uzticami piekļūt savam e-pastam</string>
   <string name="biometrics_no_longer_supported_title">Biometrija šajā ierīcē vairs netiek nodrošināta</string>
   <string name="biometrics_no_longer_supported">Notika atteikšanāš, jo ierīces biometrija neatbilst jaunākajām drošības prasībām. Lai atjauninātu iestatījumus, vēlreiz jāpiesakās vai jāsazinās ar pāŗvaldītāju, lai iegūtu piekļuvi.</string>
   <string name="cxp_import">CXP ievietošana</string>
   <string name="cxp_export">CXP izgūšana</string>
-  <string name="set_up_two_step_login">Iestatīt divpakāpju pieteikšanos</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Var iestatīt divpakāpju pieteikšanos kā citu veidu, kā aizsargāt savu kontu, vai iestatīt savu e-pasta adresi uz tādu, kurai ir piekļuve.</string>
-  <string name="turn_on_two_step_login">Ieslēgt divpakāpju pieteikšanos</string>
   <string name="change_account_email">Mainīt konta e-pasta adresi</string>
   <string name="choose_three_or_four_random_words">Jāizvēlas trīs vai četri nejauši vārdi</string>
   <string name="pick_three_or_four_random_unrelated_words">Jāizvēlas trīs vai četri nejauši, nesaistīti vārdi, kurus var viegli atcerēties. Domā par priekšmetiem, vietam vai lietām, kas Tev patīk!</string>
@@ -1162,7 +1155,6 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Mēs nevarējām apliecināt servera sertifikātu. Sertifikātu ķēde vai starpniekservera iestatījumi ierīcē, vai Bitwarden serveris varētu nebūt pareizi iestatīti.</string>
   <string name="review_flow_launched">Palaista izskatīšanas plūsma.</string>
   <string name="copy_private_key">Ievietot privāto atslēgu starpliktuvē</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Savu konta e-pasta adresi var mainīt Bitwarden tīmekļa lietotnē.</string>
   <string name="login_credentials">Pieteikšanās dati</string>
   <string name="autofill_options">Automātiskās aizpildes iespējas</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Šī poga ir izmantojama, lai izveidotu jaunu, neatkārtojamu paroli.</string>
@@ -1206,18 +1198,17 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistēmas sertifikāta izmantošana ir mazāk droša kā sertifikāta glabāšana ar Bitwarden. Turpinot tiks attēlots pieejamo sistēmas sertifikātu saraksts, ja kāds jau ir uzstādīts.</string>
   <string name="certificate_alias_already_exists">Sertifikāta aizstājvārds jau pastāv</string>
   <string name="link">Saite</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Darbība ar piekļuves atslēgu neizdevās, jo lietotne ir nepareizi parakstīta.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījumā nav pieejams saimniekdatora URL.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Darbība ar piekļuves atslēgu neizdevās, jo lietotnes paraksts ir nederīgs.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Piekļuves atslēgas reģistrēšana neizdevās iekšējas kļūdas dēļ.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Darbība ar piekļuves atslēgu neizdevās, jo iesaistīto pusi nevar identificēt.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Piekļuves atslēgas autentificēšana neizdevās iekšējas kļūdas dēļ.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Darbība ar piekļuves atslēgu neizdevās, jo atlasītais vienums nepastāv.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Darbība ar piekļuves atslēgu neizdevās, jo lietotājs ir izslēgts.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Darbība ar piekļuves atslēgu neizdevās, jo lietotāja apliecināšana tika atcelta.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums ir nederīgs.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Darbība ar piekļuves atslēgu neizdevās, jo tika pārsniegts lietotāja apliecināšanas mēģinājumu skaits.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Darbība ar piekļuves atslēgu neizdevās, jo netika atlasīts neviens vienums.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Darbība ar piekļuves atslēgu neizdevās, jo pieprasījums netiek atbalstīts.</string>
   <string name="self_host_server_url">Pašmitināta servera URL</string>
   <string name="use_chrome_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu</string>
   <string name="use_chrome_beta_autofill_integration">Izmantot Chrome automātiskās aizpildes iekļaušanu (Beta)</string>
@@ -1228,9 +1219,20 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="add_field">Pievienot lauku</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Kopīgot informāciju par kļūdu</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Melnā kaste</string>
+  <string name="flight_recorder_help">Palīdzība par melno kasti</string>
+  <string name="view_recorded_logs">Apskatīt ierakstītos žurnālus</string>
+  <string name="enable_flight_recorder_title">Iespējot melno kasti</string>
+  <string name="recorded_logs_title">Ierakstītie žurnāli</string>
+  <string name="no_logs_recorded">Nav ierakstītu žurnālu</string>
+  <string name="experiencing_an_issue">Ir kādas nebūšanas?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Iespējot pagaidu žurnalēšanu, lai vietēji savāktu un izpētītu žurnālus. Kad iespējota, var tik žurnalēti lietotnes stāvokļi un tīkla izsaukumi, nekad jūtīga glabātavas informācija.</string>
+  <string name="to_get_started_set_a_logging_duration">Lai uzsāktu, jāiestata žunalēšanas ilgums. Žurnalēšana automātiski izslēsies pēc šī laika posma, dodot laiku tvert darbības, kamēr tiek atkārtotas jebkādas nebūšanas.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Žurnāli tiks automātiski izdzēsti pēc 30 dienām. Bitwarden var piekļūt žurnālu datiem tikai tad, kad tos kopīgo.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Lai uzzinātu vairāk par to, kas tiek un netiek žurnalēts, jāapmeklē\n<annotation link="helpCenter">Bitwarden palīdzības centrs</annotation>.</string>
+  <string name="logging_duration">Žurnalēšanas ilgums</string>
+  <string name="flight_recorder_one_hour">1 stunda</string>
+  <string name="flight_recorder_eight_hours">8 stundas</string>
+  <string name="flight_recorder_twenty_four_hours">24 stundas</string>
+  <string name="flight_recorder_one_week">1 nedēļa</string>
 </resources>

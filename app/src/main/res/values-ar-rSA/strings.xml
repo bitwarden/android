@@ -1138,17 +1138,10 @@
   <string name="copy_email">نسخ البريد الإلكتروني</string>
   <string name="copy_phone">نسخ رقم الهاتف</string>
   <string name="copy_address">نسخ العنوان</string>
-  <string name="important_notice">ملاحظة هامة</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">سيقوم Bitwarden بإرسال رمز إلى البريد الإلكتروني الخاص بحسابك للتحقق من تسجيلات الدخول من الأجهزة الجديدة ابتداء من فبراير 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">هل لديك وصول موثوق إلى بريدك الإلكتروني، <annotation emphasis="bold"><annotation arg="0">%1$s؟</annotation></annotation></string>
-  <string name="yes_i_can_reliably_access_my_email">نعم، يمكنني الوصول بشكل موثوق إلى بريدي الإلكتروني</string>
   <string name="biometrics_no_longer_supported_title">القياسات الحيوية لم تعد مدعومة على هذا الجهاز</string>
   <string name="biometrics_no_longer_supported">لقد تم تسجيل الخروج لأن القياسات الحيوية لجهازك لا تفي بأحدث المتطلبات الأمنية. لتحديث الإعدادات، قم بتسجيل الدخول مرة أخرى أو اتصل بالمسؤول الخاص بك للوصول.</string>
   <string name="cxp_import">استيراد CXP</string>
   <string name="cxp_export">تصدير CXP</string>
-  <string name="set_up_two_step_login">إعداد تسجيل الدخول بخطوتين</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">يمكنك إعداد المصادقة الثنائية كطريقة بديلة لحماية حسابك أو تغيير بريدك الإلكتروني إلى بريد يمكنك الوصول إليه.</string>
-  <string name="turn_on_two_step_login">تشغيل تسجيل الدخول بخطوتين</string>
   <string name="change_account_email">تغيير البريد الإلكتروني للحساب</string>
   <string name="choose_three_or_four_random_words">اختر ثلاث أو أربع كلمات عشوائية</string>
   <string name="pick_three_or_four_random_unrelated_words">اختر ثلاث أو أربع كلمات عشوائية لا علاقة لها بالموضوع والتي يمكنك تذكرها بسهولة. فكر في <annotation emphasis="bold">الأشياء أو الأماكن أو الأشياء</annotation> التي تعجبك.</string>
@@ -1162,7 +1155,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">لا يمكننا التحقق من شهادة الخادم. قد لا يتم إعداد سلسلة الشهادات أو إعدادات الوكيل على جهازك أو خادم Bitwarden الخاص بك بشكل صحيح.</string>
   <string name="review_flow_launched">تم تشغيل التدفق!</string>
   <string name="copy_private_key">نسخ المفتاح الخاص</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">يمكنك تغيير البريد الإلكتروني لحسابك على تطبيق ويب Bitwarden.</string>
   <string name="login_credentials">Login Credentials</string>
   <string name="autofill_options">Autofill Options</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
@@ -1206,18 +1198,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Using a system certificate is less secure than storing the certificate with Bitwarden. Continuing will display a list of available system certificates if one is already installed.</string>
   <string name="certificate_alias_already_exists">Certificate alias already exists</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Passkey operation failed because app is signed incorrectly.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Passkey operation failed because host URL is not present in request.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Passkey operation failed because app signature is invalid.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Passkey registration failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Passkey operation failed because relying party cannot be identified.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Passkey authentication failed due to an internal error.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Passkey operation failed because the selected item does not exist.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Passkey operation failed because user is locked out.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Passkey operation failed because user verification was cancelled.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Passkey operation failed because the request is invalid.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Passkey operation failed because user verification attempts exceeded.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">Self-host server URL</string>
   <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
   <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
@@ -1233,4 +1224,15 @@
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

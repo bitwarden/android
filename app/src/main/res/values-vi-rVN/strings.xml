@@ -1138,17 +1138,10 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="copy_email">Sao chép email</string>
   <string name="copy_phone">Sao chép số điện thoại</string>
   <string name="copy_address">Sao chép địa chỉ</string>
-  <string name="important_notice">Thông báo quan trọng</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden sẽ gửi mã đến email tài khoản của bạn để xác minh thông tin đăng nhập từ thiết bị mới bắt đầu từ tháng 2 năm 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Bạn có quyền truy cập đáng tin cậy vào email <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation></string>
-  <string name="yes_i_can_reliably_access_my_email">Có, tôi có quyền truy cập email này</string>
   <string name="biometrics_no_longer_supported_title">Thiết bị này không còn hỗ trợ sinh trắc học nữa</string>
   <string name="biometrics_no_longer_supported">Bạn đã bị đăng xuất vì dữ liệu sinh trắc học của thiết bị không đáp ứng các yêu cầu bảo mật mới nhất. Để cập nhật cài đặt, hãy đăng nhập lại hoặc liên hệ với quản trị viên để được cấp quyền truy cập.</string>
   <string name="cxp_import">Nhập CXP</string>
   <string name="cxp_export">Xuất CXP</string>
-  <string name="set_up_two_step_login">Thiết lập đăng nhập hai bước</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Bạn có thể thiết lập đăng nhập hai bước như một cách thay thế để bảo vệ tài khoản của mình hoặc thay đổi email thành email mà bạn có thể truy cập.</string>
-  <string name="turn_on_two_step_login">Bật đăng nhập hai bước</string>
   <string name="change_account_email">Đổi địa chỉ email</string>
   <string name="choose_three_or_four_random_words">Chọn ba hoặc bốn từ ngẫu nhiên</string>
   <string name="pick_three_or_four_random_unrelated_words">Chọn ba hoặc bốn từ ngẫu nhiên, không liên quan mà bạn có thể dễ dàng nhớ được. Nghĩ về các đồ vật, địa điểm hoặc những thứ bạn thích.</string>
@@ -1162,7 +1155,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Chúng tôi không thể xác minh chứng chỉ của máy chủ. Chuỗi chứng chỉ hoặc cài đặt proxy trên thiết bị hoặc máy chủ Bitwarden của bạn có thể không được thiết lập đúng.</string>
   <string name="review_flow_launched">Đã khởi động xem trước luồng thao tác!</string>
   <string name="copy_private_key">Chép khóa riêng tư</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Bạn có thể thay đổi email trên Bitwarden bản web.</string>
   <string name="login_credentials">Thông tin đăng nhập</string>
   <string name="autofill_options">Tự động điền</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Sử dụng nút này để tạo mật khẩu mới duy nhất.</string>
@@ -1206,18 +1198,17 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sử dụng chứng chỉ hệ thống kém an toàn hơn so với lưu trữ chứng chỉ bằng Bitwarden. Tiếp tục sẽ hiển thị danh sách các chứng chỉ hệ thống khả dụng nếu đã cài đặt một chứng chỉ.</string>
   <string name="certificate_alias_already_exists">Bí danh chứng chỉ đã tồn tại</string>
   <string name="link">Liên kết</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Hoạt động mã khóa không thành công vì ứng dụng được ký không đúng cách.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Hoạt động mã khóa không thành công vì URL máy chủ không có trong yêu cầu.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Hoạt động mã khóa không thành công vì chữ ký ứng dụng không hợp lệ.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Đăng ký mã khóa không thành công do lỗi nội bộ.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Hoạt động mã khóa không thành công vì không xác định được bên tin cậy.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Xác thực mã khóa không thành công do lỗi nội bộ.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Hoạt động mã khóa không thành công vì mục đã chọn không tồn tại.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Hoạt động mã khóa không thành công vì người dùng bị khóa.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Hoạt động mã khóa không thành công vì xác minh người dùng đã bị hủy.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Hoạt động mã khóa không thành công vì yêu cầu không hợp lệ.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Hoạt động mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
   <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
@@ -1228,9 +1219,20 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="add_field">Thêm trường</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Chia sẻ chi tiết lỗi</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Bộ lưu chuyến bay</string>
+  <string name="flight_recorder_help">Trợ giúp bộ lưu chuyến bay</string>
+  <string name="view_recorded_logs">Xem nhật ký đã lưu</string>
+  <string name="enable_flight_recorder_title">Bật bộ lưu chuyến bay</string>
+  <string name="recorded_logs_title">Nhật ký đã lưu</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

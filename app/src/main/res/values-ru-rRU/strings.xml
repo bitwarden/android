@@ -1140,17 +1140,10 @@
   <string name="copy_email">Скопировать email</string>
   <string name="copy_phone">Скопировать номер телефона</string>
   <string name="copy_address">Скопировать адрес</string>
-  <string name="important_notice">Важное уведомление</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Начиная с февраля 2025 года Bitwarden будет отправлять код на электронную почту вашего аккаунта для подтверждения авторизации с новых устройств.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Есть ли у вас надежный доступ к электронной почте <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Да, я имею надежный доступ к своей электронной почте</string>
   <string name="biometrics_no_longer_supported_title">Биометрия больше не поддерживается на этом устройстве</string>
   <string name="biometrics_no_longer_supported">Вы были деавторизованы, поскольку биометрические данные вашего устройства не соответствуют последним требованиям безопасности. Чтобы обновить настройки, авторизуйтесь еще раз или обратитесь к администратору для получения доступа.</string>
   <string name="cxp_import">Импорт CXP</string>
   <string name="cxp_export">Экспорт CXP</string>
-  <string name="set_up_two_step_login">Настроить двухэтапную аутентификацию</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">В качестве альтернативного способа защиты учетной записи вы можете настроить двухэтапную аутентификацию или сменить электронную почту на ту, к которой вы можете получить доступ.</string>
-  <string name="turn_on_two_step_login">Включить двухэтапную аутентификацию</string>
   <string name="change_account_email">Изменить email аккаунта</string>
   <string name="choose_three_or_four_random_words">Выберите три или четыре случайных слова</string>
   <string name="pick_three_or_four_random_unrelated_words">Выберите три или четыре случайных, не связанных между собой слова, которые вы можете легко запомнить. Подумайте о <annotation emphasis="bold">предметах, местах или вещах</annotation>, которые вам нравятся.</string>
@@ -1164,7 +1157,6 @@
   <string name="we_couldnt_verify_the_servers_certificate">Мы не смогли проверить сертификат сервера. Возможно, цепочка сертификатов или настройки прокси на вашем устройстве или сервере Bitwarden настроены неправильно.</string>
   <string name="review_flow_launched">Начался процесс обзора!</string>
   <string name="copy_private_key">Скопировать приватный ключ</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Вы можете изменить email своего аккаунта в веб-приложении Bitwarden.</string>
   <string name="login_credentials">Данные для авторизации</string>
   <string name="autofill_options">Параметры автозаполнения</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Используйте эту кнопку для генерации нового уникального пароля.</string>
@@ -1208,18 +1200,17 @@
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Использование системного сертификата менее безопасно, чем хранение сертификата в Bitwarden. При продолжении появится список доступных системных сертификатов, если один из них уже установлен.</string>
   <string name="certificate_alias_already_exists">Псевдоним сертификата уже существует</string>
   <string name="link">Ссылка</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Операция с Passkey не удалась, поскольку приложение подписано неверно.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Операция с Passkey не удалась, поскольку URL хоста отсутствует в запросе.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Операция с Passkey не удалась, поскольку подпись приложения недействительна.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Регистрация Passkey не удалась из-за внутренней ошибки.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Операция с Passkey не удалась, поскольку не удалось идентифицировать доверяющую сторону.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Аутентификация Passkey не удалась из-за внутренней ошибки.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Операция с Passkey не удалась, поскольку выбранный элемент не существует.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Операция с Passkey не удалась, поскольку пользователь заблокирован.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Операция с Passkey не удалась, поскольку верификация пользователя была отменена.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Операция с Passkey не удалась, поскольку запрос некорректен.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Операция с Passkey не удалась, поскольку превышено количество попыток верификации пользователя.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Операция с Passkey не удалась, поскольку не был выбран ни один элемент.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Операция с Passkey не удалась, поскольку запрос не поддерживается.</string>
   <string name="self_host_server_url">URL собственного сервера</string>
   <string name="use_chrome_autofill_integration">Использовать интеграцию автозаполнения в Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Использовать интеграцию автозаполнения в Chrome (Beta)</string>
@@ -1230,9 +1221,20 @@
   <string name="add_field">Добавить поле</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Поделиться информацией об ошибке</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Бортовой самописец</string>
+  <string name="flight_recorder_help">Помощь по бортовому самописцу</string>
+  <string name="view_recorded_logs">Просмотр записанных логов</string>
+  <string name="enable_flight_recorder_title">Включить бортовой самописец</string>
+  <string name="recorded_logs_title">Записанные логи</string>
+  <string name="no_logs_recorded">Нет записанных логов</string>
+  <string name="experiencing_an_issue">Испытываете проблемы?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Включите временное логирование для сбора и изучения логов локально. Если эта опция включена, в журнал могут записываться состояния приложений и сетевые вызовы, но не конфиденциальная информация хранилища.</string>
+  <string name="to_get_started_set_a_logging_duration">Чтобы начать работу, задайте продолжительность записи логов. По истечении этого периода запись логов автоматически отключится, что обеспечит вам возможность зафиксировать действия при воспроизведении любых проблем.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Логи автоматически удаляются через 30 дней. Bitwarden может получить доступ к данным журнала только в том случае, если вы их предоставите.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Для получения подробной информации о том, что логируется, а что нет, посетите\n<annotation link="helpCenter">Справочный центр Bitwarden.</annotation></string>
+  <string name="logging_duration">Продолжительность записи логов</string>
+  <string name="flight_recorder_one_hour">1 час</string>
+  <string name="flight_recorder_eight_hours">8 часов</string>
+  <string name="flight_recorder_twenty_four_hours">24 часа</string>
+  <string name="flight_recorder_one_week">1 неделя</string>
 </resources>
