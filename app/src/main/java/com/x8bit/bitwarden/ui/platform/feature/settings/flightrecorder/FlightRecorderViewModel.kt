@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder
 
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.FlightRecorderDuration
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,11 +16,12 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class FlightRecorderViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<FlightRecorderState, FlightRecorderEvent, FlightRecorderAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: FlightRecorderState(
-            selectedDuration = FlightRecorderDuration.ONE_HOUR,
+            selectedDuration = FlightRecorderDuration.TWENTY_FOUR_HOURS,
         ),
 ) {
     override fun handleAction(action: FlightRecorderAction) {
@@ -44,7 +46,8 @@ class FlightRecorderViewModel @Inject constructor(
     }
 
     private fun handleSaveClick() {
-        // TODO: PM-19592 Persist the flight recorder state.
+        settingsRepository.startFlightRecorder(duration = state.selectedDuration)
+        sendEvent(FlightRecorderEvent.NavigateBack)
     }
 }
 

@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
@@ -70,6 +71,7 @@ class SettingsRepositoryTest {
             getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
         } returns mutableActivePolicyFlow
     }
+    private val flightRecorderManager = mockk<FlightRecorderManager>()
 
     private val settingsRepository = SettingsRepositoryImpl(
         autofillManager = autofillManager,
@@ -80,6 +82,7 @@ class SettingsRepositoryTest {
         accessibilityEnabledManager = fakeAccessibilityEnabledManager,
         dispatcherManager = FakeDispatcherManager(),
         policyManager = policyManager,
+        flightRecorderManager = flightRecorderManager,
     )
 
     @BeforeEach

@@ -2,6 +2,10 @@ package com.x8bit.bitwarden.data.platform.datasource.network.di
 
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.ConfigServiceImpl
+import com.bitwarden.network.service.EventService
+import com.bitwarden.network.service.EventServiceImpl
+import com.bitwarden.network.service.PushService
+import com.bitwarden.network.service.PushServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
@@ -9,10 +13,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlI
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.KeyManager

@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.di
 
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsServiceImpl
+import com.bitwarden.network.service.AccountsService
+import com.bitwarden.network.service.AccountsServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
