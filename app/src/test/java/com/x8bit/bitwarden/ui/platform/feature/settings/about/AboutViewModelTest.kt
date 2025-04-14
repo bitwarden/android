@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.Year
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 class AboutViewModelTest : BaseViewModelTest() {
 
@@ -235,7 +235,7 @@ class AboutViewModelTest : BaseViewModelTest() {
 
 private val FIXED_CLOCK = Clock.fixed(
     Instant.parse("2024-01-25T10:15:30.00Z"),
-    ZoneId.systemDefault(),
+    ZoneOffset.UTC,
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     version = "Version: <version_name> (<version_code>)".asText(),
