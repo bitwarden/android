@@ -163,6 +163,78 @@
     {
       "type": "android",
       "info": {
+        "package_name": "org.mozilla.fenix",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "50:04:77:90:88:E7:F9:88:D5:BC:5C:C5:F8:79:8F:EB:F4:F8:CD:08:4A:1B:2A:46:EF:D4:C8:EE:4A:EA:F2:11"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.fenix.debug",
+        "signatures": [
+          {
+            "build": "userdebug",
+            "cert_fingerprint_sha256": "BD:AE:82:02:80:D2:AF:B7:74:94:EF:22:58:AA:78:A9:AE:A1:36:41:7E:8B:C2:3D:C9:87:75:2E:6F:48:E8:48"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.focus.beta",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "62:03:A4:73:BE:36:D6:4E:E3:7F:87:FA:50:0E:DB:C7:9E:AB:93:06:10:AB:9B:9F:A4:CA:7D:5C:1F:1B:4F:FC"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.focus.nightly",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "62:03:A4:73:BE:36:D6:4E:E3:7F:87:FA:50:0E:DB:C7:9E:AB:93:06:10:AB:9B:9F:A4:CA:7D:5C:1F:1B:4F:FC"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.klar",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "62:03:A4:73:BE:36:D6:4E:E3:7F:87:FA:50:0E:DB:C7:9E:AB:93:06:10:AB:9B:9F:A4:CA:7D:5C:1F:1B:4F:FC"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
+        "package_name": "org.mozilla.reference.browser",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "B0:09:90:E3:0F:9D:81:5D:2E:BC:7B:9B:B2:21:CE:47:E5:C9:D5:17:AA:C7:0E:7F:D5:95:B1:E5:3E:9A:4B:14"
+          }
+        ]
+      }
+    },
+    {
+      "type": "android",
+      "info": {
         "package_name": "com.microsoft.emmx.canary",
         "signatures": [
           {
