@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlI
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
+import com.x8bit.bitwarden.data.platform.util.isDevBuild
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -88,7 +89,11 @@ class RetrofitsImpl(
         HttpLoggingInterceptor { message -> Timber.tag("BitwardenNetworkClient").d(message) }
             .apply {
                 redactHeader(name = HEADER_KEY_AUTHORIZATION)
-                setLevel(HttpLoggingInterceptor.Level.BODY)
+                setLevel(
+                    level = HttpLoggingInterceptor.Level.BODY
+                        .takeIf { isDevBuild }
+                        ?: HttpLoggingInterceptor.Level.BASIC,
+                )
             }
     }
 

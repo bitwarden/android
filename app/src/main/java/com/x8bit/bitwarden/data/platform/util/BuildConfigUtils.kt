@@ -10,6 +10,12 @@ val isFdroid: Boolean
     get() = BuildConfig.FLAVOR == "fdroid"
 
 /**
+ * A boolean property that indicates whether the current build is a dev build.
+ */
+val isDevBuild: Boolean
+    get() = BuildConfig.BUILD_TYPE == "debug"
+
+/**
  * A string that represents a displayable app version.
  */
 val versionData: String
