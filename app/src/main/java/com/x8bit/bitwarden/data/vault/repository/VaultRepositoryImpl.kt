@@ -24,6 +24,7 @@ import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
+import com.bitwarden.network.service.SyncService
 import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
@@ -54,7 +55,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
