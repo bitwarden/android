@@ -620,6 +620,7 @@ Scanning will happen automatically.</string>
   <string name="deletion_date_info">The Send will be permanently deleted on the specified date and time.</string>
   <string name="pending_delete">Pending deletion</string>
   <string name="expired">Expired</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Maximum access count</string>
   <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
   <string name="maximum_access_count_reached">Max access count reached</string>
