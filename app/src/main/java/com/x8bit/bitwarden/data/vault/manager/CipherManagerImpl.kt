@@ -509,7 +509,10 @@ class CipherManagerImpl(
                         .flatMap { response ->
                             when (response) {
                                 is UpdateCipherResponseJson.Invalid -> {
-                                    IllegalStateException(response.message).asFailure()
+                                    IllegalStateException(
+                                        response.message,
+                                    )
+                                        .asFailure()
                                 }
 
                                 is UpdateCipherResponseJson.Success -> {
