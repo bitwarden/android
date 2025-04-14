@@ -58,23 +58,31 @@ class CiphersServiceImpl(
                 body = body,
             )
             .toResult()
+            .recoverCatching { throwable ->
+                throwable.toBitwardenError()
+                    .parseErrorBodyOrNull<AttachmentJsonResponse.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     override suspend fun uploadAttachment(
-        attachmentJsonResponse: AttachmentJsonResponse,
+        attachment: AttachmentJsonResponse.Success,
         encryptedFile: File,
     ): Result<SyncResponseJson.Cipher> {
-        val cipher = attachmentJsonResponse.cipherResponse
-        return when (attachmentJsonResponse.fileUploadType) {
+        val cipher = attachment.cipherResponse
+        return when (attachment.fileUploadType) {
             FileUploadType.DIRECT -> {
                 ciphersApi.uploadAttachment(
                     cipherId = requireNotNull(cipher.id),
-                    attachmentId = attachmentJsonResponse.attachmentId,
+                    attachmentId = attachment.attachmentId,
                     body = this
                         .createMultipartBodyBuilder(
                             encryptedFile = encryptedFile,
                             filename = cipher
                                 .attachments
-                                ?.find { it.id == attachmentJsonResponse.attachmentId }
+                                ?.find { it.id == attachment.attachmentId }
                                 ?.fileName,
                         )
                         .build(),
@@ -83,11 +91,11 @@ class CiphersServiceImpl(
 
             FileUploadType.AZURE -> {
                 azureApi.uploadAzureBlob(
-                    url = attachmentJsonResponse.url,
+                    url = attachment.url,
                     date = DateTimeFormatter
                         .RFC_1123_DATE_TIME
                         .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
-                    version = attachmentJsonResponse.url.toUri().getQueryParameter("sv"),
+                    version = attachment.url.toUri().getQueryParameter("sv"),
                     body = encryptedFile.asRequestBody(),
                 )
             }
