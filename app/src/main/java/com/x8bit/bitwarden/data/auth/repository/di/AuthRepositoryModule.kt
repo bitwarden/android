@@ -4,8 +4,8 @@ import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.DevicesService
+import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
