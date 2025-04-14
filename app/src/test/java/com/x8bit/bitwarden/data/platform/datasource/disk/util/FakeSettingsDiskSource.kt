@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.util
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 
 /**
@@ -50,6 +52,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableShouldShowGeneratorCoachMarkFlow =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableFlightRecorderDataFlow =
+        bufferedMutableSharedFlow<FlightRecorderDataSet?>(replay = 1)
+
     private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
@@ -80,6 +85,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var createSendActionCount: Int? = null
     private var hasSeenAddLoginCoachMark: Boolean? = null
     private var hasSeenGeneratorCoachMark: Boolean? = null
+    private var storedFlightRecorderData: FlightRecorderDataSet? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -172,6 +178,17 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
         }
+
+    override var flightRecorderData: FlightRecorderDataSet?
+        get() = storedFlightRecorderData
+        set(value) {
+            storedFlightRecorderData = value
+            mutableFlightRecorderDataFlow.tryEmit(value)
+        }
+
+    override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
+        get() = mutableFlightRecorderDataFlow
+            .onSubscription { emit(storedFlightRecorderData) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -428,6 +445,13 @@ class FakeSettingsDiskSource : SettingsDiskSource {
 
     override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
         return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
+    }
+
+    /**
+     * Asserts that the stored [FlightRecorderDataSet] matches the [expected] one.
+     */
+    fun assertFlightRecorderData(expected: FlightRecorderDataSet) {
+        assertEquals(expected, storedFlightRecorderData)
     }
 
     //region Private helper functions

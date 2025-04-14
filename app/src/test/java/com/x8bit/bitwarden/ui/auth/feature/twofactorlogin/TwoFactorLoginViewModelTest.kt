@@ -5,11 +5,11 @@ import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -176,14 +176,30 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `webAuthResultFlow update with failure should display error dialog`() {
+    fun `webAuthResultFlow failure without message should display generic error dialog`() {
         val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
         val viewModel = createViewModel(state = initialState)
-        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure)
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure(message = null))
         assertEquals(
             initialState.copy(
                 dialogState = TwoFactorLoginState.DialogState.Error(
                     message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `webAuthResultFlow failure with message should display error dialog with message`() {
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
+        val viewModel = createViewModel(state = initialState)
+        val errorMessage = "An error"
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure(message = errorMessage))
+        assertEquals(
+            initialState.copy(
+                dialogState = TwoFactorLoginState.DialogState.Error(
+                    message = errorMessage.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

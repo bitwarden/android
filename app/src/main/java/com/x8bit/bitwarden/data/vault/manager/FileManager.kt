@@ -17,6 +17,11 @@ interface FileManager {
     val filesDirectory: String
 
     /**
+     * Absolute path to the private logs storage directory.
+     */
+    val logsDirectory: String
+
+    /**
      * Deletes [files] from disk.
      */
     suspend fun delete(vararg files: File)

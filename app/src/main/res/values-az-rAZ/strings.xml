@@ -1137,17 +1137,10 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="copy_email">E-poçtu kopyala</string>
   <string name="copy_phone">Telefon nömrəsini kopyala</string>
   <string name="copy_address">Ünvanı kopyala</string>
-  <string name="important_notice">Vacib bildiriş</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden, 2025-ci ilin Fevral ayından etibarən yeni cihazlardan gələn girişləri doğrulamaq üçün hesabınızın e-poçtuna bir kod göndərəcək.</string>
-  <string name="do_you_have_reliable_access_to_your_email"><annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> e-poçtunuza güvənli şəkildə müraciət edə bilirsiniz?</string>
-  <string name="yes_i_can_reliably_access_my_email">Bəli, e-poçtuma güvənli şəkildə müraciət edə bilirəm</string>
   <string name="biometrics_no_longer_supported_title">Biometriklər artıq bu cihazda dəstəklənmir</string>
   <string name="biometrics_no_longer_supported">Hesabınızdan çıxış edildi, çünki cihazınızın biometrikləri son güvənlik tələblərinə cavab vermir. Ayarları güncəlləmək üçün təkrar giriş edin və ya müraciət üçün inzibatçınızla əlaqə saxlayın.</string>
   <string name="cxp_import">CXP daxilə köçürmə</string>
   <string name="cxp_export">CXP xaricə köçürmə</string>
-  <string name="set_up_two_step_login">İki addımlı girişi qur</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Hesabınızı qorumaq üçün alternativ bir yol kimi iki addımlı girişi qura və ya e-poçtunuzu müraciət edə biləcəyiniz e-poçtla dəyişdirə bilərsiniz.</string>
-  <string name="turn_on_two_step_login">İki addımlı girişi işə sal</string>
   <string name="change_account_email">Hesabın e-poçtunu dəyişdir</string>
   <string name="choose_three_or_four_random_words">Üç və ya dörd təsadüfi söz seçin</string>
   <string name="pick_three_or_four_random_unrelated_words">Asanlıqla xatırlaya biləcəyiniz üç və ya dörd təsadüfi və əlaqəsiz söz seçin. Bəyəndiniz obyektləri, məkanları və ya şeyləri düşünün.</string>
@@ -1161,7 +1154,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Serverin sertifikatını doğrulaya bilmədik. Cihazınızda və ya Bitwarden serverinizdə sertifikat zənciri və ya proksi ayarları düzgün qurulmamış ola bilər.</string>
   <string name="review_flow_launched">İncələmə axını başladıldı!</string>
   <string name="copy_private_key">Private açarı kopyala</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Hesabınızın e-poçtunu Bitwarden veb tətbiqində dəyişdirə bilərsiniz.</string>
   <string name="login_credentials">Giriş məlumatları</string>
   <string name="autofill_options">Avto-doldurma seçimləri</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Yeni və unikal bir parol yaratmaq üçün bu düyməni istifadə edin.</string>
@@ -1205,18 +1197,17 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Sistem sertifikatını istifadə etmək, sertifikatı Bitwarden ilə saxlamaqdan daha az güvənlidir. Davam etsəniz, artıq quraşdırılmış bir sistem sertifikatı varsa, mövcud sistem sertifikatlarının bir siyahısı göstəriləcək.</string>
   <string name="certificate_alias_already_exists">Sertifikat alias-ı artıq mövcuddur</string>
   <string name="link">Keçid</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Tətbiq yanlış imzalandığı üçün keçid açarı əməliyyatı uğursuz oldu</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Sorğuda host URL təqdim olunmadığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Tətbiq imzası yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Daxili bir xətaya görə keçid açarı qeydiyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Güvənilən tərəf müəyyən edilə bilmədiyi üçün keçid açarı əəməliyyatı uğursuz oldu.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Daxili bir xətaya görə keçid açarı kimlik doğrulaması uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Seçilmiş element mövcud olmadığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">İstifadəçi kilidləndiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">İstifadəçi doğrulaması ləğv edildiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Sorğu yararsız olduğu üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">İstifadəçi doğrulama cəhdlərini aşdığı üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Heç bir element seçilmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Sorğu dəstəklənmədiyi üçün keçid açarı əməliyyatı uğursuz oldu.</string>
   <string name="self_host_server_url">Self-host server URL-si</string>
   <string name="use_chrome_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et</string>
   <string name="use_chrome_beta_autofill_integration">Chrome avto-doldurma inteqrasiyasını istifadə et (Beta)</string>
@@ -1227,9 +1218,22 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="add_field">Xana əlavə et</string>
   <string name="x_ellipses">%s...</string>
   <string name="share_error_details">Xəta detallarını paylaş</string>
-  <string name="flight_recorder">Flight recorder</string>
-  <string name="flight_recorder_help">Flight recorder help</string>
-  <string name="view_recorded_logs">View recorded logs</string>
-  <string name="enable_flight_recorder_title">Enable flight recorder</string>
-  <string name="recorded_logs_title">Recorded logs</string>
+  <string name="flight_recorder">Uçuş yazıcısı</string>
+  <string name="flight_recorder_help">Uçuş yazıcısı üzrə kömək</string>
+  <string name="view_recorded_logs">Yazılmış qeydlərə bax</string>
+  <string name="enable_flight_recorder_title">Uçuş yazıcısını fəallaşdır</string>
+  <string name="recorded_logs_title">Yazılmış qeydlər</string>
+  <string name="no_logs_recorded">Heç bir qeyd yazılmayıb</string>
+  <string name="experiencing_an_issue">Problemlə üzləşmisiniz?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Qeydləri daxili anbarda yığmaq və yoxlamaq üçün müvəqqəti jurnala yazma prosesini fəallaşdırın. Fəal olduqda, tətbiq statusları və şəbəkə zəngləri jurnala yazıla bilər, ancaq həssas seyf məlumatları heç vaxt yazılmır.</string>
+  <string name="to_get_started_set_a_logging_duration">Başlamaq üçün, jurnala yazma müddətini təyin edin.
+Jurnala yazma, bu müddətdən sonra avtomatik söndürüləcək, hər hansısa problemi yenidən yaradarkən
+fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Qeydlər 30 gün sonra avtomatik silinəcək. Bitwarden, jurnal datalarınıza yalnız siz paylaşdığınız zaman müraciət edə bilər.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Nəyin yazılıb-yazılmadığını öyrənmək üçün \n<annotation link="helpCenter">Bitwarden kömək mərkəzini</annotation> ziyarət edin.</string>
+  <string name="logging_duration">Jurnala yazma müddəti</string>
+  <string name="flight_recorder_one_hour">1 saat</string>
+  <string name="flight_recorder_eight_hours">8 saat</string>
+  <string name="flight_recorder_twenty_four_hours">24 saat</string>
+  <string name="flight_recorder_one_week">1 həftə</string>
 </resources>

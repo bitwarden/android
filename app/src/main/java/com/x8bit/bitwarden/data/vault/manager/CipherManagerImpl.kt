@@ -5,6 +5,10 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.network.model.AttachmentJsonResponse
+import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.ShareCipherJsonRequest
+import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
@@ -12,10 +16,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource

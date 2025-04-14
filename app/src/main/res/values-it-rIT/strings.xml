@@ -1138,17 +1138,10 @@ Vuoi passare a questo account?</string>
   <string name="copy_email">Copia email</string>
   <string name="copy_phone">Copia numero di telefono</string>
   <string name="copy_address">Copia indirizzo</string>
-  <string name="important_notice">Avviso importante</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden invierà un codice all\'email del tuo account per verificare gli accessi da nuovi dispositivi a partire da febbraio 2025.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Hai accesso affidabile alla tua email, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Sì, riesco ad accedere in modo affidabile alla mia email</string>
   <string name="biometrics_no_longer_supported_title">I dati biometrici non sono più supportati su questo dispositivo</string>
   <string name="biometrics_no_longer_supported">Sei stato disconnesso perché la biometria del tuo dispositivo non soddisfa gli ultimi requisiti di sicurezza. Per aggiornare le impostazioni, effettuare nuovamente il login o contatta l\'amministratore per accedere.</string>
   <string name="cxp_import">Importazione CXP</string>
   <string name="cxp_export">Esportazione CXP</string>
-  <string name="set_up_two_step_login">Configura l\'accesso in due passaggi</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Puoi impostare l\'accesso in due passaggi come metodo alternativo per proteggere il tuo account, oppure cambiare l\'email, impostandone una alla quale puoi accedere.</string>
-  <string name="turn_on_two_step_login">Attiva l\'accesso in due passaggi</string>
   <string name="change_account_email">Cambia l\'email dell\'account</string>
   <string name="choose_three_or_four_random_words">Scegli tre o quattro parole casuali</string>
   <string name="pick_three_or_four_random_unrelated_words">Scegli tre o quattro parole casuali e non correlate che sarai in grado di ricordare. Pensa a <annotation emphasis="bold">oggetti, luoghi o cose</annotation> che ti piacciono.</string>
@@ -1162,7 +1155,6 @@ Vuoi passare a questo account?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Non è stato possibile verificare il certificato del server. La catena di certificati o le impostazioni proxy del tuo dispositivo o del tuo server Bitwarden potrebbero non essere configurati correttamente.</string>
   <string name="review_flow_launched">Flusso di revisione avviato.</string>
   <string name="copy_private_key">Copia chiave privata</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">Puoi modificare l\'email del tuo account sull\'app web Bitwarden.</string>
   <string name="login_credentials">Credenziali di accesso</string>
   <string name="autofill_options">Opzioni di auto-compilazione</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Usa questo pulsante per generare una nuova parola d\'accesso univoca.</string>
@@ -1206,18 +1198,17 @@ Vuoi passare a questo account?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Potrai consultare una lista dei certificati di sistema, se almeno uno è disponibile. Ricorda che usare un certificato di sistema è meno sicuro rispetto al certificato memorizzato con Bitwarden.</string>
   <string name="certificate_alias_already_exists">L\'alias del certificato esiste già</string>
   <string name="link">Link</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operazione chiave d\'accesso non riuscita perché l\'app è firmata in modo errato.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operazione parola d\'accesso non riuscita perché l\'URL host non è presente nella richiesta.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Operazione parola d\'accesso non riuscita perché la firma dell\'app non è valida.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Registrazione chiave d\'accesso non riuscita a causa di un errore interno.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operazione chiave d\'accesso non riuscita perché la parte affidataria non può essere identificata.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Autenticazione chiave d\'accesso non riuscita a causa di un errore interno.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operazione chiave d\'accesso non riuscita perché l\'elemento selezionato non esiste.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Operazione chiave d\'accesso non riuscita perché l\'utente è escluso.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operazione chiave d\'accesso non riuscita perché la verifica dell\'utente è stata annullata.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operazione parola d\'accesso non riuscita perché la richiesta non è valida.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operazione chiave d\'accesso non riuscita perché i tentativi di verifica dell\'utente sono stati superati.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operazione chiave d\'accesso non riuscita perché nessun elemento è stato selezionato.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">URL server autogestito</string>
   <string name="use_chrome_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Usa l\'integrazione di riempimento automatico Chrome (Beta)</string>
@@ -1233,4 +1224,15 @@ Vuoi passare a questo account?</string>
   <string name="view_recorded_logs">View recorded logs</string>
   <string name="enable_flight_recorder_title">Enable flight recorder</string>
   <string name="recorded_logs_title">Recorded logs</string>
+  <string name="no_logs_recorded">No logs recorded</string>
+  <string name="experiencing_an_issue">Experiencing an issue?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
+  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
+  <string name="logging_duration">Logging duration</string>
+  <string name="flight_recorder_one_hour">1 hour</string>
+  <string name="flight_recorder_eight_hours">8 hours</string>
+  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_week">1 week</string>
 </resources>

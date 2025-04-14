@@ -6,6 +6,11 @@ import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.core.di.CoreModule
 import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
@@ -13,12 +18,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

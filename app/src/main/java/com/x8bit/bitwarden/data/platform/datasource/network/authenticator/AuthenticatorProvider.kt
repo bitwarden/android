@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.authenticator
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.bitwarden.network.model.RefreshTokenResponseJson
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 
 /**

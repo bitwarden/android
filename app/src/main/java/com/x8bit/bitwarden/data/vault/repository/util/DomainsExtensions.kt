@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson.Domains
+import com.bitwarden.network.model.SyncResponseJson.Domains
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 
 /**

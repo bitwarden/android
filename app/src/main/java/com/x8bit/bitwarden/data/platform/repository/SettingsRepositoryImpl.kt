@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -13,13 +15,12 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -49,10 +50,12 @@ class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
+    flightRecorderManager: FlightRecorderManager,
     accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
-) : SettingsRepository {
+) : SettingsRepository,
+    FlightRecorderManager by flightRecorderManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)

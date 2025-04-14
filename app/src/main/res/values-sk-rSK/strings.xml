@@ -1138,17 +1138,10 @@ Chcete prepnúť na tento účet?</string>
   <string name="copy_email">Kopírovať e-mail</string>
   <string name="copy_phone">Kopírovať telefónne číslo</string>
   <string name="copy_address">Kopírovať adresu</string>
-  <string name="important_notice">Dôležité upozornenie</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">Bitwarden vám od februára 2025 pošle na e-mail vášho účtu kód na overenie prihlásenia z nových zariadení.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Máte zaručený prístup k e-mailu, <annotation emphasis="bold"><annotation arg="0">%1$s?</annotation></annotation>?</string>
-  <string name="yes_i_can_reliably_access_my_email">Áno, mám zaručený prístup k e-mailu</string>
   <string name="biometrics_no_longer_supported_title">Biometrické údaje už nie sú v tomto zariadení podporované</string>
   <string name="biometrics_no_longer_supported">Boli ste odhlásení, pretože biometrické údaje vášho zariadenia nespĺňajú najnovšie bezpečnostné požiadavky. Pre aktualizáciu nastavenia sa prihláste ešte raz alebo sa obráťte na správcu, ktorý vám umožní prístup.</string>
   <string name="cxp_import">Import CXP</string>
   <string name="cxp_export">Export CXP</string>
-  <string name="set_up_two_step_login">Nastavenie dvojstupňového prihlásenia</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Ako alternatívny spôsob ochrany svojho účtu môžete nastaviť dvojstupňové prihlásenie alebo zmeniť e-mail na taký, ku ktorému máte prístup.</string>
-  <string name="turn_on_two_step_login">Zapnúť dvojstupňové prihlásenie</string>
   <string name="change_account_email">Zmeniť e-mail účtu</string>
   <string name="choose_three_or_four_random_words">Vyberte tri alebo štytri náhodné slová</string>
   <string name="pick_three_or_four_random_unrelated_words">Vyberte si tri alebo štyri náhodné, nesúvisiace slová, ktoré si ľahko zapamätáte. Spomeňte si na predmety, miesta alebo veci, ktoré máte radi.</string>
@@ -1162,7 +1155,6 @@ Chcete prepnúť na tento účet?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Certifikát servera sa nám nepodarilo overiť. Reťazec certifikátov alebo nastavenia proxy servera na vašom zariadení alebo serveri Bitwarden nemusia byť správne nastavené.</string>
   <string name="review_flow_launched">Prebieha hodnotenie!</string>
   <string name="copy_private_key">Kopírovať súkromný kľúč</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">E-mail účtu môžete zmeniť vo webovej aplikácii Bitwarden.</string>
   <string name="login_credentials">Prihlasovacie údaje</string>
   <string name="autofill_options">Možnosti automatického vypĺňania</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Toto tlačidlo použite na vygenerovanie nového jedinečného hesla.</string>
@@ -1206,18 +1198,17 @@ Chcete prepnúť na tento účet?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">Použitie systémového certifikátu je menej bezpečné ako uloženie certifikátu v Bitwardene. Pokračovaním sa zobrazí zoznam dostupných systémových certifikátov, ak je už nejaký nainštalovaný.</string>
   <string name="certificate_alias_already_exists">Alias certifikátu už existuje</string>
   <string name="link">Odkaz</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">Operácia prístupového kľúča zlyhala, pretože aplikácia je nesprávne podpísaná.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">Operácia prístupového kľúča zlyhala, pretože v požiadavke nie je uvedená adresa URL hostiteľa.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">Operácia prístupového kľúča zlyhala, pretože podpis aplikácia je neplatný.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">Registrácia prístupového kľúča zlyhala z dôvodu internej chyby.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">Operácia prístupového kľúča zlyhala, pretože sa nepodarilo identifikovať dôveryhodnú stranu.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">Overenie prístupovým kľúčom zlyhalo z dôvodu vnútornej chyby.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">Operácia prístupového kľúča zlyhala, pretože vybraná položka neexistuje.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">Operácia prístupového kľúča zlyhala, pretože používateľ je zablokovaný.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">Operácia prístupového kľúča zlyhala, pretože overenie používateľa bolo zrušené.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Operácia prístupového kľúča zlyhala, pretože požiadavka nie je platná.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Operácia prístupového kľúča zlyhala, pretože počet pokusov o overenie používateľa bol prekročený.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Operácia prístupového kľúča zlyhala, pretože nebola vybraná žiadna položka.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Operácia prístupového kľúča zlyhala, pretože požiadavka nie podporovaná.</string>
   <string name="self_host_server_url">Adresa URL vlastného hostingu</string>
   <string name="use_chrome_autofill_integration">Použiť integráciu automatického vyplňovania Chromu</string>
   <string name="use_chrome_beta_autofill_integration">Použiť integráciu automatického vyplňovania Chromu (Beta)</string>
@@ -1233,4 +1224,15 @@ Chcete prepnúť na tento účet?</string>
   <string name="view_recorded_logs">Zobraziť zaznamenané logy</string>
   <string name="enable_flight_recorder_title">Povoliť čiernu skrinku</string>
   <string name="recorded_logs_title">Zaznamenané logy</string>
+  <string name="no_logs_recorded">Žiadne zaznamenané logy</string>
+  <string name="experiencing_an_issue">Máte problém?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Povoľte dočasné logovanie na zhromažďovanie a kontrolu logov lokálne. Ak je povolené, stav aplikácií a sieťové hovory môžu byť zaznamenávané – ale nikdy citlivé informácie o trezore.</string>
+  <string name="to_get_started_set_a_logging_duration">Ak chcete začať, nastavte trvanie logovania. Po uplynutí tejto doby sa logovanie automaticky vypne, čím získate čas na zachytenie činnosti pri reprodukovaní prípadných problémov.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Logy sa po 30 dňoch automaticky odstránia. Bitwarden má prístup k údajom logovania len keď ich zdieľate.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Pre viac informácií, čo je a nie je logované, navštívte \n<annotation link="helpCenter">Centrum pomoci Bitwarden.</annotation></string>
+  <string name="logging_duration">Dĺžka logovania</string>
+  <string name="flight_recorder_one_hour">1 hodina</string>
+  <string name="flight_recorder_eight_hours">8 hodín</string>
+  <string name="flight_recorder_twenty_four_hours">24 hodín</string>
+  <string name="flight_recorder_one_week">1 týždeň</string>
 </resources>

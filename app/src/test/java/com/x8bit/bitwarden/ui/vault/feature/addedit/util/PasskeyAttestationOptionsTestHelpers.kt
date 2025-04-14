@@ -13,6 +13,7 @@ fun createMockPasskeyAttestationOptions(
     number: Int,
     userVerificationRequirement: UserVerificationRequirement =
         UserVerificationRequirement.PREFERRED,
+    relyingPartyId: String = "mockPublicKeyCredentialRpEntity-$number",
 ) = PasskeyAttestationOptions(
     authenticatorSelection = PasskeyAttestationOptions
         .AuthenticatorSelectionCriteria(userVerification = userVerificationRequirement),
@@ -32,7 +33,7 @@ fun createMockPasskeyAttestationOptions(
     ),
     relyingParty = PasskeyAttestationOptions.PublicKeyCredentialRpEntity(
         name = "mockPublicKeyCredentialRpEntityName-$number",
-        id = "mockPublicKeyCredentialRpEntity-$number",
+        id = relyingPartyId,
     ),
     user = PasskeyAttestationOptions.PublicKeyCredentialUserEntity(
         name = "mockPublicKeyCredentialUserEntityName-$number",

@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 
 /**
  * Converts the given [GetTokenResponseJson.Success] to a [UserStateJson], given the following
@@ -67,13 +67,16 @@ fun GetTokenResponseJson.Success.toUserState(
 private fun GetTokenResponseJson.Success.toForcePasswordResetReason(): ForcePasswordResetReason? =
     this
         .userDecryptionOptions
-        ?.trustedDeviceUserDecryptionOptions
-        ?.let { options ->
-            ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION
-                .takeIf {
-                    !this.userDecryptionOptions.hasMasterPassword &&
-                        options.hasManageResetPasswordPermission
+        ?.let { decryptionOptionsJson ->
+            decryptionOptionsJson
+                .trustedDeviceUserDecryptionOptions
+                ?.let { options ->
+                    ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION
+                        .takeIf {
+                            !decryptionOptionsJson.hasMasterPassword &&
+                                options.hasManageResetPasswordPermission
+                        }
                 }
+                ?: ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
+                    .takeIf { this.shouldForcePasswordReset }
         }
-        ?: ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
-            .takeIf { this.shouldForcePasswordReset }

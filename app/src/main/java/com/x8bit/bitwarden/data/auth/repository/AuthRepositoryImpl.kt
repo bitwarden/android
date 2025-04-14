@@ -10,11 +10,26 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.model.DeleteAccountResponseJson
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PasswordHintResponseJson
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.PrevalidateSsoResponseJson
+import com.bitwarden.network.model.RefreshTokenResponseJson
+import com.bitwarden.network.model.RegisterFinishRequestJson
 import com.bitwarden.network.model.RegisterRequestJson
+import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
+import com.bitwarden.network.model.SendVerificationEmailRequestJson
 import com.bitwarden.network.model.SetPasswordRequestJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.VerifyEmailTokenRequestJson
+import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -22,23 +37,11 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
@@ -116,9 +119,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -1209,18 +1209,19 @@ class AuthRepositoryImpl(
             organizationIdentifier = organizationIdentifier,
         )
         .fold(
-            onSuccess = {
-                when (it) {
+            onSuccess = { response ->
+                when (response) {
                     is PrevalidateSsoResponseJson.Error -> {
-                        PrevalidateSsoResult.Failure(message = it.message, error = null)
+                        PrevalidateSsoResult.Failure(message = response.message, error = null)
                     }
 
                     is PrevalidateSsoResponseJson.Success -> {
-                        if (it.token.isNullOrBlank()) {
-                            PrevalidateSsoResult.Failure(error = MissingPropertyException("Token"))
-                        } else {
-                            PrevalidateSsoResult.Success(token = it.token)
-                        }
+                        response.token
+                            ?.takeUnless { it.isBlank() }
+                            ?.let { PrevalidateSsoResult.Success(token = it) }
+                            ?: PrevalidateSsoResult.Failure(
+                                error = MissingPropertyException("Token"),
+                            )
                     }
                 }
             },
@@ -1790,17 +1791,20 @@ class AuthRepositoryImpl(
     /**
      * Attempt to unlock the current user's vault with key connector data.
      */
+    @Suppress("LongMethod")
     private suspend fun unlockVaultWithKeyConnectorOnLoginSuccess(
         profile: AccountJson.Profile,
         keyConnectorUrl: String,
         orgIdentifier: String,
         loginResponse: GetTokenResponseJson.Success,
-    ): VaultUnlockResult? =
-        if (loginResponse.userDecryptionOptions?.hasMasterPassword != false) {
+    ): VaultUnlockResult? {
+        val key = loginResponse.key
+        val privateKey = loginResponse.privateKey
+        return if (loginResponse.userDecryptionOptions?.hasMasterPassword != false) {
             // This user has a master password, so we skip the key-connector logic as it is not
             // setup yet. The user can still unlock the vault with their master password.
             null
-        } else if (loginResponse.key != null && loginResponse.privateKey != null) {
+        } else if (key != null && privateKey != null) {
             // This is a returning user who should already have the key connector setup
             keyConnectorManager
                 .getMasterKeyFromKeyConnector(
@@ -1810,10 +1814,10 @@ class AuthRepositoryImpl(
                 .map {
                     unlockVault(
                         accountProfile = profile,
-                        privateKey = loginResponse.privateKey,
+                        privateKey = privateKey,
                         initUserCryptoMethod = InitUserCryptoMethod.KeyConnector(
                             masterKey = it.masterKey,
-                            userKey = loginResponse.key,
+                            userKey = key,
                         ),
                     )
                 }
@@ -1863,6 +1867,7 @@ class AuthRepositoryImpl(
                     onSuccess = { it },
                 )
         }
+    }
 
     /**
      * Attempt to unlock the current user's vault with password data.
@@ -1896,11 +1901,13 @@ class AuthRepositoryImpl(
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with auth request if possible.
         // These values will only be null during the Just-in-Time provisioning flow.
-        if (loginResponse.privateKey != null && loginResponse.key != null) {
+        val privateKey = loginResponse.privateKey
+        val key = loginResponse.key
+        if (privateKey != null && key != null) {
             deviceData?.let { model ->
                 return unlockVault(
                     accountProfile = profile,
-                    privateKey = loginResponse.privateKey,
+                    privateKey = privateKey,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = model.privateKey,
                         method = model
@@ -1908,7 +1915,7 @@ class AuthRepositoryImpl(
                             ?.let {
                                 AuthRequestMethod.MasterKey(
                                     protectedMasterKey = model.asymmetricalKey,
-                                    authRequestKey = loginResponse.key,
+                                    authRequestKey = key,
                                 )
                             }
                             ?: AuthRequestMethod.UserKey(protectedUserKey = model.asymmetricalKey),

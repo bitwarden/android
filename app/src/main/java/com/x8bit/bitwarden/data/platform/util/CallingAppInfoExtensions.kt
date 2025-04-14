@@ -3,20 +3,7 @@ package com.x8bit.bitwarden.data.platform.util
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import java.security.MessageDigest
-
-/**
- * Returns the name of the RP. If this [CallingAppInfo] is a privileged app the RP host name will be
- * returned. If this [CallingAppInfo] is a native RP application the package name will be returned.
- * Otherwise, `null` is returned.
- */
-fun CallingAppInfo.getFido2RpIdOrNull(): String? =
-    if (isOriginPopulated()) {
-        origin?.toHostOrPathOrNull()
-    } else {
-        packageName
-    }
 
 /**
  * Returns the application's signing certificate hash formatted as a hex string if it has a single

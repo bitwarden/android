@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.bitwarden.network.api.AuthenticatedDevicesApi
+import com.bitwarden.network.api.UnauthenticatedDevicesApi
 import com.bitwarden.network.model.TrustedDeviceKeysRequestJson
 import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 import com.bitwarden.network.util.base64UrlEncode
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedDevicesApi
 
 class DevicesServiceImpl(
     private val authenticatedDevicesApi: AuthenticatedDevicesApi,

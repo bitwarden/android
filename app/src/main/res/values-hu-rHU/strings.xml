@@ -1137,17 +1137,10 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="copy_email">Email cím másolása</string>
   <string name="copy_phone">Telefonszám másolása</string>
   <string name="copy_address">Postai cím másolása</string>
-  <string name="important_notice">Fontos megjegyzés</string>
-  <string name="bitwarden_will_soon_send_a_code_to_your_account_email_to_verify_logins_from_new_devices_in_february">A Bitwarden 2025 februárjától kódot küld a fiókhoz tartozó email-címre, amellyel ellenőrizhetők az új eszközökről történő bejelentkezések.</string>
-  <string name="do_you_have_reliable_access_to_your_email">Megbízható a hozzáférés az email címhez, %1$s? </string>
-  <string name="yes_i_can_reliably_access_my_email">Igen, megbízhatóan hozzáférek az emailjeimhez</string>
   <string name="biometrics_no_longer_supported_title">A biometrikus adatok már nem támogatottak ezen az eszközön.</string>
   <string name="biometrics_no_longer_supported">Kijelentkeztetés történt, mert az eszköz biometrikus adatai nem felelnek meg a legújabb biztonsági követelményeknek. A beállítások frissítéséhez jelentkezzünk be még egyszer vagy lépjünk kapcsolatba az adminisztrátorral.</string>
   <string name="cxp_import">CXP Importálás</string>
   <string name="cxp_export">CXP Exportálás</string>
-  <string name="set_up_two_step_login">Állítsa be a kétfaktoros belépést</string>
-  <string name="you_can_set_up_two_step_login_as_an_alternative_way_to_protect_your_account_or_change_your_email_to_one_you_can_access">Esetlegesen be tudja aktiválni a kétfaktoros belépést, ezzel védve fiókját, vagy módosítsa e-mail címét egy olyanra amit biztosan elér.</string>
-  <string name="turn_on_two_step_login">Kapcsolja be a kétfaktoros belépést</string>
   <string name="change_account_email">Fiók e-mail változtatása</string>
   <string name="choose_three_or_four_random_words">Válasszunk három vagy négy véletlenszerű szót</string>
   <string name="pick_three_or_four_random_unrelated_words">Válasszunk három vagy négy véletlenszerű, egymáshoz nem kapcsolódó szót, amelyeket könnyen megjegyezhetünk. Gondoljunk olyan tárgyakra, helyekre vagy dolgokra, amelyeket szeretünk.</string>
@@ -1161,7 +1154,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="we_couldnt_verify_the_servers_certificate">Nem lehetett ellenőrizni a szerver tanúsítványát. Előfordulhat, hogy a tanúsítványlánc vagy a proxy beállítások az eszközön vagy a Bitwarden szerveren nincsenek megfelelően beállítva.</string>
   <string name="review_flow_launched">A felülvizsgálati folyamat elindult!</string>
   <string name="copy_private_key">Személyes kulcs másolása</string>
-  <string name="you_can_change_your_account_email_on_the_bitwarden_web_app">A fiók email cím a Bitwarden webalkalmazásban módosítható.</string>
   <string name="login_credentials">Bejelentkezési hitelesítő adatok</string>
   <string name="autofill_options">Automatikus kitöltés opciók</string>
   <string name="use_this_button_to_generate_a_new_unique_password">Ezzel a gombbal új egyedi jelszót hozhatunk létre.</string>
@@ -1205,18 +1197,17 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="system_certificates_are_not_as_secure_as_importing_certificates_to_bitwarden">A rendszer tanúsítvány használata kevésbé biztonságos, mint a tanúsítvány Bitwardennél történő tárolása. A folytatás megjeleníti az elérhető rendszer tanúsítványok listáját, ha már telepítve van.</string>
   <string name="certificate_alias_already_exists">A tanúsítvány álnév már létezik.</string>
   <string name="link">Hivatkozás</string>
-  <string name="passkey_operation_failed_because_app_is_signed_incorrectly">A jbelépőkulcs művelet nem sikerült, mert az alkalmazás hibásan van aláírva.</string>
   <string name="passkey_operation_failed_because_host_url_is_not_present_in_request">A belépőkulcs művelet meghiúsult, mert a kiszolgáló webcíme nem szerepel a kérésben.</string>
   <string name="passkey_operation_failed_because_app_signature_is_invalid">A belépőkulcs művelet meghiúsult, mert az alkalmazás aláírás érvénytelen.</string>
   <string name="passkey_registration_failed_due_to_an_internal_error">A belépőkulcs művelet meghiúsult egy belső hiba miatt.</string>
   <string name="passkey_operation_failed_because_relying_party_cannot_be_identified">A belépőkulcs művelet meghiúsult, mert az megcélzott fél nem lett azonosítva.</string>
-  <string name="passkey_authentication_failed_due_to_an_internal_error">A belépőkulcs hitelesítés meghiúsult egy belső hiba miatt.</string>
   <string name="passkey_operation_failed_because_the_selected_item_does_not_exist">A belépőkulcs művelet meghiúsult, mert a kiválasztott elem nem létezik.</string>
   <string name="passkey_operation_failed_because_user_is_locked_out">A belépőkulcs művelet meghiúsult, mert a felhasználó kizárásra került.</string>
   <string name="passkey_operation_failed_because_user_verification_was_cancelled">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzés törlésre került.</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">A belépőkulcs művelet meghiúsult, mert a kérés érvénytelen.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">A belépőkulcs művelet meghiúsult, mert a felhasználó ellenőrzések száma átlépésre került.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">A belépőkulcs művelet meghiúsult, mert nincs kiválasztott elem.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">A belépőkulcs művelet meghiúsult, mert a kérés nem támogatott.</string>
   <string name="self_host_server_url">Saját üzemeltetésű szerver webcím</string>
   <string name="use_chrome_autofill_integration">Chrome automatikus kitöltés integráció használata</string>
   <string name="use_chrome_beta_autofill_integration">Chrome automatikus kitöltés integráció használata (Béta)</string>
@@ -1232,4 +1223,15 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="view_recorded_logs">Adatrögzítő naplók megtekintése</string>
   <string name="enable_flight_recorder_title">Adatrögzítő engedélyezése</string>
   <string name="recorded_logs_title">Adatrögzítő naplók</string>
+  <string name="no_logs_recorded">Nincs napló rögzítve.</string>
+  <string name="experiencing_an_issue">Problémát tapasztalunk?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Az ideiglenes naplózás engedélyezése a naplók helyi gyűjtéséhez és ellenőrzéséhez. Ha engedélyezve van, előfordulhat, hogy az alkalmazások állapotai és a hálózati hívások naplózásra kerülnek – soha nem érzékeny széf információk.</string>
+  <string name="to_get_started_set_a_logging_duration">A kezdéshez állítsuk be a naplózás időtartamát. A naplózás ezen időszak letelte után automatikusan kikapcsol, így időt hagyva a tevékenységek rögzítésére a problémákat reprodukálása mellett.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">A naplók 30 nap elteltével automatikusan törlődnek. A Bitwarden csak akkor fér hozzá a naplóadatokhoz, ha megosztjuk vele azokat.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">A naplózott és nem naplózott részletekért keressük fel a\n <annotation link="helpCenter">Bitwarden súgóját</annotation></string>
+  <string name="logging_duration">Naplózási időtartaam</string>
+  <string name="flight_recorder_one_hour">1 óra</string>
+  <string name="flight_recorder_eight_hours">8 óra</string>
+  <string name="flight_recorder_twenty_four_hours">24 óra</string>
+  <string name="flight_recorder_one_week">1 hét</string>
 </resources>

@@ -27,7 +27,7 @@ fun Intent.getWebAuthResultOrNull(): WebAuthResult? {
         localData
             .getQueryParameter("data")
             ?.let { WebAuthResult.Success(token = it) }
-            ?: WebAuthResult.Failure
+            ?: WebAuthResult.Failure(message = localData.getQueryParameter("error"))
     } else {
         null
     }
@@ -74,5 +74,5 @@ sealed class WebAuthResult {
     /**
      * Represents a failure in the web auth callback.
      */
-    data object Failure : WebAuthResult()
+    data class Failure(val message: String?) : WebAuthResult()
 }
