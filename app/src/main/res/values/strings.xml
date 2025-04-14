@@ -1242,5 +1242,4 @@ Do you want to switch to this account?</string>
   <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
   <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
   <string name="do_you_really_want_to_leave_organization">Do you really want to leave %1$s organization?</string>
-
 </resources>
