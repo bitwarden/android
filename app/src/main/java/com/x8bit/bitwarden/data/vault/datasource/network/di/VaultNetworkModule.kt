@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.di
 
+import com.bitwarden.network.service.FolderService
+import com.bitwarden.network.service.FolderServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadServiceImpl
-import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
-import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService

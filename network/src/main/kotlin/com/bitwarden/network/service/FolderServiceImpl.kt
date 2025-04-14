@@ -1,13 +1,13 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.FoldersApi
 import com.bitwarden.network.model.FolderJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UpdateFolderResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import kotlinx.serialization.json.Json
 
 class FolderServiceImpl(
