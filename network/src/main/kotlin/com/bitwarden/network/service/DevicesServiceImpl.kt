@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.AuthenticatedDevicesApi
 import com.bitwarden.network.api.UnauthenticatedDevicesApi
@@ -7,6 +7,9 @@ import com.bitwarden.network.model.TrustedDeviceKeysResponseJson
 import com.bitwarden.network.util.base64UrlEncode
 import com.bitwarden.network.util.toResult
 
+/**
+ * The default implementation of the [DevicesService].
+ */
 class DevicesServiceImpl(
     private val authenticatedDevicesApi: AuthenticatedDevicesApi,
     private val unauthenticatedDevicesApi: UnauthenticatedDevicesApi,
