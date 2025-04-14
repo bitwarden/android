@@ -1,22 +1,19 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.model
+package com.bitwarden.network.model
 
-import com.bitwarden.network.model.CreateFileSendResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a response from create file send.
+ * Models a response from either "create text send" or "create file send" requests.
  */
-sealed class CreateFileSendResponse {
-
+sealed class CreateSendJsonResponse {
     /**
-     * Represents the response from a successful create file send request.
+     * Represents a successful response from either "create text send" or "create file send"
+     * request.
      *
-     * @property createFileJsonResponse Response JSON received from create file send request.
+     * @property send The created send object.
      */
-    data class Success(
-        val createFileJsonResponse: CreateFileSendResponseJson,
-    ) : CreateFileSendResponse()
+    data class Success(val send: SyncResponseJson.Send) : CreateSendJsonResponse()
 
     /**
      * Represents the json body of an invalid create request.
@@ -33,5 +30,5 @@ sealed class CreateFileSendResponse {
 
         @SerialName("validationErrors")
         override val validationErrors: Map<String, List<String>>?,
-    ) : CreateFileSendResponse(), InvalidJsonResponse
+    ) : CreateSendJsonResponse(), InvalidJsonResponse
 }

@@ -1,16 +1,16 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import android.net.Uri
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.SendsApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.CreateFileSendResponse
+import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.SendTypeJson
+import com.bitwarden.network.model.UpdateSendResponseJson
 import com.bitwarden.network.model.createMockFileSendResponseJson
 import com.bitwarden.network.model.createMockSend
 import com.bitwarden.network.model.createMockSendJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
