@@ -1,25 +1,24 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import androidx.core.net.toUri
-import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.CiphersApi
+import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
+import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.toBitwardenError
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.bitwarden.vault.Attachment
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -127,18 +126,14 @@ class CiphersServiceImpl(
 
     override suspend fun shareAttachment(
         cipherId: String,
-        attachment: Attachment,
+        attachment: AttachmentInfo,
         organizationId: String,
         encryptedFile: File,
     ): Result<Unit> {
-        val attachmentId = attachment.id
-            ?: return IllegalStateException("Attachment must have ID").asFailure()
-        val attachmentKey = attachment.key
-            ?: return IllegalStateException("Attachment must have Key").asFailure()
         return ciphersApi
             .shareAttachment(
                 cipherId = cipherId,
-                attachmentId = attachmentId,
+                attachmentId = attachment.id,
                 organizationId = organizationId,
                 body = this
                     .createMultipartBodyBuilder(
@@ -148,7 +143,7 @@ class CiphersServiceImpl(
                     .addPart(
                         part = MultipartBody.Part.createFormData(
                             name = "key",
-                            value = attachmentKey,
+                            value = attachment.key,
                         ),
                     )
                     .build(),

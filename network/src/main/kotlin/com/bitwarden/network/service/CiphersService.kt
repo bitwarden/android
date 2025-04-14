@@ -1,16 +1,16 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
+import com.bitwarden.network.model.AttachmentInfo
 import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.ImportCiphersJsonRequest
+import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
-import com.bitwarden.vault.Attachment
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.bitwarden.network.model.UpdateCipherResponseJson
 import java.io.File
 
 /**
@@ -67,7 +67,7 @@ interface CiphersService {
      */
     suspend fun shareAttachment(
         cipherId: String,
-        attachment: Attachment,
+        attachment: AttachmentInfo,
         organizationId: String,
         encryptedFile: File,
     ): Result<Unit>
