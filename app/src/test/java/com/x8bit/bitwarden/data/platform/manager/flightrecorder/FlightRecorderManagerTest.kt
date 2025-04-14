@@ -27,6 +27,7 @@ import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 class FlightRecorderManagerTest {
@@ -143,6 +144,7 @@ class FlightRecorderManagerTest {
                     startTimeMs = FIXED_CLOCK_TIME,
                     durationMs = 60L,
                     isActive = true,
+                    expirationTimeMs = null,
                 ),
                 FlightRecorderDataSet.FlightRecorderData(
                     id = "50",
@@ -150,6 +152,7 @@ class FlightRecorderManagerTest {
                     startTimeMs = FIXED_CLOCK_TIME,
                     durationMs = 60L,
                     isActive = false,
+                    expirationTimeMs = null,
                 ),
             ),
         )
@@ -166,6 +169,10 @@ class FlightRecorderManagerTest {
                         startTimeMs = FIXED_CLOCK_TIME,
                         durationMs = 60L,
                         isActive = false,
+                        expirationTimeMs = FIXED_CLOCK
+                            .instant()
+                            .plus(30, ChronoUnit.DAYS)
+                            .toEpochMilli(),
                     ),
                     FlightRecorderDataSet.FlightRecorderData(
                         id = "50",
@@ -173,6 +180,10 @@ class FlightRecorderManagerTest {
                         startTimeMs = FIXED_CLOCK_TIME,
                         durationMs = 60L,
                         isActive = false,
+                        expirationTimeMs = FIXED_CLOCK
+                            .instant()
+                            .plus(30, ChronoUnit.DAYS)
+                            .toEpochMilli(),
                     ),
                 ),
             ),

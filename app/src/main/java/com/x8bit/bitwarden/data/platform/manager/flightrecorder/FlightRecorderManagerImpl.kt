@@ -21,7 +21,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Clock
+import java.time.temporal.ChronoUnit
 import java.util.UUID
+
+private const val EXPIRATION_DURATION_DAYS: Long = 30
 
 /**
  * The default implementation of the [FlightRecorderManager].
@@ -69,7 +72,7 @@ internal class FlightRecorderManagerImpl(
         settingsDiskSource.flightRecorderData = originalData.copy(
             data = originalData
                 .data
-                .map { it.copy(isActive = false) }
+                .mapToInactive(clock = clock)
                 .toMutableSet()
                 .apply {
                     val formattedTime = startTime.toFormattedPattern(
@@ -92,7 +95,7 @@ internal class FlightRecorderManagerImpl(
     override fun endFlightRecorder() {
         val originalData = flightRecorderData
         settingsDiskSource.flightRecorderData = originalData.copy(
-            data = originalData.data.map { it.copy(isActive = false) }.toSet(),
+            data = originalData.data.mapToInactive(clock = clock),
         )
     }
 
@@ -191,3 +194,23 @@ internal class FlightRecorderManagerImpl(
         }
     }
 }
+
+/**
+ * Marks all flight recorders as inactive and ensures that they have an expiration time.
+ */
+private fun Set<FlightRecorderDataSet.FlightRecorderData>.mapToInactive(
+    clock: Clock,
+): Set<FlightRecorderDataSet.FlightRecorderData> =
+    this
+        .map { data ->
+            data.copy(
+                isActive = false,
+                expirationTimeMs = data
+                    .expirationTimeMs
+                    ?: clock
+                        .instant()
+                        .plus(EXPIRATION_DURATION_DAYS, ChronoUnit.DAYS)
+                        .toEpochMilli(),
+            )
+        }
+        .toSet()
