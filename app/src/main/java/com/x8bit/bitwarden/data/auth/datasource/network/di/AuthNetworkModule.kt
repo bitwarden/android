@@ -8,8 +8,8 @@ import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.DevicesServiceImpl
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.HaveIBeenPwnedServiceImpl
-import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityServiceImpl
+import com.bitwarden.network.service.IdentityService
+import com.bitwarden.network.service.IdentityServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService

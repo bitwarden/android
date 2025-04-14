@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.model
+package com.bitwarden.network.model
 
 /**
  * Hold the authentication information for different login methods.

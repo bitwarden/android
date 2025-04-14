@@ -1,9 +1,10 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.api.UnauthenticatedIdentityApi
 import com.bitwarden.network.base.BaseServiceTest
 import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.bitwarden.network.model.MasterPasswordPolicyOptionsJson
@@ -14,14 +15,13 @@ import com.bitwarden.network.model.RegisterFinishRequestJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
+import com.bitwarden.network.model.SendVerificationEmailResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
-import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
+import com.bitwarden.network.model.VerifyEmailTokenResponseJson
+import com.bitwarden.network.util.DeviceModelProvider
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
