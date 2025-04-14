@@ -37,6 +37,9 @@ class DeleteAccountViewModel @Inject constructor(
         isUnlockWithPasswordEnabled = requireNotNull(authRepository.userStateFlow.value)
             .activeAccount
             .hasMasterPassword,
+        isUserManagedByOrganization = requireNotNull(authRepository.userStateFlow.value)
+            .activeAccount
+            .isManagedByOrganization,
     ),
 ) {
 
@@ -160,11 +163,13 @@ class DeleteAccountViewModel @Inject constructor(
  * @param dialog The dialog for the [DeleteAccountScreen].
  * @param isUnlockWithPasswordEnabled Whether or not the user is able to unlock the vault with
  * their master password.
+ * @param isUserManagedByOrganization Whether or not the user is managed by an organization.
  */
 @Parcelize
 data class DeleteAccountState(
     val dialog: DeleteAccountDialog?,
     val isUnlockWithPasswordEnabled: Boolean,
+    val isUserManagedByOrganization: Boolean,
 ) : Parcelable {
 
     /**

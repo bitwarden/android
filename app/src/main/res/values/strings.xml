@@ -699,6 +699,8 @@ Scanning will happen automatically.</string>
   <string name="delete_account_explanation">Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</string>
   <string name="deleting_your_account">Deleting your account</string>
   <string name="your_account_has_been_permanently_deleted">Your account has been permanently deleted</string>
+  <string name="cannot_delete_your_account">Cannot delete your account</string>
+  <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
   <string name="invalid_verification_code">Invalid verification code</string>
   <string name="request_otp">Request one-time password</string>
   <string name="send_code">Send code</string>

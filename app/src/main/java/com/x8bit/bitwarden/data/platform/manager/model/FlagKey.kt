@@ -44,6 +44,7 @@ sealed class FlagKey<out T : Any> {
                 ChromeAutofill,
                 MobileErrorReporting,
                 FlightRecorder,
+                AccountDeprovisioning,
             )
         }
     }
@@ -82,6 +83,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "enable-pm-flight-recorder"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
+    }
+
+    /**
+     * Data object holding the key for Account Deprovisioning feature.
+     */
+    data object AccountDeprovisioning : FlagKey<Boolean>() {
+        override val keyName: String = "pm-10308-account-deprovisioning"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**

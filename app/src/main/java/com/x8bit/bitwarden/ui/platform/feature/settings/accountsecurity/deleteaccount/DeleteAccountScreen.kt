@@ -123,53 +123,73 @@ fun DeleteAccountScreen(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(id = R.string.deleting_your_account_is_permanent),
-                style = BitwardenTheme.typography.headlineSmall,
-                color = BitwardenTheme.colorScheme.status.error,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(id = R.string.delete_account_explanation),
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            DeleteAccountButton(
-                onDeleteAccountConfirmDialogClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            DeleteAccountAction.DeleteAccountConfirmDialogClick(it),
-                        )
-                    }
-                },
-                onDeleteAccountClick = remember(viewModel) {
-                    { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick) }
-                },
-                isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
-                modifier = Modifier
-                    .testTag("DELETE ACCOUNT")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            BitwardenOutlinedErrorButton(
-                label = stringResource(id = R.string.cancel),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(DeleteAccountAction.CancelClick) }
-                },
-                modifier = Modifier
-                    .testTag("CANCEL")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.navigationBarsPadding())
+            if (state.isUserManagedByOrganization) {
+                Text(
+                    text = stringResource(id = R.string.cannot_delete_your_account),
+                    style = BitwardenTheme.typography.headlineSmall,
+                    color = BitwardenTheme.colorScheme.status.error,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = stringResource(id = R.string.cannot_delete_your_account_explanation),
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            } else {
+                Text(
+                    text = stringResource(id = R.string.deleting_your_account_is_permanent),
+                    style = BitwardenTheme.typography.headlineSmall,
+                    color = BitwardenTheme.colorScheme.status.error,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = stringResource(id = R.string.delete_account_explanation),
+                    style = BitwardenTheme.typography.bodyMedium,
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                DeleteAccountButton(
+                    onDeleteAccountConfirmDialogClick = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                DeleteAccountAction.DeleteAccountConfirmDialogClick(it),
+                            )
+                        }
+                    },
+                    onDeleteAccountClick = remember(viewModel) {
+                        { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick) }
+                    },
+                    isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
+                    modifier = Modifier
+                        .testTag("DELETE ACCOUNT")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                BitwardenOutlinedErrorButton(
+                    label = stringResource(id = R.string.cancel),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(DeleteAccountAction.CancelClick) }
+                    },
+                    modifier = Modifier
+                        .testTag("CANCEL")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+                Spacer(modifier = Modifier.navigationBarsPadding())
+            }
         }
     }
 }
