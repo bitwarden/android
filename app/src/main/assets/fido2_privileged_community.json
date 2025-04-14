@@ -51,18 +51,6 @@
     {
       "type": "android",
       "info": {
-        "package_name": "org.mozilla.fenix",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "50:04:77:90:88:E7:F9:88:D5:BC:5C:C5:F8:79:8F:EB:F4:F8:CD:08:4A:1B:2A:46:EF:D4:C8:EE:4A:EA:F2:11"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
         "package_name": "org.mozilla.fennec_fdroid",
         "signatures": [
           {
