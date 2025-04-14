@@ -211,7 +211,7 @@ private fun RemovePasswordDialogs(
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.leave_organization),
                 message = dialogState.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.confirm),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmLeaveClick,
                 onDismissClick = onDismissRequest,

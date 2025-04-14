@@ -1331,6 +1331,26 @@ class AuthDiskSourceTest {
         val actual = authDiskSource.getLastLockTimestamp(userId = mockUserId)
         assertNull(actual)
     }
+
+    @Test
+    fun `rememberedKeyConnectorUrl should pull from and update SharedPreferences`() {
+        val rememberedKeyConnectorUrlKey = "bwPreferencesStorage:rememberedKeyConnectorUrl"
+
+        // Shared preferences and the disk source start with the same value.
+        assertNull(authDiskSource.rememberedKeyConnectorUrl)
+        assertNull(fakeSharedPreferences.getString(rememberedKeyConnectorUrlKey, null))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.rememberedKeyConnectorUrl = "www.bitwarden.com"
+        assertEquals(
+            "www.bitwarden.com",
+            fakeSharedPreferences.getString(rememberedKeyConnectorUrlKey, null),
+        )
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putString(rememberedKeyConnectorUrlKey, null) }
+        assertNull(authDiskSource.rememberedKeyConnectorUrl)
+    }
 }
 
 private const val USER_STATE_JSON = """

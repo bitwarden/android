@@ -1,22 +1,28 @@
 package com.x8bit.bitwarden.ui.auth.feature.removepassword
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,6 +34,7 @@ class RemovePasswordScreenTest : BaseComposeTest() {
     val viewModel = mockk<RemovePasswordViewModel>(relaxed = true) {
         every { eventFlow } returns bufferedMutableSharedFlow()
         every { stateFlow } returns mutableStateFlow
+        every { trySendAction(action = any()) } just runs
     }
 
     @Before
@@ -124,6 +131,53 @@ class RemovePasswordScreenTest : BaseComposeTest() {
 
         verify(exactly = 1) {
             viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick)
+        }
+    }
+
+    @Test
+    fun `leave organization confirm press should emit LeaveOrganizationConfirm`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState =
+                    RemovePasswordState.DialogState.LeaveConfirmationPrompt(
+                        R.string.leave_organization.asText(),
+                    ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Confirm")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
+        }
+    }
+
+    @Test
+    fun `leave organization cancel press should emil DialogDismiss`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
+                    R.string.leave_organization_name.asText(
+                        "orgName",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.onAllNodesWithText("Leave organization")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(RemovePasswordAction.DialogDismiss)
         }
     }
 }

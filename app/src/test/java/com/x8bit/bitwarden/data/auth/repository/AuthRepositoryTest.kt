@@ -81,6 +81,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -6776,6 +6777,54 @@ class AuthRepositoryTest {
     fun `cancelKeyConnectorLogin should clear keyConnectorResponse`() =
         runTest {
             assertDoesNotThrow { repository.cancelKeyConnectorLogin() }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `continueKeyConnectorLogin returns error if keyConnectorResponse is null`() =
+        runTest {
+            val continueResult = repository.continueKeyConnectorLogin()
+            assertEquals(
+                LoginResult.Error(
+                    errorMessage = null,
+                    error = MissingPropertyException("Key Connector Response"),
+                ), continueResult,
+            )
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `leaveOrganization should return success when organizationService leaveOrganization succeeds`() =
+        runTest {
+            coEvery {
+                organizationService.leaveOrganization(any())
+            } returns Unit.asSuccess()
+
+            val continueResult = repository.leaveOrganization("mockId-1")
+            coVerify {
+                organizationService.leaveOrganization(any())
+            }
+            assertEquals(
+                LeaveOrganizationResult.Success, continueResult,
+            )
+        }
+
+    @Test
+    fun `leaveOrganization should return error when organizationService leaveOrganization fails`() =
+        runTest {
+            val error = Throwable("Fail")
+            coEvery {
+                organizationService.leaveOrganization(any())
+            } returns error.asFailure()
+
+            val continueResult = repository.leaveOrganization("mockId-1")
+            coVerify {
+                organizationService.leaveOrganization(any())
+            }
+            assertEquals(
+                LeaveOrganizationResult.Error(message = error.message, error = error),
+                continueResult,
+            )
         }
 
     companion object {

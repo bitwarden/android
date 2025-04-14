@@ -108,6 +108,29 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `LeaveOrganizationClick should dialog state to LeaveConfirmationPrompt`() = runTest {
+        val password = "123"
+        val initialState = DEFAULT_STATE.copy(input = password)
+        val viewModel = createViewModel(state = initialState)
+        coEvery {
+            authRepository.removePassword(masterPassword = password)
+        } returns RemovePasswordResult.Success
+
+        viewModel.stateFlow.test {
+            assertEquals(initialState, awaitItem())
+            viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick)
+            assertEquals(
+                initialState.copy(
+                    dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
+                        R.string.leave_organization_name.asText("My org".asText()),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
     @Suppress("MaxLineLength")
     fun `ConfirmLeaveOrganizationClick with LeaveOrganizationResult Success should leave organization`() =
         runTest {
