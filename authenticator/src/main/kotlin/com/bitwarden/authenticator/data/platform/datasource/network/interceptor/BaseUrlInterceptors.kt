@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.interceptor
 
-import com.bitwarden.authenticator.data.platform.repository.model.Environment
-import com.bitwarden.authenticator.data.platform.repository.util.baseApiUrl
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseApiUrl
 import javax.inject.Inject
 import javax.inject.Singleton
 

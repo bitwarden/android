@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.util
 
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
