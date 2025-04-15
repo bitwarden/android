@@ -82,7 +82,7 @@ internal class FlightRecorderManagerImpl(
                     add(
                         element = FlightRecorderDataSet.FlightRecorderData(
                             id = UUID.randomUUID().toString(),
-                            fileName = "flight_recorder_$formattedTime",
+                            fileName = "flight_recorder_$formattedTime.txt",
                             startTimeMs = startTime.toEpochMilli(),
                             durationMs = duration.milliseconds,
                             isActive = true,

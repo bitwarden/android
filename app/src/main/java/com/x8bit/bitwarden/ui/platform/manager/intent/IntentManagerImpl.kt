@@ -175,6 +175,20 @@ class IntentManagerImpl(
         }
     }
 
+    override fun shareFile(title: String?, fileUri: Uri) {
+        val providedFile = FileProvider.getUriForFile(
+            context,
+            FILE_PROVIDER_AUTHORITY,
+            File(fileUri.toString()),
+        )
+        val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, title)
+            putExtra(Intent.EXTRA_STREAM, providedFile)
+            type = "application/zip"
+        }
+        startActivity(Intent.createChooser(sendIntent, null))
+    }
+
     override fun shareText(text: String) {
         val sendIntent: Intent = Intent(Intent.ACTION_SEND).apply {
             putExtra(Intent.EXTRA_TEXT, text)

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.manager
 import android.net.Uri
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.ZipFileResult
 import java.io.File
 
 /**
@@ -48,6 +49,12 @@ interface FileManager {
      * Reads the [fileUri] into memory. A successful result will contain the raw [ByteArray].
      */
     suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray>
+
+    /**
+     * Reads the file or folder on disk from the [uri] and creates a temporary zip file. A
+     * successful result will contain the zip [File] reference.
+     */
+    suspend fun zipUriToCache(uri: Uri): ZipFileResult
 
     /**
      * Reads the [fileUri] into a file on disk. A successful result will contain the [File]

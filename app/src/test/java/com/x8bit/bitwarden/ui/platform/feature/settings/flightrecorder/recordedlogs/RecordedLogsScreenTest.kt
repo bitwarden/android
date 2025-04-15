@@ -5,12 +5,16 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -20,9 +24,13 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedL
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsViewModel
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,6 +44,10 @@ class RecordedLogsScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<RecordedLogsEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
+    private val intentManager = mockk<IntentManager> {
+        every { shareFile(title = any(), fileUri = any()) } just runs
+    }
+
     private val viewModel = mockk<RecordedLogsViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -43,7 +55,9 @@ class RecordedLogsScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             RecordedLogsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -65,6 +79,15 @@ class RecordedLogsScreenTest : BaseComposeTest() {
     fun `on NavigateBack event should invoke onNavigateBack`() {
         mutableEventFlow.tryEmit(RecordedLogsEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on ShareLog event should invoke shareFile on intent manager`() {
+        val stringUri = "/logs"
+        mutableEventFlow.tryEmit(RecordedLogsEvent.ShareLog(uri = stringUri))
+        verify {
+            intentManager.shareFile(title = null, fileUri = stringUri.toUri())
+        }
     }
 
     @Test
@@ -122,12 +145,20 @@ class RecordedLogsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on Delete All click should emit DeleteAllClick`() {
+    fun `on Delete All click should display Dialog, on Yes click emits DeleteAllClick`() {
         mutableStateFlow.update {
             it.copy(viewState = RecordedLogsState.ViewState.Content(items = persistentListOf()))
         }
         composeTestRule.onNodeWithContentDescription(label = "More").performClick()
         composeTestRule.onNodeWithText(text = "Delete all").performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Delete logs")
+            .filterToOne(matcher = hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Yes")
+            .filterToOne(matcher = hasAnyAncestor(isDialog()))
+            .performClick()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
@@ -213,7 +244,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on individual Delete click should emit DeleteClick`() {
+    fun `on individual Delete click should display Dialog, on Yes click emits DeleteClick`() {
         val displayItem = RecordedLogsState.DisplayItem(
             id = "50",
             title = "title".asText(),
@@ -235,15 +266,44 @@ class RecordedLogsScreenTest : BaseComposeTest() {
             .filterToOne(matcher = hasContentDescription(value = "More"))
             .performClick()
         composeTestRule.onNodeWithText(text = "Delete").performClick()
+        composeTestRule
+            .onAllNodesWithText(text = "Delete log")
+            .filterToOne(matcher = hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Yes")
+            .filterToOne(matcher = hasAnyAncestor(isDialog()))
+            .performClick()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteClick(displayItem))
         }
+    }
+
+    @Test
+    fun `dialog should update according to state`() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = RecordedLogsState.DialogState.Error(
+                    title = "title".asText(),
+                    message = "message".asText(),
+                    error = null,
+                ),
+            )
+        }
+        composeTestRule
+            .onAllNodesWithText(text = "title")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
     }
 }
 
 private val DEFAULT_STATE: RecordedLogsState =
     RecordedLogsState(
         viewState = RecordedLogsState.ViewState.Loading,
+        dialogState = null,
         logsFolder = "/logs",
     )
