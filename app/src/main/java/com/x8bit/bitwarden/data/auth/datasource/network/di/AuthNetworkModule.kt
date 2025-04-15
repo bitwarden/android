@@ -12,8 +12,8 @@ import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.IdentityServiceImpl
 import com.bitwarden.network.service.NewAuthRequestService
 import com.bitwarden.network.service.NewAuthRequestServiceImpl
-import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationServiceImpl
+import com.bitwarden.network.service.OrganizationService
+import com.bitwarden.network.service.OrganizationServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import dagger.Module
 import dagger.Provides
