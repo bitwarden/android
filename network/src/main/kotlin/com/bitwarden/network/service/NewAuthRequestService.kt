@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.model.AuthRequestsResponseJson

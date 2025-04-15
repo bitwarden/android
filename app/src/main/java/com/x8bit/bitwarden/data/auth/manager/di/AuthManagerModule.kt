@@ -5,8 +5,8 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
 import com.bitwarden.network.service.AuthRequestsService
 import com.bitwarden.network.service.DevicesService
+import com.bitwarden.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl

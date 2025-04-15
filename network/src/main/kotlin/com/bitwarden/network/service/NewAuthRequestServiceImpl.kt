@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.network.api.AuthenticatedAuthRequestsApi
