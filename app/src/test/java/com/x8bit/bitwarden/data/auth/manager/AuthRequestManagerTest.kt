@@ -7,12 +7,12 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.AuthRequestTypeJson
 import com.bitwarden.network.model.AuthRequestsResponseJson
 import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest

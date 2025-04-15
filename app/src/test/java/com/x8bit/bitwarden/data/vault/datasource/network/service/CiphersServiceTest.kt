@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.network.api.AzureApi
 import com.bitwarden.network.api.CiphersApi
 import com.bitwarden.network.base.BaseServiceTest
+import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
@@ -12,6 +13,7 @@ import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.createMockAttachment
 import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockAttachmentJsonResponse
+import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
@@ -100,18 +102,36 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `createAttachment with invalid response should return an Invalid with the correct data`() =
+        runTest {
+            server.enqueue(
+                MockResponse().setResponseCode(400).setBody(CREATE_ATTACHMENT_INVALID_JSON),
+            )
+            val result = ciphersService.createAttachment(
+                cipherId = "mockId-1",
+                body = createMockAttachmentJsonRequest(number = 1),
+            )
+            assertEquals(
+                AttachmentJsonResponse.Invalid(
+                    message = "You do not have permission.",
+                    validationErrors = null,
+                ),
+                result.getOrThrow(),
+            )
+        }
+
+    @Test
     fun `uploadAttachment with Azure uploadFile success should return cipher`() = runTest {
         setupMockUri(url = "mockUrl-1", queryParams = mapOf("sv" to "2024-04-03"))
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.AZURE,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.AZURE,
+            ),
             encryptedFile = encryptedFile,
         )
 
@@ -121,15 +141,14 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `uploadAttachment with Direct uploadFile success should return cipher`() = runTest {
         val mockCipher = createMockCipher(number = 1)
-        val attachmentJsonResponse = createMockAttachmentJsonResponse(
-            number = 1,
-            fileUploadType = FileUploadType.DIRECT,
-        )
         val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
-            attachmentJsonResponse = attachmentJsonResponse,
+            attachment = createMockAttachmentResponse(
+                number = 1,
+                fileUploadType = FileUploadType.DIRECT,
+            ),
             encryptedFile = encryptedFile,
         )
 
@@ -481,6 +500,13 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "keyFingerprint": "mockKeyFingerprint-1"
     }
   }
+}
+"""
+
+private const val CREATE_ATTACHMENT_INVALID_JSON = """
+{
+  "message": "You do not have permission.",
+  "validationErrors": null
 }
 """
 

@@ -5,6 +5,7 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
@@ -327,7 +328,15 @@ class CipherManagerImpl(
             fileUri = fileUri,
         )
             .fold(
-                onFailure = { CreateAttachmentResult.Error(error = it) },
+                onFailure = {
+                    CreateAttachmentResult.Error(
+                        error = it,
+                        message = when (it) {
+                            is IllegalStateException -> it.message
+                            else -> null
+                        },
+                    )
+                },
                 onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
             )
 
@@ -371,11 +380,22 @@ class CipherManagerImpl(
                                         cipherId = cipherId,
                                         body = attachment.toNetworkAttachmentRequest(),
                                     )
-                                    .flatMap { attachmentJsonResponse ->
-                                        val encryptedFile = File("${cacheFile.absolutePath}.enc")
+                            }
+                            .flatMap { attachmentResponse ->
+                                when (attachmentResponse) {
+                                    is AttachmentJsonResponse.Invalid -> {
+                                        return IllegalStateException(
+                                            attachmentResponse.message,
+                                        ).asFailure()
+                                    }
+
+                                    is AttachmentJsonResponse.Success -> {
+                                        val encryptedFile = File(
+                                            "${cacheFile.absolutePath}.enc",
+                                        )
                                         ciphersService
                                             .uploadAttachment(
-                                                attachmentJsonResponse = attachmentJsonResponse,
+                                                attachment = attachmentResponse,
                                                 encryptedFile = encryptedFile,
                                             )
                                             .onSuccess {
@@ -385,6 +405,7 @@ class CipherManagerImpl(
                                                 fileManager.delete(cacheFile, encryptedFile)
                                             }
                                     }
+                                }
                             }
                     }
             }
@@ -488,7 +509,10 @@ class CipherManagerImpl(
                         .flatMap { response ->
                             when (response) {
                                 is UpdateCipherResponseJson.Invalid -> {
-                                    IllegalStateException(response.message).asFailure()
+                                    IllegalStateException(
+                                        response.message,
+                                    )
+                                        .asFailure()
                                 }
 
                                 is UpdateCipherResponseJson.Success -> {

@@ -1,7 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.model
-
-// TODO: Remove this file once all models have been moved to the network module
-// This class has already been moved to the network module
+package com.bitwarden.network.model
 
 /**
  * Represents the json body of an invalid send json request.
