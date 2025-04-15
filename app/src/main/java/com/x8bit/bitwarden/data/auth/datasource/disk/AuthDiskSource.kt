@@ -352,14 +352,4 @@ interface AuthDiskSource {
      * Stores the last lock timestamp for the given [userId].
      */
     fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?)
-
-    /**
-     * Retrieves a key connector url using a [userId].
-     */
-    fun getKeyConnectorUrl(userId: String): String?
-
-    /**
-     * Stores a key connector url using a [userId].
-     */
-    fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?)
 }

@@ -693,9 +693,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         runTest {
             val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.rememberedKeyConnectorUrl
-            } returns "bitwarden.com"
-            coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")
 
@@ -1129,10 +1126,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `CancelKeyConnectorDomainClick should hide prompt and call authRepository cancelKeyConnectorLogin`() =
         runTest {
             coEvery {
-                authRepository.rememberedKeyConnectorUrl
-            } returns "bitwarden.com"
-
-            coEvery {
                 authRepository.cancelKeyConnectorLogin()
             } just runs
 
@@ -1145,14 +1138,18 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
 
-                viewModel.trySendAction(EnterpriseSignOnAction.Internal.OnLoginResult(
-                    LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")),
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.Internal.OnLoginResult(
+                        LoginResult.ConfirmKeyConnectorDomain("bitwarden.com"),
+                    ),
                 )
 
                 assertEquals(
-                    DEFAULT_STATE.copy(dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
-                        keyConnectorDomain = "bitwarden.com",
-                    )),
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                            keyConnectorDomain = "bitwarden.com",
+                        ),
+                    ),
                     awaitItem(),
                 )
 

@@ -318,14 +318,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedLastLockTimestampState[userId] = lastLockTimestamp
     }
 
-    override fun getKeyConnectorUrl(userId: String): String? {
-        return storedRememberKeyConnectorUrlKeys[userId]
-    }
-
-    override fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?) {
-        storedRememberKeyConnectorUrlKeys[userId] = keyConnectorUrl
-    }
-
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
      */

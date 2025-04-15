@@ -23,6 +23,7 @@ class SyncResponseJsonExtensionsTest {
                 shouldManageResetPassword = false,
                 shouldUseKeyConnector = false,
                 role = OrganizationType.ADMIN,
+                keyConnectorUrl = null,
             ),
             createMockOrganization(number = 1).toOrganization(),
         )
@@ -38,6 +39,7 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = true,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = "www.bitwarden.com",
                 ),
                 Organization(
                     id = "mockId-2",
@@ -45,6 +47,7 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = true,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
+                    keyConnectorUrl = null,
                 ),
             ),
             listOf(

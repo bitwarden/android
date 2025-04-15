@@ -500,16 +500,6 @@ class AuthDiskSourceImpl(
         )
     }
 
-    override fun getKeyConnectorUrl(userId: String): String? =
-        getString(key = REMEMBERED_KEY_CONNECTOR_URL_KEY.appendIdentifier(userId))
-
-    override fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?) {
-        putString(
-            key = REMEMBERED_KEY_CONNECTOR_URL_KEY.appendIdentifier(userId),
-            value = keyConnectorUrl,
-        )
-    }
-
     private fun generateAndStoreUniqueAppId(): String =
         UUID
             .randomUUID()

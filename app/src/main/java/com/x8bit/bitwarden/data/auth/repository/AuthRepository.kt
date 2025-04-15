@@ -109,11 +109,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     var rememberedOrgIdentifier: String?
 
     /**
-     * The currently persisted key connector url (or `null` if not set).
-     */
-    val rememberedKeyConnectorUrl: String?
-
-    /**
      * The currently persisted state indicating whether the user has completed login via TDE.
      */
     val tdeLoginComplete: Boolean?

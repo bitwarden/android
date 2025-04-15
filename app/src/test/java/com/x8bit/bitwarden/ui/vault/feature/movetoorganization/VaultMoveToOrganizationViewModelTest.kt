@@ -498,6 +498,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
                 ),
                 Organization(
                     id = "mockOrganizationId-2",
@@ -505,6 +506,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
                 ),
                 Organization(
                     id = "mockOrganizationId-3",
@@ -512,6 +514,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
                 ),
             ),
             trustedDevice = null,

@@ -617,23 +617,6 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `rememberedKeyConnectorUrl should pull from and update AuthDiskSource`() {
-        // AuthDiskSource and the repository start with the same value.
-        assertNull(repository.rememberedKeyConnectorUrl)
-        assertNull(fakeAuthDiskSource.getKeyConnectorUrl(userId = USER_ID_1))
-
-        // Updating AuthDiskSource updates the repository
-        fakeAuthDiskSource.storeKeyConnectorUrl(userId = USER_ID_1, keyConnectorUrl = "Bitwarden")
-        assertEquals(
-            "Bitwarden",
-            fakeAuthDiskSource.getKeyConnectorUrl(userId = USER_ID_1),
-        )
-
-        fakeAuthDiskSource.storeKeyConnectorUrl(userId = USER_ID_1, keyConnectorUrl = null)
-        assertNull(repository.rememberedKeyConnectorUrl)
-    }
-
-    @Test
     fun `tdeLoginComplete should directly access the authDiskSource`() {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         // AuthDiskSource and the repository start with the same default value.

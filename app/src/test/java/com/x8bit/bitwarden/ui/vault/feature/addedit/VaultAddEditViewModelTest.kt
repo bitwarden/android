@@ -1143,10 +1143,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             val mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
-                every { callingAppInfo } returns mockk(relaxed = true)
-                every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
-            }
+                mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+                    every { callingAppInfo } returns mockk(relaxed = true)
+                    every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
+                }
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -4615,6 +4615,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
+                            keyConnectorUrl = null,
                         ),
                     ),
                     isBiometricsEnabled = true,

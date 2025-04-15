@@ -28,7 +28,6 @@ import org.junit.jupiter.api.Test
 class RemovePasswordViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
-        every { rememberedKeyConnectorUrl } returns "bitwarden.com"
         every { userStateFlow } returns mutableUserStateFlow
         every { logout(reason = any()) } just runs
     }
@@ -261,6 +260,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
             shouldManageResetPassword = false,
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
+            keyConnectorUrl = KEY_CONNECTOR_URL,
         ),
     ),
     needsMasterPassword = false,

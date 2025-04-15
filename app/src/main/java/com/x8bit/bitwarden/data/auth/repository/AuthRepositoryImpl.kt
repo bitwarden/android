@@ -348,9 +348,6 @@ class AuthRepositoryImpl(
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
 
-    override val rememberedKeyConnectorUrl: String?
-        get() = activeUserId?.let { authDiskSource.getKeyConnectorUrl(userId = it) }
-
     override val tdeLoginComplete: Boolean?
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
 
@@ -988,12 +985,8 @@ class AuthRepositoryImpl(
         val userKey = authDiskSource
             .getUserKey(userId = userId)
             ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
-        val keyConnectorUrl = organizations
-            .find {
-                it.shouldUseKeyConnector &&
-                    it.type != OrganizationType.OWNER &&
-                    it.type != OrganizationType.ADMIN
-            }
+        val keyConnectorUrl = this.userStateFlow.value?.activeAccount?.organizations
+            ?.firstOrNull { it.shouldUseKeyConnector }
             ?.keyConnectorUrl
             ?: return RemovePasswordResult.Error(
                 error = MissingPropertyException("Key Connector URL"),
@@ -1716,11 +1709,6 @@ class AuthRepositoryImpl(
                         domain = keyConnectorUrl,
                     )
                 }
-
-                authDiskSource.storeKeyConnectorUrl(
-                    userId = userId,
-                    keyConnectorUrl = keyConnectorUrl,
-                )
 
                 unlockVaultWithKeyConnectorOnLoginSuccess(
                     profile = profile,
