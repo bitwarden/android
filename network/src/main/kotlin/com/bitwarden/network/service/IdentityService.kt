@@ -1,6 +1,7 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
@@ -8,11 +9,10 @@ import com.bitwarden.network.model.RegisterFinishRequestJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
+import com.bitwarden.network.model.SendVerificationEmailResponseJson
+import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
+import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 
 /**
  * Provides an API for querying identity endpoints.

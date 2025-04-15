@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.network.util
 
 import android.os.Build
 import com.bitwarden.core.annotation.OmitFromCoverage
