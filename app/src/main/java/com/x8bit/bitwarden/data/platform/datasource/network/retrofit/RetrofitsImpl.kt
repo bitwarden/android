@@ -6,7 +6,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.Refres
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.platform.util.isDevBuild
 import kotlinx.serialization.json.Json
