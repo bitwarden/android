@@ -170,8 +170,8 @@ private fun EnterpriseSignOnScreenContent(
 private fun EnterpriseSignOnDialogs(
     dialogState: EnterpriseSignOnState.DialogState?,
     onDismissRequest: () -> Unit,
-    onConfirmKeyConnectorDomain: () -> Unit = {},
-    onDismissKeyConnectorDomain: () -> Unit = {},
+    onConfirmKeyConnectorDomain: () -> Unit,
+    onDismissKeyConnectorDomain: () -> Unit,
 ) {
     when (dialogState) {
         is EnterpriseSignOnState.DialogState.Error -> {
@@ -197,7 +197,7 @@ private fun EnterpriseSignOnDialogs(
                 confirmButtonText = stringResource(R.string.confirm),
                 dismissButtonText = stringResource(R.string.cancel),
                 onConfirmClick = onConfirmKeyConnectorDomain,
-                onDismissRequest = { },
+                onDismissRequest = onDismissKeyConnectorDomain,
                 onDismissClick = onDismissKeyConnectorDomain,
             )
         }

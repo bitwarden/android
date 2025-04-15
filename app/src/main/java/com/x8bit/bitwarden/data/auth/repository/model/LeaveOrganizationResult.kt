@@ -13,7 +13,6 @@ sealed class LeaveOrganizationResult {
      * There was an error leaving the organization.
      */
     data class Error(
-        val message: String?,
         val error: Throwable?,
     ) : LeaveOrganizationResult()
 }

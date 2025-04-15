@@ -132,15 +132,6 @@ class AuthDiskSourceImpl(
             )
         }
 
-    override var rememberedKeyConnectorUrl: String?
-        get() = getString(key = REMEMBERED_KEY_CONNECTOR_URL_KEY)
-        set(value) {
-            putString(
-                key = REMEMBERED_KEY_CONNECTOR_URL_KEY,
-                value = value,
-            )
-        }
-
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
@@ -506,6 +497,16 @@ class AuthDiskSourceImpl(
         putLong(
             key = LAST_LOCK_TIMESTAMP.appendIdentifier(userId),
             value = lastLockTimestamp?.toEpochMilli(),
+        )
+    }
+
+    override fun getKeyConnectorUrl(userId: String): String? =
+        getString(key = REMEMBERED_KEY_CONNECTOR_URL_KEY.appendIdentifier(userId))
+
+    override fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?) {
+        putString(
+            key = REMEMBERED_KEY_CONNECTOR_URL_KEY.appendIdentifier(userId),
+            value = keyConnectorUrl,
         )
     }
 

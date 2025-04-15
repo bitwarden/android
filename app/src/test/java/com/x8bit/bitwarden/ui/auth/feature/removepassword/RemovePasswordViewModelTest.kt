@@ -166,7 +166,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 authRepository.leaveOrganization(
                     organizationId = "mockId-1",
                 )
-            } returns LeaveOrganizationResult.Error(message = "error", error = null)
+            } returns LeaveOrganizationResult.Error(error = null)
             coEvery {
                 authRepository.logout(any())
             } returns Unit

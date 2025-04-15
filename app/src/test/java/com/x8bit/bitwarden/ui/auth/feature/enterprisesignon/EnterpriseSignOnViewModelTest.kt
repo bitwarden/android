@@ -697,7 +697,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             } returns "bitwarden.com"
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
-            } returns LoginResult.ConfirmKeyConnectorDomain
+            } returns LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")
 
             val viewModel = createViewModel(
                 ssoData = DEFAULT_SSO_DATA,
@@ -1146,7 +1146,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 )
 
                 viewModel.trySendAction(EnterpriseSignOnAction.Internal.OnLoginResult(
-                    LoginResult.ConfirmKeyConnectorDomain),
+                    LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")),
                 )
 
                 assertEquals(

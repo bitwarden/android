@@ -1334,14 +1334,18 @@ class AuthDiskSourceTest {
 
     @Test
     fun `rememberedKeyConnectorUrl should pull from and update SharedPreferences`() {
-        val rememberedKeyConnectorUrlKey = "bwPreferencesStorage:rememberedKeyConnectorUrl"
+        val userId = "userId"
+        val rememberedKeyConnectorUrlKey = "bwPreferencesStorage:rememberedKeyConnectorUrl_$userId"
 
         // Shared preferences and the disk source start with the same value.
-        assertNull(authDiskSource.rememberedKeyConnectorUrl)
+        assertNull(authDiskSource.getKeyConnectorUrl(userId = userId))
         assertNull(fakeSharedPreferences.getString(rememberedKeyConnectorUrlKey, null))
 
         // Updating the disk source updates shared preferences
-        authDiskSource.rememberedKeyConnectorUrl = "www.bitwarden.com"
+        authDiskSource.storeKeyConnectorUrl(
+            userId = userId,
+            keyConnectorUrl = "www.bitwarden.com",
+        )
         assertEquals(
             "www.bitwarden.com",
             fakeSharedPreferences.getString(rememberedKeyConnectorUrlKey, null),
@@ -1349,7 +1353,7 @@ class AuthDiskSourceTest {
 
         // Update SharedPreferences updates the disk source
         fakeSharedPreferences.edit { putString(rememberedKeyConnectorUrlKey, null) }
-        assertNull(authDiskSource.rememberedKeyConnectorUrl)
+        assertNull(authDiskSource.getKeyConnectorUrl(userId = userId))
     }
 }
 

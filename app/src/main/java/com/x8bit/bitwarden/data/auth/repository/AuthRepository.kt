@@ -111,7 +111,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * The currently persisted key connector url (or `null` if not set).
      */
-    var rememberedKeyConnectorUrl: String?
+    val rememberedKeyConnectorUrl: String?
 
     /**
      * The currently persisted state indicating whether the user has completed login via TDE.

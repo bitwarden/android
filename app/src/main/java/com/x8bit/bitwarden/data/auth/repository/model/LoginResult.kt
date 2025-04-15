@@ -22,7 +22,9 @@ sealed class LoginResult {
     /**
      * User should confirm KeyConnector domain
      */
-    data object ConfirmKeyConnectorDomain : LoginResult()
+    data class ConfirmKeyConnectorDomain(
+        val domain: String,
+    ) : LoginResult()
 
     /**
      * There was an error logging in.

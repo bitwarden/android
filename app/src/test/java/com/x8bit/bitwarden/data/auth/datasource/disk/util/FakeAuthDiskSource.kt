@@ -21,7 +21,6 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override var rememberedEmailAddress: String? = null
     override var rememberedOrgIdentifier: String? = null
-    override var rememberedKeyConnectorUrl: String? = null
 
     private val mutableShouldUseKeyConnectorFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -64,6 +63,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
+    private val storedRememberKeyConnectorUrlKeys = mutableMapOf<String, String?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -316,6 +316,14 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
         storedLastLockTimestampState[userId] = lastLockTimestamp
+    }
+
+    override fun getKeyConnectorUrl(userId: String): String? {
+        return storedRememberKeyConnectorUrlKeys[userId]
+    }
+
+    override fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?) {
+        storedRememberKeyConnectorUrlKeys[userId] = keyConnectorUrl
     }
 
     /**

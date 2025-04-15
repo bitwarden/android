@@ -211,7 +211,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
             is LoginResult.ConfirmKeyConnectorDomain -> {
                 showKeyConnectorDomainConfirmation(
-                    keyConnectorDomain = authRepository.rememberedKeyConnectorUrl.orEmpty(),
+                    keyConnectorDomain = loginResult.domain,
                 )
             }
         }

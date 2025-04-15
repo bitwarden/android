@@ -34,14 +34,14 @@ class RemovePasswordViewModel @Inject constructor(
             ?.organizations
             ?.firstOrNull { it.shouldUseKeyConnector }
 
-        val keyConnectorDomain = authRepository.rememberedKeyConnectorUrl.orEmpty()
+        val keyConnectorDomain = authRepository.rememberedKeyConnectorUrl
         RemovePasswordState(
             input = "",
             description = R.string.password_no_longer_required_confirm_domain.asText(),
             labelOrg = R.string.key_connector_organization.asText(),
             orgName = org?.name.orEmpty().asText(),
             labelDomain = R.string.key_connector_domain.asText(),
-            domainName = keyConnectorDomain.asText(),
+            domainName = keyConnectorDomain.orEmpty().asText(),
             dialogState = null,
             organizationId = org?.id.orNullIfBlank(),
         )

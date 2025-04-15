@@ -348,7 +348,8 @@ class AuthRepositoryImpl(
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
 
-    override var rememberedKeyConnectorUrl: String? by authDiskSource::rememberedKeyConnectorUrl
+    override val rememberedKeyConnectorUrl: String?
+        get() = activeUserId?.let { authDiskSource.getKeyConnectorUrl(userId = it) }
 
     override val tdeLoginComplete: Boolean?
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
@@ -1437,7 +1438,7 @@ class AuthRepositoryImpl(
     override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
         organizationService.leaveOrganization(organizationId).fold(
             onSuccess = { LeaveOrganizationResult.Success },
-            onFailure = { LeaveOrganizationResult.Error(message = it.message, error = it) },
+            onFailure = { LeaveOrganizationResult.Error(error = it) },
         )
 
     @Suppress("CyclomaticComplexMethod")
@@ -1701,8 +1702,6 @@ class AuthRepositoryImpl(
                     deviceData = deviceData,
                 )
             } else if (keyConnectorUrl != null && orgIdentifier != null) {
-                authDiskSource.rememberedKeyConnectorUrl = keyConnectorUrl
-
                 val isNewKeyConnectorUser =
                     loginResponse.userDecryptionOptions?.hasMasterPassword == false &&
                         loginResponse.key == null &&
@@ -1713,8 +1712,15 @@ class AuthRepositoryImpl(
                 // we should ask him to confirm the domain
                 if (isNewKeyConnectorUser && isNotConfirmed) {
                     keyConnectorResponse = loginResponse
-                    return LoginResult.ConfirmKeyConnectorDomain
+                    return LoginResult.ConfirmKeyConnectorDomain(
+                        domain = keyConnectorUrl,
+                    )
                 }
+
+                authDiskSource.storeKeyConnectorUrl(
+                    userId = userId,
+                    keyConnectorUrl = keyConnectorUrl,
+                )
 
                 unlockVaultWithKeyConnectorOnLoginSuccess(
                     profile = profile,

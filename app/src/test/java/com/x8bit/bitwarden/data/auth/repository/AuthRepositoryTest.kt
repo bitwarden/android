@@ -620,14 +620,16 @@ class AuthRepositoryTest {
     fun `rememberedKeyConnectorUrl should pull from and update AuthDiskSource`() {
         // AuthDiskSource and the repository start with the same value.
         assertNull(repository.rememberedKeyConnectorUrl)
-        assertNull(fakeAuthDiskSource.rememberedKeyConnectorUrl)
-
-        // Updating the repository updates AuthDiskSource
-        repository.rememberedKeyConnectorUrl = "Bitwarden"
-        assertEquals("Bitwarden", fakeAuthDiskSource.rememberedKeyConnectorUrl)
+        assertNull(fakeAuthDiskSource.getKeyConnectorUrl(userId = USER_ID_1))
 
         // Updating AuthDiskSource updates the repository
-        fakeAuthDiskSource.rememberedKeyConnectorUrl = null
+        fakeAuthDiskSource.storeKeyConnectorUrl(userId = USER_ID_1, keyConnectorUrl = "Bitwarden")
+        assertEquals(
+            "Bitwarden",
+            fakeAuthDiskSource.getKeyConnectorUrl(userId = USER_ID_1),
+        )
+
+        fakeAuthDiskSource.storeKeyConnectorUrl(userId = USER_ID_1, keyConnectorUrl = null)
         assertNull(repository.rememberedKeyConnectorUrl)
     }
 
@@ -3312,7 +3314,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
-            assertEquals(LoginResult.ConfirmKeyConnectorDomain, result)
+            assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
             val continueResult = repository.continueKeyConnectorLogin()
             assertEquals(LoginResult.Error(errorMessage = null, error = error), continueResult)
@@ -3416,7 +3418,7 @@ class AuthRepositoryTest {
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
-            assertEquals(LoginResult.ConfirmKeyConnectorDomain, result)
+            assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
 
             val continueResult = repository.continueKeyConnectorLogin()
             assertEquals(LoginResult.Success, continueResult)
@@ -3502,7 +3504,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
-            assertEquals(LoginResult.ConfirmKeyConnectorDomain, result)
+            assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), result)
         }
 
     @Test
@@ -3585,7 +3587,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
-            assertEquals(LoginResult.ConfirmKeyConnectorDomain, loginResult)
+            assertEquals(LoginResult.ConfirmKeyConnectorDomain(keyConnectorUrl), loginResult)
 
             val result = repository.continueKeyConnectorLogin()
             assertEquals(LoginResult.Success, result)
@@ -6788,7 +6790,8 @@ class AuthRepositoryTest {
                 LoginResult.Error(
                     errorMessage = null,
                     error = MissingPropertyException("Key Connector Response"),
-                ), continueResult,
+                ),
+                continueResult,
             )
         }
 
@@ -6822,7 +6825,7 @@ class AuthRepositoryTest {
                 organizationService.leaveOrganization(any())
             }
             assertEquals(
-                LeaveOrganizationResult.Error(message = error.message, error = error),
+                LeaveOrganizationResult.Error(error = error),
                 continueResult,
             )
         }

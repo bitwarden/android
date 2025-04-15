@@ -38,11 +38,6 @@ interface AuthDiskSource {
     var rememberedOrgIdentifier: String?
 
     /**
-     * The currently persisted Key Connector url (or `null` if not set).
-     */
-    var rememberedKeyConnectorUrl: String?
-
-    /**
      * The currently persisted user state information (or `null` if not set).
      */
     var userState: UserStateJson?
@@ -357,4 +352,14 @@ interface AuthDiskSource {
      * Stores the last lock timestamp for the given [userId].
      */
     fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?)
+
+    /**
+     * Retrieves a key connector url using a [userId].
+     */
+    fun getKeyConnectorUrl(userId: String): String?
+
+    /**
+     * Stores a key connector url using a [userId].
+     */
+    fun storeKeyConnectorUrl(userId: String, keyConnectorUrl: String?)
 }
