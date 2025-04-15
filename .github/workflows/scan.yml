@@ -40,27 +40,12 @@ jobs:
             --filter "state=TO_VERIFY;PROPOSED_NOT_EXPLOITABLE;CONFIRMED;URGENT" \
             --output-path . ${{ env.INCREMENTAL }}
 
-      - name: Get branch refs
-        id: get-branch-refs
-        env:
-          GH_TOKEN: ${{ github.token }}
-          _PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          if [[ $GITHUB_EVENT_NAME == "pull_request_target" ]]; then
-            MERGE_SHA=$(gh api /repos/$GITHUB_REPOSITORY/pulls/$_PR_NUMBER --jq .merge_commit_sha)
-            echo "SHA=$MERGE_SHA" >> $GITHUB_OUTPUT
-            echo "REF=refs/pull/$_PR_NUMBER/merge" >> $GITHUB_OUTPUT
-          else
-            echo "SHA=$GITHUB_SHA" >> $GITHUB_OUTPUT
-            echo "REF=$GITHUB_REF" >> $GITHUB_OUTPUT
-          fi
-
       - name: Upload Checkmarx results to GitHub
         uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           sarif_file: cx_result.sarif
-          sha: ${{ steps.get-branch-refs.outputs.SHA }}
-          ref: ${{ steps.get-branch-refs.outputs.REF }}
+          sha: ${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ contains(github.event_name, 'pull_request') && format('refs/pull/{0}/head', github.event.pull_request.number) || github.ref }}
 
   quality:
     name: Quality scan
