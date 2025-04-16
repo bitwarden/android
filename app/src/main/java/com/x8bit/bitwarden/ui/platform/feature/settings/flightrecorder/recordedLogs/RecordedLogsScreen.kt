@@ -17,7 +17,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -25,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
@@ -37,10 +41,14 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflo
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenEmptyContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 
@@ -48,17 +56,30 @@ import kotlinx.collections.immutable.persistentListOf
  * Displays the flight recorder recorded logs screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun RecordedLogsScreen(
     onNavigateBack: () -> Unit,
     viewModel: RecordedLogsViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel) { event ->
         when (event) {
             RecordedLogsEvent.NavigateBack -> onNavigateBack()
+            is RecordedLogsEvent.ShareLog -> {
+                intentManager.shareFile(fileUri = event.uri.toUri())
+            }
         }
     }
+
+    RecordedLogsDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(RecordedLogsAction.DismissDialog) }
+        },
+    )
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
         topBar = {
@@ -120,6 +141,18 @@ private fun RecordedLogsOverflowMenu(
     onShareAllClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showDeletionDialog by rememberSaveable { mutableStateOf(value = false) }
+    if (showDeletionDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete_logs),
+            message = stringResource(id = R.string.do_you_really_want_to_delete_all_recorded_logs),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onDismissRequest = { showDeletionDialog = false },
+            onDismissClick = { showDeletionDialog = false },
+            onConfirmClick = onDeleteAllClick,
+        )
+    }
     BitwardenOverflowActionItem(
         modifier = modifier,
         menuItemDataList = persistentListOf(
@@ -130,12 +163,31 @@ private fun RecordedLogsOverflowMenu(
             ),
             OverflowMenuItemData(
                 text = stringResource(id = R.string.delete_all),
-                onClick = onDeleteAllClick,
+                onClick = { showDeletionDialog = true },
                 isEnabled = isOverflowEnabled,
                 color = BitwardenTheme.colorScheme.status.error,
             ),
         ),
     )
+}
+
+@Composable
+private fun RecordedLogsDialogs(
+    dialogState: RecordedLogsState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is RecordedLogsState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
+                throwable = dialogState.error,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        null -> Unit
+    }
 }
 
 @Composable
@@ -181,6 +233,18 @@ private fun LogRow(
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
+    var showDeletionDialog by rememberSaveable { mutableStateOf(value = false) }
+    if (showDeletionDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete_log),
+            message = stringResource(id = R.string.do_you_really_want_to_delete_this_log),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onDismissRequest = { showDeletionDialog = false },
+            onDismissClick = { showDeletionDialog = false },
+            onConfirmClick = { onDeleteItemClick(displayableItem) },
+        )
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -235,7 +299,7 @@ private fun LogRow(
                 ),
                 OverflowMenuItemData(
                     text = stringResource(id = R.string.delete),
-                    onClick = { onDeleteItemClick(displayableItem) },
+                    onClick = { showDeletionDialog = true },
                     color = BitwardenTheme.colorScheme.status.error,
                     isEnabled = displayableItem.isDeletedEnabled,
                 ),

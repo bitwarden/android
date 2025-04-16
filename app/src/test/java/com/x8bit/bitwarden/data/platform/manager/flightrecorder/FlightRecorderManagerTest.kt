@@ -123,7 +123,7 @@ class FlightRecorderManagerTest {
                 data = setOf(
                     FlightRecorderDataSet.FlightRecorderData(
                         id = "mockUUID",
-                        fileName = "flight_recorder_2023-10-27_12-00-00",
+                        fileName = "flight_recorder_2023-10-27_12-00-00.txt",
                         startTimeMs = FIXED_CLOCK_TIME,
                         durationMs = FlightRecorderDuration.ONE_HOUR.milliseconds,
                         isActive = true,

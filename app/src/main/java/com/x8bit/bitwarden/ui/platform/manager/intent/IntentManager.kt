@@ -69,6 +69,11 @@ interface IntentManager {
     ): ManagedActivityResultLauncher<Intent, ActivityResult>
 
     /**
+     * Launches the share sheet with the given [title] and file.
+     */
+    fun shareFile(title: String? = null, fileUri: Uri)
+
+    /**
      * Launches the share sheet with the given [text].
      */
     fun shareText(text: String)
