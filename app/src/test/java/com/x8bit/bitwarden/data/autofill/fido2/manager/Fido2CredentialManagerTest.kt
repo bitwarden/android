@@ -9,6 +9,7 @@ import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.decodeFromStringOrNull
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
@@ -21,6 +22,9 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
@@ -29,6 +33,8 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAssertionResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import io.mockk.coEvery
@@ -96,6 +102,11 @@ class Fido2CredentialManagerTest {
     }
     private val mockVaultSdkSource = mockk<VaultSdkSource>()
     private val mockFido2CredentialStore = mockk<Fido2CredentialStore>()
+    private val mockIntentManager = mockk<IntentManager>()
+    private val mockVaultRepository = mockk<VaultRepository>()
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager>()
+    private val mockBiometricsEncryptionManager = mockk<BiometricsEncryptionManager>()
+    private val mockEnvironmentRepository = mockk<EnvironmentRepository>()
 
     @BeforeEach
     fun setUp() {
@@ -107,9 +118,16 @@ class Fido2CredentialManagerTest {
         every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
 
         fido2CredentialManager = Fido2CredentialManagerImpl(
+            context = mockk(relaxed = true),
             vaultSdkSource = mockVaultSdkSource,
             fido2CredentialStore = mockFido2CredentialStore,
             json = json,
+            intentManager = mockIntentManager,
+            dispatcherManager = FakeDispatcherManager(),
+            vaultRepository = mockVaultRepository,
+            featureFlagManager = mockFeatureFlagManager,
+            biometricsEncryptionManager = mockBiometricsEncryptionManager,
+            environmentRepository = mockEnvironmentRepository,
         )
     }
 

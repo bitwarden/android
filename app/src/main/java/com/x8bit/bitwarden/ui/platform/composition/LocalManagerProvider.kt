@@ -76,7 +76,7 @@ private fun createFido2CompletionManager(
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
         Fido2CompletionManagerUnsupportedApiImpl
     } else {
-        Fido2CompletionManagerImpl(activity, intentManager)
+        Fido2CompletionManagerImpl(activity)
     }
 
 /**
