@@ -124,7 +124,10 @@ class MainActivity : AppCompatActivity() {
                         }
                     },
                 )
-                BitwardenTheme(theme = state.theme) {
+                BitwardenTheme(
+                    theme = state.theme,
+                    dynamicColor = state.isDynamicColorsEnabled,
+                ) {
                     NavHost(
                         navController = navController,
                         startDestination = ROOT_ROUTE,

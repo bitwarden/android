@@ -26,6 +26,7 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -372,21 +373,41 @@ private fun RowScope.ToolTip(
     )
 }
 
-@Preview
+@Suppress("LongMethod")
+@Preview(wallpaper = Wallpapers.GREEN_DOMINATED_EXAMPLE)
 @Composable
 private fun BitwardenSwitch_preview() {
-    Column {
-        BitwardenSwitch(
-            label = "Label",
-            supportingText = "description",
-            isChecked = true,
-            onCheckedChange = {},
-            cardStyle = CardStyle.Top(),
-        )
-        BitwardenSwitch(
-            label = "Label",
-            isChecked = false,
-            onCheckedChange = {},
+    BitwardenTheme(dynamicColor = true) {
+        Column {
+            BitwardenSwitch(
+                label = "Label",
+                supportingText = "description",
+                isChecked = true,
+                onCheckedChange = {},
+                cardStyle = CardStyle.Top(),
+            )
+            BitwardenSwitch(
+                label = "Label",
+                isChecked = false,
+                onCheckedChange = {},
+                cardStyle = CardStyle.Middle(),
+            )
+            BitwardenSwitch(
+                label = "Label",
+                supportingText = "description",
+                isChecked = true,
+                onCheckedChange = {},
+                tooltip = TooltipData(
+                onClick = { },
+                contentDescription = "content description",
+            ),
+                actions = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_generate,
+                        contentDescription = "content description",
+                        onClick = {},
+                    )
+                },
             cardStyle = CardStyle.Middle(),
         )
         BitwardenSwitch(
@@ -398,38 +419,21 @@ private fun BitwardenSwitch_preview() {
                 onClick = { },
                 contentDescription = "content description",
             ),
-            actions = {
-                BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_generate,
-                    contentDescription = "content description",
-                    onClick = {},
-                )
-            },
             cardStyle = CardStyle.Middle(),
         )
-        BitwardenSwitch(
-            label = "Label",
-            supportingText = "description",
-            isChecked = true,
-            onCheckedChange = {},
-            tooltip = TooltipData(
-                onClick = { },
-                contentDescription = "content description",
-            ),
-            cardStyle = CardStyle.Middle(),
-        )
-        BitwardenSwitch(
-            label = "Label",
-            isChecked = false,
-            onCheckedChange = {},
-            actions = {
-                BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_generate,
-                    contentDescription = "content description",
-                    onClick = {},
-                )
-            },
-            cardStyle = CardStyle.Bottom,
-        )
+            BitwardenSwitch(
+                label = "Label",
+                isChecked = false,
+                onCheckedChange = {},
+                actions = {
+                    BitwardenStandardIconButton(
+                        vectorIconRes = R.drawable.ic_generate,
+                        contentDescription = "content description",
+                        onClick = {},
+                    )
+                },
+                cardStyle = CardStyle.Bottom,
+            )
+        }
     }
 }
