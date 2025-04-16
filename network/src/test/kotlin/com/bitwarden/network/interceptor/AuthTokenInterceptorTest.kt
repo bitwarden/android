@@ -1,9 +1,6 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
+package com.bitwarden.network.interceptor
 
-import com.bitwarden.network.interceptor.FakeInterceptorChain
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import okhttp3.Request
@@ -14,9 +11,11 @@ import javax.inject.Singleton
 
 @Singleton
 class AuthTokenInterceptorTest {
-    private val authDiskSource = FakeAuthDiskSource()
+    private val mockAuthTokenProvider = mockk<AuthTokenProvider> {
+        every { getActiveAccessTokenOrNull() } returns null
+    }
     private val interceptor: AuthTokenInterceptor = AuthTokenInterceptor(
-        authDiskSource = authDiskSource,
+        authTokenProvider = mockAuthTokenProvider,
     )
     private val request: Request = Request
         .Builder()
@@ -25,8 +24,8 @@ class AuthTokenInterceptorTest {
 
     @Test
     fun `intercept should add the auth token when set`() {
-        authDiskSource.userState = USER_STATE
-        authDiskSource.storeAccountTokens(userId = USER_ID, ACCOUNT_TOKENS)
+        every { mockAuthTokenProvider.getActiveAccessTokenOrNull() } returns ACCESS_TOKEN
+
         val response = interceptor.intercept(
             chain = FakeInterceptorChain(request = request),
         )
@@ -50,13 +49,4 @@ class AuthTokenInterceptorTest {
     }
 }
 
-private const val USER_ID: String = "user_id"
 private const val ACCESS_TOKEN: String = "access_token"
-private val USER_STATE: UserStateJson = UserStateJson(
-    activeUserId = USER_ID,
-    accounts = mapOf(USER_ID to mockk()),
-)
-private val ACCOUNT_TOKENS: AccountTokensJson = AccountTokensJson(
-    accessToken = ACCESS_TOKEN,
-    refreshToken = null,
-)

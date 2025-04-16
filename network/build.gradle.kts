@@ -2,8 +2,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -46,6 +48,8 @@ dependencies {
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.google.hilt.android)
+    ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.serialization)
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)

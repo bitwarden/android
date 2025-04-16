@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import com.bitwarden.network.interceptor.AuthTokenInterceptor
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.ConfigServiceImpl
@@ -8,8 +9,8 @@ import com.bitwarden.network.service.EventServiceImpl
 import com.bitwarden.network.service.PushService
 import com.bitwarden.network.service.PushServiceImpl
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
@@ -63,8 +64,10 @@ object PlatformNetworkModule {
     @Provides
     @Singleton
     fun providesAuthTokenInterceptor(
-        authDiskSource: AuthDiskSource,
-    ): AuthTokenInterceptor = AuthTokenInterceptor(authDiskSource = authDiskSource)
+        authTokenManager: AuthTokenManager,
+    ): AuthTokenInterceptor = AuthTokenInterceptor(
+        authTokenProvider = authTokenManager,
+    )
 
     @Provides
     @Singleton
