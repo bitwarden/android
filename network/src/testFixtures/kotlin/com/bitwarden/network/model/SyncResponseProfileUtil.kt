@@ -7,7 +7,9 @@ import java.time.ZonedDateTime
  */
 fun createMockProfile(number: Int): SyncResponseJson.Profile =
     SyncResponseJson.Profile(
-        providerOrganizations = listOf(createMockOrganization(number = number)),
+        providerOrganizations = listOf(createMockOrganization(number = number).copy(
+            keyConnectorUrl = "mockKeyConnectorUrl-$number",
+        )),
         isPremiumFromOrganization = false,
         shouldForcePasswordReset = false,
         avatarColor = "mockAvatarColor-$number",
@@ -17,7 +19,11 @@ fun createMockProfile(number: Int): SyncResponseJson.Profile =
         isPremium = false,
         culture = "mockCulture-$number",
         name = "mockName-$number",
-        organizations = listOf(createMockOrganization(number = number)),
+        organizations = listOf(
+            createMockOrganization(number = number).copy(
+                keyConnectorUrl = "mockKeyConnectorUrl-$number",
+            ),
+        ),
         shouldUseKeyConnector = false,
         id = "mockId-$number",
         masterPasswordHint = "mockMasterPasswordHint-$number",
