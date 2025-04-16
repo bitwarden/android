@@ -8,8 +8,10 @@ import androidx.core.os.bundleOf
  */
 fun createMockFido2CreateCredentialRequest(
     number: Int,
+    isUserPreVerified: Boolean = false,
     requestData: Bundle = bundleOf(),
 ): Fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
     userId = "mockUserId-$number",
+    isUserPreVerified = isUserPreVerified,
     requestData = requestData,
 )

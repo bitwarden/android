@@ -887,6 +887,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = Fido2CreateCredentialRequest(
                     userId = "userId",
+                    isUserPreVerified = false,
                     requestData = bundleOf(),
                 ),
                 fido2CredentialAutofillViews = null,
