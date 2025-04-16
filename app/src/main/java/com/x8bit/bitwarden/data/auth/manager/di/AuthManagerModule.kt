@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
@@ -131,4 +133,10 @@ object AuthManagerModule {
     @Singleton
     fun providesAddTotpItemFromAuthenticatorManager(): AddTotpItemFromAuthenticatorManager =
         AddTotpItemFromAuthenticatorManagerImpl()
+
+    @Provides
+    @Singleton
+    fun providesAuthTokenManager(
+        authDiskSource: AuthDiskSource,
+    ): AuthTokenManager = AuthTokenManagerImpl(authDiskSource = authDiskSource)
 }
