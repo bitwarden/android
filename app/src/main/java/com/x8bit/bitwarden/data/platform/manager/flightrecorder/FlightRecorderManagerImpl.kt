@@ -23,6 +23,7 @@ import timber.log.Timber
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 private const val EXPIRATION_DURATION_DAYS: Long = 30
 
@@ -39,6 +40,7 @@ internal class FlightRecorderManagerImpl(
     private val unconfinedScope = CoroutineScope(context = dispatcherManager.unconfined)
     private val ioScope = CoroutineScope(context = dispatcherManager.io)
     private var cancellationJob: Job = Job().apply { complete() }
+    private val expirationJobMap: ConcurrentHashMap<String, Job> = ConcurrentHashMap()
     private val flightRecorderTree = FlightRecorderTree()
 
     override val flightRecorderData: FlightRecorderDataSet
@@ -58,7 +60,10 @@ internal class FlightRecorderManagerImpl(
         // Always plant the tree, it will not log anything if the flight recorder is off.
         Timber.plant(flightRecorderTree)
         flightRecorderDataFlow
-            .onEach { it.configureFlightRecorder() }
+            .onEach {
+                it.configureFlightRecorder()
+                it.configureExpirationJobs()
+            }
             .launchIn(scope = unconfinedScope)
         context.registerReceiver(
             ScreenStateBroadcastReceiver(),
@@ -119,6 +124,7 @@ internal class FlightRecorderManagerImpl(
             data = originalData.data.filterNot { it == data }.toSet(),
         )
         ioScope.launch { flightRecorderWriter.deleteLog(data = data) }
+        expirationJobMap.remove(data.id)?.cancel()
     }
 
     private fun cancelCancellationJob() {
@@ -156,6 +162,27 @@ internal class FlightRecorderManagerImpl(
             }
     }
 
+    /**
+     * Configure the expiration jobs based on the [FlightRecorderDataSet].
+     *
+     * This cancels each expiration job and rebuilds it with the up-to-date info.
+     */
+    private fun FlightRecorderDataSet.configureExpirationJobs() {
+        this
+            .data
+            .filterNot { it.isActive }
+            .onEach {
+                expirationJobMap.remove(it.id)?.cancel()
+                expirationJobMap[it.id] = ioScope.launch {
+                    // If an inactive job does not have an expiration time, something has gone
+                    // wrong and we just delete it.
+                    val delay = (it.expirationTimeMs ?: 0L) - clock.instant().toEpochMilli()
+                    delay(timeMillis = delay)
+                    deleteLog(data = it)
+                }
+            }
+    }
+
     private inner class FlightRecorderTree : Timber.Tree() {
         var flightRecorderData: FlightRecorderDataSet.FlightRecorderData? = null
             set(value) {
@@ -182,7 +209,7 @@ internal class FlightRecorderManagerImpl(
 
     /**
      * A custom [BroadcastReceiver] that listens for when the screen is powered on and restarts the
-     * cancellation job to ensure they complete at the correct time.
+     * cancellation job and expiration jobs to ensure they complete at the correct time.
      *
      * This is necessary because the [delay] function in a coroutine will not keep accurate time
      * when the screen is off. We do not cancel the job when the screen is off, this allows the
@@ -191,6 +218,7 @@ internal class FlightRecorderManagerImpl(
     private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             flightRecorderData.configureFlightRecorder()
+            flightRecorderData.configureExpirationJobs()
         }
     }
 }

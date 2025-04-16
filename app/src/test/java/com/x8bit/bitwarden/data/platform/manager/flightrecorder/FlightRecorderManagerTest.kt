@@ -78,9 +78,21 @@ class FlightRecorderManagerTest {
         fakeSettingsDiskSource.flightRecorderData = null
         assertEquals(FlightRecorderDataSet(data = emptySet()), flightRecorder.flightRecorderData)
 
-        val expected = mockk<FlightRecorderDataSet> {
-            every { activeFlightRecorderData } returns null
-        }
+        val expected = FlightRecorderDataSet(
+            data = setOf(
+                FlightRecorderDataSet.FlightRecorderData(
+                    id = "mockUUID",
+                    fileName = "flight_recorder_2023-10-27_12-00-00",
+                    startTimeMs = FIXED_CLOCK_TIME,
+                    durationMs = FlightRecorderDuration.ONE_HOUR.milliseconds,
+                    isActive = false,
+                    expirationTimeMs = FIXED_CLOCK
+                        .instant()
+                        .plus(1L, ChronoUnit.HOURS)
+                        .toEpochMilli(),
+                ),
+            ),
+        )
         fakeSettingsDiskSource.flightRecorderData = expected
         assertEquals(expected, flightRecorder.flightRecorderData)
     }
@@ -93,7 +105,7 @@ class FlightRecorderManagerTest {
             .test {
                 assertEquals(FlightRecorderDataSet(data = emptySet()), awaitItem())
 
-                val expected = FlightRecorderDataSet(
+                val unexpired = FlightRecorderDataSet(
                     data = setOf(
                         FlightRecorderDataSet.FlightRecorderData(
                             id = "mockUUID",
@@ -101,14 +113,36 @@ class FlightRecorderManagerTest {
                             startTimeMs = FIXED_CLOCK_TIME,
                             durationMs = FlightRecorderDuration.ONE_HOUR.milliseconds,
                             isActive = false,
+                            expirationTimeMs = FIXED_CLOCK
+                                .instant()
+                                .plus(1L, ChronoUnit.HOURS)
+                                .toEpochMilli(),
                         ),
                     ),
                 )
-                fakeSettingsDiskSource.flightRecorderData = expected
-                assertEquals(expected, awaitItem())
+                fakeSettingsDiskSource.flightRecorderData = unexpired
+                assertEquals(unexpired, awaitItem())
+
+                val expired = FlightRecorderDataSet(
+                    data = setOf(
+                        FlightRecorderDataSet.FlightRecorderData(
+                            id = "mockUUID",
+                            fileName = "flight_recorder_2023-10-27_12-00-00",
+                            startTimeMs = FIXED_CLOCK_TIME,
+                            durationMs = FlightRecorderDuration.ONE_HOUR.milliseconds,
+                            isActive = false,
+                            expirationTimeMs = FIXED_CLOCK
+                                .instant()
+                                .minus(1L, ChronoUnit.HOURS)
+                                .toEpochMilli(),
+                        ),
+                    ),
+                )
+                fakeSettingsDiskSource.flightRecorderData = expired
+                assertEquals(FlightRecorderDataSet(data = emptySet()), awaitItem())
 
                 fakeSettingsDiskSource.flightRecorderData = null
-                assertEquals(FlightRecorderDataSet(data = emptySet()), awaitItem())
+                expectNoEvents()
             }
     }
 
@@ -152,7 +186,10 @@ class FlightRecorderManagerTest {
                     startTimeMs = FIXED_CLOCK_TIME,
                     durationMs = 60L,
                     isActive = false,
-                    expirationTimeMs = null,
+                    expirationTimeMs = FIXED_CLOCK
+                        .instant()
+                        .plus(30, ChronoUnit.DAYS)
+                        .toEpochMilli(),
                 ),
             ),
         )
@@ -198,6 +235,7 @@ class FlightRecorderManagerTest {
             startTimeMs = FIXED_CLOCK_TIME,
             durationMs = 60L,
             isActive = false,
+            expirationTimeMs = FIXED_CLOCK.instant().plus(1L, ChronoUnit.HOURS).toEpochMilli(),
         )
         val activeData = FlightRecorderDataSet.FlightRecorderData(
             id = "50",
@@ -205,6 +243,7 @@ class FlightRecorderManagerTest {
             startTimeMs = FIXED_CLOCK_TIME,
             durationMs = 60L,
             isActive = true,
+            expirationTimeMs = null,
         )
         val activeDataset = FlightRecorderDataSet(data = setOf(activeData))
         val inactiveDataset = FlightRecorderDataSet(data = setOf(inactiveData))
@@ -249,6 +288,7 @@ class FlightRecorderManagerTest {
             startTimeMs = FIXED_CLOCK_TIME,
             durationMs = 60L,
             isActive = false,
+            expirationTimeMs = FIXED_CLOCK.instant().plus(1L, ChronoUnit.HOURS).toEpochMilli(),
         )
         fakeSettingsDiskSource.flightRecorderData = FlightRecorderDataSet(data = setOf(data))
 
