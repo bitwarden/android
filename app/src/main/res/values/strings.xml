@@ -622,7 +622,7 @@ Scanning will happen automatically.</string>
   <string name="expired">Expired</string>
   <string name="expires_at">Expires at %s</string>
   <string name="expires_tomorrow">Expires tomorrow</string>
-  <string name="expires_in_days">Expires in %s days</string>
+  <string name="expires_on">Expires on %s</string>
   <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Maximum access count</string>
   <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
