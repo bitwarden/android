@@ -8,7 +8,7 @@ import com.bitwarden.authenticator.BuildConfig
  */
 @Suppress("MaxLineLength")
 val HEADER_VALUE_USER_AGENT: String =
-    "Bitwarden_Mobile/${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE}) (Android ${Build.VERSION.RELEASE}; SDK ${Build.VERSION.SDK_INT}; Model ${Build.MODEL})"
+    "Bitwarden_Authenticator_Mobile/${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE}) (Android ${Build.VERSION.RELEASE}; SDK ${Build.VERSION.SDK_INT}; Model ${Build.MODEL})"
 
 /**
  * The value used for the 'bitwarden-client-name' headers.
