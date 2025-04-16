@@ -63,7 +63,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
     private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
-    private val storedRememberKeyConnectorUrlKeys = mutableMapOf<String, String?>()
 
     override var userState: UserStateJson? = null
         set(value) {
