@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.ConfigServiceImpl
 import com.bitwarden.network.service.EventService
@@ -10,11 +11,13 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManagerImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_NAME
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_VERSION
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
 import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import dagger.Module
@@ -65,7 +68,11 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun providesHeadersInterceptor(): HeadersInterceptor = HeadersInterceptor()
+    fun providesHeadersInterceptor(): HeadersInterceptor = HeadersInterceptor(
+        userAgent = HEADER_VALUE_USER_AGENT,
+        clientName = HEADER_VALUE_CLIENT_NAME,
+        clientVersion = HEADER_VALUE_CLIENT_VERSION,
+    )
 
     @Provides
     @Singleton
