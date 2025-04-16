@@ -1,6 +1,5 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
+package com.bitwarden.network.interceptor
 
-import com.bitwarden.network.interceptor.FakeInterceptorChain
 import okhttp3.Request
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
+package com.bitwarden.network.interceptor
 
 import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
