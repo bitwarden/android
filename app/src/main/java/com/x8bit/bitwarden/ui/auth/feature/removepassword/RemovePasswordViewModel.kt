@@ -137,7 +137,9 @@ class RemovePasswordViewModel @Inject constructor(
     private fun handleConfirmLeaveOrganizationResult() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = RemovePasswordState.DialogState.Loading("".asText()),
+                dialogState = RemovePasswordState.DialogState.Loading(
+                    R.string.loading.asText(),
+                ),
             )
         }
 

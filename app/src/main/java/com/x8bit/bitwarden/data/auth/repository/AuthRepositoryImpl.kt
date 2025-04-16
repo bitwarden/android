@@ -12,7 +12,6 @@ import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
-import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -719,23 +718,18 @@ class AuthRepositoryImpl(
         )
 
     override suspend fun continueKeyConnectorLogin(): LoginResult {
-        keyConnectorResponse.let {
-            if (it == null) {
-                return LoginResult.Error(
-                    errorMessage = null,
-                    error = MissingPropertyException("Key Connector Response"),
-                )
-            }
-
-            return handleLoginCommonSuccess(
-                loginResponse = it,
-                email = rememberedEmailAddress.orEmpty(),
-                orgIdentifier = rememberedOrgIdentifier,
-                password = null,
-                deviceData = null,
-                userConfirmedKeyConnector = true,
-            )
-        }
+        val response = keyConnectorResponse ?: return LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Key Connector Response"),
+        )
+        return handleLoginCommonSuccess(
+            loginResponse = response,
+            email = rememberedEmailAddress.orEmpty(),
+            orgIdentifier = rememberedOrgIdentifier,
+            password = null,
+            deviceData = null,
+            userConfirmedKeyConnector = true,
+        )
     }
 
     override fun cancelKeyConnectorLogin() {
@@ -1581,6 +1575,7 @@ class AuthRepositoryImpl(
      * A helper function to extract the common logic of logging in through
      * any of the available methods.
      */
+    @Suppress("LongMethod")
     private suspend fun loginCommon(
         email: String,
         password: String? = null,
@@ -1632,6 +1627,7 @@ class AuthRepositoryImpl(
                         password = password,
                         deviceData = deviceData,
                         orgIdentifier = orgIdentifier,
+                        userConfirmedKeyConnector = false,
                     )
 
                     is GetTokenResponseJson.Invalid -> {
@@ -1665,7 +1661,7 @@ class AuthRepositoryImpl(
         password: String?,
         deviceData: DeviceDataModel?,
         orgIdentifier: String?,
-        userConfirmedKeyConnector: Boolean = false,
+        userConfirmedKeyConnector: Boolean,
     ): LoginResult = userStateTransaction {
         val userStateJson = loginResponse.toUserState(
             previousUserState = authDiskSource.userState,
