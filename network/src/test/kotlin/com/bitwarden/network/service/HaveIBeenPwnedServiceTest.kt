@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.HaveIBeenPwnedApi
 import com.bitwarden.network.base.BaseServiceTest

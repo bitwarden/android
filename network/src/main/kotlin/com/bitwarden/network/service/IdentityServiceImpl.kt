@@ -1,7 +1,8 @@
-package com.x8bit.bitwarden.data.auth.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.UnauthenticatedIdentityApi
 import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.PreLoginRequestJson
 import com.bitwarden.network.model.PreLoginResponseJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -10,18 +11,17 @@ import com.bitwarden.network.model.RegisterFinishRequestJson
 import com.bitwarden.network.model.RegisterRequestJson
 import com.bitwarden.network.model.RegisterResponseJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
+import com.bitwarden.network.model.SendVerificationEmailResponseJson
+import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
+import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.model.toBitwardenError
+import com.bitwarden.network.util.DeviceModelProvider
 import com.bitwarden.network.util.NetworkErrorCode
 import com.bitwarden.network.util.base64UrlEncode
 import com.bitwarden.network.util.executeForNetworkResult
 import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
-import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
 
 class IdentityServiceImpl(

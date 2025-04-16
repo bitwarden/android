@@ -1,34 +1,27 @@
-name: Scan Pull Requests
+name: Scan Protected Branches On Push
 
 on:
   workflow_dispatch:
-  pull_request_target:
-    types: [opened, synchronize]
+  push:
+    branches:
+      - "main"
 
 jobs:
-  check-run:
-    name: Check PR run
-    uses: bitwarden/gh-actions/.github/workflows/check-run.yml@main
-
   sast:
     name: SAST scan
     runs-on: ubuntu-24.04
-    needs: check-run
     permissions:
       contents: read
-      pull-requests: write
       security-events: write
 
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{  github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Scan with Checkmarx
         uses: checkmarx/ast-github-action@184bf2f64f55d1c93fd6636d539edf274703e434 # 2.0.41
-        env:
-          INCREMENTAL: "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
         with:
           project_name: ${{ github.repository }}
           cx_tenant: ${{ secrets.CHECKMARX_TENANT }}
@@ -38,29 +31,24 @@ jobs:
           additional_params: |
             --report-format sarif \
             --filter "state=TO_VERIFY;PROPOSED_NOT_EXPLOITABLE;CONFIRMED;URGENT" \
-            --output-path . ${{ env.INCREMENTAL }}
+            --output-path .
 
       - name: Upload Checkmarx results to GitHub
         uses: github/codeql-action/upload-sarif@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3.28.1
         with:
           sarif_file: cx_result.sarif
-          sha: ${{ contains(github.event_name, 'pull_request') && github.event.pull_request.head.sha || github.sha }}
-          ref: ${{ contains(github.event_name, 'pull_request') && format('refs/pull/{0}/head', github.event.pull_request.number) || github.ref }}
 
   quality:
     name: Quality scan
     runs-on: ubuntu-24.04
-    needs: check-run
     permissions:
       contents: read
-      pull-requests: write
 
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-          ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with SonarCloud
         uses: sonarsource/sonarqube-scan-action@bfd4e558cda28cda6b5defafb9232d191be8c203 # v4.2.1
@@ -70,4 +58,3 @@ jobs:
           args: >
             -Dsonar.organization=${{ github.repository_owner }}
             -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
-            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
