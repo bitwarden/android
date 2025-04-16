@@ -41,7 +41,7 @@ fun createMockOrganization(
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
         shouldUseKeyConnector = false,
-        keyConnectorUrl = "mockKeyConnectorUrl-$number",
+        keyConnectorUrl = null,
         type = type,
         seats = 1,
         isEnabled = isEnabled,

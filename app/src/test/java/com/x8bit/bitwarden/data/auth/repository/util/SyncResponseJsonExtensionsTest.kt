@@ -51,7 +51,10 @@ class SyncResponseJsonExtensionsTest {
                 ),
             ),
             listOf(
-                createMockOrganization(number = 1).copy(shouldUseKeyConnector = true),
+                createMockOrganization(number = 1).copy(
+                    shouldUseKeyConnector = true,
+                    keyConnectorUrl = "www.bitwarden.com",
+                ),
                 createMockOrganization(number = 2, shouldManageResetPassword = true)
                     .copy(type = OrganizationType.USER),
             )
