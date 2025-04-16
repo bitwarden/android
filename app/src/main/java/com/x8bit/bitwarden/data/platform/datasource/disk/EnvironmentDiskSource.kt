@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import kotlinx.coroutines.flow.Flow
 
 /**

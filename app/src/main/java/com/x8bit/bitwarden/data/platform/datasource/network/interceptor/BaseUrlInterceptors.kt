@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
 import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseApiUrl
+import com.bitwarden.data.repository.util.baseEventsUrl
+import com.bitwarden.data.repository.util.baseIdentityUrl
+import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseApiUrl
-import com.x8bit.bitwarden.data.platform.repository.util.baseEventsUrl
-import com.x8bit.bitwarden.data.platform.repository.util.baseIdentityUrl
-import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import javax.inject.Inject
 import javax.inject.Singleton
 

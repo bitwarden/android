@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.interceptor
 
-import com.bitwarden.authenticator.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.bitwarden.authenticator.data.platform.repository.model.Environment
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
