@@ -65,92 +65,6 @@ class Fido2CredentialManagerImpl(
         }
     }
 
-    private suspend fun registerFido2CredentialForUnprivilegedApp(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
-        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
-        selectedCipherView: CipherView,
-    ): Fido2RegisterCredentialResult {
-        val clientData = ClientData.DefaultWithExtraData(callingAppInfo.packageName)
-
-        val host = getOriginUrlFromAttestationOptionsOrNull(
-            requestJson = createPublicKeyCredentialRequest.requestJson,
-        )
-            ?: return Fido2RegisterCredentialResult.Error.MissingHostUrl
-
-        val signatureFingerprint = callingAppInfo
-            .getSignatureFingerprintAsHexString()
-            ?: return Fido2RegisterCredentialResult.Error.InvalidAppSignature
-
-        val sdkOrigin = Origin.Android(
-            UnverifiedAssetLink(
-                packageName = callingAppInfo.packageName,
-                sha256CertFingerprint = signatureFingerprint,
-                host = host,
-                assetLinkUrl = host,
-            ),
-        )
-
-        return registerFido2CredentialInternal(
-            userId = userId,
-            sdkOrigin = sdkOrigin,
-            createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
-            selectedCipherView = selectedCipherView,
-            clientData = clientData,
-        )
-    }
-
-    private suspend fun registerFido2CredentialForPrivilegedApp(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
-        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
-        selectedCipherView: CipherView,
-    ): Fido2RegisterCredentialResult {
-        val clientData = callingAppInfo
-            .getAppSigningSignatureFingerprint()
-            ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-            ?: return Fido2RegisterCredentialResult.Error.InvalidAppSignature
-
-        val sdkOrigin = createPublicKeyCredentialRequest.origin
-            ?.let { Origin.Web(it) }
-            ?: return Fido2RegisterCredentialResult.Error.MissingHostUrl
-
-        return registerFido2CredentialInternal(
-            userId = userId,
-            sdkOrigin = sdkOrigin,
-            createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
-            selectedCipherView = selectedCipherView,
-            clientData = clientData,
-        )
-    }
-
-    private suspend fun registerFido2CredentialInternal(
-        userId: String,
-        sdkOrigin: Origin,
-        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
-        selectedCipherView: CipherView,
-        clientData: ClientData,
-    ): Fido2RegisterCredentialResult = vaultSdkSource
-        .registerFido2Credential(
-            request = RegisterFido2CredentialRequest(
-                userId = userId,
-                origin = sdkOrigin,
-                requestJson = """{"publicKey": ${createPublicKeyCredentialRequest.requestJson}}""",
-                clientData = clientData,
-                selectedCipherView = selectedCipherView,
-                // User verification is handled prior to engaging the SDK. We always respond
-                // `true` so that the SDK does not fail if the relying party requests UV.
-                isUserVerificationSupported = true,
-            ),
-            fido2CredentialStore = this,
-        )
-        .map { it.toAndroidAttestationResponse() }
-        .mapCatching { json.encodeToString(it) }
-        .fold(
-            onSuccess = { Fido2RegisterCredentialResult.Success(it) },
-            onFailure = { Fido2RegisterCredentialResult.Error.InternalError },
-        )
-
     override fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
     ): PasskeyAttestationOptions? =
@@ -253,6 +167,95 @@ class Fido2CredentialManagerImpl(
         ?.authenticatorSelection
         ?.userVerification
         ?: fallbackRequirement
+
+    private suspend fun registerFido2CredentialForUnprivilegedApp(
+        userId: String,
+        callingAppInfo: CallingAppInfo,
+        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
+        selectedCipherView: CipherView,
+    ): Fido2RegisterCredentialResult {
+        val clientData = ClientData.DefaultWithExtraData(callingAppInfo.packageName)
+
+        val host = getOriginUrlFromAttestationOptionsOrNull(
+            requestJson = createPublicKeyCredentialRequest.requestJson,
+        )
+            ?: return Fido2RegisterCredentialResult.Error.MissingHostUrl
+
+        val signatureFingerprint = callingAppInfo
+            .getSignatureFingerprintAsHexString()
+            ?: return Fido2RegisterCredentialResult.Error.InvalidAppSignature
+
+        val sdkOrigin = Origin.Android(
+            UnverifiedAssetLink(
+                packageName = callingAppInfo.packageName,
+                sha256CertFingerprint = signatureFingerprint,
+                host = host,
+                assetLinkUrl = host,
+            ),
+        )
+
+        return registerFido2CredentialInternal(
+            userId = userId,
+            sdkOrigin = sdkOrigin,
+            createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
+            selectedCipherView = selectedCipherView,
+            clientData = clientData,
+        )
+    }
+
+    private suspend fun registerFido2CredentialForPrivilegedApp(
+        userId: String,
+        callingAppInfo: CallingAppInfo,
+        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
+        selectedCipherView: CipherView,
+    ): Fido2RegisterCredentialResult {
+        val clientData = callingAppInfo
+            .getAppSigningSignatureFingerprint()
+            ?.let { ClientData.DefaultWithCustomHash(hash = it) }
+            ?: return Fido2RegisterCredentialResult.Error.InvalidAppSignature
+
+        val sdkOrigin = createPublicKeyCredentialRequest.origin
+            ?.let { Origin.Web(it) }
+            ?: return Fido2RegisterCredentialResult.Error.MissingHostUrl
+
+        return registerFido2CredentialInternal(
+            userId = userId,
+            sdkOrigin = sdkOrigin,
+            createPublicKeyCredentialRequest = createPublicKeyCredentialRequest,
+            selectedCipherView = selectedCipherView,
+            clientData = clientData,
+        )
+    }
+
+    private suspend fun registerFido2CredentialInternal(
+        userId: String,
+        sdkOrigin: Origin,
+        createPublicKeyCredentialRequest: CreatePublicKeyCredentialRequest,
+        selectedCipherView: CipherView,
+        clientData: ClientData,
+    ): Fido2RegisterCredentialResult = vaultSdkSource
+        .registerFido2Credential(
+            request = RegisterFido2CredentialRequest(
+                userId = userId,
+                origin = sdkOrigin,
+                requestJson = """{"publicKey": ${createPublicKeyCredentialRequest.requestJson}}""",
+                clientData = clientData,
+                selectedCipherView = selectedCipherView,
+                // User verification is handled prior to engaging the SDK. We always respond
+                // `true` so that the SDK does not fail if the relying party requests UV.
+                isUserVerificationSupported = true,
+            ),
+            fido2CredentialStore = this,
+        )
+        .map { it.toAndroidAttestationResponse() }
+        .mapCatching { json.encodeToString(it) }
+        .fold(
+            onSuccess = { Fido2RegisterCredentialResult.Success(it) },
+            onFailure = {
+                Timber.e(it, "Failed to register FIDO2 credential.")
+                Fido2RegisterCredentialResult.Error.InternalError
+            },
+        )
 
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
         getPasskeyAssertionOptionsOrNull(requestJson)

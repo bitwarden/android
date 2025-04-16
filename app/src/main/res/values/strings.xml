@@ -1241,6 +1241,13 @@ Do you want to switch to this account?</string>
   <string name="flight_recorder_one_week">1 week</string>
   <string name="delete_all">Delete all</string>
   <string name="share_all">Share all</string>
+  <string name="unable_to_share">Unable to share</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+  <string name="delete_log">Delete log</string>
+  <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
+  <string name="delete_logs">Delete logs</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
   <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
   <string name="key_connector_domain">Key Connector domain:</string>
   <string name="key_connector_organization">Organization:</string>

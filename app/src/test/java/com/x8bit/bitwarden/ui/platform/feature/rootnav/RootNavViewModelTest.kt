@@ -665,6 +665,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "activeUserId",
+            isUserPreVerified = false,
             requestData = bundleOf(),
         )
         specialCircumstanceManager.specialCircumstance =

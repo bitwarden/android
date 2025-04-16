@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.util
 import android.content.Intent
 import androidx.core.os.bundleOf
 import androidx.credentials.provider.BeginGetCredentialRequest
+import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -18,6 +19,7 @@ import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
@@ -58,13 +60,50 @@ class Fido2IntentUtilsTest {
         every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
         every {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
-        } returns mockk()
+        } returns mockk(relaxed = true) {
+            every { biometricPromptResult } returns mockk(relaxed = true) {
+                every { isSuccessful } returns false
+            }
+        }
 
         val createRequest = intent.getFido2CreateCredentialRequestOrNull()
         assertEquals(
             "mockUserId",
             createRequest?.userId,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getFido2CreateCredentialRequestOrNull should set user verification based on biometric prompt result`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+        }
+        val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+            every { isSuccessful } returns false
+        }
+        val mockProviderCreateCredentialRequest =
+            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+                every { biometricPromptResult } returns mockBiometricPromptResult
+            }
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
+        } returns mockProviderCreateCredentialRequest
+
+        // Verify false is returned when biometric prompt is unsuccessful
+        var createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertFalse(createRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt is successful
+        every { mockBiometricPromptResult.isSuccessful } returns true
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assert(createRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null
+        every { mockProviderCreateCredentialRequest.biometricPromptResult } returns null
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertFalse(createRequest!!.isUserPreVerified)
     }
 
     @Suppress("MaxLineLength")
@@ -108,7 +147,11 @@ class Fido2IntentUtilsTest {
         every { ProviderGetCredentialRequest.asBundle(any()) } returns bundleOf()
         every {
             PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockk()
+        } returns mockk(relaxed = true) {
+            every { biometricPromptResult } returns mockk(relaxed = true) {
+                every { isSuccessful } returns false
+            }
+        }
 
         val assertionRequest = intent.getFido2AssertionRequestOrNull()
 
@@ -116,6 +159,42 @@ class Fido2IntentUtilsTest {
         assertEquals("mockUserId", assertionRequest?.userId)
         assertEquals("mockCipherId", assertionRequest?.cipherId)
         assertEquals("mockCredentialId", assertionRequest?.credentialId)
+        assertEquals(false, assertionRequest?.isUserPreVerified)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getFido2AssertionRequestOrNull should set user verification based on biometric prompt result`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+            every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+        }
+        val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+            every { isSuccessful } returns false
+        }
+        val mockGetCredentialRequest =
+            mockk<ProviderGetCredentialRequest>(relaxed = true) {
+                every { biometricPromptResult } returns mockBiometricPromptResult
+            }
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
+        } returns mockGetCredentialRequest
+
+        // Verify false is returned when biometric prompt is unsuccessful
+        var assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt is successful
+        every { mockBiometricPromptResult.isSuccessful } returns true
+        assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assert(assertionRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null
+        every { mockGetCredentialRequest.biometricPromptResult } returns null
+        assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
     }
 
     @Test
