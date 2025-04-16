@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import android.net.Uri
 import com.bitwarden.network.api.AzureApi
@@ -8,17 +8,17 @@ import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
 import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
+import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
+import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
+import com.bitwarden.network.model.createMockAttachmentInfo
 import com.bitwarden.network.model.createMockAttachmentJsonRequest
 import com.bitwarden.network.model.createMockAttachmentJsonResponse
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ImportCiphersResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -217,45 +217,11 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `shareAttachment without attachment ID should return an error`() = runTest {
-        val cipherId = "cipherId"
-        val organizationId = "organizationId"
-        val attachment = createMockSdkAttachment(number = 1).copy(id = null)
-        val encryptedFile = File.createTempFile("mockFile", "temp")
-
-        val result = ciphersService.shareAttachment(
-            cipherId = cipherId,
-            attachment = attachment,
-            organizationId = organizationId,
-            encryptedFile = encryptedFile,
-        )
-
-        assertTrue(result.isFailure)
-    }
-
-    @Test
-    fun `shareAttachment without attachment key should return an error`() = runTest {
-        val cipherId = "cipherId"
-        val organizationId = "organizationId"
-        val attachment = createMockSdkAttachment(number = 1, key = null)
-        val encryptedFile = File.createTempFile("mockFile", "temp")
-
-        val result = ciphersService.shareAttachment(
-            cipherId = cipherId,
-            attachment = attachment,
-            organizationId = organizationId,
-            encryptedFile = encryptedFile,
-        )
-
-        assertTrue(result.isFailure)
-    }
-
-    @Test
     fun `shareAttachment should execute the share attachment API`() = runTest {
         server.enqueue(MockResponse().setResponseCode(200))
         val cipherId = "cipherId"
         val organizationId = "organizationId"
-        val attachment = createMockSdkAttachment(number = 1)
+        val attachment = createMockAttachmentInfo(number = 1)
         val encryptedFile = File.createTempFile("mockFile", "temp")
 
         val result = ciphersService.shareAttachment(

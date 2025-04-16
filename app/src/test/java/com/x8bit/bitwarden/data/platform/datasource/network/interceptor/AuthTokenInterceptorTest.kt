@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.interceptor
 
+import com.bitwarden.network.interceptor.FakeInterceptorChain
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource

@@ -31,6 +31,7 @@ import com.bitwarden.network.model.createMockProfile
 import com.bitwarden.network.model.createMockSend
 import com.bitwarden.network.model.createMockSendJsonRequest
 import com.bitwarden.network.model.createMockSyncResponse
+import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
@@ -63,7 +64,6 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
