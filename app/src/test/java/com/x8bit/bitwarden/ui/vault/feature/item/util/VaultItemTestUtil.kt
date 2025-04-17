@@ -15,6 +15,7 @@ import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -153,6 +154,7 @@ fun createCipherView(type: CipherType, isEmpty: Boolean): CipherView =
             ),
         )
             .takeUnless { isEmpty },
+        permissions = createMockSdkCipherPermissions(),
         creationDate = Instant.ofEpochSecond(1_000L),
         deletedDate = null,
         revisionDate = Instant.ofEpochSecond(1_000L),

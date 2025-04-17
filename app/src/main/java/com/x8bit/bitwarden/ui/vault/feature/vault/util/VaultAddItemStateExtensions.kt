@@ -40,6 +40,7 @@ fun VaultAddEditState.ViewState.Content.toCipherView(): CipherView =
         attachments = common.originalCipher?.attachments,
         organizationUseTotp = common.originalCipher?.organizationUseTotp ?: false,
         passwordHistory = toPasswordHistory(),
+        permissions = common.originalCipher?.permissions,
         creationDate = common.originalCipher?.creationDate ?: Instant.now(),
         deletedDate = common.originalCipher?.deletedDate,
         revisionDate = common.originalCipher?.revisionDate ?: Instant.now(),
