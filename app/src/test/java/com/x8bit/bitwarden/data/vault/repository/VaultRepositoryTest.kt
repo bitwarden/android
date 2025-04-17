@@ -37,6 +37,7 @@ import com.bitwarden.network.model.createMockSyncResponse
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.SendsService
+import com.bitwarden.network.service.SyncService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -65,7 +66,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView

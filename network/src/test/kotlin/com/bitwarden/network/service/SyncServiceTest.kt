@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.SyncApi
 import com.bitwarden.network.base.BaseServiceTest
