@@ -6,9 +6,9 @@ import com.bitwarden.network.service.DownloadService
 import com.bitwarden.network.service.DownloadServiceImpl
 import com.bitwarden.network.service.FolderService
 import com.bitwarden.network.service.FolderServiceImpl
+import com.bitwarden.network.service.SendsService
+import com.bitwarden.network.service.SendsServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsServiceImpl
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncServiceImpl
 import dagger.Module

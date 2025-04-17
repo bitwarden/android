@@ -1,11 +1,11 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
+import com.bitwarden.network.model.CreateFileSendResponse
 import com.bitwarden.network.model.CreateFileSendResponseJson
+import com.bitwarden.network.model.CreateSendJsonResponse
 import com.bitwarden.network.model.SendJsonRequest
 import com.bitwarden.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
+import com.bitwarden.network.model.UpdateSendResponseJson
 import java.io.File
 
 /**
