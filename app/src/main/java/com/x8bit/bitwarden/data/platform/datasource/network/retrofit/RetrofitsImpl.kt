@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import com.bitwarden.network.interceptor.AuthTokenInterceptor
+import com.bitwarden.network.interceptor.BaseUrlInterceptor
+import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.platform.util.isDevBuild
 import kotlinx.serialization.json.Json

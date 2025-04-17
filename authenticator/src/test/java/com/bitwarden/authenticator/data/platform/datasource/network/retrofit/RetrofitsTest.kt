@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.retrofit
 
-import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.NetworkResult
 import io.mockk.every
