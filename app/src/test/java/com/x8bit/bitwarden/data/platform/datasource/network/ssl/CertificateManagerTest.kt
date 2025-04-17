@@ -1,12 +1,17 @@
-package com.x8bit.bitwarden.data.platform.manager
+package com.x8bit.bitwarden.data.platform.datasource.network.ssl
 
 import android.content.Context
+import android.net.Uri
 import android.security.KeyChain
 import android.security.KeyChainException
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -19,29 +24,40 @@ import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import timber.log.Timber
 import java.io.IOException
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.NoSuchAlgorithmException
 import java.security.PrivateKey
 import java.security.UnrecoverableKeyException
-import java.security.cert.Certificate
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
 
-class KeyManagerTest {
+@Suppress("LargeClass")
+class CertificateManagerTest {
+
     private val mockContext = mockk<Context>()
     private val mockAndroidKeyStore = mockk<KeyStore>(name = "MockAndroidKeyStore")
     private val mockPkcs12KeyStore = mockk<KeyStore>(name = "MockPKCS12KeyStore")
-    private val keyDiskSource = KeyManagerImpl(
+    private val mockEnvironment = mockk<Environment> {
+        every { environmentUrlData } returns DEFAULT_ENV_URL_DATA
+    }
+    private val mockEnvironmentRepository = mockk<EnvironmentRepository> {
+        every { environment } returns mockEnvironment
+    }
+
+    private val certificateManager: CertificateManagerImpl = CertificateManagerImpl(
+        environmentRepository = mockEnvironmentRepository,
         context = mockContext,
     )
-
     @BeforeEach
     fun setUp() {
-        mockkStatic(KeyStore::class, KeyChain::class)
+        mockkStatic(KeyStore::class, KeyChain::class, Uri::class, Timber::class)
         mockkConstructor(MissingPropertyException::class)
         every {
             anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
@@ -50,272 +66,217 @@ class KeyManagerTest {
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(KeyStore::class, KeyChain::class)
+        unmockkStatic(
+            KeyStore::class,
+            KeyChain::class,
+            Uri::class,
+            SSLContext::class,
+            Timber::class,
+        )
         unmockkConstructor(MissingPropertyException::class)
     }
 
     @Test
-    fun `getMutualTlsCertificateChain should return null when MutualTlsKeyAlias is not found`() {
-        // Verify null is returned when alias is not found in KeyChain
+    fun `mutualTlsCertificate should return certificate stored in AndroidKeyStore`() {
+        setupMockUri()
         setupMockAndroidKeyStore()
-        every { KeyChain.getPrivateKey(mockContext, "mockAlias") } throws KeyChainException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = "mockAlias",
-                host = MutualTlsKeyHost.KEY_CHAIN,
-            ),
-        )
 
-        // Verify null is returned when alias is not found in AndroidKeyStore
-        every { mockAndroidKeyStore.getKey("mockAlias", null) } throws UnrecoverableKeyException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = "mockAlias",
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getMutualTlsCertificateChain should return MutualTlsCertificateChain when using ANDROID KEY STORE and key is found`() {
-        setupMockAndroidKeyStore()
-        val mockAlias = "mockAlias"
         val mockPrivateKey = mockk<PrivateKey>()
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
-        every {
-            mockAndroidKeyStore.getCertificateChain(mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } returns mockPrivateKey
-
-        val result = keyDiskSource.getMutualTlsCertificateChain(
-            alias = mockAlias,
-            host = MutualTlsKeyHost.ANDROID_KEY_STORE,
+        val mockCertificateChain = listOf(
+            mockk<X509Certificate>(),
         )
+
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } returns mockPrivateKey
+        every {
+            mockAndroidKeyStore.getCertificateChain("mockAlias")
+        } returns mockCertificateChain.toTypedArray()
 
         assertEquals(
             MutualTlsCertificate(
-                alias = mockAlias,
-                certificateChain = listOf(mockCertificate1, mockCertificate2),
+                alias = "mockAlias",
                 privateKey = mockPrivateKey,
+                certificateChain = mockCertificateChain,
             ),
-            result,
+            certificateManager.mutualTlsCertificate,
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `getMutualTlsCertificateChain should return null when using ANDROID KEY STORE and key is not found`() {
-        setupMockAndroidKeyStore()
-        val mockAlias = "mockAlias"
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
-        every {
-            mockAndroidKeyStore.getCertificateChain(mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } returns null
-
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getMutualTlsCertificateChain should return null when using ANDROID KEY STORE and certificate chain is invalid`() {
-        setupMockAndroidKeyStore()
-        val mockAlias = "mockAlias"
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } returns mockk<PrivateKey>()
-
-        // Verify null is returned when certificate chain is empty
-        every {
-            mockAndroidKeyStore.getCertificateChain(mockAlias)
-        } returns emptyArray()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-
-        // Verify null is returned when certificate chain contains non-X509Certificate objects
-        every {
-            mockAndroidKeyStore.getCertificateChain(mockAlias)
-        } returns arrayOf(mockk<Certificate>())
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getMutualTlsCertificateChain should return null when using ANDROID KEY STORE and an exception occurs`() {
-        setupMockAndroidKeyStore()
-        val mockAlias = "mockAlias"
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
-        every {
-            mockAndroidKeyStore.getCertificateChain(mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-
-        // Verify KeyStoreException is handled
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } throws KeyStoreException()
-
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-
-        // Verify UnrecoverableKeyException is handled
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } throws UnrecoverableKeyException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-
-        // Verify NoSuchAlgorithmException is handled
-        every {
-            mockAndroidKeyStore.getKey(mockAlias, null)
-        } throws NoSuchAlgorithmException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getMutualTlsCertificateChain should return MutualTlsCertificateChain when using KEY CHAIN and key is found`() {
-        val mockAlias = "mockAlias"
+    fun `mutualTlsCertificate should return certificate stored in KeyChain`() {
+        setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
+        setupMockPkcs12KeyStore()
         val mockPrivateKey = mockk<PrivateKey>()
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
-        every {
-            KeyChain.getCertificateChain(mockContext, mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-        every {
-            KeyChain.getPrivateKey(mockContext, mockAlias)
-        } returns mockPrivateKey
-
-        val result = keyDiskSource.getMutualTlsCertificateChain(
-            alias = mockAlias,
-            host = MutualTlsKeyHost.KEY_CHAIN,
+        val mockCertificateChain = listOf(
+            mockk<X509Certificate>(),
         )
+
+        every {
+            KeyChain.getPrivateKey(mockContext, "mockAlias")
+        } returns mockPrivateKey
+        every {
+            KeyChain.getCertificateChain(mockContext, "mockAlias")
+        } returns mockCertificateChain.toTypedArray()
 
         assertEquals(
             MutualTlsCertificate(
-                alias = mockAlias,
-                certificateChain = listOf(mockCertificate1, mockCertificate2),
+                alias = "mockAlias",
                 privateKey = mockPrivateKey,
+                certificateChain = mockCertificateChain.toList(),
             ),
-            result,
+            certificateManager.mutualTlsCertificate,
+        )
+    }
+
+    @Test
+    fun `mutualTlsCertificate should return null when keyUri is invalid`() {
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Test
+    fun `mutualTlsCertificate should return null when host is invalid`() {
+        setupMockUri(authority = "UNKNOWN_HOST")
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Test
+    fun `mutualTlsCertificate should return null when alias is null`() {
+        setupMockUri(path = null)
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Test
+    fun `mutualTlsCertificate should return null when alias is empty after trim`() {
+        setupMockUri(path = "/")
+        assertEquals(
+            "",
+            certificateManager.chooseClientAlias(null, null, null),
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getMutualTlsCertificateChain should return null when using KEY CHAIN and key is not found`() {
-        val mockAlias = "mockAlias"
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
+    fun `mutualTlsCertificate should log KeyChainException and return null`() {
+        mockkStatic(Timber::class)
+        setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
+        val keyChainException = KeyChainException("Alias not found")
         every {
-            KeyChain.getCertificateChain(mockContext, mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-        every {
-            KeyChain.getPrivateKey(mockContext, mockAlias)
-        } returns null
-
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.KEY_CHAIN,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getMutualTlsCertificateChain should return null when using KEY CHAIN and an exception occurs`() {
-        val mockAlias = "mockAlias"
-        val mockCertificate1 = mockk<X509Certificate>(name = "mockCertificate1")
-        val mockCertificate2 = mockk<X509Certificate>(name = "mockCertificate2")
-
-        every {
-            KeyChain.getCertificateChain(mockContext, mockAlias)
-        } returns arrayOf(mockCertificate1, mockCertificate2)
-
-        // Verify KeyChainException from getPrivateKey is handled
-        every {
-            KeyChain.getPrivateKey(mockContext, mockAlias)
-        } throws KeyChainException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.KEY_CHAIN,
-            ),
-        )
-
-        // Verify KeyChainException from getCertificateChain is handled
-        every { KeyChain.getPrivateKey(mockContext, mockAlias) } returns mockk()
-        every { KeyChain.getCertificateChain(mockContext, mockAlias) } throws KeyChainException()
-        assertNull(
-            keyDiskSource.getMutualTlsCertificateChain(
-                alias = mockAlias,
-                host = MutualTlsKeyHost.KEY_CHAIN,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `removeMutualTlsKey should remove key from AndroidKeyStore when host is ANDROID_KEY_STORE`() {
-        setupMockAndroidKeyStore()
-        val mockAlias = "mockAlias"
-
-        every { mockAndroidKeyStore.deleteEntry(mockAlias) } just runs
-
-        keyDiskSource.removeMutualTlsKey(
-            alias = mockAlias,
-            host = MutualTlsKeyHost.ANDROID_KEY_STORE,
-        )
-
+            KeyChain.getPrivateKey(mockContext, "mockAlias")
+        } throws keyChainException
+        assertNull(certificateManager.mutualTlsCertificate)
         verify {
-            mockAndroidKeyStore.deleteEntry(mockAlias)
+            Timber.e(
+                keyChainException,
+                "Requested alias not found in system KeyChain",
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutualTlsCertificate should log exception and return null when KeyChain throws KeyChainException for certificate chain`() {
+        setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
+        val keyChainException = KeyChainException("Unable to access certificate chain")
+        every {
+            KeyChain.getPrivateKey(mockContext, "mockAlias")
+        } returns mockk<PrivateKey>()
+        every {
+            KeyChain.getCertificateChain(mockContext, "mockAlias")
+        } throws keyChainException
+        assertNull(certificateManager.mutualTlsCertificate)
+        verify {
+            Timber.e(
+                keyChainException,
+                "Unable to access certificate chain for provided alias",
+            )
         }
     }
 
     @Test
-    fun `removeMutualTlsKey should do nothing when host is KEY_CHAIN`() {
-        keyDiskSource.removeMutualTlsKey(
-            alias = "mockAlias",
-            host = MutualTlsKeyHost.KEY_CHAIN,
-        )
+    fun `mutualTlsCertificate should return null when KeyChain returns null private key`() {
+        setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
+        every {
+            KeyChain.getPrivateKey(mockContext, "mockAlias")
+        } returns null
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
 
-        verify(exactly = 0) {
-            mockAndroidKeyStore.deleteEntry(any())
+    @Test
+    fun `mutualTlsCertificate should return null when KeyChain returns null certificate chain`() {
+        setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
+        every {
+            KeyChain.getPrivateKey(mockContext, "mockAlias")
+        } returns mockk<PrivateKey>()
+
+        every {
+            KeyChain.getCertificateChain(mockContext, "mockAlias")
+        } returns null
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Test
+    fun `mutualTlsCertificate should return null when AndroidKeyStore returns null private key`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } returns null
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutualTlsCertificate should return null when AndroidKeyStore returns empty certificate chain`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } returns mockk<PrivateKey>()
+        every {
+            mockAndroidKeyStore.getCertificateChain("mockAlias")
+        } returns emptyArray()
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws KeyStoreException`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        val keyStoreException = KeyStoreException()
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } throws keyStoreException
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws UnrecoverableKeyException`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } throws UnrecoverableKeyException()
+        assertNull(certificateManager.mutualTlsCertificate)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws NoSuchAlgorithmException`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        val noSuchAlgorithmException = NoSuchAlgorithmException()
+        every {
+            mockAndroidKeyStore.getKey("mockAlias", null)
+        } throws noSuchAlgorithmException
+        assertNull(certificateManager.mutualTlsCertificate)
+        verify {
+            Timber.e(
+                noSuchAlgorithmException,
+                "Key cannot be recovered. Password may be incorrect.",
+            )
         }
     }
 
@@ -359,7 +320,7 @@ class KeyManagerTest {
 
         assertEquals(
             ImportPrivateKeyResult.Success(alias = expectedAlias),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -379,7 +340,7 @@ class KeyManagerTest {
         every { mockPkcs12KeyStore.load(any(), any()) } throws keystoreError
         assertEquals(
             ImportPrivateKeyResult.Error.UnsupportedKey(throwable = keystoreError),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -393,7 +354,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.KeyStoreOperationFailed(
                 throwable = keystoreOperationIoError,
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -405,7 +366,7 @@ class KeyManagerTest {
         every { mockPkcs12KeyStore.load(any(), any()) } throws unrecoverableKeyError
         assertEquals(
             ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = unrecoverableKeyError),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -419,7 +380,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.KeyStoreOperationFailed(
                 throwable = keystoreOperationError,
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -431,7 +392,7 @@ class KeyManagerTest {
         every { mockPkcs12KeyStore.load(any(), any()) } throws certificateError
         assertEquals(
             ImportPrivateKeyResult.Error.InvalidCertificateChain(throwable = certificateError),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -443,12 +404,33 @@ class KeyManagerTest {
         every { mockPkcs12KeyStore.load(any(), any()) } throws algorithmError
         assertEquals(
             ImportPrivateKeyResult.Error.UnsupportedKey(throwable = algorithmError),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
             ),
         ) { "NoSuchAlgorithmException was not handled correctly" }
+    }
+
+    @Test
+    fun `importMutualTlsCertificate should return UnsupportedKey when aliases is null`() {
+        setupMockPkcs12KeyStore()
+        val expectedAlias = "mockAlias"
+        val pkcs12Bytes = "key.p12".toByteArray()
+        val password = "password"
+
+        every { mockPkcs12KeyStore.aliases() } returns null
+
+        assertEquals(
+            ImportPrivateKeyResult.Error.UnsupportedKey(
+                throwable = MissingPropertyException("Internal Alias"),
+            ),
+            certificateManager.importMutualTlsCertificate(
+                key = pkcs12Bytes,
+                alias = expectedAlias,
+                password = password,
+            ),
+        )
     }
 
     @Test
@@ -466,7 +448,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.UnsupportedKey(
                 throwable = MissingPropertyException("Internal Alias"),
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -498,7 +480,7 @@ class KeyManagerTest {
 
         assertEquals(
             ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = error),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -515,7 +497,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.UnrecoverableKey(
                 throwable = MissingPropertyException("Private Key"),
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -550,7 +532,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.InvalidCertificateChain(
                 throwable = MissingPropertyException("Certificate Chain"),
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -565,7 +547,7 @@ class KeyManagerTest {
             ImportPrivateKeyResult.Error.InvalidCertificateChain(
                 throwable = MissingPropertyException("Certificate Chain"),
             ),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -611,7 +593,7 @@ class KeyManagerTest {
 
         assertEquals(
             ImportPrivateKeyResult.Error.KeyStoreOperationFailed(throwable = error),
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
@@ -647,12 +629,120 @@ class KeyManagerTest {
 
         assertEquals(
             ImportPrivateKeyResult.Error.DuplicateAlias,
-            keyDiskSource.importMutualTlsCertificate(
+            certificateManager.importMutualTlsCertificate(
                 key = pkcs12Bytes,
                 alias = expectedAlias,
                 password = password,
             ),
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `removeMutualTlsKey should remove key from AndroidKeyStore when host is ANDROID_KEY_STORE`() {
+        setupMockAndroidKeyStore()
+        val mockAlias = "mockAlias"
+
+        every { mockAndroidKeyStore.deleteEntry(mockAlias) } just runs
+
+        certificateManager.removeMutualTlsKey(
+            alias = mockAlias,
+            host = MutualTlsKeyHost.ANDROID_KEY_STORE,
+        )
+
+        verify {
+            mockAndroidKeyStore.deleteEntry(mockAlias)
+        }
+    }
+
+    @Test
+    fun `removeMutualTlsKey should do nothing when host is KEY_CHAIN`() {
+        certificateManager.removeMutualTlsKey(
+            alias = "mockAlias",
+            host = MutualTlsKeyHost.KEY_CHAIN,
+        )
+
+        verify(exactly = 0) {
+            mockAndroidKeyStore.deleteEntry(any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `removeMutualTlsKey should catch KeyStoreException when deleting key from AndroidKeyStore fails`() {
+        mockkStatic(Timber::class)
+        setupMockAndroidKeyStore()
+        val mockAlias = "mockAlias"
+        val mockException = KeyStoreException()
+
+        every { mockAndroidKeyStore.deleteEntry(mockAlias) } throws mockException
+
+        certificateManager.removeMutualTlsKey(
+            alias = mockAlias,
+            host = MutualTlsKeyHost.ANDROID_KEY_STORE,
+        )
+
+        verify {
+            mockAndroidKeyStore.deleteEntry(mockAlias)
+            Timber.e(mockException, "Failed to remove key from Android KeyStore")
+        }
+    }
+
+    @Test
+    fun `chooseClientAlias should return alias from mutualTlsCertificate`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+
+        every { mockAndroidKeyStore.getKey("mockAlias", null) } returns mockk<PrivateKey>()
+        every { mockAndroidKeyStore.getCertificateChain("mockAlias") } returns arrayOf(
+            mockk<X509Certificate>(),
+        )
+
+        assertEquals(
+            "mockAlias",
+            certificateManager.chooseClientAlias(
+                arrayOf("TLS"),
+                emptyArray(),
+                null,
+            ),
+        )
+    }
+
+    @Test
+    fun `getCertificateChain should return certificate chain from mutualTlsCertificate`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        val mockCertChain = arrayOf(mockk<X509Certificate>())
+        every { mockAndroidKeyStore.getKey("mockAlias", null) } returns mockk<PrivateKey>()
+        every { mockAndroidKeyStore.getCertificateChain("mockAlias") } returns mockCertChain
+
+        assertTrue(
+            certificateManager
+                .getCertificateChain("mockAlias")
+                .contentEquals(mockCertChain),
+        )
+    }
+
+    @Test
+    fun `getCertificateChain should return null when mutualTlsCertificate is null`() {
+        assertNull(certificateManager.getCertificateChain("mockAlias"))
+    }
+
+    @Test
+    fun `getPrivateKey should return private key from mutualTlsCertificate`() {
+        setupMockUri()
+        setupMockAndroidKeyStore()
+        val mockPrivateKey = mockk<PrivateKey>()
+        every { mockAndroidKeyStore.getKey("mockAlias", null) } returns mockPrivateKey
+        every { mockAndroidKeyStore.getCertificateChain("mockAlias") } returns arrayOf(
+            mockk<X509Certificate>(),
+        )
+        assertEquals(mockPrivateKey, certificateManager.getPrivateKey("mockAlias"))
+    }
+
+    @Test
+    fun `getPrivateKey should return null when mutualTlsCertificate is null`() {
+        assertNull(certificateManager.getPrivateKey("mockAlias"))
     }
 
     private fun setupMockAndroidKeyStore() {
@@ -664,4 +754,20 @@ class KeyManagerTest {
         every { KeyStore.getInstance("pkcs12") } returns mockPkcs12KeyStore
         every { mockPkcs12KeyStore.load(any(), any()) } just runs
     }
+
+    private fun setupMockUri(
+        authority: String = "ANDROID_KEY_STORE",
+        path: String? = "/mockAlias",
+    ) {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.authority } returns authority
+        every { uriMock.path } returns path
+    }
 }
+
+val DEFAULT_ENV_URL_DATA = EnvironmentUrlDataJson(
+    base = "https://example.com",
+    keyUri = "cert://ANDROID_KEY_STORE/mockAlias",
+)

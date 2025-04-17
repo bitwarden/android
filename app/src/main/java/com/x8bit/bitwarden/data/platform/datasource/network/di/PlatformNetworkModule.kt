@@ -15,13 +15,10 @@ import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
-import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_NAME
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_VERSION
 import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
-import com.x8bit.bitwarden.data.platform.manager.KeyManager
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,17 +81,6 @@ object PlatformNetworkModule {
 
     @Provides
     @Singleton
-    fun provideSslManager(
-        keyManager: KeyManager,
-        environmentRepository: EnvironmentRepository,
-    ): SslManager =
-        SslManagerImpl(
-            keyManager = keyManager,
-            environmentRepository = environmentRepository,
-        )
-
-    @Provides
-    @Singleton
     fun providesBaseUrlInterceptors(
         baseUrlsProvider: BaseUrlsProvider,
     ): BaseUrlInterceptors =
@@ -107,7 +93,7 @@ object PlatformNetworkModule {
         baseUrlInterceptors: BaseUrlInterceptors,
         headersInterceptor: HeadersInterceptor,
         refreshAuthenticator: RefreshAuthenticator,
-        sslManager: SslManager,
+        certificateManager: CertificateManager,
         json: Json,
     ): Retrofits =
         RetrofitsImpl(
@@ -115,7 +101,7 @@ object PlatformNetworkModule {
             baseUrlInterceptors = baseUrlInterceptors,
             headersInterceptor = headersInterceptor,
             refreshAuthenticator = refreshAuthenticator,
-            sslManager = sslManager,
+            certificateProvider = certificateManager,
             json = json,
         )
 }
