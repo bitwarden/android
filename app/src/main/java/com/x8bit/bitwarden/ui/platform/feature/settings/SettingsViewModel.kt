@@ -1,4 +1,4 @@
- package com.x8bit.bitwarden.ui.platform.feature.settings
+package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text

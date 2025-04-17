@@ -121,7 +121,7 @@ private fun RemovePasswordScreenContent(
                 .fillMaxWidth(),
         )
         Text(
-            text = state.orgName?.invoke() ?: "",
+            text = state.orgName?.invoke().orEmpty(),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
@@ -139,7 +139,7 @@ private fun RemovePasswordScreenContent(
         )
 
         Text(
-            text = state.domainName?.invoke() ?: "",
+            text = state.domainName?.invoke().orEmpty(),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier

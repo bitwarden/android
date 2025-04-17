@@ -985,7 +985,8 @@ class AuthRepositoryImpl(
                 it.shouldUseKeyConnector &&
                     it.type != OrganizationType.OWNER &&
                     it.type != OrganizationType.ADMIN
-            }?.keyConnectorUrl
+            }
+            ?.keyConnectorUrl
             ?: return RemovePasswordResult.Error(
                 error = MissingPropertyException("Key Connector URL"),
             )
