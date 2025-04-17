@@ -121,6 +121,7 @@ fun VaultAddEditScreen(
         lazyListState = lazyListState,
         orderedList = AddEditItemCoachMark.entries,
     )
+    val scope = rememberCoroutineScope()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultAddEditEvent.NavigateToQrCodeScan -> {
@@ -180,9 +181,11 @@ fun VaultAddEditScreen(
             }
 
             VaultAddEditEvent.StartAddLoginItemCoachMarkTour -> {
-                coachMarkState.showCoachMark(
-                    coachMarkToShow = AddEditItemCoachMark.GENERATE_PASSWORD,
-                )
+                scope.launch {
+                    coachMarkState.showCoachMark(
+                        coachMarkToShow = AddEditItemCoachMark.GENERATE_PASSWORD,
+                    )
+                }
             }
         }
     }

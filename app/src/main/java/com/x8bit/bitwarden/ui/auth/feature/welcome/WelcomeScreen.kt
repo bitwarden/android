@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
+import kotlinx.coroutines.launch
 
 /**
  * The custom horizontal margin that is specific to this screen.
@@ -68,11 +70,12 @@ fun WelcomeScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val scope = rememberCoroutineScope()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is WelcomeEvent.UpdatePager -> {
-                pagerState.animateScrollToPage(event.index)
+                scope.launch { pagerState.animateScrollToPage(event.index) }
             }
 
             WelcomeEvent.NavigateToCreateAccount -> onNavigateToCreateAccount()
