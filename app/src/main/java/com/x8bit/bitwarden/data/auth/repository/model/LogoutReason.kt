@@ -72,5 +72,5 @@ sealed class LogoutReason {
     /**
      * Indicates that the logout is happening because the left the organization.
      */
-    data object LeaveOrganization : LogoutReason()
+    data object LeftOrganization : LogoutReason()
 }

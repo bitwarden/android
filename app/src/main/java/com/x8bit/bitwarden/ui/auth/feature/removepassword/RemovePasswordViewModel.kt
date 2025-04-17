@@ -175,7 +175,7 @@ class RemovePasswordViewModel @Inject constructor(
                     it.copy(dialogState = null)
                 }
                 authRepository.logout(
-                    reason = LogoutReason.LeaveOrganization,
+                    reason = LogoutReason.LeftOrganization,
                 )
             }
         }
