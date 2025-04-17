@@ -38,9 +38,9 @@ class RemovePasswordViewModel @Inject constructor(
             input = "",
             description = R.string.password_no_longer_required_confirm_domain.asText(),
             labelOrg = R.string.key_connector_organization.asText(),
-            orgName = org?.name.orEmpty().asText(),
+            orgName = org?.name?.asText(),
             labelDomain = R.string.key_connector_domain.asText(),
-            domainName = org?.keyConnectorUrl.orEmpty().asText(),
+            domainName = org?.keyConnectorUrl?.asText(),
             dialogState = null,
             organizationId = org?.id.orNullIfBlank(),
         )
@@ -71,7 +71,7 @@ class RemovePasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.LeaveConfirmationPrompt(
-                    message = R.string.leave_organization_name.asText(state.orgName),
+                    message = R.string.leave_organization_name.asText(state.orgName ?: ""),
                 ),
             )
         }
@@ -138,7 +138,7 @@ class RemovePasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = RemovePasswordState.DialogState.Loading(
-                    R.string.loading.asText(),
+                    title = R.string.loading.asText(),
                 ),
             )
         }
@@ -175,9 +175,7 @@ class RemovePasswordViewModel @Inject constructor(
                     it.copy(dialogState = null)
                 }
                 authRepository.logout(
-                    reason = LogoutReason.Click(
-                        source = "RemovePasswordViewModel",
-                    ),
+                    reason = LogoutReason.LeaveOrganization,
                 )
             }
         }
@@ -192,9 +190,9 @@ data class RemovePasswordState(
     val input: String,
     val description: Text,
     val labelOrg: Text,
-    val orgName: Text,
+    val orgName: Text?,
     val labelDomain: Text,
-    val domainName: Text,
+    val domainName: Text?,
     val dialogState: DialogState?,
     val organizationId: String?,
 ) : Parcelable {

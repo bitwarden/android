@@ -13,6 +13,7 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
+import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.PrevalidateSsoResponseJson
@@ -238,9 +239,9 @@ class AuthRepositoryImpl(
      */
     private var passwordsToCheckMap = mutableMapOf<String, String>()
 
-    override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
-
     private var keyConnectorResponse: GetTokenResponseJson.Success? = null
+
+    override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -979,9 +980,12 @@ class AuthRepositoryImpl(
         val userKey = authDiskSource
             .getUserKey(userId = userId)
             ?: return RemovePasswordResult.Error(error = MissingPropertyException("User Key"))
-        val keyConnectorUrl = this.userStateFlow.value?.activeAccount?.organizations
-            ?.firstOrNull { it.shouldUseKeyConnector }
-            ?.keyConnectorUrl
+        val keyConnectorUrl = organizations
+            .find {
+                it.shouldUseKeyConnector &&
+                    it.type != OrganizationType.OWNER &&
+                    it.type != OrganizationType.ADMIN
+            }?.keyConnectorUrl
             ?: return RemovePasswordResult.Error(
                 error = MissingPropertyException("Key Connector URL"),
             )

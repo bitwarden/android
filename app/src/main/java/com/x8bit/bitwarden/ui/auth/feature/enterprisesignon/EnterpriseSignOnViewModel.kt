@@ -133,8 +133,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
             EnterpriseSignOnAction.CancelKeyConnectorDomainClick -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-                authRepository.cancelKeyConnectorLogin()
+                handleCancelKeyConnectorDomainClick()
             }
 
             EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick -> {
@@ -549,6 +548,11 @@ class EnterpriseSignOnViewModel @Inject constructor(
             val result = authRepository.continueKeyConnectorLogin()
             sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
         }
+    }
+
+    private fun handleCancelKeyConnectorDomainClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        authRepository.cancelKeyConnectorLogin()
     }
 }
 

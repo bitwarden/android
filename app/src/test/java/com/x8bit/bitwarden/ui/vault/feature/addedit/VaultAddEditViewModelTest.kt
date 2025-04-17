@@ -1146,10 +1146,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             val mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-                mockk<ProviderCreateCredentialRequest>(relaxed = true) {
-                    every { callingAppInfo } returns mockk(relaxed = true)
-                    every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
-                }
+            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+                every { callingAppInfo } returns mockk(relaxed = true)
+                every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
+            }
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())

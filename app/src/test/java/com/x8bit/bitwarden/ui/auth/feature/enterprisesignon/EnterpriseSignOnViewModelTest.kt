@@ -688,7 +688,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `ssoCallbackResultFlow returns ConfirmKeyConnectorDomain should update dialogState`() =
         runTest {
             val orgIdentifier = "Bitwarden"

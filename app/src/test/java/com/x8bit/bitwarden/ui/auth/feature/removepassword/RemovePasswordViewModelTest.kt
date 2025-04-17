@@ -158,7 +158,6 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `ConfirmLeaveOrganizationClick with LeaveOrganizationResult Error should show error`() =
         runTest {
             coEvery {
@@ -177,7 +176,9 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 assertEquals(
                     DEFAULT_STATE.copy(
-                        dialogState = RemovePasswordState.DialogState.Loading(R.string.loading.asText()),
+                        dialogState = RemovePasswordState.DialogState.Loading(
+                            title = R.string.loading.asText(),
+                        ),
                     ),
                     awaitItem(),
                 )

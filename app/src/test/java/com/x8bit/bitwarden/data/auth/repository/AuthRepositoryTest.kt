@@ -6758,14 +6758,12 @@ class AuthRepositoryTest {
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `cancelKeyConnectorLogin should clear keyConnectorResponse`() =
         runTest {
             assertDoesNotThrow { repository.cancelKeyConnectorLogin() }
         }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `continueKeyConnectorLogin returns error if keyConnectorResponse is null`() =
         runTest {
             val continueResult = repository.continueKeyConnectorLogin()
