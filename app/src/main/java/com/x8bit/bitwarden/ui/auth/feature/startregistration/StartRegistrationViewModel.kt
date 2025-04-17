@@ -3,6 +3,10 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.model.Environment.Type
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -10,8 +14,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
@@ -27,8 +29,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAc
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

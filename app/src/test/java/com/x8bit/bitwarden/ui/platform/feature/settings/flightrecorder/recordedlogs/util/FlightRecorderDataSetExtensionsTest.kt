@@ -117,7 +117,7 @@ class FlightRecorderDataSetExtensionsTest {
                         id = "52",
                         title = "2025-04-12T08:15:00 – 2025-04-12T09:15:00".asText(),
                         subtextStart = "1.00 KB".asText(),
-                        subtextEnd = R.string.expires_in_days.asText(30L),
+                        subtextEnd = R.string.expires_on.asText("5/11/25"),
                         isDeletedEnabled = true,
                     ),
                     RecordedLogsState.DisplayItem(

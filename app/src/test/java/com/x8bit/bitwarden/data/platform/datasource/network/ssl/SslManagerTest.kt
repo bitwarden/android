@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.ssl
 
 import android.net.Uri
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

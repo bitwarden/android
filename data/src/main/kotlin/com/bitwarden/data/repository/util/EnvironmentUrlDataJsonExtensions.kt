@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.repository.util
+package com.bitwarden.data.repository.util
 
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import java.net.URI
 
 private const val DEFAULT_API_URL: String = "https://api.bitwarden.com"

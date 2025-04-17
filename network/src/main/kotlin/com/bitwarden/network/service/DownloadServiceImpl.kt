@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.vault.datasource.network.service
+package com.bitwarden.network.service
 
 import com.bitwarden.network.api.DownloadApi
 import com.bitwarden.network.util.toResult

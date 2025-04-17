@@ -114,7 +114,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
                             id = "52",
                             title = "2025-04-12T03:15:00 – 2025-04-12T04:15:00".asText(),
                             subtextStart = "1.00 KB".asText(),
-                            subtextEnd = R.string.expires_in_days.asText("30"),
+                            subtextEnd = R.string.expires_on.asText("4/12/25"),
                             isDeletedEnabled = true,
                         ),
                     ),

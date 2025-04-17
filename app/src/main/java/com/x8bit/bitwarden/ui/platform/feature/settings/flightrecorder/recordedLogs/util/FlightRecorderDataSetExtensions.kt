@@ -12,7 +12,6 @@ import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Converts a set of [FlightRecorderDataSet] to a [RecordedLogsState.ViewState].
@@ -74,9 +73,9 @@ private fun FlightRecorderDataSet.FlightRecorderData.expiresIn(clock: Clock): Te
         // We expire tomorrow based on the day of year.
         R.string.expires_tomorrow.asText()
     } else {
-        // Let them know how many days they have left.
-        val millisRemaining = expirationTime.minusMillis(now.toEpochMilli()).toEpochMilli()
-        R.string.expires_in_days.asText(millisRemaining.milliseconds.inWholeDays)
+        // Let them know the date it expires.
+        val expirationDate = expirationTime.toFormattedPattern(pattern = "M/d/yy", clock = clock)
+        R.string.expires_on.asText(expirationDate)
     }
 }
 

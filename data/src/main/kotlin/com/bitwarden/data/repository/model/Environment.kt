@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.platform.repository.model
+package com.bitwarden.data.repository.model
 
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.x8bit.bitwarden.data.platform.repository.util.labelOrBaseUrlHost
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.util.labelOrBaseUrlHost
 
 /**
  * A higher-level wrapper around [EnvironmentUrlDataJson] that provides type-safety, enumerability,

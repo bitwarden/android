@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.repository.util
 
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
