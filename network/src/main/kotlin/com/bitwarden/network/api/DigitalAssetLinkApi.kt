@@ -1,7 +1,7 @@
-package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.api
+package com.bitwarden.network.api
 
+import com.bitwarden.network.model.DigitalAssetLinkResponseJson
 import com.bitwarden.network.model.NetworkResult
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import retrofit2.http.GET
 import retrofit2.http.Url
 

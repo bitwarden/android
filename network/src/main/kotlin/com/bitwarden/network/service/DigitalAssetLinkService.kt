@@ -1,6 +1,6 @@
-package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service
+package com.bitwarden.network.service
 
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
+import com.bitwarden.network.model.DigitalAssetLinkResponseJson
 
 /**
  * Provides an API for querying digital asset links.

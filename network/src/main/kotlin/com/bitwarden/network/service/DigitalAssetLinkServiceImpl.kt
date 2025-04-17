@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service
+package com.bitwarden.network.service
 
+import com.bitwarden.network.api.DigitalAssetLinkApi
+import com.bitwarden.network.model.DigitalAssetLinkResponseJson
 import com.bitwarden.network.util.toResult
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.api.DigitalAssetLinkApi
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 
 /**
  * Primary implementation of [DigitalAssetLinkService].
