@@ -386,6 +386,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
+                                keyConnectorUrl = "bitwarden.com",
                             ),
                         ),
                         needsMasterPassword = false,

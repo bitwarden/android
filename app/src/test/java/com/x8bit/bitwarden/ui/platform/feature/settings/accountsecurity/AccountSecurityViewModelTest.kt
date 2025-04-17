@@ -997,6 +997,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.USER,
+                    keyConnectorUrl = null,
                 ),
                 Organization(
                     id = "organizationAdmin",
@@ -1004,6 +1005,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
                 ),
                 Organization(
                     id = "organizationOwner",
@@ -1011,6 +1013,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.OWNER,
+                    keyConnectorUrl = null,
                 ),
                 Organization(
                     id = "organizationCustom",
@@ -1018,6 +1021,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     shouldManageResetPassword = false,
                     role = OrganizationType.CUSTOM,
+                    keyConnectorUrl = null,
                 ),
             ),
             needsMasterPassword = false,

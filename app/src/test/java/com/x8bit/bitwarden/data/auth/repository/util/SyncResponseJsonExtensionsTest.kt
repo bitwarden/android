@@ -23,6 +23,7 @@ class SyncResponseJsonExtensionsTest {
                 shouldManageResetPassword = false,
                 shouldUseKeyConnector = false,
                 role = OrganizationType.ADMIN,
+                keyConnectorUrl = "mockKeyConnectorUrl-1",
             ),
             createMockOrganization(number = 1).toOrganization(),
         )
@@ -38,6 +39,7 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = true,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = "mockKeyConnectorUrl-1",
                 ),
                 Organization(
                     id = "mockId-2",
@@ -45,10 +47,13 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = true,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
+                    keyConnectorUrl = "mockKeyConnectorUrl-2",
                 ),
             ),
             listOf(
-                createMockOrganization(number = 1).copy(shouldUseKeyConnector = true),
+                createMockOrganization(number = 1).copy(
+                    shouldUseKeyConnector = true,
+                ),
                 createMockOrganization(number = 2, shouldManageResetPassword = true)
                     .copy(type = OrganizationType.USER),
             )

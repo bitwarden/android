@@ -4618,6 +4618,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
+                            keyConnectorUrl = null,
                         ),
                     ),
                     isBiometricsEnabled = true,

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -244,6 +245,16 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     ): LoginResult
 
     /**
+     * Continue the previously halted login attempt.
+     */
+    suspend fun continueKeyConnectorLogin(): LoginResult
+
+    /**
+     * Cancel the previously halted login attempt.
+     */
+    fun cancelKeyConnectorLogin()
+
+    /**
      * Log out the current user.
      */
     fun logout(reason: LogoutReason)
@@ -422,4 +433,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Update the value of the onboarding status for the user.
      */
     fun setOnboardingStatus(status: OnboardingStatus)
+
+    /**
+     * Leaves the organization that matches the given [organizationId]
+     */
+    suspend fun leaveOrganization(
+        organizationId: String,
+    ): LeaveOrganizationResult
 }
