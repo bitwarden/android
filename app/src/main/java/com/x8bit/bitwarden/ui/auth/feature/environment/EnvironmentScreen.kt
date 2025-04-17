@@ -16,6 +16,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -47,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalKeyChainManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 /**
  * Displays the about self-hosted/custom environment screen.
@@ -69,6 +71,7 @@ fun EnvironmentScreen(
             )
         }
     }
+    val scope = rememberCoroutineScope()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is EnvironmentEvent.NavigateBack -> onNavigateBack.invoke()
@@ -83,13 +86,14 @@ fun EnvironmentScreen(
             }
 
             is EnvironmentEvent.ShowSystemCertificateSelectionDialog -> {
-                viewModel.trySendAction(
-                    EnvironmentAction.SystemCertificateSelectionResultReceive(
-                        keyChainManager.choosePrivateKeyAlias(
-                            currentServerUrl = event.serverUrl?.takeUnless { it.isEmpty() },
-                        ),
-                    ),
-                )
+                scope.launch {
+                    val result = keyChainManager.choosePrivateKeyAlias(
+                        currentServerUrl = event.serverUrl?.takeUnless { it.isEmpty() },
+                    )
+                    viewModel.trySendAction(
+                        action = EnvironmentAction.SystemCertificateSelectionResultReceive(result),
+                    )
+                }
             }
         }
     }

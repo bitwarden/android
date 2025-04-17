@@ -9,16 +9,20 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.bitwarden.ui.util.Text
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * A custom state holder for [BitwardenSnackbarData] and manging a snackbar host with the
  * passed in [SnackbarHostState].
  */
 @Stable
-class BitwardenSnackbarHostState(
+data class BitwardenSnackbarHostState(
     val snackbarHostState: SnackbarHostState,
+    val scope: CoroutineScope,
 ) {
     /**
      * The current snackbar data to be displayed.
@@ -31,14 +35,24 @@ class BitwardenSnackbarHostState(
      * through the message parameter of the [SnackbarHostState.showSnackbar] method. This key
      * can be used to identify the correct snackbar data to show in the host.
      */
-    suspend fun showSnackbar(
+    fun showSnackbar(
         snackbarData: BitwardenSnackbarData,
         duration: SnackbarDuration = SnackbarDuration.Short,
-    ): SnackbarResult {
-        currentSnackbarData = snackbarData
-        return snackbarHostState
-            .showSnackbar(message = snackbarData.key, duration = duration)
-            .also { currentSnackbarData = null }
+        onActionPerformed: () -> Unit = { },
+        onDismiss: () -> Unit = { },
+    ) {
+        scope.launch {
+            currentSnackbarData = snackbarData
+            snackbarHostState
+                .showSnackbar(message = snackbarData.key, duration = duration)
+                .also {
+                    currentSnackbarData = null
+                    when (it) {
+                        SnackbarResult.Dismissed -> onDismiss()
+                        SnackbarResult.ActionPerformed -> onActionPerformed()
+                    }
+                }
+        }
     }
 }
 
@@ -66,6 +80,7 @@ data class BitwardenSnackbarData(
 @Composable
 fun rememberBitwardenSnackbarHostState(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    scope: CoroutineScope = rememberCoroutineScope(),
 ) = remember {
-    BitwardenSnackbarHostState(snackbarHostState)
+    BitwardenSnackbarHostState(snackbarHostState = snackbarHostState, scope = scope)
 }

@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.onEach
 fun <E> EventsEffect(
     viewModel: BaseViewModel<*, E, *>,
     lifecycleOwner: Lifecycle = LocalLifecycleOwner.current.lifecycle,
-    handler: suspend (E) -> Unit,
+    handler: (E) -> Unit,
 ) {
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow
