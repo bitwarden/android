@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.di
 
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkServiceImpl
+import com.bitwarden.network.service.DigitalAssetLinkService
+import com.bitwarden.network.service.DigitalAssetLinkServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
 import dagger.Module
 import dagger.Provides

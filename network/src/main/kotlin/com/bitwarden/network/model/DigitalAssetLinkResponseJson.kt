@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model
+package com.bitwarden.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
