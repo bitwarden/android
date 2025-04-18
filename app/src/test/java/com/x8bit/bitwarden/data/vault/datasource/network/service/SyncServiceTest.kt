@@ -220,6 +220,10 @@ private const val SYNC_SUCCESS_JSON = """
           "lastUsedDate": "2023-10-27T12:00:00.00Z"
         }
       ],
+      "permissions": {
+        "delete": true,
+        "restore": true
+      },
       "revisionDate": "2023-10-27T12:00:00.00Z",
       "type": 1,
       "login": {
