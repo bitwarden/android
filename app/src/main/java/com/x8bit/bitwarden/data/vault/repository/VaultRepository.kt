@@ -8,6 +8,7 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
@@ -64,6 +65,14 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * must be collected in order to trigger state changes.
      */
     val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
+
+    /**
+     * Flow that represents all ciphers for the active user.
+     *
+     * Note that the [StateFlow.value] will return the last known value but the [StateFlow] itself
+     * must be collected in order to trigger state changes.
+     */
+    val ciphersListViewStateFlow: StateFlow<DataState<List<CipherListView>>>
 
     /**
      * Flow that represents all collections for the active user.

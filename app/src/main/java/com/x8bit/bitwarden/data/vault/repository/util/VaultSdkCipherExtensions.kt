@@ -15,6 +15,7 @@ import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -606,6 +607,19 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
  */
 @JvmName("toAlphabeticallySortedCipherList")
 fun List<CipherView>.sortAlphabetically(): List<CipherView> {
+    return this.sortedWith(
+        comparator = { cipher1, cipher2 ->
+            SpecialCharWithPrecedenceComparator.compare(cipher1.name, cipher2.name)
+        },
+    )
+}
+
+/**
+ * Sorts the data in alphabetical order by name. Using lexicographical sorting but giving
+ * precedence to special characters over letters and digits.
+ */
+@JvmName("toAlphabeticallySortedCipherListView")
+fun List<CipherListView>.sortAlphabetically(): List<CipherListView> {
     return this.sortedWith(
         comparator = { cipher1, cipher2 ->
             SpecialCharWithPrecedenceComparator.compare(cipher1.name, cipher2.name)
