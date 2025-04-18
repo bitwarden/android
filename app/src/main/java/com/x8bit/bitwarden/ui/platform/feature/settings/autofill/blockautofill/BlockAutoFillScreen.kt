@@ -65,50 +65,21 @@ fun BlockAutoFillScreen(
         }
     }
 
-    when (val dialogState = state.dialog) {
-        is BlockAutoFillState.DialogState.AddEdit -> {
-            AddEditBlockedUriDialog(
-                uri = dialogState.uri,
-                isEdit = dialogState.originalUri != null,
-                errorMessage = dialogState.errorMessage?.invoke(),
-                onUriChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it))
-                    }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
-                },
-                onDeleteClick = if (dialogState.isEdit) {
-                    remember(viewModel, dialogState) {
-                        {
-                            dialogState.originalUri?.let { originalUri ->
-                                viewModel.trySendAction(
-                                    BlockAutoFillAction.RemoveUriClick(originalUri),
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    null
-                },
-                onCancelClick = remember(viewModel) {
-                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
-                },
-                onSaveClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            BlockAutoFillAction.SaveUri(
-                                newUri = it,
-                            ),
-                        )
-                    }
-                },
-            )
-        }
-
-        null -> Unit
-    }
+    BlockAutoFillDialogs(
+        dialogState = state.dialog,
+        onUriTextChange = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) }
+        },
+        onSaveClick = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = it)) }
+        },
+        onRemoveClick = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) }
+        },
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -203,6 +174,36 @@ fun BlockAutoFillScreen(
     }
 }
 
+@Composable
+private fun BlockAutoFillDialogs(
+    dialogState: BlockAutoFillState.DialogState? = null,
+    onUriTextChange: (String) -> Unit,
+    onSaveClick: (String) -> Unit,
+    onRemoveClick: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is BlockAutoFillState.DialogState.AddEdit -> {
+            AddEditBlockedUriDialog(
+                uri = dialogState.uri,
+                isEdit = dialogState.originalUri != null,
+                errorMessage = dialogState.errorMessage?.invoke(),
+                onUriChange = onUriTextChange,
+                onDismissRequest = onDismissRequest,
+                onDeleteClick = if (dialogState.isEdit) {
+                    { dialogState.originalUri?.let { onRemoveClick(it) } }
+                } else {
+                    null
+                },
+                onCancelClick = onDismissRequest,
+                onSaveClick = onSaveClick,
+            )
+        }
+
+        null -> Unit
+    }
+}
+
 /**
  * No items view for the [BlockAutoFillScreen].
  */
@@ -216,12 +217,15 @@ private fun BlockAutoFillNoItems(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
             painter = rememberVectorPainter(
                 id = R.drawable.blocked_uri,
             ),
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .size(size = 124.dp)
+                .align(Alignment.CenterHorizontally),
         )
         Spacer(modifier = Modifier.height(32.dp))
 
