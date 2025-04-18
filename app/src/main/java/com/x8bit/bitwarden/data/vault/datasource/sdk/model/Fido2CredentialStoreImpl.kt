@@ -4,6 +4,7 @@ import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
@@ -24,15 +25,28 @@ class Fido2CredentialStoreImpl(
     /**
      * Return all active ciphers that contain FIDO 2 credentials.
      */
-    override suspend fun allCredentials(): List<CipherView> {
+    override suspend fun allCredentials(): List<CipherListView> {
         val syncResult = vaultRepository.syncForResult()
         if (syncResult is SyncVaultDataResult.Error) {
             syncResult.throwable
                 ?.let { throw it }
                 ?: throw IllegalStateException("Sync failed.")
         }
-        return vaultRepository.ciphersStateFlow.value.data
-            ?.filter { it.isActiveWithFido2Credentials }
+        val activeCipherIds = vaultRepository.ciphersStateFlow.value.data
+            ?.filter {
+                it.isActiveWithFido2Credentials
+            }
+            ?.map {
+                it.id
+            }
+            ?: emptyList()
+
+        return vaultRepository.ciphersListViewStateFlow.value.data
+            ?.filter { clv ->
+                activeCipherIds
+                    .toSet()
+                    .contains(clv.id)
+            }
             ?: emptyList()
     }
 

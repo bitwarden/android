@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -46,6 +47,7 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -188,6 +190,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { markCoachMarkTourCompleted(CoachMarkTourType.ADD_LOGIN) } just runs
         every { shouldShowAddLoginCoachMarkFlow } returns mutableShouldShowAddLoginCoachMarkFlow
+    }
+
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.RestrictCipherItemDeletion) } returns false
     }
 
     @BeforeEach
@@ -3243,6 +3249,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 organizationEventManager = organizationEventManager,
                 networkConnectionManager = networkConnectionManager,
                 firstTimeActionManager = firstTimeActionManager,
+                featureFlagManager = featureFlagManager,
             )
         }
 
@@ -4582,6 +4589,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             organizationEventManager = organizationEventManager,
             networkConnectionManager = networkConnectionManager,
             firstTimeActionManager = firstTimeActionManager,
+            featureFlagManager = featureFlagManager,
         )
 
     private fun createVaultData(

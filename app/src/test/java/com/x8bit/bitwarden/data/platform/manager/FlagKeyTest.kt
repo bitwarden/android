@@ -81,6 +81,10 @@ class FlagKeyTest {
             FlagKey.FlightRecorder.keyName,
             "enable-pm-flight-recorder",
         )
+        assertEquals(
+            FlagKey.RestrictCipherItemDeletion.keyName,
+            "pm-15493-restrict-item-deletion-to-can-manage-permission",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 !it.defaultValue
             },
@@ -131,6 +136,7 @@ class FlagKeyTest {
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
+                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 it.isRemotelyConfigured
             },

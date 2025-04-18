@@ -15,6 +15,8 @@ import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -68,6 +70,7 @@ fun Cipher.toEncryptedNetworkCipherResponse(): SyncResponseJson.Cipher =
         notes = notes,
         reprompt = reprompt.toNetworkRepromptType(),
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
+        permissions = permissions?.toEncryptedNetworkCipherPermissions(),
         type = type.toNetworkCipherType(),
         login = login?.toEncryptedNetworkLogin(),
         secureNote = secureNote?.toEncryptedNetworkSecureNote(),
@@ -300,6 +303,17 @@ private fun PasswordHistory.toEncryptedNetworkPasswordHistory(): SyncResponseJso
     )
 
 /**
+ * Converts a Bitwarden SDK [CipherPermissions] object to a corresponding
+ * [SyncResponseJson.Cipher.CipherPermissions] object.
+ */
+@Suppress("MaxLineLength")
+private fun CipherPermissions.toEncryptedNetworkCipherPermissions(): SyncResponseJson.Cipher.CipherPermissions =
+    SyncResponseJson.Cipher.CipherPermissions(
+        delete = delete,
+        restore = restore,
+    )
+
+/**
  * Converts a Bitwarden SDK [CipherRepromptType] object to a corresponding
  * [CipherRepromptTypeJson] object.
  */
@@ -357,6 +371,7 @@ fun SyncResponseJson.Cipher.toEncryptedSdkCipher(): Cipher =
         attachments = attachments?.toSdkAttachmentList(),
         fields = fields?.toSdkFieldList(),
         passwordHistory = passwordHistory?.toSdkPasswordHistoryList(),
+        permissions = permissions?.toSdkPermissions(),
         creationDate = creationDate.toInstant(),
         deletedDate = deletedDate?.toInstant(),
         revisionDate = revisionDate.toInstant(),
@@ -532,6 +547,16 @@ fun SyncResponseJson.Cipher.PasswordHistory.toSdkPasswordHistory(): PasswordHist
     )
 
 /**
+ * Transforms a [SyncResponseJson.Cipher.CipherPermissions] into
+ * a corresponding Bitwarden SDK [CipherPermissions].
+ */
+fun SyncResponseJson.Cipher.CipherPermissions.toSdkPermissions(): CipherPermissions =
+    CipherPermissions(
+        delete = delete,
+        restore = restore,
+    )
+
+/**
  * Transforms a [CipherTypeJson] to the corresponding Bitwarden SDK [CipherType].
  */
 fun CipherTypeJson.toSdkCipherType(): CipherType =
@@ -582,6 +607,19 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
  */
 @JvmName("toAlphabeticallySortedCipherList")
 fun List<CipherView>.sortAlphabetically(): List<CipherView> {
+    return this.sortedWith(
+        comparator = { cipher1, cipher2 ->
+            SpecialCharWithPrecedenceComparator.compare(cipher1.name, cipher2.name)
+        },
+    )
+}
+
+/**
+ * Sorts the data in alphabetical order by name. Using lexicographical sorting but giving
+ * precedence to special characters over letters and digits.
+ */
+@JvmName("toAlphabeticallySortedCipherListView")
+fun List<CipherListView>.sortAlphabetically(): List<CipherListView> {
     return this.sortedWith(
         comparator = { cipher1, cipher2 ->
             SpecialCharWithPrecedenceComparator.compare(cipher1.name, cipher2.name)
