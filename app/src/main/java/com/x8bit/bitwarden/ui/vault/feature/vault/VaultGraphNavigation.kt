@@ -28,6 +28,7 @@ fun NavGraphBuilder.vaultGraph(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
 ) {
     navigation(
         route = VAULT_GRAPH_ROUTE,
@@ -45,6 +46,7 @@ fun NavGraphBuilder.vaultGraph(
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToAboutScreen = onNavigateToAboutScreen,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },

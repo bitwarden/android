@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.aboutDestination
@@ -85,8 +87,26 @@ fun NavGraphBuilder.settingsGraph(
 }
 
 /**
- * Navigate to the settings screen.
+ * Navigate to the settings graph.
  */
 fun NavController.navigateToSettingsGraph(navOptions: NavOptions? = null) {
     navigate(SETTINGS_GRAPH_ROUTE, navOptions)
+}
+
+/**
+ * Navigate to the settings graph root.
+ */
+fun NavController.navigateToSettingsGraphRoot() {
+    // Brings up back to the Settings graph
+    navigateToSettingsGraph(
+        navOptions = navOptions {
+            popUpTo(id = graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        },
+    )
+    // Then ensures that we are at the root
+    popBackStack(route = SETTINGS_ROUTE, inclusive = false)
 }

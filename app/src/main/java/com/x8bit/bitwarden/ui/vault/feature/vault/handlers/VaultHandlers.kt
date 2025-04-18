@@ -39,6 +39,8 @@ data class VaultHandlers(
     val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
     val dismissImportActionCard: () -> Unit,
     val importActionCardClick: () -> Unit,
+    val flightRecorderGoToSettingsClick: () -> Unit,
+    val dismissFlightRecorderSnackbar: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -46,6 +48,7 @@ data class VaultHandlers(
          * Creates an instance of [VaultHandlers] by binding actions to the provided
          * [VaultViewModel].
          */
+        @Suppress("LongMethod")
         fun create(viewModel: VaultViewModel): VaultHandlers =
             VaultHandlers(
                 vaultFilterTypeSelect = {
@@ -103,6 +106,12 @@ data class VaultHandlers(
                 },
                 importActionCardClick = {
                     viewModel.trySendAction(VaultAction.ImportActionCardClick)
+                },
+                flightRecorderGoToSettingsClick = {
+                    viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)
+                },
+                dismissFlightRecorderSnackbar = {
+                    viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
                 },
             )
     }
