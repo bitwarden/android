@@ -620,6 +620,10 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="deletion_date_info">Wysyłka zostanie trwale usunięta w określonym czasie.</string>
   <string name="pending_delete">Oczekiwanie na usunięcie</string>
   <string name="expired">Wygasła</string>
+  <string name="expires_at">Wygasa o %s</string>
+  <string name="expires_tomorrow">Wygasa jutro</string>
+  <string name="expires_on">Wygasa %s</string>
+  <string name="stops_logging_on">Zatrzymaj rejestrowanie %1$s o %2$s</string>
   <string name="maximum_access_count">Maksymalna liczba dostępów</string>
   <string name="maximum_access_count_info">Jeśli funkcja jest włączona, po osiągnięciu maksymalnej liczby dostępów, użytkownicy nie będą mieli dostępu do tej wysyłki.</string>
   <string name="maximum_access_count_reached">Maksymalna liczba dostępów została osiągnięta</string>
@@ -1235,4 +1239,13 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="flight_recorder_eight_hours">8 godzin</string>
   <string name="flight_recorder_twenty_four_hours">24 godziny</string>
   <string name="flight_recorder_one_week">1 tydzień</string>
+  <string name="delete_all">Usuń wszystkie</string>
+  <string name="share_all">Udostępnij wszystkie</string>
+  <string name="unable_to_share">Nie można udostępnić</string>
+  <string name="please_try_again_or_select_a_different_log">Spróbuj ponownie lub wybierz inne logi.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Plik z logami, który próbujesz udostępnić, został usunięty.</string>
+  <string name="delete_log">Usuń log</string>
+  <string name="do_you_really_want_to_delete_this_log">Czy na pewno chcesz usunąć ten log?</string>
+  <string name="delete_logs">Usuń logi</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Czy na pewno chcesz usunąć wszystkie zarejestrowane logi?</string>
 </resources>

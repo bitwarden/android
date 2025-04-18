@@ -620,6 +620,10 @@
   <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
   <string name="pending_delete">待删除</string>
   <string name="expired">已过期</string>
+  <string name="expires_at">于 %s 过期</string>
+  <string name="expires_tomorrow">明天过期</string>
+  <string name="expires_on">Expires on %s</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">最大访问次数</string>
   <string name="maximum_access_count_info">设置后，当达到最大访问次数时用户将不再能够访问此 Send。</string>
   <string name="maximum_access_count_reached">已达最大访问次数</string>
@@ -1235,4 +1239,13 @@
   <string name="flight_recorder_eight_hours">8 小时</string>
   <string name="flight_recorder_twenty_four_hours">24 小时</string>
   <string name="flight_recorder_one_week">1 周</string>
+  <string name="delete_all">删除所有</string>
+  <string name="share_all">分享所有</string>
+  <string name="unable_to_share">无法分享</string>
+  <string name="please_try_again_or_select_a_different_log">请重试或选择其他日志。</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">您尝试分享的日志文件已被移除。</string>
+  <string name="delete_log">删除日志</string>
+  <string name="do_you_really_want_to_delete_this_log">您确定要删除此日志吗？</string>
+  <string name="delete_logs">删除日志</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">您确定要删除所有记录的日志吗？</string>
 </resources>

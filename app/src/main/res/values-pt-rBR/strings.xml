@@ -91,15 +91,15 @@
   <string name="account_created_success">Sua conta nova foi criada!</string>
   <string name="add_an_item">Adicionar um Item</string>
   <string name="app_extension">Extensão do Aplicativo</string>
-  <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade do Bitwarden para autopreencher as suas credenciais entre aplicativos e a web.</string>
-  <string name="autofill_service">Serviço de autopreenchimento</string>
+  <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais entre aplicativos e a web.</string>
+  <string name="autofill_service">Serviço de preenchimento automático</string>
   <string name="set_bitwarden_as_passkey_manager_description">Defina o Bitwarden como seu provedor de chaves de acesso nas configurações de seu dispositivo.</string>
   <string name="avoid_ambiguous_characters">Evitar Caracteres Ambíguos</string>
   <string name="bitwarden_app_extension">Extensão do Aplicativo Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão do app do Bitwarden. Saiba mais sobre como usar a extensão do app do Bitwarden navegando até a tela de \"Configurações\".</string>
   <string name="bitwarden_app_extension_description">Use o Bitwarden no Safari e em outros aplicativos para preencher automaticamente suas credenciais.</string>
-  <string name="bitwarden_autofill_service">Serviço de Autopreenchimento do Bitwarden</string>
-  <string name="bitwarden_autofill_accessibility_service_description">Utilize o serviço de acessibilidade Bitwarden para autopreencher as suas credenciais.</string>
+  <string name="bitwarden_autofill_service">Serviço de Preenchimento Automático do Bitwarden</string>
+  <string name="bitwarden_autofill_accessibility_service_description">Usar o serviço de acessibilidade do Bitwarden para preencher automaticamente as suas credenciais.</string>
   <string name="change_email">Alterar e-mail</string>
   <string name="change_email_confirmation">Você pode alterar o seu endereço de e-mail no cofre web em bitwarden.com. Você deseja visitar o site agora?</string>
   <string name="change_master_password">Alterar senha mestra</string>
@@ -230,8 +230,8 @@
   <string name="no_items_for_uri">Não existem itens no seu cofre para %1$s.</string>
   <string name="no_items_for_vault">Não existem itens no seu cofre que correspondam a \"%1$s\"</string>
   <string name="search_for_a_login_or_add_a_new_login">Pesquise por um login ou adicione um novo login</string>
-  <string name="bitwarden_autofill_service_overlay">Quando você selecionar um campo de entrada e ver uma sobreposição de autopreenchimento no Bitwarden, você pode tocar nele para iniciar o serviço de autopreenchimento.</string>
-  <string name="bitwarden_autofill_service_notification_content">Toque nesta notificação para autopreencher um item a partir do seu cofre.</string>
+  <string name="bitwarden_autofill_service_overlay">Quando você selecionar um campo de entrada e ver uma sobreposição de preenchimento automático do Bitwarden, você pode tocar nele para abrir o serviço de preenchimento automático.</string>
+  <string name="bitwarden_autofill_service_notification_content">Toque nesta notificação para preencher automaticamente um item a partir do seu cofre.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Abrir as Configurações de Acessibilidade</string>
   <string name="bitwarden_autofill_service_step1">1. Na tela de Configurações de Acessibilidade do Android, toque em \"Bitwarden\" debaixo do cabeçalho Serviços.</string>
   <string name="bitwarden_autofill_service_step2">2. Ligue o interruptor e pressione OK para aceitar.</string>
@@ -240,14 +240,14 @@
   <string name="off" tools:override="true">Desligado</string>
   <string name="on" tools:override="true">Ligado</string>
   <string name="status">Estado</string>
-  <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de Autopreenchimento do Bitwarden. Saiba mais sobre como usar o Serviço de Autopreenchimento do Bitwarden navegando até a tela de \"Configurações\".</string>
-  <string name="autofill">Autopreenchimento</string>
-  <string name="autofill_or_view">Você pretende autopreencher ou ver esta credencial?</string>
+  <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de Preenchimento Automático do Bitwarden. Saiba mais sobre como usar o Serviço de Preenchimento Automático do Bitwarden navegando até a tela de \"Configurações\".</string>
+  <string name="autofill">Preenchimento automático</string>
+  <string name="autofill_or_view">Você gostaria de preencher essa credencial automaticamente ou vê-la?</string>
   <string name="bitwarden_autofill_service_match_confirm">Tem certeza de que deseja preencher automaticamente este item? Ele não é uma correspondência completa para \"%1$s\".</string>
   <string name="matching_items">Itens Correspondentes</string>
   <string name="possible_matching_items">Itens correspondentes possíveis</string>
   <string name="search">Pesquisar</string>
-  <string name="bitwarden_autofill_service_search">Você está procurando uma credencial de autopreenchimento para \"%1$s\".</string>
+  <string name="bitwarden_autofill_service_search">Você está procurando uma credencial de preenchimento automático para \"%1$s\".</string>
   <string name="learn_org">Aprenda mais sobre as Organizações</string>
   <string name="cannot_open_app">Não é possível abrir o aplicativo \"%1$s\".</string>
   <string name="authenticator_app_title">Aplicativo de Autenticação</string>
@@ -620,6 +620,10 @@ A leitura será feita automaticamente.</string>
   <string name="deletion_date_info">O envio será eliminado permanentemente na data e hora especificadas.</string>
   <string name="pending_delete">Exclusão pendente</string>
   <string name="expired">Expirado</string>
+  <string name="expires_at">Expires at %s</string>
+  <string name="expires_tomorrow">Expires tomorrow</string>
+  <string name="expires_on">Expires on %s</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Contagem Máxima de Acessos</string>
   <string name="maximum_access_count_info">Se atribuído, usuários não poderão mais acessar este Send assim que o número máximo de acessos for atingido.</string>
   <string name="maximum_access_count_reached">Número máximo de acessos atingido</string>
@@ -1235,4 +1239,13 @@ Você deseja mudar para esta conta?</string>
   <string name="flight_recorder_eight_hours">8 hours</string>
   <string name="flight_recorder_twenty_four_hours">24 hours</string>
   <string name="flight_recorder_one_week">1 week</string>
+  <string name="delete_all">Delete all</string>
+  <string name="share_all">Share all</string>
+  <string name="unable_to_share">Unable to share</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+  <string name="delete_log">Delete log</string>
+  <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
+  <string name="delete_logs">Delete logs</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
 </resources>

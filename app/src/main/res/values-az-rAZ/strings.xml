@@ -620,6 +620,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
   <string name="pending_delete">Silinməsi gözlənilir</string>
   <string name="expired">Müddəti bitib</string>
+  <string name="expires_at">%s müddəti bitir</string>
+  <string name="expires_tomorrow">Sabah müddəti bitir</string>
+  <string name="expires_on">Expires on %s</string>
+  <string name="stops_logging_on">%1$s %2$s vaxtı üzrə jurnala yazmağı dayandırır</string>
   <string name="maximum_access_count">Maksimal müraciət sayı</string>
   <string name="maximum_access_count_info">Əgər ayarlanıbsa, istifadəçilər maksimal müraciət sayına çatdıqdan sonra bu \"Send\"ə müraciət edə bilməyəcək.</string>
   <string name="maximum_access_count_reached">Maksimal müraciət sayına çatıldı</string>
@@ -1236,4 +1240,13 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
   <string name="flight_recorder_eight_hours">8 saat</string>
   <string name="flight_recorder_twenty_four_hours">24 saat</string>
   <string name="flight_recorder_one_week">1 həftə</string>
+  <string name="delete_all">Hamısını sil</string>
+  <string name="share_all">Hamısını paylaş</string>
+  <string name="unable_to_share">Unable to share</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+  <string name="delete_log">Delete log</string>
+  <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
+  <string name="delete_logs">Delete logs</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
 </resources>

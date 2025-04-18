@@ -480,7 +480,7 @@
   <string name="unlock">Розблокувати</string>
   <string name="unlock_vault">Розблокувати сховище</string>
   <string name="thirty_minutes">30 хвилин</string>
-  <string name="set_pin_description">Встановіть PIN-код для розблокування Bitwarden. Налаштування PIN-коду будуть скинуті, якщо ви коли-небудь повністю вийдете з програми.</string>
+  <string name="set_pin_description">PIN-код має складатися принаймні з 4 символів. Налаштування PIN-коду буде скинуто, якщо ви коли-небудь вийдете зі сховища.</string>
   <string name="logged_in_as_on">Ви увійшли як %1$s на %2$s.</string>
   <string name="vault_locked_master_password">Сховище заблоковано. Введіть головний пароль для продовження.</string>
   <string name="vault_locked_pin">Ваше сховище заблоковане. Для продовження підтвердьте свій PIN-код.</string>
@@ -620,6 +620,10 @@
   <string name="deletion_date_info">Відправлення буде остаточно видалено у вказаний час.</string>
   <string name="pending_delete">Очікується видалення</string>
   <string name="expired">Термін дії завершився</string>
+  <string name="expires_at">Expires at %s</string>
+  <string name="expires_tomorrow">Expires tomorrow</string>
+  <string name="expires_on">Expires on %s</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Максимальна кількість доступів</string>
   <string name="maximum_access_count_info">Якщо встановлено, користувачі більше не зможуть отримати доступ до цього відправлення після досягнення максимальної кількості доступів.</string>
   <string name="maximum_access_count_reached">Досягнуто максимальної кількості доступів</string>
@@ -1017,7 +1021,7 @@
   <string name="twelve_or_more_characters">Складаються не менш як із 12 символів</string>
   <string name="random_and_complex_using_numbers_and_special_characters">Випадкові та складні, з використанням цифр і спеціальних символів</string>
   <string name="totally_different_from_your_other_passwords">Повністю відрізняються від інших паролів</string>
-  <string name="use_the_generator_to_create_a_strong_unique_password">Використовуйте генератор для створення надійного, унікального пароля</string>
+  <string name="use_the_generator_to_create_a_strong_unique_password">Скористайтеся генератором, щоб створити надійний, унікальний пароль</string>
   <string name="try_it_out">Спробувати</string>
   <string name="account_setup">Налаштування облікового запису</string>
   <string name="set_up_unlock">Налаштувати розблокування</string>
@@ -1232,9 +1236,18 @@
 що могли спричинити проблеми.</string>
   <string name="logs_will_be_automatically_deleted_after_30_days">Записи автоматично видаляться через 30 днів. Bitwarden може отримати до них доступ лише якщо ви ними поділитесь.</string>
   <string name="for_details_on_what_is_and_isnt_logged">Щоб дізнатися про те, які дані записуються, відвідайте\n<annotation link="helpCenter">Довідковий центр Bitwarden.</annotation></string>
-  <string name="logging_duration">Logging duration</string>
-  <string name="flight_recorder_one_hour">1 hour</string>
-  <string name="flight_recorder_eight_hours">8 hours</string>
-  <string name="flight_recorder_twenty_four_hours">24 hours</string>
-  <string name="flight_recorder_one_week">1 week</string>
+  <string name="logging_duration">Тривалість запису</string>
+  <string name="flight_recorder_one_hour">1 година</string>
+  <string name="flight_recorder_eight_hours">8 годин</string>
+  <string name="flight_recorder_twenty_four_hours">24 години</string>
+  <string name="flight_recorder_one_week">1 тиждень</string>
+  <string name="delete_all">Delete all</string>
+  <string name="share_all">Share all</string>
+  <string name="unable_to_share">Unable to share</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+  <string name="delete_log">Delete log</string>
+  <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
+  <string name="delete_logs">Delete logs</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Do you really want to delete all recorded logs?</string>
 </resources>
