@@ -620,6 +620,10 @@ Koodi skannataan automaattisesti.</string>
   <string name="deletion_date_info">Send poistuu pysyvästi määritettynä ajankohtana.</string>
   <string name="pending_delete">Odottaa poistoa</string>
   <string name="expired">Erääntynyt</string>
+  <string name="expires_at">Erääntyy %s</string>
+  <string name="expires_tomorrow">Erääntyy huomenna</string>
+  <string name="expires_on">Erääntyy %s</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Käyttökertojen enimmäismäärä</string>
   <string name="maximum_access_count_info">Jos määritetty, käyttäjät eivät voi avata Sendiä käyttökertojen enimmäismäärän täytyttyä.</string>
   <string name="maximum_access_count_reached">Käyttökertojen enimmäismäärä on saavutettu</string>
@@ -1125,7 +1129,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="copy_public_key">Kopioi julkinen avain</string>
   <string name="copy_fingerprint">Kopioi sormenjälki</string>
   <string name="enable_notifications">Ota ilmoitukset käyttöön</string>
-  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+  <string name="log_in_quickly_and_easily_across_devices">Kirjaudu nopeasti ja helposti eri laitteilla</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Ohita tällä kertaa</string>
   <string name="done_text">Valmis</string>
@@ -1145,7 +1149,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="change_account_email">Muuta tilin sähköpostiosoitetta</string>
   <string name="choose_three_or_four_random_words">Valitse kolme tai neljä satunnaista sanaa</string>
   <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
-  <string name="combine_those_words_together">Combine those words together</string>
+  <string name="combine_those_words_together">Yhdistä nuo sanat yhteen</string>
   <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
   <string name="make_it_yours">Tee siitä omasi</string>
   <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
@@ -1155,9 +1159,9 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Kopioi yksityinen avain</string>
-  <string name="login_credentials">Login Credentials</string>
+  <string name="login_credentials">Kirjautumistiedot</string>
   <string name="autofill_options">Autofill Options</string>
-  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Käytä tätä painiketta luodaksesi uuden ainutlaatuisen salasanan.</string>
   <string name="coachmark_1_of_3">1/3</string>
   <string name="coachmark_2_of_3">2/3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
@@ -1210,15 +1214,15 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">Self-host server URL</string>
-  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
-  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
+  <string name="use_chrome_autofill_integration">Käytä Chromen automaattitäytön integrointia</string>
+  <string name="use_chrome_beta_autofill_integration">Käytä Chromen automaattitäytön integrointia (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
   <string name="show_more">Näytä enemmän</string>
   <string name="no_folder">Ei kansiota</string>
   <string name="show_less">Näytä vähemmän</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Lisää kenttä</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Jaa virhetiedot</string>
   <string name="flight_recorder">Flight recorder</string>
   <string name="flight_recorder_help">Flight recorder help</string>
   <string name="view_recorded_logs">View recorded logs</string>
@@ -1231,8 +1235,17 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
   <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
   <string name="logging_duration">Logging duration</string>
-  <string name="flight_recorder_one_hour">1 hour</string>
-  <string name="flight_recorder_eight_hours">8 hours</string>
-  <string name="flight_recorder_twenty_four_hours">24 hours</string>
+  <string name="flight_recorder_one_hour">1 tunti</string>
+  <string name="flight_recorder_eight_hours">8 tuntia</string>
+  <string name="flight_recorder_twenty_four_hours">24 tuntia</string>
   <string name="flight_recorder_one_week">1 week</string>
+  <string name="delete_all">Delete all</string>
+  <string name="share_all">Share all</string>
+  <string name="unable_to_share">Unable to share</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
+  <string name="delete_log">Delete log</string>
+  <string name="do_you_really_want_to_delete_this_log">Do you really want to delete this log?</string>
+  <string name="delete_logs">Poista lokit</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Haluatko varmasti poistaa kaikki tallennetut lokit?</string>
 </resources>

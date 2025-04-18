@@ -1,11 +1,12 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.di
 
-import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.authenticator.data.platform.datasource.network.retrofit.Retrofits
 import com.bitwarden.authenticator.data.platform.datasource.network.retrofit.RetrofitsImpl
 import com.bitwarden.authenticator.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_NAME
 import com.bitwarden.authenticator.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_VERSION
 import com.bitwarden.authenticator.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
+import com.bitwarden.network.interceptor.BaseUrlInterceptors
+import com.bitwarden.network.interceptor.BaseUrlsProvider
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.service.ConfigServiceImpl
@@ -37,6 +38,13 @@ object PlatformNetworkModule {
         clientName = HEADER_VALUE_CLIENT_NAME,
         clientVersion = HEADER_VALUE_CLIENT_VERSION,
     )
+
+    @Provides
+    @Singleton
+    fun providesBaseUrlInterceptors(
+        baseUrlsProvider: BaseUrlsProvider,
+    ): BaseUrlInterceptors =
+        BaseUrlInterceptors(baseUrlsProvider = baseUrlsProvider)
 
     @Provides
     @Singleton

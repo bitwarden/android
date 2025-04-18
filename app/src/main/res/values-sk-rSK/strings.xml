@@ -519,7 +519,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="download">Stiahnuť</string>
   <string name="shared">Zdieľané</string>
   <string name="toggle_visibility">Prepnúť viditeľnosť</string>
-  <string name="login_expired">Platnosť prihlásenia vypršala.</string>
+  <string name="login_expired">Platnosť relácie prihlásenia vypršala.</string>
   <string name="biometrics_direction">Na overenie použiť biometrické údaje.</string>
   <string name="biometrics">Biometrické údaje</string>
   <string name="biometrics_failed">Biometria zlyhala</string>
@@ -619,7 +619,11 @@ Skenovanie prebehne automaticky.</string>
   <string name="deletion_time">Čas odstránenia</string>
   <string name="deletion_date_info">Send bude natrvalo odstránený v zadaný dátum a čas.</string>
   <string name="pending_delete">Čakajúce odstránenie</string>
-  <string name="expired">Expirované</string>
+  <string name="expired">Exspirované</string>
+  <string name="expires_at">Vyprší %s</string>
+  <string name="expires_tomorrow">Vyprší zajtra</string>
+  <string name="expires_on">Platnosť končí %s</string>
+  <string name="stops_logging_on">Logovanie skončí %1$s o %2$s</string>
   <string name="maximum_access_count">Maximálny počet prístupov</string>
   <string name="maximum_access_count_info">Ak je nastavené, používatelia už nebudú mať prístup k tomuto Sendu po dosiahnutí maximálneho počtu prístupov.</string>
   <string name="maximum_access_count_reached">Bol dosiahnutý maximálny počet prístupov</string>
@@ -1235,4 +1239,13 @@ Chcete prepnúť na tento účet?</string>
   <string name="flight_recorder_eight_hours">8 hodín</string>
   <string name="flight_recorder_twenty_four_hours">24 hodín</string>
   <string name="flight_recorder_one_week">1 týždeň</string>
+  <string name="delete_all">Odstrániť všetko</string>
+  <string name="share_all">Zdieľať všetko</string>
+  <string name="unable_to_share">Nie je možné zdieľať</string>
+  <string name="please_try_again_or_select_a_different_log">Skúste to znova alebo vyberte iný log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Súbor logu, ktorý sa pokúšate zdieľať bol odstránený.</string>
+  <string name="delete_log">Odstrániť log</string>
+  <string name="do_you_really_want_to_delete_this_log">Naozaj chcete odstrániť tento log?</string>
+  <string name="delete_logs">Odstrániť logy</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Naozaj chcete odstrániť všetky zaznamenané logy?</string>
 </resources>

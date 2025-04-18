@@ -620,6 +620,10 @@
   <string name="deletion_date_info">Изпращането ще бъде окончателно изтрито на зададената дата и време.</string>
   <string name="pending_delete">Предстои изтриване</string>
   <string name="expired">Изтекъл</string>
+  <string name="expires_at">Изтича в %s</string>
+  <string name="expires_tomorrow">Изтича утре</string>
+  <string name="expires_on">Изтича на %s</string>
+  <string name="stops_logging_on">Спира записването в журнала на %1$s в %2$s</string>
   <string name="maximum_access_count">Максимален брой достъпвания.</string>
   <string name="maximum_access_count_info">При задаване — това изпращане ще се изключи след определен брой достъпвания.</string>
   <string name="maximum_access_count_reached">Достигнат е максималният брой достъпвания</string>
@@ -1237,4 +1241,13 @@
   <string name="flight_recorder_eight_hours">8 часа</string>
   <string name="flight_recorder_twenty_four_hours">24 часа</string>
   <string name="flight_recorder_one_week">1 седмица</string>
+  <string name="delete_all">Изтриване на всичко</string>
+  <string name="share_all">Споделяне на всичко</string>
+  <string name="unable_to_share">Споделянето е невъзможно</string>
+  <string name="please_try_again_or_select_a_different_log">Опитайте отново или изберете друг журнал.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Журналът, който се опитвате да споделите, е премахнат.</string>
+  <string name="delete_log">Изтриване на журнала</string>
+  <string name="do_you_really_want_to_delete_this_log">Наистина ли искате да изтриете журнала?</string>
+  <string name="delete_logs">Изтриване на журналите</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Наистина ли искате да изтриете всички записани журнали?</string>
 </resources>

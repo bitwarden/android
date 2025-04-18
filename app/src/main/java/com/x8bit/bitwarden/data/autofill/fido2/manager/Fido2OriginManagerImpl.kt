@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.provider.CallingAppInfo
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
+import com.bitwarden.network.model.DigitalAssetLinkResponseJson
+import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString

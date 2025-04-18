@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
 
 import com.bitwarden.network.interceptor.AuthTokenInterceptor
+import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.NetworkResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
 import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every

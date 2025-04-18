@@ -20,6 +20,13 @@ sealed class LoginResult {
     data object TwoFactorRequired : LoginResult()
 
     /**
+     * User should confirm KeyConnector domain
+     */
+    data class ConfirmKeyConnectorDomain(
+        val domain: String,
+    ) : LoginResult()
+
+    /**
      * There was an error logging in.
      */
     data class Error(

@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -237,6 +238,8 @@ class AuthRepositoryImpl(
      * the user can complete the login flow. This value is stored using the user ID.
      */
     private var passwordsToCheckMap = mutableMapOf<String, String>()
+
+    private var keyConnectorResponse: GetTokenResponseJson.Success? = null
 
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
@@ -714,6 +717,25 @@ class AuthRepositoryImpl(
             errorMessage = null,
             error = MissingPropertyException("Identity Token Auth Model"),
         )
+
+    override suspend fun continueKeyConnectorLogin(): LoginResult {
+        val response = keyConnectorResponse ?: return LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Key Connector Response"),
+        )
+        return handleLoginCommonSuccess(
+            loginResponse = response,
+            email = rememberedEmailAddress.orEmpty(),
+            orgIdentifier = rememberedOrgIdentifier,
+            password = null,
+            deviceData = null,
+            userConfirmedKeyConnector = true,
+        )
+    }
+
+    override fun cancelKeyConnectorLogin() {
+        keyConnectorResponse = null
+    }
 
     override suspend fun login(
         email: String,
@@ -1405,6 +1427,12 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
+        organizationService.leaveOrganization(organizationId).fold(
+            onSuccess = { LeaveOrganizationResult.Success },
+            onFailure = { LeaveOrganizationResult.Error(error = it) },
+        )
+
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,
@@ -1552,6 +1580,7 @@ class AuthRepositoryImpl(
      * A helper function to extract the common logic of logging in through
      * any of the available methods.
      */
+    @Suppress("LongMethod")
     private suspend fun loginCommon(
         email: String,
         password: String? = null,
@@ -1603,6 +1632,7 @@ class AuthRepositoryImpl(
                         password = password,
                         deviceData = deviceData,
                         orgIdentifier = orgIdentifier,
+                        userConfirmedKeyConnector = false,
                     )
 
                     is GetTokenResponseJson.Invalid -> {
@@ -1636,6 +1666,7 @@ class AuthRepositoryImpl(
         password: String?,
         deviceData: DeviceDataModel?,
         orgIdentifier: String?,
+        userConfirmedKeyConnector: Boolean,
     ): LoginResult = userStateTransaction {
         val userStateJson = loginResponse.toUserState(
             previousUserState = authDiskSource.userState,
@@ -1665,6 +1696,21 @@ class AuthRepositoryImpl(
                     deviceData = deviceData,
                 )
             } else if (keyConnectorUrl != null && orgIdentifier != null) {
+                val isNewKeyConnectorUser =
+                    loginResponse.userDecryptionOptions?.hasMasterPassword == false &&
+                        loginResponse.key == null &&
+                        loginResponse.privateKey == null
+                val isNotConfirmed = !userConfirmedKeyConnector
+
+                // If a new KeyConnector user is logging in for the first time,
+                // we should ask him to confirm the domain
+                if (isNewKeyConnectorUser && isNotConfirmed) {
+                    keyConnectorResponse = loginResponse
+                    return LoginResult.ConfirmKeyConnectorDomain(
+                        domain = keyConnectorUrl,
+                    )
+                }
+
                 unlockVaultWithKeyConnectorOnLoginSuccess(
                     profile = profile,
                     keyConnectorUrl = keyConnectorUrl,
@@ -1738,6 +1784,7 @@ class AuthRepositoryImpl(
         resendEmailRequestJson = null
         twoFactorDeviceData = null
         resendNewDeviceOtpRequestJson = null
+        keyConnectorResponse = null
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()

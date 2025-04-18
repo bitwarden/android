@@ -620,6 +620,10 @@ Načtení proběhne automaticky.</string>
   <string name="deletion_date_info">Tento Send bude trvale smazán v určený datum a čas.</string>
   <string name="pending_delete">Čeká na smazání</string>
   <string name="expired">Vypršela platnost</string>
+  <string name="expires_at">Vyprší v %s</string>
+  <string name="expires_tomorrow">Vyprší zítra</string>
+  <string name="expires_on">Platí do %s</string>
+  <string name="stops_logging_on">Zastaví logování na %1$s v %2$s</string>
   <string name="maximum_access_count">Maximální počet přístupů</string>
   <string name="maximum_access_count_info">Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</string>
   <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
@@ -1236,4 +1240,13 @@ při opakování problémů.</string>
   <string name="flight_recorder_eight_hours">8 hodin</string>
   <string name="flight_recorder_twenty_four_hours">24 hodin</string>
   <string name="flight_recorder_one_week">1 týden</string>
+  <string name="delete_all">Smazat vše</string>
+  <string name="share_all">Sdílet vše</string>
+  <string name="unable_to_share">Nelze sdílet</string>
+  <string name="please_try_again_or_select_a_different_log">Zkuste to znovu nebo vyberte jiný log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Soubor s logem, který se snažíte sdílet, byl odebrán.</string>
+  <string name="delete_log">Smazat log</string>
+  <string name="do_you_really_want_to_delete_this_log">Opravdu chcete smazat tento log?</string>
+  <string name="delete_logs">Smazat logy</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Opravdu chcete smazat všechny zaznamenané logy?</string>
 </resources>

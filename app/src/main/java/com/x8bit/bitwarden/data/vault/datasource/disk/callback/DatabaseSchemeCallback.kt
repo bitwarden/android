@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.callback
 
 import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.SQLiteConnection
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 
 /**
@@ -10,7 +10,8 @@ import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 class DatabaseSchemeCallback(
     private val databaseSchemeManager: DatabaseSchemeManager,
 ) : RoomDatabase.Callback() {
-    override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
+    override fun onDestructiveMigration(connection: SQLiteConnection) {
+        super.onDestructiveMigration(connection)
         databaseSchemeManager.clearSyncState()
     }
 }

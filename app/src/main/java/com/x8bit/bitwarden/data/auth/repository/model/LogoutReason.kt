@@ -68,4 +68,9 @@ sealed class LogoutReason {
      * unsuccessfully too many times.
      */
     data object TooManyUnlockAttempts : LogoutReason()
+
+    /**
+     * Indicates that the logout is happening because the left the organization.
+     */
+    data object LeftOrganization : LogoutReason()
 }

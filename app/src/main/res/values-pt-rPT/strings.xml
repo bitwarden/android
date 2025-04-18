@@ -620,6 +620,10 @@ A leitura será efetuada automaticamente.</string>
   <string name="deletion_date_info">O Send será permanentemente eliminado na data e hora especificadas.</string>
   <string name="pending_delete">Eliminação pendente</string>
   <string name="expired">Expirado</string>
+  <string name="expires_at">Expira a %s</string>
+  <string name="expires_tomorrow">Expira amanhã</string>
+  <string name="expires_on">Expira a %s</string>
+  <string name="stops_logging_on">Parar o registo em %1$s em %2$s</string>
   <string name="maximum_access_count">Número máximo de acessos</string>
   <string name="maximum_access_count_info">Se definido, os utilizadores deixarão de poder aceder a este Send quando a contagem máxima de acessos for atingida.</string>
   <string name="maximum_access_count_reached">Número máximo de acessos atingido</string>
@@ -1235,4 +1239,13 @@ Pretende mudar para esta conta?</string>
   <string name="flight_recorder_eight_hours">8 horas</string>
   <string name="flight_recorder_twenty_four_hours">24 horas</string>
   <string name="flight_recorder_one_week">1 semana</string>
+  <string name="delete_all">Eliminar tudo</string>
+  <string name="share_all">Partilhar tudo</string>
+  <string name="unable_to_share">Não é possível partilhar</string>
+  <string name="please_try_again_or_select_a_different_log">Por favor, tente novamente ou selecione um registo diferente.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">O ficheiro de registo que está a tentar partilhar foi removido.</string>
+  <string name="delete_log">Eliminar registo</string>
+  <string name="do_you_really_want_to_delete_this_log">Quer mesmo eliminar este registo?</string>
+  <string name="delete_logs">Eliminar registos</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Quer mesmo eliminar todos os registos gravados?</string>
 </resources>

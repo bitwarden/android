@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.datasource.network.retrofit
 
-import com.bitwarden.authenticator.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import retrofit2.Retrofit
 import retrofit2.http.Url
 

@@ -620,6 +620,10 @@ Het scannen gebeurt automatisch.</string>
   <string name="deletion_date_info">Deze Send wordt op de aangegeven datum en tijd definitief verwijderd.</string>
   <string name="pending_delete">Wordt verwijderd</string>
   <string name="expired">Verlopen</string>
+  <string name="expires_at">Verloopt op %s</string>
+  <string name="expires_tomorrow">Verloopt morgen</string>
+  <string name="expires_on">Verloopt op %s</string>
+  <string name="stops_logging_on">Stopt loggen op %1$s om %2$s</string>
   <string name="maximum_access_count">Maximum toegangsaantal</string>
   <string name="maximum_access_count_info">Als dit is ingesteld kunnen gebruikers deze Send niet meer benaderen zodra het maximale aantal toegang is bereikt.</string>
   <string name="maximum_access_count_reached">Maximum aantal keren benaderd</string>
@@ -1235,4 +1239,13 @@ Wilt u naar dit account wisselen?</string>
   <string name="flight_recorder_eight_hours">8 uur</string>
   <string name="flight_recorder_twenty_four_hours">24 uur</string>
   <string name="flight_recorder_one_week">1 week</string>
+  <string name="delete_all">Alles verwijderen</string>
+  <string name="share_all">Alles delen</string>
+  <string name="unable_to_share">Kan niet delen</string>
+  <string name="please_try_again_or_select_a_different_log">Probeer het opnieuw of selecteer een ander log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Het logbestand dat je probeert te delen is verwijderd.</string>
+  <string name="delete_log">Log verwijderen</string>
+  <string name="do_you_really_want_to_delete_this_log">Weet je zeker dat je dit log wilt verwijderen?</string>
+  <string name="delete_logs">Logsverwijderen</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Weet je zeker dat je alle logs wilt verwijderen?</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.callback
 
+import androidx.sqlite.SQLiteConnection
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import io.mockk.every
 import io.mockk.just
@@ -17,7 +18,7 @@ class DatabaseSchemeCallbackTest {
 
     @Test
     fun `onDestructiveMigration calls clearSyncState`() {
-        callback.onDestructiveMigration(mockk())
+        callback.onDestructiveMigration(mockk<SQLiteConnection>())
         verify(exactly = 1) { databaseSchemeManager.clearSyncState() }
     }
 }

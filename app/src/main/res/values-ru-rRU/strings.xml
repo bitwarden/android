@@ -439,7 +439,7 @@
   <string name="check_password_for_data_breaches">Проверить пароль на скомпрометированность</string>
   <string name="password_exposed">Этот пароль был скомпрометирован %1$s раз(а). Вам следует его изменить.</string>
   <string name="password_safe">Этот пароль не обнаружен в известных базах утечек. Можно продолжать его использовать.</string>
-  <string name="identity_name">Имя</string>
+  <string name="identity_name">Название личности</string>
   <string name="value">Значение</string>
   <string name="password_history">История паролей</string>
   <string name="password_history_count"><annotation link="passwordHistory">История паролей: <annotation arg="0">%1$s</annotation></annotation></string>
@@ -480,7 +480,7 @@
   <string name="unlock">Разблокировать</string>
   <string name="unlock_vault">Разблокировать хранилище</string>
   <string name="thirty_minutes">30 минут</string>
-  <string name="set_pin_description">Установите PIN-код для разблокировки Bitwarden. Настройки PIN-кода будут сброшены, если вы когда-либо полностью выйдете из приложения.</string>
+  <string name="set_pin_description">PIN-код для Bitwarden должен состоять как минимум из 4 символов. Настройки PIN-кода будут сброшены, если вы полностью выйдете из приложения.</string>
   <string name="logged_in_as_on">На %2$s авторизован %1$s.</string>
   <string name="vault_locked_master_password">Ваше хранилище заблокировано. Для продолжения введите мастер-пароль.</string>
   <string name="vault_locked_pin">Ваше хранилище заблокировано. Для продолжения введите PIN-код.</string>
@@ -620,6 +620,10 @@
   <string name="deletion_date_info">Эта Send будет окончательно удалена в указанные дату и время.</string>
   <string name="pending_delete">Ожидание удаления</string>
   <string name="expired">Срок истек</string>
+  <string name="expires_at">Истекает %s</string>
+  <string name="expires_tomorrow">Истекает завтра</string>
+  <string name="expires_on">Истекает %s</string>
+  <string name="stops_logging_on">Остановка логирования на %1$s в %2$s</string>
   <string name="maximum_access_count">Максимум обращений</string>
   <string name="maximum_access_count_info">Если задано, пользователи больше не смогут получить доступ к этой Send, как только будет достигнуто максимальное количество обращений.</string>
   <string name="maximum_access_count_reached">Достигнут максимум обращений</string>
@@ -1132,7 +1136,7 @@
   <string name="skip_for_now">Пока пропустить</string>
   <string name="done_text">Готово</string>
   <string name="page_number_x_of_y">%1$s из %2$s</string>
-  <string name="copy_identity_name">Скопировать имя личной информации</string>
+  <string name="copy_identity_name">Скопировать название личности</string>
   <string name="copy_company">Скопировать компанию</string>
   <string name="copy_ssn">Скопировать номер социального страхования</string>
   <string name="copy_passport_number">Скопировать номер паспорта</string>
@@ -1237,4 +1241,13 @@
   <string name="flight_recorder_eight_hours">8 часов</string>
   <string name="flight_recorder_twenty_four_hours">24 часа</string>
   <string name="flight_recorder_one_week">1 неделя</string>
+  <string name="delete_all">Удалить все</string>
+  <string name="share_all">Поделиться всеми</string>
+  <string name="unable_to_share">Невозможно поделиться</string>
+  <string name="please_try_again_or_select_a_different_log">Пожалуйста, попробуйте еще раз или выберите другой лог.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Лог, которым вы пытаетесь поделиться, был удален.</string>
+  <string name="delete_log">Удалить лог</string>
+  <string name="do_you_really_want_to_delete_this_log">Вы действительно хотите удалить этот лог?</string>
+  <string name="delete_logs">Удалить логи</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Вы действительно хотите удалить все записанные логи?</string>
 </resources>
