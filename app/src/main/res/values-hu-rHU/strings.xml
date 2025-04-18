@@ -619,6 +619,10 @@
   <string name="deletion_date_info">A Send véglegesen törlésre kerül a meghatározott időpontban.</string>
   <string name="pending_delete">Függőben lévő törlés</string>
   <string name="expired">Lejárt</string>
+  <string name="expires_at">Lejárat: %s</string>
+  <string name="expires_tomorrow">Holnap lejár</string>
+  <string name="expires_on">Lejárat: %s</string>
+  <string name="stops_logging_on">Leállítja a bejelentkezést. - %1$s - %2$s</string>
   <string name="maximum_access_count">Maximális elérési szám</string>
   <string name="maximum_access_count_info">Beállítva a Send elérhetetlen lesz a meghatározott hozzáférések számának elérése után.</string>
   <string name="maximum_access_count_reached">A maximális hozzáférések száma elérésre került.</string>
@@ -1234,4 +1238,13 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="flight_recorder_eight_hours">8 óra</string>
   <string name="flight_recorder_twenty_four_hours">24 óra</string>
   <string name="flight_recorder_one_week">1 hét</string>
+  <string name="delete_all">Összes törlése</string>
+  <string name="share_all">Összes megosztása</string>
+  <string name="unable_to_share">Nem lehet megosztani.</string>
+  <string name="please_try_again_or_select_a_different_log">Póbáljuk újra vagy válasszunk egy másik naplót.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">A megosztani kívánt naplófájl eltávolításra került.</string>
+  <string name="delete_log">Napló törlése</string>
+  <string name="do_you_really_want_to_delete_this_log">Valóban törölni akarjuk ezt a naplót?</string>
+  <string name="delete_logs">Naplók törlése</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Valóban törölni szeretnénk az összes rögzített naplót?</string>
 </resources>

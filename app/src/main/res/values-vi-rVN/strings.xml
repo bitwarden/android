@@ -620,6 +620,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
   <string name="deletion_date_info">Mục Gửi sẽ được xóa vĩnh viễn vào ngày và giờ chỉ định.</string>
   <string name="pending_delete">Đang chờ xóa</string>
   <string name="expired">Đã hết hạn</string>
+  <string name="expires_at">Hết hạn vào %s</string>
+  <string name="expires_tomorrow">Hết hạn ngày mai</string>
+  <string name="expires_on">Hết hạn vào %s</string>
+  <string name="stops_logging_on">Ngừng đăng nhập %1$s vào %2$s</string>
   <string name="maximum_access_count">Số lần truy cập tối đa</string>
   <string name="maximum_access_count_info">Nếu được thiết lập, người dùng sẽ không thể truy cập mục Gửi này khi đã đạt tới số lần truy cập tối đa.</string>
   <string name="maximum_access_count_reached">Đã vượt số lần truy cập tối đa</string>
@@ -1208,7 +1212,7 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="passkey_operation_failed_because_the_request_is_invalid">Hoạt động mã khóa không thành công vì yêu cầu không hợp lệ.</string>
   <string name="passkey_operation_failed_because_user_verification_attempts_exceeded">Hoạt động mã khóa không thành công vì vượt quá số lần xác minh người dùng.</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Hoạt động mã khóa không thành công vì không có mục nào được chọn.</string>
-  <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
+  <string name="passkey_operation_failed_because_the_request_is_unsupported">Hoạt động mã khóa không thành công vì yêu cầu không hỗ trợ.</string>
   <string name="self_host_server_url">URL máy chủ tự lưu trữ</string>
   <string name="use_chrome_autofill_integration">Dùng tích hợp điền tự động Chrome</string>
   <string name="use_chrome_beta_autofill_integration">Dùng tích hợp điền tự động Chrome (Thử nghiệm)</string>
@@ -1224,15 +1228,26 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="view_recorded_logs">Xem nhật ký đã lưu</string>
   <string name="enable_flight_recorder_title">Bật bộ lưu chuyến bay</string>
   <string name="recorded_logs_title">Nhật ký đã lưu</string>
-  <string name="no_logs_recorded">No logs recorded</string>
-  <string name="experiencing_an_issue">Experiencing an issue?</string>
-  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
-  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
-  <string name="logging_duration">Logging duration</string>
-  <string name="flight_recorder_one_hour">1 hour</string>
-  <string name="flight_recorder_eight_hours">8 hours</string>
-  <string name="flight_recorder_twenty_four_hours">24 hours</string>
-  <string name="flight_recorder_one_week">1 week</string>
+  <string name="no_logs_recorded">Chưa có nhật ký</string>
+  <string name="experiencing_an_issue">Gặp vấn đề?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Bật ghi nhật ký tạm thời để thu thập và kiểm tra nhật ký cục bộ. Khi được bật, trạng thái ứng dụng và cuộc gọi mạng có thể được ghi lại—không bao giờ là thông tin kho lưu trữ nhạy cảm.</string>
+  <string name="to_get_started_set_a_logging_duration">Để bắt đầu, hãy đặt thời lượng ghi nhật ký. Ghi nhật ký
+sẽ tự động tắt sau khoảng thời gian này, cho bạn thời gian để ghi lại hoạt động trong khi tái tạo
+bất kỳ sự cố nào.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Nhật ký sẽ tự động bị xóa sau 30 ngày. Bitwarden chỉ có thể truy cập dữ liệu nhật ký của bạn khi bạn chia sẻ nó.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Để biết chi tiết về những gì được và không được ghi lại, hãy truy cập\n<annotation link="helpCenter">Trung tâm hỗ trợ Bitwarden.</annotation></string>
+  <string name="logging_duration">Thời lượng ghi</string>
+  <string name="flight_recorder_one_hour">1 giờ</string>
+  <string name="flight_recorder_eight_hours">8 giờ</string>
+  <string name="flight_recorder_twenty_four_hours">24 giờ</string>
+  <string name="flight_recorder_one_week">1 tuần</string>
+  <string name="delete_all">Xóa tất cả</string>
+  <string name="share_all">Chia sẻ tất cả</string>
+  <string name="unable_to_share">Không thể chia sẻ</string>
+  <string name="please_try_again_or_select_a_different_log">Vui lòng thử lại hoặc chọn một nhật ký khác.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">File nhật ký bạn chia sẻ đã bị di chuyển.</string>
+  <string name="delete_log">Xóa nhật ký</string>
+  <string name="do_you_really_want_to_delete_this_log">Bạn muốn xoá nhật ký này?</string>
+  <string name="delete_logs">Xóa nhật ký</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Bạn muốn xoá tất cả nhật ký?</string>
 </resources>
