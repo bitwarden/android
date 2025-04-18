@@ -150,7 +150,10 @@ private fun RecordedLogsOverflowMenu(
             dismissButtonText = stringResource(id = R.string.cancel),
             onDismissRequest = { showDeletionDialog = false },
             onDismissClick = { showDeletionDialog = false },
-            onConfirmClick = onDeleteAllClick,
+            onConfirmClick = {
+                onDeleteAllClick()
+                showDeletionDialog = false
+            },
         )
     }
     BitwardenOverflowActionItem(
@@ -242,7 +245,10 @@ private fun LogRow(
             dismissButtonText = stringResource(id = R.string.cancel),
             onDismissRequest = { showDeletionDialog = false },
             onDismissClick = { showDeletionDialog = false },
-            onConfirmClick = { onDeleteItemClick(displayableItem) },
+            onConfirmClick = {
+                onDeleteItemClick(displayableItem)
+                showDeletionDialog = false
+            },
         )
     }
     Row(

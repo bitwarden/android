@@ -159,6 +159,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
             .onAllNodesWithText(text = "Yes")
             .filterToOne(matcher = hasAnyAncestor(isDialog()))
             .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
@@ -274,6 +275,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
             .onAllNodesWithText(text = "Yes")
             .filterToOne(matcher = hasAnyAncestor(isDialog()))
             .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteClick(displayItem))
