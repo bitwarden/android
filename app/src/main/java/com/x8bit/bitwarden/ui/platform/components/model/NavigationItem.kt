@@ -25,9 +25,14 @@ interface NavigationItem {
     val contentDescriptionRes: Int
 
     /**
-     * Route of the tab.
+     * Route of the tab's graph.
      */
-    val route: String
+    val graphRoute: String
+
+    /**
+     * Route of the tab's start destination.
+     */
+    val startDestinationRoute: String
 
     /**
      * The test tag of the tab.
