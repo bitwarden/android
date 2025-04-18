@@ -9,8 +9,8 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -35,7 +35,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.MutualTls) } returns true
         every { getFeatureFlagFlow(FlagKey.MutualTls) } returns mutableMutualTlsFeatureFlagFlow
     }
-    private val mockKeyManager = mockk<KeyManager>()
+    private val mockCertificateManager = mockk<CertificateManager>()
     private val mockFileManager = mockk<FileManager>()
 
     @Suppress("MaxLineLength")
@@ -593,7 +593,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 mockFileManager.uriToByteArray(mockFileData.uri)
             } returns keyBytes.asSuccess()
             coEvery {
-                mockKeyManager.importMutualTlsCertificate(
+                mockCertificateManager.importMutualTlsCertificate(
                     key = keyBytes,
                     alias = "mockAlias",
                     password = "mockPassword",
@@ -618,7 +618,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
 
             coVerify {
                 mockFileManager.uriToByteArray(mockFileData.uri)
-                mockKeyManager.importMutualTlsCertificate(
+                mockCertificateManager.importMutualTlsCertificate(
                     key = byteArrayOf(),
                     alias = "mockAlias",
                     password = "mockPassword",
@@ -675,7 +675,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         EnvironmentViewModel(
             environmentRepository = fakeEnvironmentRepository,
             featureFlagManager = mockFeatureFlagManager,
-            keyManager = mockKeyManager,
+            certificateManager = mockCertificateManager,
             fileManager = mockFileManager,
             savedStateHandle = savedStateHandle,
         )
