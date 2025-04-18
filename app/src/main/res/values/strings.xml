@@ -1253,4 +1253,7 @@ Do you want to switch to this account?</string>
   <string name="key_connector_organization">Organization:</string>
   <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
   <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Flight recorder on</string>
+  <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
+  <string name="go_to_settings">Go to settings</string>
 </resources>

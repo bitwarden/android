@@ -71,6 +71,13 @@ internal class FlightRecorderManagerImpl(
         )
     }
 
+    override fun dismissFlightRecorderBanner() {
+        val originalData = flightRecorderData
+        settingsDiskSource.flightRecorderData = originalData.copy(
+            data = originalData.data.map { it.copy(isBannerDismissed = true) }.toSet(),
+        )
+    }
+
     override fun startFlightRecorder(duration: FlightRecorderDuration) {
         val startTime = clock.instant()
         val originalData = flightRecorderData

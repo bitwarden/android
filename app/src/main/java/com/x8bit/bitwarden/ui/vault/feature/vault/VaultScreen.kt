@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.x8bit.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshSt
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbar
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
@@ -94,6 +96,7 @@ fun VaultScreen(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     appReviewManager: AppReviewManager = LocalAppReviewManager.current,
@@ -181,6 +184,8 @@ fun VaultScreen(
             VaultEvent.NavigateToAddFolder -> {
                 onNavigateToAddFolderScreen(null)
             }
+
+            VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -312,9 +317,23 @@ private fun VaultScreenScaffold(
             }
         },
         snackbarHost = {
-            BitwardenSnackbarHost(
-                bitwardenHostState = snackbarHostState,
-            )
+            AnimateNullableContentVisibility(
+                targetState = state.flightRecorderSnackBar,
+                label = "AnimateFlightRecorderSnackbar",
+            ) { data ->
+                BitwardenSnackbar(
+                    bitwardenSnackbarData = data,
+                    onDismiss = vaultHandlers.dismissFlightRecorderSnackbar,
+                    onActionClick = vaultHandlers.flightRecorderGoToSettingsClick,
+                )
+            }
+            if (state.flightRecorderSnackBar == null) {
+                // We don't want additional animations from the Animated Visibility and we only
+                // want this displayed if the flight recorder snackbar is not set.
+                BitwardenSnackbarHost(
+                    bitwardenHostState = snackbarHostState,
+                )
+            }
         },
         floatingActionButton = {
             AnimatedVisibility(

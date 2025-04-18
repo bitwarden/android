@@ -26,6 +26,7 @@ fun NavGraphBuilder.vaultDestination(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
 ) {
     composableWithRootPushTransitions(
         route = VAULT_ROUTE,
@@ -40,6 +41,7 @@ fun NavGraphBuilder.vaultDestination(
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToAboutScreen = onNavigateToAboutScreen,
         )
     }
 }
