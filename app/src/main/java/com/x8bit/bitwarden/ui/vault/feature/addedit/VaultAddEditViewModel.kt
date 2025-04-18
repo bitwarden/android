@@ -26,12 +26,14 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
@@ -119,6 +121,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -1719,6 +1722,10 @@ class VaultAddEditViewModel @Inject constructor(
         vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
+        val restrictCipherItemDeletionEnabled = featureFlagManager
+            .getFeatureFlag(
+                FlagKey.RestrictCipherItemDeletion,
+            )
         val internalVaultData = vaultData
             ?: VaultData(
                 cipherViewList = emptyList(),
@@ -1737,10 +1744,15 @@ class VaultAddEditViewModel @Inject constructor(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
-
-                    val canDelete = internalVaultData
-                        .collectionViewList
-                        .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
+                    val canDelete = if (restrictCipherItemDeletionEnabled &&
+                        cipherView?.permissions?.delete != null
+                    ) {
+                        cipherView.permissions?.delete == true
+                    } else {
+                        internalVaultData
+                            .collectionViewList
+                            .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
+                    }
 
                     val canAssignToCollections = internalVaultData
                         .collectionViewList
@@ -2241,16 +2253,21 @@ data class VaultAddEditState(
              * This is only present when editing a pre-existing cipher.
              * @property name Represents the name for the item type. This is an abstract property
              * that must be overridden to save the item.
+             * @property isUnlockWithPasswordEnabled Indicates whether the user is allowed to
+             * unlock with a password.
              * @property masterPasswordReprompt Indicates if a master password reprompt is required.
              * @property favorite Indicates whether this item is marked as a favorite.
              * @property customFieldData Additional custom fields associated with the item.
              * @property notes Any additional notes or comments associated with the item.
+             * @property selectedCollectionId The ID of the collection that this item belongs to.
              * @property selectedFolderId The ID of the folder that this item belongs to.
              * @property availableFolders The list of folders that this item could be added too.
              * @property selectedOwnerId The ID of the owner associated with the item.
              * @property availableOwners A list of available owners.
              * @property hasOrganizations Indicates if the user is part of any organizations.
              * @property canDelete Indicates whether the current user can delete the item.
+             * @property canAssignToCollections Indicates whether the current user can assign the
+             * item to a collection.
              */
             @Parcelize
             data class Common(

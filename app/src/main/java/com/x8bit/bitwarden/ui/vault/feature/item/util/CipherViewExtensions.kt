@@ -45,6 +45,7 @@ fun CipherView.toViewState(
     totpCodeItemData: TotpCodeItemData?,
     clock: Clock = Clock.systemDefaultZone(),
     canDelete: Boolean,
+    canRestore: Boolean,
     canAssignToCollections: Boolean,
     canEdit: Boolean,
     baseIconUrl: String,
@@ -98,6 +99,7 @@ fun CipherView.toViewState(
                 }
                 .orEmpty(),
             canDelete = canDelete,
+            canRestore = canRestore,
             canAssignToCollections = canAssignToCollections,
             canEdit = canEdit,
             favorite = this.favorite,

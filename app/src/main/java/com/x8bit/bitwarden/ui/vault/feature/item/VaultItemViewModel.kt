@@ -17,8 +17,10 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -70,6 +72,7 @@ class VaultItemViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -105,6 +108,10 @@ class VaultItemViewModel @Inject constructor(
             vaultRepository.collectionsStateFlow,
             vaultRepository.foldersStateFlow,
         ) { cipherViewState, userState, authCodeState, collectionsState, folderState ->
+            val restrictCipherItemDeletionEnabled = featureFlagManager
+                .getFeatureFlag(
+                    FlagKey.RestrictCipherItemDeletion,
+                )
             val totpCodeData = authCodeState.data?.let {
                 TotpCodeItemData(
                     periodSeconds = it.periodSeconds,
@@ -126,10 +133,23 @@ class VaultItemViewModel @Inject constructor(
                 }
                     .mapNullable {
                         val cipherView = cipherViewState.data
-                        val canDelete = collectionsState.data
-                            .hasDeletePermissionInAtLeastOneCollection(
+                        val canDelete = if (restrictCipherItemDeletionEnabled &&
+                            cipherView?.permissions?.delete != null
+                        ) {
+                            cipherView.permissions?.delete == true
+                        } else {
+                            collectionsState.data.hasDeletePermissionInAtLeastOneCollection(
                                 collectionIds = cipherView?.collectionIds,
                             )
+                        }
+
+                        val canRestore = if (restrictCipherItemDeletionEnabled &&
+                            cipherView?.permissions?.restore != null
+                        ) {
+                            cipherView.permissions?.restore == true
+                        } else {
+                            canDelete && cipherView?.deletedDate != null
+                        }
 
                         val canAssignToCollections = collectionsState.data
                             .canAssignToCollections(cipherView?.collectionIds)
@@ -167,6 +187,7 @@ class VaultItemViewModel @Inject constructor(
                             cipher = cipherView,
                             totpCodeItemData = totpCodeData,
                             canDelete = canDelete,
+                            canRestore = canRestore,
                             canAssociateToCollections = canAssignToCollections,
                             canEdit = canEdit,
                             relatedLocations = relatedLocations,
@@ -1200,6 +1221,7 @@ class VaultItemViewModel @Inject constructor(
             hasMasterPassword = account.hasMasterPassword,
             totpCodeItemData = this.data?.totpCodeItemData,
             canDelete = this.data?.canDelete == true,
+            canRestore = this.data?.canRestore == true,
             canAssignToCollections = this.data?.canAssociateToCollections == true,
             canEdit = this.data?.canEdit == true,
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
@@ -1496,6 +1518,14 @@ data class VaultItemState(
             ?.common
             ?.canDelete == true
 
+    /**
+     * Whether or not the cipher can be deleted.
+     */
+    val canRestore: Boolean
+        get() = viewState.asContentOrNull()
+            ?.common
+            ?.canRestore == true
+
     val canAssignToCollections: Boolean
         get() = viewState.asContentOrNull()
             ?.common
@@ -1555,6 +1585,7 @@ data class VaultItemState(
              * @property currentCipher The cipher that is currently being viewed (nullable).
              * @property attachments A list of attachments associated with the cipher.
              * @property canDelete Indicates if the cipher can be deleted.
+             * @property canRestore Indicates if the cipher can be restored.
              * @property canAssignToCollections Indicates if the cipher can be assigned to
              * collections.
              * @property favorite Indicates that the cipher is favorite.
@@ -1572,6 +1603,7 @@ data class VaultItemState(
                 val currentCipher: CipherView? = null,
                 val attachments: List<AttachmentItem>?,
                 val canDelete: Boolean,
+                val canRestore: Boolean,
                 val canAssignToCollections: Boolean,
                 val canEdit: Boolean,
                 val favorite: Boolean,

@@ -166,7 +166,7 @@ fun VaultItemScreen(
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
                 },
                 actions = {
-                    if (state.isCipherDeleted && state.canDelete) {
+                    if (state.canRestore) {
                         BitwardenTextButton(
                             label = stringResource(id = R.string.restore),
                             onClick = remember(viewModel) {
