@@ -3,6 +3,19 @@
     {
       "type": "android",
       "info": {
+        "package_name": "com.lemurbrowser.exts",
+        "signatures": [
+          {
+            "build": "release",
+            "cert_fingerprint_sha256": "EB:1E:57:D8:D9:18:E7:A0:B8:0C:C5:77:80:B0:8E:56:0D:3E:26:E1:8E:37:59:10:C2:11:0F:E2:50:2B:40:4A"
+          }
+        ]
+      }
+    },
+    
+    {
+      "type": "android",
+      "info": {
         "package_name": "io.github.forkmaintainers.iceraven",
         "signatures": [
           {
