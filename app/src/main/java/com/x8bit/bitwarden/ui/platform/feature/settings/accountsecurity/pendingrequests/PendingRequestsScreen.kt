@@ -35,9 +35,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -286,7 +288,6 @@ private fun PendingRequestItem(
             text = stringResource(id = R.string.fingerprint_phrase),
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.primary,
-            textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
         )
 
@@ -296,7 +297,6 @@ private fun PendingRequestItem(
             text = fingerprintPhrase,
             color = BitwardenTheme.colorScheme.text.codePink,
             style = BitwardenTheme.typography.sensitiveInfoSmall,
-            textAlign = TextAlign.Start,
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
                 .fillMaxWidth(),
@@ -313,14 +313,17 @@ private fun PendingRequestItem(
                 text = platform,
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
-                textAlign = TextAlign.Start,
             )
             Spacer(modifier = Modifier.width(width = 16.dp))
             Text(
                 text = timestamp,
                 style = BitwardenTheme.typography.labelSmall,
                 color = BitwardenTheme.colorScheme.text.secondary,
-                textAlign = TextAlign.End,
+                textAlign = if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+                    TextAlign.Left
+                } else {
+                    TextAlign.Right
+                },
             )
         }
     }
