@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDesti
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 
 const val SETTINGS_GRAPH_ROUTE: String = "settings_graph"
-private const val SETTINGS_ROUTE: String = "settings"
+const val SETTINGS_ROUTE: String = "settings"
 
 /**
  * Add settings destinations to the nav graph.
