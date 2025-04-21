@@ -40,7 +40,7 @@ class VaultDiskModule {
                 klass = VaultDatabase::class.java,
                 name = "vault_database",
             )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = false)
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()
