@@ -25,7 +25,9 @@ import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
@@ -227,6 +229,10 @@ private fun VaultUnlockedNavBarScaffold(
                 onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+                onNavigateToAboutScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAbout()
+                },
             )
             sendGraph(
                 navController = navController,
