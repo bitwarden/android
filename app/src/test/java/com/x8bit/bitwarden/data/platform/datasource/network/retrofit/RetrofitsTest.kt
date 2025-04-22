@@ -4,17 +4,13 @@ import com.bitwarden.network.interceptor.AuthTokenInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.NetworkResult
+import com.bitwarden.network.ssl.CertificateProvider
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.ssl.SslManager
-import com.x8bit.bitwarden.data.util.mockBuilder
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.unmockkConstructor
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import okhttp3.Authenticator
@@ -30,10 +26,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import retrofit2.Retrofit
 import retrofit2.create
 import retrofit2.http.GET
-import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSocketFactory
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 class RetrofitsTest {
     private val authTokenInterceptor = mockk<AuthTokenInterceptor> {
@@ -58,9 +50,10 @@ class RetrofitsTest {
     }
     private val json = Json
     private val server = MockWebServer()
-    private val mockSslManager = mockk<SslManager> {
-        every { sslContext } returns mockk(relaxed = true)
-        every { trustManagers } returns arrayOf(mockk<X509TrustManager>(relaxed = true))
+    private val certificateProvider = mockk<CertificateProvider> {
+        every { chooseClientAlias(any(), any(), any()) } returns ""
+        every { getCertificateChain(any()) } returns emptyArray()
+        every { getPrivateKey(any()) } returns null
     }
 
     private val retrofits = RetrofitsImpl(
@@ -68,7 +61,7 @@ class RetrofitsTest {
         baseUrlInterceptors = baseUrlInterceptors,
         headersInterceptor = headersInterceptors,
         refreshAuthenticator = refreshAuthenticator,
-        sslManager = mockSslManager,
+        certificateProvider = certificateProvider,
         json = json,
     )
 
@@ -272,94 +265,6 @@ class RetrofitsTest {
             assertFalse(isIdentityInterceptorCalled)
             assertFalse(isEventsInterceptorCalled)
         }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `createStaticRetrofit should set sslSocketFactory`() =
-        runTest {
-            val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
-            val mockSocketFactory = mockk<SSLSocketFactory>()
-            val mockSslContext = mockk<SSLContext> {
-                every { socketFactory } returns mockSocketFactory
-            }
-            setupMockOkHttpClientBuilder(
-                sslContext = mockSslContext,
-                trustManagers = arrayOf(mockTrustManager),
-            )
-
-            retrofits.createStaticRetrofit(isAuthenticated = false)
-
-            verify {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = mockSocketFactory,
-                        trustManager = mockTrustManager,
-                    )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `authenticatedOkHttpClient should set sslSocketFactory`() =
-        runTest {
-            val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
-            val mockSocketFactory = mockk<SSLSocketFactory>()
-            val mockSslContext = mockk<SSLContext> {
-                every { socketFactory } returns mockSocketFactory
-            }
-            setupMockOkHttpClientBuilder(
-                sslContext = mockSslContext,
-                trustManagers = arrayOf(mockTrustManager),
-            )
-
-            retrofits.authenticatedApiRetrofit
-
-            verify {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = mockSocketFactory,
-                        trustManager = mockTrustManager,
-                    )
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unauthenticatedOkHttpClient should set sslSocketFactory`() =
-        runTest {
-            val mockTrustManager = mockk<X509TrustManager>(relaxed = true)
-            val mockSocketFactory = mockk<SSLSocketFactory>()
-            val mockSslContext = mockk<SSLContext> {
-                every { socketFactory } returns mockSocketFactory
-            }
-            setupMockOkHttpClientBuilder(
-                sslContext = mockSslContext,
-                trustManagers = arrayOf(mockTrustManager),
-            )
-
-            retrofits.unauthenticatedApiRetrofit
-
-            verify {
-                anyConstructed<OkHttpClient.Builder>()
-                    .sslSocketFactory(
-                        sslSocketFactory = mockSocketFactory,
-                        trustManager = mockTrustManager,
-                    )
-            }
-        }
-
-    private fun setupMockOkHttpClientBuilder(
-        sslContext: SSLContext = mockk<SSLContext>(),
-        trustManagers: Array<TrustManager> = emptyArray(),
-    ) {
-        mockkConstructor(OkHttpClient.Builder::class)
-        every { mockSslManager.sslContext } returns sslContext
-        every { mockSslManager.trustManagers } returns trustManagers
-        mockBuilder<OkHttpClient.Builder> {
-            it.sslSocketFactory(any(), any())
-        }
-        every { anyConstructed<OkHttpClient.Builder>().build() } returns mockk(relaxed = true)
-    }
 
     private fun Retrofit.createMockRetrofit(): Retrofit =
         this

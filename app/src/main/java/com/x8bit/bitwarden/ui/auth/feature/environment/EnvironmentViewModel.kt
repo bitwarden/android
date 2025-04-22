@@ -10,8 +10,8 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.KeyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -41,7 +41,7 @@ private const val KEY_STATE = "state"
 class EnvironmentViewModel @Inject constructor(
     private val environmentRepository: EnvironmentRepository,
     private val fileManager: FileManager,
-    private val keyManager: KeyManager,
+    private val certificateManager: CertificateManager,
     private val featureFlagManager: FeatureFlagManager,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EnvironmentState, EnvironmentEvent, EnvironmentAction>(
@@ -293,7 +293,7 @@ class EnvironmentViewModel @Inject constructor(
             fileManager
                 .uriToByteArray(action.certificateFileData.uri)
                 .map { bytes ->
-                    keyManager.importMutualTlsCertificate(
+                    certificateManager.importMutualTlsCertificate(
                         key = bytes,
                         alias = action.alias,
                         password = action.password,
