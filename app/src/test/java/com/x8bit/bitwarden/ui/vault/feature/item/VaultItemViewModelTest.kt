@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -3418,6 +3419,134 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                     canDelete = true,
                     canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(
+                        VaultItemLocation.Organization("mockOrganizationName"),
+                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Folder("mockName-1"),
+                    ),
+                )
+            } returns viewState
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_USER_ACCOUNT.copy(
+                        organizations = listOf(
+                            Organization(
+                                id = "mockOrganizationId",
+                                name = "mockOrganizationName",
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.OWNER,
+                                keyConnectorUrl = null,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                listOf(createMockCollectionView(number = 1)),
+            )
+            mutableFoldersStateFlow.value = DataState.Loaded(
+                listOf(createMockFolderView(number = 1)),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = viewState),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `on VaultDataReceive with Loaded and nonnull false permission data should update the ViewState with cipher permissions`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
+            } returns true
+            every { mockCipherView.organizationId } returns "mockOrganizationId"
+            every { mockCipherView.collectionIds } returns listOf("mockId-1")
+            every { mockCipherView.folderId } returns "mockId-1"
+            every {
+                mockCipherView.permissions
+            } returns createMockSdkCipherPermissions(delete = false, restore = false)
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = false,
+                    canRestore = false,
+                    canAssignToCollections = true,
+                    canEdit = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    isIconLoadingDisabled = false,
+                    relatedLocations = persistentListOf(
+                        VaultItemLocation.Organization("mockOrganizationName"),
+                        VaultItemLocation.Collection("mockName-1"),
+                        VaultItemLocation.Folder("mockName-1"),
+                    ),
+                )
+            } returns viewState
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_USER_ACCOUNT.copy(
+                        organizations = listOf(
+                            Organization(
+                                id = "mockOrganizationId",
+                                name = "mockOrganizationName",
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.OWNER,
+                                keyConnectorUrl = null,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableCollectionsStateFlow.value = DataState.Loaded(
+                listOf(createMockCollectionView(number = 1)),
+            )
+            mutableFoldersStateFlow.value = DataState.Loaded(
+                listOf(createMockFolderView(number = 1)),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = viewState),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        @Suppress("MaxLineLength")
+        fun `on VaultDataReceive with Loaded and nonnull true permission data should update the ViewState with cipher permissions`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
+            } returns true
+            every { mockCipherView.organizationId } returns "mockOrganizationId"
+            every { mockCipherView.collectionIds } returns listOf("mockId-1")
+            every { mockCipherView.folderId } returns "mockId-1"
+            every { mockCipherView.permissions } returns createMockSdkCipherPermissions()
+            every {
+                mockCipherView.toViewState(
+                    previousState = null,
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                    canDelete = true,
+                    canRestore = true,
                     canAssignToCollections = true,
                     canEdit = true,
                     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,

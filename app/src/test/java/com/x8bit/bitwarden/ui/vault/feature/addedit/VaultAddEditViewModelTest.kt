@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createEditExceptPasswordsCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createManageCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createViewExceptPasswordsCollectionView
@@ -1152,10 +1153,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             val mockProviderCreateCredentialRequest: ProviderCreateCredentialRequest =
-            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
-                every { callingAppInfo } returns mockk(relaxed = true)
-                every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
-            }
+                mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+                    every { callingAppInfo } returns mockk(relaxed = true)
+                    every { callingRequest } returns mockk<CreatePasswordRequest>(relaxed = true)
+                }
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -1307,6 +1308,152 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
                 assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
+            }
+        }
+
+    @Test
+    fun `in edit mode, canDelete should be false when cipher permission is false`() =
+        runTest {
+            val cipherView = createMockCipherView(1)
+                .copy(
+                    permissions = createMockSdkCipherPermissions(
+                        delete = false,
+                        restore = false,
+                    ),
+                )
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = cipherView,
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                    notes = "mockNotes-1",
+                    canDelete = false,
+                ),
+            )
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
+            } returns true
+
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = false,
+                    canAssignToCollections = true,
+                )
+            } returns stateWithName.viewState
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherView = cipherView,
+                    collectionViewList = listOf(
+                        createEditCollectionView(number = 1),
+                    ),
+                ),
+            )
+
+            createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            verify {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = false,
+                    canAssignToCollections = true,
+                )
+            }
+        }
+
+    @Test
+    fun `in edit mode, canDelete should be true when cipher permission is true`() =
+        runTest {
+            val cipherView = createMockCipherView(1)
+                .copy(
+                    permissions = createMockSdkCipherPermissions(
+                        delete = true,
+                        restore = false,
+                    ),
+                )
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = cipherView,
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                    notes = "mockNotes-1",
+                    canDelete = true,
+                ),
+            )
+            every {
+                featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
+            } returns true
+
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
+            } returns stateWithName.viewState
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                data = createVaultData(
+                    cipherView = cipherView,
+                    collectionViewList = listOf(
+                        createEditCollectionView(number = 1),
+                    ),
+                ),
+            )
+
+            createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                    vaultItemCipherType = VaultItemCipherType.LOGIN,
+                ),
+            )
+
+            verify {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    totpData = null,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                    canDelete = true,
+                    canAssignToCollections = true,
+                )
             }
         }
 
