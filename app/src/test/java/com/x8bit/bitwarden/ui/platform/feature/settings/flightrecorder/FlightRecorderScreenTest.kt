@@ -121,7 +121,7 @@ class FlightRecorderScreenTest : BaseComposeTest() {
     fun `on NavigateToHelpCenter event should launch intent for help center`() {
         mutableEventFlow.tryEmit(FlightRecorderEvent.NavigateToHelpCenter)
         verify(exactly = 1) {
-            intentManager.launchUri(uri = "https://bitwarden.com/help".toUri())
+            intentManager.launchUri(uri = "https://bitwarden.com/help/flight-recorder".toUri())
         }
     }
 }
