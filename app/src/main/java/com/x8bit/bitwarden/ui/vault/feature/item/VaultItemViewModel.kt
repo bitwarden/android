@@ -146,7 +146,8 @@ class VaultItemViewModel @Inject constructor(
                         val canRestore = if (restrictCipherItemDeletionEnabled &&
                             cipherView?.permissions?.restore != null
                         ) {
-                            cipherView.permissions?.restore == true
+                            cipherView.permissions?.restore == true &&
+                                cipherView.deletedDate != null
                         } else {
                             canDelete && cipherView?.deletedDate != null
                         }
