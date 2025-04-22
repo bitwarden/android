@@ -3536,6 +3536,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 featureFlagManager.getFeatureFlag(FlagKey.RestrictCipherItemDeletion)
             } returns true
             every { mockCipherView.organizationId } returns "mockOrganizationId"
+            every { mockCipherView.deletedDate } returns Instant.MIN
             every { mockCipherView.collectionIds } returns listOf("mockId-1")
             every { mockCipherView.folderId } returns "mockId-1"
             every { mockCipherView.permissions } returns createMockSdkCipherPermissions()
