@@ -18,12 +18,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
@@ -50,7 +50,9 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberBitwardenNavController(
+        name = "VaultUnlockedNavBarScreen",
+    ),
     onNavigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
