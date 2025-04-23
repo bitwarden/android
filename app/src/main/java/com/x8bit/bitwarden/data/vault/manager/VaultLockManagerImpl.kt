@@ -9,6 +9,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -58,7 +59,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.Clock
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -88,7 +88,7 @@ class VaultLockManagerImpl(
      * This [Map] tracks all active timeout [Job]s that are running and their associated data using
      * the user ID as the key.
      */
-    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = ConcurrentHashMap()
+    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = concurrentMapOf()
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
