@@ -7,9 +7,7 @@ import okhttp3.Request
 import org.junit.Assert.assertThrows
 import org.junit.Test
 import java.io.IOException
-import javax.inject.Singleton
 
-@Singleton
 class AuthTokenInterceptorTest {
     private val mockAuthTokenProvider = mockk<AuthTokenProvider> {
         every { getActiveAccessTokenOrNull() } returns null

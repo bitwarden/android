@@ -1,16 +1,20 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
+package com.bitwarden.network.retrofit
 
+import com.bitwarden.network.authenticator.RefreshAuthenticator
 import com.bitwarden.network.interceptor.AuthTokenInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.NetworkResult
 import com.bitwarden.network.ssl.CertificateProvider
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
+import io.mockk.MockKMatcherScope
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.slot
 import io.mockk.unmockkConstructor
+import io.mockk.verify
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import okhttp3.Authenticator
@@ -266,6 +270,32 @@ class RetrofitsTest {
             assertFalse(isEventsInterceptorCalled)
         }
 
+    @Test
+    fun `createStaticRetrofit should set sslSocketFactory when certificateProvider is not null`() =
+        runTest {
+            mockkConstructor(OkHttpClient.Builder::class)
+            mockBuilder<OkHttpClient.Builder> {
+                it.addInterceptor(baseUrlInterceptors.apiInterceptor)
+            }
+            every {
+                anyConstructed<OkHttpClient.Builder>().sslSocketFactory(any(), any())
+            } returns mockk(relaxed = true)
+            val retrofits = RetrofitsImpl(
+                authTokenInterceptor = authTokenInterceptor,
+                baseUrlInterceptors = baseUrlInterceptors,
+                headersInterceptor = headersInterceptors,
+                refreshAuthenticator = refreshAuthenticator,
+                certificateProvider = certificateProvider,
+                json = json,
+            )
+
+            retrofits.createStaticRetrofit()
+
+            verify(exactly = 1) {
+                anyConstructed<OkHttpClient.Builder>().sslSocketFactory(any(), any())
+            }
+        }
+
     private fun Retrofit.createMockRetrofit(): Retrofit =
         this
             .newBuilder()
@@ -299,5 +329,33 @@ private fun Interceptor.mockIntercept(isCalledCallback: () -> Unit) {
         isCalledCallback()
         val chain = chainSlot.captured
         chain.proceed(chain.request())
+    }
+}
+
+/**
+ * Helper method for mocking pipeline operations within the builder pattern. This saves a lot of
+ * boiler plate. In order to use this, the builder's constructor must be mockked.
+ *
+ * Example:
+ * ```
+ *     // Setup
+ *     mockkConstructor(FillResponse.Builder::class)
+ *     mockBuilder<FillResponse.Builder> { it.setIgnoredIds() }
+ *     every { anyConstructed<FillResponse.Builder>().build() } returns mockk()
+ *
+ *     // Test
+ *     ...
+ *
+ *     // Verify
+ *     verify(exactly = 1) {
+ *         anyConstructed<FillResponse.Builder>().setIgnoredIds()
+ *         anyConstructed<FillResponse.Builder>().build()
+ *     }
+ *     unmockkConstructor(FillResponse.Builder::class)
+ * ```
+ */
+inline fun <reified T : Any> mockBuilder(crossinline block: MockKMatcherScope.(T) -> T) {
+    every { block(anyConstructed<T>()) } answers {
+        this.self as T
     }
 }
