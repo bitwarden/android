@@ -33,12 +33,8 @@ class Fido2CredentialStoreImpl(
                 ?: throw IllegalStateException("Sync failed.")
         }
         val activeCipherIds = vaultRepository.ciphersStateFlow.value.data
-            ?.filter {
-                it.isActiveWithFido2Credentials
-            }
-            ?.map {
-                it.id
-            }
+            ?.filter { it.isActiveWithFido2Credentials }
+            ?.map { it.id }
             ?: emptyList()
 
         return vaultRepository.ciphersListViewStateFlow.value.data
