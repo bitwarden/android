@@ -259,8 +259,10 @@ object PlatformManagerModule {
     @Singleton
     fun provideNetworkConnectionManager(
         application: Application,
+        dispatcherManager: DispatcherManager,
     ): NetworkConnectionManager = NetworkConnectionManagerImpl(
         context = application.applicationContext,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
