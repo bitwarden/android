@@ -606,40 +606,6 @@ class VaultSdkSourceTest {
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `Cipher decryptCipherListToCipherListView should call SDK and return a Result with correct data`() =
-        runBlocking {
-            val userId = "userId"
-            val mockCipher1 = mockk<Cipher>()
-            val mockCipher2 = mockk<Cipher>()
-            val cipherViewList1 = mockk<CipherListView>()
-            val cipherViewList2 = mockk<CipherListView>()
-            coEvery {
-                clientCiphers.decryptList(
-                    ciphers = listOf(
-                        mockCipher1,
-                        mockCipher2,
-                    ),
-                )
-            } returns listOf(cipherViewList1, cipherViewList2)
-            val result = vaultSdkSource.decryptCipherListToCipherListView(
-                userId = userId,
-                cipherList = listOf(mockCipher1, mockCipher2),
-            )
-            assertEquals(
-                listOf(cipherViewList1, cipherViewList2).asSuccess(),
-                result,
-            )
-            coVerify(exactly = 1) {
-                clientCiphers.decryptList(ciphers = listOf(mockCipher1, mockCipher2))
-                // It's important that we only fetch the client once
-                sdkClientManager.getOrCreateClient(userId = userId)
-                client.vault()
-                clientVault.ciphers()
-            }
-        }
-
-    @Test
     fun `decryptCollection should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
             val userId = "userId"

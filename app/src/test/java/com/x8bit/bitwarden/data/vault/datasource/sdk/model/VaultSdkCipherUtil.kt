@@ -83,8 +83,10 @@ fun createMockSdkPasswordHistory(number: Int, clock: Clock): PasswordHistory =
 /**
  * Create a mock [CipherPermissions] with a given [delete] and [restore] permissions.
  */
-@Suppress("MaxLineLength")
-fun createMockSdkCipherPermissions(delete: Boolean = true, restore: Boolean = true): CipherPermissions =
+fun createMockSdkCipherPermissions(
+    delete: Boolean = true,
+    restore: Boolean = true,
+): CipherPermissions =
     CipherPermissions(
         delete = delete,
         restore = restore,

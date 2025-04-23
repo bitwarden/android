@@ -299,17 +299,6 @@ class VaultSdkSourceImpl(
             }
         }
 
-    override suspend fun decryptCipherListToCipherListView(
-        userId: String,
-        cipherList: List<Cipher>,
-    ): Result<List<CipherListView>> =
-        runCatchingWithLogs {
-            val ciphers = getClient(userId = userId).vault().ciphers()
-            withContext(context = dispatcherManager.default) {
-                ciphers.decryptList(ciphers = cipherList)
-            }
-        }
-
     override suspend fun decryptCollection(
         userId: String,
         collection: Collection,

@@ -267,6 +267,15 @@ class VaultRepositoryImpl(
             }
             .launchIn(unconfinedScope)
 
+        mutableCiphersListViewStateFlow
+            .observeWhenSubscribedAndUnlocked(
+                userStateFlow = authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
+                observeVaultDiskCiphersToCipherListView(activeUserId)
+            }
+            .launchIn(unconfinedScope)
+
         // Setup domains MutableStateFlow
         mutableDomainsStateFlow
             .observeWhenSubscribedAndLoggedIn(
@@ -1087,7 +1096,7 @@ class VaultRepositoryImpl(
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
-                    .decryptCipherListToCipherListView(
+                    .decryptCipherListCollection(
                         userId = userId,
                         cipherList = it.toEncryptedSdkCipherList(),
                     )
