@@ -1092,7 +1092,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CipherListView>>> =
         vaultDiskSource
             .getCiphers(userId = userId)
-            .onStart { mutableCiphersStateFlow.updateToPendingOrLoading() }
+            .onStart { mutableCiphersListViewStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
