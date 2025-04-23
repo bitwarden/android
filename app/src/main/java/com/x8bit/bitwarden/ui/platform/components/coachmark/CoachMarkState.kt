@@ -8,10 +8,10 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.geometry.Rect
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightState
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.math.max
 import kotlin.math.min
 
@@ -33,7 +33,7 @@ open class CoachMarkState<T : Enum<T>>(
     initialCoachMarkHighlight: T? = null,
     isCoachMarkVisible: Boolean = false,
 ) {
-    private val highlights: MutableMap<T, CoachMarkHighlightState<T>?> = ConcurrentHashMap()
+    private val highlights: MutableMap<T, CoachMarkHighlightState<T>?> = concurrentMapOf()
     private val mutableCurrentHighlight = mutableStateOf(initialCoachMarkHighlight)
     val currentHighlight: State<T?> = mutableCurrentHighlight
     private val mutableCurrentHighlightBounds = mutableStateOf(Rect.Zero)
