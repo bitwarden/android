@@ -1256,4 +1256,6 @@ Do you want to switch to this account?</string>
   <string name="flight_recorder_banner_title">Flight recorder on</string>
   <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
   <string name="go_to_settings">Go to settings</string>
+  <string name="all_logs_deleted">All logs deleted</string>
+  <string name="log_deleted">Log deleted</string>
 </resources>
