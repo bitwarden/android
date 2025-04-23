@@ -12,7 +12,6 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_AUTO_FILL_AS_ROOT_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_COMPLETE_ROUTE
@@ -44,6 +43,7 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
@@ -72,7 +72,7 @@ import java.util.concurrent.atomic.AtomicReference
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberBitwardenNavController(name = "RootNavScreen"),
     onSplashScreenRemoved: () -> Unit = {},
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
