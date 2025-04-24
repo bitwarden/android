@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.lifecycle.SavedStateHandle
@@ -20,7 +22,6 @@ const val VAULT_UNLOCK_ROUTE: String = "$VAULT_UNLOCK_ROUTE_PREFIX/{$VAULT_UNLOC
 /**
  * Class to retrieve vault unlock arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class VaultUnlockArgs(
     val unlockType: UnlockType,
 ) {

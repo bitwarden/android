@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
 import androidx.lifecycle.SavedStateHandle
@@ -25,7 +27,6 @@ private const val TWO_FACTOR_LOGIN_ROUTE =
 /**
  * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class TwoFactorLoginArgs(
     val emailAddress: String,
     val password: String?,

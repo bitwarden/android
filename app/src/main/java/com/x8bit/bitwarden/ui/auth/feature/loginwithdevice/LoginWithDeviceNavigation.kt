@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
@@ -19,7 +21,6 @@ private const val LOGIN_WITH_DEVICE_ROUTE =
 /**
  * Class to retrieve login with device arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class LoginWithDeviceArgs(
     val emailAddress: String,
     val loginType: LoginWithDeviceType,

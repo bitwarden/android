@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
@@ -23,7 +25,6 @@ const val SETUP_AUTO_FILL_AS_ROOT_ROUTE =
 /**
  * Arguments for the [SetupAutoFillScreen] using [SavedStateHandle].
  */
-@OmitFromCoverage
 data class SetupAutoFillScreenArgs(val isInitialSetup: Boolean) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         isInitialSetup = requireNotNull(savedStateHandle[SETUP_AUTO_FILL_NAV_ARG]),

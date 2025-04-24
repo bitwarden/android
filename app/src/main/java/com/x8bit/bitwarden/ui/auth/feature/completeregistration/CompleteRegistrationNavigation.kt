@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.lifecycle.SavedStateHandle
@@ -19,7 +21,6 @@ private const val COMPLETE_REGISTRATION_ROUTE =
 /**
  * Class to retrieve complete registration arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class CompleteRegistrationArgs(
     val emailAddress: String,
     val verificationToken: String,
