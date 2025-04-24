@@ -29,5 +29,6 @@
     <string name="enable_chrome_autofill">Enable chrome autofill</string>
     <string name="enable_error_reporting_dialog">Enable error reporting dialog</string>
     <string name="enable_flight_recorder">Enable flight recorder</string>
+    <string name="enable_pre_auth_settings">Enabled pre-auth settings</string>
     <!-- /Debug Menu -->
 </resources>

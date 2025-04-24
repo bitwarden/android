@@ -22,6 +22,7 @@ fun NavGraphBuilder.landingDestination(
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
+    onNavigateToPreAuthSettings: () -> Unit,
 ) {
     composableWithStayTransitions(
         route = LANDING_ROUTE,
@@ -31,6 +32,7 @@ fun NavGraphBuilder.landingDestination(
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,
             onNavigateToStartRegistration = onNavigateToStartRegistration,
+            onNavigateToPreAuthSettings = onNavigateToPreAuthSettings,
         )
     }
 }

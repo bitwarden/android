@@ -233,7 +233,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
                 onNavigateToAboutScreen = {
                     navController.navigateToSettingsGraphRoot()
-                    navController.navigateToAbout()
+                    navController.navigateToAbout(isPreAuth = false)
                 },
             )
             sendGraph(
