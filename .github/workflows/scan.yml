@@ -3,9 +3,10 @@ name: Scan Pull Requests
 on:
   workflow_dispatch:
   pull_request:
-    - main
-    - rc
-    - hotfix-rc
+    branches:
+      - main
+      - rc
+      - hotfix-rc
   pull_request_target:
     types: [opened, synchronize]
     branches:
