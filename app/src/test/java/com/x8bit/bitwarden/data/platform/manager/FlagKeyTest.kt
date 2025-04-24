@@ -81,6 +81,10 @@ class FlagKeyTest {
             FlagKey.FlightRecorder.keyName,
             "enable-pm-flight-recorder",
         )
+        assertEquals(
+            FlagKey.PreAuthSettings.keyName,
+            "enable-pm-prelogin-settings",
+        )
     }
 
     @Test
@@ -104,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.defaultValue
             },
@@ -140,6 +145,7 @@ class FlagKeyTest {
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.isRemotelyConfigured
             },

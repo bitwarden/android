@@ -26,16 +26,20 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays the settings screen.
  */
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    onNavigateBack: () -> Unit,
     onNavigateToAbout: () -> Unit,
     onNavigateToAccountSecurity: () -> Unit,
     onNavigateToAppearance: () -> Unit,
@@ -47,6 +51,7 @@ fun SettingsScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
+            SettingsEvent.NavigateBack -> onNavigateBack()
             SettingsEvent.NavigateAbout -> onNavigateToAbout()
             SettingsEvent.NavigateAccountSecurity -> onNavigateToAccountSecurity.invoke()
             SettingsEvent.NavigateAppearance -> onNavigateToAppearance()
@@ -63,6 +68,17 @@ fun SettingsScreen(
             BitwardenMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
                 scrollBehavior = scrollBehavior,
+                navigationIcon = if (state.shouldShowCloseButton) {
+                    NavigationIcon(
+                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIconContentDescription = stringResource(id = R.string.close),
+                        onNavigationIconClick = remember(viewModel) {
+                            { viewModel.trySendAction(SettingsAction.CloseClick) }
+                        },
+                    )
+                } else {
+                    null
+                },
             )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -73,7 +89,7 @@ fun SettingsScreen(
                 .verticalScroll(state = rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(height = 12.dp))
-            Settings.entries.forEachIndexed { index, settingEntry ->
+            state.settingRows.forEachIndexed { index, settingEntry ->
                 BitwardenPushRow(
                     text = settingEntry.text(),
                     onClick = remember(viewModel) {
@@ -83,7 +99,7 @@ fun SettingsScreen(
                         key = settingEntry,
                         defaultValue = 0,
                     ),
-                    cardStyle = Settings.entries.toListItemCardStyle(
+                    cardStyle = state.settingRows.toListItemCardStyle(
                         index = index,
                         // Start padding, plus icon, plus spacing between text.
                         dividerPadding = 48.dp,

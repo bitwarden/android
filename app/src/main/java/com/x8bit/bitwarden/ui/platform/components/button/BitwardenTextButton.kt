@@ -24,7 +24,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick The callback when the button is clicked.
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
- * @param labelTextColor The color for the label text.
+ * @param contentColor The color for the label text and icon.
  */
 @Composable
 fun BitwardenTextButton(
@@ -33,7 +33,7 @@ fun BitwardenTextButton(
     modifier: Modifier = Modifier,
     icon: Painter? = null,
     isEnabled: Boolean = true,
-    labelTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
+    contentColor: Color = BitwardenTheme.colorScheme.outlineButton.foreground,
 ) {
     TextButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
@@ -45,12 +45,13 @@ fun BitwardenTextButton(
             start = 12.dp,
             end = if (icon == null) 12.dp else 16.dp,
         ),
-        colors = bitwardenTextButtonColors(contentColor = labelTextColor),
+        colors = bitwardenTextButtonColors(contentColor = contentColor),
     ) {
         icon?.let {
             Icon(
                 painter = icon,
                 contentDescription = null,
+                tint = contentColor,
             )
             Spacer(modifier = Modifier.width(8.dp))
         }

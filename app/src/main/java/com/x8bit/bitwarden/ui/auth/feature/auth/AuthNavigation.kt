@@ -41,6 +41,8 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.startRegistrationDe
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.welcomeDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToPreAuthSettings
+import com.x8bit.bitwarden.ui.platform.feature.settings.preAuthSettingsDestinations
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
@@ -126,6 +128,7 @@ fun NavGraphBuilder.authGraph(
                 navController.navigateToEnvironment()
             },
             onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
+            onNavigateToPreAuthSettings = { navController.navigateToPreAuthSettings() },
         )
         welcomeDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
@@ -209,6 +212,7 @@ fun NavGraphBuilder.authGraph(
                 )
             },
         )
+        preAuthSettingsDestinations(navController = navController)
     }
 }
 

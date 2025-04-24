@@ -9,12 +9,14 @@ import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
@@ -165,9 +167,42 @@ class OtherScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isPopup()))
     }
+
+    @Test
+    fun `should display correct items according to state`() {
+        mutableStateFlow.update { it.copy(isPreAuth = false) }
+        composeTestRule.onRoot().printToLog(tag = "BRIAN")
+        composeTestRule
+            .onNodeWithText(text = "Allow sync on refresh")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Sync now")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Clear clipboard", useUnmergedTree = true)
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Allow screen capture")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(isPreAuth = true) }
+        composeTestRule
+            .onNodeWithText(text = "Allow sync on refresh")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Sync now")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Clear clipboard", useUnmergedTree = true)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Allow screen capture")
+            .assertExists()
+    }
 }
 
 private val DEFAULT_STATE = OtherState(
+    isPreAuth = false,
     allowScreenCapture = false,
     allowSyncOnRefresh = false,
     clearClipboardFrequency = ClearClipboardFrequency.NEVER,
