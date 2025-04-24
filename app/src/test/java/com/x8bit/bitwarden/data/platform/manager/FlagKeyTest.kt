@@ -42,10 +42,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.AppReviewPrompt.keyName,
-            "app-review-prompt",
-        )
-        assertEquals(
             FlagKey.CipherKeyEncryption.keyName,
             "cipher-key-encryption",
         )
@@ -95,7 +91,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
@@ -122,7 +117,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,

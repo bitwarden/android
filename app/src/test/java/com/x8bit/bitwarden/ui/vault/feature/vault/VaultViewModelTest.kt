@@ -1955,9 +1955,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when LifecycleResumed action is handled, PromptForAppReview is sent if flag is enabled and criteria is met`() =
+    fun `when LifecycleResumed action is handled, PromptForAppReview is sent if criteria is met`() =
         runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
             every { reviewPromptManager.shouldPromptForAppReview() } returns true
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
@@ -1968,22 +1967,8 @@ class VaultViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if flag is disabled`() =
-        runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns false
-            every { reviewPromptManager.shouldPromptForAppReview() } returns true
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(VaultAction.LifecycleResumed)
-                expectNoEvents()
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `when LifecycleResumed action is handled, PromptForAppReview is not sent if criteria is not met`() =
         runTest {
-            every { featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt) } returns true
             every { reviewPromptManager.shouldPromptForAppReview() } returns false
             val viewModel = createViewModel()
             viewModel.eventFlow.test {

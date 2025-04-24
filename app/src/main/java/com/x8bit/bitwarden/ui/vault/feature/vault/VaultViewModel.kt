@@ -254,9 +254,7 @@ class VaultViewModel @Inject constructor(
             else -> Unit
         }
 
-        val shouldShowPrompt = reviewPromptManager.shouldPromptForAppReview() &&
-            featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt)
-        if (shouldShowPrompt) {
+        if (reviewPromptManager.shouldPromptForAppReview()) {
             sendEvent(VaultEvent.PromptForAppReview)
         }
     }
