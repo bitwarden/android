@@ -403,7 +403,7 @@ class AuthRepositoryImpl(
             .onEach {
                 val userId = activeUserId ?: return@onEach
                 refreshAccessTokenSynchronously(userId)
-                vaultRepository.sync()
+                vaultRepository.sync(forced = true)
             }
             // This requires the ioScope to ensure that refreshAccessTokenSynchronously
             // happens on a background thread
