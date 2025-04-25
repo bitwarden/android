@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
@@ -37,7 +36,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * [BitwardenSelectionRow].
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenSelectionDialog(
     title: String,

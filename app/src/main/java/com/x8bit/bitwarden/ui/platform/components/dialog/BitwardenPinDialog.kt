@@ -8,7 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -28,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onDismissRequest called when the user attempts to dismiss the dialog (for example by
  * tapping outside of it).
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenPinDialog(
     onConfirmClick: (pin: String) -> Unit,

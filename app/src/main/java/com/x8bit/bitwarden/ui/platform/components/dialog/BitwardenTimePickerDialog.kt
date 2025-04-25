@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -129,7 +128,6 @@ private fun bitwardenTimePickerColors(): TimePickerColors = TimePickerColors(
     timeSelectorUnselectedContentColor = BitwardenTheme.colorScheme.text.primary,
 )
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TimePickerDialog(
     onDismissRequest: () -> Unit,

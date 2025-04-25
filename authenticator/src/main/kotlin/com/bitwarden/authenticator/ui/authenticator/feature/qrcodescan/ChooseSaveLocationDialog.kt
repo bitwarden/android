@@ -3,7 +3,6 @@ package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,7 +40,6 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogWidth
  * parameter is true if the user checked "Save option as default".
  */
 @Composable
-@OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 fun ChooseSaveLocationDialog(
     onSaveHereClick: (Boolean) -> Unit,
