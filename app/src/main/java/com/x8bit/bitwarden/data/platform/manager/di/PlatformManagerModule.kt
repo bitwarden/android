@@ -6,6 +6,7 @@ import androidx.core.content.getSystemService
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.manager.DispatcherManagerImpl
 import com.bitwarden.data.repository.ServerConfigRepository
+import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.service.EventService
 import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
@@ -244,14 +244,14 @@ object PlatformManagerModule {
         authRepository: AuthRepository,
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
-        refreshAuthenticator: RefreshAuthenticator,
+        bitwardenServiceClient: BitwardenServiceClient,
         dispatcherManager: DispatcherManager,
     ): NetworkConfigManager =
         NetworkConfigManagerImpl(
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
-            refreshAuthenticator = refreshAuthenticator,
+            bitwardenServiceClient = bitwardenServiceClient,
             dispatcherManager = dispatcherManager,
         )
 

@@ -1,7 +1,6 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.ssl
+package com.bitwarden.network.ssl
 
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.bitwarden.network.ssl.CertificateProvider
 import java.net.Socket
 import java.security.Principal
 import java.security.PrivateKey

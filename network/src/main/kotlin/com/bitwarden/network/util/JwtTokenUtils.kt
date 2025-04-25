@@ -1,7 +1,6 @@
-package com.x8bit.bitwarden.data.auth.repository.util
+package com.bitwarden.network.util
 
-import com.bitwarden.network.util.base64UrlDecodeOrNull
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
+import com.bitwarden.network.model.JwtTokenDataJson
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 
