@@ -14,5 +14,6 @@ sealed class RemovePasswordResult {
      */
     data class Error(
         val error: Throwable,
+        val message: String? = null,
     ) : RemovePasswordResult()
 }

@@ -40,6 +40,7 @@ import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
+import com.bitwarden.sdk.BitwardenException
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -1007,7 +1008,12 @@ class AuthRepositoryImpl(
                 settingsRepository.setDefaultsIfNecessary(userId = userId)
             }
             .fold(
-                onFailure = { RemovePasswordResult.Error(error = it) },
+                onFailure = {
+                    RemovePasswordResult.Error(
+                        error = it,
+                        message = (it as? BitwardenException)?.message,
+                    )
+                },
                 onSuccess = { RemovePasswordResult.Success },
             )
     }

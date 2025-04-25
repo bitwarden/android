@@ -59,6 +59,7 @@ import com.bitwarden.network.service.DevicesService
 import com.bitwarden.network.service.HaveIBeenPwnedService
 import com.bitwarden.network.service.IdentityService
 import com.bitwarden.network.service.OrganizationService
+import com.bitwarden.sdk.BitwardenException
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
@@ -4723,6 +4724,51 @@ class AuthRepositoryTest {
             val result = repository.removePassword(masterPassword = PASSWORD)
 
             assertEquals(RemovePasswordResult.Error(error = error), result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `removePassword with migrateExistingUserToKeyConnector error should return error with message if is BitwardenException`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val url = "www.example.com"
+            val error = mockk<BitwardenException> {
+                every { message } returns "Wrong Password"
+            }
+            val organizations = listOf(
+                mockk<SyncResponseJson.Profile.Organization> {
+                    every { id } returns "orgId"
+                    every { name } returns "orgName"
+                    every { permissions } returns mockk {
+                        every { shouldManageResetPassword } returns false
+                    }
+                    every { shouldUseKeyConnector } returns true
+                    every { type } returns OrganizationType.USER
+                    every { keyConnectorUrl } returns url
+                },
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            coEvery {
+                keyConnectorManager.migrateExistingUserToKeyConnector(
+                    userId = USER_ID_1,
+                    url = url,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = PROFILE_1.email,
+                    masterPassword = PASSWORD,
+                    kdf = PROFILE_1.toSdkParams(),
+                )
+            } returns error.asFailure()
+
+            val result = repository.removePassword(masterPassword = PASSWORD)
+
+            assertEquals(
+                RemovePasswordResult.Error(
+                    error = error,
+                    message = "Wrong Password",
+                ),
+                result,
+            )
         }
 
     @Suppress("MaxLineLength")
