@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -31,7 +30,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onDismissRequest A lambda that is invoked when the user has requested to dismiss the
  * dialog, whether by tapping "OK", tapping outside the dialog, or pressing the back button.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun BitwardenBasicDialog(

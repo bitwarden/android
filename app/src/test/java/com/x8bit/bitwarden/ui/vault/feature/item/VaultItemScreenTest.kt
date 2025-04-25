@@ -28,10 +28,10 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -2546,14 +2546,14 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in identity state, on copy identity name field click should send CopyIdentityNameClick`() {
-
-        val identityName = "the identity name"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll(identityName)
+        // We scroll to username, which is right after the identity to avoid clicking on the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Username")
 
         composeTestRule
-            .onNodeWithTag("IdentityCopyNameButton")
-            .performSemanticsAction(SemanticsActions.OnClick)
+            .onNodeWithContentDescriptionAfterScroll("Copy identity name")
+            .assertIsDisplayed()
+            .performClick()
 
         verify {
             viewModel.trySendAction(VaultItemAction.ItemType.Identity.CopyIdentityNameClick)
@@ -2567,7 +2567,8 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithTextAfterScroll("Company")
 
         composeTestRule
-            .onNodeWithTag("IdentityCopyUsernameButton")
+            .onNodeWithContentDescriptionAfterScroll("Copy username")
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -2580,10 +2581,10 @@ class VaultItemScreenTest : BaseComposeTest() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
 
         // Scroll to ssn so we can see the Copy company button but not have it covered by the FAB
-        composeTestRule.onNodeWithTextAfterScroll("the SSN")
-
+        composeTestRule.onNodeWithTextAfterScroll("Social Security number")
         composeTestRule
-            .onNodeWithTag("IdentityCopyCompanyButton")
+            .onNodeWithContentDescriptionAfterScroll("Copy company")
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -2593,12 +2594,15 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in identity state, on copy SSN field click should send CopySsnClick`() {
-        val ssn = "the SSN"
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll(ssn)
+        // Scroll to passport so we can see the Copy ssn button but not have it covered by the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Passport number")
 
         composeTestRule
-            .onNodeWithTag("IdentityCopySsnButton")
+            .onNodeWithTextAfterScroll("Social Security number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Copy social security number"))
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -2639,8 +2643,9 @@ class VaultItemScreenTest : BaseComposeTest() {
     @Test
     fun `in identity state, on copy email field click should send CopyEmailClick`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_IDENTITY_VIEW_STATE) }
-        composeTestRule.onFirstNodeWithTextAfterScroll("the address")
 
+        // Scroll to passport so we can see the Copy email button but not have it covered by the FAB
+        composeTestRule.onNodeWithTextAfterScroll("Phone")
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll("Copy email")
             .performClick()
@@ -2718,10 +2723,14 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertTextEquals("Number", "••••••")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Copy number")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Copy number"))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Show")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Show"))
             .assertIsDisplayed()
             .performClick()
 
@@ -2754,10 +2763,14 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertTextEquals("Number", "••••••")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Copy number")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Copy number"))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Show")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Show"))
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -2778,10 +2791,14 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertTextEquals("Number", "number")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Copy number")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Copy number"))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithContentDescription("Hide")
+            .onNodeWithTextAfterScroll("Number")
+            .onChildren()
+            .filterToOne(hasContentDescription("Hide"))
             .assertIsDisplayed()
     }
 
@@ -3043,7 +3060,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         // We scroll to notes, which is right after the fingerprint to avoid clicking on the FAB
         composeTestRule.onNodeWithTextAfterScroll("Notes")
         composeTestRule
-            .onNodeWithContentDescription("Copy fingerprint")
+            .onNodeWithContentDescriptionAfterScroll("Copy fingerprint")
             .performClick()
 
         verify(exactly = 1) {
