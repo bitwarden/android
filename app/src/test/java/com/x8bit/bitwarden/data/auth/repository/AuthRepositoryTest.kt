@@ -6272,20 +6272,20 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `syncOrgKeysFlow emissions should refresh access token and sync`() {
+    fun `syncOrgKeysFlow emissions should refresh access token and force sync`() {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = ACCOUNT_TOKENS_1)
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
 
-        coEvery { vaultRepository.sync() } just runs
+        coEvery { vaultRepository.sync(forced = true) } just runs
 
         mutableSyncOrgKeysFlow.tryEmit(Unit)
 
         coVerify(exactly = 1) {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-            vaultRepository.sync()
+            vaultRepository.sync(forced = true)
         }
     }
 
