@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
@@ -23,7 +25,6 @@ private const val SETUP_UNLOCK_ROUTE = "$SETUP_UNLOCK_PREFIX/{$SETUP_UNLOCK_INIT
 /**
  * Class to retrieve setup unlock arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class SetupUnlockArgs(
     val isInitialSetup: Boolean,
 ) {

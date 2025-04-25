@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval
 
 import androidx.lifecycle.SavedStateHandle
@@ -16,7 +18,6 @@ private const val LOGIN_APPROVAL_ROUTE = "$LOGIN_APPROVAL_PREFIX?$FINGERPRINT={$
 /**
  * Class to retrieve login approval arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class LoginApprovalArgs(val fingerprint: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         fingerprint = savedStateHandle.get<String>(FINGERPRINT),

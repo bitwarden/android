@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
@@ -41,7 +43,6 @@ const val SETTINGS_ROUTE: String = "settings"
 /**
  * Class to retrieve settings arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class SettingsArgs(val isPreAuth: Boolean) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         isPreAuth = requireNotNull(savedStateHandle[IS_PRE_AUTH]),

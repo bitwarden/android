@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.lifecycle.SavedStateHandle
@@ -26,7 +28,6 @@ private const val VAULT_ITEM_ROUTE = "$VAULT_ITEM_PREFIX/{$VAULT_ITEM_ID}" +
 /**
  * Class to retrieve vault item arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class VaultItemArgs(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,

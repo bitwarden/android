@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.createaccount
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val CREATE_ACCOUNT_ROUTE = "create_account"

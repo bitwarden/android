@@ -1,7 +1,10 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
 private const val DEBUG_MENU = "debug_menu"

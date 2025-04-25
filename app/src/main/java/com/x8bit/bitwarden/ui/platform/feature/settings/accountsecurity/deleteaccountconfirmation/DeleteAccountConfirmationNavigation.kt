@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val DELETE_ACCOUNT_CONFIRMATION_ROUTE = "delete_account_confirmation"
