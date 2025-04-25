@@ -169,6 +169,67 @@ class FlightRecorderManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `dismissFlightRecorderBanner should set the isDismissBanner flag to true and update SettingsDiskSource`() {
+        val data = FlightRecorderDataSet(
+            data = setOf(
+                FlightRecorderDataSet.FlightRecorderData(
+                    id = "40",
+                    fileName = "fileName1",
+                    startTimeMs = FIXED_CLOCK_TIME,
+                    durationMs = 60L,
+                    isActive = true,
+                    expirationTimeMs = null,
+                    isBannerDismissed = false,
+                ),
+                FlightRecorderDataSet.FlightRecorderData(
+                    id = "50",
+                    fileName = "fileName2",
+                    startTimeMs = FIXED_CLOCK_TIME,
+                    durationMs = 60L,
+                    isActive = false,
+                    expirationTimeMs = FIXED_CLOCK
+                        .instant()
+                        .plus(30, ChronoUnit.DAYS)
+                        .toEpochMilli(),
+                    isBannerDismissed = false,
+                ),
+            ),
+        )
+        fakeSettingsDiskSource.flightRecorderData = data
+
+        flightRecorder.dismissFlightRecorderBanner()
+
+        fakeSettingsDiskSource.assertFlightRecorderData(
+            expected = FlightRecorderDataSet(
+                data = setOf(
+                    FlightRecorderDataSet.FlightRecorderData(
+                        id = "40",
+                        fileName = "fileName1",
+                        startTimeMs = FIXED_CLOCK_TIME,
+                        durationMs = 60L,
+                        isActive = true,
+                        expirationTimeMs = null,
+                        isBannerDismissed = true,
+                    ),
+                    FlightRecorderDataSet.FlightRecorderData(
+                        id = "50",
+                        fileName = "fileName2",
+                        startTimeMs = FIXED_CLOCK_TIME,
+                        durationMs = 60L,
+                        isActive = false,
+                        expirationTimeMs = FIXED_CLOCK
+                            .instant()
+                            .plus(30, ChronoUnit.DAYS)
+                            .toEpochMilli(),
+                        isBannerDismissed = true,
+                    ),
+                ),
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `endFlightRecorder should set the active log to inactive and update the SettingsDiskSource`() {
         val data = FlightRecorderDataSet(
             data = setOf(

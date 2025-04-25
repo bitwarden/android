@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -28,6 +29,15 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
+    }
+
+    @Test
+    fun `on CloseClick should emit NavigateBack`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SettingsAction.CloseClick)
+            assertEquals(SettingsEvent.NavigateBack, awaitItem())
+        }
     }
 
     @Test
@@ -91,7 +101,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         mutableVaultBadgeCountFlow.update { 3 }
         val viewModel = createViewModel()
         assertEquals(
-            SettingsState(
+            DEFAULT_STATE.copy(
                 autoFillCount = 1,
                 securityCount = 2,
                 vaultCount = 3,
@@ -105,7 +115,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(
-                SettingsState(
+                DEFAULT_STATE.copy(
                     autoFillCount = 0,
                     securityCount = 0,
                     vaultCount = 0,
@@ -115,7 +125,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
             mutableSecurityBadgeCountFlow.update { 2 }
             assertEquals(
-                SettingsState(
+                DEFAULT_STATE.copy(
                     autoFillCount = 0,
                     securityCount = 2,
                     vaultCount = 0,
@@ -125,7 +135,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
             mutableAutofillBadgeCountFlow.update { 1 }
             assertEquals(
-                SettingsState(
+                DEFAULT_STATE.copy(
                     autoFillCount = 1,
                     securityCount = 2,
                     vaultCount = 0,
@@ -135,7 +145,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
 
             mutableVaultBadgeCountFlow.update { 3 }
             assertEquals(
-                SettingsState(
+                DEFAULT_STATE.copy(
                     autoFillCount = 1,
                     securityCount = 2,
                     vaultCount = 3,
@@ -161,8 +171,18 @@ class SettingsViewModelTest : BaseViewModelTest() {
             verify { specialCircumstanceManager.specialCircumstance = null }
         }
 
-    private fun createViewModel() = SettingsViewModel(
+    private fun createViewModel(isPreAuth: Boolean = false) = SettingsViewModel(
         firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
+        savedStateHandle = SavedStateHandle().apply {
+            set("isPreAuth", isPreAuth)
+        },
     )
 }
+
+private val DEFAULT_STATE = SettingsState(
+    isPreAuth = false,
+    autoFillCount = 0,
+    securityCount = 0,
+    vaultCount = 0,
+)

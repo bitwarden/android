@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import androidx.lifecycle.SavedStateHandle
@@ -25,7 +27,6 @@ private const val PASSWORD_HISTORY_ROUTE: String =
 /**
  * Class to retrieve password history arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class PasswordHistoryArgs(
     val passwordHistoryMode: GeneratorPasswordHistoryMode,
 ) {

@@ -50,6 +50,8 @@ class LandingScreenTest : BaseComposeTest() {
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
     private var onNavigateToStartRegistrationCalled = false
+    private var onNavigateToPreAuthSettingsCalled = false
+
     private val mutableEventFlow = bufferedMutableSharedFlow<LandingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LandingViewModel>(relaxed = true) {
@@ -68,6 +70,7 @@ class LandingScreenTest : BaseComposeTest() {
                 },
                 onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
                 onNavigateToStartRegistration = { onNavigateToStartRegistrationCalled = true },
+                onNavigateToPreAuthSettings = { onNavigateToPreAuthSettingsCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -271,6 +274,30 @@ class LandingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `app settings button should be displayed according to state`() {
+        mutableStateFlow.update { it.copy(showSettingsButton = false) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .assertDoesNotExist()
+        mutableStateFlow.update { it.copy(showSettingsButton = true) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .assertExists()
+    }
+
+    @Test
+    fun `on app settings click should send AppSettingsClick action`() {
+        mutableStateFlow.update { it.copy(showSettingsButton = true) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(LandingAction.AppSettingsClick)
+        }
+    }
+
+    @Test
     fun `email address should change according to state`() {
         composeTestRule
             .onNodeWithText("Email address")
@@ -312,6 +339,18 @@ class LandingScreenTest : BaseComposeTest() {
     fun `NavigateToEnvironment event should call onNavigateToEvent`() {
         mutableEventFlow.tryEmit(LandingEvent.NavigateToEnvironment)
         assertTrue(onNavigateToEnvironmentCalled)
+    }
+
+    @Test
+    fun `NavigateToStartRegistration event should call onNavigateToStartRegistration`() {
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToStartRegistration)
+        assertTrue(onNavigateToStartRegistrationCalled)
+    }
+
+    @Test
+    fun `NavigateToSettings event should call onNavigateToPreAuthSettings`() {
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToSettings)
+        assertTrue(onNavigateToPreAuthSettingsCalled)
     }
 
     @Test
@@ -478,4 +517,5 @@ private val DEFAULT_STATE = LandingState(
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
+    showSettingsButton = false,
 )

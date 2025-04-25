@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -12,6 +13,8 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,8 +28,10 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
+        isPreAuth = SettingsArgs(savedStateHandle = savedStateHandle).isPreAuth,
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
@@ -59,10 +64,15 @@ class SettingsViewModel @Inject constructor(
     }
 
     override fun handleAction(action: SettingsAction): Unit = when (action) {
+        is SettingsAction.CloseClick -> handleCloseClick()
         is SettingsAction.SettingsClick -> handleAccountSecurityClick(action)
         is SettingsAction.Internal.SettingsNotificationCountUpdate -> {
             handleSettingsNotificationCountUpdate(action)
         }
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(SettingsEvent.NavigateBack)
     }
 
     private fun handleSettingsNotificationCountUpdate(
@@ -110,10 +120,26 @@ class SettingsViewModel @Inject constructor(
  * Models the state of the settings screen.
  */
 data class SettingsState(
+    private val isPreAuth: Boolean,
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
 ) {
+    val shouldShowCloseButton: Boolean = isPreAuth
+    val settingRows: ImmutableList<Settings> = Settings
+        .entries
+        .filter { setting ->
+            when (setting) {
+                Settings.ACCOUNT_SECURITY -> !isPreAuth
+                Settings.AUTO_FILL -> !isPreAuth
+                Settings.VAULT -> !isPreAuth
+                Settings.APPEARANCE -> true
+                Settings.OTHER -> true
+                Settings.ABOUT -> true
+            }
+        }
+        .toImmutableList()
+
     val notificationBadgeCountMap: Map<Settings, Int> = mapOf(
         Settings.ACCOUNT_SECURITY to securityCount,
         Settings.AUTO_FILL to autoFillCount,
@@ -125,6 +151,11 @@ data class SettingsState(
  * Models events for the settings screen.
  */
 sealed class SettingsEvent {
+    /**
+     * Navigates back. This is only possible prior to login.
+     */
+    data object NavigateBack : SettingsEvent()
+
     /**
      * Navigate to the about screen.
      */
@@ -165,6 +196,11 @@ sealed class SettingsEvent {
  * Models actions for the settings screen.
  */
 sealed class SettingsAction {
+    /**
+     * THe user has clicked the close button
+     */
+    data object CloseClick : SettingsAction()
+
     /**
      * User clicked a settings row.
      */

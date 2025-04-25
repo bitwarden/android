@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import androidx.lifecycle.SavedStateHandle
@@ -17,7 +19,6 @@ private const val IMPORT_LOGINS_ROUTE = "$IMPORT_LOGINS_PREFIX/{$IMPORT_LOGINS_N
 /**
  * Arguments for the [ImportLoginsScreen] using [SavedStateHandle].
  */
-@OmitFromCoverage
 data class ImportLoginsArgs(val snackBarRelay: SnackbarRelay) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         snackBarRelay = SnackbarRelay.valueOf(

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.theme
 
 import android.app.Activity
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +16,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -111,7 +111,7 @@ fun BitwardenTheme(
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme
             window.setBackgroundDrawable(
-                ColorDrawable(bitwardenColorScheme.background.primary.value.toInt()),
+                bitwardenColorScheme.background.primary.value.toInt().toDrawable(),
             )
         }
     }

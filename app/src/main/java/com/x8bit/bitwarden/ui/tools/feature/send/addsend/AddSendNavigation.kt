@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.lifecycle.SavedStateHandle
@@ -23,7 +25,6 @@ const val ADD_SEND_ROUTE: String =
 /**
  * Class to retrieve send add & edit arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class AddSendArgs(
     val sendAddType: AddSendType,
 ) {

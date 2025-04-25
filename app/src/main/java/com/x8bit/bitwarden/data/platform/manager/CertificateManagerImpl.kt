@@ -1,17 +1,24 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import android.content.Context
+import android.net.Uri
 import android.security.KeyChain
 import android.security.KeyChainException
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import timber.log.Timber
 import java.io.IOException
+import java.net.Socket
 import java.security.KeyStore
 import java.security.KeyStoreException
 import java.security.NoSuchAlgorithmException
+import java.security.Principal
 import java.security.PrivateKey
 import java.security.UnrecoverableKeyException
 import java.security.cert.Certificate
@@ -19,13 +26,43 @@ import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 
 /**
- * Default implementation of [KeyManager].
+ * Default implementation of [CertificateManager].
  */
-class KeyManagerImpl(
+class CertificateManagerImpl(
     private val context: Context,
-) : KeyManager {
+    private val environmentRepository: EnvironmentRepository,
+) : CertificateManager {
+
+    /*
+        This property must only be accessed from a background thread. Accessing this property from
+        the main thread will result in an exception being thrown when retrieving the mutual TLS
+        certificate from [KeyManager].
+     */
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    @get:WorkerThread
+    internal val mutualTlsCertificate: MutualTlsCertificate?
+        get() {
+            val keyUri = getKeyUri()
+                ?: return null
+
+            val host = MutualTlsKeyHost
+                .entries
+                .find { it.name == keyUri.authority }
+                ?: return null
+
+            val alias = keyUri.path
+                ?.trim('/')
+                ?.takeUnless { it.isEmpty() }
+                ?: return null
+
+            return getMutualTlsCertificateChain(
+                alias = alias,
+                host = host,
+            )
+        }
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
+    @WorkerThread
     override fun importMutualTlsCertificate(
         key: ByteArray,
         alias: String,
@@ -40,10 +77,10 @@ class KeyManagerImpl(
                         .getInstance(KEYSTORE_TYPE_PKCS12)
                         .also { it.load(stream, password.toCharArray()) }
                 } catch (e: KeyStoreException) {
-                    Timber.Forest.e(e, "Failed to load PKCS12 bytes")
+                    Timber.e(e, "Failed to load PKCS12 bytes")
                     return ImportPrivateKeyResult.Error.UnsupportedKey(throwable = e)
                 } catch (e: IOException) {
-                    Timber.Forest.e(e, "Format or password error while loading PKCS12 bytes")
+                    Timber.e(e, "Format or password error while loading PKCS12 bytes")
                     return when (e.cause) {
                         is UnrecoverableKeyException -> {
                             ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = e)
@@ -54,10 +91,10 @@ class KeyManagerImpl(
                         }
                     }
                 } catch (e: CertificateException) {
-                    Timber.Forest.e(e, "Unable to load certificate chain")
+                    Timber.e(e, "Unable to load certificate chain")
                     return ImportPrivateKeyResult.Error.InvalidCertificateChain(throwable = e)
                 } catch (e: NoSuchAlgorithmException) {
-                    Timber.Forest.e(e, "Cryptographic algorithm not supported")
+                    Timber.e(e, "Cryptographic algorithm not supported")
                     return ImportPrivateKeyResult.Error.UnsupportedKey(throwable = e)
                 }
             }
@@ -79,7 +116,7 @@ class KeyManagerImpl(
                     throwable = MissingPropertyException("Private Key"),
                 )
         } catch (e: UnrecoverableKeyException) {
-            Timber.Forest.e(e, "Failed to get private key")
+            Timber.e(e, "Failed to get private key")
             return ImportPrivateKeyResult.Error.UnrecoverableKey(throwable = e)
         }
 
@@ -100,7 +137,7 @@ class KeyManagerImpl(
             try {
                 setKeyEntry(alias, privateKey, null, certChain)
             } catch (e: KeyStoreException) {
-                Timber.Forest.e(e, "Failed to import key into Android KeyStore")
+                Timber.e(e, "Failed to import key into Android KeyStore")
                 return ImportPrivateKeyResult.Error.KeyStoreOperationFailed(throwable = e)
             }
         }
@@ -117,7 +154,36 @@ class KeyManagerImpl(
         }
     }
 
-    override fun getMutualTlsCertificateChain(
+    @WorkerThread
+    override fun chooseClientAlias(
+        keyType: Array<out String>?,
+        issuers: Array<out Principal>?,
+        socket: Socket?,
+    ): String = mutualTlsCertificate?.alias.orEmpty()
+
+    @WorkerThread
+    override fun getCertificateChain(
+        alias: String?,
+    ): Array<X509Certificate>? = mutualTlsCertificate?.certificateChain?.toTypedArray()
+
+    @WorkerThread
+    override fun getPrivateKey(alias: String?): PrivateKey? = mutualTlsCertificate?.privateKey
+
+    private fun getKeyUri(): Uri? = environmentRepository
+        .environment
+        .environmentUrlData
+        .keyUri
+        ?.toUri()
+
+    private fun removeKeyFromAndroidKeyStore(alias: String) {
+        try {
+            androidKeyStore.deleteEntry(alias)
+        } catch (e: KeyStoreException) {
+            Timber.e(e, "Failed to remove key from Android KeyStore")
+        }
+    }
+
+    private fun getMutualTlsCertificateChain(
         alias: String,
         host: MutualTlsKeyHost,
     ): MutualTlsCertificate? = when (host) {
@@ -126,19 +192,11 @@ class KeyManagerImpl(
         MutualTlsKeyHost.KEY_CHAIN -> getSystemKeySpecOrNull(alias)
     }
 
-    private fun removeKeyFromAndroidKeyStore(alias: String) {
-        try {
-            androidKeyStore.deleteEntry(alias)
-        } catch (e: KeyStoreException) {
-            Timber.Forest.e(e, "Failed to remove key from Android KeyStore")
-        }
-    }
-
     private fun getSystemKeySpecOrNull(alias: String): MutualTlsCertificate? {
         val systemPrivateKey = try {
             KeyChain.getPrivateKey(context, alias)
         } catch (e: KeyChainException) {
-            Timber.Forest.e(e, "Requested alias not found in system KeyChain")
+            Timber.e(e, "Requested alias not found in system KeyChain")
             null
         }
             ?: return null
@@ -146,7 +204,7 @@ class KeyManagerImpl(
         val systemCertificateChain = try {
             KeyChain.getCertificateChain(context, alias)
         } catch (e: KeyChainException) {
-            Timber.Forest.e(e, "Unable to access certificate chain for provided alias")
+            Timber.e(e, "Unable to access certificate chain for provided alias")
             null
         }
             ?: return null
@@ -173,16 +231,13 @@ class KeyManagerImpl(
                     privateKey = privateKeyRef,
                 )
             } catch (e: KeyStoreException) {
-                Timber.Forest.e(e, "Failed to load Android KeyStore")
+                Timber.e(e, "Failed to load Android KeyStore")
                 null
             } catch (e: UnrecoverableKeyException) {
-                Timber.Forest.e(e, "Failed to load client certificate from Android KeyStore")
+                Timber.e(e, "Failed to load client certificate from Android KeyStore")
                 null
             } catch (e: NoSuchAlgorithmException) {
-                Timber.Forest.e(e, "Key cannot be recovered. Password may be incorrect.")
-                null
-            } catch (e: NoSuchAlgorithmException) {
-                Timber.Forest.e(e, "Algorithm not supported")
+                Timber.e(e, "Key cannot be recovered. Password may be incorrect.")
                 null
             }
         }

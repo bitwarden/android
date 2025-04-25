@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
 import androidx.lifecycle.SavedStateHandle
@@ -22,7 +24,6 @@ fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOpti
 /**
  * Class to retrieve check email arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class CheckEmailArgs(
     val emailAddress: String,
 ) {

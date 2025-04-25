@@ -67,7 +67,7 @@ object PlatformDiskModule {
                 klass = PlatformDatabase::class.java,
                 name = "platform_database",
             )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = false)
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .build()

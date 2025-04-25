@@ -1,14 +1,13 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import androidx.annotation.WorkerThread
-import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsCertificate
+import com.bitwarden.network.ssl.CertificateProvider
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.MutualTlsKeyHost
+import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 
 /**
  * Primary access point for disk information related to key data.
  */
-interface KeyManager {
+interface CertificateManager : CertificateProvider {
 
     /**
      * Import a private key into the application KeyStore.
@@ -27,15 +26,4 @@ interface KeyManager {
      * Removes the mTLS key from storage.
      */
     fun removeMutualTlsKey(alias: String, host: MutualTlsKeyHost)
-
-    /**
-     * Retrieve the certificate chain for the selected mTLS key.
-     *
-     * Must be called from a background thread to prevent possible deadlocks on the main thread.
-     */
-    @WorkerThread
-    fun getMutualTlsCertificateChain(
-        alias: String,
-        host: MutualTlsKeyHost,
-    ): MutualTlsCertificate?
 }

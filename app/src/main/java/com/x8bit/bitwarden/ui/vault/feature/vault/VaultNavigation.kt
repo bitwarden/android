@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
@@ -26,6 +29,7 @@ fun NavGraphBuilder.vaultDestination(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
 ) {
     composableWithRootPushTransitions(
         route = VAULT_ROUTE,
@@ -40,6 +44,7 @@ fun NavGraphBuilder.vaultDestination(
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToAboutScreen = onNavigateToAboutScreen,
         )
     }
 }

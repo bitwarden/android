@@ -34,7 +34,6 @@ sealed class FlagKey<out T : Any> {
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                AppReviewPrompt,
                 IgnoreEnvironmentCheck,
                 MutualTls,
                 SingleTapPasskeyCreation,
@@ -44,6 +43,8 @@ sealed class FlagKey<out T : Any> {
                 ChromeAutofill,
                 MobileErrorReporting,
                 FlightRecorder,
+                RestrictCipherItemDeletion,
+                PreAuthSettings,
             )
         }
     }
@@ -141,15 +142,6 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the App Review Prompt feature.
-     */
-    data object AppReviewPrompt : FlagKey<Boolean>() {
-        override val keyName: String = "app-review-prompt"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
-    }
-
-    /**
      * Data object holding the feature flag key for the Cipher Key Encryption feature.
      */
     data object CipherKeyEncryption : FlagKey<Boolean>() {
@@ -230,6 +222,15 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "pm-15493-restrict-item-deletion-to-can-manage-permission"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the settings menu before login.
+     */
+    data object PreAuthSettings : FlagKey<Boolean>() {
+        override val keyName: String = "enable-pm-prelogin-settings"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
     }
 
     //region Dummy keys for testing

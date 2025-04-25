@@ -1,7 +1,10 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * The route for the root navigation screen.

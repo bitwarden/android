@@ -74,6 +74,7 @@ class RecordedLogsViewModel @Inject constructor(
 
     private fun handleDeleteAllClick() {
         settingsRepository.deleteAllLogs()
+        sendEvent(RecordedLogsEvent.ShowSnackbar(text = R.string.all_logs_deleted.asText()))
     }
 
     private fun handleDeleteClick(action: RecordedLogsAction.DeleteClick) {
@@ -81,7 +82,10 @@ class RecordedLogsViewModel @Inject constructor(
             .flightRecorderData
             .data
             .find { it.id == action.item.id }
-            ?.let { settingsRepository.deleteLog(data = it) }
+            ?.let {
+                settingsRepository.deleteLog(data = it)
+                sendEvent(RecordedLogsEvent.ShowSnackbar(text = R.string.log_deleted.asText()))
+            }
     }
 
     private fun handleShareAllClick() {
@@ -256,6 +260,11 @@ sealed class RecordedLogsEvent {
      * Shares the logs are the given [uri].
      */
     data class ShareLog(val uri: String) : RecordedLogsEvent()
+
+    /**
+     * Displays a snackbar with the given [text].
+     */
+    data class ShowSnackbar(val text: Text) : RecordedLogsEvent()
 }
 
 /**

@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import androidx.lifecycle.SavedStateHandle
@@ -42,7 +44,6 @@ private const val SEND_ITEM_LISTING_ROUTE: String =
 /**
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class VaultItemListingArgs(
     val vaultItemListingType: VaultItemListingType,
 ) {

@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.ui.platform.components.fab
 
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.FloatingActionButton
@@ -19,7 +21,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param painter The icon for the button.
  * @param contentDescription The content description for the button.
  * @param modifier The [Modifier] to be applied to the button.
- * @param windowInsets The insets to be applied to this composable.
+ * @param windowInsets The insets to be applied to this composable. By default this will account for
+ * the insets that are on the sides and bottom of the screen (Display Cutout and Navigation bars).
  */
 @Composable
 fun BitwardenFloatingActionButton(
@@ -27,7 +30,9 @@ fun BitwardenFloatingActionButton(
     painter: Painter,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    windowInsets: WindowInsets = WindowInsets.displayCutout.union(WindowInsets.navigationBars),
+    windowInsets: WindowInsets = WindowInsets.displayCutout
+        .only(sides = WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
+        .union(insets = WindowInsets.navigationBars),
 ) {
     FloatingActionButton(
         containerColor = BitwardenTheme.colorScheme.filledButton.background,

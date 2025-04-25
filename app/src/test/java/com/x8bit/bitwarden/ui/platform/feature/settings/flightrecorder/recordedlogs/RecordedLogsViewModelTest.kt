@@ -257,16 +257,22 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on DeleteAllClick action should call deleteAllLogs`() {
+    fun `on DeleteAllClick action should call deleteAllLogs`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
+            assertEquals(
+                RecordedLogsEvent.ShowSnackbar(R.string.all_logs_deleted.asText()),
+                awaitItem(),
+            )
+        }
         verify(exactly = 1) {
             settingsRepository.deleteAllLogs()
         }
     }
 
     @Test
-    fun `on DeleteClick action should call deleteLog`() {
+    fun `on DeleteClick action should call deleteLog`() = runTest {
         val data = mockk<FlightRecorderDataSet.FlightRecorderData> {
             every { id } returns "50"
         }
@@ -276,7 +282,13 @@ class RecordedLogsViewModelTest : BaseViewModelTest() {
         val item = mockk<RecordedLogsState.DisplayItem> {
             every { id } returns "50"
         }
-        viewModel.trySendAction(RecordedLogsAction.DeleteClick(item = item))
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(RecordedLogsAction.DeleteClick(item = item))
+            assertEquals(
+                RecordedLogsEvent.ShowSnackbar(R.string.log_deleted.asText()),
+                awaitItem(),
+            )
+        }
         verify(exactly = 1) {
             settingsRepository.deleteLog(data = data)
         }

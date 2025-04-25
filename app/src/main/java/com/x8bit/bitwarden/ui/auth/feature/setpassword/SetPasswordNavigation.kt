@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.setpassword
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 const val SET_PASSWORD_ROUTE: String = "set_password"
 

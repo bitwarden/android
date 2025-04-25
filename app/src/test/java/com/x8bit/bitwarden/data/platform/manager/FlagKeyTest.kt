@@ -42,10 +42,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.AppReviewPrompt.keyName,
-            "app-review-prompt",
-        )
-        assertEquals(
             FlagKey.CipherKeyEncryption.keyName,
             "cipher-key-encryption",
         )
@@ -85,6 +81,10 @@ class FlagKeyTest {
             FlagKey.RestrictCipherItemDeletion.keyName,
             "pm-15493-restrict-item-deletion-to-can-manage-permission",
         )
+        assertEquals(
+            FlagKey.PreAuthSettings.keyName,
+            "enable-pm-prelogin-settings",
+        )
     }
 
     @Test
@@ -99,7 +99,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
@@ -109,6 +108,7 @@ class FlagKeyTest {
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.defaultValue
             },
@@ -127,7 +127,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
@@ -146,6 +145,7 @@ class FlagKeyTest {
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.isRemotelyConfigured
             },

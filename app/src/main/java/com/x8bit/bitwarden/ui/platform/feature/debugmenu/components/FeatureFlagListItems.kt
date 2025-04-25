@@ -33,7 +33,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.VerifiedSsoDomainEndpoint,
     FlagKey.CredentialExchangeProtocolImport,
     FlagKey.CredentialExchangeProtocolExport,
-    FlagKey.AppReviewPrompt,
     FlagKey.CipherKeyEncryption,
     FlagKey.IgnoreEnvironmentCheck,
     FlagKey.MutualTls,
@@ -45,6 +44,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.MobileErrorReporting,
     FlagKey.FlightRecorder,
     FlagKey.RestrictCipherItemDeletion,
+    FlagKey.PreAuthSettings,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -94,7 +94,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.VerifiedSsoDomainEndpoint -> stringResource(R.string.verified_sso_domain_verified)
     FlagKey.CredentialExchangeProtocolImport -> stringResource(R.string.cxp_import)
     FlagKey.CredentialExchangeProtocolExport -> stringResource(R.string.cxp_export)
-    FlagKey.AppReviewPrompt -> stringResource(R.string.app_review_prompt)
     FlagKey.CipherKeyEncryption -> stringResource(R.string.cipher_key_encryption)
     FlagKey.IgnoreEnvironmentCheck -> stringResource(R.string.ignore_environment_check)
     FlagKey.MutualTls -> stringResource(R.string.mutual_tls)
@@ -109,4 +108,5 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
     FlagKey.FlightRecorder -> stringResource(R.string.enable_flight_recorder)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
+    FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
 }

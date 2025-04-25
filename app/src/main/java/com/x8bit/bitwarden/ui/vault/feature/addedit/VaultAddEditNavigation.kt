@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.lifecycle.SavedStateHandle
@@ -40,7 +42,6 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 /**
  * Class to retrieve vault add & edit arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class VaultAddEditArgs(
     val vaultAddEditType: VaultAddEditType,
     val vaultItemCipherType: VaultItemCipherType,

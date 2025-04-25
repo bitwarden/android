@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
 import androidx.lifecycle.SavedStateHandle
@@ -25,7 +27,6 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 /**
  * Class to retrieve folder add & edit arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class FolderAddEditArgs(
     val folderAddEditType: FolderAddEditType,
     val parentFolderName: String?,

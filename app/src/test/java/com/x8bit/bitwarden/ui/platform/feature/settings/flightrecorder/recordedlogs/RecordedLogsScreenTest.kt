@@ -82,6 +82,16 @@ class RecordedLogsScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on ShowSnackbar event should display the snackbar with the correct message`() {
+        val message = "Test Snackbar Message"
+        mutableEventFlow.tryEmit(RecordedLogsEvent.ShowSnackbar(text = message.asText()))
+
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `on ShareLog event should invoke shareFile on intent manager`() {
         val stringUri = "/logs"
         mutableEventFlow.tryEmit(RecordedLogsEvent.ShareLog(uri = stringUri))
@@ -159,6 +169,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
             .onAllNodesWithText(text = "Yes")
             .filterToOne(matcher = hasAnyAncestor(isDialog()))
             .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteAllClick)
@@ -274,6 +285,7 @@ class RecordedLogsScreenTest : BaseComposeTest() {
             .onAllNodesWithText(text = "Yes")
             .filterToOne(matcher = hasAnyAncestor(isDialog()))
             .performClick()
+        composeTestRule.assertNoDialogExists()
 
         verify(exactly = 1) {
             viewModel.trySendAction(RecordedLogsAction.DeleteClick(displayItem))

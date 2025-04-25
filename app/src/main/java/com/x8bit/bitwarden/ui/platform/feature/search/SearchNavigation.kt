@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.lifecycle.SavedStateHandle
@@ -36,7 +38,6 @@ private const val SEARCH_ROUTE: String = "$SEARCH_ROUTE_PREFIX/{$SEARCH_TYPE}/{$
 /**
  * Class to retrieve search arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class SearchArgs(
     val type: SearchType,
 ) {

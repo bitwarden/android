@@ -19,6 +19,11 @@ interface FlightRecorderManager {
     val flightRecorderDataFlow: StateFlow<FlightRecorderDataSet>
 
     /**
+     * Dismisses the all flight recorder banners.
+     */
+    fun dismissFlightRecorderBanner()
+
+    /**
      * Starts the flight recorder for the given [duration].
      */
     fun startFlightRecorder(duration: FlightRecorderDuration)

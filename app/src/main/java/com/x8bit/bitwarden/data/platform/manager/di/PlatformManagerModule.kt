@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -33,8 +35,6 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.KeyManager
-import com.x8bit.bitwarden.data.platform.manager.KeyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
@@ -259,8 +259,10 @@ object PlatformManagerModule {
     @Singleton
     fun provideNetworkConnectionManager(
         application: Application,
+        dispatcherManager: DispatcherManager,
     ): NetworkConnectionManager = NetworkConnectionManagerImpl(
         context = application.applicationContext,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
@@ -376,7 +378,11 @@ object PlatformManagerModule {
     @Singleton
     fun provideKeyManager(
         @ApplicationContext context: Context,
-    ): KeyManager = KeyManagerImpl(context = context)
+        environmentRepository: EnvironmentRepository,
+    ): CertificateManager = CertificateManagerImpl(
+        context = context,
+        environmentRepository = environmentRepository,
+    )
 
     @Provides
     @Singleton

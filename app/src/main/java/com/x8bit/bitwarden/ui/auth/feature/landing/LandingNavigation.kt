@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 
 const val LANDING_ROUTE: String = "landing"
@@ -22,6 +25,7 @@ fun NavGraphBuilder.landingDestination(
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
+    onNavigateToPreAuthSettings: () -> Unit,
 ) {
     composableWithStayTransitions(
         route = LANDING_ROUTE,
@@ -31,6 +35,7 @@ fun NavGraphBuilder.landingDestination(
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,
             onNavigateToStartRegistration = onNavigateToStartRegistration,
+            onNavigateToPreAuthSettings = onNavigateToPreAuthSettings,
         )
     }
 }

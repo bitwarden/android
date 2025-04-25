@@ -56,7 +56,7 @@ fun FlightRecorderScreen(
         when (event) {
             FlightRecorderEvent.NavigateBack -> onNavigateBack()
             FlightRecorderEvent.NavigateToHelpCenter -> {
-                intentManager.launchUri(uri = "https://bitwarden.com/help".toUri())
+                intentManager.launchUri(uri = "https://bitwarden.com/help/flight-recorder".toUri())
             }
         }
     }

@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -1186,7 +1187,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
         generatorRepository = generatorRepository,
-        networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
+        networkConnectionManager = FakeNetworkConnectionManager(
+            isNetworkConnected = isNetworkConnected,
+            networkConnection = NetworkConnection.Cellular,
+        ),
         savedStateHandle = savedStateHandle,
     )
         .also {

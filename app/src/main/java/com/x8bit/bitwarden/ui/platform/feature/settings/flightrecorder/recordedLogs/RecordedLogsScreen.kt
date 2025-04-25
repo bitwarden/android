@@ -46,6 +46,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -64,11 +67,18 @@ fun RecordedLogsScreen(
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel) { event ->
         when (event) {
             RecordedLogsEvent.NavigateBack -> onNavigateBack()
             is RecordedLogsEvent.ShareLog -> {
                 intentManager.shareFile(fileUri = event.uri.toUri())
+            }
+
+            is RecordedLogsEvent.ShowSnackbar -> {
+                snackbarHostState.showSnackbar(
+                    snackbarData = BitwardenSnackbarData(message = event.text),
+                )
             }
         }
     }
@@ -104,6 +114,7 @@ fun RecordedLogsScreen(
                 },
             )
         },
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) {
         when (val viewState = state.viewState) {
@@ -150,7 +161,10 @@ private fun RecordedLogsOverflowMenu(
             dismissButtonText = stringResource(id = R.string.cancel),
             onDismissRequest = { showDeletionDialog = false },
             onDismissClick = { showDeletionDialog = false },
-            onConfirmClick = onDeleteAllClick,
+            onConfirmClick = {
+                onDeleteAllClick()
+                showDeletionDialog = false
+            },
         )
     }
     BitwardenOverflowActionItem(
@@ -242,7 +256,10 @@ private fun LogRow(
             dismissButtonText = stringResource(id = R.string.cancel),
             onDismissRequest = { showDeletionDialog = false },
             onDismissClick = { showDeletionDialog = false },
-            onConfirmClick = { onDeleteItemClick(displayableItem) },
+            onConfirmClick = {
+                onDeleteItemClick(displayableItem)
+                showDeletionDialog = false
+            },
         )
     }
     Row(

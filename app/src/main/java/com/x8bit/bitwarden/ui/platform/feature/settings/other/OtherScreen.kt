@@ -52,7 +52,6 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * Displays the other screen.
  */
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OtherScreen(
@@ -100,36 +99,60 @@ fun OtherScreen(
             )
         },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            Spacer(modifier = Modifier.height(height = 12.dp))
+        OtherContent(
+            state = state,
+            onEnableSyncCheckChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
+            },
+            onSyncClick = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
+            },
+            onClipboardFrequencyChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
+            },
+            onScreenCaptureChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it)) }
+            },
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun OtherContent(
+    state: OtherState,
+    onEnableSyncCheckChange: (Boolean) -> Unit,
+    onSyncClick: () -> Unit,
+    onClipboardFrequencyChange: (ClearClipboardFrequency) -> Unit,
+    onScreenCaptureChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+    ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        if (!state.isPreAuth) {
             BitwardenSwitch(
                 label = stringResource(id = R.string.enable_sync_on_refresh),
                 supportingText = stringResource(id = R.string.enable_sync_on_refresh_description),
                 isChecked = state.allowSyncOnRefresh,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
-                },
+                onCheckedChange = onEnableSyncCheckChange,
                 cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("SyncOnRefreshSwitch")
+                    .testTag(tag = "SyncOnRefreshSwitch")
                     .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenOutlinedButton(
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
-                },
+                onClick = onSyncClick,
                 label = stringResource(id = R.string.sync_now),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("SyncNowButton")
+                    .testTag(tag = "SyncNowButton")
                     .standardHorizontalMargin(),
             )
 
@@ -138,7 +161,7 @@ fun OtherScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("LastSyncLabel")
+                    .testTag(tag = "LastSyncLabel")
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -161,31 +184,27 @@ fun OtherScreen(
 
             ClearClipboardFrequencyRow(
                 currentSelection = state.clearClipboardFrequency,
-                onFrequencySelection = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
-                },
+                onFrequencySelection = onClipboardFrequencyChange,
                 modifier = Modifier
-                    .testTag("ClearClipboardChooser")
+                    .testTag(tag = "ClearClipboardChooser")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
 
             Spacer(modifier = Modifier.height(height = 8.dp))
-
-            ScreenCaptureRow(
-                currentValue = state.allowScreenCapture,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it)) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("AllowScreenCaptureSwitch")
-                    .standardHorizontalMargin(),
-            )
-
-            Spacer(modifier = Modifier.height(height = 16.dp))
-            Spacer(modifier = Modifier.navigationBarsPadding())
         }
+
+        ScreenCaptureRow(
+            currentValue = state.allowScreenCapture,
+            onValueChange = onScreenCaptureChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(tag = "AllowScreenCaptureSwitch")
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 

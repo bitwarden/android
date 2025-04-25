@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.snackbar
 
+import android.os.Parcelable
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import com.bitwarden.ui.util.Text
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 /**
  * A custom state holder for [BitwardenSnackbarData] and manging a snackbar host with the
@@ -65,13 +67,14 @@ data class BitwardenSnackbarHostState(
  * @property key The unique key for the [BitwardenSnackbarData].
  */
 @Immutable
+@Parcelize
 data class BitwardenSnackbarData(
     val message: Text,
     val messageHeader: Text? = null,
     val actionLabel: Text? = null,
     val withDismissAction: Boolean = false,
-) {
-    val key: String = this.hashCode().toString()
+) : Parcelable {
+    val key: String get() = this.hashCode().toString()
 }
 
 /**

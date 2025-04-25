@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -23,7 +24,6 @@ import timber.log.Timber
 import java.time.Clock
 import java.time.temporal.ChronoUnit
 import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
 private const val EXPIRATION_DURATION_DAYS: Long = 30
 
@@ -40,7 +40,7 @@ internal class FlightRecorderManagerImpl(
     private val unconfinedScope = CoroutineScope(context = dispatcherManager.unconfined)
     private val ioScope = CoroutineScope(context = dispatcherManager.io)
     private var cancellationJob: Job = Job().apply { complete() }
-    private val expirationJobMap: ConcurrentHashMap<String, Job> = ConcurrentHashMap()
+    private val expirationJobMap: MutableMap<String, Job> = concurrentMapOf()
     private val flightRecorderTree = FlightRecorderTree()
 
     override val flightRecorderData: FlightRecorderDataSet
@@ -68,6 +68,13 @@ internal class FlightRecorderManagerImpl(
         context.registerReceiver(
             ScreenStateBroadcastReceiver(),
             IntentFilter(Intent.ACTION_SCREEN_ON),
+        )
+    }
+
+    override fun dismissFlightRecorderBanner() {
+        val originalData = flightRecorderData
+        settingsDiskSource.flightRecorderData = originalData.copy(
+            data = originalData.data.map { it.copy(isBannerDismissed = true) }.toSet(),
         )
     }
 

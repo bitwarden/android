@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -38,6 +39,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param scrollBehavior Defines the scrolling behavior of the app bar. It controls how the app bar
  * behaves in conjunction with scrolling content.
  * @param windowInsets The insets to be applied to this composable.
+ * @param navigationIcon Indicates how the navigation icon should be displayed.
  * @param dividerStyle Determines how the bottom divider should be displayed.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
@@ -51,6 +53,7 @@ fun BitwardenMediumTopAppBar(
     modifier: Modifier = Modifier,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
         .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
+    navigationIcon: NavigationIcon? = null,
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
@@ -59,6 +62,18 @@ fun BitwardenMediumTopAppBar(
         colors = bitwardenTopAppBarColors(),
         scrollBehavior = scrollBehavior,
         expandedHeight = 56.dp,
+        navigationIcon = {
+            navigationIcon?.let {
+                BitwardenStandardIconButton(
+                    painter = it.navigationIcon,
+                    contentDescription = it.navigationIconContentDescription,
+                    onClick = it.onNavigationIconClick,
+                    modifier = Modifier
+                        .testTag(tag = "CloseButton")
+                        .mirrorIfRtl(),
+                )
+            }
+        },
         title = {
             Text(
                 text = title,
