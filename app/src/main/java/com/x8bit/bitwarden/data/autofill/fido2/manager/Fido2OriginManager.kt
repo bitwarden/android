@@ -12,12 +12,10 @@ interface Fido2OriginManager {
      * Validates the origin of a calling app.
      *
      * @param callingAppInfo The calling app info.
-     * @param relyingPartyId The relying party ID.
      *
      * @return The result of the validation.
      */
     suspend fun validateOrigin(
         callingAppInfo: CallingAppInfo,
-        relyingPartyId: String,
     ): Fido2ValidateOriginResult
 }
