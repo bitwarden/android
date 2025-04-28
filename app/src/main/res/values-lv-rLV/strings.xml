@@ -620,6 +620,10 @@ Nolasīšana notiks automātiski.</string>
   <string name="deletion_date_info">Send tiks neatgriezeniski izdzēsts norādītajā datumā un laikā.</string>
   <string name="pending_delete">Gaida dzēšanu</string>
   <string name="expired">Beidzies izmantošanas laiks</string>
+  <string name="expires_at">Beigsies %s</string>
+  <string name="expires_tomorrow">Beigsies rīt</string>
+  <string name="expires_on">Beigsies %s</string>
+  <string name="stops_logging_on">Aptur žurnalēšanu %1$s %2$s</string>
   <string name="maximum_access_count">Lielākais pieļaujamais piekļuves reižu skaits</string>
   <string name="maximum_access_count_info">Ja iestatīts, lietotāji nevarēs piekļūt šim Send, kad tiks sasniegts lielākais pieļaujamais piekļūšanas reižu skaits.</string>
   <string name="maximum_access_count_reached">Sasniegts lielākais pieļaujamais piekļuves reižu skaits</string>
@@ -1235,4 +1239,24 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="flight_recorder_eight_hours">8 stundas</string>
   <string name="flight_recorder_twenty_four_hours">24 stundas</string>
   <string name="flight_recorder_one_week">1 nedēļa</string>
+  <string name="delete_all">Izdzēst visu</string>
+  <string name="share_all">Kopīgot visu</string>
+  <string name="unable_to_share">Nav iespējams kopīgot</string>
+  <string name="please_try_again_or_select_a_different_log">Lūgums mēģināt vēlreiz vai atlasīt citu žurnālu.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Žurnāla datne, mēģini kopīgot, tika noņemta.</string>
+  <string name="delete_log">Izdzēst žunālu</string>
+  <string name="do_you_really_want_to_delete_this_log">Vai tiešām izdzēst šo žurnālu?</string>
+  <string name="delete_logs">Izdzēst žurnālus</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Vai tiešām izdzēst visus ierakstītos žurnālus?</string>
+  <string name="confirm_key_connector_domain">Apstiprināt Key Connector domēnu</string>
+  <string name="key_connector_domain">Key Connector domēns:</string>
+  <string name="key_connector_organization">Apvienība:</string>
+  <string name="password_no_longer_required_confirm_domain">Galvenā parole nav nepieciešama turpmāk minētās apvienības dalībniekiem. Lūgums saskaņot zemāk esošo domēnu ar savas apvienības pārvaldītāju.</string>
+  <string name="please_confirm_domain_with_admin">Lūgums apstiprināt zemāk esošo domēnu ar savas apvienības pāŗvaldītāju.\n\nKey Connector domēns:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Melnā kaste ieslēgta</string>
+  <string name="flight_recorder_banner_message">Melnā kasta būs ieslēgta līdz %1$s plkst. %2$s. Jāatgriežas iestatījumos, lai to tagad izslēgtu.</string>
+  <string name="go_to_settings">Atvērt iestatījumus</string>
+  <string name="all_logs_deleted">Visi žurnāli izdzēsti</string>
+  <string name="log_deleted">Žurnāls izdzēsts</string>
+  <string name="app_settings">Lietotnes iestatījumi</string>
 </resources>

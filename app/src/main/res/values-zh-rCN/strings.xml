@@ -120,7 +120,7 @@
   <string name="extension_almost_done">就差一步！</string>
   <string name="extension_enable">激活 App 扩展</string>
   <string name="extension_in_safari">在 Safari 中，使用共享图标寻找 Bitwarden （提示：在菜单最下面一行的右边）。</string>
-  <string name="extension_instant_access">立即访问您的密码！</string>
+  <string name="extension_instant_access">即时访问您的密码！</string>
   <string name="extension_ready">您已经准备好登录了！</string>
   <string name="extension_setup">现在，您可以从 Safari、Chrome 以及其他支持的 App 中方便地访问您的登录了。</string>
   <string name="extension_setup2">在 Safari 和 Chrome 中，使用共享图标寻找 Bitwarden（提示：在菜单最下面一行的右边）。</string>
@@ -480,7 +480,7 @@
   <string name="unlock">解锁​​​​</string>
   <string name="unlock_vault">解锁密码库</string>
   <string name="thirty_minutes">30 分钟</string>
-  <string name="set_pin_description">您的 PIN 码必须至少包含 4 个字符。 如果您完全注销应用程序，您的 PIN 设置将被重置。</string>
+  <string name="set_pin_description">您的 PIN 码必须至少包含 4 个字符。您的 PIN 设置将在您完全注销应用程序时被重置。</string>
   <string name="logged_in_as_on">已在 %2$s 上以 %1$s 身份登录。</string>
   <string name="vault_locked_master_password">您的密码库已锁定，请验证您的主密码以继续。</string>
   <string name="vault_locked_pin">您的密码库已锁定。请验证您的 PIN 码以继续。</string>
@@ -620,6 +620,10 @@
   <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
   <string name="pending_delete">待删除</string>
   <string name="expired">已过期</string>
+  <string name="expires_at">于 %s 后过期</string>
+  <string name="expires_tomorrow">明天过期</string>
+  <string name="expires_on">于 %s 后过期</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">最大访问次数</string>
   <string name="maximum_access_count_info">设置后，当达到最大访问次数时用户将不再能够访问此 Send。</string>
   <string name="maximum_access_count_reached">已达最大访问次数</string>
@@ -929,7 +933,7 @@
   <string name="privacy_policy_description_long">在 bitwarden.com 上查看我们的隐私政策。</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">在网页 App 上探索您的 Bitwarden 账户的更多功能。</string>
   <string name="learn_about_organizations_description_long">Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站进一步了解。</string>
-  <string name="rate_app_description_long">帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</string>
+  <string name="rate_app_description_long">帮助他人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</string>
   <string name="default_dark_theme_description_long">当设备的深色模式启用时，选择要使用的深色主题。</string>
   <string name="created_xy">创建于 %1$s, %2$s</string>
   <string name="too_many_attempts">尝试次数过多</string>
@@ -957,7 +961,7 @@
   <string name="passwords">密码</string>
   <string name="unknown_account">未知账户</string>
   <string name="set_up_autofill">设置自动填充</string>
-  <string name="get_instant_access_to_your_passwords_and_passkeys">立即访问您的密码和通行密钥！</string>
+  <string name="get_instant_access_to_your_passwords_and_passkeys">即时访问您的密码和通行密钥！</string>
   <string name="set_up_auto_fill_description_long">要设置密码自动填充和通行密钥管理，请在 iOS 设置中将 Bitwarden 设置为您的首选提供程序。</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. 转到您设备的设置 &gt; 密码 &gt; 密码选项</string>
   <string name="second_dot_turn_on_auto_fill">2. 打开自动填充</string>
@@ -1235,4 +1239,24 @@
   <string name="flight_recorder_eight_hours">8 小时</string>
   <string name="flight_recorder_twenty_four_hours">24 小时</string>
   <string name="flight_recorder_one_week">1 周</string>
+  <string name="delete_all">删除所有</string>
+  <string name="share_all">分享所有</string>
+  <string name="unable_to_share">无法分享</string>
+  <string name="please_try_again_or_select_a_different_log">请重试或选择其他日志。</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">您尝试分享的日志文件已被移除。</string>
+  <string name="delete_log">删除日志</string>
+  <string name="do_you_really_want_to_delete_this_log">确定要删除此日志吗？</string>
+  <string name="delete_logs">删除日志</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">确定要删除所有记录的日志吗？</string>
+  <string name="confirm_key_connector_domain">确认 Key Connector 域名</string>
+  <string name="key_connector_domain">Key Connector 域名：</string>
+  <string name="key_connector_organization">组织：</string>
+  <string name="password_no_longer_required_confirm_domain">以下组织的成员不再需要主密码。请与您的组织管理员确认下面的域名。</string>
+  <string name="please_confirm_domain_with_admin">请与您的组织管理员确认下面的域名。\n\nKey Connector 域名：\n%1$s</string>
+  <string name="flight_recorder_banner_title">飞行记录开启</string>
+  <string name="flight_recorder_banner_message">即将激活飞行记录，持续到 %1$s 在 %2$s。现在返回设置可以停用。</string>
+  <string name="go_to_settings">转到设置</string>
+  <string name="all_logs_deleted">所有日志已删除</string>
+  <string name="log_deleted">日志已删除</string>
+  <string name="app_settings">App 设置</string>
 </resources>
