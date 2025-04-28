@@ -36,13 +36,6 @@ sealed class ImportPrivateKeyResult {
         ) : Error()
 
         /**
-         * Indicates that the specified alias is already in use.
-         */
-        data object DuplicateAlias : Error() {
-            override val throwable: Throwable? = null
-        }
-
-        /**
          * Indicates that an error occurred during the key store operation.
          */
         data class KeyStoreOperationFailed(

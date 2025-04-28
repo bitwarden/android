@@ -104,8 +104,9 @@ fun EnvironmentScreen(
                 title = stringResource(id = R.string.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
                 },
+                throwable = dialog.throwable,
             )
         }
 
@@ -145,10 +146,34 @@ fun EnvironmentScreen(
                 },
                 dismissButtonText = stringResource(R.string.cancel),
                 onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
                 },
                 onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
+                },
+            )
+        }
+
+        is EnvironmentState.DialogState.ConfirmOverwriteAlias -> {
+            BitwardenTwoButtonDialog(
+                title = dialog.title(),
+                message = dialog.message(),
+                confirmButtonText = stringResource(R.string.replace_certificate),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            EnvironmentAction.ConfirmOverwriteCertificateClick(
+                                triggeringAction = dialog.triggeringAction,
+                            ),
+                        )
+                    }
+                },
+                onDismissClick = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
+                },
+                onDismissRequest = remember(viewModel) {
+                    { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
                 },
             )
         }

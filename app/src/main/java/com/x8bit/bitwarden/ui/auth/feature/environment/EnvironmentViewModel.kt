@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.environment
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
@@ -86,7 +87,7 @@ class EnvironmentViewModel @Inject constructor(
     override fun handleAction(action: EnvironmentAction): Unit = when (action) {
         is EnvironmentAction.CloseClick -> handleCloseClickAction()
         is EnvironmentAction.SaveClick -> handleSaveClickAction()
-        is EnvironmentAction.ErrorDialogDismiss -> handleErrorDialogDismiss()
+        is EnvironmentAction.DialogDismiss -> handleDialogDismiss()
         is EnvironmentAction.ServerUrlChange -> handleServerUrlChangeAction(action)
         is EnvironmentAction.WebVaultServerUrlChange -> handleWebVaultServerUrlChangeAction(action)
         is EnvironmentAction.ApiServerUrlChange -> handleApiServerUrlChangeAction(action)
@@ -119,6 +120,10 @@ class EnvironmentViewModel @Inject constructor(
 
         is EnvironmentAction.SystemCertificateSelectionResultReceive -> {
             handleSystemCertificateSelectionResultReceive(action)
+        }
+
+        is EnvironmentAction.ConfirmOverwriteCertificateClick -> {
+            handleConfirmOverwriteCertificateClick(action)
         }
 
         is EnvironmentAction.Internal -> handleInternalAction(action)
@@ -167,7 +172,7 @@ class EnvironmentViewModel @Inject constructor(
         sendEvent(EnvironmentEvent.NavigateBack)
     }
 
-    private fun handleErrorDialogDismiss() {
+    private fun handleDialogDismiss() {
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
@@ -256,6 +261,10 @@ class EnvironmentViewModel @Inject constructor(
 
     private fun handleInternalAction(action: EnvironmentAction.Internal) {
         when (action) {
+            is EnvironmentAction.Internal.ShowErrorDialog -> {
+                showErrorDialog(message = action.message, throwable = action.throwable)
+            }
+
             is EnvironmentAction.Internal.ImportKeyResultReceive -> {
                 handleSaveKeyResultReceive(action)
             }
@@ -287,23 +296,30 @@ class EnvironmentViewModel @Inject constructor(
             return
         }
 
+        if (certificateManager.getMutualTlsKeyAliases().contains(action.alias)) {
+            mutableStateFlow.update {
+                @Suppress("MaxLineLength")
+                it.copy(
+                    dialog = EnvironmentState.DialogState.ConfirmOverwriteAlias(
+                        title = R.string.replace_existing_certificate.asText(),
+                        message =
+                            R.string.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
+                                .asText(action.alias),
+                        triggeringAction = action,
+                    ),
+                )
+            }
+            return
+        }
+
         mutableStateFlow.update { it.copy(dialog = null) }
 
         viewModelScope.launch {
-            fileManager
-                .uriToByteArray(action.certificateFileData.uri)
-                .map { bytes ->
-                    certificateManager.importMutualTlsCertificate(
-                        key = bytes,
-                        alias = action.alias,
-                        password = action.password,
-                    )
-                }
-                .map { result ->
-                    sendAction(
-                        EnvironmentAction.Internal.ImportKeyResultReceive(result),
-                    )
-                }
+            saveCertificate(
+                uri = action.certificateFileData.uri,
+                alias = action.alias,
+                password = action.password,
+            )
         }
     }
 
@@ -334,11 +350,6 @@ class EnvironmentViewModel @Inject constructor(
 
             is ImportPrivateKeyResult.Error.InvalidCertificateChain -> {
                 showToast(R.string.invalid_certificate_chain.asText())
-            }
-
-            ImportPrivateKeyResult.Error.DuplicateAlias -> {
-                // TODO [PM-17686] Improve duplicate alias handling.
-                showToast(R.string.certificate_alias_already_exists.asText())
             }
         }
     }
@@ -384,14 +395,61 @@ class EnvironmentViewModel @Inject constructor(
         }
     }
 
+    private fun handleConfirmOverwriteCertificateClick(
+        action: EnvironmentAction.ConfirmOverwriteCertificateClick,
+    ) {
+        mutableStateFlow.update { it.copy(dialog = null) }
+        viewModelScope.launch {
+            saveCertificate(
+                uri = action.triggeringAction.certificateFileData.uri,
+                alias = action.triggeringAction.alias,
+                password = action.triggeringAction.password,
+            )
+        }
+    }
+
     private fun showToast(message: Text) {
         sendEvent(EnvironmentEvent.ShowToast(message))
     }
 
-    private fun showErrorDialog(message: Text) {
+    private fun showErrorDialog(message: Text, throwable: Throwable? = null) {
         mutableStateFlow.update {
-            it.copy(dialog = EnvironmentState.DialogState.Error(message = message))
+            it.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    message = message,
+                    throwable = throwable,
+                ),
+            )
         }
+    }
+
+    private suspend fun saveCertificate(
+        uri: Uri,
+        alias: String,
+        password: String,
+    ) {
+        sendAction(
+            fileManager
+                .uriToByteArray(uri)
+                .fold(
+                    onFailure = {
+                        EnvironmentAction.Internal.ShowErrorDialog(
+                            message = R.string.unable_to_read_certificate.asText(),
+                            throwable = it,
+                        )
+                    },
+                    onSuccess = { bytes ->
+                        EnvironmentAction.Internal.ImportKeyResultReceive(
+                            certificateManager
+                                .importMutualTlsCertificate(
+                                    key = bytes,
+                                    alias = alias,
+                                    password = password,
+                                ),
+                        )
+                    },
+                ),
+        )
     }
 }
 
@@ -423,10 +481,20 @@ data class EnvironmentState(
     sealed class DialogState : Parcelable {
 
         /**
+         * Show a dialog to confirm overwriting an existing certificate alias.
+         */
+        data class ConfirmOverwriteAlias(
+            val title: Text,
+            val message: Text,
+            val triggeringAction: EnvironmentAction.SetCertificateInfoResultReceive,
+        ) : DialogState()
+
+        /**
          * Show an error dialog.
          */
         data class Error(
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -487,9 +555,9 @@ sealed class EnvironmentAction {
     data object SaveClick : EnvironmentAction()
 
     /**
-     * User dismissed an error dialog.
+     * User dismissed a dialog.
      */
-    data object ErrorDialogDismiss : EnvironmentAction()
+    data object DialogDismiss : EnvironmentAction()
 
     /**
      * User clicked the import certificate button.
@@ -510,6 +578,13 @@ sealed class EnvironmentAction {
      * User confirmed choosing the system certificate.
      */
     data object ConfirmChooseSystemCertificateClick : EnvironmentAction()
+
+    /**
+     * User confirmed overwriting an existing certificate alias.
+     */
+    data class ConfirmOverwriteCertificateClick(
+        val triggeringAction: SetCertificateInfoResultReceive,
+    ) : EnvironmentAction()
 
     /**
      * Indicates that the overall server URL has changed.
@@ -563,11 +638,12 @@ sealed class EnvironmentAction {
     /**
      * Indicates the certificate info data was received.
      */
+    @Parcelize
     data class SetCertificateInfoResultReceive(
         val certificateFileData: IntentManager.FileData,
         val password: String,
         val alias: String,
-    ) : EnvironmentAction()
+    ) : EnvironmentAction(), Parcelable
 
     /**
      * User has selected a system certificate alias.
@@ -580,6 +656,15 @@ sealed class EnvironmentAction {
      * Models actions the EnvironmentViewModel itself may trigger.
      */
     sealed class Internal : EnvironmentAction() {
+
+        /**
+         * Show an error dialog.
+         */
+        data class ShowErrorDialog(
+            val message: Text,
+            val throwable: Throwable? = null,
+        ) : Internal()
+
         /**
          * Indicates the result of importing a key was received.
          */

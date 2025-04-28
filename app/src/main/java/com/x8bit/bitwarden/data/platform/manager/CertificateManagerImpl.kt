@@ -28,6 +28,7 @@ import java.security.cert.X509Certificate
 /**
  * Default implementation of [CertificateManager].
  */
+@Suppress("TooManyFunctions")
 class CertificateManagerImpl(
     private val context: Context,
     private val environmentRepository: EnvironmentRepository,
@@ -60,6 +61,8 @@ class CertificateManagerImpl(
                 host = host,
             )
         }
+
+    override fun getMutualTlsKeyAliases(): List<String> = androidKeyStore.aliases().toList()
 
     @Suppress("LongMethod", "CyclomaticComplexMethod")
     @WorkerThread
@@ -130,10 +133,6 @@ class CertificateManagerImpl(
         // Step 4: Store the private key and X.509 certificate in the AndroidKeyStore if the alias
         // does not exists.
         with(androidKeyStore) {
-            if (containsAlias(alias)) {
-                return ImportPrivateKeyResult.Error.DuplicateAlias
-            }
-
             try {
                 setKeyEntry(alias, privateKey, null, certChain)
             } catch (e: KeyStoreException) {
