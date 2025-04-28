@@ -29,7 +29,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload sources
-        uses: crowdin/github-action@d1632879d4d4da358f2d040f79fa094571c9a649 # v2.5.1
+        uses: crowdin/github-action@b8012bd5491b8aa8578b73ab5b5f5e7c94aaa6e2 # v2.7.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
