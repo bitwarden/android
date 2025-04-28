@@ -19,7 +19,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 
 /**
  * Primary implementation of [NetworkConnectionManager].
@@ -72,6 +74,7 @@ class NetworkConnectionManagerImpl(
         .connectionChangeFlow
         .map { _ -> networkConnection }
         .distinctUntilChanged()
+        .onEach { Timber.d("Network status change: $it") }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,

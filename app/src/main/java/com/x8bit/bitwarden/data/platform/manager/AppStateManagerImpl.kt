@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 
 /**
  * Primary implementation of [AppStateManager].
@@ -38,10 +39,12 @@ class AppStateManagerImpl(
     private inner class AppForegroundObserver : DefaultLifecycleObserver {
         override fun onStart(owner: LifecycleOwner) {
             mutableAppForegroundStateFlow.value = AppForegroundState.FOREGROUNDED
+            Timber.d("App is foregrounded")
         }
 
         override fun onStop(owner: LifecycleOwner) {
             mutableAppForegroundStateFlow.value = AppForegroundState.BACKGROUNDED
+            Timber.d("App is backgrounded")
         }
     }
 
