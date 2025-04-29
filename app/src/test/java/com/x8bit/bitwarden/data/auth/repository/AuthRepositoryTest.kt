@@ -170,9 +170,11 @@ class AuthRepositoryTest {
     private val haveIBeenPwnedService: HaveIBeenPwnedService = mockk()
     private val organizationService: OrganizationService = mockk()
     private val mutableVaultUnlockDataStateFlow = MutableStateFlow(VAULT_UNLOCK_DATA)
+    private val mutableIsActiveUserUnlockingFlow = MutableStateFlow(false)
     private val vaultRepository: VaultRepository = mockk {
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
         every { deleteVaultData(any()) } just runs
+        every { isActiveUserUnlockingFlow } returns mutableIsActiveUserUnlockingFlow
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeEnvironmentRepository =
