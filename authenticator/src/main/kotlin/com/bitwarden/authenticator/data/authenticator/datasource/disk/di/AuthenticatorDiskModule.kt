@@ -30,7 +30,7 @@ object AuthenticatorDiskModule {
                 klass = AuthenticatorDatabase::class.java,
                 name = "authenticator_database",
             )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = true)
             .addTypeConverter(AuthenticatorItemTypeConverter())
             .addTypeConverter(AuthenticatorItemAlgorithmConverter())
             .build()

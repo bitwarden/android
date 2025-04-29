@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.platform.datasource.network.retrofit
+package com.bitwarden.network.retrofit
 
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import retrofit2.Retrofit
@@ -7,7 +7,20 @@ import retrofit2.http.Url
 /**
  * A collection of various [Retrofit] instances that serve different purposes.
  */
-interface Retrofits {
+internal interface Retrofits {
+    /**
+     * Allows access to "/api" calls that must be authenticated.
+     *
+     * The base URL can be dynamically determined via the [BaseUrlInterceptors].
+     */
+    val authenticatedApiRetrofit: Retrofit
+
+    /**
+     * Allows access to "/events" calls that must be authenticated.
+     *
+     * The base URL can be dynamically determined via the [BaseUrlInterceptors].
+     */
+    val authenticatedEventsRetrofit: Retrofit
 
     /**
      * Allows access to "/api" calls that do not require authentication.
@@ -15,6 +28,13 @@ interface Retrofits {
      * The base URL can be dynamically determined via the [BaseUrlInterceptors].
      */
     val unauthenticatedApiRetrofit: Retrofit
+
+    /**
+     * Allows access to "/identity" calls that do not require authentication.
+     *
+     * The base URL can be dynamically determined via the [BaseUrlInterceptors].
+     */
+    val unauthenticatedIdentityRetrofit: Retrofit
 
     /**
      * Allows access to static API calls (ex: external APIs).

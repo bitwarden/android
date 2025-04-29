@@ -1,16 +1,14 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.authenticator
+package com.bitwarden.network.authenticator
 
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.RefreshTokenResponseJson
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
-import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
-import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
+import com.bitwarden.network.provider.RefreshTokenProvider
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import okhttp3.Protocol
@@ -24,12 +22,12 @@ import org.junit.jupiter.api.Test
 
 class RefreshAuthenticatorTests {
     private lateinit var authenticator: RefreshAuthenticator
-    private val authenticatorProvider: AuthenticatorProvider = mockk()
+    private val refreshTokenProvider: RefreshTokenProvider = mockk()
 
     @BeforeEach
     fun setup() {
         authenticator = RefreshAuthenticator()
-        authenticator.authenticatorProvider = authenticatorProvider
+        authenticator.refreshTokenProvider = refreshTokenProvider
 
         mockkStatic(::parseJwtTokenDataOrNull)
     }
@@ -40,57 +38,43 @@ class RefreshAuthenticatorTests {
     }
 
     @Test
-    fun `RefreshAuthenticator returns null if the request is for a different user`() {
-        every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
-        every { authenticatorProvider.activeUserId } returns "different_user_id"
-
-        assertNull(authenticator.authenticate(null, RESPONSE_401))
-
-        verify(exactly = 1) {
-            authenticatorProvider.activeUserId
-        }
-    }
-
-    @Test
     fun `RefreshAuthenticator returns null if API has no authorization user ID`() {
         every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns null
 
         assertNull(authenticator.authenticate(null, RESPONSE_401))
 
         verify(exactly = 0) {
-            authenticatorProvider.activeUserId
-            authenticatorProvider.refreshAccessTokenSynchronously(any())
-            authenticatorProvider.logout(userId = any(), reason = LogoutReason.TokenRefreshFail)
+            refreshTokenProvider.refreshAccessTokenSynchronously(any())
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `RefreshAuthenticator returns null and logs out when request is for active user and refresh is failure`() {
+    fun `RefreshAuthenticator returns null when refresh is failure`() {
         every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
-        every { authenticatorProvider.activeUserId } returns USER_ID
         every {
-            authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
+            refreshTokenProvider.refreshAccessTokenSynchronously(USER_ID)
         } returns Throwable("Fail").asFailure()
-        every {
-            authenticatorProvider.logout(
-                userId = USER_ID,
-                reason = LogoutReason.TokenRefreshFail,
-            )
-        } just runs
 
         assertNull(authenticator.authenticate(null, RESPONSE_401))
 
         verify(exactly = 1) {
-            authenticatorProvider.activeUserId
-            authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
-            authenticatorProvider.logout(userId = USER_ID, reason = LogoutReason.TokenRefreshFail)
+            refreshTokenProvider.refreshAccessTokenSynchronously(USER_ID)
+        }
+    }
+
+    @Test
+    fun `RefreshAuthenticator returns null when refreshTokenProvider is null`() {
+        authenticator.refreshTokenProvider = null
+        every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
+        assertNull(authenticator.authenticate(null, RESPONSE_401))
+        verify(exactly = 0) {
+            refreshTokenProvider.refreshAccessTokenSynchronously(any())
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `RefreshAuthenticator returns updated request when request is for active user and refresh is success`() {
+    fun `RefreshAuthenticator returns updated request when refresh is success`() {
         val newAccessToken = "newAccessToken"
         val refreshResponse = RefreshTokenResponseJson(
             accessToken = newAccessToken,
@@ -99,9 +83,8 @@ class RefreshAuthenticatorTests {
             tokenType = "Bearer",
         )
         every { parseJwtTokenDataOrNull(JWT_ACCESS_TOKEN) } returns JTW_TOKEN
-        every { authenticatorProvider.activeUserId } returns USER_ID
         every {
-            authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
+            refreshTokenProvider.refreshAccessTokenSynchronously(USER_ID)
         } returns refreshResponse.asSuccess()
 
         val authenticatedRequest = authenticator.authenticate(null, RESPONSE_401)
@@ -113,8 +96,7 @@ class RefreshAuthenticatorTests {
             authenticatedRequest!!.header("Authorization"),
         )
         verify(exactly = 1) {
-            authenticatorProvider.activeUserId
-            authenticatorProvider.refreshAccessTokenSynchronously(USER_ID)
+            refreshTokenProvider.refreshAccessTokenSynchronously(USER_ID)
         }
     }
 }

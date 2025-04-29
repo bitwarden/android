@@ -4,15 +4,17 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.ServerConfigRepository
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.BitwardenServiceClient
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -38,8 +40,9 @@ class NetworkConfigManagerTest {
     private val serverConfigRepository: ServerConfigRepository = mockk {
         coEvery { getServerConfig(forceRefresh = true) } returns null
     }
-
-    private val refreshAuthenticator = RefreshAuthenticator()
+    private val mockBitwardenServiceClient: BitwardenServiceClient = mockk {
+        every { setRefreshTokenProvider(any()) } just runs
+    }
 
     private lateinit var networkConfigManager: NetworkConfigManager
 
@@ -49,7 +52,7 @@ class NetworkConfigManagerTest {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
-            refreshAuthenticator = refreshAuthenticator,
+            bitwardenServiceClient = mockBitwardenServiceClient,
             dispatcherManager = dispatcherManager,
         )
     }

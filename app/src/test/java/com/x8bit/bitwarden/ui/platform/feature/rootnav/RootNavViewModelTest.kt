@@ -3,14 +3,14 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 import androidx.core.os.bundleOf
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest

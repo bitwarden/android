@@ -1,15 +1,12 @@
 package com.bitwarden.network.interceptor
 
 import com.bitwarden.core.annotation.OmitFromCoverage
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * An overall container for various [BaseUrlInterceptor] implementations for different API groups.
  */
 @OmitFromCoverage
-@Singleton
-class BaseUrlInterceptors @Inject constructor(
+class BaseUrlInterceptors(
     private val baseUrlsProvider: BaseUrlsProvider,
 ) {
     /**
