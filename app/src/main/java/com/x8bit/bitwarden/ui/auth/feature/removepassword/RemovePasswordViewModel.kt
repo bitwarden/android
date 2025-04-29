@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.RemovePasswordResult
+import com.x8bit.bitwarden.ui.auth.feature.removepassword.RemovePasswordState.DialogState.Error
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -81,7 +82,7 @@ class RemovePasswordViewModel @Inject constructor(
         if (state.input.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
-                    dialogState = RemovePasswordState.DialogState.Error(
+                    dialogState = Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required
                             .asText(R.string.master_password.asText()),
@@ -118,10 +119,21 @@ class RemovePasswordViewModel @Inject constructor(
             is RemovePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = RemovePasswordState.DialogState.Error(
+                        dialogState = Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = result.message?.asText()
-                                ?: R.string.generic_error_message.asText(),
+                            message = R.string.generic_error_message.asText(),
+                            error = result.error,
+                        ),
+                    )
+                }
+            }
+
+            is RemovePasswordResult.WrongPasswordError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.invalid_master_password.asText(),
                             error = result.error,
                         ),
                     )
@@ -162,7 +174,7 @@ class RemovePasswordViewModel @Inject constructor(
             is LeaveOrganizationResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = RemovePasswordState.DialogState.Error(
+                        dialogState = Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
                             error = result.error,

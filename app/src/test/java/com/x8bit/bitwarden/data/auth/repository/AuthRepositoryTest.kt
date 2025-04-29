@@ -4728,13 +4728,13 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `removePassword with migrateExistingUserToKeyConnector error should return error with message if is BitwardenException`() =
+    fun `removePassword with migrateExistingUserToKeyConnector wrong password error should return WrongPasswordError error`() =
         runTest {
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
             val url = "www.example.com"
             val error = mockk<BitwardenException> {
-                every { message } returns "Wrong Password"
+                every { message } returns "Wrong password"
             }
             val organizations = listOf(
                 mockk<SyncResponseJson.Profile.Organization> {
@@ -4763,10 +4763,7 @@ class AuthRepositoryTest {
             val result = repository.removePassword(masterPassword = PASSWORD)
 
             assertEquals(
-                RemovePasswordResult.Error(
-                    error = error,
-                    message = "Wrong Password",
-                ),
+                RemovePasswordResult.WrongPasswordError(error = error),
                 result,
             )
         }
