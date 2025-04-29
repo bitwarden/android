@@ -344,6 +344,9 @@ data class SyncResponseJson(
 
             @SerialName("status")
             val status: OrganizationStatusType,
+
+            @SerialName("userIsManagedByOrganization")
+            val userIsManagedByOrganization: Boolean,
         )
 
         /**

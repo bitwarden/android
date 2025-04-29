@@ -1513,7 +1513,8 @@ class AuthRepositoryImpl(
      */
     private fun isUserManagedByOrganization(
         userId: String,
-    ): Boolean = userId.isNotBlank() // TODO establish if user is managed by an organization
+    ): Boolean =
+        authDiskSource.getOrganizations(userId)?.any { it.userIsManagedByOrganization } == true
 
     private fun isBiometricsEnabled(
         userId: String,
