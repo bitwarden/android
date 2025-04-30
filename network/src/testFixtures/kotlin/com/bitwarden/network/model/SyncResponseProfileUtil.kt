@@ -69,6 +69,7 @@ fun createMockOrganization(
         shouldUseApi = false,
         familySponsorshipValidUntil = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         status = OrganizationStatusType.ACCEPTED,
+        userIsManagedByOrganization = false,
     )
 
 /**

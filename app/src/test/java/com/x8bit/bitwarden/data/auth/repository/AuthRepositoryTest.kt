@@ -386,6 +386,7 @@ class AuthRepositoryTest {
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isDeviceTrustedProvider = { false },
                 firstTimeState = FIRST_TIME_STATE,
+                userIsManagedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -413,6 +414,7 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
+                userIsManagedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -431,6 +433,7 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
+                userIsManagedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -461,6 +464,7 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
+                userIsManagedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -691,6 +695,7 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            userIsManagedByOrganization = { false },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -703,6 +708,7 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            userIsManagedByOrganization = { false },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -4518,6 +4524,7 @@ class AuthRepositoryTest {
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
+                every { userIsManagedByOrganization } returns false
             },
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4547,6 +4554,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsManagedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4583,6 +4591,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsManagedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -5637,6 +5646,7 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            userIsManagedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5672,6 +5682,7 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            userIsManagedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5705,6 +5716,7 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
+            userIsManagedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(

@@ -248,6 +248,7 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
+            isManagedByOrganization = false,
         ),
     ),
 )
@@ -255,4 +256,5 @@ private val DEFAULT_USER_STATE: UserState = UserState(
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )

@@ -219,4 +219,5 @@ class DeleteAccountScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )
