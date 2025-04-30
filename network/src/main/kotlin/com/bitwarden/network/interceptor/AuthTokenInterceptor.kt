@@ -9,7 +9,7 @@ import java.io.IOException
 /**
  * Interceptor responsible for adding the auth token(Bearer) to API requests.
  */
-class AuthTokenInterceptor(
+internal class AuthTokenInterceptor(
     private val authTokenProvider: AuthTokenProvider,
 ) : Interceptor {
     private val missingTokenMessage = "Auth token is missing!"

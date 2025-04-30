@@ -7,7 +7,7 @@ import com.bitwarden.network.model.NetworkResult
 /**
  * Converts the [NetworkResult] to a [Result].
  */
-fun <T> NetworkResult<T>.toResult(): Result<T> =
+internal fun <T> NetworkResult<T>.toResult(): Result<T> =
     when (this) {
         is NetworkResult.Failure -> this.throwable.asFailure()
         is NetworkResult.Success -> this.value.asSuccess()

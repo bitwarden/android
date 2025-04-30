@@ -7,7 +7,7 @@ import com.bitwarden.network.util.toResult
 /**
  * Default implementation of [PushService].
  */
-class PushServiceImpl(
+internal class PushServiceImpl(
     private val pushApi: PushApi,
     private val appId: String,
 ) : PushService {

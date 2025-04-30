@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * This interface defines the API service for fetching vault data.
  */
-interface SyncApi {
+internal interface SyncApi {
     /**
      * Retrieves the vault data from the server.
      *

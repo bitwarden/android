@@ -7,7 +7,7 @@ import retrofit2.http.Header
 /**
  * Defines raw calls under the /devices API that do not require authentication.
  */
-interface UnauthenticatedDevicesApi {
+internal interface UnauthenticatedDevicesApi {
     @GET("/devices/knowndevice")
     suspend fun getIsKnownDevice(
         @Header(value = "X-Request-Email") emailAddress: String,

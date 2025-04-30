@@ -9,7 +9,7 @@ import retrofit2.http.Url
 /**
  * Defines endpoints to retrieve content from arbitrary URLs.
  */
-interface DownloadApi {
+internal interface DownloadApi {
     /**
      * Streams data from a [url].
      */

@@ -10,7 +10,7 @@ import retrofit2.http.Query
  * Defines calls to a digital asset link file.
  */
 @Keep
-interface DigitalAssetLinkApi {
+internal interface DigitalAssetLinkApi {
 
     /**
      * Checks if the given [relation] exists in a digital asset link file.

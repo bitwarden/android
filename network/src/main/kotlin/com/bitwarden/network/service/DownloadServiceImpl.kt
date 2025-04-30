@@ -7,7 +7,7 @@ import okhttp3.ResponseBody
 /**
  * Default implementation of [DownloadService].
  */
-class DownloadServiceImpl(
+internal class DownloadServiceImpl(
     private val downloadApi: DownloadApi,
 ) : DownloadService {
     override suspend fun getDataStream(

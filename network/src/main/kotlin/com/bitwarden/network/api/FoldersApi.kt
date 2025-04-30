@@ -13,7 +13,7 @@ import retrofit2.http.Path
 /**
  * Defines raw calls under the /folders API with authentication applied.
  */
-interface FoldersApi {
+internal interface FoldersApi {
 
     /**
      * Create a folder.

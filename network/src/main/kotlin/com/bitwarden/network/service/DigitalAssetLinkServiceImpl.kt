@@ -7,7 +7,7 @@ import com.bitwarden.network.util.toResult
 /**
  * Primary implementation of [DigitalAssetLinkService].
  */
-class DigitalAssetLinkServiceImpl(
+internal class DigitalAssetLinkServiceImpl(
     private val digitalAssetLinkApi: DigitalAssetLinkApi,
 ) : DigitalAssetLinkService {
 
