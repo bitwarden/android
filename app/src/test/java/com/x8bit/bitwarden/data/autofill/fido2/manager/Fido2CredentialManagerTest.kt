@@ -456,25 +456,6 @@ class Fido2CredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `registerFido2Credential should return InvalidAppSignature when calling app is not privileged and signature is invalid`() =
-        runTest {
-            every { mockCallingAppInfo.isOriginPopulated() } returns false
-            every { mockSigningInfo.hasMultipleSigners() } returns true
-            val result = fido2CredentialManager.registerFido2Credential(
-                userId = "mockUserId",
-                callingAppInfo = mockCallingAppInfo,
-                createPublicKeyCredentialRequest = mockCreatePublicKeyCredentialRequest,
-                selectedCipherView = createMockCipherView(number = 1),
-            )
-
-            assertEquals(
-                Fido2RegisterCredentialResult.Error.InvalidAppSignature,
-                result,
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `registerFido2Credential should return MissingHostUrl when calling app if privileged and origin is missing`() =
         runTest {
             every { mockCreatePublicKeyCredentialRequest.origin } returns null

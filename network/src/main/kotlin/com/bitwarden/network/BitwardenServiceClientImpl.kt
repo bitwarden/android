@@ -131,7 +131,9 @@ internal class BitwardenServiceClientImpl(
 
     override val digitalAssetLinkService: DigitalAssetLinkService by lazy {
         DigitalAssetLinkServiceImpl(
-            digitalAssetLinkApi = retrofits.createStaticRetrofit().create(),
+            digitalAssetLinkApi = retrofits
+                .createStaticRetrofit(baseUrl = "https://digitalassetlinks.googleapis.com/")
+                .create(),
         )
     }
 

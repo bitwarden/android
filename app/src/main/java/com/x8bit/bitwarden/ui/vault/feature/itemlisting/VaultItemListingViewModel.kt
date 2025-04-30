@@ -889,22 +889,10 @@ class VaultItemListingViewModel @Inject constructor(
                 )
                 return
             }
-        val relyingPartyId = fido2CredentialManager
-            .getPasskeyAssertionOptionsOrNull(option.requestJson)
-            ?.relyingPartyId
-            ?: run {
-                showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-                )
-                return
-            }
         viewModelScope.launch {
 
             val validateOriginResult = fido2OriginManager
-                .validateOrigin(
-                    callingAppInfo = request.callingAppInfo,
-                    relyingPartyId = relyingPartyId,
-                )
+                .validateOrigin(callingAppInfo = request.callingAppInfo)
 
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Error -> {
@@ -1638,23 +1626,10 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleFido2RegisterCredentialRequestReceive(
         action: VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive,
     ) {
-        val relyingPartyId = action.request
-            .providerRequest
-            .getCreatePasskeyCredentialRequestOrNull()
-            ?.let { fido2CredentialManager.getPasskeyAttestationOptionsOrNull(it.requestJson) }
-            ?.relyingParty
-            ?.id
-            ?: run {
-                showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-                )
-                return
-            }
         viewModelScope.launch {
             val validateOriginResult = fido2OriginManager
                 .validateOrigin(
                     callingAppInfo = action.request.callingAppInfo,
-                    relyingPartyId = relyingPartyId,
                 )
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Error -> {
@@ -1734,7 +1709,6 @@ class VaultItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             val validateOriginResult = fido2OriginManager.validateOrigin(
                 callingAppInfo = callingAppInfo,
-                relyingPartyId = relyingPartyId,
             )
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Success -> {
