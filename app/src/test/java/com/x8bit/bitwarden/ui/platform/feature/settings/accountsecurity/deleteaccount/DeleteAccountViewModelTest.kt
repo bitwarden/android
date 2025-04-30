@@ -45,6 +45,10 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(isUnlockWithPasswordEnabled = false),
             viewModel.stateFlow.value,
         )
+        assertEquals(
+            DEFAULT_STATE.copy(isUserManagedByOrganization = false),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
