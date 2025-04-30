@@ -1571,7 +1571,7 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
 
         state.fido2GetCredentialsRequest
-            ?.let { handleFido2GetCredentialsRequest(it, vaultData.data) }
+            ?.let { handleFido2GetCredentialsRequest(it) }
             ?: state.fido2CredentialAssertionRequest
                 ?.let { request ->
                     trySendAction(
@@ -1676,9 +1676,9 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    @Suppress("LongMethod")
     private fun handleFido2GetCredentialsRequest(
         request: Fido2GetCredentialsRequest,
-        vaultData: VaultData,
     ) {
         val beginGetCredentialOption = request
             .beginGetPublicKeyCredentialOption
@@ -1717,10 +1717,13 @@ class VaultItemListingViewModel @Inject constructor(
                             GetFido2CredentialsResult.Success(
                                 userId = request.userId,
                                 option = beginGetCredentialOption,
-                                credentials = vaultData
-                                    .toFido2CredentialAutofillViews()
-                                    .orEmpty()
-                                    .filter { it.rpId == relyingPartyId },
+                                credentialEntries = fido2CredentialManager
+                                    .getPublicKeyCredentialEntries(
+                                        userId = request.userId,
+                                        option = beginGetCredentialOption,
+                                    )
+                                    .getOrNull()
+                                    .orEmpty(),
                             ),
                         ),
                     )

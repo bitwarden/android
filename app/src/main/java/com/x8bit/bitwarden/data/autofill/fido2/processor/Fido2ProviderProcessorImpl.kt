@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.content.Context
-import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
@@ -28,27 +27,18 @@ import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.bitwarden.core.data.repository.model.DataState
-import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.data.manager.DispatcherManager
-import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.launch
 import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
@@ -67,8 +57,6 @@ const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOU
 class Fido2ProviderProcessorImpl(
     private val context: Context,
     private val authRepository: AuthRepository,
-    private val vaultRepository: VaultRepository,
-    private val fido2CredentialStore: Fido2CredentialStore,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     private val clock: Clock,
@@ -78,7 +66,7 @@ class Fido2ProviderProcessorImpl(
 ) : Fido2ProviderProcessor {
 
     private val requestCode = AtomicInteger()
-    private val scope = CoroutineScope(dispatcherManager.unconfined)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     override fun processCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
@@ -91,7 +79,7 @@ class Fido2ProviderProcessorImpl(
             return
         }
 
-        val createCredentialJob = scope.launch {
+        val createCredentialJob = ioScope.launch {
             processCreateCredentialRequest(request = request)
                 ?.let { callback.onResult(it) }
                 ?: callback.onError(CreateCredentialUnknownException())
@@ -136,21 +124,17 @@ class Fido2ProviderProcessorImpl(
         }
 
         // Otherwise, find all matching credentials from the current vault.
-        val getCredentialJob = scope.launch {
-            try {
-                val credentialEntries = getMatchingFido2CredentialEntries(
-                    userId = userState.activeUserId,
-                    request = request,
-                )
-
-                callback.onResult(
-                    BeginGetCredentialResponse(
-                        credentialEntries = credentialEntries,
-                    ),
-                )
-            } catch (e: GetCredentialException) {
-                callback.onError(e)
-            }
+        val getCredentialJob = ioScope.launch {
+            getMatchingFido2CredentialEntries(
+                userId = userState.activeUserId,
+                request = request,
+            )
+                .onSuccess {
+                    callback.onResult(
+                        BeginGetCredentialResponse(credentialEntries = it),
+                    )
+                }
+                .onFailure { callback.onError(GetCredentialUnknownException(it.message)) }
         }
         cancellationSignal.setOnCancelListener {
             callback.onError(GetCredentialCancellationException())
@@ -230,109 +214,21 @@ class Fido2ProviderProcessorImpl(
         return entryBuilder.build()
     }
 
-    @Throws(GetCredentialUnsupportedException::class)
     private suspend fun getMatchingFido2CredentialEntries(
         userId: String,
         request: BeginGetCredentialRequest,
-    ): List<CredentialEntry> =
+    ): Result<List<CredentialEntry>> =
         request
             .beginGetCredentialOptions
-            .flatMap { option ->
-                if (option is BeginGetPublicKeyCredentialOption) {
-                    val relyingPartyId = fido2CredentialManager
-                        .getPasskeyAssertionOptionsOrNull(requestJson = option.requestJson)
-                        ?.relyingPartyId
-                        ?: throw GetCredentialUnknownException("Invalid data.")
-                    buildCredentialEntries(userId, relyingPartyId, option)
-                } else {
-                    throw GetCredentialUnsupportedException("Unsupported option.")
-                }
-            }
-
-    private suspend fun buildCredentialEntries(
-        userId: String,
-        relyingPartyId: String,
-        option: BeginGetPublicKeyCredentialOption,
-    ): List<CredentialEntry> {
-        val cipherViews = vaultRepository
-            .ciphersStateFlow
-            .takeUntilLoaded()
-            .fold(emptyList<CipherView>()) { _, dataState ->
-                when (dataState) {
-                    is DataState.Loaded -> dataState.data.filter { it.isActiveWithFido2Credentials }
-
-                    else -> emptyList()
-                }
-            }
-        val result = vaultRepository
-            .getDecryptedFido2CredentialAutofillViews(cipherViews)
-        return when (result) {
-            is DecryptFido2CredentialAutofillViewResult.Error -> {
-                throw GetCredentialUnknownException("Error decrypting credentials.")
-            }
-
-            is DecryptFido2CredentialAutofillViewResult.Success -> {
-                result
-                    .fido2CredentialAutofillViews
-                    .filter { it.rpId == relyingPartyId }
-                    .toCredentialEntries(
+            .firstNotNullOfOrNull { it as? BeginGetPublicKeyCredentialOption }
+            ?.let {
+                fido2CredentialManager
+                    .getPublicKeyCredentialEntries(
                         userId = userId,
-                        option = option,
+                        option = it,
                     )
             }
-        }
-    }
-
-    private fun List<Fido2CredentialAutofillView>.toCredentialEntries(
-        userId: String,
-        option: BeginGetPublicKeyCredentialOption,
-    ): List<CredentialEntry> =
-        this
-            .map {
-                val publicKeyEntryBuilder = PublicKeyCredentialEntry
-                    .Builder(
-                        context = context,
-                        username = it.userNameForUi ?: context.getString(R.string.no_username),
-                        pendingIntent = intentManager.createFido2GetCredentialPendingIntent(
-                            action = GET_PASSKEY_INTENT,
-                            userId = userId,
-                            credentialId = it.credentialId.toString(),
-                            cipherId = it.cipherId,
-                            requestCode = requestCode.getAndIncrement(),
-                        ),
-                        beginGetPublicKeyCredentialOption = option,
-                    )
-                    .setIcon(
-                        Icon.createWithResource(
-                            context,
-                            R.drawable.ic_bw_passkey,
-                        ),
-                    )
-
-                if (featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)) {
-                    biometricsEncryptionManager
-                        .getOrCreateCipher(userId)
-                        ?.let {
-                            publicKeyEntryBuilder
-                                .setBiometricPromptDataIfSupported(cipher = it)
-                        }
-                }
-                publicKeyEntryBuilder.build()
-            }
-
-    private fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
-        cipher: Cipher,
-    ): PublicKeyCredentialEntry.Builder {
-        return if (isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
-            this
-        } else {
-            setBiometricPromptData(
-                biometricPromptData = BiometricPromptData
-                    .Builder()
-                    .buildPromptDataWithCipher(cipher),
-            )
-        }
-    }
+            ?: GetCredentialUnsupportedException("Unsupported option.").asFailure()
 
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
@@ -341,15 +237,13 @@ class Fido2ProviderProcessorImpl(
             this
         } else {
             setBiometricPromptData(
-                biometricPromptData = BiometricPromptData
-                    .Builder()
-                    .buildPromptDataWithCipher(cipher),
+                biometricPromptData = buildPromptDataWithCipher(cipher),
             )
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    private fun BiometricPromptData.Builder.buildPromptDataWithCipher(
+    private fun buildPromptDataWithCipher(
         cipher: Cipher,
     ): BiometricPromptData = BiometricPromptData.Builder()
         .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)

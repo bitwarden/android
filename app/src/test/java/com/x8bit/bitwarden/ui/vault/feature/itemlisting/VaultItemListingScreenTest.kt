@@ -1926,7 +1926,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         val result = GetFido2CredentialsResult.Success(
             userId = "mockUserId",
             option = mockk(),
-            credentials = mockk(),
+            credentialEntries = mockk(),
         )
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2GetCredentialsRequest(result))
         verify {

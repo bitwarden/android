@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK
 
 /**
  * Checks if this [Intent] contains a [Fido2CreateCredentialRequest] related to an ongoing FIDO 2
@@ -28,11 +29,11 @@ fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest
         ?: return null
 
     // Extract the OS biometric prompt result from the request data because it is not included in
-    // the bundle returned by `ProviderGetCredentialRequest.asBundle()`.
+    // the bundle returned by `ProviderCreateCredentialRequest.asBundle()`.
     val isUserPreVerified = systemRequest
         .biometricPromptResult
         ?.isSuccessful
-        ?: false
+        ?: getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
 
     return Fido2CreateCredentialRequest(
         userId = userId,
@@ -66,7 +67,7 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
     val isUserPreVerified = systemRequest
         .biometricPromptResult
         ?.isSuccessful
-        ?: false
+        ?: getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
 
     return Fido2CredentialAssertionRequest(
         userId = userId,
