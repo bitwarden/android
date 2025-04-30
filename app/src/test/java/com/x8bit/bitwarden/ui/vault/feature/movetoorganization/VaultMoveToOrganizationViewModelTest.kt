@@ -26,17 +26,20 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
 
     private val initialState = createVaultMoveToOrganizationState()
-    private val initialSavedStateHandle = createSavedStateHandleWithState(
-        state = initialState,
-    )
+    private val initialSavedStateHandle
+        get() = createSavedStateHandleWithState(state = initialState)
 
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
 
@@ -52,6 +55,16 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
 
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toVaultMoveToOrganizationArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toVaultMoveToOrganizationArgs)
     }
 
     @Test
@@ -456,8 +469,10 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         showOnlyCollections: Boolean = false,
     ) = SavedStateHandle().apply {
         set("state", state)
-        set("vault_move_to_organization_id", vaultItemId)
-        set("vault_move_to_organization_only_collections", "$showOnlyCollections")
+        every { toVaultMoveToOrganizationArgs() } returns VaultMoveToOrganizationArgs(
+            vaultItemId = vaultItemId,
+            showOnlyCollections = showOnlyCollections,
+        )
     }
 
     @Suppress("MaxLineLength")

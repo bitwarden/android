@@ -12,14 +12,18 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SetupAutoFillViewModelTest : BaseViewModelTest() {
@@ -43,6 +47,16 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
         every { setOnboardingStatus(any()) } just runs
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toSetupAutoFillArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toSetupAutoFillArgs)
     }
 
     @Test
@@ -183,12 +197,10 @@ class SetupAutoFillViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: SetupAutoFillState? = null,
     ) = SetupAutoFillViewModel(
-        savedStateHandle = SavedStateHandle(
-            mapOf(
-                "state" to initialState,
-                "isInitialSetup" to true,
-            ),
-        ),
+        savedStateHandle = SavedStateHandle().apply {
+            set(key = "state", value = initialState)
+            every { toSetupAutoFillArgs() } returns SetupAutoFillScreenArgs(isInitialSetup = true)
+        },
         settingsRepository = settingsRepository,
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,

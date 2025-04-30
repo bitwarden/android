@@ -44,7 +44,7 @@ class PasswordHistoryViewModel @Inject constructor(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
             PasswordHistoryState(
-                passwordHistoryMode = PasswordHistoryArgs(savedStateHandle).passwordHistoryMode,
+                passwordHistoryMode = savedStateHandle.toPasswordHistoryArgs().passwordHistoryMode,
                 viewState = PasswordHistoryState.ViewState.Loading,
             )
         },

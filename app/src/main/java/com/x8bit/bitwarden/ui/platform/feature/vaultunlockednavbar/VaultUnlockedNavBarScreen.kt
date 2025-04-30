@@ -42,7 +42,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import kotlinx.collections.immutable.persistentListOf
@@ -220,7 +220,7 @@ private fun VaultUnlockedNavBarScaffold(
         // - consume the IME insets.
         NavHost(
             navController = navController,
-            startDestination = VAULT_GRAPH_ROUTE,
+            startDestination = VaultGraphRoute,
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,

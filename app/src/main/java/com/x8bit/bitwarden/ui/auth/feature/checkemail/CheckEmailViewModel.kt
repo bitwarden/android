@@ -21,7 +21,7 @@ class CheckEmailViewModel @Inject constructor(
 ) : BaseViewModel<CheckEmailState, CheckEmailEvent, CheckEmailAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: CheckEmailState(
-            email = CheckEmailArgs(savedStateHandle).emailAddress,
+            email = savedStateHandle.toCheckEmailArgs().emailAddress,
         ),
 ) {
     init {

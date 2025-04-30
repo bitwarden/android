@@ -7,9 +7,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val PRE_AUTH_APPEARANCE_ROUTE = "pre_auth_settings_appearance"
-private const val APPEARANCE_ROUTE = "settings_appearance"
+/**
+ * The type-safe route for the settings appearance screen.
+ */
+@Serializable
+sealed class SettingsAppearanceRoute {
+    /**
+     * The type-safe route for the settings appearance screen.
+     */
+    @Serializable
+    data object Standard : SettingsAppearanceRoute()
+
+    /**
+     * The type-safe route for the pre-auth settings appearance screen.
+     */
+    @Serializable
+    data object PreAuth : SettingsAppearanceRoute()
+}
 
 /**
  * Add settings destinations to the nav graph.
@@ -18,10 +34,14 @@ fun NavGraphBuilder.appearanceDestination(
     isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = getRoute(isPreAuth = isPreAuth),
-    ) {
-        AppearanceScreen(onNavigateBack = onNavigateBack)
+    if (isPreAuth) {
+        composableWithPushTransitions<SettingsAppearanceRoute.PreAuth> {
+            AppearanceScreen(onNavigateBack = onNavigateBack)
+        }
+    } else {
+        composableWithPushTransitions<SettingsAppearanceRoute.Standard> {
+            AppearanceScreen(onNavigateBack = onNavigateBack)
+        }
     }
 }
 
@@ -32,9 +52,12 @@ fun NavController.navigateToAppearance(
     isPreAuth: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = getRoute(isPreAuth = isPreAuth), navOptions = navOptions)
+    this.navigate(
+        route = if (isPreAuth) {
+            SettingsAppearanceRoute.PreAuth
+        } else {
+            SettingsAppearanceRoute.Standard
+        },
+        navOptions = navOptions,
+    )
 }
-
-private fun getRoute(
-    isPreAuth: Boolean,
-): String = if (isPreAuth) PRE_AUTH_APPEARANCE_ROUTE else APPEARANCE_ROUTE

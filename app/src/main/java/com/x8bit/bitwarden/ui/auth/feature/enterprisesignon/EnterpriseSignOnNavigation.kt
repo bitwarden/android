@@ -6,22 +6,30 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val ENTERPRISE_SIGN_ON_PREFIX = "enterprise_sign_on "
-private const val EMAIL_ADDRESS: String = "email_address"
-private const val ENTERPRISE_SIGN_ON_ROUTE = "$ENTERPRISE_SIGN_ON_PREFIX/{$EMAIL_ADDRESS}"
+/**
+ * The type-safe route for the enterprise sign-on screen.
+ */
+@Serializable
+data class EnterpriseSignOnRoute(
+    val emailAddress: String,
+)
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-data class EnterpriseSignOnArgs(val emailAddress: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-    )
+data class EnterpriseSignOnArgs(val emailAddress: String)
+
+/**
+ * Constructs a [EnterpriseSignOnArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toEnterpriseSignOnArgs(): EnterpriseSignOnArgs {
+    val route = this.toRoute<EnterpriseSignOnRoute>()
+    return EnterpriseSignOnArgs(emailAddress = route.emailAddress)
 }
 
 /**
@@ -31,7 +39,10 @@ fun NavController.navigateToEnterpriseSignOn(
     emailAddress: String,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("$ENTERPRISE_SIGN_ON_PREFIX/$emailAddress", navOptions)
+    this.navigate(
+        route = EnterpriseSignOnRoute(emailAddress = emailAddress),
+        navOptions = navOptions,
+    )
 }
 
 /**
@@ -42,12 +53,7 @@ fun NavGraphBuilder.enterpriseSignOnDestination(
     onNavigateToSetPassword: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String, orgIdentifier: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = ENTERPRISE_SIGN_ON_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<EnterpriseSignOnRoute> {
         EnterpriseSignOnScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToSetPassword = onNavigateToSetPassword,

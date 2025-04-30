@@ -50,7 +50,7 @@ class AttachmentsViewModel @Inject constructor(
         ?: run {
             val isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true
             AttachmentsState(
-                cipherId = AttachmentsArgs(savedStateHandle).cipherId,
+                cipherId = savedStateHandle.toAttachmentsArgs().cipherId,
                 viewState = AttachmentsState.ViewState.Loading,
                 dialogState = AttachmentsState.DialogState.Error(
                     title = null,

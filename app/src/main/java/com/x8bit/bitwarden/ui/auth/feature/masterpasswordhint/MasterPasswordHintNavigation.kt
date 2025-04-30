@@ -6,21 +6,30 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL_ADDRESS: String = "email_address"
-private const val MASTER_PASSWORD_HINT_ROUTE: String = "master_password_hint/{$EMAIL_ADDRESS}"
+/**
+ * The type-safe route for the master password hint screen.
+ */
+@Serializable
+data class MasterPasswordHintRoute(
+    val emailAddress: String,
+)
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-data class MasterPasswordHintArgs(val emailAddress: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-    )
+data class MasterPasswordHintArgs(val emailAddress: String)
+
+/**
+ * Constructs a [MasterPasswordHintArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toMasterPasswordHintArgs(): MasterPasswordHintArgs {
+    val route = this.toRoute<MasterPasswordHintRoute>()
+    return MasterPasswordHintArgs(emailAddress = route.emailAddress)
 }
 
 /**
@@ -30,7 +39,10 @@ fun NavController.navigateToMasterPasswordHint(
     emailAddress: String,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("master_password_hint/$emailAddress", navOptions)
+    this.navigate(
+        route = MasterPasswordHintRoute(emailAddress = emailAddress),
+        navOptions = navOptions,
+    )
 }
 
 /**
@@ -39,12 +51,7 @@ fun NavController.navigateToMasterPasswordHint(
 fun NavGraphBuilder.masterPasswordHintDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = MASTER_PASSWORD_HINT_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<MasterPasswordHintRoute> {
         MasterPasswordHintScreen(onNavigateBack = onNavigateBack)
     }
 }

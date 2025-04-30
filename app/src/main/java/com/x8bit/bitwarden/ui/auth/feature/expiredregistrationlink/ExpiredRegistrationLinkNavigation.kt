@@ -7,14 +7,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val EXPIRED_REGISTRATION_LINK_ROUTE = "expired_registration_link"
+/**
+ * The type-safe route for the expired registration link screen.
+ */
+@Serializable
+data object ExpiredRegistrationLinkRoute
 
 /**
  * Navigate to the expired registration link screen.
  */
 fun NavController.navigateToExpiredRegistrationLinkScreen(navOptions: NavOptions? = null) {
-    this.navigate(route = EXPIRED_REGISTRATION_LINK_ROUTE, navOptions = navOptions)
+    this.navigate(route = ExpiredRegistrationLinkRoute, navOptions = navOptions)
 }
 
 /**
@@ -25,9 +30,7 @@ fun NavGraphBuilder.expiredRegistrationLinkDestination(
     onNavigateToStartRegistration: () -> Unit,
     onNavigateToLogin: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = EXPIRED_REGISTRATION_LINK_ROUTE,
-    ) {
+    composableWithPushTransitions<ExpiredRegistrationLinkRoute> {
         ExpiredRegistrationLinkScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToStartRegistration = onNavigateToStartRegistration,

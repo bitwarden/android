@@ -7,16 +7,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.bitwarden.core.annotation.OmitFromCoverage
+import kotlinx.serialization.Serializable
 
-const val SET_PASSWORD_ROUTE: String = "set_password"
+/**
+ * The type-safe route for the set password screen.
+ */
+@Serializable
+data object SetPasswordRoute
 
 /**
  * Add the Set Password screen to the nav graph.
  */
 fun NavGraphBuilder.setPasswordDestination() {
-    composable(
-        route = SET_PASSWORD_ROUTE,
-    ) {
+    composable<SetPasswordRoute> {
         SetPasswordScreen()
     }
 }
@@ -27,5 +30,5 @@ fun NavGraphBuilder.setPasswordDestination() {
 fun NavController.navigateToSetPassword(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(SET_PASSWORD_ROUTE, navOptions)
+    this.navigate(route = SetPasswordRoute, navOptions = navOptions)
 }

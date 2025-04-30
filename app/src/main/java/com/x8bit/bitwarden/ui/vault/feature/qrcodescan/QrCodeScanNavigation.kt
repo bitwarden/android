@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val QR_CODE_SCAN_ROUTE: String = "qr_code_scan"
+/**
+ * The type-safe route for the QR code scan screen.
+ */
+@Serializable
+data object QrCodeScanRoute
 
 /**
  * Add the QR code scan screen to the nav graph.
@@ -17,9 +22,7 @@ fun NavGraphBuilder.vaultQrCodeScanDestination(
     onNavigateBack: () -> Unit,
     onNavigateToManualCodeEntryScreen: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = QR_CODE_SCAN_ROUTE,
-    ) {
+    composableWithSlideTransitions<QrCodeScanRoute> {
         QrCodeScanScreen(
             onNavigateToManualCodeEntryScreen = onNavigateToManualCodeEntryScreen,
             onNavigateBack = onNavigateBack,
@@ -33,5 +36,5 @@ fun NavGraphBuilder.vaultQrCodeScanDestination(
 fun NavController.navigateToQrCodeScanScreen(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(QR_CODE_SCAN_ROUTE, navOptions)
+    this.navigate(route = QrCodeScanRoute, navOptions = navOptions)
 }

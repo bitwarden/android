@@ -213,9 +213,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     private val initialState = createVaultItemListingState()
-    private val initialSavedStateHandle = createSavedStateHandleWithVaultItemListingType(
-        vaultItemListingType = VaultItemListingType.Login,
-    )
+    private val initialSavedStateHandle
+        get() = createSavedStateHandleWithVaultItemListingType(
+            vaultItemListingType = VaultItemListingType.Login,
+        )
     private val mockProviderGetCredentialRequest =
         mockk<ProviderGetCredentialRequest>(relaxed = true) {
             every {
@@ -236,6 +237,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
+        mockkStatic(SavedStateHandle::toVaultItemListingArgs)
         mockkObject(
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
@@ -252,6 +254,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @AfterEach
     fun tearDown() {
+        unmockkStatic(SavedStateHandle::toVaultItemListingArgs)
         unmockkObject(
             ProviderCreateCredentialRequest.Companion,
             ProviderGetCredentialRequest.Companion,
@@ -307,7 +310,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
-    }
+        }
 
     @Test
     fun `on LockAccountClick should call lockVault for the given account`() {
@@ -4713,40 +4716,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
         }
 
-    @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType: VaultItemListingType,
-    ) = SavedStateHandle().apply {
-        set(
-            "vault_item_listing_type",
-            when (vaultItemListingType) {
-                is VaultItemListingType.Card -> "card"
-                is VaultItemListingType.Collection -> "collection"
-                is VaultItemListingType.Folder -> "folder"
-                is VaultItemListingType.Identity -> "identity"
-                is VaultItemListingType.Login -> "login"
-                is VaultItemListingType.SecureNote -> "secure_note"
-                is VaultItemListingType.Trash -> "trash"
-                is VaultItemListingType.SendFile -> "send_file"
-                is VaultItemListingType.SendText -> "send_text"
-                is VaultItemListingType.SshKey -> "ssh_key"
-            },
-        )
-        set(
-            "id",
-            when (vaultItemListingType) {
-                is VaultItemListingType.Card -> null
-                is VaultItemListingType.Collection -> vaultItemListingType.collectionId
-                is VaultItemListingType.Folder -> vaultItemListingType.folderId
-                is VaultItemListingType.Identity -> null
-                is VaultItemListingType.Login -> null
-                is VaultItemListingType.SecureNote -> null
-                is VaultItemListingType.Trash -> null
-                is VaultItemListingType.SendFile -> null
-                is VaultItemListingType.SendText -> null
-                is VaultItemListingType.SshKey -> null
-            },
-        )
+    ): SavedStateHandle = SavedStateHandle().apply {
+        every {
+            toVaultItemListingArgs()
+        } returns VaultItemListingArgs(vaultItemListingType = vaultItemListingType)
     }
 
     private fun setupMockUri() {

@@ -40,7 +40,7 @@ class OtherViewModel @Inject constructor(
 ) : BaseViewModel<OtherState, OtherEvent, OtherAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: OtherState(
-            isPreAuth = OtherArgs(savedStateHandle = savedStateHandle).isPreAuth,
+            isPreAuth = savedStateHandle.toOtherArgs().isPreAuth,
             allowScreenCapture = settingsRepo.isScreenCaptureAllowed,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = settingsRepo.clearClipboardFrequency,

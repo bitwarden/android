@@ -86,7 +86,7 @@ class GeneratorViewModel @Inject constructor(
     private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val generatorMode = GeneratorArgs(savedStateHandle).type
+        val generatorMode = savedStateHandle.toGeneratorArgs().type
         GeneratorState(
             generatedText = NO_GENERATED_TEXT,
             selectedType = when (generatorMode) {

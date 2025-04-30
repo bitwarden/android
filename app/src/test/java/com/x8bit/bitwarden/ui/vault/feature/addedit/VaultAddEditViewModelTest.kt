@@ -136,11 +136,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val loginInitialState = createVaultAddItemState(
         typeContentViewState = createLoginTypeContentViewState(),
     )
-    private val loginInitialSavedStateHandle = createSavedStateHandleWithState(
-        state = loginInitialState,
-        vaultAddEditType = VaultAddEditType.AddItem,
-        vaultItemCipherType = VaultItemCipherType.LOGIN,
-    )
+    private val loginInitialSavedStateHandle
+        get() = createSavedStateHandleWithState(
+            state = loginInitialState,
+            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultItemCipherType = VaultItemCipherType.LOGIN,
+        )
 
     private val totpTestCodeFlow: MutableSharedFlow<TotpCodeResult> = bufferedMutableSharedFlow()
 
@@ -199,16 +200,22 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CipherView::toViewState)
-        mockkStatic(UUID::randomUUID)
+        mockkStatic(
+            SavedStateHandle::toVaultAddEditArgs,
+            CipherView::toViewState,
+            UUID::randomUUID,
+        )
         mockkObject(ProviderCreateCredentialRequest.Companion)
         every { UUID.randomUUID().toString() } returns TEST_ID
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CipherView::toViewState)
-        unmockkStatic(UUID::randomUUID)
+        unmockkStatic(
+            SavedStateHandle::toVaultAddEditArgs,
+            CipherView::toViewState,
+            UUID::randomUUID,
+        )
         unmockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
@@ -4691,24 +4698,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         vaultItemCipherType: VaultItemCipherType,
     ): SavedStateHandle = SavedStateHandle().apply {
         set("state", state)
-        set(
-            "vault_add_edit_type",
-            when (vaultAddEditType) {
-                is VaultAddEditType.AddItem -> "add"
-                is VaultAddEditType.EditItem -> "edit"
-                is VaultAddEditType.CloneItem -> "clone"
-            },
-        )
-        set("vault_edit_id", (vaultAddEditType as? VaultAddEditType.EditItem)?.vaultItemId)
-        set(
-            "vault_item_type",
-            when (vaultItemCipherType) {
-                VaultItemCipherType.LOGIN -> "login"
-                VaultItemCipherType.CARD -> "card"
-                VaultItemCipherType.IDENTITY -> "identity"
-                VaultItemCipherType.SECURE_NOTE -> "secure_note"
-                VaultItemCipherType.SSH_KEY -> "ssh_key"
-            },
+        every { toVaultAddEditArgs() } returns VaultAddEditArgs(
+            vaultAddEditType = vaultAddEditType,
+            vaultItemCipherType = vaultItemCipherType,
         )
     }
 

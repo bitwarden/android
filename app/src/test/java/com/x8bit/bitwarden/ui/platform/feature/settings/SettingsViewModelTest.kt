@@ -9,12 +9,16 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class SettingsViewModelTest : BaseViewModelTest() {
@@ -29,6 +33,16 @@ class SettingsViewModelTest : BaseViewModelTest() {
     }
     private val specialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toSettingsArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toSettingsArgs)
     }
 
     @Test
@@ -175,7 +189,7 @@ class SettingsViewModelTest : BaseViewModelTest() {
         firstTimeActionManager = firstTimeManager,
         specialCircumstanceManager = specialCircumstanceManager,
         savedStateHandle = SavedStateHandle().apply {
-            set("isPreAuth", isPreAuth)
+            every { toSettingsArgs() } returns SettingsArgs(isPreAuth = isPreAuth)
         },
     )
 }

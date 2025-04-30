@@ -120,12 +120,18 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CipherView::toViewState)
+        mockkStatic(
+            SavedStateHandle::toVaultItemArgs,
+            CipherView::toViewState,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CipherView::toViewState)
+        unmockkStatic(
+            SavedStateHandle::toVaultItemArgs,
+            CipherView::toViewState,
+        )
         unmockkStatic(Uri::class)
     }
 
@@ -3773,18 +3779,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     ): VaultItemViewModel = VaultItemViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            set("vault_item_id", vaultItemId)
-            set(
-                "vault_item_cipher_type",
-                when (vaultItemCipherType) {
-                    VaultItemCipherType.LOGIN -> "login"
-                    VaultItemCipherType.CARD -> "card"
-                    VaultItemCipherType.IDENTITY -> "identity"
-                    VaultItemCipherType.SECURE_NOTE -> "secure_note"
-                    VaultItemCipherType.SSH_KEY -> "ssh_key"
-                },
-            )
             set("tempAttachmentFile", tempAttachmentFile)
+            every {
+                toVaultItemArgs()
+            } returns VaultItemArgs(vaultItemId = vaultItemId, cipherType = vaultItemCipherType)
         },
         clipboardManager = bitwardenClipboardManager,
         authRepository = authRepository,

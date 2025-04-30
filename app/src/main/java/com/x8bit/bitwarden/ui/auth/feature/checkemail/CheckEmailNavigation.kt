@@ -6,19 +6,24 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL: String = "email"
-private const val CHECK_EMAIL_ROUTE: String = "check_email/{$EMAIL}"
+/**
+ * The type-safe route for the check email screen.
+ */
+@Serializable
+data class CheckEmailRoute(
+    val emailAddress: String,
+)
 
 /**
  * Navigate to the check email screen.
  */
 fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOptions? = null) {
-    this.navigate("check_email/$emailAddress", navOptions)
+    this.navigate(route = CheckEmailRoute(emailAddress = emailAddress), navOptions = navOptions)
 }
 
 /**
@@ -26,10 +31,14 @@ fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOpti
  */
 data class CheckEmailArgs(
     val emailAddress: String,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL)),
-    )
+)
+
+/**
+ * Constructs a [CheckEmailArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toCheckEmailArgs(): CheckEmailArgs {
+    val route = this.toRoute<CheckEmailRoute>()
+    return CheckEmailArgs(emailAddress = route.emailAddress)
 }
 
 /**
@@ -38,12 +47,7 @@ data class CheckEmailArgs(
 fun NavGraphBuilder.checkEmailDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = CHECK_EMAIL_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<CheckEmailRoute> {
         CheckEmailScreen(
             onNavigateBack = onNavigateBack,
         )

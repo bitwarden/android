@@ -22,10 +22,14 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -50,6 +54,16 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         } returns mutableAuthRequestSharedFlow
         coEvery { getAuthRequestByIdFlow(REQUEST_ID) } returns mutableAuthRequestSharedFlow
         every { userStateFlow } returns mutableUserStateFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toLoginApprovalArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toLoginApprovalArgs)
     }
 
     @Test
@@ -415,9 +429,10 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         clock = fixedClock,
         authRepository = mockAuthRepository,
         specialCircumstanceManager = mockSpecialCircumstanceManager,
-        savedStateHandle = SavedStateHandle()
-            .also { it["fingerprint"] = FINGERPRINT }
-            .apply { set("state", state) },
+        savedStateHandle = SavedStateHandle().apply {
+            set("state", state)
+            every { toLoginApprovalArgs() } returns LoginApprovalArgs(fingerprint = FINGERPRINT)
+        },
     )
 }
 

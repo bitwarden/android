@@ -6,23 +6,37 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
+import kotlinx.serialization.Serializable
 
 private const val ADD_TYPE: String = "add"
 private const val EDIT_TYPE: String = "edit"
 private const val EDIT_ITEM_ID: String = "folder_edit_id"
 private const val PARENT_FOLDER_NAME: String = "parent_folder_name"
 
-private const val ADD_EDIT_ITEM_PREFIX: String = "folder_add_edit_item"
 private const val ADD_EDIT_ITEM_TYPE: String = "folder_add_edit_type"
 
-private const val ADD_EDIT_ITEM_ROUTE: String =
-    "$ADD_EDIT_ITEM_PREFIX/{$ADD_EDIT_ITEM_TYPE}" +
-        "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}&$PARENT_FOLDER_NAME={$PARENT_FOLDER_NAME}"
+/**
+ * The type-safe route for the login approval screen.
+ */
+@Serializable
+data class FolderAddEditRoute(
+    val actionType: FolderActionType,
+    val folderId: String?,
+    val parentFolderName: String?,
+)
+
+/**
+ * Represents the action being done with a folder.
+ */
+@Serializable
+enum class FolderActionType {
+    ADD,
+    EDIT,
+}
 
 /**
  * Class to retrieve folder add & edit arguments from the [SavedStateHandle].
@@ -30,14 +44,19 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
 data class FolderAddEditArgs(
     val folderAddEditType: FolderAddEditType,
     val parentFolderName: String?,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        folderAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
-            ADD_TYPE -> FolderAddEditType.AddItem
-            EDIT_TYPE -> FolderAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
-            else -> throw IllegalStateException("Unknown FolderAddEditType.")
+)
+
+/**
+ * Constructs a [FolderAddEditArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toFolderAddEditArgs(): FolderAddEditArgs {
+    val route = this.toRoute<FolderAddEditRoute>()
+    return FolderAddEditArgs(
+        folderAddEditType = when (route.actionType) {
+            FolderActionType.ADD -> FolderAddEditType.AddItem
+            FolderActionType.EDIT -> FolderAddEditType.EditItem(requireNotNull(route.folderId))
         },
-        parentFolderName = savedStateHandle[PARENT_FOLDER_NAME],
+        parentFolderName = route.parentFolderName,
     )
 }
 
@@ -47,20 +66,7 @@ data class FolderAddEditArgs(
 fun NavGraphBuilder.folderAddEditDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = ADD_EDIT_ITEM_ROUTE,
-        arguments = listOf(
-            navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
-            navArgument(EDIT_ITEM_ID) {
-                nullable = true
-                type = NavType.StringType
-            },
-            navArgument(PARENT_FOLDER_NAME) {
-                nullable = true
-                type = NavType.StringType
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<FolderAddEditRoute> {
         FolderAddEditScreen(onNavigateBack = onNavigateBack)
     }
 }
@@ -73,18 +79,20 @@ fun NavController.navigateToFolderAddEdit(
     parentFolderName: String? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$ADD_EDIT_ITEM_PREFIX/${folderAddEditType.toTypeString()}" +
-            "?$EDIT_ITEM_ID=${folderAddEditType.toIdOrNull()}" +
-            "&$PARENT_FOLDER_NAME=$parentFolderName",
+    this.navigate(
+        route = FolderAddEditRoute(
+            actionType = folderAddEditType.toFolderActionType(),
+            folderId = folderAddEditType.toIdOrNull(),
+            parentFolderName = parentFolderName,
+        ),
         navOptions = navOptions,
     )
 }
 
-private fun FolderAddEditType.toTypeString(): String =
+private fun FolderAddEditType.toFolderActionType(): FolderActionType =
     when (this) {
-        is FolderAddEditType.AddItem -> ADD_TYPE
-        is FolderAddEditType.EditItem -> EDIT_TYPE
+        is FolderAddEditType.AddItem -> FolderActionType.ADD
+        is FolderAddEditType.EditItem -> FolderActionType.EDIT
     }
 
 private fun FolderAddEditType.toIdOrNull(): String? =

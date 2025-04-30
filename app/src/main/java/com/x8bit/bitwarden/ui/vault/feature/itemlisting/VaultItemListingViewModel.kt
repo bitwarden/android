@@ -133,7 +133,8 @@ class VaultItemListingViewModel @Inject constructor(
         val fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = specialCircumstance?.toFido2AssertionRequestOrNull()
         VaultItemListingState(
-            itemListingType = VaultItemListingArgs(savedStateHandle = savedStateHandle)
+            itemListingType = savedStateHandle
+                .toVaultItemListingArgs()
                 .vaultItemListingType
                 .toItemListingType(),
             activeAccountSummary = activeAccountSummary,

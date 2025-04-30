@@ -7,11 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
 /**
- * The route for navigating to the [TrustedDeviceScreen].
+ * The type-safe route for the trusted device screen.
  */
-const val TRUSTED_DEVICE_ROUTE: String = "trusted_device"
+@Serializable
+data object TrustedDeviceRoute
 
 /**
  * Add the Trusted Device Screen to the nav graph.
@@ -21,9 +23,7 @@ fun NavGraphBuilder.trustedDeviceDestination(
     onNavigateToLoginWithOtherDevice: (emailAddress: String) -> Unit,
     onNavigateToLock: (emailAddress: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = TRUSTED_DEVICE_ROUTE,
-    ) {
+    composableWithSlideTransitions<TrustedDeviceRoute> {
         TrustedDeviceScreen(
             onNavigateToAdminApproval = onNavigateToAdminApproval,
             onNavigateToLoginWithOtherDevice = onNavigateToLoginWithOtherDevice,
@@ -38,5 +38,5 @@ fun NavGraphBuilder.trustedDeviceDestination(
 fun NavController.navigateToTrustedDevice(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(TRUSTED_DEVICE_ROUTE, navOptions)
+    this.navigate(route = TrustedDeviceRoute, navOptions = navOptions)
 }

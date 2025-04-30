@@ -6,19 +6,19 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val VAULT_MOVE_TO_ORGANIZATION_PREFIX = "vault_move_to_organization"
-private const val VAULT_MOVE_TO_ORGANIZATION_ID = "vault_move_to_organization_id"
-private const val VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS =
-    "vault_move_to_organization_only_collections"
-private const val VAULT_MOVE_TO_ORGANIZATION_ROUTE =
-    VAULT_MOVE_TO_ORGANIZATION_PREFIX +
-        "/{$VAULT_MOVE_TO_ORGANIZATION_ID}" +
-        "/{$VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS}"
+/**
+ * The type-safe route for the vault move to organization screen.
+ */
+@Serializable
+data class VaultMoveToOrganizationRoute(
+    val vaultItemId: String,
+    val showOnlyCollections: Boolean,
+)
 
 /**
  * Class to retrieve vault move to organization arguments from the [SavedStateHandle].
@@ -26,12 +26,16 @@ private const val VAULT_MOVE_TO_ORGANIZATION_ROUTE =
 data class VaultMoveToOrganizationArgs(
     val vaultItemId: String,
     val showOnlyCollections: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        vaultItemId = checkNotNull(savedStateHandle[VAULT_MOVE_TO_ORGANIZATION_ID]) as String,
-        showOnlyCollections =
-            (checkNotNull(savedStateHandle[VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS]) as String)
-                .toBoolean(),
+)
+
+/**
+ * Constructs a [VaultMoveToOrganizationArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toVaultMoveToOrganizationArgs(): VaultMoveToOrganizationArgs {
+    val route = this.toRoute<VaultMoveToOrganizationRoute>()
+    return VaultMoveToOrganizationArgs(
+        vaultItemId = route.vaultItemId,
+        showOnlyCollections = route.showOnlyCollections,
     )
 }
 
@@ -41,15 +45,7 @@ data class VaultMoveToOrganizationArgs(
 fun NavGraphBuilder.vaultMoveToOrganizationDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = VAULT_MOVE_TO_ORGANIZATION_ROUTE,
-        arguments = listOf(
-            navArgument(VAULT_MOVE_TO_ORGANIZATION_ID) { type = NavType.StringType },
-            navArgument(VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS) {
-                type = NavType.StringType
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<VaultMoveToOrganizationRoute> {
         VaultMoveToOrganizationScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -64,8 +60,11 @@ fun NavController.navigateToVaultMoveToOrganization(
     showOnlyCollections: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$VAULT_MOVE_TO_ORGANIZATION_PREFIX/$vaultItemId/$showOnlyCollections",
+    this.navigate(
+        route = VaultMoveToOrganizationRoute(
+            vaultItemId = vaultItemId,
+            showOnlyCollections = showOnlyCollections,
+        ),
         navOptions = navOptions,
     )
 }

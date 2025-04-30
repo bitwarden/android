@@ -6,46 +6,79 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import kotlinx.serialization.Serializable
 
-private const val SEARCH_TYPE: String = "search_type"
-private const val SEARCH_TYPE_SEND_ALL: String = "search_type_sends_all"
-private const val SEARCH_TYPE_SEND_TEXT: String = "search_type_sends_text"
-private const val SEARCH_TYPE_SEND_FILE: String = "search_type_sends_file"
-private const val SEARCH_TYPE_VAULT_ALL: String = "search_type_vault_all"
-private const val SEARCH_TYPE_VAULT_LOGINS: String = "search_type_vault_logins"
-private const val SEARCH_TYPE_VAULT_CARDS: String = "search_type_vault_cards"
-private const val SEARCH_TYPE_VAULT_IDENTITIES: String = "search_type_vault_identities"
-private const val SEARCH_TYPE_VAULT_SECURE_NOTES: String = "search_type_vault_secure_notes"
-private const val SEARCH_TYPE_VAULT_COLLECTION: String = "search_type_vault_collection"
-private const val SEARCH_TYPE_VAULT_NO_FOLDER: String = "search_type_vault_no_folder"
-private const val SEARCH_TYPE_VAULT_FOLDER: String = "search_type_vault_folder"
-private const val SEARCH_TYPE_VAULT_TRASH: String = "search_type_vault_trash"
-private const val SEARCH_TYPE_VAULT_VERIFICATION_CODES: String =
-    "search_type_vault_verification_codes"
-private const val SEARCH_TYPE_ID: String = "search_type_id"
-private const val SEARCH_TYPE_VAULT_SSH_KEYS: String = "search_type_vault_ssh_keys"
+/**
+ * The type-safe route for the search screen.
+ */
+@Serializable
+data class SearchRoute(
+    val searchableItemType: SearchableItemType,
+    val id: String?,
+)
 
-private const val SEARCH_ROUTE_PREFIX: String = "search"
-private const val SEARCH_ROUTE: String = "$SEARCH_ROUTE_PREFIX/{$SEARCH_TYPE}/{$SEARCH_TYPE_ID}"
+/**
+ * Represents the various types of searchable items.
+ */
+@Serializable
+enum class SearchableItemType {
+    SENDS_ALL,
+    SENDS_TEXTS,
+    SENDS_FILES,
+    VAULT_ALL,
+    VAULT_LOGINS,
+    VAULT_CARDS,
+    VAULT_IDENTITIES,
+    VAULT_SECURE_NOTES,
+    VAULT_SSH_KEYS,
+    VAULT_COLLECTIONS,
+    VAULT_NO_FOLDER,
+    VAULT_FOLDER,
+    VAULT_TRASH,
+    VAULT_VERIFICATION_CODES,
+}
 
 /**
  * Class to retrieve search arguments from the [SavedStateHandle].
  */
 data class SearchArgs(
     val type: SearchType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        type = determineSearchType(
-            searchTypeString = requireNotNull(savedStateHandle.get<String>(SEARCH_TYPE)),
-            id = savedStateHandle.get<String>(SEARCH_TYPE_ID),
-        ),
+)
+
+/**
+ * Constructs a [SearchArgs] from the [SavedStateHandle] and internal route data.
+ */
+@Suppress("CyclomaticComplexMethod")
+fun SavedStateHandle.toSearchArgs(): SearchArgs {
+    val route = this.toRoute<SearchRoute>()
+    return SearchArgs(
+        type = when (route.searchableItemType) {
+            SearchableItemType.SENDS_ALL -> SearchType.Sends.All
+            SearchableItemType.SENDS_TEXTS -> SearchType.Sends.Texts
+            SearchableItemType.SENDS_FILES -> SearchType.Sends.Files
+            SearchableItemType.VAULT_ALL -> SearchType.Vault.All
+            SearchableItemType.VAULT_LOGINS -> SearchType.Vault.Logins
+            SearchableItemType.VAULT_CARDS -> SearchType.Vault.Cards
+            SearchableItemType.VAULT_IDENTITIES -> SearchType.Vault.Identities
+            SearchableItemType.VAULT_SECURE_NOTES -> SearchType.Vault.SecureNotes
+            SearchableItemType.VAULT_SSH_KEYS -> SearchType.Vault.SshKeys
+            SearchableItemType.VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
+            SearchableItemType.VAULT_TRASH -> SearchType.Vault.Trash
+            SearchableItemType.VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
+            SearchableItemType.VAULT_FOLDER -> SearchType.Vault.Folder(
+                folderId = requireNotNull(route.id),
+            )
+
+            SearchableItemType.VAULT_COLLECTIONS -> SearchType.Vault.Collection(
+                collectionId = requireNotNull(route.id),
+            )
+        },
     )
 }
 
@@ -58,16 +91,7 @@ fun NavGraphBuilder.searchDestination(
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = SEARCH_ROUTE,
-        arguments = listOf(
-            navArgument(SEARCH_TYPE) { type = NavType.StringType },
-            navArgument(SEARCH_TYPE_ID) {
-                type = NavType.StringType
-                nullable = true
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<SearchRoute> {
         SearchScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToEditSend = onNavigateToEditSend,
@@ -84,50 +108,31 @@ fun NavController.navigateToSearch(
     searchType: SearchType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$SEARCH_ROUTE_PREFIX/${searchType.toTypeString()}/${searchType.toIdOrNull()}",
+    this.navigate(
+        route = SearchRoute(
+            searchableItemType = searchType.toSearchableItemType(),
+            id = searchType.toIdOrNull(),
+        ),
         navOptions = navOptions,
     )
 }
 
-private fun determineSearchType(
-    searchTypeString: String,
-    id: String?,
-): SearchType =
-    when (searchTypeString) {
-        SEARCH_TYPE_SEND_ALL -> SearchType.Sends.All
-        SEARCH_TYPE_SEND_TEXT -> SearchType.Sends.Texts
-        SEARCH_TYPE_SEND_FILE -> SearchType.Sends.Files
-        SEARCH_TYPE_VAULT_ALL -> SearchType.Vault.All
-        SEARCH_TYPE_VAULT_LOGINS -> SearchType.Vault.Logins
-        SEARCH_TYPE_VAULT_CARDS -> SearchType.Vault.Cards
-        SEARCH_TYPE_VAULT_IDENTITIES -> SearchType.Vault.Identities
-        SEARCH_TYPE_VAULT_SECURE_NOTES -> SearchType.Vault.SecureNotes
-        SEARCH_TYPE_VAULT_COLLECTION -> SearchType.Vault.Collection(requireNotNull(id))
-        SEARCH_TYPE_VAULT_NO_FOLDER -> SearchType.Vault.NoFolder
-        SEARCH_TYPE_VAULT_FOLDER -> SearchType.Vault.Folder(requireNotNull(id))
-        SEARCH_TYPE_VAULT_TRASH -> SearchType.Vault.Trash
-        SEARCH_TYPE_VAULT_VERIFICATION_CODES -> SearchType.Vault.VerificationCodes
-        SEARCH_TYPE_VAULT_SSH_KEYS -> SearchType.Vault.SshKeys
-        else -> throw IllegalArgumentException("Invalid Search Type")
-    }
-
-private fun SearchType.toTypeString(): String =
+private fun SearchType.toSearchableItemType(): SearchableItemType =
     when (this) {
-        SearchType.Sends.All -> SEARCH_TYPE_SEND_ALL
-        SearchType.Sends.Files -> SEARCH_TYPE_SEND_FILE
-        SearchType.Sends.Texts -> SEARCH_TYPE_SEND_TEXT
-        SearchType.Vault.All -> SEARCH_TYPE_VAULT_ALL
-        SearchType.Vault.Cards -> SEARCH_TYPE_VAULT_CARDS
-        is SearchType.Vault.Collection -> SEARCH_TYPE_VAULT_COLLECTION
-        is SearchType.Vault.Folder -> SEARCH_TYPE_VAULT_FOLDER
-        SearchType.Vault.Identities -> SEARCH_TYPE_VAULT_IDENTITIES
-        SearchType.Vault.Logins -> SEARCH_TYPE_VAULT_LOGINS
-        SearchType.Vault.NoFolder -> SEARCH_TYPE_VAULT_NO_FOLDER
-        SearchType.Vault.SecureNotes -> SEARCH_TYPE_VAULT_SECURE_NOTES
-        SearchType.Vault.Trash -> SEARCH_TYPE_VAULT_TRASH
-        SearchType.Vault.VerificationCodes -> SEARCH_TYPE_VAULT_VERIFICATION_CODES
-        SearchType.Vault.SshKeys -> SEARCH_TYPE_VAULT_SSH_KEYS
+        SearchType.Sends.All -> SearchableItemType.SENDS_ALL
+        SearchType.Sends.Files -> SearchableItemType.SENDS_FILES
+        SearchType.Sends.Texts -> SearchableItemType.SENDS_TEXTS
+        SearchType.Vault.All -> SearchableItemType.VAULT_ALL
+        SearchType.Vault.Cards -> SearchableItemType.VAULT_CARDS
+        is SearchType.Vault.Collection -> SearchableItemType.VAULT_COLLECTIONS
+        is SearchType.Vault.Folder -> SearchableItemType.VAULT_FOLDER
+        SearchType.Vault.Identities -> SearchableItemType.VAULT_IDENTITIES
+        SearchType.Vault.Logins -> SearchableItemType.VAULT_LOGINS
+        SearchType.Vault.NoFolder -> SearchableItemType.VAULT_NO_FOLDER
+        SearchType.Vault.SecureNotes -> SearchableItemType.VAULT_SECURE_NOTES
+        SearchType.Vault.Trash -> SearchableItemType.VAULT_TRASH
+        SearchType.Vault.VerificationCodes -> SearchableItemType.VAULT_VERIFICATION_CODES
+        SearchType.Vault.SshKeys -> SearchableItemType.VAULT_SSH_KEYS
     }
 
 private fun SearchType.toIdOrNull(): String? =

@@ -20,12 +20,16 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.crypto.Cipher
 
@@ -54,6 +58,16 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             isBiometricIntegrityValid(userId = DEFAULT_USER_ID, cipher = CIPHER)
         } returns false
         every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toSetupUnlockArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toSetupUnlockArgs)
     }
 
     @Test
@@ -373,12 +387,10 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         state: SetupUnlockState? = null,
     ): SetupUnlockViewModel =
         SetupUnlockViewModel(
-            savedStateHandle = SavedStateHandle(
-                mapOf(
-                    "state" to state,
-                    "isInitialSetup" to true,
-                ),
-            ),
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+                every { toSetupUnlockArgs() } returns SetupUnlockArgs(isInitialSetup = true)
+            },
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             biometricsEncryptionManager = biometricsEncryptionManager,

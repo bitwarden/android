@@ -58,12 +58,18 @@ class LoginViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::generateUriForCaptcha)
+        mockkStatic(
+            ::generateUriForCaptcha,
+            SavedStateHandle::toLoginArgs,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::generateUriForCaptcha)
+        unmockkStatic(
+            ::generateUriForCaptcha,
+            SavedStateHandle::toLoginArgs,
+        )
     }
 
     @Test
@@ -617,9 +623,9 @@ class LoginViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
             vaultRepository = vaultRepository,
-            savedStateHandle = SavedStateHandle().also {
-                it["email_address"] = EMAIL
-                it["state"] = state
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+                every { toLoginArgs() } returns LoginArgs(emailAddress = EMAIL, captchaToken = null)
             },
         )
 

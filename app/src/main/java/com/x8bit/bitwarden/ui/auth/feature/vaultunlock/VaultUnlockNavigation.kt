@@ -6,28 +6,55 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
+import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.serialization.Serializable
 
-private const val VAULT_UNLOCK_TYPE: String = "unlock_type"
-private const val TDE_VAULT_UNLOCK_ROUTE_PREFIX: String = "tde_vault_unlock"
-private const val TDE_VAULT_UNLOCK_ROUTE: String =
-    "$TDE_VAULT_UNLOCK_ROUTE_PREFIX/{$VAULT_UNLOCK_TYPE}"
-private const val VAULT_UNLOCK_ROUTE_PREFIX: String = "vault_unlock"
-const val VAULT_UNLOCK_ROUTE: String = "$VAULT_UNLOCK_ROUTE_PREFIX/{$VAULT_UNLOCK_TYPE}"
+/**
+ * The type-safe route for the vault unlock screen.
+ */
+@Serializable
+sealed class VaultUnlockRoute {
+    /**
+     * The underlying [UnlockType] used in the vault unlock screen.
+     */
+    abstract val unlockType: UnlockType
+
+    /**
+     * The type-safe route for the standard vault unlock screen.
+     */
+    @Serializable
+    data object Standard : VaultUnlockRoute() {
+        override val unlockType: UnlockType get() = UnlockType.STANDARD
+    }
+
+    /**
+     * The type-safe route for the TDE vault unlock screen.
+     */
+    @Serializable
+    data object Tde : VaultUnlockRoute() {
+        override val unlockType: UnlockType get() = UnlockType.TDE
+    }
+}
 
 /**
  * Class to retrieve vault unlock arguments from the [SavedStateHandle].
  */
 data class VaultUnlockArgs(
     val unlockType: UnlockType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        unlockType = checkNotNull(savedStateHandle.get<UnlockType>(VAULT_UNLOCK_TYPE)),
-    )
+)
+
+/**
+ * Constructs a [VaultUnlockArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toVaultUnlockArgs(): VaultUnlockArgs {
+    val route = this.toObjectRoute<VaultUnlockRoute.Tde>()
+        ?: this.toObjectRoute<VaultUnlockRoute.Standard>()
+    return route
+        ?.let { VaultUnlockArgs(unlockType = it.unlockType) }
+        ?: throw IllegalStateException("Missing correct route for VaultUnlockScreen")
 }
 
 /**
@@ -37,7 +64,7 @@ fun NavController.navigateToVaultUnlock(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$VAULT_UNLOCK_ROUTE_PREFIX/${UnlockType.STANDARD}",
+        route = VaultUnlockRoute.Standard,
         navOptions = navOptions,
     )
 }
@@ -46,12 +73,7 @@ fun NavController.navigateToVaultUnlock(
  * Add the Vault Unlock screen to the nav graph.
  */
 fun NavGraphBuilder.vaultUnlockDestination() {
-    composable(
-        route = VAULT_UNLOCK_ROUTE,
-        arguments = listOf(
-            navArgument(VAULT_UNLOCK_TYPE) { type = NavType.EnumType(UnlockType::class.java) },
-        ),
-    ) {
+    composable<VaultUnlockRoute.Standard> {
         VaultUnlockScreen()
     }
 }
@@ -63,7 +85,7 @@ fun NavController.navigateToTdeVaultUnlock(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$TDE_VAULT_UNLOCK_ROUTE_PREFIX/${UnlockType.TDE}",
+        route = VaultUnlockRoute.Tde,
         navOptions = navOptions,
     )
 }
@@ -72,12 +94,7 @@ fun NavController.navigateToTdeVaultUnlock(
  * Add the Vault Unlock screen to the TDE nav graph.
  */
 fun NavGraphBuilder.tdeVaultUnlockDestination() {
-    composable(
-        route = TDE_VAULT_UNLOCK_ROUTE,
-        arguments = listOf(
-            navArgument(VAULT_UNLOCK_TYPE) { type = NavType.EnumType(UnlockType::class.java) },
-        ),
-    ) {
+    composable<VaultUnlockRoute.Tde> {
         VaultUnlockScreen()
     }
 }

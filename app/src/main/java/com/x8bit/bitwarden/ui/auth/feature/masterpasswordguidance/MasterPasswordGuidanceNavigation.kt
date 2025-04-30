@@ -7,14 +7,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val MASTER_PASSWORD_GUIDANCE = "master_password_guidance"
+/**
+ * The type-safe route for the master password guidance screen.
+ */
+@Serializable
+data object MasterPasswordGuidanceRoute
 
 /**
  * Navigate to the master password guidance screen.
  */
 fun NavController.navigateToMasterPasswordGuidance(navOptions: NavOptions? = null) {
-    this.navigate(MASTER_PASSWORD_GUIDANCE, navOptions)
+    this.navigate(route = MasterPasswordGuidanceRoute, navOptions = navOptions)
 }
 
 /**
@@ -24,9 +29,7 @@ fun NavGraphBuilder.masterPasswordGuidanceDestination(
     onNavigateBack: () -> Unit,
     onNavigateToGeneratePassword: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = MASTER_PASSWORD_GUIDANCE,
-    ) {
+    composableWithSlideTransitions<MasterPasswordGuidanceRoute> {
         MasterPasswordGuidanceScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToGeneratePassword = onNavigateToGeneratePassword,

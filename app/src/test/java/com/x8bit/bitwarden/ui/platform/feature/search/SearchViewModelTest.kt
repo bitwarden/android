@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
@@ -130,6 +131,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(
+            SavedStateHandle::toSearchArgs,
             List<CipherView>::toViewState,
             List<CipherView>::filterAndOrganize,
             List<CipherView>::toFilteredList,
@@ -139,6 +141,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
+            SavedStateHandle::toSearchArgs,
             List<CipherView>::toViewState,
             List<CipherView>::filterAndOrganize,
             List<CipherView>::toFilteredList,
@@ -1518,44 +1521,31 @@ class SearchViewModelTest : BaseViewModelTest() {
     ): SearchViewModel = SearchViewModel(
         SavedStateHandle().apply {
             set("state", initialState)
-            set(
-                "search_type",
-                when (initialState?.searchType) {
-                    SearchTypeData.Sends.All -> "search_type_sends_all"
-                    SearchTypeData.Sends.Files -> "search_type_sends_file"
-                    SearchTypeData.Sends.Texts -> "search_type_sends_text"
-                    SearchTypeData.Vault.All -> "search_type_vault_all"
-                    SearchTypeData.Vault.Cards -> "search_type_vault_cards"
-                    SearchTypeData.Vault.SshKeys -> "search_type_vault_ssh_keys"
-                    is SearchTypeData.Vault.Collection -> "search_type_vault_collection"
-                    is SearchTypeData.Vault.Folder -> "search_type_vault_folder"
-                    SearchTypeData.Vault.Identities -> "search_type_vault_identities"
-                    SearchTypeData.Vault.Logins -> "search_type_vault_logins"
-                    SearchTypeData.Vault.NoFolder -> "search_type_vault_no_folder"
-                    SearchTypeData.Vault.SecureNotes -> "search_type_vault_secure_notes"
-                    SearchTypeData.Vault.VerificationCodes -> "search_type_vault_verification_codes"
-                    SearchTypeData.Vault.Trash -> "search_type_vault_trash"
-                    null -> "search_type_vault_all"
-                },
-            )
-            set(
-                "search_type_id",
-                when (val searchType = initialState?.searchType) {
-                    SearchTypeData.Sends.All -> null
-                    SearchTypeData.Sends.Files -> null
-                    SearchTypeData.Sends.Texts -> null
-                    SearchTypeData.Vault.All -> null
-                    SearchTypeData.Vault.Cards -> null
-                    SearchTypeData.Vault.SshKeys -> null
-                    is SearchTypeData.Vault.Collection -> searchType.collectionId
-                    is SearchTypeData.Vault.Folder -> searchType.folderId
-                    SearchTypeData.Vault.Identities -> null
-                    SearchTypeData.Vault.Logins -> null
-                    SearchTypeData.Vault.NoFolder -> null
-                    SearchTypeData.Vault.SecureNotes -> null
-                    SearchTypeData.Vault.VerificationCodes -> null
-                    SearchTypeData.Vault.Trash -> null
-                    null -> null
+            every {
+                toSearchArgs()
+            } returns SearchArgs(
+                type = when (val searchType = initialState?.searchType) {
+                    SearchTypeData.Sends.All -> SearchType.Sends.All
+                    SearchTypeData.Sends.Files -> SearchType.Sends.Files
+                    SearchTypeData.Sends.Texts -> SearchType.Sends.Texts
+                    SearchTypeData.Vault.All -> SearchType.Vault.All
+                    SearchTypeData.Vault.Cards -> SearchType.Vault.Cards
+                    is SearchTypeData.Vault.Collection -> SearchType.Vault.Collection(
+                        collectionId = searchType.collectionId,
+                    )
+
+                    is SearchTypeData.Vault.Folder -> SearchType.Vault.Folder(
+                        folderId = searchType.folderId,
+                    )
+
+                    SearchTypeData.Vault.Identities -> SearchType.Vault.Identities
+                    SearchTypeData.Vault.Logins -> SearchType.Vault.Logins
+                    SearchTypeData.Vault.NoFolder -> SearchType.Vault.NoFolder
+                    SearchTypeData.Vault.SecureNotes -> SearchType.Vault.SecureNotes
+                    SearchTypeData.Vault.SshKeys -> SearchType.Vault.SshKeys
+                    SearchTypeData.Vault.Trash -> SearchType.Vault.Trash
+                    SearchTypeData.Vault.VerificationCodes -> SearchType.Vault.VerificationCodes
+                    null -> SearchType.Vault.All
                 },
             )
         },

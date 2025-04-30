@@ -6,24 +6,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import kotlinx.serialization.Serializable
 
-private const val LOGIN: String = "login"
-private const val CARD: String = "card"
-private const val IDENTITY: String = "identity"
-private const val SECURE_NOTE: String = "secure_note"
-private const val SSH_KEY: String = "ssh_key"
-private const val VAULT_ITEM_CIPHER_TYPE: String = "vault_item_cipher_type"
-
-private const val VAULT_ITEM_PREFIX = "vault_item"
-private const val VAULT_ITEM_ID = "vault_item_id"
-private const val VAULT_ITEM_ROUTE = "$VAULT_ITEM_PREFIX/{$VAULT_ITEM_ID}" +
-    "?$VAULT_ITEM_CIPHER_TYPE={$VAULT_ITEM_CIPHER_TYPE}"
+/**
+ * The type-safe route for the vault item screen.
+ */
+@Serializable
+data class VaultItemRoute(
+    val vaultItemId: String,
+    val cipherType: VaultItemCipherType,
+)
 
 /**
  * Class to retrieve vault item arguments from the [SavedStateHandle].
@@ -31,12 +28,14 @@ private const val VAULT_ITEM_ROUTE = "$VAULT_ITEM_PREFIX/{$VAULT_ITEM_ID}" +
 data class VaultItemArgs(
     val vaultItemId: String,
     val cipherType: VaultItemCipherType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        vaultItemId = checkNotNull(savedStateHandle.get<String>(VAULT_ITEM_ID)),
-        cipherType = requireNotNull(savedStateHandle.get<String>(VAULT_ITEM_CIPHER_TYPE))
-            .toVaultItemCipherType(),
-    )
+)
+
+/**
+ * Constructs a [VaultItemArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toVaultItemArgs(): VaultItemArgs {
+    val route = this.toRoute<VaultItemRoute>()
+    return VaultItemArgs(vaultItemId = route.vaultItemId, cipherType = route.cipherType)
 }
 
 /**
@@ -49,13 +48,7 @@ fun NavGraphBuilder.vaultItemDestination(
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = VAULT_ITEM_ROUTE,
-        arguments = listOf(
-            navArgument(VAULT_ITEM_ID) { type = NavType.StringType },
-            navArgument(VAULT_ITEM_CIPHER_TYPE) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<VaultItemRoute> {
         VaultItemScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVaultAddEditItem = onNavigateToVaultEditItem,
@@ -74,29 +67,10 @@ fun NavController.navigateToVaultItem(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$VAULT_ITEM_PREFIX/${args.vaultItemId}" +
-            "?$VAULT_ITEM_CIPHER_TYPE=${args.cipherType.toTypeString()}",
+        route = VaultItemRoute(
+            vaultItemId = args.vaultItemId,
+            cipherType = args.cipherType,
+        ),
         navOptions = navOptions,
     )
 }
-
-private fun VaultItemCipherType.toTypeString(): String =
-    when (this) {
-        VaultItemCipherType.LOGIN -> LOGIN
-        VaultItemCipherType.CARD -> CARD
-        VaultItemCipherType.IDENTITY -> IDENTITY
-        VaultItemCipherType.SECURE_NOTE -> SECURE_NOTE
-        VaultItemCipherType.SSH_KEY -> SSH_KEY
-    }
-
-private fun String.toVaultItemCipherType(): VaultItemCipherType =
-    when (this) {
-        LOGIN -> VaultItemCipherType.LOGIN
-        CARD -> VaultItemCipherType.CARD
-        IDENTITY -> VaultItemCipherType.IDENTITY
-        SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
-        SSH_KEY -> VaultItemCipherType.SSH_KEY
-        else -> throw IllegalStateException(
-            "Edit Item string arguments for VaultAddEditNavigation must match!",
-        )
-    }
