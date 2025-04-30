@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -688,6 +689,71 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `ssoCallbackResultFlow returns ConfirmKeyConnectorDomain should update dialogState`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.ConfirmKeyConnectorDomain("bitwarden.com")
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                            keyConnectorDomain = "bitwarden.com",
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Test
     fun `captchaTokenResultFlow MissingToken should show error dialog`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -1009,6 +1075,98 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmKeyConnectorDomainClick with login Success should show loading dialog and hide it`() =
+        runTest {
+            coEvery {
+                authRepository.continueKeyConnectorLogin()
+            } returns LoginResult.Success
+
+            coEvery {
+                authRepository.rememberedOrgIdentifier = "Bitwarden"
+            } just runs
+
+            val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
+            val viewModel = createViewModel(
+                initialState = initialState,
+                ssoData = DEFAULT_SSO_DATA,
+            )
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick)
+
+                assertEquals(
+                    initialState.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    initialState,
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.continueKeyConnectorLogin()
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `CancelKeyConnectorDomainClick should hide prompt and call authRepository cancelKeyConnectorLogin`() =
+        runTest {
+            coEvery {
+                authRepository.cancelKeyConnectorLogin()
+            } just runs
+
+            val viewModel = createViewModel(initialState = DEFAULT_STATE)
+
+            viewModel.stateFlow.test {
+
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.Internal.OnLoginResult(
+                        LoginResult.ConfirmKeyConnectorDomain("bitwarden.com"),
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                            keyConnectorDomain = "bitwarden.com",
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = null,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.cancelKeyConnectorLogin()
+            }
+        }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         initialState: EnterpriseSignOnState? = null,
@@ -1029,7 +1187,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         environmentRepository = environmentRepository,
         featureFlagManager = featureFlagManager,
         generatorRepository = generatorRepository,
-        networkConnectionManager = FakeNetworkConnectionManager(isNetworkConnected),
+        networkConnectionManager = FakeNetworkConnectionManager(
+            isNetworkConnected = isNetworkConnected,
+            networkConnection = NetworkConnection.Cellular,
+        ),
         savedStateHandle = savedStateHandle,
     )
         .also {

@@ -10,8 +10,10 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
 import com.bitwarden.network.model.PolicyTypeJson
@@ -24,12 +26,19 @@ import com.bitwarden.network.model.ResendEmailRequestJson
 import com.bitwarden.network.model.ResendNewDeviceOtpRequestJson
 import com.bitwarden.network.model.ResetPasswordRequestJson
 import com.bitwarden.network.model.SendVerificationEmailRequestJson
+import com.bitwarden.network.model.SendVerificationEmailResponseJson
 import com.bitwarden.network.model.SetPasswordRequestJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.model.VerifyEmailTokenRequestJson
+import com.bitwarden.network.model.VerifyEmailTokenResponseJson
 import com.bitwarden.network.service.AccountsService
+import com.bitwarden.network.service.DevicesService
+import com.bitwarden.network.service.HaveIBeenPwnedService
+import com.bitwarden.network.service.IdentityService
+import com.bitwarden.network.service.OrganizationService
 import com.bitwarden.network.util.isSslHandShakeError
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -38,14 +47,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyEmailTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
@@ -58,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
@@ -118,7 +120,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
@@ -238,6 +239,8 @@ class AuthRepositoryImpl(
      */
     private var passwordsToCheckMap = mutableMapOf<String, String>()
 
+    private var keyConnectorResponse: GetTokenResponseJson.Success? = null
+
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
@@ -280,6 +283,7 @@ class AuthRepositoryImpl(
         merge(
             mutableHasPendingAccountDeletionStateFlow,
             mutableUserStateTransactionCountStateFlow,
+            vaultRepository.isActiveUserUnlockingFlow,
         ),
     ) { array ->
         val userStateJson = array[0] as UserStateJson?
@@ -304,8 +308,11 @@ class AuthRepositoryImpl(
             firstTimeState = firstTimeState,
         )
     }
-        .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
-        .filterNot { mutableUserStateTransactionCountStateFlow.value > 0 }
+        .filterNot {
+            mutableHasPendingAccountDeletionStateFlow.value ||
+                mutableUserStateTransactionCountStateFlow.value > 0 ||
+                vaultRepository.isActiveUserUnlockingFlow.value
+        }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,
@@ -401,8 +408,12 @@ class AuthRepositoryImpl(
             .syncOrgKeysFlow
             .onEach {
                 val userId = activeUserId ?: return@onEach
-                refreshAccessTokenSynchronously(userId)
-                vaultRepository.sync()
+                // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
+                refreshAccessTokenSynchronouslyInternal(
+                    userId = userId,
+                    logOutOnFailure = false,
+                )
+                vaultRepository.sync(forced = true)
             }
             // This requires the ioScope to ensure that refreshAccessTokenSynchronously
             // happens on a background thread
@@ -717,6 +728,25 @@ class AuthRepositoryImpl(
             error = MissingPropertyException("Identity Token Auth Model"),
         )
 
+    override suspend fun continueKeyConnectorLogin(): LoginResult {
+        val response = keyConnectorResponse ?: return LoginResult.Error(
+            errorMessage = null,
+            error = MissingPropertyException("Key Connector Response"),
+        )
+        return handleLoginCommonSuccess(
+            loginResponse = response,
+            email = rememberedEmailAddress.orEmpty(),
+            orgIdentifier = rememberedOrgIdentifier,
+            password = null,
+            deviceData = null,
+            userConfirmedKeyConnector = true,
+        )
+    }
+
+    override fun cancelKeyConnectorLogin() {
+        keyConnectorResponse = null
+    }
+
     override suspend fun login(
         email: String,
         ssoCode: String,
@@ -735,33 +765,11 @@ class AuthRepositoryImpl(
         orgIdentifier = organizationIdentifier,
     )
 
-    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
-        val refreshToken = authDiskSource
-            .getAccountTokens(userId = userId)
-            ?.refreshToken
-            ?: return IllegalStateException("Must be logged in.").asFailure()
-        return identityService
-            .refreshTokenSynchronously(refreshToken)
-            .flatMap { refreshTokenResponse ->
-                // Check to make sure the user is still logged in after making the request
-                authDiskSource
-                    .userState
-                    ?.accounts
-                    ?.get(userId)
-                    ?.let { refreshTokenResponse.asSuccess() }
-                    ?: IllegalStateException("Must be logged in.").asFailure()
-            }
-            .onSuccess { refreshTokenResponse ->
-                // Update the existing UserState with updated token information
-                authDiskSource.storeAccountTokens(
-                    userId = userId,
-                    accountTokens = AccountTokensJson(
-                        accessToken = refreshTokenResponse.accessToken,
-                        refreshToken = refreshTokenResponse.refreshToken,
-                    ),
-                )
-            }
-    }
+    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> =
+        refreshAccessTokenSynchronouslyInternal(
+            userId = userId,
+            logOutOnFailure = true,
+        )
 
     override fun logout(reason: LogoutReason) {
         activeUserId?.let { userId -> logout(userId = userId, reason = reason) }
@@ -1407,6 +1415,48 @@ class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun leaveOrganization(organizationId: String): LeaveOrganizationResult =
+        organizationService.leaveOrganization(organizationId).fold(
+            onSuccess = { LeaveOrganizationResult.Success },
+            onFailure = { LeaveOrganizationResult.Error(error = it) },
+        )
+
+    private fun refreshAccessTokenSynchronouslyInternal(
+        userId: String,
+        logOutOnFailure: Boolean,
+    ): Result<RefreshTokenResponseJson> {
+        val refreshToken = authDiskSource
+            .getAccountTokens(userId = userId)
+            ?.refreshToken
+            ?: return IllegalStateException("Must be logged in.").asFailure()
+        return identityService
+            .refreshTokenSynchronously(refreshToken)
+            .flatMap { refreshTokenResponse ->
+                // Check to make sure the user is still logged in after making the request
+                authDiskSource
+                    .userState
+                    ?.accounts
+                    ?.get(userId)
+                    ?.let { refreshTokenResponse.asSuccess() }
+                    ?: IllegalStateException("Must be logged in.").asFailure()
+            }
+            .onFailure {
+                if (logOutOnFailure) {
+                    logout(userId = userId, reason = LogoutReason.TokenRefreshFail)
+                }
+            }
+            .onSuccess { refreshTokenResponse ->
+                // Update the existing UserState with updated token information
+                authDiskSource.storeAccountTokens(
+                    userId = userId,
+                    accountTokens = AccountTokensJson(
+                        accessToken = refreshTokenResponse.accessToken,
+                        refreshToken = refreshTokenResponse.refreshToken,
+                    ),
+                )
+            }
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,
@@ -1562,6 +1612,7 @@ class AuthRepositoryImpl(
      * A helper function to extract the common logic of logging in through
      * any of the available methods.
      */
+    @Suppress("LongMethod")
     private suspend fun loginCommon(
         email: String,
         password: String? = null,
@@ -1613,6 +1664,7 @@ class AuthRepositoryImpl(
                         password = password,
                         deviceData = deviceData,
                         orgIdentifier = orgIdentifier,
+                        userConfirmedKeyConnector = false,
                     )
 
                     is GetTokenResponseJson.Invalid -> {
@@ -1646,6 +1698,7 @@ class AuthRepositoryImpl(
         password: String?,
         deviceData: DeviceDataModel?,
         orgIdentifier: String?,
+        userConfirmedKeyConnector: Boolean,
     ): LoginResult = userStateTransaction {
         val userStateJson = loginResponse.toUserState(
             previousUserState = authDiskSource.userState,
@@ -1675,6 +1728,21 @@ class AuthRepositoryImpl(
                     deviceData = deviceData,
                 )
             } else if (keyConnectorUrl != null && orgIdentifier != null) {
+                val isNewKeyConnectorUser =
+                    loginResponse.userDecryptionOptions?.hasMasterPassword == false &&
+                        loginResponse.key == null &&
+                        loginResponse.privateKey == null
+                val isNotConfirmed = !userConfirmedKeyConnector
+
+                // If a new KeyConnector user is logging in for the first time,
+                // we should ask him to confirm the domain
+                if (isNewKeyConnectorUser && isNotConfirmed) {
+                    keyConnectorResponse = loginResponse
+                    return LoginResult.ConfirmKeyConnectorDomain(
+                        domain = keyConnectorUrl,
+                    )
+                }
+
                 unlockVaultWithKeyConnectorOnLoginSuccess(
                     profile = profile,
                     keyConnectorUrl = keyConnectorUrl,
@@ -1748,6 +1816,7 @@ class AuthRepositoryImpl(
         resendEmailRequestJson = null
         twoFactorDeviceData = null
         resendNewDeviceOtpRequestJson = null
+        keyConnectorResponse = null
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         settingsRepository.storeUserHasLoggedInValue(userId)
         vaultRepository.syncIfNecessary()

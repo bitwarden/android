@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
@@ -116,11 +119,19 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                     parentFolderName = it,
                 )
             },
-            onNavigateToFlightRecorder = { navController.navigateToFlightRecorder() },
-            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs() },
+            onNavigateToFlightRecorder = {
+                navController.navigateToFlightRecorder(isPreAuth = false)
+            },
+            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
         )
-        flightRecorderDestination(onNavigateBack = { navController.popBackStack() })
-        recordedLogsDestination(onNavigateBack = { navController.popBackStack() })
+        flightRecorderDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
+        recordedLogsDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToDeleteAccountConfirmation = {

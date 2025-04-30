@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -11,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import io.mockk.coVerify
@@ -33,7 +33,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.Year
-import java.time.ZoneId
+import java.time.ZoneOffset
 
 class AboutViewModelTest : BaseViewModelTest() {
 
@@ -235,7 +235,7 @@ class AboutViewModelTest : BaseViewModelTest() {
 
 private val FIXED_CLOCK = Clock.fixed(
     Instant.parse("2024-01-25T10:15:30.00Z"),
-    ZoneId.systemDefault(),
+    ZoneOffset.UTC,
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
     version = "Version: <version_name> (<version_code>)".asText(),

@@ -46,7 +46,7 @@ class UserLogoutManagerImpl(
 
     override fun logout(userId: String, reason: LogoutReason) {
         authDiskSource.userState ?: return
-        Timber.i("logout reason=$reason")
+        Timber.d("logout reason=$reason")
         val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
             showToast(message = R.string.login_expired)
@@ -68,7 +68,7 @@ class UserLogoutManagerImpl(
     }
 
     override fun softLogout(userId: String, reason: LogoutReason) {
-        Timber.i("softLogout reason=$reason")
+        Timber.d("softLogout reason=$reason")
         val isExpired = reason == LogoutReason.SecurityStamp
         if (isExpired) {
             showToast(message = R.string.login_expired)

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -32,7 +33,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResul
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
-import io.mockk.awaits
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -44,6 +44,7 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -64,6 +65,7 @@ import java.time.ZonedDateTime
 class VaultLockManagerTest {
     private val broadcastReceiver = slot<BroadcastReceiver>()
     private val context: Context = mockk {
+        @SuppressLint("UnspecifiedRegisterReceiverFlag")
         every { registerReceiver(capture(broadcastReceiver), any()) } returns null
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
@@ -115,6 +117,7 @@ class VaultLockManagerTest {
     @Test
     fun `broadcast receiver should be registered on initialization`() {
         verify(exactly = 1) {
+            @SuppressLint("UnspecifiedRegisterReceiverFlag")
             context.registerReceiver(any(), any())
         }
     }
@@ -170,7 +173,7 @@ class VaultLockManagerTest {
                 assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
                 fakeAuthDiskSource.assertLastLockTimestamp(
                     userId = USER_ID,
-                    FIXED_CLOCK.instant(),
+                    expectedValue = FIXED_CLOCK.instant(),
                 )
             }
         }
@@ -212,6 +215,20 @@ class VaultLockManagerTest {
                 expectNoEvents()
             }
         }
+
+    @Test
+    fun `isActiveUserUnlockingFlow should emit according to the current lock state`() = runTest {
+        // Ensure the vault is unlocked
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        vaultLockManager.isActiveUserUnlockingFlow.test {
+            assertFalse(awaitItem())
+            verifyUnlockedVault(userId = USER_ID)
+            assertTrue(awaitItem())
+            assertFalse(awaitItem())
+            vaultLockManager.lockVault(userId = USER_ID, isUserInitiated = false)
+            expectNoEvents()
+        }
+    }
 
     @Test
     fun `app coming into background subsequent times should perform timeout action if necessary`() {
@@ -774,16 +791,15 @@ class VaultLockManagerTest {
         runTest {
             assertFalse(vaultLockManager.isVaultUnlocking(userId = USER_ID))
 
-            val unlockingJob = async {
-                verifyUnlockingVault(userId = USER_ID)
-            }
-            this.testScheduler.advanceUntilIdle()
+            // The async call will hang for 500ms
+            async { verifyUnlockingVault(userId = USER_ID) }
 
+            // We fast-forward 300ms, enough that the vault should be unlocking
+            this.testScheduler.advanceTimeBy(delayTimeMillis = 300L)
             assertTrue(vaultLockManager.isVaultUnlocking(userId = USER_ID))
 
-            unlockingJob.cancel()
-            this.testScheduler.advanceUntilIdle()
-
+            // We fast-forward another 300ms, enough that the vault should be done unlocking
+            this.testScheduler.advanceTimeBy(delayTimeMillis = 300L)
             assertFalse(vaultLockManager.isVaultUnlocking(userId = USER_ID))
         }
 
@@ -1560,7 +1576,7 @@ class VaultLockManagerTest {
 
     /**
      * Helper to ensures that the vault for the user with the given [userId] is actively unlocking.
-     * Note that this call will actively hang.
+     * Note that this call will delay for 500 ms.
      */
     private suspend fun verifyUnlockingVault(userId: String) {
         val kdf = MOCK_PROFILE.toSdkParams()
@@ -1582,7 +1598,10 @@ class VaultLockManagerTest {
                     ),
                 ),
             )
-        } just awaits
+        } coAnswers {
+            delay(timeMillis = 500L)
+            InitializeCryptoResult.AuthenticationError(error = Throwable()).asSuccess()
+        }
 
         vaultLockManager.unlockVault(
             userId = userId,

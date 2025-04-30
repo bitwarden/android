@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.lifecycle.SavedStateHandle
@@ -27,7 +29,6 @@ private const val GENERATOR_MODAL_ROUTE: String =
 /**
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class GeneratorArgs(
     val type: GeneratorMode,
 ) {

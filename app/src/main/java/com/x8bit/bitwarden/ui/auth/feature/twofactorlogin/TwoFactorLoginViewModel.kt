@@ -6,7 +6,9 @@ import androidx.annotation.DrawableRes
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.TwoFactorDataModel
 import com.bitwarden.network.util.availableAuthMethods
 import com.bitwarden.network.util.preferredAuthMethod
 import com.bitwarden.network.util.twoFactorDisplayEmail
@@ -14,7 +16,6 @@ import com.bitwarden.network.util.twoFactorDuoAuthUrl
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -25,7 +26,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
@@ -350,6 +350,9 @@ class TwoFactorLoginViewModel @Inject constructor(
                     )
                 }
             }
+
+            // NO-OP: This result should not be possible here
+            is LoginResult.ConfirmKeyConnectorDomain -> Unit
         }
     }
 

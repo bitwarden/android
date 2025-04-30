@@ -128,7 +128,6 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.VerifiedSsoDomainEndpoint to true,
     FlagKey.CredentialExchangeProtocolImport to true,
     FlagKey.CredentialExchangeProtocolExport to true,
-    FlagKey.AppReviewPrompt to true,
     FlagKey.IgnoreEnvironmentCheck to true,
     FlagKey.MutualTls to true,
     FlagKey.SingleTapPasskeyCreation to true,
@@ -138,6 +137,7 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.ChromeAutofill to true,
     FlagKey.MobileErrorReporting to true,
     FlagKey.FlightRecorder to true,
+    FlagKey.PreAuthSettings to true,
 )
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
@@ -149,7 +149,6 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.VerifiedSsoDomainEndpoint to false,
     FlagKey.CredentialExchangeProtocolImport to false,
     FlagKey.CredentialExchangeProtocolExport to false,
-    FlagKey.AppReviewPrompt to false,
     FlagKey.IgnoreEnvironmentCheck to false,
     FlagKey.MutualTls to false,
     FlagKey.SingleTapPasskeyCreation to false,
@@ -159,6 +158,7 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.ChromeAutofill to false,
     FlagKey.MobileErrorReporting to false,
     FlagKey.FlightRecorder to false,
+    FlagKey.PreAuthSettings to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(

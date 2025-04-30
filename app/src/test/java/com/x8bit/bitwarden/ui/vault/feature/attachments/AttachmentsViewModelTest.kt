@@ -4,6 +4,9 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -11,14 +14,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
@@ -204,7 +204,82 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             )
             mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
             mutableUserStateFlow.value = DEFAULT_USER_STATE
-            val error = NoActiveUserException()
+            val error = IllegalStateException("No permissions.")
+            coEvery {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            } returns CreateAttachmentResult.Error(
+                error = error,
+                message = "No permissions.",
+            )
+
+            val viewModel = createViewModel()
+            // Need to populate the VM with a file
+            viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+            viewModel.stateFlow.test {
+                assertEquals(state, awaitItem())
+                viewModel.trySendAction(AttachmentsAction.SaveClick)
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Loading(
+                            message = R.string.saving.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = error.message!!.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            }
+        }
+
+    @Test
+    fun `SaveClick should display generic error message dialog when createAttachment fails`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1)
+            val fileName = "test.png"
+            val uri = mockk<Uri>()
+            val sizeJustRight = 104_857_600L
+            val state = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        displayName = fileName,
+                        uri = uri,
+                        sizeBytes = sizeJustRight,
+                    ),
+                ),
+                isPremiumUser = true,
+            )
+            val fileData = IntentManager.FileData(
+                fileName = fileName,
+                uri = uri,
+                sizeBytes = sizeJustRight,
+            )
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            val error = Exception()
             coEvery {
                 vaultRepository.createAttachment(
                     cipherId = state.cipherId,

@@ -28,8 +28,10 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -48,6 +50,11 @@ fun RemovePasswordScreen(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(RemovePasswordAction.DialogDismiss) }
+        },
+        onConfirmLeaveClick = remember(viewModel) {
+            {
+                viewModel.trySendAction(RemovePasswordAction.ConfirmLeaveOrganizationClick)
+            }
         },
     )
 
@@ -72,16 +79,21 @@ fun RemovePasswordScreen(
             onInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(RemovePasswordAction.InputChanged(it)) }
             },
+            onLeaveOrganizationClick = remember(viewModel) {
+                { viewModel.trySendAction(RemovePasswordAction.LeaveOrganizationClick) }
+            },
             modifier = Modifier.fillMaxSize(),
         )
     }
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun RemovePasswordScreenContent(
     state: RemovePasswordState,
     onContinueClick: () -> Unit,
     onInputChanged: (String) -> Unit,
+    onLeaveOrganizationClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -94,6 +106,42 @@ private fun RemovePasswordScreenContent(
             text = state.description(),
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        Text(
+            text = state.labelOrg(),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Text(
+            text = state.orgName?.invoke().orEmpty(),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        Text(
+            text = state.labelDomain(),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.primary,
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+
+        Text(
+            text = state.domainName?.invoke().orEmpty(),
+            style = BitwardenTheme.typography.bodyMedium,
+            color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier
                 .standardHorizontalMargin()
                 .fillMaxWidth(),
@@ -124,6 +172,17 @@ private fun RemovePasswordScreenContent(
                 .fillMaxWidth(),
         )
 
+        Spacer(modifier = Modifier.height(12.dp))
+
+        BitwardenOutlinedButton(
+            label = stringResource(id = R.string.leave_organization),
+            onClick = onLeaveOrganizationClick,
+            modifier = Modifier
+                .testTag("LeaveOrganizationButton")
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
@@ -133,6 +192,7 @@ private fun RemovePasswordScreenContent(
 private fun RemovePasswordDialogs(
     dialogState: RemovePasswordState.DialogState?,
     onDismissRequest: () -> Unit,
+    onConfirmLeaveClick: () -> Unit,
 ) {
     when (dialogState) {
         is RemovePasswordState.DialogState.Error -> {
@@ -147,6 +207,18 @@ private fun RemovePasswordDialogs(
             BitwardenLoadingDialog(text = dialogState.title())
         }
 
+        is RemovePasswordState.DialogState.LeaveConfirmationPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.leave_organization),
+                message = dialogState.message.invoke(),
+                confirmButtonText = stringResource(id = R.string.confirm),
+                dismissButtonText = stringResource(id = R.string.cancel),
+                onConfirmClick = onConfirmLeaveClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         null -> Unit
     }
 }
@@ -158,11 +230,21 @@ private fun RemovePasswordScreen_preview() {
         RemovePasswordScreenContent(
             state = RemovePasswordState(
                 input = "",
-                description = "Organization is using SSO with a self-hosted key server.".asText(),
+                description =
+                    ("A master password is no longer required " +
+                        "for members of the following organization. " +
+                        "Please confirm the domain below with your " +
+                        "organization administrator.").asText(),
+                labelOrg = "Organization name".asText(),
+                orgName = "Organization name".asText(),
+                labelDomain = "Key Connector domain".asText(),
+                domainName = "http://localhost:8080".asText(),
                 dialogState = null,
+                organizationId = null,
             ),
             onContinueClick = { },
             onInputChanged = { },
+            onLeaveOrganizationClick = { },
         )
     }
 }

@@ -20,12 +20,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -65,6 +65,7 @@ import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -74,6 +75,7 @@ import org.junit.Test
 
 @Suppress("LargeClass")
 class VaultScreenTest : BaseComposeTest() {
+    private var onNavigateToAboutCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
@@ -120,6 +122,7 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName
                 },
+                onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
             )
         }
     }
@@ -1251,6 +1254,12 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `when NavigateToAbout is sent, it should call onNavigateToAbout`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAbout)
+        assertTrue(onNavigateToAboutCalled)
+    }
+
+    @Test
     fun `when ShowSnackbar is sent snackbar should be displayed`() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
@@ -1372,6 +1381,55 @@ class VaultScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Test
+    fun `on FlightRecorder Snackbar close click sends the DismissFlightRecorderSnackbar`() =
+        runTest {
+            mutableStateFlow.update {
+                it.copy(
+                    flightRecorderSnackBar = BitwardenSnackbarData(
+                        message = R.string.flight_recorder_banner_message.asText(
+                            "4/12/25",
+                            "9:15 AM",
+                        ),
+                        messageHeader = R.string.flight_recorder_banner_title.asText(),
+                        actionLabel = R.string.go_to_settings.asText(),
+                        withDismissAction = true,
+                    ),
+                )
+            }
+
+            composeTestRule.onNodeWithText(text = "Flight recorder on").assertIsDisplayed()
+            composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
+            verify(exactly = 1) {
+                viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on FlightRecorder Snackbar go to setting click sends the FlightRecorderGoToSettingsClick`() =
+        runTest {
+            mutableStateFlow.update {
+                it.copy(
+                    flightRecorderSnackBar = BitwardenSnackbarData(
+                        message = R.string.flight_recorder_banner_message.asText(
+                            "4/12/25",
+                            "9:15 AM",
+                        ),
+                        messageHeader = R.string.flight_recorder_banner_title.asText(),
+                        actionLabel = R.string.go_to_settings.asText(),
+                        withDismissAction = true,
+                    ),
+                )
+            }
+
+            composeTestRule.onNodeWithText(text = "Flight recorder on").assertIsDisplayed()
+            composeTestRule.onNodeWithText(text = "Go to settings").performClick()
+            verify(exactly = 1) {
+                viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)
+            }
+        }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1426,6 +1484,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasMasterPassword = true,
     isRefreshing = false,
     showImportActionCard = false,
+    flightRecorderSnackBar = null,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

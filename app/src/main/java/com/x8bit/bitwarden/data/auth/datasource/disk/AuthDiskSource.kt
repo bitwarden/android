@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.provider.AppIdProvider
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
@@ -12,20 +13,13 @@ import java.time.Instant
  * Primary access point for disk information.
  */
 @Suppress("TooManyFunctions")
-interface AuthDiskSource {
+interface AuthDiskSource : AppIdProvider {
 
     /**
      * The currently persisted authenticator sync symmetric key. This key is used for
      * encrypting IPC traffic.
      */
     var authenticatorSyncSymmetricKey: ByteArray?
-
-    /**
-     * Retrieves a unique ID for the application that is stored locally. This will generate a new
-     * one if it does not yet exist and it will only be reset for new installs or when clearing
-     * application data.
-     */
-    val uniqueAppId: String
 
     /**
      * The currently persisted saved email address (or `null` if not set).

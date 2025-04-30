@@ -3,11 +3,11 @@ package com.x8bit.bitwarden.data.auth.repository.di
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.AccountsService
+import com.bitwarden.network.service.DevicesService
+import com.bitwarden.network.service.HaveIBeenPwnedService
+import com.bitwarden.network.service.IdentityService
+import com.bitwarden.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager

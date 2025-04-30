@@ -5,6 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -28,8 +30,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult

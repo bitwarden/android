@@ -1,9 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.model.UserState.Account
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 
 /**
  * Represents the overall "user state" of the current active user as well as any users that may be

@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val MASTER_PASSWORD_GENERATOR = "master_password_generator"

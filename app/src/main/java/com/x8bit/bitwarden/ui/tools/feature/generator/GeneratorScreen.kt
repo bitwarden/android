@@ -149,6 +149,7 @@ fun GeneratorScreen(
     LaunchedEffect(key1 = coachMarkState.isVisible.value) {
         onDimNavBarRequest(coachMarkState.isVisible.value)
     }
+    val scope = rememberCoroutineScope()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             GeneratorEvent.NavigateToPasswordHistory -> onNavigateToPasswordHistory()
@@ -168,7 +169,9 @@ fun GeneratorScreen(
 
             GeneratorEvent.NavigateBack -> onNavigateBack.invoke()
             GeneratorEvent.StartCoachMarkTour -> {
-                coachMarkState.showCoachMark(ExploreGeneratorCoachMark.PASSWORD_MODE)
+                scope.launch {
+                    coachMarkState.showCoachMark(ExploreGeneratorCoachMark.PASSWORD_MODE)
+                }
             }
         }
     }
@@ -193,23 +196,14 @@ fun GeneratorScreen(
             }
         }
 
-    val scope = rememberCoroutineScope()
     val onShowNextCoachMark: () -> Unit = remember {
-        {
-            scope.launch { coachMarkState.showNextCoachMark() }
-        }
+        { scope.launch { coachMarkState.showNextCoachMark() } }
     }
-
     val onShowPreviousCoachMark: () -> Unit = remember {
-        {
-            scope.launch { coachMarkState.showPreviousCoachMark() }
-        }
+        { scope.launch { coachMarkState.showPreviousCoachMark() } }
     }
-
     val onDismissCoachMark: () -> Unit = remember {
-        {
-            scope.launch { lazyListState.animateScrollToItem(index = 0) }
-        }
+        { scope.launch { lazyListState.animateScrollToItem(index = 0) } }
     }
 
     val passwordHandlers = rememberPasswordHandlers(viewModel)

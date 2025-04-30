@@ -1,8 +1,11 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 
 private const val ACCOUNT_SECURITY_ROUTE = "settings_account_security"

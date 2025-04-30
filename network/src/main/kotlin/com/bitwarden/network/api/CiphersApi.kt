@@ -45,7 +45,7 @@ interface CiphersApi {
     suspend fun createAttachment(
         @Path("cipherId") cipherId: String,
         @Body body: AttachmentJsonRequest,
-    ): NetworkResult<AttachmentJsonResponse>
+    ): NetworkResult<AttachmentJsonResponse.Success>
 
     /**
      * Uploads the attachment associated with a cipher.

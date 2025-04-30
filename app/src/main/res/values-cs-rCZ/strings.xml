@@ -620,6 +620,10 @@ Načtení proběhne automaticky.</string>
   <string name="deletion_date_info">Tento Send bude trvale smazán v určený datum a čas.</string>
   <string name="pending_delete">Čeká na smazání</string>
   <string name="expired">Vypršela platnost</string>
+  <string name="expires_at">Vyprší v %s</string>
+  <string name="expires_tomorrow">Vyprší zítra</string>
+  <string name="expires_on">Platí do %s</string>
+  <string name="stops_logging_on">Zastaví logování na %1$s v %2$s</string>
   <string name="maximum_access_count">Maximální počet přístupů</string>
   <string name="maximum_access_count_info">Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</string>
   <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
@@ -1236,4 +1240,24 @@ při opakování problémů.</string>
   <string name="flight_recorder_eight_hours">8 hodin</string>
   <string name="flight_recorder_twenty_four_hours">24 hodin</string>
   <string name="flight_recorder_one_week">1 týden</string>
+  <string name="delete_all">Smazat vše</string>
+  <string name="share_all">Sdílet vše</string>
+  <string name="unable_to_share">Nelze sdílet</string>
+  <string name="please_try_again_or_select_a_different_log">Zkuste to znovu nebo vyberte jiný log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Soubor s logem, který se snažíte sdílet, byl odebrán.</string>
+  <string name="delete_log">Smazat log</string>
+  <string name="do_you_really_want_to_delete_this_log">Opravdu chcete smazat tento log?</string>
+  <string name="delete_logs">Smazat logy</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Opravdu chcete smazat všechny zaznamenané logy?</string>
+  <string name="confirm_key_connector_domain">Potvrdit doménu Key Connectoru</string>
+  <string name="key_connector_domain">Doména Key Connectoru:</string>
+  <string name="key_connector_organization">Organizace:</string>
+  <string name="password_no_longer_required_confirm_domain">Hlavní heslo již není vyžadováno pro členy následující organizace. Potvrďte níže uvedenou doménu u správce Vaší organizace.</string>
+  <string name="please_confirm_domain_with_admin">Potvrďte níže uvedenou doménu u správce Vaší organizace.\n\nDoména Key Connectoru:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Letový zapisovač zapnutý</string>
+  <string name="flight_recorder_banner_message">Letový zapisovač bude aktivní do %1$s v %2$s. Pro deaktivování se vraťte do nastavení.</string>
+  <string name="go_to_settings">Přejít do nastavení</string>
+  <string name="all_logs_deleted">Všechny logy byly smazány</string>
+  <string name="log_deleted">Log byl smazán</string>
+  <string name="app_settings">App settings</string>
 </resources>

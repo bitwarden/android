@@ -5,10 +5,10 @@ import android.content.Context
 import android.content.RestrictionsManager
 import android.os.Bundle
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.manager.util.FakeAppStateManager
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import io.mockk.clearMocks
 import io.mockk.every

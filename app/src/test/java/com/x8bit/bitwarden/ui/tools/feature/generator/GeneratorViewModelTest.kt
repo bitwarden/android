@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult

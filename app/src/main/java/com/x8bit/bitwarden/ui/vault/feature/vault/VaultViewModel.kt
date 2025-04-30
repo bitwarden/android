@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -26,7 +28,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -47,6 +48,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
@@ -114,6 +116,9 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
+            flightRecorderSnackBar = settingsRepository
+                .flightRecorderData
+                .toSnackbarData(clock = clock),
         )
     },
 ) {
@@ -162,9 +167,13 @@ class VaultViewModel @Inject constructor(
 
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY)
-            .map {
-                VaultAction.Internal.SnackbarDataReceive(it)
-            }
+            .map { VaultAction.Internal.SnackbarDataReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .flightRecorderDataFlow
+            .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -205,10 +214,21 @@ class VaultViewModel @Inject constructor(
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
             VaultAction.LifecycleResumed -> handleLifecycleResumed()
             VaultAction.SelectAddItemType -> handleSelectAddItemType()
+            VaultAction.DismissFlightRecorderSnackbar -> handleDismissFlightRecorderSnackbar()
+            VaultAction.FlightRecorderGoToSettingsClick -> handleFlightRecorderGoToSettingsClick()
         }
     }
 
     //region VaultAction Handlers
+    private fun handleDismissFlightRecorderSnackbar() {
+        settingsRepository.dismissFlightRecorderBanner()
+    }
+
+    private fun handleFlightRecorderGoToSettingsClick() {
+        settingsRepository.dismissFlightRecorderBanner()
+        sendEvent(VaultEvent.NavigateToAbout)
+    }
+
     private fun handleSelectAddItemType() {
         mutableStateFlow.update {
             it.copy(
@@ -234,9 +254,7 @@ class VaultViewModel @Inject constructor(
             else -> Unit
         }
 
-        val shouldShowPrompt = reviewPromptManager.shouldPromptForAppReview() &&
-            featureFlagManager.getFeatureFlag(FlagKey.AppReviewPrompt)
-        if (shouldShowPrompt) {
+        if (reviewPromptManager.shouldPromptForAppReview()) {
             sendEvent(VaultEvent.PromptForAppReview)
         }
     }
@@ -607,6 +625,10 @@ class VaultViewModel @Inject constructor(
             VaultAction.Internal.InternetConnectionErrorReceived -> {
                 handleInternetConnectionErrorReceived()
             }
+
+            is VaultAction.Internal.FlightRecorderDataReceive -> {
+                handleFlightRecorderDataReceive(action)
+            }
         }
     }
 
@@ -619,6 +641,14 @@ class VaultViewModel @Inject constructor(
                     R.string.internet_connection_required_message.asText(),
                 ),
             )
+        }
+    }
+
+    private fun handleFlightRecorderDataReceive(
+        action: VaultAction.Internal.FlightRecorderDataReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(flightRecorderSnackBar = action.data.toSnackbarData(clock = clock))
         }
     }
 
@@ -840,6 +870,9 @@ data class VaultState(
     val vaultFilterData: VaultFilterData? = null,
     val viewState: ViewState,
     val dialog: DialogState? = null,
+    val isRefreshing: Boolean,
+    val showImportActionCard: Boolean,
+    val flightRecorderSnackBar: BitwardenSnackbarData?,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
     val isPremium: Boolean,
@@ -847,8 +880,6 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val isRefreshing: Boolean,
-    val showImportActionCard: Boolean,
 ) : Parcelable {
 
     /**
@@ -1256,12 +1287,27 @@ sealed class VaultEvent {
      * Navigate to the add folder screen
      */
     data object NavigateToAddFolder : VaultEvent()
+
+    /**
+     * Navigate to settings.
+     */
+    data object NavigateToAbout : VaultEvent()
 }
 
 /**
  * Models actions for the [VaultScreen].
  */
 sealed class VaultAction {
+    /**
+     * User has clicked the go to settings button.
+     */
+    data object FlightRecorderGoToSettingsClick : VaultAction()
+
+    /**
+     * User has dismissed the flight recorder.
+     */
+    data object DismissFlightRecorderSnackbar : VaultAction()
+
     /**
      * User has triggered a pull to refresh.
      */
@@ -1488,6 +1534,13 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
+        ) : Internal()
+
+        /**
+         * Indicates that the flight recorder data was received.
+         */
+        data class FlightRecorderDataReceive(
+            val data: FlightRecorderDataSet,
         ) : Internal()
     }
 }

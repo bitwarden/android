@@ -1,8 +1,9 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 

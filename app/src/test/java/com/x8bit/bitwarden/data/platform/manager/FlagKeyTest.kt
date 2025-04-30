@@ -42,10 +42,6 @@ class FlagKeyTest {
             "cxp-export-mobile",
         )
         assertEquals(
-            FlagKey.AppReviewPrompt.keyName,
-            "app-review-prompt",
-        )
-        assertEquals(
             FlagKey.CipherKeyEncryption.keyName,
             "cipher-key-encryption",
         )
@@ -81,6 +77,10 @@ class FlagKeyTest {
             FlagKey.FlightRecorder.keyName,
             "enable-pm-flight-recorder",
         )
+        assertEquals(
+            FlagKey.PreAuthSettings.keyName,
+            "enable-pm-prelogin-settings",
+        )
     }
 
     @Test
@@ -95,7 +95,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
                 FlagKey.AnonAddySelfHostAlias,
@@ -104,6 +103,7 @@ class FlagKeyTest {
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.defaultValue
             },
@@ -122,7 +122,6 @@ class FlagKeyTest {
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.AppReviewPrompt,
                 FlagKey.CipherKeyEncryption,
                 FlagKey.SingleTapPasskeyCreation,
                 FlagKey.SingleTapPasskeyAuthentication,
@@ -130,6 +129,7 @@ class FlagKeyTest {
                 FlagKey.AnonAddySelfHostAlias,
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.ChromeAutofill,
+                FlagKey.MobileErrorReporting,
             ).all {
                 it.isRemotelyConfigured
             },
@@ -138,8 +138,8 @@ class FlagKeyTest {
         assertTrue(
             listOf(
                 FlagKey.IgnoreEnvironmentCheck,
-                FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.PreAuthSettings,
             ).all {
                 !it.isRemotelyConfigured
             },

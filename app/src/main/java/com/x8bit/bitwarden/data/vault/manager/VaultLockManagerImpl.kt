@@ -9,6 +9,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -40,9 +42,11 @@ import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,10 +59,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.Clock
-import java.util.concurrent.ConcurrentHashMap
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -88,7 +93,7 @@ class VaultLockManagerImpl(
      * This [Map] tracks all active timeout [Job]s that are running and their associated data using
      * the user ID as the key.
      */
-    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = ConcurrentHashMap()
+    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = concurrentMapOf()
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -98,6 +103,26 @@ class VaultLockManagerImpl(
 
     override val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
         get() = mutableVaultUnlockDataStateFlow.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val isActiveUserUnlockingFlow: StateFlow<Boolean>
+        get() = authDiskSource
+            .activeUserIdChangesFlow
+            .flatMapLatest { activeUserId ->
+                vaultUnlockDataStateFlow.map { vaultUnlockData ->
+                    vaultUnlockData.any {
+                        it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
+                    }
+                }
+            }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = mutableVaultUnlockDataStateFlow.value.any {
+                    it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
+                },
+            )
 
     override val vaultStateEventFlow: Flow<VaultStateEvent>
         get() = mutableVaultStateEventSharedFlow.asSharedFlow()
@@ -144,7 +169,7 @@ class VaultLockManagerImpl(
         privateKey: String,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
+    ): VaultUnlockResult = withContext(context = NonCancellable) {
         flow {
             setVaultToUnlocking(userId = userId)
             emit(
@@ -202,10 +227,9 @@ class VaultLockManagerImpl(
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
-                                        setVaultToUnlocked(userId = userId)
-                                        trustedDeviceManager.trustThisDeviceIfNecessary(
-                                            userId = userId,
-                                        )
+                                        trustedDeviceManager
+                                            .trustThisDeviceIfNecessary(userId = userId)
+                                            .also { setVaultToUnlocked(userId = userId) }
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }
@@ -216,6 +240,7 @@ class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+    }
 
     override suspend fun waitUntilUnlocked(userId: String) {
         vaultUnlockDataStateFlow

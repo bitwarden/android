@@ -89,6 +89,6 @@ class AccessibilityNodeInfoManagerImpl : AccessibilityNodeInfoManager {
             ?.let { allNodes.getOrNull(index = allNodes.indexOf(element = it) - 1) }
 
     private fun log(message: String) {
-        Timber.i(message)
+        Timber.d(message)
     }
 }

@@ -374,10 +374,8 @@ class MainViewModel @Inject constructor(
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CreateCredentialRequest.providerRequest
-                    .biometricPromptResult
-                    ?.isSuccessful
-                    ?.let { isVerified -> fido2CredentialManager.isUserVerified = isVerified }
+                fido2CredentialManager.isUserVerified =
+                    fido2CreateCredentialRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
@@ -393,12 +391,11 @@ class MainViewModel @Inject constructor(
             }
 
             fido2AssertCredentialRequest != null -> {
-                // If device biometric verification was performed as part of single-tap
-                // authentication, set the user's verification state to the device result.
-                // Otherwise, retain the verification state as-is.
-                fido2AssertCredentialRequest.providerRequest.biometricPromptResult
-                    ?.isSuccessful
-                    ?.let { isVerified -> fido2CredentialManager.isUserVerified = isVerified }
+                // Set the user's verification status when a new FIDO 2 request is received to force
+                // explicit verification if the user's vault is unlocked when the request is
+                // received.
+                fido2CredentialManager.isUserVerified =
+                    fido2AssertCredentialRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(

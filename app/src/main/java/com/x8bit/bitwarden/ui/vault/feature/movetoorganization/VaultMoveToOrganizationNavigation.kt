@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 
 import androidx.lifecycle.SavedStateHandle
@@ -21,7 +23,6 @@ private const val VAULT_MOVE_TO_ORGANIZATION_ROUTE =
 /**
  * Class to retrieve vault move to organization arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class VaultMoveToOrganizationArgs(
     val vaultItemId: String,
     val showOnlyCollections: Boolean,
@@ -29,8 +30,8 @@ data class VaultMoveToOrganizationArgs(
     constructor(savedStateHandle: SavedStateHandle) : this(
         vaultItemId = checkNotNull(savedStateHandle[VAULT_MOVE_TO_ORGANIZATION_ID]) as String,
         showOnlyCollections =
-        (checkNotNull(savedStateHandle[VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS]) as String)
-            .toBoolean(),
+            (checkNotNull(savedStateHandle[VAULT_MOVE_TO_ORGANIZATION_ONLY_COLLECTIONS]) as String)
+                .toBoolean(),
     )
 }
 

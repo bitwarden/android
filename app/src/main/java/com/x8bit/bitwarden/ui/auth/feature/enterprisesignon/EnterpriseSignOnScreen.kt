@@ -31,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -77,6 +78,12 @@ fun EnterpriseSignOnScreen(
 
     EnterpriseSignOnDialogs(
         dialogState = state.dialogState,
+        onConfirmKeyConnectorDomain = remember(viewModel) {
+            { viewModel.trySendAction(EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick) }
+        },
+        onDismissKeyConnectorDomain = remember(viewModel) {
+            { viewModel.trySendAction(EnterpriseSignOnAction.CancelKeyConnectorDomainClick) }
+        },
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss) }
         },
@@ -163,6 +170,8 @@ private fun EnterpriseSignOnScreenContent(
 private fun EnterpriseSignOnDialogs(
     dialogState: EnterpriseSignOnState.DialogState?,
     onDismissRequest: () -> Unit,
+    onConfirmKeyConnectorDomain: () -> Unit,
+    onDismissKeyConnectorDomain: () -> Unit,
 ) {
     when (dialogState) {
         is EnterpriseSignOnState.DialogState.Error -> {
@@ -176,6 +185,21 @@ private fun EnterpriseSignOnDialogs(
 
         is EnterpriseSignOnState.DialogState.Loading -> {
             BitwardenLoadingDialog(text = dialogState.message())
+        }
+
+        is EnterpriseSignOnState.DialogState.KeyConnectorDomain -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.confirm_key_connector_domain),
+                message = stringResource(
+                    R.string.please_confirm_domain_with_admin,
+                    dialogState.keyConnectorDomain,
+                ),
+                confirmButtonText = stringResource(R.string.confirm),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = onConfirmKeyConnectorDomain,
+                onDismissRequest = onDismissKeyConnectorDomain,
+                onDismissClick = onDismissKeyConnectorDomain,
+            )
         }
 
         null -> Unit

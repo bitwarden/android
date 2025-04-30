@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult

@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -28,6 +31,7 @@ fun NavGraphBuilder.vaultGraph(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
 ) {
     navigation(
         route = VAULT_GRAPH_ROUTE,
@@ -45,6 +49,7 @@ fun NavGraphBuilder.vaultGraph(
             onDimBottomNavBarRequest = onDimBottomNavBarRequest,
             onNavigateToImportLogins = onNavigateToImportLogins,
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+            onNavigateToAboutScreen = onNavigateToAboutScreen,
         )
         vaultItemListingDestination(
             onNavigateBack = { navController.popBackStack() },

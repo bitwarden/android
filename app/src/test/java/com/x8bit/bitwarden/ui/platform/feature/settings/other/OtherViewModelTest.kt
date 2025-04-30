@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -211,17 +211,17 @@ class OtherViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
+            set("isPreAuth", state?.isPreAuth == true)
         },
         networkConnectionManager = networkConnectionManager,
     )
-
-    companion object {
-        private val DEFAULT_STATE = OtherState(
-            allowScreenCapture = false,
-            allowSyncOnRefresh = false,
-            clearClipboardFrequency = ClearClipboardFrequency.NEVER,
-            lastSyncTime = "10/26/2023 12:00 PM",
-            dialogState = null,
-        )
-    }
 }
+
+private val DEFAULT_STATE = OtherState(
+    isPreAuth = false,
+    allowScreenCapture = false,
+    allowSyncOnRefresh = false,
+    clearClipboardFrequency = ClearClipboardFrequency.NEVER,
+    lastSyncTime = "10/26/2023 12:00 PM",
+    dialogState = null,
+)

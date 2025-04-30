@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.bitwarden.data.repository.model.Environment
 
 /**
  * Implementations of this interface provide a way to enable or disable the collection of crash

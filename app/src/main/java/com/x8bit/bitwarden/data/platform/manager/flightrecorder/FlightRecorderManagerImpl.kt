@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import com.bitwarden.core.data.util.concurrentMapOf
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -21,7 +22,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.Clock
+import java.time.temporal.ChronoUnit
 import java.util.UUID
+
+private const val EXPIRATION_DURATION_DAYS: Long = 30
 
 /**
  * The default implementation of the [FlightRecorderManager].
@@ -36,6 +40,7 @@ internal class FlightRecorderManagerImpl(
     private val unconfinedScope = CoroutineScope(context = dispatcherManager.unconfined)
     private val ioScope = CoroutineScope(context = dispatcherManager.io)
     private var cancellationJob: Job = Job().apply { complete() }
+    private val expirationJobMap: MutableMap<String, Job> = concurrentMapOf()
     private val flightRecorderTree = FlightRecorderTree()
 
     override val flightRecorderData: FlightRecorderDataSet
@@ -55,11 +60,21 @@ internal class FlightRecorderManagerImpl(
         // Always plant the tree, it will not log anything if the flight recorder is off.
         Timber.plant(flightRecorderTree)
         flightRecorderDataFlow
-            .onEach { it.configureFlightRecorder() }
+            .onEach {
+                it.configureFlightRecorder()
+                it.configureExpirationJobs()
+            }
             .launchIn(scope = unconfinedScope)
         context.registerReceiver(
             ScreenStateBroadcastReceiver(),
             IntentFilter(Intent.ACTION_SCREEN_ON),
+        )
+    }
+
+    override fun dismissFlightRecorderBanner() {
+        val originalData = flightRecorderData
+        settingsDiskSource.flightRecorderData = originalData.copy(
+            data = originalData.data.map { it.copy(isBannerDismissed = true) }.toSet(),
         )
     }
 
@@ -69,7 +84,7 @@ internal class FlightRecorderManagerImpl(
         settingsDiskSource.flightRecorderData = originalData.copy(
             data = originalData
                 .data
-                .map { it.copy(isActive = false) }
+                .mapToInactive(clock = clock)
                 .toMutableSet()
                 .apply {
                     val formattedTime = startTime.toFormattedPattern(
@@ -79,7 +94,7 @@ internal class FlightRecorderManagerImpl(
                     add(
                         element = FlightRecorderDataSet.FlightRecorderData(
                             id = UUID.randomUUID().toString(),
-                            fileName = "flight_recorder_$formattedTime",
+                            fileName = "flight_recorder_$formattedTime.txt",
                             startTimeMs = startTime.toEpochMilli(),
                             durationMs = duration.milliseconds,
                             isActive = true,
@@ -92,7 +107,7 @@ internal class FlightRecorderManagerImpl(
     override fun endFlightRecorder() {
         val originalData = flightRecorderData
         settingsDiskSource.flightRecorderData = originalData.copy(
-            data = originalData.data.map { it.copy(isActive = false) }.toSet(),
+            data = originalData.data.mapToInactive(clock = clock),
         )
     }
 
@@ -116,6 +131,7 @@ internal class FlightRecorderManagerImpl(
             data = originalData.data.filterNot { it == data }.toSet(),
         )
         ioScope.launch { flightRecorderWriter.deleteLog(data = data) }
+        expirationJobMap.remove(data.id)?.cancel()
     }
 
     private fun cancelCancellationJob() {
@@ -153,6 +169,27 @@ internal class FlightRecorderManagerImpl(
             }
     }
 
+    /**
+     * Configure the expiration jobs based on the [FlightRecorderDataSet].
+     *
+     * This cancels each expiration job and rebuilds it with the up-to-date info.
+     */
+    private fun FlightRecorderDataSet.configureExpirationJobs() {
+        this
+            .data
+            .filterNot { it.isActive }
+            .onEach {
+                expirationJobMap.remove(it.id)?.cancel()
+                expirationJobMap[it.id] = ioScope.launch {
+                    // If an inactive job does not have an expiration time, something has gone
+                    // wrong and we just delete it.
+                    val delay = (it.expirationTimeMs ?: 0L) - clock.instant().toEpochMilli()
+                    delay(timeMillis = delay)
+                    deleteLog(data = it)
+                }
+            }
+    }
+
     private inner class FlightRecorderTree : Timber.Tree() {
         var flightRecorderData: FlightRecorderDataSet.FlightRecorderData? = null
             set(value) {
@@ -179,7 +216,7 @@ internal class FlightRecorderManagerImpl(
 
     /**
      * A custom [BroadcastReceiver] that listens for when the screen is powered on and restarts the
-     * cancellation job to ensure they complete at the correct time.
+     * cancellation job and expiration jobs to ensure they complete at the correct time.
      *
      * This is necessary because the [delay] function in a coroutine will not keep accurate time
      * when the screen is off. We do not cancel the job when the screen is off, this allows the
@@ -188,6 +225,27 @@ internal class FlightRecorderManagerImpl(
     private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             flightRecorderData.configureFlightRecorder()
+            flightRecorderData.configureExpirationJobs()
         }
     }
 }
+
+/**
+ * Marks all flight recorders as inactive and ensures that they have an expiration time.
+ */
+private fun Set<FlightRecorderDataSet.FlightRecorderData>.mapToInactive(
+    clock: Clock,
+): Set<FlightRecorderDataSet.FlightRecorderData> =
+    this
+        .map { data ->
+            data.copy(
+                isActive = false,
+                expirationTimeMs = data
+                    .expirationTimeMs
+                    ?: clock
+                        .instant()
+                        .plus(EXPIRATION_DURATION_DAYS, ChronoUnit.DAYS)
+                        .toEpochMilli(),
+            )
+        }
+        .toSet()

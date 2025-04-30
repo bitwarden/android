@@ -27,8 +27,16 @@ fun Intent.getFido2CreateCredentialRequestOrNull(): Fido2CreateCredentialRequest
     val userId = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
+    // Extract the OS biometric prompt result from the request data because it is not included in
+    // the bundle returned by `ProviderGetCredentialRequest.asBundle()`.
+    val isUserPreVerified = systemRequest
+        .biometricPromptResult
+        ?.isSuccessful
+        ?: false
+
     return Fido2CreateCredentialRequest(
         userId = userId,
+        isUserPreVerified = isUserPreVerified,
         requestData = ProviderCreateCredentialRequest.asBundle(systemRequest),
     )
 }
@@ -53,10 +61,18 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
     val userId: String = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
 
+    // Extract the OS biometric prompt result from the request data because it is not included in
+    // the bundle returned by `ProviderGetCredentialRequest.asBundle()`.
+    val isUserPreVerified = systemRequest
+        .biometricPromptResult
+        ?.isSuccessful
+        ?: false
+
     return Fido2CredentialAssertionRequest(
         userId = userId,
         cipherId = cipherId,
         credentialId = credentialId,
+        isUserPreVerified = isUserPreVerified,
         requestData = ProviderGetCredentialRequest.asBundle(systemRequest),
     )
 }

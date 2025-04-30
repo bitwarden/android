@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.credentials.provider.ProviderCreateCredentialRequest
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.util.asText
@@ -13,9 +16,6 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -887,6 +887,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = Fido2CreateCredentialRequest(
                     userId = "userId",
+                    isUserPreVerified = false,
                     requestData = bundleOf(),
                 ),
                 fido2CredentialAutofillViews = null,

@@ -2,6 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.net.Uri
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -9,16 +15,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.bitwarden.core.data.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem

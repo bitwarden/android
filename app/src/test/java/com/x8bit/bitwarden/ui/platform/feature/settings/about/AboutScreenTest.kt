@@ -192,7 +192,7 @@ class AboutScreenTest : BaseComposeTest() {
     fun `on NavigateToFlightRecorderHelp should call launchUri on IntentManager`() {
         mutableEventFlow.tryEmit(AboutEvent.NavigateToFlightRecorderHelp)
         verify(exactly = 1) {
-            intentManager.launchUri("https://bitwarden.com/help".toUri())
+            intentManager.launchUri("https://bitwarden.com/help/flight-recorder".toUri())
         }
     }
 

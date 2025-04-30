@@ -620,6 +620,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="deletion_date_info">\"Send\" göstərilən tarix və saatda birdəfəlik silinəcək.</string>
   <string name="pending_delete">Silinməsi gözlənilir</string>
   <string name="expired">Müddəti bitib</string>
+  <string name="expires_at">%s müddəti bitir</string>
+  <string name="expires_tomorrow">Sabah müddəti bitir</string>
+  <string name="expires_on">%s müddəti bitir</string>
+  <string name="stops_logging_on">%1$s %2$s vaxtı üzrə jurnala yazmağı dayandırır</string>
   <string name="maximum_access_count">Maksimal müraciət sayı</string>
   <string name="maximum_access_count_info">Əgər ayarlanıbsa, istifadəçilər maksimal müraciət sayına çatdıqdan sonra bu \"Send\"ə müraciət edə bilməyəcək.</string>
   <string name="maximum_access_count_reached">Maksimal müraciət sayına çatıldı</string>
@@ -1236,4 +1240,24 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
   <string name="flight_recorder_eight_hours">8 saat</string>
   <string name="flight_recorder_twenty_four_hours">24 saat</string>
   <string name="flight_recorder_one_week">1 həftə</string>
+  <string name="delete_all">Hamısını sil</string>
+  <string name="share_all">Hamısını paylaş</string>
+  <string name="unable_to_share">Paylaşıla bilmir</string>
+  <string name="please_try_again_or_select_a_different_log">Lütfən yenidən sınayın və ya fərqli bir jurnal seçin.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Paylaşmağa çalışdığınız jurnal faylı silinib.</string>
+  <string name="delete_log">Jurnalı sil</string>
+  <string name="do_you_really_want_to_delete_this_log">Həqiqətən bu jurnalı silmək istəyirsiniz?</string>
+  <string name="delete_logs">Jurnalları sil</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Həqiqətən yazılmış bütün jurnalları silmək istəyirsiniz?</string>
+  <string name="confirm_key_connector_domain">Key Connector domenini təsdiqlə</string>
+  <string name="key_connector_domain">Key Connector domeni:</string>
+  <string name="key_connector_organization">Təşkilat:</string>
+  <string name="password_no_longer_required_confirm_domain">Aşağıdakı təşkilatların üzvləri üçün artıq ana parol tələb olunmur. Lütfən aşağıdakı domeni təşkilatınızın inzibatçısı ilə təsdiqləyin.</string>
+  <string name="please_confirm_domain_with_admin">Lütfən aşağıdakı domeni təşkilatınızın inzibatçısı ilə təsdiqləyin.\n\nKey Connector domeni:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Flight recorder on</string>
+  <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
+  <string name="go_to_settings">Go to settings</string>
+  <string name="all_logs_deleted">All logs deleted</string>
+  <string name="log_deleted">Log deleted</string>
+  <string name="app_settings">App settings</string>
 </resources>

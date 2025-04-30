@@ -10,6 +10,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -53,7 +54,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -691,6 +691,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = DEFAULT_USER_STATE.activeUserId,
+            isUserPreVerified = false,
             requestData = bundleOf(),
         )
         val fido2Intent = createMockIntent(
@@ -715,7 +716,10 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with fido2 create request data should set the user verification based on request`() {
         val viewModel = createViewModel()
-        val createCredentialRequest = createMockFido2CreateCredentialRequest(number = 1)
+        val createCredentialRequest = createMockFido2CreateCredentialRequest(
+            number = 1,
+            isUserPreVerified = true,
+        )
         val fido2Intent = createMockIntent(
             mockFido2CreateCredentialRequest = createCredentialRequest,
         )
@@ -739,6 +743,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
                 userId = "selectedUserId",
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
             val mockIntent = createMockIntent(
@@ -769,6 +774,7 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
                 userId = DEFAULT_USER_STATE.activeUserId,
+                isUserPreVerified = false,
                 requestData = bundleOf(),
             )
             val mockIntent = createMockIntent(

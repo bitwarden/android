@@ -2,14 +2,15 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.core.os.bundleOf
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.JwtTokenDataJson
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
@@ -20,7 +21,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockk
@@ -393,6 +393,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
+                                keyConnectorUrl = "bitwarden.com",
                             ),
                         ),
                         needsMasterPassword = false,
@@ -678,6 +679,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "activeUserId",
+            isUserPreVerified = false,
             requestData = bundleOf(),
         )
         specialCircumstanceManager.specialCircumstance =

@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -24,9 +26,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -3349,6 +3349,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                                 shouldManageResetPassword = false,
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
+                                keyConnectorUrl = null,
                             ),
                         ),
                     ),

@@ -1,13 +1,11 @@
 package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.di
 
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
+import com.bitwarden.network.BitwardenServiceClient
+import com.bitwarden.network.service.DigitalAssetLinkService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import retrofit2.create
 import javax.inject.Singleton
 
 /**
@@ -20,11 +18,7 @@ object Fido2NetworkModule {
     @Provides
     @Singleton
     fun provideDigitalAssetLinkService(
-        retrofits: Retrofits,
+        bitwardenServiceClient: BitwardenServiceClient,
     ): DigitalAssetLinkService =
-        DigitalAssetLinkServiceImpl(
-            digitalAssetLinkApi = retrofits
-                .createStaticRetrofit()
-                .create(),
-        )
+        bitwardenServiceClient.digitalAssetLinkService
 }

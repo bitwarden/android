@@ -40,6 +40,7 @@ class OtherViewModel @Inject constructor(
 ) : BaseViewModel<OtherState, OtherEvent, OtherAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: OtherState(
+            isPreAuth = OtherArgs(savedStateHandle = savedStateHandle).isPreAuth,
             allowScreenCapture = settingsRepo.isScreenCaptureAllowed,
             allowSyncOnRefresh = settingsRepo.getPullToRefreshEnabledFlow().value,
             clearClipboardFrequency = settingsRepo.clearClipboardFrequency,
@@ -153,6 +154,7 @@ class OtherViewModel @Inject constructor(
  */
 @Parcelize
 data class OtherState(
+    val isPreAuth: Boolean,
     val allowScreenCapture: Boolean,
     val allowSyncOnRefresh: Boolean,
     val clearClipboardFrequency: ClearClipboardFrequency,

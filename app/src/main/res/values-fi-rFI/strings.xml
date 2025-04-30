@@ -620,6 +620,10 @@ Koodi skannataan automaattisesti.</string>
   <string name="deletion_date_info">Send poistuu pysyvästi määritettynä ajankohtana.</string>
   <string name="pending_delete">Odottaa poistoa</string>
   <string name="expired">Erääntynyt</string>
+  <string name="expires_at">Erääntyy %s</string>
+  <string name="expires_tomorrow">Erääntyy huomenna</string>
+  <string name="expires_on">Erääntyy %s</string>
+  <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
   <string name="maximum_access_count">Käyttökertojen enimmäismäärä</string>
   <string name="maximum_access_count_info">Jos määritetty, käyttäjät eivät voi avata Sendiä käyttökertojen enimmäismäärän täytyttyä.</string>
   <string name="maximum_access_count_reached">Käyttökertojen enimmäismäärä on saavutettu</string>
@@ -775,7 +779,7 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
   <string name="email_required_parenthesis">Sähköpostiosoite (pakollinen)</string>
   <string name="domain_name">domain name</string>
   <string name="domain_name_required_parenthesis">Verkkotunnus (pakollinen)</string>
-  <string name="api_key">API key</string>
+  <string name="api_key">API-avain</string>
   <string name="api_key_required_parenthesis">API-avain (pakollinen)</string>
   <string name="service">Palvelu</string>
   <string name="addy_io">addy.io</string>
@@ -1065,7 +1069,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua.</string>
   <string name="master_password_hint_not_specified">Pääsalasanan vihje</string>
   <string name="master_password_important_hint">Tärkeää: Pääsalasanaasi ei ole mahdollista palauttaa, jos unohdat sen! Vähintään 12 merkkiä.</string>
-  <string name="new_master_password_hint">New master password hint</string>
+  <string name="new_master_password_hint">Uusi pääsalasanan vihje</string>
   <string name="get_started">Aloita</string>
   <string name="save_and_protect_your_data">Tallenna ja suojaa tietojasi</string>
   <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
@@ -1125,7 +1129,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="copy_public_key">Kopioi julkinen avain</string>
   <string name="copy_fingerprint">Kopioi sormenjälki</string>
   <string name="enable_notifications">Ota ilmoitukset käyttöön</string>
-  <string name="log_in_quickly_and_easily_across_devices">Log in quickly and easily across devices</string>
+  <string name="log_in_quickly_and_easily_across_devices">Kirjaudu nopeasti ja helposti eri laitteilla</string>
   <string name="bitwarden_can_notify_you_each_time_you_receive_a_new_login_request_from_another_device">Bitwarden can notify you each time you receive a new login request from another device.</string>
   <string name="skip_for_now">Ohita tällä kertaa</string>
   <string name="done_text">Valmis</string>
@@ -1145,7 +1149,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="change_account_email">Muuta tilin sähköpostiosoitetta</string>
   <string name="choose_three_or_four_random_words">Valitse kolme tai neljä satunnaista sanaa</string>
   <string name="pick_three_or_four_random_unrelated_words">Pick three or four random, unrelated words that you can easily remember. Think of <annotation emphasis="bold">objects, places, or things</annotation> you like.</string>
-  <string name="combine_those_words_together">Combine those words together</string>
+  <string name="combine_those_words_together">Yhdistä nuo sanat yhteen</string>
   <string name="put_the_words_together_in_any_order_to_form_your_passphrase">Put the words together in any order to form your passphrase. <annotation emphasis="bold">Use hyphens, spaces, or leave them as one long word</annotation>—your choice!</string>
   <string name="make_it_yours">Tee siitä omasi</string>
   <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">Add a number or symbol</annotation> to make it even stronger. Now you have a unique, secure, and memorable passphrase!</string>
@@ -1155,9 +1159,9 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
   <string name="review_flow_launched">Review flow launched!</string>
   <string name="copy_private_key">Kopioi yksityinen avain</string>
-  <string name="login_credentials">Login Credentials</string>
+  <string name="login_credentials">Kirjautumistiedot</string>
   <string name="autofill_options">Autofill Options</string>
-  <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
+  <string name="use_this_button_to_generate_a_new_unique_password">Käytä tätä painiketta luodaksesi uuden ainutlaatuisen salasanan.</string>
   <string name="coachmark_1_of_3">1/3</string>
   <string name="coachmark_2_of_3">2/3</string>
   <string name="you_ll_only_need_to_set_up_authenticator_key">You’ll only need to set up Authenticator Key for logins that require two-factor authentication with a code. The key will continuously generate six-digit codes you can use to log in.</string>
@@ -1166,9 +1170,9 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="mutual_tls">Mutual TLS</string>
   <string name="single_tap_passkey_creation">Yhden napautuksen pääsyavaimen luonti</string>
   <string name="single_tap_passkey_authentication">Yhden napautuksen kirjautuminen</string>
-  <string name="learn_about_new_logins">Learn about new logins</string>
+  <string name="learn_about_new_logins">Lisätietoja uusista kirjautumistiedoista</string>
   <string name="we_ll_walk_you_through_the_key_features_to_add_a_new_login">We\'ll walk you through the key features to add a new login.</string>
-  <string name="explore_the_generator">Explore the generator</string>
+  <string name="explore_the_generator">Tutustu generaattoriin</string>
   <string name="learn_more_about_generating_secure_login_credentials_with_guided_tour">Learn more about generating secure login credentials with a guided tour.</string>
   <string name="import_client_certificate">Import client certificate</string>
   <string name="enter_the_client_certificate_password_and_alias">Enter the client certificate password and the desired alias for this certificate.</string>
@@ -1210,15 +1214,15 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="passkey_operation_failed_because_no_item_was_selected">Passkey operation failed because no item was selected.</string>
   <string name="passkey_operation_failed_because_the_request_is_unsupported">Passkey operation failed because the request is unsupported.</string>
   <string name="self_host_server_url">Self-host server URL</string>
-  <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
-  <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
+  <string name="use_chrome_autofill_integration">Käytä Chromen automaattitäytön integrointia</string>
+  <string name="use_chrome_beta_autofill_integration">Käytä Chromen automaattitäytön integrointia (Beta)</string>
   <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
   <string name="show_more">Näytä enemmän</string>
   <string name="no_folder">Ei kansiota</string>
   <string name="show_less">Näytä vähemmän</string>
-  <string name="add_field">Add field</string>
+  <string name="add_field">Lisää kenttä</string>
   <string name="x_ellipses">%s...</string>
-  <string name="share_error_details">Share error details</string>
+  <string name="share_error_details">Jaa virhetiedot</string>
   <string name="flight_recorder">Flight recorder</string>
   <string name="flight_recorder_help">Flight recorder help</string>
   <string name="view_recorded_logs">View recorded logs</string>
@@ -1231,8 +1235,28 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
   <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
   <string name="logging_duration">Logging duration</string>
-  <string name="flight_recorder_one_hour">1 hour</string>
-  <string name="flight_recorder_eight_hours">8 hours</string>
-  <string name="flight_recorder_twenty_four_hours">24 hours</string>
-  <string name="flight_recorder_one_week">1 week</string>
+  <string name="flight_recorder_one_hour">1 tunti</string>
+  <string name="flight_recorder_eight_hours">8 tuntia</string>
+  <string name="flight_recorder_twenty_four_hours">24 tuntia</string>
+  <string name="flight_recorder_one_week">1 viikko</string>
+  <string name="delete_all">Poista kaikki</string>
+  <string name="share_all">Jaa kaikki</string>
+  <string name="unable_to_share">Jakaminen epäonnistui</string>
+  <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Lokitiedosto, jonka yrität jakaa, on poistettu.</string>
+  <string name="delete_log">Poista loki</string>
+  <string name="do_you_really_want_to_delete_this_log">Haluatko varmasti poistaa tämän lokin?</string>
+  <string name="delete_logs">Poista lokit</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Haluatko varmasti poistaa kaikki tallennetut lokit?</string>
+  <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
+  <string name="key_connector_domain">Key Connector domain:</string>
+  <string name="key_connector_organization">Organisaatio:</string>
+  <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
+  <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Flight recorder on</string>
+  <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
+  <string name="go_to_settings">Go to settings</string>
+  <string name="all_logs_deleted">All logs deleted</string>
+  <string name="log_deleted">Log deleted</string>
+  <string name="app_settings">App settings</string>
 </resources>

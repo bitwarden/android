@@ -71,8 +71,7 @@ fun AboutScreen(
             AboutEvent.NavigateToRecordedLogs -> onNavigateToRecordedLogs()
 
             AboutEvent.NavigateToFlightRecorderHelp -> {
-                // TODO: PM-19809 Update this URL to be specific to the flight recorder
-                intentManager.launchUri("https://bitwarden.com/help".toUri())
+                intentManager.launchUri("https://bitwarden.com/help/flight-recorder".toUri())
             }
 
             AboutEvent.NavigateToHelpCenter -> {

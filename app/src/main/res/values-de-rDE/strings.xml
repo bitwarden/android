@@ -620,6 +620,10 @@ Das Scannen erfolgt automatisch.</string>
   <string name="deletion_date_info">Das Send wird am angegebenen Datum zur angegebenen Uhrzeit dauerhaft gelöscht.</string>
   <string name="pending_delete">Ausstehende Löschung</string>
   <string name="expired">Abgelaufen</string>
+  <string name="expires_at">Läuft ab um %s</string>
+  <string name="expires_tomorrow">Läuft morgen ab</string>
+  <string name="expires_on">Läuft ab am %s</string>
+  <string name="stops_logging_on">Stoppt die Protokollierung am %1$s um %2$s</string>
   <string name="maximum_access_count">Maximale Zugriffsanzahl</string>
   <string name="maximum_access_count_info">Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</string>
   <string name="maximum_access_count_reached">Maximale Zugriffsanzahl erreicht</string>
@@ -1224,14 +1228,34 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="enable_flight_recorder_title">Flugschreiber aktivieren</string>
   <string name="recorded_logs_title">Gespeicherte Protokolle</string>
   <string name="no_logs_recorded">Keine Protokolle gespeichert</string>
-  <string name="experiencing_an_issue">Experiencing an issue?</string>
-  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
-  <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-  <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
-  <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
-  <string name="logging_duration">Logging duration</string>
+  <string name="experiencing_an_issue">Hast du ein Problem?</string>
+  <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Aktiviere die temporäre Protokollierung, um Protokolle lokal zu sammeln und zu prüfen. Wenn diese Option aktiviert ist, können Anwendungszustände und Netzwerkaufrufe protokolliert werden, jedoch niemals sensible Tresor-Informationen.</string>
+  <string name="to_get_started_set_a_logging_duration">Leg zunächst eine Dauer für die Protokollierung fest. Die Protokollierung schaltet sich automatisch nach diesem Zeitraum aus, so dass du Zeit hast, Aktivitäten zu erfassen und eventuelle Probleme zu reproduzieren.</string>
+  <string name="logs_will_be_automatically_deleted_after_30_days">Protokolle werden nach 30 Tagen automatisch gelöscht. Bitwarden kann nur auf deine Protokolldaten zugreifen, wenn du sie teilst.</string>
+  <string name="for_details_on_what_is_and_isnt_logged">Für Details zu dem, was und was nicht protokolliert wird, besuche das\n<annotation link="helpCenter">Bitwarden Hilfezentrum.</annotation></string>
+  <string name="logging_duration">Dauer der Protokollierung</string>
   <string name="flight_recorder_one_hour">1 Stunde</string>
   <string name="flight_recorder_eight_hours">8 Stunden</string>
   <string name="flight_recorder_twenty_four_hours">24 Stunden</string>
   <string name="flight_recorder_one_week">1 Woche</string>
+  <string name="delete_all">Alles löschen</string>
+  <string name="share_all">Alles teilen</string>
+  <string name="unable_to_share">Teilen nicht möglich</string>
+  <string name="please_try_again_or_select_a_different_log">Bitte versuche es erneut oder wähle ein anderes Protokoll aus.</string>
+  <string name="the_log_file_you_are_trying_to_share_has_been_removed">Die Protokolldatei, die du teilen möchtest, wurde gelöscht.</string>
+  <string name="delete_log">Protokoll löschen</string>
+  <string name="do_you_really_want_to_delete_this_log">Möchtests du dieses Protokoll wirklich löschen?</string>
+  <string name="delete_logs">Protokolle löschen</string>
+  <string name="do_you_really_want_to_delete_all_recorded_logs">Willst du wirklich alle aufgezeichneten Protokolle löschen?</string>
+  <string name="confirm_key_connector_domain">Key Connector-Domain bestätigen</string>
+  <string name="key_connector_domain">Key Connector-Domain:</string>
+  <string name="key_connector_organization">Organisation:</string>
+  <string name="password_no_longer_required_confirm_domain">Für Mitglieder der folgenden Organisation ist kein Master-Passwort mehr erforderlich. Bitte bestätige die folgende Domain bei deinem Organisations-Administrator.</string>
+  <string name="please_confirm_domain_with_admin">Bitte bestätige die folgende Domain bei deinem Organisations-Administrator.\n\nKey Connector-Domain:\n%1$s</string>
+  <string name="flight_recorder_banner_title">Flugschreiber eingeschaltet</string>
+  <string name="flight_recorder_banner_message">Der Flugschreiber wird bis zum %1$s um %2$s aktiv sein. Gehe zurück zu den Einstellungen, um ihn jetzt zu deaktivieren.</string>
+  <string name="go_to_settings">Gehe zu den Einstellungen</string>
+  <string name="all_logs_deleted">Alle Protokolle gelöscht</string>
+  <string name="log_deleted">Protokoll gelöscht</string>
+  <string name="app_settings">App settings</string>
 </resources>

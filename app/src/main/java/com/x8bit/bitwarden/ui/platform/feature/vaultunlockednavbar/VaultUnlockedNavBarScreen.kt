@@ -13,20 +13,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
@@ -49,7 +50,9 @@ import kotlinx.collections.immutable.persistentListOf
 @Composable
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberBitwardenNavController(
+        name = "VaultUnlockedNavBarScreen",
+    ),
     onNavigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
@@ -73,32 +76,37 @@ fun VaultUnlockedNavBarScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions = vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
             when (event) {
                 is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
                     -> {
-                    navigateToVaultGraph(navOptions)
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToVaultGraph(navOptions = it)
+                    }
                 }
 
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
                 VaultUnlockedNavBarEvent.NavigateToSendScreen,
                     -> {
-                    navigateToSendGraph(navOptions)
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToSendGraph(navOptions = it)
+                    }
                 }
 
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
                     -> {
-                    navigateToGeneratorGraph(navOptions)
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToGeneratorGraph(navOptions = it)
+                    }
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
-                    navigateToSettingsGraph(navOptions)
-                }
-
-                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen -> {
-                    navigateToSettingsGraph(navOptions)
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
+                VaultUnlockedNavBarEvent.NavigateToSettingsScreen,
+                    -> {
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToSettingsGraph(navOptions = it)
+                    }
                 }
             }
         }
@@ -190,7 +198,7 @@ private fun VaultUnlockedNavBarScaffold(
         navigationData = ScaffoldNavigationData(
             navigationItems = navigationItems,
             selectedNavigationItem = navigationItems.find {
-                navBackStackEntry.isCurrentRoute(route = it.route)
+                navBackStackEntry.isCurrentRoute(route = it.graphRoute)
             },
             onNavigationClick = { navigationItem ->
                 when (navigationItem) {
@@ -223,6 +231,10 @@ private fun VaultUnlockedNavBarScaffold(
                 onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
                 onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+                onNavigateToAboutScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAbout(isPreAuth = false)
+                },
             )
             sendGraph(
                 navController = navController,
@@ -251,34 +263,32 @@ private fun VaultUnlockedNavBarScaffold(
 }
 
 /**
- * Helper function to generate [NavOptions] for [VaultUnlockedNavBarScreen].
- *
- * @param tabToNavigateTo The [VaultUnlockedNavBarTab] to prepare the NavOptions for.
- * NavOptions are determined on whether or not the tab is already selected.
+ * Helper function to determine how to navigate to a specified [VaultUnlockedNavBarTab].
+ * If direct navigation is required, the [navigate] lambda will be invoked with the appropriate
+ * [NavOptions].
  */
-private fun NavController.vaultUnlockedNavBarScreenNavOptions(
+private fun NavController.navigateToTabOrRoot(
     tabToNavigateTo: VaultUnlockedNavBarTab,
-): NavOptions {
-    val returnToCurrentSubRoot = currentBackStackEntry.isCurrentRoute(tabToNavigateTo.route)
-    val currentSubRootGraph = currentDestination?.parent?.id
-    // determine the destination to navigate to, if we are navigating to the same sub-root for the
-    // selected tab we want to find the start destination of the sub-root and pop up to it, which
-    // will maintain its state (i.e. scroll position). If we are navigating to a different sub-root,
-    // we can safely pop up to the start of the graph, the "home" tab destination.
-    val popUpToDestination = graph
-        .getSubgraphStartDestinationOrNull(currentSubRootGraph)
-        .takeIf { returnToCurrentSubRoot }
-        ?: graph.findStartDestination().id
-    // If we are popping up the start of the whole nav graph we want to maintain the state of the
-    // the popped destinations in the other sub-roots. If we are navigating to the same sub-root,
-    // we want to pop off the nested destinations without maintaining their state.
-    val maintainStateOfPoppedDestinations = !returnToCurrentSubRoot
-    return navOptions {
-        popUpTo(popUpToDestination) {
-            saveState = maintainStateOfPoppedDestinations
-        }
-        launchSingleTop = true
-        restoreState = maintainStateOfPoppedDestinations
+    navigate: (NavOptions) -> Unit,
+) {
+    if (tabToNavigateTo.startDestinationRoute == currentDestination?.route) {
+        // We are at the start destination already, so nothing to do.
+        return
+    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute) {
+        // We are not at the start destination but we are in the correct graph,
+        // so lets pop up to the start destination.
+        popBackStack(route = tabToNavigateTo.startDestinationRoute, inclusive = false)
+    } else {
+        // We are not in correct graph at all, so navigate there.
+        navigate(
+            navOptions {
+                popUpTo(id = graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            },
+        )
     }
 }
 
@@ -290,17 +300,3 @@ private fun NavBackStackEntry?.isCurrentRoute(route: String): Boolean =
         ?.destination
         ?.hierarchy
         ?.any { it.route == route } == true
-
-/**
- * Helper function to determine the start destination of a subgraph.
- *
- * @param subgraphId the id of the subgraph to find the start destination of.
- *
- * @return the ID of the start destination of the subgraph, or null if the subgraph does not exist.
- */
-private fun NavGraph.getSubgraphStartDestinationOrNull(subgraphId: Int?): Int? {
-    subgraphId ?: return null
-    return nodes[subgraphId]?.let {
-        (it as? NavGraph)?.findStartDestination()?.id
-    }
-}

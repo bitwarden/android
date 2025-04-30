@@ -42,5 +42,11 @@ data class FlightRecorderDataSet(
 
         @SerialName("isActive")
         val isActive: Boolean,
+
+        @SerialName("isBannerDismissed")
+        val isBannerDismissed: Boolean = false,
+
+        @SerialName("expirationTime")
+        val expirationTimeMs: Long? = null,
     )
 }

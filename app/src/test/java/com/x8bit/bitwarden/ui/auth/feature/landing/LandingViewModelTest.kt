@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -42,6 +42,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.EmailVerification) } returns false
+        every { getFeatureFlag(FlagKey.PreAuthSettings) } returns false
     }
 
     @Test
@@ -210,6 +211,29 @@ class LandingViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `AppSettingsClick should emit NavigateToLogin`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LandingAction.AppSettingsClick)
+            assertEquals(LandingEvent.NavigateToSettings, awaitItem())
+        }
+    }
+
+    @Test
+    fun `PreAuthSettingFlagReceive should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(true))
+            assertEquals(DEFAULT_STATE.copy(showSettingsButton = true), awaitItem())
+
+            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(false))
+            assertEquals(DEFAULT_STATE.copy(showSettingsButton = false), awaitItem())
         }
     }
 
@@ -606,16 +630,15 @@ class LandingViewModelTest : BaseViewModelTest() {
     )
 
     //endregion Helper methods
-
-    companion object {
-        private val DEFAULT_STATE = LandingState(
-            emailInput = "",
-            isContinueButtonEnabled = false,
-            isRememberEmailEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            selectedEnvironmentLabel = Environment.Us.label,
-            dialog = null,
-            accountSummaries = emptyList(),
-        )
-    }
 }
+
+private val DEFAULT_STATE = LandingState(
+    emailInput = "",
+    isContinueButtonEnabled = false,
+    isRememberEmailEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    selectedEnvironmentLabel = Environment.Us.label,
+    dialog = null,
+    accountSummaries = emptyList(),
+    showSettingsButton = false,
+)

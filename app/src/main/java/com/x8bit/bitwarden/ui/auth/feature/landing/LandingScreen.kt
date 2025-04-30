@@ -35,8 +35,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -66,6 +66,7 @@ fun LandingScreen(
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     onNavigateToStartRegistration: () -> Unit,
+    onNavigateToPreAuthSettings: () -> Unit,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -78,6 +79,7 @@ fun LandingScreen(
 
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
             LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
+            LandingEvent.NavigateToSettings -> onNavigateToPreAuthSettings()
         }
     }
 
@@ -185,6 +187,9 @@ fun LandingScreen(
             onCreateAccountClick = remember(viewModel) {
                 { viewModel.trySendAction(LandingAction.CreateAccountClick) }
             },
+            onAppSettingsClick = remember(viewModel) {
+                { viewModel.trySendAction(LandingAction.AppSettingsClick) }
+            },
         )
     }
 }
@@ -198,6 +203,7 @@ private fun LandingScreenContent(
     onRememberMeToggle: (Boolean) -> Unit,
     onContinueClick: () -> Unit,
     onCreateAccountClick: () -> Unit,
+    onAppSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -306,6 +312,17 @@ private fun LandingScreenContent(
                 onClick = onCreateAccountClick,
                 modifier = Modifier
                     .testTag("CreateAccountLabel"),
+            )
+        }
+        if (state.showSettingsButton) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenTextButton(
+                label = stringResource(id = R.string.app_settings),
+                onClick = onAppSettingsClick,
+                icon = rememberVectorPainter(id = R.drawable.ic_cog),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
             )
         }
 
