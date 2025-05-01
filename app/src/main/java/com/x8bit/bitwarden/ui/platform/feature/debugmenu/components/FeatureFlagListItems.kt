@@ -27,7 +27,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
 
     FlagKey.AuthenticatorSync,
     FlagKey.EmailVerification,
-    FlagKey.OnboardingCarousel,
     FlagKey.OnboardingFlow,
     FlagKey.ImportLoginsFlow,
     FlagKey.VerifiedSsoDomainEndpoint,
@@ -87,7 +86,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
 
     FlagKey.AuthenticatorSync -> stringResource(R.string.authenticator_sync)
     FlagKey.EmailVerification -> stringResource(R.string.email_verification)
-    FlagKey.OnboardingCarousel -> stringResource(R.string.onboarding_carousel)
     FlagKey.OnboardingFlow -> stringResource(R.string.onboarding_flow)
     FlagKey.ImportLoginsFlow -> stringResource(R.string.import_logins_flow)
     FlagKey.VerifiedSsoDomainEndpoint -> stringResource(R.string.verified_sso_domain_verified)

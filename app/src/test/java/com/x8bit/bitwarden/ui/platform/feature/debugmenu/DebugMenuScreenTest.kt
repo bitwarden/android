@@ -151,13 +151,6 @@ class DebugMenuScreenTest : BaseComposeTest() {
 
     @Test
     fun `Show onboarding carousel should send action when enabled and clicked`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = persistentMapOf(
-                    FlagKey.OnboardingCarousel to true,
-                ),
-            ),
-        )
         composeTestRule
             .onNodeWithText("Show Onboarding Carousel", ignoreCase = true)
             .performScrollTo()
@@ -165,25 +158,6 @@ class DebugMenuScreenTest : BaseComposeTest() {
             .performClick()
 
         verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
-    }
-
-    @Test
-    fun `show onboarding carousel should not send action when not enabled`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = persistentMapOf(
-                    FlagKey.OnboardingCarousel to false,
-                ),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Show Onboarding Carousel", ignoreCase = true)
-            .performScrollTo()
-            .assertIsNotEnabled()
-            .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel) }
     }
 
     @Test
