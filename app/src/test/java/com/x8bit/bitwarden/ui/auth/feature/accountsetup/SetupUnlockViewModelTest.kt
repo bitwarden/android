@@ -414,7 +414,7 @@ private val DEFAULT_USER_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.ACCOUNT_LOCK_SETUP,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-    isManagedByOrganization = false,
+    isClaimedByOrganization = false,
 )
 
 private val CIPHER = mockk<Cipher>()

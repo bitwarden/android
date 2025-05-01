@@ -102,7 +102,7 @@ private const val SYNC_SUCCESS_JSON = """
         "useApi": false,
         "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",
         "status": 1,
-        "userIsManagedByOrganization": false
+        "userIsClaimedByOrganization": false
       }
     ],
     "providers": [
@@ -178,7 +178,7 @@ private const val SYNC_SUCCESS_JSON = """
         "useApi": false,
         "familySponsorshipValidUntil": "2023-10-27T12:00:00.00Z",
         "status": 1,
-        "userIsManagedByOrganization": false
+        "userIsClaimedByOrganization": false
       }
     ]
   },

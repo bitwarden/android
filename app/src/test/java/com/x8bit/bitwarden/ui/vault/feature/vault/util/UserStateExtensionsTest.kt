@@ -90,7 +90,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -119,7 +119,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -152,7 +152,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -185,7 +185,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -233,7 +233,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -279,7 +279,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -329,7 +329,7 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -358,7 +358,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -418,7 +418,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -479,7 +479,7 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

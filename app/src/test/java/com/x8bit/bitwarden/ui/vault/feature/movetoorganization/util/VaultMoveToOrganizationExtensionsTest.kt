@@ -135,7 +135,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isManagedByOrganization = false,
+                isClaimedByOrganization = false,
             ),
         ),
     )

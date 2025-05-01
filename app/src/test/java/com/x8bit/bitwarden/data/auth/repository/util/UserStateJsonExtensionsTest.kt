@@ -377,7 +377,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -449,7 +449,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -489,7 +489,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.NOT_STARTED,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -557,7 +557,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { false },
                     onboardingStatus = OnboardingStatus.NOT_STARTED,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -603,7 +603,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -674,7 +674,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -720,7 +720,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -791,7 +791,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = OnboardingStatus.AUTOFILL_SETUP,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -837,7 +837,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -908,7 +908,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -958,7 +958,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1029,7 +1029,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -1059,7 +1059,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1109,7 +1109,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -1139,7 +1139,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1191,7 +1191,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -1238,7 +1238,7 @@ class UserStateJsonExtensionsTest {
                         isUsingKeyConnector = true,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1311,7 +1311,7 @@ class UserStateJsonExtensionsTest {
                     isDeviceTrustedProvider = { true },
                     onboardingStatus = null,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
@@ -1359,7 +1359,7 @@ class UserStateJsonExtensionsTest {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = false,
                         ),
-                        isManagedByOrganization = false,
+                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -1432,7 +1432,7 @@ class UserStateJsonExtensionsTest {
                     firstTimeState = FirstTimeState(
                         showImportLoginsCard = false,
                     ),
-                    userIsManagedByOrganization = { false },
+                    userIsClaimedByOrganization = { false },
                 ),
         )
     }
