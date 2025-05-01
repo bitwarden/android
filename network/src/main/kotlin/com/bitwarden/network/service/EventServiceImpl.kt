@@ -7,7 +7,7 @@ import com.bitwarden.network.util.toResult
 /**
  * The default implementation of the [EventService].
  */
-class EventServiceImpl(
+internal class EventServiceImpl(
     private val eventApi: EventApi,
 ) : EventService {
     override suspend fun sendOrganizationEvents(

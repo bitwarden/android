@@ -11,7 +11,7 @@ import retrofit2.http.Url
 /**
  * Defines raw calls to the Azure API without any authentication applied.
  */
-interface AzureApi {
+internal interface AzureApi {
     /**
      * Attempts to upload an encrypted file to Azure.
      */

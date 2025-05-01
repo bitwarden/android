@@ -14,7 +14,7 @@ import retrofit2.http.Path
 /**
  * Defines authenticated raw calls under the /auth-requests API.
  */
-interface AuthenticatedAuthRequestsApi {
+internal interface AuthenticatedAuthRequestsApi {
 
     /**
      * Notifies the server of a new admin authentication request.

@@ -13,7 +13,7 @@ import retrofit2.http.Path
 /**
  * Defines raw calls under the authenticated /organizations API.
  */
-interface AuthenticatedOrganizationApi {
+internal interface AuthenticatedOrganizationApi {
     /**
      * Enrolls this user in the organization's password reset.
      */

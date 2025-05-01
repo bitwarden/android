@@ -7,7 +7,7 @@ import retrofit2.Call
 /**
  * Synchronously executes the [Call] and returns the [NetworkResult].
  */
-inline fun <reified T : Any> Call<T>.executeForNetworkResult(): NetworkResult<T> =
+internal inline fun <reified T : Any> Call<T>.executeForNetworkResult(): NetworkResult<T> =
     this
         .toNetworkResultCall()
         .executeForResult()
@@ -15,7 +15,7 @@ inline fun <reified T : Any> Call<T>.executeForNetworkResult(): NetworkResult<T>
 /**
  * Wraps the existing [Call] in a [NetworkResultCall].
  */
-inline fun <reified T : Any> Call<T>.toNetworkResultCall(): NetworkResultCall<T> =
+internal inline fun <reified T : Any> Call<T>.toNetworkResultCall(): NetworkResultCall<T> =
     NetworkResultCall(
         backingCall = this,
         successType = T::class.java,

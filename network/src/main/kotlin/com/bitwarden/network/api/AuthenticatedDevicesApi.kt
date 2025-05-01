@@ -12,7 +12,7 @@ import retrofit2.http.Path
  * Defines raw calls under the /devices API that require authentication.
  */
 @Keep
-interface AuthenticatedDevicesApi {
+internal interface AuthenticatedDevicesApi {
     @PUT("/devices/{appId}/keys")
     suspend fun updateTrustedDeviceKeys(
         @Path(value = "appId") appId: String,

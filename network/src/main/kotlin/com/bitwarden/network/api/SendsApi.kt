@@ -17,7 +17,7 @@ import retrofit2.http.Path
  * Defines raw calls under the /send API with authentication applied.
  */
 @Keep
-interface SendsApi {
+internal interface SendsApi {
 
     /**
      * Create a text send.

@@ -24,7 +24,7 @@ import retrofit2.http.Query
 /**
  * Defines raw calls under the /identity API.
  */
-interface UnauthenticatedIdentityApi {
+internal interface UnauthenticatedIdentityApi {
 
     @POST("/connect/token")
     @Suppress("LongParameterList")

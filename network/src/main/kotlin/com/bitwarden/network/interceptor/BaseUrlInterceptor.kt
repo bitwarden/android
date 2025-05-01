@@ -9,7 +9,7 @@ import okhttp3.Response
  * An [Interceptor] that optionally takes the current base URL of a request and replaces it with
  * the currently set base URL from the [baseUrlProvider].
  */
-class BaseUrlInterceptor(
+internal class BaseUrlInterceptor(
     private val baseUrlProvider: () -> String?,
 ) : Interceptor {
 

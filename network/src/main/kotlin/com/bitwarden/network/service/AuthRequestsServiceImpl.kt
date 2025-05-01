@@ -5,7 +5,7 @@ import com.bitwarden.network.model.AuthRequestUpdateRequestJson
 import com.bitwarden.network.model.AuthRequestsResponseJson
 import com.bitwarden.network.util.toResult
 
-class AuthRequestsServiceImpl(
+internal class AuthRequestsServiceImpl(
     private val authenticatedAuthRequestsApi: AuthenticatedAuthRequestsApi,
 ) : AuthRequestsService {
     override suspend fun getAuthRequests(): Result<AuthRequestsResponseJson> =
