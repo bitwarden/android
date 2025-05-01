@@ -39,7 +39,7 @@ class DeleteAccountViewModel @Inject constructor(
             .hasMasterPassword,
         isUserManagedByOrganization = requireNotNull(authRepository.userStateFlow.value)
             .activeAccount
-            .isClaimedByOrganization,
+            .organizations.any { it.userIsClaimedByOrganization } == true,
     ),
 ) {
 

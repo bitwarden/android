@@ -499,6 +499,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockOrganizationId-2",
@@ -507,6 +508,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockOrganizationId-3",
@@ -515,6 +517,7 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             trustedDevice = null,
@@ -522,7 +525,6 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         ),
     ),
 )

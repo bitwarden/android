@@ -110,7 +110,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -148,7 +147,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -183,7 +181,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -228,7 +225,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -270,7 +266,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -312,7 +307,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -351,7 +345,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -394,6 +387,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = true,
                                 role = OrganizationType.USER,
                                 keyConnectorUrl = "bitwarden.com",
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         needsMasterPassword = false,
@@ -404,7 +398,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -440,7 +433,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -481,7 +473,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -520,7 +511,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         firstTimeState = FirstTimeState(false),
                         onboardingStatus = OnboardingStatus.COMPLETE,
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -564,7 +554,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -608,7 +597,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -659,7 +647,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -708,7 +695,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -754,7 +740,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -890,7 +875,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -945,7 +929,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1008,7 +991,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1051,7 +1033,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1089,7 +1070,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1125,7 +1105,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1164,7 +1143,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1203,7 +1181,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1242,7 +1219,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1281,7 +1257,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1320,7 +1295,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1359,7 +1333,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
                         firstTimeState = FirstTimeState(
                             showImportLoginsCard = true,
                         ),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             ),
@@ -1406,7 +1379,6 @@ private val MOCK_VAULT_UNLOCKED_USER_STATE = UserState(
             isUsingKeyConnector = false,
             firstTimeState = FirstTimeState(false),
             onboardingStatus = OnboardingStatus.COMPLETE,
-            isClaimedByOrganization = false,
         ),
     ),
 )

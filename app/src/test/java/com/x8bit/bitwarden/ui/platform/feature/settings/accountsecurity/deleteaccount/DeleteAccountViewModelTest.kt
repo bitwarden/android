@@ -248,7 +248,6 @@ private val DEFAULT_USER_STATE: UserState = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         ),
     ),
 )

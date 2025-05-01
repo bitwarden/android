@@ -301,7 +301,6 @@ class AuthRepositoryImpl(
             userIsUsingKeyConnectorList = userIsUsingKeyConnectorList,
             hasPendingAccountAddition = hasPendingAccountAddition,
             onboardingStatus = onboardingStatus,
-            userIsClaimedByOrganization = ::isUserManagedByOrganization,
             isBiometricsEnabledProvider = ::isBiometricsEnabled,
             vaultUnlockTypeProvider = ::getVaultUnlockType,
             isDeviceTrustedProvider = ::isDeviceTrusted,
@@ -325,7 +324,6 @@ class AuthRepositoryImpl(
                     userIsUsingKeyConnectorList = authDiskSource.userKeyConnectorStateList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     onboardingStatus = authDiskSource.currentOnboardingStatus,
-                    userIsClaimedByOrganization = ::isUserManagedByOrganization,
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
@@ -1557,14 +1555,6 @@ class AuthRepositoryImpl(
                 remember = false,
             )
         }
-
-    /**
-     * Returns true if user is managed by an organization.
-     */
-    private fun isUserManagedByOrganization(
-        userId: String,
-    ): Boolean =
-        authDiskSource.getOrganizations(userId)?.any { it.userIsClaimedByOrganization } == true
 
     private fun isBiometricsEnabled(
         userId: String,

@@ -293,7 +293,6 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isUsingKeyConnector = false,
     onboardingStatus = OnboardingStatus.COMPLETE,
     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-    isClaimedByOrganization = false,
 )
 
 private val DEFAULT_USER_STATE = UserState(

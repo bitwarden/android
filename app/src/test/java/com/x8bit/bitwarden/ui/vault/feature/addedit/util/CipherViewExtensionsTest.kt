@@ -565,6 +565,7 @@ class CipherViewExtensionsTest {
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             isBiometricsEnabled = true,
@@ -575,7 +576,6 @@ class CipherViewExtensionsTest {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         )
 }
 

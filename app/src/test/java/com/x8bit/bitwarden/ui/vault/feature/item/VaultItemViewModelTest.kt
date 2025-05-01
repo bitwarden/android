@@ -3350,6 +3350,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),
@@ -3625,7 +3626,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         )
 
         private val DEFAULT_USER_STATE: UserState = UserState(

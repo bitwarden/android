@@ -259,6 +259,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -266,7 +267,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
-                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -347,6 +347,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -354,7 +355,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = DEFAULT_FIRST_TIME_STATE,
-                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -636,6 +636,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),
@@ -2104,7 +2105,6 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
-            isClaimedByOrganization = false,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -2124,7 +2124,6 @@ private val DEFAULT_USER_STATE = UserState(
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = DEFAULT_FIRST_TIME_STATE,
-            isClaimedByOrganization = false,
         ),
     ),
 )

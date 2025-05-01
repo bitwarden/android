@@ -71,7 +71,6 @@ data class UserState(
         val hasMasterPassword: Boolean,
         val trustedDevice: TrustedDevice?,
         val organizations: List<Organization>,
-        val isClaimedByOrganization: Boolean,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
         val isUsingKeyConnector: Boolean,

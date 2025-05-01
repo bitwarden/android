@@ -20,4 +20,5 @@ data class Organization(
     val shouldUseKeyConnector: Boolean,
     val role: OrganizationType,
     val keyConnectorUrl: String?,
+    val userIsClaimedByOrganization: Boolean,
 )

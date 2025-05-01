@@ -390,7 +390,6 @@ class AuthRepositoryTest {
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isDeviceTrustedProvider = { false },
                 firstTimeState = FIRST_TIME_STATE,
-                userIsClaimedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -418,7 +417,6 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
-                userIsClaimedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -437,7 +435,6 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
-                userIsClaimedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -468,7 +465,6 @@ class AuthRepositoryTest {
                 isDeviceTrustedProvider = { false },
                 onboardingStatus = null,
                 firstTimeState = FIRST_TIME_STATE,
-                userIsClaimedByOrganization = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -699,7 +695,6 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
-            userIsClaimedByOrganization = { false },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -712,7 +707,6 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
-            userIsClaimedByOrganization = { false },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -5807,7 +5801,6 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
-            userIsClaimedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5843,7 +5836,6 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
-            userIsClaimedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -5877,7 +5869,6 @@ class AuthRepositoryTest {
             isDeviceTrustedProvider = { false },
             onboardingStatus = null,
             firstTimeState = FIRST_TIME_STATE,
-            userIsClaimedByOrganization = { false },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(
@@ -6856,7 +6847,6 @@ class AuthRepositoryTest {
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isDeviceTrustedProvider = { false },
                     firstTimeState = FIRST_TIME_STATE,
-                    userIsClaimedByOrganization = { true },
                 ),
                 repository.userStateFlow.value,
             )

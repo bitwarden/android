@@ -83,6 +83,7 @@ class UserStateExtensionsTest {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -90,7 +91,6 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -112,6 +112,7 @@ class UserStateExtensionsTest {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -119,7 +120,6 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -145,6 +145,7 @@ class UserStateExtensionsTest {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -152,7 +153,6 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isClaimedByOrganization = false,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -178,6 +178,7 @@ class UserStateExtensionsTest {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -185,7 +186,6 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -226,6 +226,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -233,7 +234,6 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -272,6 +272,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -279,7 +280,6 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -322,6 +322,7 @@ class UserStateExtensionsTest {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.ADMIN,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                         trustedDevice = null,
@@ -329,7 +330,6 @@ class UserStateExtensionsTest {
                         isUsingKeyConnector = false,
                         onboardingStatus = OnboardingStatus.COMPLETE,
                         firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                        isClaimedByOrganization = false,
                     ),
                 ),
             )
@@ -358,7 +358,6 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -403,6 +402,7 @@ class UserStateExtensionsTest {
                         shouldManageResetPassword = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                     Organization(
                         id = "organizationId-A",
@@ -411,6 +411,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -418,7 +419,6 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -464,6 +464,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                     Organization(
                         id = "organizationId-A",
@@ -472,6 +473,7 @@ class UserStateExtensionsTest {
                         shouldUseKeyConnector = false,
                         role = OrganizationType.ADMIN,
                         keyConnectorUrl = null,
+                        userIsClaimedByOrganization = false,
                     ),
                 ),
                 trustedDevice = null,
@@ -479,7 +481,6 @@ class UserStateExtensionsTest {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

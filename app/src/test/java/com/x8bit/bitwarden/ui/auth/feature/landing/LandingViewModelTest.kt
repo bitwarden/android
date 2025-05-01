@@ -92,7 +92,6 @@ class LandingViewModelTest : BaseViewModelTest() {
                     isUsingKeyConnector = false,
                     onboardingStatus = OnboardingStatus.COMPLETE,
                     firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                    isClaimedByOrganization = false,
                 ),
             ),
         )
@@ -259,7 +258,6 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -317,7 +315,6 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -379,7 +376,6 @@ class LandingViewModelTest : BaseViewModelTest() {
                 isUsingKeyConnector = false,
                 onboardingStatus = OnboardingStatus.COMPLETE,
                 firstTimeState = FirstTimeState(showImportLoginsCard = true),
-                isClaimedByOrganization = false,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",
@@ -557,7 +553,6 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         )
 
         val userState = UserState(
@@ -594,7 +589,6 @@ class LandingViewModelTest : BaseViewModelTest() {
             isUsingKeyConnector = false,
             onboardingStatus = OnboardingStatus.COMPLETE,
             firstTimeState = FirstTimeState(showImportLoginsCard = true),
-            isClaimedByOrganization = false,
         )
 
         val userState = UserState(
