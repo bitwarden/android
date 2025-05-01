@@ -28,6 +28,7 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import java.io.File
@@ -66,7 +67,7 @@ interface VaultSdkSource {
         email: String,
         password: String,
         kdf: Kdf,
-    ): Result<String>
+    ): Result<DeriveKeyConnectorResult>
 
     /**
      * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later

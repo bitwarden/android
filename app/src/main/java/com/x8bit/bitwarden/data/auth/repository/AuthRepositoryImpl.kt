@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -352,7 +353,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
 
     override var shouldTrustDevice: Boolean
-        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } ?: false
+        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } == true
         set(value) {
             activeUserId?.let {
                 authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
@@ -981,23 +982,29 @@ class AuthRepositoryImpl(
                 masterPassword = masterPassword,
                 kdf = profile.toSdkParams(),
             )
-            .onSuccess {
-                authDiskSource.userState = authDiskSource
-                    .userState
-                    ?.toRemovedPasswordUserStateJson(userId = userId)
-                vaultRepository.sync()
-                settingsRepository.setDefaultsIfNecessary(userId = userId)
-            }
-            .fold(
-                onFailure = {
-                    if (it.message == "Wrong password") {
-                        RemovePasswordResult.WrongPasswordError(error = it)
-                    } else {
-                        RemovePasswordResult.Error(error = it)
+            .map { migrateResult: MigrateExistingUserToKeyConnectorResult ->
+                when (migrateResult) {
+                    is MigrateExistingUserToKeyConnectorResult.Error -> {
+                        RemovePasswordResult.Error(error = migrateResult.error)
                     }
-                },
-                onSuccess = { RemovePasswordResult.Success },
-            )
+
+                    MigrateExistingUserToKeyConnectorResult.Success -> {
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toRemovedPasswordUserStateJson(userId = userId)
+                        vaultRepository.sync()
+                        settingsRepository.setDefaultsIfNecessary(userId = userId)
+                        RemovePasswordResult.Success
+                    }
+
+                    MigrateExistingUserToKeyConnectorResult.WrongPasswordError -> {
+                        RemovePasswordResult.WrongPasswordError
+                    }
+                }
+            }
+            .getOrElse {
+                RemovePasswordResult.Error(error = it)
+            }
     }
 
     override suspend fun resetPassword(

@@ -8,7 +8,9 @@ import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 
 /**
  * The default implementation of the [KeyConnectorManager].
@@ -34,7 +36,7 @@ class KeyConnectorManagerImpl(
         email: String,
         masterPassword: String,
         kdf: Kdf,
-    ): Result<Unit> =
+    ): Result<MigrateExistingUserToKeyConnectorResult> =
         vaultSdkSource
             .deriveKeyConnector(
                 userId = userId,
@@ -42,11 +44,35 @@ class KeyConnectorManagerImpl(
                 email = email,
                 password = masterPassword,
                 kdf = kdf,
-            )
-            .flatMap { masterKey ->
-                accountsService.storeMasterKeyToKeyConnector(url = url, masterKey = masterKey)
+            ).map { result: DeriveKeyConnectorResult ->
+                when (result) {
+                    is DeriveKeyConnectorResult.Error -> {
+                        MigrateExistingUserToKeyConnectorResult.Error(result.error)
+                    }
+
+                    is DeriveKeyConnectorResult.Success -> {
+                        accountsService.storeMasterKeyToKeyConnector(
+                            url = url,
+                            masterKey = result.derivedKey,
+                        )
+                            .flatMap {
+                                accountsService.convertToKeyConnector()
+                            }
+                            .fold(
+                                onSuccess = {
+                                    MigrateExistingUserToKeyConnectorResult.Success
+                                },
+                                onFailure = {
+                                    MigrateExistingUserToKeyConnectorResult.Error(it)
+                                },
+                            )
+                    }
+
+                    is DeriveKeyConnectorResult.WrongPasswordError -> {
+                        MigrateExistingUserToKeyConnectorResult.WrongPasswordError
+                    }
+                }
             }
-            .flatMap { accountsService.convertToKeyConnector() }
 
     override suspend fun migrateNewUserToKeyConnector(
         url: String,

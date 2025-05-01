@@ -133,7 +133,6 @@ class RemovePasswordViewModel @Inject constructor(
                         dialogState = RemovePasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.invalid_master_password.asText(),
-                            error = result.error,
                         ),
                     )
                 }

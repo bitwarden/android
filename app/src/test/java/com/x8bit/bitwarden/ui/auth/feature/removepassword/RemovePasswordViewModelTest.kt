@@ -91,7 +91,7 @@ class RemovePasswordViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = initialState)
         coEvery {
             authRepository.removePassword(masterPassword = password)
-        } returns RemovePasswordResult.WrongPasswordError(error = error)
+        } returns RemovePasswordResult.WrongPasswordError
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())

@@ -19,7 +19,5 @@ sealed class RemovePasswordResult {
     /**
      * There was wrong password error removing the password.
      */
-    data class WrongPasswordError(
-        val error: Throwable,
-    ) : RemovePasswordResult()
+    data object WrongPasswordError : RemovePasswordResult()
 }
