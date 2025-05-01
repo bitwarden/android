@@ -257,7 +257,6 @@ class AuthRepositoryTest {
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-        every { getFeatureFlag(FlagKey.IgnoreEnvironmentCheck) } returns false
     }
 
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {

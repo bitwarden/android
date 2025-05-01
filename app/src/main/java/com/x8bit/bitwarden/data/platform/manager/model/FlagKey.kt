@@ -34,7 +34,6 @@ sealed class FlagKey<out T : Any> {
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
-                IgnoreEnvironmentCheck,
                 MutualTls,
                 SingleTapPasskeyCreation,
                 SingleTapPasskeyAuthentication,
@@ -147,15 +146,6 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "cipher-key-encryption"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
-    }
-
-    /**
-     * Data object holding the feature flag key to ignore an environment check.
-     */
-    data object IgnoreEnvironmentCheck : FlagKey<Boolean>() {
-        override val keyName: String = "ignore-environment-check"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
     }
 
     /**
