@@ -44,7 +44,8 @@ class KeyConnectorManagerImpl(
                 email = email,
                 password = masterPassword,
                 kdf = kdf,
-            ).map { result: DeriveKeyConnectorResult ->
+            )
+            .map { result: DeriveKeyConnectorResult ->
                 when (result) {
                     is DeriveKeyConnectorResult.Error -> {
                         MigrateExistingUserToKeyConnectorResult.Error(result.error)
@@ -55,17 +56,17 @@ class KeyConnectorManagerImpl(
                             url = url,
                             masterKey = result.derivedKey,
                         )
-                            .flatMap {
-                                accountsService.convertToKeyConnector()
-                            }
-                            .fold(
-                                onSuccess = {
-                                    MigrateExistingUserToKeyConnectorResult.Success
-                                },
-                                onFailure = {
-                                    MigrateExistingUserToKeyConnectorResult.Error(it)
-                                },
-                            )
+                        .flatMap {
+                            accountsService.convertToKeyConnector()
+                        }
+                        .fold(
+                            onSuccess = {
+                                MigrateExistingUserToKeyConnectorResult.Success
+                            },
+                            onFailure = {
+                                MigrateExistingUserToKeyConnectorResult.Error(it)
+                            },
+                        )
                     }
 
                     is DeriveKeyConnectorResult.WrongPasswordError -> {
