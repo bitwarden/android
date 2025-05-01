@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
@@ -32,15 +32,15 @@ class DeleteAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<DeleteAccountState, DeleteAccountEvent, DeleteAccountAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: DeleteAccountState(
-        dialog = null,
-        isUnlockWithPasswordEnabled = requireNotNull(authRepository.userStateFlow.value)
-            .activeAccount
-            .hasMasterPassword,
-        isUserManagedByOrganization = requireNotNull(authRepository.userStateFlow.value)
-            .activeAccount
-            .organizations.any { it.userIsClaimedByOrganization } == true,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val account = requireNotNull(authRepository.userStateFlow.value).activeAccount
+        DeleteAccountState(
+            dialog = null,
+            isUnlockWithPasswordEnabled = account.hasMasterPassword,
+            isUserManagedByOrganization =
+                account.organizations.any { it.userIsClaimedByOrganization } == true,
+        )
+    },
 ) {
 
     init {
