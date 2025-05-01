@@ -11,12 +11,54 @@ import java.net.URISyntaxException
 private const val ANDROID_APP_PROTOCOL: String = "androidapp://"
 
 /**
+ * Regex to match an IP address (IPv4) with an optional port within the valid range (0-65535).
+ *
+ * This regex matches the following:
+ * - An optional "http://" or "https://" prefix.
+ * - A standard IPv4 address (four groups of digits separated by dots).
+ * - An optional colon (:) followed by a port number (digits).
+ * - The port number, if present, must be within the range of 0-65535.
+ *
+ * Example valid strings:
+ * - 192.168.1.1
+ * - 10.0.0.5:8080
+ * - 255.255.255.0:9000
+ * - 0.0.0.0
+ * - 1.1.1.1:0
+ * - 1.1.1.1:65535
+ * - https://192.168.1.1
+ * - https://10.0.0.5:8080
+ * - http://255.255.255.0:9000
+ * - http://10.0.0.5:8080
+ *
+ * Example invalid strings:
+ * - 256.1.1.1 (invalid IP component)
+ * - 10.1.1 (missing IP components)
+ * - 10.1.1.1:abc (non-numeric port)
+ * - 10.1.1.1:-1 (invalid port)
+ * - 10.1.1.1: (missing port)
+ * - 1.1.1.1:65536 (invalid port)
+ * - 1.1.1.1:99999 (invalid port)
+ * - ://192.168.1.1 (invalid scheme)
+ * - androidapp://192.168.1.1 (invalid scheme)
+ * - file://usr/docs/file.txt (invalid scheme)
+ */
+@Suppress("MaxLineLength")
+private val IP_ADDRESS_WITH_OPTIONAL_PORT =
+    Regex("""^(https?://)?((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}(:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?$""")
+
+/**
  * Try creating a [URI] out of this [String]. If it fails, return null.
  */
 fun String.toUriOrNull(): URI? =
     try {
-        URI(this)
-    } catch (e: URISyntaxException) {
+        // URI cannot parse IP addresses without a scheme, so add one if necessary.
+        if (this.isIpAddress() && !this.hasHttpProtocol()) {
+            URI("https://$this")
+        } else {
+            URI(this)
+        }
+    } catch (_: URISyntaxException) {
         null
     }
 
@@ -31,6 +73,12 @@ fun String.isAndroidApp(): Boolean =
  */
 fun String.hasHttpProtocol(): Boolean =
     this.startsWith(prefix = "http://") || this.startsWith(prefix = "https://")
+
+/**
+ * Whether this [String] represents an IP address with an optional port.
+ */
+fun String.isIpAddress(): Boolean =
+    this.matches(IP_ADDRESS_WITH_OPTIONAL_PORT)
 
 /**
  * Try and extract the web host from this [String] if it represents an Android app.
