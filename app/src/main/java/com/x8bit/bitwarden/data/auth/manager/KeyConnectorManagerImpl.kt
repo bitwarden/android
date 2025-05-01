@@ -52,21 +52,22 @@ class KeyConnectorManagerImpl(
                     }
 
                     is DeriveKeyConnectorResult.Success -> {
-                        accountsService.storeMasterKeyToKeyConnector(
-                            url = url,
-                            masterKey = result.derivedKey,
-                        )
-                        .flatMap {
-                            accountsService.convertToKeyConnector()
-                        }
-                        .fold(
-                            onSuccess = {
-                                MigrateExistingUserToKeyConnectorResult.Success
-                            },
-                            onFailure = {
-                                MigrateExistingUserToKeyConnectorResult.Error(it)
-                            },
-                        )
+                        accountsService
+                            .storeMasterKeyToKeyConnector(
+                                url = url,
+                                masterKey = result.derivedKey,
+                            )
+                            .flatMap {
+                                accountsService.convertToKeyConnector()
+                            }
+                            .fold(
+                                onSuccess = {
+                                    MigrateExistingUserToKeyConnectorResult.Success
+                                },
+                                onFailure = {
+                                    MigrateExistingUserToKeyConnectorResult.Error(it)
+                                },
+                            )
                     }
 
                     is DeriveKeyConnectorResult.WrongPasswordError -> {
