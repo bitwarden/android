@@ -54,10 +54,6 @@ class FlagKeyTest {
             "single-tap-passkey-authentication",
         )
         assertEquals(
-            FlagKey.IgnoreEnvironmentCheck.keyName,
-            "ignore-environment-check",
-        )
-        assertEquals(
             FlagKey.MutualTls.keyName,
             "mutual-tls",
         )
@@ -137,7 +133,6 @@ class FlagKeyTest {
 
         assertTrue(
             listOf(
-                FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.FlightRecorder,
                 FlagKey.PreAuthSettings,
             ).all {
