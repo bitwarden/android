@@ -51,7 +51,6 @@ data class UserState(
      * not have a password but still not need one, such as TDE.
      * @property hasMasterPassword Indicates that the user does or does not have a master password.
      * @property organizations List of [Organization]s the user is associated with, if any.
-     * @property isClaimedByOrganization Indicates that the user is managed by an organization.
      * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
      * user's vault is enabled.
      * @property vaultUnlockType The mechanism by which the user's vault may be unlocked.
