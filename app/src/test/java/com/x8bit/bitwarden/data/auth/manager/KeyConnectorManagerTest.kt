@@ -10,7 +10,9 @@ import com.bitwarden.network.model.KeyConnectorKeyRequestJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -90,7 +92,7 @@ class KeyConnectorManagerTest {
     @Test
     fun `migrateExistingUserToKeyConnector with storeMasterKeyToKeyConnector failure should return failure`() =
         runTest {
-            val expectedResult = Throwable("Fail").asFailure()
+            val expectedResult = Throwable("Fail")
             coEvery {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
@@ -99,10 +101,10 @@ class KeyConnectorManagerTest {
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
-            } returns MASTER_KEY.asSuccess()
+            } returns DeriveKeyConnectorResult.Success(MASTER_KEY).asSuccess()
             coEvery {
                 accountsService.storeMasterKeyToKeyConnector(url = URL, masterKey = MASTER_KEY)
-            } returns expectedResult
+            } returns expectedResult.asFailure()
 
             val result = keyConnectorManager.migrateExistingUserToKeyConnector(
                 userId = USER_ID,
@@ -113,14 +115,46 @@ class KeyConnectorManagerTest {
                 kdf = KDF,
             )
 
-            assertEquals(expectedResult, result)
+            assertEquals(
+                MigrateExistingUserToKeyConnectorResult.Error(error = expectedResult),
+                result.getOrNull(),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `migrateExistingUserToKeyConnector with wrong password error should return WrongPasswordError`() =
+        runTest {
+            coEvery {
+                vaultSdkSource.deriveKeyConnector(
+                    userId = USER_ID,
+                    userKeyEncrypted = ENCRYPTED_USER_KEY,
+                    email = EMAIL,
+                    password = MASTER_PASSWORD,
+                    kdf = KDF,
+                )
+            } returns DeriveKeyConnectorResult.WrongPasswordError.asSuccess()
+
+            val result = keyConnectorManager.migrateExistingUserToKeyConnector(
+                userId = USER_ID,
+                url = URL,
+                userKeyEncrypted = ENCRYPTED_USER_KEY,
+                email = EMAIL,
+                masterPassword = MASTER_PASSWORD,
+                kdf = KDF,
+            )
+
+            assertEquals(
+                MigrateExistingUserToKeyConnectorResult.WrongPasswordError,
+                result.getOrNull(),
+            )
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `migrateExistingUserToKeyConnector with convertToKeyConnector failure should return failure`() =
         runTest {
-            val expectedResult = Throwable("Fail").asFailure()
+            val expectedResult = Throwable("Fail")
             coEvery {
                 vaultSdkSource.deriveKeyConnector(
                     userId = USER_ID,
@@ -129,11 +163,11 @@ class KeyConnectorManagerTest {
                     password = MASTER_PASSWORD,
                     kdf = KDF,
                 )
-            } returns MASTER_KEY.asSuccess()
+            } returns DeriveKeyConnectorResult.Success(MASTER_KEY).asSuccess()
             coEvery {
                 accountsService.storeMasterKeyToKeyConnector(url = URL, masterKey = MASTER_KEY)
             } returns Unit.asSuccess()
-            coEvery { accountsService.convertToKeyConnector() } returns expectedResult
+            coEvery { accountsService.convertToKeyConnector() } returns expectedResult.asFailure()
 
             val result = keyConnectorManager.migrateExistingUserToKeyConnector(
                 userId = USER_ID,
@@ -144,7 +178,10 @@ class KeyConnectorManagerTest {
                 kdf = KDF,
             )
 
-            assertEquals(expectedResult, result)
+            assertEquals(
+                MigrateExistingUserToKeyConnectorResult.Error(error = expectedResult),
+                result.getOrNull(),
+            )
         }
 
     @Test
@@ -157,7 +194,7 @@ class KeyConnectorManagerTest {
                 password = MASTER_PASSWORD,
                 kdf = KDF,
             )
-        } returns MASTER_KEY.asSuccess()
+        } returns DeriveKeyConnectorResult.Success(MASTER_KEY).asSuccess()
         coEvery {
             accountsService.storeMasterKeyToKeyConnector(url = URL, masterKey = MASTER_KEY)
         } returns Unit.asSuccess()
@@ -172,7 +209,7 @@ class KeyConnectorManagerTest {
             kdf = KDF,
         )
 
-        assertEquals(Unit.asSuccess(), result)
+        assertEquals(MigrateExistingUserToKeyConnectorResult.Success, result.getOrNull())
     }
 
     @Test
