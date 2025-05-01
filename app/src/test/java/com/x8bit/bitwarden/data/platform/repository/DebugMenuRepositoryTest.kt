@@ -105,10 +105,6 @@ class DebugMenuRepositoryTest {
                     FlagKey.EmailVerification.defaultValue,
                 )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.OnboardingCarousel,
-                    FlagKey.OnboardingCarousel.defaultValue,
-                )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
                     FlagKey.OnboardingFlow.defaultValue,
                 )
@@ -127,7 +123,6 @@ class DebugMenuRepositoryTest {
             val mockServerData = mockk<ConfigResponseJson>(relaxed = true) {
                 every { featureStates } returns mapOf(
                     FlagKey.EmailVerification.keyName to JsonPrimitive(true),
-                    FlagKey.OnboardingCarousel.keyName to JsonPrimitive(true),
                     FlagKey.OnboardingFlow.keyName to JsonPrimitive(true),
                 )
             }
@@ -139,13 +134,8 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
 
             assertTrue(FlagKey.EmailVerification.isRemotelyConfigured)
-            assertTrue(FlagKey.OnboardingCarousel.isRemotelyConfigured)
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(FlagKey.EmailVerification, true)
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.OnboardingCarousel,
-                    true,
-                )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
                     true,

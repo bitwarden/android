@@ -29,7 +29,6 @@ sealed class FlagKey<out T : Any> {
                 AuthenticatorSync,
                 EmailVerification,
                 OnboardingFlow,
-                OnboardingCarousel,
                 ImportLoginsFlow,
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
@@ -81,15 +80,6 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "enable-pm-flight-recorder"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the Onboarding Carousel feature.
-     */
-    data object OnboardingCarousel : FlagKey<Boolean>() {
-        override val keyName: String = "native-carousel-flow"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**

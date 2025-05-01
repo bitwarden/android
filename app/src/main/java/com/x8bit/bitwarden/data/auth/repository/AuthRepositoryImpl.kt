@@ -117,7 +117,6 @@ import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -381,8 +380,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
 
     override val showWelcomeCarousel: Boolean
-        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
 
     init {
         combine(

@@ -5577,17 +5577,11 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `showWelcomeCarousel should return value from settings repository and feature flag manager`() {
+    fun `showWelcomeCarousel should return value from settings repository`() {
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns false
-        every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel) } returns true
         assertTrue(repository.showWelcomeCarousel)
 
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
-        every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel) } returns true
-        assertFalse(repository.showWelcomeCarousel)
-
-        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
-        every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel) } returns false
         assertFalse(repository.showWelcomeCarousel)
     }
 
