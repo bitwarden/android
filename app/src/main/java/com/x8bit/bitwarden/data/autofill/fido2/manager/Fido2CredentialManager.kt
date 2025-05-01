@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
+import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -94,4 +96,13 @@ interface Fido2CredentialManager {
         request: CreatePublicKeyCredentialRequest,
         fallbackRequirement: UserVerificationRequirement = UserVerificationRequirement.REQUIRED,
     ): UserVerificationRequirement
+
+    /**
+     * Retrieve a list of [CredentialEntry] objects representing vault items matching the given
+     * request [option].
+     */
+    suspend fun getPublicKeyCredentialEntries(
+        userId: String,
+        option: BeginGetPublicKeyCredentialOption,
+    ): Result<List<CredentialEntry>>
 }

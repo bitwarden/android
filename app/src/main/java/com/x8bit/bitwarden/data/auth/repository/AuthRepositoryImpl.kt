@@ -284,6 +284,7 @@ class AuthRepositoryImpl(
         merge(
             mutableHasPendingAccountDeletionStateFlow,
             mutableUserStateTransactionCountStateFlow,
+            vaultRepository.isActiveUserUnlockingFlow,
         ),
     ) { array ->
         val userStateJson = array[0] as UserStateJson?
@@ -307,8 +308,11 @@ class AuthRepositoryImpl(
             firstTimeState = firstTimeState,
         )
     }
-        .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
-        .filterNot { mutableUserStateTransactionCountStateFlow.value > 0 }
+        .filterNot {
+            mutableHasPendingAccountDeletionStateFlow.value ||
+                mutableUserStateTransactionCountStateFlow.value > 0 ||
+                vaultRepository.isActiveUserUnlockingFlow.value
+        }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,

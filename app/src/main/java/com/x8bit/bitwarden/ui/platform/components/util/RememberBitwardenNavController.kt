@@ -18,6 +18,6 @@ fun rememberBitwardenNavController(
     rememberNavController(navigators = navigators).apply {
         this.addOnDestinationChangedListener { _, destination, _ ->
             val graph = destination.parent?.route?.let { " in $it" }.orEmpty()
-            Timber.i("$name destination changed: ${destination.route}$graph")
+            Timber.d("$name destination changed: ${destination.route}$graph")
         }
     }

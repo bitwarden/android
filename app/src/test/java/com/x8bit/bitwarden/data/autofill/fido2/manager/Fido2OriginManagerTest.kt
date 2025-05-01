@@ -5,7 +5,7 @@ import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
-import com.bitwarden.network.model.DigitalAssetLinkResponseJson
+import com.bitwarden.network.model.DigitalAssetLinkCheckResponseJson
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -76,7 +76,6 @@ class Fido2OriginManagerTest {
 
             val result = fido2OriginManager.validateOrigin(
                 callingAppInfo = mockPrivilegedAppInfo,
-                relyingPartyId = "relyingPartyId",
             )
             coVerify(exactly = 1) {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
@@ -100,7 +99,6 @@ class Fido2OriginManagerTest {
 
             val result = fido2OriginManager.validateOrigin(
                 callingAppInfo = mockPrivilegedAppInfo,
-                relyingPartyId = "relyingPartyId",
             )
             coVerify(exactly = 1) {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
@@ -125,7 +123,6 @@ class Fido2OriginManagerTest {
 
             val result = fido2OriginManager.validateOrigin(
                 callingAppInfo = mockPrivilegedAppInfo,
-                relyingPartyId = "relyingPartyId",
             )
 
             coVerify(exactly = 1) {
@@ -143,12 +140,15 @@ class Fido2OriginManagerTest {
     fun `validateOrigin should return Success when calling app is NonPrivileged and has a valid asset link entry`() =
         runTest {
             coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
-            } returns listOf(DEFAULT_STATEMENT).asSuccess()
+                mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
+                    packageName = DEFAULT_PACKAGE_NAME,
+                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relation = "delegate_permission/common.handle_all_urls",
+                )
+            } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE.asSuccess()
 
             val result = fido2OriginManager.validateOrigin(
                 callingAppInfo = mockNonPrivilegedAppInfo,
-                relyingPartyId = DEFAULT_RP_ID,
             )
 
             assertEquals(
@@ -159,49 +159,21 @@ class Fido2OriginManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validateOrigin should return ApplicationFingerprintNotVerified when calling app is NonPrivileged but signature does not match asset link entry`() =
+    fun `validateOrigin should return PasskeysNotSupportedForApp when calling app is NonPrivileged but signature does not match asset link entry`() =
         runTest {
             coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
-            } returns listOf(
-                DEFAULT_STATEMENT.copy(
-                    target = DEFAULT_STATEMENT.target.copy(
-                        sha256CertFingerprints = listOf("invalid_fingerprint"),
-                    ),
-                ),
-            )
+                mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
+                    packageName = DEFAULT_PACKAGE_NAME,
+                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relation = "delegate_permission/common.handle_all_urls",
+                )
+            } returns DEFAULT_ASSET_LINKS_CHECK_RESPONSE
+                .copy(linked = false)
                 .asSuccess()
 
             assertEquals(
-                Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockNonPrivilegedAppInfo,
-                    relyingPartyId = DEFAULT_RP_ID,
-                ),
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `validateOrigin should return ApplicationNotFound when calling app is NonPrivileged and packageName has no asset link entry`() =
-        runTest {
-            coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
-            } returns listOf(
-                DEFAULT_STATEMENT.copy(
-                    target = DEFAULT_STATEMENT.target.copy(
-                        packageName = "invalid_package_name",
-                    ),
-                ),
-            )
-                .asSuccess()
-
-            assertEquals(
-                Fido2ValidateOriginResult.Error.ApplicationNotFound,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockNonPrivilegedAppInfo,
-                    relyingPartyId = DEFAULT_RP_ID,
-                ),
+                Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp,
+                fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
             )
         }
 
@@ -210,35 +182,16 @@ class Fido2OriginManagerTest {
     fun `validateOrigin should return AssetLinkNotFound when calling app is NonPrivileged and asset link does not exist`() =
         runTest {
             coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
+                mockDigitalAssetLinkService.checkDigitalAssetLinksRelations(
+                    packageName = DEFAULT_PACKAGE_NAME,
+                    certificateFingerprint = DEFAULT_CERT_FINGERPRINT,
+                    relation = "delegate_permission/common.handle_all_urls",
+                )
             } returns RuntimeException().asFailure()
 
             assertEquals(
                 Fido2ValidateOriginResult.Error.AssetLinkNotFound,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockNonPrivilegedAppInfo,
-                    relyingPartyId = DEFAULT_RP_ID,
-                ),
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `validateOrigin should return Unknown error when calling app is NonPrivileged and exception is caught while filtering asset links`() =
-        runTest {
-            coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
-            } returns listOf(DEFAULT_STATEMENT).asSuccess()
-            every {
-                mockNonPrivilegedAppInfo.packageName
-            } throws IllegalStateException()
-
-            assertEquals(
-                Fido2ValidateOriginResult.Error.Unknown,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockNonPrivilegedAppInfo,
-                    relyingPartyId = DEFAULT_RP_ID,
-                ),
+                fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
             )
         }
 
@@ -246,9 +199,6 @@ class Fido2OriginManagerTest {
     @Test
     fun `validateOrigin should return Unknown error when calling app is Privileged and allow list file read fails`() =
         runTest {
-            coEvery {
-                mockDigitalAssetLinkService.getDigitalAssetLinkForRp(relyingParty = DEFAULT_RP_ID)
-            } returns listOf(DEFAULT_STATEMENT).asSuccess()
             coEvery {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
             } returns IllegalStateException().asFailure()
@@ -260,7 +210,6 @@ class Fido2OriginManagerTest {
                 Fido2ValidateOriginResult.Error.Unknown,
                 fido2OriginManager.validateOrigin(
                     callingAppInfo = mockPrivilegedAppInfo,
-                    relyingPartyId = DEFAULT_RP_ID,
                 ),
             )
         }
@@ -269,7 +218,6 @@ class Fido2OriginManagerTest {
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
 private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
-private const val DEFAULT_RP_ID = "bitwarden.com"
 private const val DEFAULT_ORIGIN = "bitwarden.com"
 private const val GOOGLE_ALLOW_LIST_FILENAME = "fido2_privileged_google.json"
 private const val COMMUNITY_ALLOW_LIST_FILENAME = "fido2_privileged_community.json"
@@ -317,16 +265,9 @@ private const val FAIL_ALLOW_LIST = """
   ]
 }
 """
-private val DEFAULT_STATEMENT = DigitalAssetLinkResponseJson(
-    relation = listOf(
-        "delegate_permission/common.get_login_creds",
-        "delegate_permission/common.handle_all_urls",
-    ),
-    target = DigitalAssetLinkResponseJson.Target(
-        namespace = "android_app",
-        packageName = DEFAULT_PACKAGE_NAME,
-        sha256CertFingerprints = listOf(
-            DEFAULT_CERT_FINGERPRINT,
-        ),
-    ),
+private val DEFAULT_ASSET_LINKS_CHECK_RESPONSE =
+    DigitalAssetLinkCheckResponseJson(
+        linked = true,
+        maxAge = "30s",
+        debugString = null,
 )
