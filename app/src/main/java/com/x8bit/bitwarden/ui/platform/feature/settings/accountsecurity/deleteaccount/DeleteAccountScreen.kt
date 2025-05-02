@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount
 
 import android.widget.Toast
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledErrorButton
@@ -42,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorB
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -124,16 +125,17 @@ fun DeleteAccountScreen(
             Spacer(modifier = Modifier.height(16.dp))
             if (state.isUserManagedByOrganization) {
                 WarningMessageCard(
-                    headerText =
-                        stringResource(id = R.string.cannot_delete_your_account),
-                    subtitleText =
-                        stringResource(id = R.string.cannot_delete_your_account_explanation),
+                    headerText = stringResource(id = R.string.cannot_delete_your_account),
+                    subtitleText = stringResource(
+                        id = R.string.cannot_delete_your_account_explanation,
+                    ),
+                    modifier = Modifier.standardHorizontalMargin(),
                 )
             } else {
-
                 WarningMessageCard(
                     headerText = stringResource(id = R.string.deleting_your_account_is_permanent),
                     subtitleText = stringResource(id = R.string.delete_account_explanation),
+                    modifier = Modifier.standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 DeleteAccountButton(
@@ -205,54 +207,45 @@ private fun DeleteAccountButton(
 private fun WarningMessageCard(
     headerText: String,
     subtitleText: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
-            .standardHorizontalMargin()
-            .background(
-                BitwardenTheme.colorScheme.background.secondary,
-                shape = BitwardenTheme.shapes.actionCard,
-            ),
+        modifier = modifier.cardStyle(
+            cardStyle = CardStyle.Full,
+            paddingHorizontal = 12.dp,
+        ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(Modifier.width(12.dp))
         Icon(
             painter = rememberVectorPainter(id = R.drawable.ic_warning),
             contentDescription = null,
-            tint = BitwardenTheme.colorScheme.status.error,
+            tint = BitwardenTheme.colorScheme.status.weak1,
         )
-
-        Column(modifier = Modifier.weight(weight = 1f, fill = false)) {
-            Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.width(width = 12.dp))
+        Column(modifier = Modifier.weight(weight = 1f)) {
             Text(
                 text = headerText,
                 style = BitwardenTheme.typography.titleSmall,
-                color = BitwardenTheme.colorScheme.status.error,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                color = BitwardenTheme.colorScheme.status.weak1,
+                modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(height = 4.dp))
             Text(
                 text = subtitleText,
                 style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(Modifier.height(12.dp))
         }
+        Spacer(modifier = Modifier.width(width = 4.dp))
     }
 }
 
 @Preview
 @Composable
-private fun WarningMessageCardPreview() {
-    Column {
-        WarningMessageCard(
-            headerText = stringResource(id = R.string.cannot_delete_your_account),
-            subtitleText = stringResource(id = R.string.cannot_delete_your_account_explanation),
-        )
-    }
+private fun WarningMessageCard_preview() {
+    WarningMessageCard(
+        headerText = stringResource(id = R.string.cannot_delete_your_account),
+        subtitleText = stringResource(id = R.string.cannot_delete_your_account_explanation),
+    )
 }

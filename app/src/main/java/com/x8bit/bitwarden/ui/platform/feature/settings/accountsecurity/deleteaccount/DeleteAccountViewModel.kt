@@ -37,8 +37,9 @@ class DeleteAccountViewModel @Inject constructor(
         DeleteAccountState(
             dialog = null,
             isUnlockWithPasswordEnabled = account.hasMasterPassword,
-            isUserManagedByOrganization =
-                account.organizations.any { it.userIsClaimedByOrganization } == true,
+            isUserManagedByOrganization = account
+                .organizations
+                .any { it.userIsClaimedByOrganization } == true,
         )
     },
 ) {
