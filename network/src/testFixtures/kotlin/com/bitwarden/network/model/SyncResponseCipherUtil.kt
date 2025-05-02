@@ -117,7 +117,7 @@ fun createMockCipherPermissions(
     delete: Boolean = true,
     restore: Boolean = true,
 ): SyncResponseJson.Cipher.CipherPermissions =
-SyncResponseJson.Cipher.CipherPermissions(
+    SyncResponseJson.Cipher.CipherPermissions(
         delete = delete,
         restore = restore,
     )
