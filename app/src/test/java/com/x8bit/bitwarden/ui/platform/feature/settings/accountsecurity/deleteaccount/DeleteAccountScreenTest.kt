@@ -214,9 +214,48 @@ class DeleteAccountScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `if isUserManagedByOrganization should display cannot delete message and hide delete button`() {
+        composeTestRule
+            .onNodeWithText("Cannot delete your account")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("This action cannot be completed because your account " +
+                "is owned by an organization. " +
+                "Contact your organization administrator for additional details.")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Delete account")
+            .filterToOne(hasClickAction())
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(isUserManagedByOrganization = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Cannot delete your account")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithText("This action cannot be completed because your account " +
+                "is owned by an organization. " +
+                "Contact your organization administrator for additional details.")
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText("Delete account")
+            .filterToOne(hasClickAction())
+            .assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )

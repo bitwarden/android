@@ -3350,6 +3350,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                                 shouldUseKeyConnector = false,
                                 role = OrganizationType.OWNER,
                                 keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
                             ),
                         ),
                     ),

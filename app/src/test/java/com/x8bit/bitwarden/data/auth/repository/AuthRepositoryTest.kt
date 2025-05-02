@@ -4679,6 +4679,7 @@ class AuthRepositoryTest {
                 every { shouldUseKeyConnector } returns true
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
+                every { userIsClaimedByOrganization } returns false
             },
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4708,6 +4709,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsClaimedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4745,6 +4747,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsClaimedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4785,6 +4788,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsClaimedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4824,6 +4828,7 @@ class AuthRepositoryTest {
                     every { shouldUseKeyConnector } returns true
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
+                    every { userIsClaimedByOrganization } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -6884,6 +6889,42 @@ class AuthRepositoryTest {
             assertEquals(
                 LeaveOrganizationResult.Error(error = error),
                 continueResult,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isUserManagedByOrganization should return true if any org userIsClaimedByOrganization is true`() =
+        runTest {
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = USER_ID_1, userKey = ENCRYPTED_USER_KEY)
+            val organizations = listOf(
+                createMockOrganization(number = 0)
+                    .copy(
+                        userIsClaimedByOrganization = true,
+                    ),
+                createMockOrganization(number = 1),
+            )
+            fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
+            assertEquals(
+                SINGLE_USER_STATE_1.toUserState(
+                    vaultState = VAULT_UNLOCK_DATA,
+                    userAccountTokens = emptyList(),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = USER_ID_1,
+                            organizations = organizations.toOrganizations(),
+                        ),
+                    ),
+                    userIsUsingKeyConnectorList = emptyList(),
+                    hasPendingAccountAddition = false,
+                    onboardingStatus = null,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isDeviceTrustedProvider = { false },
+                    firstTimeState = FIRST_TIME_STATE,
+                ),
+                repository.userStateFlow.value,
             )
         }
 
