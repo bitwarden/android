@@ -40,7 +40,6 @@ class Fido2CredentialStoreImpl(
         return vaultRepository.ciphersListViewStateFlow.value.data
             ?.filter { clv ->
                 activeCipherIds
-                    .toSet()
                     .contains(clv.id)
             }
             ?: emptyList()
