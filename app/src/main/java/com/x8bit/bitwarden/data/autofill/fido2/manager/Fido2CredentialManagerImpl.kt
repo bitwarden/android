@@ -321,7 +321,9 @@ class Fido2CredentialManagerImpl(
             )
             .setIcon(iconCompat.toIcon(context))
 
-        if (featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication)) {
+        if (featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication) &&
+            !isUserVerified
+        ) {
             biometricsEncryptionManager
                 .getOrCreateCipher(userId)
                 ?.let { cipher ->
