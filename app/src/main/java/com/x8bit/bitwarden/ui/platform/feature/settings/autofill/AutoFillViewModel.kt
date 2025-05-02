@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.Ch
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -58,7 +57,9 @@ class AutoFillViewModel @Inject constructor(
                 defaultUriMatchType = settingsRepository.defaultUriMatchType,
                 showAutofillActionCard = false,
                 activeUserId = userId,
-                chromeAutofillSettingsOptions = persistentListOf(),
+                chromeAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
+                    .chromeThirdPartyAutofillStatus
+                    .toChromeAutoFillSettingsOptions(),
             )
         },
 ) {

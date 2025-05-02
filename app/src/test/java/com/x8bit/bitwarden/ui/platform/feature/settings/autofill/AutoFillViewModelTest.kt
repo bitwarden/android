@@ -50,6 +50,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
     private val chromeThirdPartyAutofillEnabledManager =
         mockk<ChromeThirdPartyAutofillEnabledManager> {
             every { chromeThirdPartyAutofillStatusFlow } returns mutableChromeAutofillStatusFlow
+            every { chromeThirdPartyAutofillStatus } returns DEFAULT_AUTOFILL_STATUS
         }
 
     private val settingsRepository: SettingsRepository = mockk {
@@ -79,7 +80,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when not set`() {
-        mockkStatic(::isBuildVersionBelow)
         every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
 
         val viewModel = createViewModel(state = null)
@@ -90,7 +90,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when set`() {
-        mockkStatic(::isBuildVersionBelow)
         every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
 
         mutableIsAutofillEnabledStateFlow.value = true
@@ -106,7 +105,6 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when sdk is below min`() {
-        mockkStatic(::isBuildVersionBelow)
         every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
 
         val expected = DEFAULT_STATE.copy(
