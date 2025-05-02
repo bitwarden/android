@@ -24,6 +24,7 @@ class SyncResponseJsonExtensionsTest {
                 shouldUseKeyConnector = false,
                 role = OrganizationType.ADMIN,
                 keyConnectorUrl = "mockKeyConnectorUrl-1",
+                userIsClaimedByOrganization = false,
             ),
             createMockOrganization(number = 1).toOrganization(),
         )
@@ -40,6 +41,7 @@ class SyncResponseJsonExtensionsTest {
                     shouldUseKeyConnector = true,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = "mockKeyConnectorUrl-1",
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockId-2",
@@ -48,6 +50,7 @@ class SyncResponseJsonExtensionsTest {
                     shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
                     keyConnectorUrl = "mockKeyConnectorUrl-2",
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             listOf(

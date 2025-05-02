@@ -109,6 +109,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
+                            userIsClaimedByOrganization = false,
                         ),
                         Organization(
                             id = "mockOrganizationId-2",
@@ -117,6 +118,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
+                            userIsClaimedByOrganization = false,
                         ),
                         Organization(
                             id = "mockOrganizationId-3",
@@ -125,6 +127,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
+                            userIsClaimedByOrganization = false,
                         ),
                     )
                 } else {

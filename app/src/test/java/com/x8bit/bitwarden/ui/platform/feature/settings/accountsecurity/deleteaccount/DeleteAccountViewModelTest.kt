@@ -255,4 +255,5 @@ private val DEFAULT_USER_STATE: UserState = UserState(
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )

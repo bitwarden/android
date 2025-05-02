@@ -566,6 +566,7 @@ class CipherViewExtensionsTest {
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
                     keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             isBiometricsEnabled = true,

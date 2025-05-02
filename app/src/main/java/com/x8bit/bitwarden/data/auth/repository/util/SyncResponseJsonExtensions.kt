@@ -23,6 +23,7 @@ fun SyncResponseJson.Profile.Organization.toOrganization(): Organization =
         role = this.type,
         shouldManageResetPassword = this.permissions.shouldManageResetPassword,
         keyConnectorUrl = this.keyConnectorUrl,
+        userIsClaimedByOrganization = this.userIsClaimedByOrganization,
     )
 
 /**

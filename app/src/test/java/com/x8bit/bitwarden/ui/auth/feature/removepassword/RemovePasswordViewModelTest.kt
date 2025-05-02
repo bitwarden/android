@@ -295,6 +295,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
             shouldUseKeyConnector = true,
             role = OrganizationType.USER,
             keyConnectorUrl = KEY_CONNECTOR_URL,
+            userIsClaimedByOrganization = false,
         ),
     ),
     needsMasterPassword = false,
