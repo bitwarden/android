@@ -101,8 +101,6 @@ fun DebugMenuScreen(
             Spacer(Modifier.height(height = 16.dp))
             // Pulled these into variable to avoid over-nested formatting in the composable call.
             val isRestartOnboardingEnabled = state.featureFlags[FlagKey.OnboardingFlow] as? Boolean
-            val isRestartOnboardingCarouselEnabled = state
-                .featureFlags[FlagKey.OnboardingCarousel] as? Boolean
             OnboardingOverrideContent(
                 isRestartOnboardingEnabled = isRestartOnboardingEnabled == true,
                 onStartOnboarding = remember(viewModel) {
@@ -110,7 +108,6 @@ fun DebugMenuScreen(
                         viewModel.trySendAction(DebugMenuAction.RestartOnboarding)
                     }
                 },
-                isCarouselOverrideEnabled = isRestartOnboardingCarouselEnabled == true,
                 onStartOnboardingCarousel = remember(viewModel) {
                     {
                         viewModel.trySendAction(DebugMenuAction.RestartOnboardingCarousel)
@@ -183,7 +180,6 @@ private fun FeatureFlagContent(
 private fun OnboardingOverrideContent(
     isRestartOnboardingEnabled: Boolean,
     onStartOnboarding: () -> Unit,
-    isCarouselOverrideEnabled: Boolean,
     onStartOnboardingCarousel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -217,7 +213,6 @@ private fun OnboardingOverrideContent(
         BitwardenFilledButton(
             label = stringResource(R.string.restart_onboarding_carousel),
             onClick = onStartOnboardingCarousel,
-            isEnabled = isCarouselOverrideEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -242,7 +237,6 @@ private fun FeatureFlagContent_preview() {
         FeatureFlagContent(
             featureFlagMap = persistentMapOf(
                 FlagKey.EmailVerification to true,
-                FlagKey.OnboardingCarousel to true,
                 FlagKey.OnboardingFlow to false,
             ),
             onValueChange = { _, _ -> },
@@ -259,7 +253,6 @@ private fun OnboardingOverrideContent_preview() {
             onStartOnboarding = {},
             isRestartOnboardingEnabled = true,
             onStartOnboardingCarousel = {},
-            isCarouselOverrideEnabled = true,
         )
     }
 }

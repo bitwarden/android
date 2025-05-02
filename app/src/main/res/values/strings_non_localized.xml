@@ -9,7 +9,6 @@
 
     <!-- Debug Menu -->
     <string name="email_verification">Email Verification</string>
-    <string name="onboarding_carousel">Onboarding Carousel</string>
     <string name="onboarding_flow">Onboarding Flow</string>
     <string name="import_logins_flow">Import Logins Flow</string>
     <string name="feature_flags">Feature Flags:</string>
@@ -21,7 +20,6 @@
     <string name="restart_onboarding_carousel">Show Onboarding Carousel</string>
     <string name="restart_onboarding_carousel_details">This will force the change to app state which will cause the first time carousel to show. The carousel will continue to show for any \"new\" account until a login is completed. May need to exit debug menu manually.</string>
     <string name="cipher_key_encryption">Cipher Key Encryption</string>
-    <string name="ignore_environment_check">Ignore environment check</string>">
     <string name="reset_coach_mark_tour_status">Reset all coach mark tours</string>
     <string name="anon_addy_self_hosted_aliases">AnonAddy self-hosted aliases</string>
     <string name="simple_login_self_hosted_aliases">SimpleLogin self-hosted aliases</string>

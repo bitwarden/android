@@ -11,7 +11,7 @@ import okhttp3.Response
 /**
  * Interceptor responsible for adding various headers to all API requests.
  */
-class HeadersInterceptor(
+internal class HeadersInterceptor(
     private val userAgent: String,
     private val clientName: String,
     private val clientVersion: String,

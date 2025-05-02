@@ -23,16 +23,6 @@ sealed class Fido2ValidateOriginResult {
         data object AssetLinkNotFound : Error()
 
         /**
-         * Indicates the application package name was not found in the digital asset links file.
-         */
-        data object ApplicationNotFound : Error()
-
-        /**
-         * Indicates the application fingerprint was not found the digital asset links file.
-         */
-        data object ApplicationFingerprintNotVerified : Error()
-
-        /**
          * Indicates the calling application is privileged but its package name is not found within
          * the privileged app allow list.
          */

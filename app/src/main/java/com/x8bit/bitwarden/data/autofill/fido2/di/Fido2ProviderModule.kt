@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorI
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -41,8 +43,6 @@ object Fido2ProviderModule {
     fun provideCredentialProviderProcessor(
         @ApplicationContext context: Context,
         authRepository: AuthRepository,
-        vaultRepository: VaultRepository,
-        fido2CredentialStore: Fido2CredentialStore,
         fido2CredentialManager: Fido2CredentialManager,
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
@@ -53,8 +53,6 @@ object Fido2ProviderModule {
         Fido2ProviderProcessorImpl(
             context,
             authRepository,
-            vaultRepository,
-            fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
             clock,
@@ -66,14 +64,29 @@ object Fido2ProviderModule {
     @Provides
     @Singleton
     fun provideFido2CredentialManager(
+        @ApplicationContext context: Context,
+        intentManager: IntentManager,
+        featureFlagManager: FeatureFlagManager,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
         json: Json,
+        environmentRepository: EnvironmentRepository,
+        settingsRepository: SettingsRepository,
+        vaultRepository: VaultRepository,
+        dispatcherManager: DispatcherManager,
     ): Fido2CredentialManager =
         Fido2CredentialManagerImpl(
+            context = context,
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            intentManager = intentManager,
+            featureFlagManager = featureFlagManager,
+            biometricsEncryptionManager = biometricsEncryptionManager,
             json = json,
+            environmentRepository = environmentRepository,
+            vaultRepository = vaultRepository,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides

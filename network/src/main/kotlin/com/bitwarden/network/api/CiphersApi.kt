@@ -22,7 +22,7 @@ import retrofit2.http.Query
  * Defines raw calls under the /ciphers API with authentication applied.
  */
 @Suppress("TooManyFunctions")
-interface CiphersApi {
+internal interface CiphersApi {
 
     /**
      * Create a cipher.

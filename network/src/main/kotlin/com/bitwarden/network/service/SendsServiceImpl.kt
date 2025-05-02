@@ -27,7 +27,7 @@ import java.time.format.DateTimeFormatter
 /**
  * Default implementation of the [SendsService].
  */
-class SendsServiceImpl(
+internal class SendsServiceImpl(
     private val azureApi: AzureApi,
     private val sendsApi: SendsApi,
     private val clock: Clock,

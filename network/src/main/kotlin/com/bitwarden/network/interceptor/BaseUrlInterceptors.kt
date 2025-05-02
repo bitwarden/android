@@ -6,7 +6,7 @@ import com.bitwarden.core.annotation.OmitFromCoverage
  * An overall container for various [BaseUrlInterceptor] implementations for different API groups.
  */
 @OmitFromCoverage
-class BaseUrlInterceptors(
+internal class BaseUrlInterceptors(
     private val baseUrlsProvider: BaseUrlsProvider,
 ) {
     /**

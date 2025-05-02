@@ -18,10 +18,6 @@ class FlagKeyTest {
             "email-verification",
         )
         assertEquals(
-            FlagKey.OnboardingCarousel.keyName,
-            "native-carousel-flow",
-        )
-        assertEquals(
             FlagKey.OnboardingFlow.keyName,
             "native-create-account-flow",
         )
@@ -52,10 +48,6 @@ class FlagKeyTest {
         assertEquals(
             FlagKey.SingleTapPasskeyAuthentication.keyName,
             "single-tap-passkey-authentication",
-        )
-        assertEquals(
-            FlagKey.IgnoreEnvironmentCheck.keyName,
-            "ignore-environment-check",
         )
         assertEquals(
             FlagKey.MutualTls.keyName,
@@ -89,7 +81,6 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.VerifiedSsoDomainEndpoint,
@@ -116,7 +107,6 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingCarousel,
                 FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.VerifiedSsoDomainEndpoint,
@@ -137,7 +127,6 @@ class FlagKeyTest {
 
         assertTrue(
             listOf(
-                FlagKey.IgnoreEnvironmentCheck,
                 FlagKey.FlightRecorder,
                 FlagKey.PreAuthSettings,
             ).all {

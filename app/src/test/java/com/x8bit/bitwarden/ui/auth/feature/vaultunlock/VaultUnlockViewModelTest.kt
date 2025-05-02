@@ -1275,8 +1275,11 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to verified when result is Success`() {
-        val viewModel = createViewModel()
-
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(
+                fido2GetCredentialsRequest = mockk(relaxed = true),
+            ),
+        )
         viewModel.trySendAction(
             VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
                 userId = "activeUserId",

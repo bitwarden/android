@@ -4,18 +4,24 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -25,8 +31,6 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMess
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -100,10 +104,9 @@ class VaultUnlockViewModel @Inject constructor(
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
-            // TODO: [PM-13075] Handle Fido2GetCredentialsRequest special circumstance
-            fido2GetCredentialsRequest = null,
-            // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
-            fido2CredentialAssertionRequest = null,
+            fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
+            fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
+            fido2CreateCredentialRequest = specialCircumstance?.toFido2CreateRequestOrNull(),
             hasMasterPassword = activeAccount.hasMasterPassword,
             isFromLockFlow = vaultLockManager.isFromLockFlow,
         )
@@ -336,7 +339,8 @@ class VaultUnlockViewModel @Inject constructor(
 
         // Mark the user verified for this session if the unlock result is Success.
         fido2CredentialManager.isUserVerified =
-            action.vaultUnlockResult is VaultUnlockResult.Success
+            action.vaultUnlockResult is VaultUnlockResult.Success &&
+                state.isUnlockingForFido2Request
 
         when (val result = action.vaultUnlockResult) {
             is VaultUnlockResult.AuthenticationError -> {
@@ -471,6 +475,7 @@ data class VaultUnlockState(
     val userId: String,
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    val fido2CreateCredentialRequest: Fido2CreateCredentialRequest? = null,
     private val hasMasterPassword: Boolean,
     val isFromLockFlow: Boolean,
 ) : Parcelable {
@@ -496,6 +501,14 @@ data class VaultUnlockState(
      */
     val fido2RequestUserId: String?
         get() = fido2GetCredentialsRequest?.userId ?: fido2CredentialAssertionRequest?.userId
+
+    /**
+     * Indicates if the Vault is being unlocked for a FIDO 2 request.
+     */
+    val isUnlockingForFido2Request: Boolean
+        get() = fido2GetCredentialsRequest != null ||
+            fido2CredentialAssertionRequest != null ||
+            fido2CreateCredentialRequest != null
 
     /**
      * If the user requires biometrics to be able to unlock the account.

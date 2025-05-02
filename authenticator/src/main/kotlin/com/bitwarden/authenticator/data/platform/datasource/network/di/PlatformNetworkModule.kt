@@ -9,7 +9,6 @@ import com.bitwarden.network.BitwardenServiceClient
 import com.bitwarden.network.bitwardenServiceClient
 import com.bitwarden.network.interceptor.AuthTokenProvider
 import com.bitwarden.network.interceptor.BaseUrlsProvider
-import com.bitwarden.network.interceptor.HeadersInterceptor
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.service.ConfigService
 import com.bitwarden.network.ssl.CertificateProvider
@@ -36,14 +35,6 @@ object PlatformNetworkModule {
     fun providesConfigService(
         bitwardenServiceClient: BitwardenServiceClient,
     ): ConfigService = bitwardenServiceClient.configService
-
-    @Provides
-    @Singleton
-    fun providesHeadersInterceptor(): HeadersInterceptor = HeadersInterceptor(
-        userAgent = HEADER_VALUE_USER_AGENT,
-        clientName = HEADER_VALUE_CLIENT_NAME,
-        clientVersion = HEADER_VALUE_CLIENT_VERSION,
-    )
 
     @Provides
     @Singleton

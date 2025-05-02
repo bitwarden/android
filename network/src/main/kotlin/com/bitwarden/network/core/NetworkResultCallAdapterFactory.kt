@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 /**
  * A [retrofit2.CallAdapter.Factory] for wrapping network requests into [NetworkResult].
  */
-class NetworkResultCallAdapterFactory : CallAdapter.Factory() {
+internal class NetworkResultCallAdapterFactory : CallAdapter.Factory() {
     override fun get(
         returnType: Type,
         annotations: Array<out Annotation>,

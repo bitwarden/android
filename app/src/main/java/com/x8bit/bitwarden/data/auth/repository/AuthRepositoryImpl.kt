@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -116,7 +117,6 @@ import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -356,7 +356,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
 
     override var shouldTrustDevice: Boolean
-        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } ?: false
+        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } == true
         set(value) {
             activeUserId?.let {
                 authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
@@ -380,8 +380,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
 
     override val showWelcomeCarousel: Boolean
-        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
 
     init {
         combine(
@@ -985,17 +984,29 @@ class AuthRepositoryImpl(
                 masterPassword = masterPassword,
                 kdf = profile.toSdkParams(),
             )
-            .onSuccess {
-                authDiskSource.userState = authDiskSource
-                    .userState
-                    ?.toRemovedPasswordUserStateJson(userId = userId)
-                vaultRepository.sync()
-                settingsRepository.setDefaultsIfNecessary(userId = userId)
+            .map { migrateResult: MigrateExistingUserToKeyConnectorResult ->
+                when (migrateResult) {
+                    is MigrateExistingUserToKeyConnectorResult.Error -> {
+                        RemovePasswordResult.Error(error = migrateResult.error)
+                    }
+
+                    MigrateExistingUserToKeyConnectorResult.Success -> {
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toRemovedPasswordUserStateJson(userId = userId)
+                        vaultRepository.sync()
+                        settingsRepository.setDefaultsIfNecessary(userId = userId)
+                        RemovePasswordResult.Success
+                    }
+
+                    MigrateExistingUserToKeyConnectorResult.WrongPasswordError -> {
+                        RemovePasswordResult.WrongPasswordError
+                    }
+                }
             }
-            .fold(
-                onFailure = { RemovePasswordResult.Error(error = it) },
-                onSuccess = { RemovePasswordResult.Success },
-            )
+            .getOrElse {
+                RemovePasswordResult.Error(error = it)
+            }
     }
 
     override suspend fun resetPassword(

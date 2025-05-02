@@ -20,7 +20,7 @@ private const val NO_CONTENT_RESPONSE_CODE: Int = 204
  * A [Call] for wrapping a network request into a [NetworkResult].
  */
 @Suppress("TooManyFunctions")
-class NetworkResultCall<T>(
+internal class NetworkResultCall<T>(
     private val backingCall: Call<T>,
     private val successType: Type,
 ) : Call<NetworkResult<T>> {

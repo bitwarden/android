@@ -10,7 +10,7 @@ import com.bitwarden.network.util.toResult
 /**
  * The default implementation of the [DevicesService].
  */
-class DevicesServiceImpl(
+internal class DevicesServiceImpl(
     private val authenticatedDevicesApi: AuthenticatedDevicesApi,
     private val unauthenticatedDevicesApi: UnauthenticatedDevicesApi,
 ) : DevicesService {

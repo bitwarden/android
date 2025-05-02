@@ -127,6 +127,17 @@ class RemovePasswordViewModel @Inject constructor(
                 }
             }
 
+            is RemovePasswordResult.WrongPasswordError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = RemovePasswordState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    )
+                }
+            }
+
             RemovePasswordResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 // We do nothing here because state-based navigation will handle it.

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -100,8 +102,18 @@ class Fido2IntentUtilsTest {
         createRequest = intent.getFido2CreateCredentialRequestOrNull()
         assert(createRequest!!.isUserPreVerified)
 
-        // Verify false is returned when biometric prompt result is null
+        // Verify true is returned when biometric prompt result is null and intent extra is true
         every { mockProviderCreateCredentialRequest.biometricPromptResult } returns null
+        every {
+            intent.getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+        } returns true
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertTrue(createRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null and intent extra is false
+        every {
+            intent.getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+        } returns false
         createRequest = intent.getFido2CreateCredentialRequestOrNull()
         assertFalse(createRequest!!.isUserPreVerified)
     }
@@ -169,6 +181,9 @@ class Fido2IntentUtilsTest {
             every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
             every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
             every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+            every {
+                getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+            } returns false
         }
         val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
             every { isSuccessful } returns false

@@ -33,6 +33,7 @@ import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
@@ -75,18 +76,28 @@ class VaultSdkSourceImpl(
         email: String,
         password: String,
         kdf: Kdf,
-    ): Result<String> =
+    ): Result<DeriveKeyConnectorResult> =
         runCatchingWithLogs {
-            getClient(userId = userId)
-                .crypto()
-                .deriveKeyConnector(
-                    request = DeriveKeyConnectorRequest(
-                        userKeyEncrypted = userKeyEncrypted,
-                        password = password,
-                        kdf = kdf,
-                        email = email,
-                    ),
-                )
+            try {
+                val key = getClient(userId = userId)
+                    .crypto()
+                    .deriveKeyConnector(
+                        request = DeriveKeyConnectorRequest(
+                            userKeyEncrypted = userKeyEncrypted,
+                            password = password,
+                            kdf = kdf,
+                            email = email,
+                        ),
+                    )
+                DeriveKeyConnectorResult.Success(key)
+            } catch (exception: BitwardenException) {
+                when {
+                    exception.message == "Wrong password" -> {
+                        DeriveKeyConnectorResult.WrongPasswordError
+                    }
+                    else -> DeriveKeyConnectorResult.Error(exception)
+                }
+            }
         }
 
     override suspend fun derivePinKey(
