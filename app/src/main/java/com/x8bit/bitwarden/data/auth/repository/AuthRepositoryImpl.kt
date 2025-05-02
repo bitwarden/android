@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
@@ -116,7 +117,6 @@ import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -283,6 +283,7 @@ class AuthRepositoryImpl(
         merge(
             mutableHasPendingAccountDeletionStateFlow,
             mutableUserStateTransactionCountStateFlow,
+            vaultRepository.isActiveUserUnlockingFlow,
         ),
     ) { array ->
         val userStateJson = array[0] as UserStateJson?
@@ -306,8 +307,11 @@ class AuthRepositoryImpl(
             firstTimeState = firstTimeState,
         )
     }
-        .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
-        .filterNot { mutableUserStateTransactionCountStateFlow.value > 0 }
+        .filterNot {
+            mutableHasPendingAccountDeletionStateFlow.value ||
+                mutableUserStateTransactionCountStateFlow.value > 0 ||
+                vaultRepository.isActiveUserUnlockingFlow.value
+        }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,
@@ -352,7 +356,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getIsTdeLoginComplete(userId = it) }
 
     override var shouldTrustDevice: Boolean
-        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } ?: false
+        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } == true
         set(value) {
             activeUserId?.let {
                 authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
@@ -376,8 +380,7 @@ class AuthRepositoryImpl(
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
 
     override val showWelcomeCarousel: Boolean
-        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount
 
     init {
         combine(
@@ -402,8 +405,12 @@ class AuthRepositoryImpl(
             .syncOrgKeysFlow
             .onEach {
                 val userId = activeUserId ?: return@onEach
-                refreshAccessTokenSynchronously(userId)
-                vaultRepository.sync()
+                // TODO: [PM-20593] Investigate why tokens are explicitly refreshed.
+                refreshAccessTokenSynchronouslyInternal(
+                    userId = userId,
+                    logOutOnFailure = false,
+                )
+                vaultRepository.sync(forced = true)
             }
             // This requires the ioScope to ensure that refreshAccessTokenSynchronously
             // happens on a background thread
@@ -755,33 +762,11 @@ class AuthRepositoryImpl(
         orgIdentifier = organizationIdentifier,
     )
 
-    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
-        val refreshToken = authDiskSource
-            .getAccountTokens(userId = userId)
-            ?.refreshToken
-            ?: return IllegalStateException("Must be logged in.").asFailure()
-        return identityService
-            .refreshTokenSynchronously(refreshToken)
-            .flatMap { refreshTokenResponse ->
-                // Check to make sure the user is still logged in after making the request
-                authDiskSource
-                    .userState
-                    ?.accounts
-                    ?.get(userId)
-                    ?.let { refreshTokenResponse.asSuccess() }
-                    ?: IllegalStateException("Must be logged in.").asFailure()
-            }
-            .onSuccess { refreshTokenResponse ->
-                // Update the existing UserState with updated token information
-                authDiskSource.storeAccountTokens(
-                    userId = userId,
-                    accountTokens = AccountTokensJson(
-                        accessToken = refreshTokenResponse.accessToken,
-                        refreshToken = refreshTokenResponse.refreshToken,
-                    ),
-                )
-            }
-    }
+    override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> =
+        refreshAccessTokenSynchronouslyInternal(
+            userId = userId,
+            logOutOnFailure = true,
+        )
 
     override fun logout(reason: LogoutReason) {
         activeUserId?.let { userId -> logout(userId = userId, reason = reason) }
@@ -999,17 +984,29 @@ class AuthRepositoryImpl(
                 masterPassword = masterPassword,
                 kdf = profile.toSdkParams(),
             )
-            .onSuccess {
-                authDiskSource.userState = authDiskSource
-                    .userState
-                    ?.toRemovedPasswordUserStateJson(userId = userId)
-                vaultRepository.sync()
-                settingsRepository.setDefaultsIfNecessary(userId = userId)
+            .map { migrateResult: MigrateExistingUserToKeyConnectorResult ->
+                when (migrateResult) {
+                    is MigrateExistingUserToKeyConnectorResult.Error -> {
+                        RemovePasswordResult.Error(error = migrateResult.error)
+                    }
+
+                    MigrateExistingUserToKeyConnectorResult.Success -> {
+                        authDiskSource.userState = authDiskSource
+                            .userState
+                            ?.toRemovedPasswordUserStateJson(userId = userId)
+                        vaultRepository.sync()
+                        settingsRepository.setDefaultsIfNecessary(userId = userId)
+                        RemovePasswordResult.Success
+                    }
+
+                    MigrateExistingUserToKeyConnectorResult.WrongPasswordError -> {
+                        RemovePasswordResult.WrongPasswordError
+                    }
+                }
             }
-            .fold(
-                onFailure = { RemovePasswordResult.Error(error = it) },
-                onSuccess = { RemovePasswordResult.Success },
-            )
+            .getOrElse {
+                RemovePasswordResult.Error(error = it)
+            }
     }
 
     override suspend fun resetPassword(
@@ -1432,6 +1429,42 @@ class AuthRepositoryImpl(
             onSuccess = { LeaveOrganizationResult.Success },
             onFailure = { LeaveOrganizationResult.Error(error = it) },
         )
+
+    private fun refreshAccessTokenSynchronouslyInternal(
+        userId: String,
+        logOutOnFailure: Boolean,
+    ): Result<RefreshTokenResponseJson> {
+        val refreshToken = authDiskSource
+            .getAccountTokens(userId = userId)
+            ?.refreshToken
+            ?: return IllegalStateException("Must be logged in.").asFailure()
+        return identityService
+            .refreshTokenSynchronously(refreshToken)
+            .flatMap { refreshTokenResponse ->
+                // Check to make sure the user is still logged in after making the request
+                authDiskSource
+                    .userState
+                    ?.accounts
+                    ?.get(userId)
+                    ?.let { refreshTokenResponse.asSuccess() }
+                    ?: IllegalStateException("Must be logged in.").asFailure()
+            }
+            .onFailure {
+                if (logOutOnFailure) {
+                    logout(userId = userId, reason = LogoutReason.TokenRefreshFail)
+                }
+            }
+            .onSuccess { refreshTokenResponse ->
+                // Update the existing UserState with updated token information
+                authDiskSource.storeAccountTokens(
+                    userId = userId,
+                    accountTokens = AccountTokensJson(
+                        accessToken = refreshTokenResponse.accessToken,
+                        refreshToken = refreshTokenResponse.refreshToken,
+                    ),
+                )
+            }
+    }
 
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(

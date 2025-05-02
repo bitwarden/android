@@ -11,7 +11,7 @@ import com.bitwarden.network.util.toResult
 /**
  * The default implementation of the [NewAuthRequestService].
  */
-class NewAuthRequestServiceImpl(
+internal class NewAuthRequestServiceImpl(
     private val authenticatedAuthRequestsApi: AuthenticatedAuthRequestsApi,
     private val unauthenticatedAuthRequestsApi: UnauthenticatedAuthRequestsApi,
 ) : NewAuthRequestService {

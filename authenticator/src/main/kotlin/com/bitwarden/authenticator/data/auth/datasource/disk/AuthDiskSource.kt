@@ -1,9 +1,11 @@
 package com.bitwarden.authenticator.data.auth.datasource.disk
 
+import com.bitwarden.network.provider.AppIdProvider
+
 /**
  * Primary access point for disk information.
  */
-interface AuthDiskSource {
+interface AuthDiskSource : AppIdProvider {
 
     /**
      * Retrieves the "last active time".

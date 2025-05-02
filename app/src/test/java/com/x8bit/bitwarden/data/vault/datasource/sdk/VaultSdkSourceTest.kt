@@ -48,6 +48,7 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
@@ -175,7 +176,100 @@ class VaultSdkSourceTest {
                 password = password,
                 kdf = kdf,
             )
-            assertEquals(expectedResult.asSuccess(), result)
+            assertEquals(
+                DeriveKeyConnectorResult.Success(derivedKey = expectedResult),
+                result.getOrNull(),
+            )
+            coVerify(exactly = 1) {
+                sdkClientManager.getOrCreateClient(userId = userId)
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            }
+        }
+
+    @Test
+    fun `deriveKeyConnector should call SDK and return a Result with wrong password`() =
+        runBlocking {
+            val userId = "userId"
+            val userKeyEncrypted = "userKeyEncrypted"
+            val email = "email"
+            val password = "password"
+            val error = mockk<BitwardenException> {
+                every { message } returns "Wrong password"
+            }
+            val kdf = mockk<Kdf>()
+            coEvery {
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            } throws error
+            val result = vaultSdkSource.deriveKeyConnector(
+                userId = userId,
+                userKeyEncrypted = userKeyEncrypted,
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
+            assertEquals(
+                DeriveKeyConnectorResult.WrongPasswordError,
+                result.getOrNull(),
+            )
+            coVerify(exactly = 1) {
+                sdkClientManager.getOrCreateClient(userId = userId)
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            }
+        }
+
+    @Test
+    fun `deriveKeyConnector should call SDK and return a Result with error`() =
+        runBlocking {
+            val userId = "userId"
+            val userKeyEncrypted = "userKeyEncrypted"
+            val email = "email"
+            val password = "password"
+            val error = mockk<BitwardenException> {
+                every { message } returns "Other error"
+            }
+            val kdf = mockk<Kdf>()
+            coEvery {
+                clientCrypto.deriveKeyConnector(
+                    request = DeriveKeyConnectorRequest(
+                        userKeyEncrypted = userKeyEncrypted,
+                        email = email,
+                        password = password,
+                        kdf = kdf,
+                    ),
+                )
+            } throws error
+            val result = vaultSdkSource.deriveKeyConnector(
+                userId = userId,
+                userKeyEncrypted = userKeyEncrypted,
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
+            assertEquals(
+                DeriveKeyConnectorResult.Error(error = error),
+                result.getOrNull(),
+            )
             coVerify(exactly = 1) {
                 sdkClientManager.getOrCreateClient(userId = userId)
                 clientCrypto.deriveKeyConnector(

@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * This interface defines the API service for fetching configuration data.
  */
-interface ConfigApi {
+internal interface ConfigApi {
 
     @GET("config")
     suspend fun getConfig(): NetworkResult<ConfigResponseJson>

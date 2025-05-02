@@ -3,7 +3,7 @@ package com.bitwarden.network.util
 /**
  * The key used for the 'authorization' headers.
  */
-const val HEADER_KEY_AUTHORIZATION: String = "Authorization"
+internal const val HEADER_KEY_AUTHORIZATION: String = "Authorization"
 
 /**
  * The key used for the 'bitwarden-client-name' headers.
@@ -28,7 +28,7 @@ internal const val HEADER_KEY_DEVICE_TYPE: String = "Device-Type"
 /**
  * The bearer prefix used for the 'authorization' headers value.
  */
-const val HEADER_VALUE_BEARER_PREFIX: String = "Bearer "
+internal const val HEADER_VALUE_BEARER_PREFIX: String = "Bearer "
 
 /**
  * The value used for the 'device-type' headers.

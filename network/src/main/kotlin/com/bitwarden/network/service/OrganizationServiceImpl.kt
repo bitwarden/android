@@ -14,7 +14,7 @@ import com.bitwarden.network.util.toResult
 /**
  * Default implementation of [OrganizationService].
  */
-class OrganizationServiceImpl(
+internal class OrganizationServiceImpl(
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi,
     private val unauthenticatedOrganizationApi: UnauthenticatedOrganizationApi,
 ) : OrganizationService {

@@ -125,6 +125,7 @@ class EnvironmentRepositoryTest {
         val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
         val environment = mockk<Environment> {
             every { environmentUrlData } returns environmentUrlDataJson
+            every { type } returns Environment.Type.US
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
 

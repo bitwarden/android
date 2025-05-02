@@ -24,7 +24,7 @@ import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
 import kotlinx.serialization.json.Json
 
-class IdentityServiceImpl(
+internal class IdentityServiceImpl(
     private val unauthenticatedIdentityApi: UnauthenticatedIdentityApi,
     private val json: Json,
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),

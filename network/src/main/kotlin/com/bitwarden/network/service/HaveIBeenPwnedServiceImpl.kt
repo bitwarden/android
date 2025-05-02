@@ -4,7 +4,9 @@ import com.bitwarden.network.api.HaveIBeenPwnedApi
 import com.bitwarden.network.util.toResult
 import java.security.MessageDigest
 
-class HaveIBeenPwnedServiceImpl(private val api: HaveIBeenPwnedApi) : HaveIBeenPwnedService {
+internal class HaveIBeenPwnedServiceImpl(
+    private val api: HaveIBeenPwnedApi,
+) : HaveIBeenPwnedService {
 
     @Suppress("MagicNumber")
     override suspend fun getPasswordBreachCount(password: String): Result<Int> {

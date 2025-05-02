@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.autofill.fido2.manager.model
 
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
-import com.bitwarden.fido.Fido2CredentialAutofillView
+import androidx.credentials.provider.CredentialEntry
 import com.bitwarden.ui.util.Text
 
 /**
@@ -14,7 +14,7 @@ sealed class GetFido2CredentialsResult {
      * option, and associated user ID.
      */
     data class Success(
-        val credentials: List<Fido2CredentialAutofillView>,
+        val credentialEntries: List<CredentialEntry>,
         val option: BeginGetPublicKeyCredentialOption,
         val userId: String,
     ) : GetFido2CredentialsResult()

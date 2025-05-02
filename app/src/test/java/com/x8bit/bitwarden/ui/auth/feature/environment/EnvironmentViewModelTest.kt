@@ -22,11 +22,13 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class EnvironmentViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -35,7 +37,9 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
         every { getFeatureFlag(FlagKey.MutualTls) } returns true
         every { getFeatureFlagFlow(FlagKey.MutualTls) } returns mutableMutualTlsFeatureFlagFlow
     }
-    private val mockCertificateManager = mockk<CertificateManager>()
+    private val mockCertificateManager = mockk<CertificateManager> {
+        every { getMutualTlsKeyAliases() } returns emptyList()
+    }
     private val mockFileManager = mockk<FileManager>()
 
     @Suppress("MaxLineLength")
@@ -397,7 +401,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `ErrorDialogDismiss should clear the dialog`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss)
+        viewModel.trySendAction(EnvironmentAction.DialogDismiss)
         assertEquals(
             DEFAULT_STATE.copy(dialog = null),
             viewModel.stateFlow.value,
@@ -564,16 +568,6 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 EnvironmentEvent.ShowToast(R.string.invalid_certificate_chain.asText()),
                 awaitItem(),
             )
-
-            viewModel.trySendAction(
-                EnvironmentAction.Internal.ImportKeyResultReceive(
-                    result = ImportPrivateKeyResult.Error.DuplicateAlias,
-                ),
-            )
-            assertEquals(
-                EnvironmentEvent.ShowToast(R.string.certificate_alias_already_exists.asText()),
-                awaitItem(),
-            )
         }
     }
 
@@ -626,6 +620,38 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SetCertificateInfoResultReceive should show ConfirmOverwriteAlias dialog if alias already exists`() =
+        runTest {
+            every { mockCertificateManager.getMutualTlsKeyAliases() } returns listOf("mockAlias")
+
+            val action = EnvironmentAction.SetCertificateInfoResultReceive(
+                certificateFileData = mockk(),
+                alias = "mockAlias",
+                password = "mockPassword",
+            )
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(action)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = EnvironmentState.DialogState.ConfirmOverwriteAlias(
+                        title = R.string.replace_existing_certificate.asText(),
+                        message = R.string.a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it
+                            .asText("mockAlias"),
+                        triggeringAction = action,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            verify(exactly = 0) {
+                mockCertificateManager.importMutualTlsCertificate(any(), any(), any())
+            }
+        }
+
     @Test
     fun `SetCertificateInfoResultReceive should show error dialog if input is invalid`() = runTest {
         val viewModel = createViewModel()
@@ -661,6 +687,110 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                     R.string.validation_field_required.asText(
                         R.string.alias.asText(),
                     ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SetCertificateInfoResultReceive should send ShowErrorDialog if uriToByteArray fails`() =
+        runTest {
+            val viewModel = createViewModel()
+            val mockUri = mockk<Uri>()
+            val mockFileData = IntentManager.FileData(
+                fileName = "mockFileName",
+                uri = mockUri,
+                sizeBytes = 0,
+            )
+            val exception = Exception()
+
+            coEvery { mockFileManager.uriToByteArray(any()) } returns Result.failure(exception)
+
+            viewModel.trySendAction(
+                EnvironmentAction.SetCertificateInfoResultReceive(
+                    certificateFileData = mockFileData,
+                    alias = "mockAlias",
+                    password = "password",
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = EnvironmentState.DialogState.Error(
+                        message = R.string.unable_to_read_certificate.asText(),
+                        throwable = exception,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `ConfirmOverwriteCertificateClick should clear dialog and import certificate`() = runTest {
+        val viewModel = createViewModel()
+        val mockUri = mockk<Uri>()
+        val mockFileData = IntentManager.FileData(
+            fileName = "mockFileName",
+            uri = mockUri,
+            sizeBytes = 0,
+        )
+        val keyBytes = byteArrayOf()
+        coEvery {
+            mockFileManager.uriToByteArray(mockFileData.uri)
+        } returns keyBytes.asSuccess()
+        coEvery {
+            mockCertificateManager.importMutualTlsCertificate(
+                key = keyBytes,
+                alias = "mockAlias",
+                password = "mockPassword",
+            )
+        } returns ImportPrivateKeyResult.Success(alias = "mockAlias")
+
+        viewModel.trySendAction(
+            EnvironmentAction.ConfirmOverwriteCertificateClick(
+                triggeringAction = EnvironmentAction.SetCertificateInfoResultReceive(
+                    certificateFileData = mockFileData,
+                    alias = "mockAlias",
+                    password = "mockPassword",
+                ),
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = null,
+                keyAlias = "mockAlias",
+                keyHost = MutualTlsKeyHost.ANDROID_KEY_STORE,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify {
+            mockFileManager.uriToByteArray(mockFileData.uri)
+            mockCertificateManager.importMutualTlsCertificate(
+                key = byteArrayOf(),
+                alias = "mockAlias",
+                password = "mockPassword",
+            )
+        }
+    }
+
+    @Test
+    fun `ShowErrorDialog should show error dialog`() = runTest {
+        val viewModel = createViewModel()
+        val exception = RuntimeException()
+        viewModel.trySendAction(
+            EnvironmentAction.Internal.ShowErrorDialog(
+                message = R.string.generic_error_message.asText(),
+                throwable = exception,
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = EnvironmentState.DialogState.Error(
+                    message = R.string.generic_error_message.asText(),
+                    throwable = exception,
                 ),
             ),
             viewModel.stateFlow.value,

@@ -11,7 +11,7 @@ import retrofit2.http.POST
 /**
  * Defines raw calls under the /organizations API.
  */
-interface UnauthenticatedOrganizationApi {
+internal interface UnauthenticatedOrganizationApi {
     /**
      * Checks for the claimed domain organization of an email for SSO purposes.
      */

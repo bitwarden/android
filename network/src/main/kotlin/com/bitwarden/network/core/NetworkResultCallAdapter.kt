@@ -8,7 +8,7 @@ import java.lang.reflect.Type
 /**
  * A [retrofit2.CallAdapter] for wrapping network requests into [NetworkResult].
  */
-class NetworkResultCallAdapter<T>(
+internal class NetworkResultCallAdapter<T>(
     private val successType: Type,
 ) : CallAdapter<T, Call<NetworkResult<T>>> {
 

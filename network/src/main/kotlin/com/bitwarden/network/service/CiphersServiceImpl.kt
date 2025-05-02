@@ -30,7 +30,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 @Suppress("TooManyFunctions")
-class CiphersServiceImpl(
+internal class CiphersServiceImpl(
     private val azureApi: AzureApi,
     private val ciphersApi: CiphersApi,
     private val json: Json,

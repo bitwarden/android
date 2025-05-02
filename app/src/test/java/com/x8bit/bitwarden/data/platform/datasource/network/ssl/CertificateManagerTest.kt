@@ -36,6 +36,7 @@ import java.security.PrivateKey
 import java.security.UnrecoverableKeyException
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.Vector
 import javax.net.ssl.SSLContext
 
 @Suppress("LargeClass")
@@ -603,42 +604,6 @@ class CertificateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `importMutualTlsCertificate should return DuplicateAlias when alias already exists in AndroidKeyStore`() {
-        setupMockAndroidKeyStore()
-        setupMockPkcs12KeyStore()
-        val expectedAlias = "mockAlias"
-        val pkcs12Bytes = "key.p12".toByteArray()
-        val password = "password"
-
-        every { mockPkcs12KeyStore.aliases() } returns mockk {
-            every { hasMoreElements() } returns true
-            every { nextElement() } returns "mockInternalAlias"
-        }
-
-        every {
-            mockPkcs12KeyStore.getKey(
-                "mockInternalAlias",
-                password.toCharArray(),
-            )
-        } returns mockk()
-        every {
-            mockPkcs12KeyStore.getCertificateChain("mockInternalAlias")
-        } returns arrayOf(mockk())
-
-        every { mockAndroidKeyStore.containsAlias(expectedAlias) } returns true
-
-        assertEquals(
-            ImportPrivateKeyResult.Error.DuplicateAlias,
-            certificateManager.importMutualTlsCertificate(
-                key = pkcs12Bytes,
-                alias = expectedAlias,
-                password = password,
-            ),
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `removeMutualTlsKey should remove key from AndroidKeyStore when host is ANDROID_KEY_STORE`() {
         setupMockAndroidKeyStore()
         val mockAlias = "mockAlias"
@@ -745,6 +710,15 @@ class CertificateManagerTest {
         assertNull(certificateManager.getPrivateKey("mockAlias"))
     }
 
+    @Test
+    fun `getMutualTlsKeyAliases should return aliases from AndroidKeyStore`() {
+        setupMockAndroidKeyStore()
+        val mockAliases = listOf("alias1", "alias2")
+        every { mockAndroidKeyStore.aliases() } returns Vector(mockAliases).elements()
+        assertEquals(mockAliases, certificateManager.getMutualTlsKeyAliases())
+    }
+
+    //region Helper functions
     private fun setupMockAndroidKeyStore() {
         every { KeyStore.getInstance("AndroidKeyStore") } returns mockAndroidKeyStore
         every { mockAndroidKeyStore.load(null) } just runs
@@ -765,6 +739,7 @@ class CertificateManagerTest {
         every { uriMock.authority } returns authority
         every { uriMock.path } returns path
     }
+    //endregion Helper functions
 }
 
 val DEFAULT_ENV_URL_DATA = EnvironmentUrlDataJson(

@@ -8,7 +8,7 @@ import retrofit2.http.POST
 /**
  * This interface defines the API service for posting event data.
  */
-interface EventApi {
+internal interface EventApi {
     @POST("/collect")
     suspend fun collectOrganizationEvents(
         @Body events: List<OrganizationEventJson>,

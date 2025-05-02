@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 
 /**
  * Primary implementation of [EnvironmentRepository].
@@ -36,6 +37,7 @@ class EnvironmentRepositoryImpl(
     override val environmentStateFlow: StateFlow<Environment> = environmentDiskSource
         .preAuthEnvironmentUrlDataFlow
         .map { it.toEnvironmentUrlsOrDefault() }
+        .onEach { Timber.d("Current environment: ${it.type}") }
         .stateIn(
             scope = scope,
             started = SharingStarted.Lazily,

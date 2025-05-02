@@ -10,6 +10,11 @@ import com.x8bit.bitwarden.data.platform.manager.model.ImportPrivateKeyResult
 interface CertificateManager : CertificateProvider {
 
     /**
+     * Returns a list of aliases for all mTLS keys stored in the application KeyStore.
+     */
+    fun getMutualTlsKeyAliases(): List<String>
+
+    /**
      * Import a private key into the application KeyStore.
      *
      * @param key The private key to be saved.

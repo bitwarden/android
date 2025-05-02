@@ -1,15 +1,14 @@
-package com.x8bit.bitwarden.data.platform.datasource.network.retrofit
+package com.bitwarden.network.retrofit
 
+import com.bitwarden.network.authenticator.RefreshAuthenticator
 import com.bitwarden.network.core.NetworkResultCallAdapterFactory
 import com.bitwarden.network.interceptor.AuthTokenInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptor
 import com.bitwarden.network.interceptor.BaseUrlInterceptors
 import com.bitwarden.network.interceptor.HeadersInterceptor
+import com.bitwarden.network.ssl.BitwardenX509ExtendedKeyManager
 import com.bitwarden.network.ssl.CertificateProvider
 import com.bitwarden.network.util.HEADER_KEY_AUTHORIZATION
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.ssl.BitwardenX509ExtendedKeyManager
-import com.x8bit.bitwarden.data.platform.util.isDevBuild
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -21,19 +20,20 @@ import java.security.KeyStore
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.TrustManagerFactory
-import javax.net.ssl.X509ExtendedKeyManager
 import javax.net.ssl.X509TrustManager
 
 /**
  * Primary implementation of [Retrofits].
  */
-class RetrofitsImpl(
+@Suppress("LongParameterList")
+internal class RetrofitsImpl(
     authTokenInterceptor: AuthTokenInterceptor,
     baseUrlInterceptors: BaseUrlInterceptors,
     headersInterceptor: HeadersInterceptor,
-    refreshAuthenticator: RefreshAuthenticator,
+    refreshAuthenticator: RefreshAuthenticator?,
     json: Json,
     private val certificateProvider: CertificateProvider,
+    private val logHttpBody: Boolean = false,
 ) : Retrofits {
     //region Authenticated Retrofits
 
@@ -91,22 +91,24 @@ class RetrofitsImpl(
                 redactHeader(name = HEADER_KEY_AUTHORIZATION)
                 setLevel(
                     level = HttpLoggingInterceptor.Level.BODY
-                        .takeIf { isDevBuild }
+                        .takeIf { logHttpBody }
                         ?: HttpLoggingInterceptor.Level.BASIC,
                 )
             }
     }
 
     private val baseOkHttpClient: OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(headersInterceptor)
-            .setSslSocketFactory()
-            .build()
+        .addInterceptor(headersInterceptor)
+        .configureSsl()
+        .build()
 
     private val authenticatedOkHttpClient: OkHttpClient by lazy {
         baseOkHttpClient
             .newBuilder()
-            .authenticator(refreshAuthenticator)
             .addInterceptor(authTokenInterceptor)
+            .also { builder ->
+                refreshAuthenticator?.let { builder.authenticator(it) }
+            }
             .build()
     }
 
@@ -157,22 +159,20 @@ class RetrofitsImpl(
             .apply { init(null as KeyStore?) }
             .trustManagers
 
-    private fun createX509KeyManager(): X509ExtendedKeyManager =
-        BitwardenX509ExtendedKeyManager(certificateProvider = certificateProvider)
-
-    private fun createSslContext(): SSLContext = SSLContext
-        .getInstance("TLS")
-        .apply {
+    private fun createSslContext(certificateProvider: CertificateProvider): SSLContext = SSLContext
+        .getInstance("TLS").apply {
             init(
-                arrayOf(createX509KeyManager()),
+                arrayOf(
+                    BitwardenX509ExtendedKeyManager(certificateProvider = certificateProvider),
+                ),
                 createSslTrustManagers(),
                 null,
             )
         }
 
-    private fun OkHttpClient.Builder.setSslSocketFactory(): OkHttpClient.Builder =
+    private fun OkHttpClient.Builder.configureSsl(): OkHttpClient.Builder =
         sslSocketFactory(
-            createSslContext().socketFactory,
+            createSslContext(certificateProvider = certificateProvider).socketFactory,
             createSslTrustManagers().first() as X509TrustManager,
         )
 

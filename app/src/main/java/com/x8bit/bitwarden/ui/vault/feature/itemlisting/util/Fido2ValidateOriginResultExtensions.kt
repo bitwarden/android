@@ -11,14 +11,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 val Fido2ValidateOriginResult.Error.messageResourceId: Int
     @StringRes
     get() = when (this) {
-        Fido2ValidateOriginResult.Error.ApplicationFingerprintNotVerified -> {
-            R.string.passkey_operation_failed_because_app_could_not_be_verified
-        }
-
-        Fido2ValidateOriginResult.Error.ApplicationNotFound -> {
-            R.string.passkey_operation_failed_because_app_not_found_in_asset_links
-        }
-
         Fido2ValidateOriginResult.Error.AssetLinkNotFound -> {
             R.string.passkey_operation_failed_because_of_missing_asset_links
         }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
+import com.bitwarden.network.model.JwtTokenDataJson
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test

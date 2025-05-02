@@ -889,22 +889,10 @@ class VaultItemListingViewModel @Inject constructor(
                 )
                 return
             }
-        val relyingPartyId = fido2CredentialManager
-            .getPasskeyAssertionOptionsOrNull(option.requestJson)
-            ?.relyingPartyId
-            ?: run {
-                showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-                )
-                return
-            }
         viewModelScope.launch {
 
             val validateOriginResult = fido2OriginManager
-                .validateOrigin(
-                    callingAppInfo = request.callingAppInfo,
-                    relyingPartyId = relyingPartyId,
-                )
+                .validateOrigin(callingAppInfo = request.callingAppInfo)
 
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Error -> {
@@ -1583,7 +1571,7 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
 
         state.fido2GetCredentialsRequest
-            ?.let { handleFido2GetCredentialsRequest(it, vaultData.data) }
+            ?.let { handleFido2GetCredentialsRequest(it) }
             ?: state.fido2CredentialAssertionRequest
                 ?.let { request ->
                     trySendAction(
@@ -1638,23 +1626,10 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleFido2RegisterCredentialRequestReceive(
         action: VaultItemListingsAction.Internal.Fido2RegisterCredentialRequestReceive,
     ) {
-        val relyingPartyId = action.request
-            .providerRequest
-            .getCreatePasskeyCredentialRequestOrNull()
-            ?.let { fido2CredentialManager.getPasskeyAttestationOptionsOrNull(it.requestJson) }
-            ?.relyingParty
-            ?.id
-            ?: run {
-                showFido2ErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-                )
-                return
-            }
         viewModelScope.launch {
             val validateOriginResult = fido2OriginManager
                 .validateOrigin(
                     callingAppInfo = action.request.callingAppInfo,
-                    relyingPartyId = relyingPartyId,
                 )
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Error -> {
@@ -1701,9 +1676,9 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    @Suppress("LongMethod")
     private fun handleFido2GetCredentialsRequest(
         request: Fido2GetCredentialsRequest,
-        vaultData: VaultData,
     ) {
         val beginGetCredentialOption = request
             .beginGetPublicKeyCredentialOption
@@ -1734,7 +1709,6 @@ class VaultItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             val validateOriginResult = fido2OriginManager.validateOrigin(
                 callingAppInfo = callingAppInfo,
-                relyingPartyId = relyingPartyId,
             )
             when (validateOriginResult) {
                 is Fido2ValidateOriginResult.Success -> {
@@ -1743,10 +1717,13 @@ class VaultItemListingViewModel @Inject constructor(
                             GetFido2CredentialsResult.Success(
                                 userId = request.userId,
                                 option = beginGetCredentialOption,
-                                credentials = vaultData
-                                    .toFido2CredentialAutofillViews()
-                                    .orEmpty()
-                                    .filter { it.rpId == relyingPartyId },
+                                credentialEntries = fido2CredentialManager
+                                    .getPublicKeyCredentialEntries(
+                                        userId = request.userId,
+                                        option = beginGetCredentialOption,
+                                    )
+                                    .getOrNull()
+                                    .orEmpty(),
                             ),
                         ),
                     )

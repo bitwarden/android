@@ -7,7 +7,7 @@ import com.bitwarden.network.model.TwoFactorAuthMethod
  * (Higher value = preference to use the method if it's available)
  */
 @Suppress("MagicNumber")
-val TwoFactorAuthMethod.priority: Int
+internal val TwoFactorAuthMethod.priority: Int
     get() = when (this) {
         TwoFactorAuthMethod.AUTHENTICATOR_APP -> 1
         TwoFactorAuthMethod.EMAIL -> 0

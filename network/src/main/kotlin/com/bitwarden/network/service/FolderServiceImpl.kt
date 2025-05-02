@@ -10,7 +10,7 @@ import com.bitwarden.network.util.parseErrorBodyOrNull
 import com.bitwarden.network.util.toResult
 import kotlinx.serialization.json.Json
 
-class FolderServiceImpl(
+internal class FolderServiceImpl(
     private val foldersApi: FoldersApi,
     private val json: Json,
 ) : FolderService {
