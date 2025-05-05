@@ -14,8 +14,8 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -153,6 +153,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                         dialogState = LoginWithDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -203,7 +204,7 @@ class LoginWithDeviceViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(
         action: LoginWithDeviceAction.Internal.ReceiveLoginResult,
     ) {
@@ -235,6 +236,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -256,6 +258,34 @@ class LoginWithDeviceViewModel @Inject constructor(
                 sendEvent(LoginWithDeviceEvent.ShowToast(R.string.login_approved.asText()))
                 mutableStateFlow.update { it.copy(dialogState = null) }
             }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginWithDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = loginResult
+                                .errorMessage
+                                ?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            // NO-OP: This result should not be possible here
+            is LoginResult.ConfirmKeyConnectorDomain -> Unit
         }
     }
 
@@ -452,7 +482,8 @@ data class LoginWithDeviceState(
          */
         @Parcelize
         data class Error(
-            val title: Text?,
+            val title: Text? = null,
+            val error: Throwable? = null,
             val message: Text,
         ) : DialogState()
     }

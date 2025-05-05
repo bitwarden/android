@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
@@ -122,6 +123,7 @@ fun MasterPasswordGeneratorScreen(
                 },
                 modifier = Modifier.standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -137,15 +139,16 @@ private fun MasterPasswordGeneratorContent(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         BitwardenTextField(
-            label = "",
+            label = null,
             value = generatedPassword,
             onValueChange = {},
             readOnly = true,
             shouldAddCustomLineBreaks = true,
             textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
             visualTransformation = nonLetterColorVisualTransformation(),
+            cardStyle = CardStyle.Full,
             modifier = Modifier.fillMaxWidth(),
         )
 

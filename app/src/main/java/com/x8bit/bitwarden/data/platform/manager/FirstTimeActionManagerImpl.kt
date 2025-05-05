@@ -1,10 +1,11 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -154,6 +155,34 @@ class FirstTimeActionManagerImpl @Inject constructor(
             }
             .distinctUntilChanged()
 
+    override val shouldShowAddLoginCoachMarkFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .getShouldShowAddLoginCoachMarkFlow()
+            .map { it != false }
+            .mapFalseIfAnyLoginCiphersAvailable()
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { shouldShow, featureIsEnabled ->
+                // If the feature flag is off always return true so observers know
+                // the card has not been shown.
+                shouldShow && featureIsEnabled
+            }
+            .distinctUntilChanged()
+
+    override val shouldShowGeneratorCoachMarkFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .getShouldShowGeneratorCoachMarkFlow()
+            .map { it != false }
+            .mapFalseIfAnyLoginCiphersAvailable()
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
+            ) { shouldShow, featureFlagEnabled ->
+                // If the feature flag is off always return true so observers know
+                // the card has not been shown.
+                shouldShow && featureFlagEnabled
+            }
+            .distinctUntilChanged()
+
     /**
      * Get the current [FirstTimeState] of the active user if available, otherwise return
      * a default configuration.
@@ -211,6 +240,18 @@ class FirstTimeActionManagerImpl @Inject constructor(
         )
     }
 
+    override fun markCoachMarkTourCompleted(tourCompleted: CoachMarkTourType) {
+        when (tourCompleted) {
+            CoachMarkTourType.ADD_LOGIN -> {
+                settingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = false)
+            }
+
+            CoachMarkTourType.GENERATOR -> {
+                settingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = false)
+            }
+        }
+    }
+
     /**
      * Internal implementation to get a flow of the showImportLogins value which takes
      * into account if the vault is empty.
@@ -257,4 +298,25 @@ class FirstTimeActionManagerImpl @Inject constructor(
         return settingsDiskSource.getShowAutoFillSettingBadge(userId) ?: false &&
             !autofillEnabledManager.isAutofillEnabled
     }
+
+    /**
+     *  If there are any existing "Login" type ciphers then we'll map the current value
+     *  of the receiver Flow to `false`.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun Flow<Boolean>.mapFalseIfAnyLoginCiphersAvailable(): Flow<Boolean> =
+        authDiskSource
+            .activeUserIdChangesFlow
+            .filterNotNull()
+            .flatMapLatest { activeUserId ->
+                combine(
+                    flow = this,
+                    flow2 = vaultDiskSource.getCiphers(activeUserId),
+                ) { receiverCurrentValue, ciphers ->
+                    receiverCurrentValue && ciphers.none {
+                        it.login != null && it.organizationId == null
+                    }
+                }
+            }
+            .distinctUntilChanged()
 }

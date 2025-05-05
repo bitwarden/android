@@ -3,21 +3,22 @@ package com.x8bit.bitwarden.ui.vault.feature.attachments
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import io.mockk.coEvery
@@ -86,6 +87,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             dialogState = AttachmentsState.DialogState.Error(
                 title = null,
                 message = R.string.premium_required.asText(),
+                throwable = null,
             ),
             isPremiumUser = false,
         )
@@ -100,6 +102,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     dialogState = AttachmentsState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.premium_required.asText(),
+                        throwable = null,
                     ),
                 ),
                 awaitItem(),
@@ -125,6 +128,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     dialogState = AttachmentsState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required.asText(R.string.file.asText()),
+                        throwable = null,
                     ),
                 ),
                 awaitItem(),
@@ -168,6 +172,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     dialogState = AttachmentsState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.max_file_size.asText(),
+                        throwable = null,
                     ),
                 ),
                 awaitItem(),
@@ -199,6 +204,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
             )
             mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
             mutableUserStateFlow.value = DEFAULT_USER_STATE
+            val error = IllegalStateException("No permissions.")
             coEvery {
                 vaultRepository.createAttachment(
                     cipherId = state.cipherId,
@@ -207,7 +213,82 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     fileName = fileName,
                     fileUri = uri,
                 )
-            } returns CreateAttachmentResult.Error
+            } returns CreateAttachmentResult.Error(
+                error = error,
+                message = "No permissions.",
+            )
+
+            val viewModel = createViewModel()
+            // Need to populate the VM with a file
+            viewModel.trySendAction(AttachmentsAction.FileChoose(fileData))
+
+            viewModel.stateFlow.test {
+                assertEquals(state, awaitItem())
+                viewModel.trySendAction(AttachmentsAction.SaveClick)
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Loading(
+                            message = R.string.saving.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    state.copy(
+                        dialogState = AttachmentsState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = error.message!!.asText(),
+                            throwable = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            }
+        }
+
+    @Test
+    fun `SaveClick should display generic error message dialog when createAttachment fails`() =
+        runTest {
+            val cipherView = createMockCipherView(number = 1)
+            val fileName = "test.png"
+            val uri = mockk<Uri>()
+            val sizeJustRight = 104_857_600L
+            val state = DEFAULT_STATE.copy(
+                viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS.copy(
+                    newAttachment = AttachmentsState.NewAttachment(
+                        displayName = fileName,
+                        uri = uri,
+                        sizeBytes = sizeJustRight,
+                    ),
+                ),
+                isPremiumUser = true,
+            )
+            val fileData = IntentManager.FileData(
+                fileName = fileName,
+                uri = uri,
+                sizeBytes = sizeJustRight,
+            )
+            mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            val error = Exception()
+            coEvery {
+                vaultRepository.createAttachment(
+                    cipherId = state.cipherId,
+                    cipherView = cipherView,
+                    fileSizeBytes = sizeJustRight.toString(),
+                    fileName = fileName,
+                    fileUri = uri,
+                )
+            } returns CreateAttachmentResult.Error(error = error)
 
             val viewModel = createViewModel()
             // Need to populate the VM with a file
@@ -229,6 +310,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                         dialogState = AttachmentsState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -356,13 +438,14 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val attachmentId = "mockId-1"
         val cipherView = createMockCipherView(number = 1)
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_WITH_ATTACHMENTS)
+        val error = NoActiveUserException()
         coEvery {
             vaultRepository.deleteCipherAttachment(
                 cipherId = cipherId,
                 attachmentId = attachmentId,
                 cipherView = cipherView,
             )
-        } returns DeleteAttachmentResult.Error
+        } returns DeleteAttachmentResult.Error(error = error)
         mutableVaultItemStateFlow.value = DataState.Loaded(cipherView)
 
         val viewModel = createViewModel()
@@ -382,6 +465,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
                     dialogState = AttachmentsState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 awaitItem(),

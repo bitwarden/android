@@ -3,17 +3,18 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
@@ -43,11 +44,12 @@ class LandingViewModel @Inject constructor(
         ?: LandingState(
             emailInput = authRepository.rememberedEmailAddress.orEmpty(),
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
-            isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
+            isRememberEmailEnabled = authRepository.rememberedEmailAddress != null,
             selectedEnvironmentType = environmentRepository.environment.type,
             selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
+            showSettingsButton = featureFlagManager.getFeatureFlag(key = FlagKey.PreAuthSettings),
         ),
 ) {
 
@@ -96,10 +98,16 @@ class LandingViewModel @Inject constructor(
                 action?.let(::handleAction)
             }
             .launchIn(viewModelScope)
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.PreAuthSettings)
+            .map { LandingAction.Internal.PreAuthSettingFlagReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
         when (action) {
+            is LandingAction.AppSettingsClick -> handleAppSettingsClick()
             is LandingAction.LockAccountClick -> handleLockAccountClicked(action)
             is LandingAction.LogoutAccountClick -> handleLogoutAccountClicked(action)
             is LandingAction.SwitchAccountClick -> handleSwitchAccountClicked(action)
@@ -123,15 +131,26 @@ class LandingViewModel @Inject constructor(
             is LandingAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
+
+            is LandingAction.Internal.PreAuthSettingFlagReceive -> {
+                handlePreAuthSettingFlagReceive(action)
+            }
         }
     }
 
+    private fun handleAppSettingsClick() {
+        sendEvent(LandingEvent.NavigateToSettings)
+    }
+
     private fun handleLockAccountClicked(action: LandingAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClicked(action: LandingAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "LandingViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClicked(action: LandingAction.SwitchAccountClick) {
@@ -185,7 +204,7 @@ class LandingViewModel @Inject constructor(
         }
 
         val email = state.emailInput
-        val isRememberMeEnabled = state.isRememberMeEnabled
+        val isRememberMeEnabled = state.isRememberEmailEnabled
 
         // Update the remembered email address
         authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }
@@ -210,7 +229,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleRememberMeToggled(action: LandingAction.RememberMeToggle) {
-        mutableStateFlow.update { it.copy(isRememberMeEnabled = action.isChecked) }
+        mutableStateFlow.update { it.copy(isRememberEmailEnabled = action.isChecked) }
     }
 
     private fun handleEnvironmentTypeSelect(action: LandingAction.EnvironmentTypeSelect) {
@@ -240,6 +259,12 @@ class LandingViewModel @Inject constructor(
         }
     }
 
+    private fun handlePreAuthSettingFlagReceive(
+        action: LandingAction.Internal.PreAuthSettingFlagReceive,
+    ) {
+        mutableStateFlow.update { it.copy(showSettingsButton = action.isEnabled) }
+    }
+
     /**
      * If the user state account is changed to an active but not "logged in" account we can
      * pre-populate the email field with this account.
@@ -261,12 +286,19 @@ class LandingViewModel @Inject constructor(
 data class LandingState(
     val emailInput: String,
     val isContinueButtonEnabled: Boolean,
-    val isRememberMeEnabled: Boolean,
+    val isRememberEmailEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
     val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
+    val showSettingsButton: Boolean,
 ) : Parcelable {
+    /**
+     * Determines whether the app bar should be visible based on the presence of account summaries.
+     */
+    val isAppBarVisible: Boolean
+        get() = accountSummaries.isNotEmpty()
+
     /**
      * Represents the current state of any dialogs on screen.
      */
@@ -306,6 +338,11 @@ sealed class LandingEvent {
     data object NavigateToStartRegistration : LandingEvent()
 
     /**
+     * Navigates to the pre-auth settings screen.
+     */
+    data object NavigateToSettings : LandingEvent()
+
+    /**
      * Navigates to the Login screen with the given email address and region label.
      */
     data class NavigateToLogin(
@@ -322,6 +359,10 @@ sealed class LandingEvent {
  * Models actions for the landing screen.
  */
 sealed class LandingAction {
+    /**
+     * Indicates that the app settings button has been clicked.
+     */
+    data object AppSettingsClick : LandingAction()
 
     /**
      * Indicates the user has clicked on the given [accountSummary] information in order to lock
@@ -394,6 +435,12 @@ sealed class LandingAction {
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : LandingAction() {
+        /**
+         * Indicates that there has been a change to the pre-auth settings feature flag.
+         */
+        data class PreAuthSettingFlagReceive(
+            val isEnabled: Boolean,
+        ) : Internal()
 
         /**
          * Indicates that there has been a change in [environment].

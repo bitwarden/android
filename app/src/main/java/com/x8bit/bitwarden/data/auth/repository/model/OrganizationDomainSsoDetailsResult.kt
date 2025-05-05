@@ -22,5 +22,7 @@ sealed class OrganizationDomainSsoDetailsResult {
     /**
      * The request failed.
      */
-    data object Failure : OrganizationDomainSsoDetailsResult()
+    data class Failure(
+        val error: Throwable,
+    ) : OrganizationDomainSsoDetailsResult()
 }

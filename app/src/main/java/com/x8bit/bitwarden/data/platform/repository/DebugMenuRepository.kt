@@ -39,6 +39,11 @@ interface DebugMenuRepository {
     fun resetOnboardingStatusForCurrentUser()
 
     /**
+     * Resets the value for the show coach mark statuses so their default values will be used.
+     */
+    fun resetCoachMarkTourStatuses()
+
+    /**
      * Manipulates the state to force showing the onboarding carousel.
      *
      * @param userStateUpdateTrigger A passable lambda to trigger a user state update.

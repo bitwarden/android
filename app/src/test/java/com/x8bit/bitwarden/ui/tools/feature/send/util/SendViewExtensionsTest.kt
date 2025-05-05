@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -58,7 +60,7 @@ class SendViewExtensionsTest {
 
         val result = sendView.toLabelIcons(clock)
 
-        assertEquals(emptyList<IconRes>(), result)
+        assertEquals(emptyList<IconData.Local>(), result)
     }
 
     @Suppress("MaxLineLength")
@@ -114,28 +116,28 @@ class SendViewExtensionsTest {
     }
 }
 
-private val ALL_SEND_STATUS_ICONS: List<IconRes> = listOf(
-    IconRes(
+private val ALL_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
+    IconData.Local(
         iconRes = SendStatusIcon.DISABLED.iconRes,
         contentDescription = SendStatusIcon.DISABLED.contentDescription,
         testTag = SendStatusIcon.DISABLED.testTag,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.PASSWORD.iconRes,
         contentDescription = SendStatusIcon.PASSWORD.contentDescription,
         testTag = SendStatusIcon.PASSWORD.testTag,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.iconRes,
         contentDescription = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.contentDescription,
         testTag = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.testTag,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.EXPIRED.iconRes,
         contentDescription = SendStatusIcon.EXPIRED.contentDescription,
         testTag = SendStatusIcon.EXPIRED.testTag,
     ),
-    IconRes(
+    IconData.Local(
         iconRes = SendStatusIcon.PENDING_DELETE.iconRes,
         contentDescription = SendStatusIcon.PENDING_DELETE.contentDescription,
         testTag = SendStatusIcon.PENDING_DELETE.testTag,

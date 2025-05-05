@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockAction
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockViewModel
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
+import javax.crypto.Cipher
 
 /**
  * A collection of handler functions for managing actions within the context of the Setup Unlock
@@ -14,7 +15,7 @@ data class SetupUnlockHandler(
     val onUnlockWithPinToggle: (UnlockWithPinState) -> Unit,
     val onContinueClick: () -> Unit,
     val onSetUpLaterClick: () -> Unit,
-    val unlockWithBiometricToggle: () -> Unit,
+    val unlockWithBiometricToggle: (cipher: Cipher) -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -25,9 +26,7 @@ data class SetupUnlockHandler(
         fun create(viewModel: SetupUnlockViewModel): SetupUnlockHandler =
             SetupUnlockHandler(
                 onDisableBiometrics = {
-                    viewModel.trySendAction(
-                        SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false),
-                    )
+                    viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleDisabled)
                 },
                 onEnableBiometrics = {
                     viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
@@ -39,7 +38,7 @@ data class SetupUnlockHandler(
                 onSetUpLaterClick = { viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick) },
                 unlockWithBiometricToggle = {
                     viewModel.trySendAction(
-                        SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true),
+                        SetupUnlockAction.UnlockWithBiometricToggleEnabled(cipher = it),
                     )
                 },
             )

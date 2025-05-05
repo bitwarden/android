@@ -1,9 +1,17 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
-import android.content.pm.SigningInfo
+import androidx.core.os.bundleOf
+import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.BiometricPromptResult
+import androidx.credentials.provider.ProviderCreateCredentialRequest
+import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
@@ -16,15 +24,14 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -32,23 +39,24 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticator
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
@@ -60,8 +68,10 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,13 +94,16 @@ class MainViewModelTest : BaseViewModelTest() {
     private val addTotpItemAuthenticatorManager = AddTotpItemFromAuthenticatorManagerImpl()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
+    private val mutableAppLanguageFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
+        every { appLanguageStateFlow } returns mutableAppLanguageFlow
         every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
         every { storeUserHasLoggedInValue(any()) } just runs
+        every { appLanguage = any() } just runs
     }
     private val authRepository = mockk<AuthRepository> {
         every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
@@ -123,6 +136,33 @@ class MainViewModelTest : BaseViewModelTest() {
     }
     private val savedStateHandle = SavedStateHandle()
 
+    private val appResumeManager: AppResumeManager = mockk {
+        every { setResumeScreen(any()) } just runs
+        every { clearResumeScreen() } just runs
+    }
+
+    private val mutableMobileErrorReportingFeatureFlow = MutableStateFlow(false)
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(key = FlagKey.MobileErrorReporting) } returns false
+        every {
+            getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
+        } returns mutableMobileErrorReportingFeatureFlow
+    }
+    private val mockBiometricsPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+        every { isSuccessful } returns true
+    }
+    private val mockProviderCreateCredentialRequest =
+        mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+            every { biometricPromptResult } returns mockBiometricsPromptResult
+        }
+    private val mockProviderGetCredentialRequest =
+        mockk<ProviderGetCredentialRequest>(relaxed = true) {
+            every { biometricPromptResult } returns mockBiometricsPromptResult
+            every { credentialOptions } returns listOf(
+                mockk<GetPublicKeyCredentialOption>(relaxed = true),
+            )
+        }
+
     @BeforeEach
     fun setup() {
         mockkStatic(
@@ -132,7 +172,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -141,6 +181,16 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
         )
+        mockkObject(
+            ProviderCreateCredentialRequest.Companion,
+            ProviderGetCredentialRequest.Companion,
+        )
+        every {
+            ProviderCreateCredentialRequest.fromBundle(any())
+        } returns mockProviderCreateCredentialRequest
+        every {
+            ProviderGetCredentialRequest.fromBundle(any())
+        } returns mockProviderGetCredentialRequest
     }
 
     @AfterEach
@@ -152,7 +202,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSelectionDataOrNull,
             Intent::getCompleteRegistrationDataIntentOrNull,
             Intent::getFido2AssertionRequestOrNull,
-            Intent::getFido2CredentialRequestOrNull,
+            Intent::getFido2CreateCredentialRequestOrNull,
             Intent::getFido2GetCredentialsRequestOrNull,
             Intent::isAddTotpLoginItemFromAuthenticator,
         )
@@ -160,6 +210,10 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::isMyVaultShortcut,
             Intent::isPasswordGeneratorShortcut,
             Intent::isAccountSecurityShortcut,
+        )
+        unmockkObject(
+            ProviderCreateCredentialRequest.Companion,
+            ProviderGetCredentialRequest.Companion,
         )
     }
 
@@ -186,6 +240,10 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
             mutableUserStateFlow.value = UserState(
                 activeUserId = userId1,
                 accounts = listOf(
@@ -233,6 +291,10 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
                 mutableVaultStateEventFlow.tryEmit(VaultStateEvent.Unlocked(userId = "userId"))
                 expectNoEvents()
 
@@ -250,6 +312,10 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val cipherView = mockk<CipherView>()
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
                 accessibilitySelectionManager.emitAccessibilitySelection(cipherView = cipherView)
                 assertEquals(
                     MainEvent.CompleteAccessibilityAutofill(cipherView = cipherView),
@@ -263,6 +329,10 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val cipherView = mockk<CipherView>()
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
             autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
             assertEquals(
                 MainEvent.CompleteAutofill(cipherView = cipherView),
@@ -287,28 +357,44 @@ class MainViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on AppThemeChanged should update state`() {
+    fun `on AppThemeChanged should update state and send event`() = runTest {
+        val theme = AppTheme.DARK
         val viewModel = createViewModel()
 
-        assertEquals(
-            DEFAULT_STATE,
-            viewModel.stateFlow.value,
-        )
-        viewModel.trySendAction(
-            MainAction.Internal.ThemeUpdate(
-                theme = AppTheme.DARK,
-            ),
-        )
-        assertEquals(
-            DEFAULT_STATE.copy(
-                theme = AppTheme.DARK,
-            ),
-            viewModel.stateFlow.value,
-        )
+        viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            eventFlow.awaitItem()
+            eventFlow.awaitItem()
+
+            assertEquals(DEFAULT_STATE, stateFlow.awaitItem())
+            mutableAppThemeFlow.value = theme
+            assertEquals(DEFAULT_STATE.copy(theme = theme), stateFlow.awaitItem())
+            assertEquals(MainEvent.UpdateAppTheme(osTheme = theme.osValue), eventFlow.awaitItem())
+        }
 
         verify {
             settingsRepository.appTheme
             settingsRepository.appThemeStateFlow
+            settingsRepository.appLanguageStateFlow
+        }
+    }
+
+    @Test
+    fun `on AppLanguageChanged should send UpdateAppLocale event`() = runTest {
+        val language = AppLanguage.ENGLISH_BRITISH
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
+            mutableAppLanguageFlow.value = language
+            assertEquals(MainEvent.UpdateAppLocale(localeName = language.localeName), awaitItem())
+        }
+
+        verify(exactly = 1) {
+            settingsRepository.appLanguageStateFlow
         }
     }
 
@@ -457,33 +543,35 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to ExpiredRegistration if token is not valid`() {
-        val viewModel = createViewModel()
-        val intentEmail = "email"
-        val token = "token"
-        val completeRegistrationData = mockk<CompleteRegistrationData> {
-            every { email } returns intentEmail
-            every { verificationToken } returns token
-        }
-        val mockIntent = createMockIntent(mockCompleteRegistrationData = completeRegistrationData)
-        every { authRepository.activeUserId } returns null
-        coEvery {
-            authRepository.validateEmailToken(
-                email = intentEmail,
-                token = token,
-            )
-        } returns EmailTokenResult.Expired
+    fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to ExpiredRegistration if token is not valid`() =
+        runTest {
+            val viewModel = createViewModel()
+            val intentEmail = "email"
+            val token = "token"
+            val completeRegistrationData = mockk<CompleteRegistrationData> {
+                every { email } returns intentEmail
+                every { verificationToken } returns token
+            }
+            val mockIntent =
+                createMockIntent(mockCompleteRegistrationData = completeRegistrationData)
+            every { authRepository.activeUserId } returns null
+            coEvery {
+                authRepository.validateEmailToken(
+                    email = intentEmail,
+                    token = token,
+                )
+            } returns EmailTokenResult.Expired
 
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = mockIntent,
-            ),
-        )
-        assertEquals(
-            SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink,
-            specialCircumstanceManager.specialCircumstance,
-        )
-    }
+            viewModel.trySendAction(
+                MainAction.ReceiveFirstIntent(
+                    intent = mockIntent,
+                ),
+            )
+            assertEquals(
+                SpecialCircumstance.RegistrationEvent.ExpiredRegistrationLink,
+                specialCircumstanceManager.specialCircumstance,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -501,18 +589,15 @@ class MainViewModelTest : BaseViewModelTest() {
             )
             every { authRepository.activeUserId } returns null
             coEvery {
-                authRepository.validateEmailToken(
-                    intentEmail,
-                    token,
-                )
-            } returns EmailTokenResult.Error(message = null)
+                authRepository.validateEmailToken(email = intentEmail, token = token)
+            } returns EmailTokenResult.Error(message = null, error = Throwable("Fail!"))
 
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
+                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
                     MainEvent.ShowToast(R.string.there_was_an_issue_validating_the_registration_token.asText()),
                     awaitItem(),
@@ -538,18 +623,15 @@ class MainViewModelTest : BaseViewModelTest() {
 
             val expectedMessage = "expectedMessage"
             coEvery {
-                authRepository.validateEmailToken(
-                    intentEmail,
-                    token,
-                )
-            } returns EmailTokenResult.Error(message = expectedMessage)
+                authRepository.validateEmailToken(email = intentEmail, token = token)
+            } returns EmailTokenResult.Error(message = expectedMessage, error = null)
 
-            viewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = mockIntent,
-                ),
-            )
             viewModel.eventFlow.test {
+                // We skip the first 2 events because they are the default appTheme and appLanguage
+                awaitItem()
+                awaitItem()
+
+                viewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = mockIntent))
                 assertEquals(
                     MainEvent.ShowToast(expectedMessage.asText()),
                     awaitItem(),
@@ -600,23 +682,16 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should set the special circumstance to Fido2Save`() {
+    fun `on ReceiveFirstIntent with fido2 create intent data should set the special circumstance to Fido2Save`() {
         val viewModel = createViewModel()
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = DEFAULT_USER_STATE.activeUserId,
-            requestJson = """{"mockRequestJson":1}""",
-            packageName = "com.x8bit.bitwarden",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
+            isUserPreVerified = false,
+            requestData = bundleOf(),
         )
-        val fido2Intent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
-
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
-            )
-        } returns Fido2ValidateOriginResult.Success
+        val fido2Intent = createMockIntent(
+            mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+        )
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -632,11 +707,16 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
+    fun `on ReceiveFirstIntent with fido2 create request data should set the user verification based on request`() {
         val viewModel = createViewModel()
+        val createCredentialRequest = createMockFido2CreateCredentialRequest(
+            number = 1,
+            isUserPreVerified = true,
+        )
         val fido2Intent = createMockIntent(
-            mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(number = 1),
+            mockFido2CreateCredentialRequest = createCredentialRequest,
         )
 
         viewModel.trySendAction(
@@ -646,66 +726,58 @@ class MainViewModelTest : BaseViewModelTest() {
         )
 
         verify {
-            fido2CredentialManager.isUserVerified = false
+            fido2CredentialManager.isUserVerified = true
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should switch users if active user is not selected`() {
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-        val viewModel = createViewModel()
-        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-            userId = "selectedUserId",
-            requestJson = """{"mockRequestJson":1}""",
-            packageName = "com.x8bit.bitwarden",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
+    fun `on ReceiveFirstIntent with fido2 create intent data should switch users if active user is not selected`() =
+        runTest {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            val viewModel = createViewModel()
+            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
+                userId = "selectedUserId",
+                isUserPreVerified = false,
+                requestData = bundleOf(),
             )
-        } returns Fido2ValidateOriginResult.Success
+            val mockIntent = createMockIntent(
+                mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+            )
 
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = mockIntent,
-            ),
-        )
+            viewModel.trySendAction(
+                MainAction.ReceiveFirstIntent(
+                    intent = mockIntent,
+                ),
+            )
 
-        verify(exactly = 1) { authRepository.switchAccount(fido2CreateCredentialRequest.userId) }
-    }
+            verify(exactly = 1) {
+                authRepository.switchAccount(fido2CreateCredentialRequest.userId)
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 request data should not switch users if active user is selected`() {
-        val viewModel = createViewModel()
-        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
-            userId = DEFAULT_USER_STATE.activeUserId,
-            requestJson = """{"mockRequestJson":1}""",
-            packageName = "com.x8bit.bitwarden",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockIntent = createMockIntent(mockFido2CreateCredentialRequest = fido2CreateCredentialRequest)
-        coEvery {
-            fido2CredentialManager.validateOrigin(
-                fido2CreateCredentialRequest.callingAppInfo,
-                fido2CreateCredentialRequest.requestJson,
+    fun `on ReceiveFirstIntent with fido2 request data should not switch users if active user is selected`() =
+        runTest {
+            val viewModel = createViewModel()
+            val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                isUserPreVerified = false,
+                requestData = bundleOf(),
             )
-        } returns Fido2ValidateOriginResult.Success
+            val mockIntent = createMockIntent(
+                mockFido2CreateCredentialRequest = fido2CreateCredentialRequest,
+            )
 
-        viewModel.trySendAction(
-            MainAction.ReceiveFirstIntent(
-                intent = mockIntent,
-            ),
-        )
+            viewModel.trySendAction(
+                MainAction.ReceiveFirstIntent(
+                    intent = mockIntent,
+                ),
+            )
 
-        verify(exactly = 0) { authRepository.switchAccount(fido2CreateCredentialRequest.userId) }
-    }
+            verify(exactly = 0) { authRepository.switchAccount(fido2CreateCredentialRequest.userId) }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -947,9 +1019,12 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `send NavigateToDebugMenu action when OpenDebugMenu action is sent`() = runTest {
         val viewModel = createViewModel()
-        viewModel.trySendAction(MainAction.OpenDebugMenu)
-
         viewModel.eventFlow.test {
+            // We skip the first 2 events because they are the default appTheme and appLanguage
+            awaitItem()
+            awaitItem()
+
+            viewModel.trySendAction(MainAction.OpenDebugMenu)
             assertEquals(MainEvent.NavigateToDebugMenu, awaitItem())
         }
     }
@@ -1008,6 +1083,37 @@ class MainViewModelTest : BaseViewModelTest() {
         verify { authRepository.switchAccount(userId) }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ResumeScreenDataReceived with null value, should call AppResumeManager clearResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            MainAction.ResumeScreenDataReceived(screenResumeData = null),
+        )
+
+        verify { appResumeManager.clearResumeScreen() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ResumeScreenDataReceived with data value, should call AppResumeManager setResumeScreen`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            MainAction.ResumeScreenDataReceived(screenResumeData = AppResumeScreenData.GeneratorScreen),
+        )
+
+        verify { appResumeManager.setResumeScreen(AppResumeScreenData.GeneratorScreen) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on AppSpecificLanguageUpdate, the repository value should be updated with the specified value`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(MainAction.AppSpecificLanguageUpdate(AppLanguage.SPANISH))
+
+        verify { settingsRepository.appLanguage = AppLanguage.SPANISH }
+    }
+
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
     ) = MainViewModel(
@@ -1026,12 +1132,15 @@ class MainViewModelTest : BaseViewModelTest() {
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
+        appResumeManager = appResumeManager,
+        featureFlagManager = featureFlagManager,
     )
 }
 
 private val DEFAULT_STATE: MainState = MainState(
     theme = AppTheme.DEFAULT,
     isScreenCaptureAllowed = true,
+    isErrorReportingDialogEnabled = false,
 )
 
 private val DEFAULT_FIRST_TIME_STATE = FirstTimeState(
@@ -1091,7 +1200,7 @@ private fun createMockIntent(
     every { getAutofillSelectionDataOrNull() } returns mockAutofillSelectionData
     every { getCompleteRegistrationDataIntentOrNull() } returns mockCompleteRegistrationData
     every { getFido2AssertionRequestOrNull() } returns mockFido2CredentialAssertionRequest
-    every { getFido2CredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
+    every { getFido2CreateCredentialRequestOrNull() } returns mockFido2CreateCredentialRequest
     every { getFido2GetCredentialsRequestOrNull() } returns mockFido2GetCredentialsRequest
     every { isMyVaultShortcut } returns mockIsMyVaultShortcut
     every { isPasswordGeneratorShortcut } returns mockIsPasswordGeneratorShortcut

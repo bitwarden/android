@@ -16,8 +16,10 @@
 
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">bitwarden.com</domain>
+        <domain includeSubdomains="true">bitwarden.eu</domain>
+        <domain includeSubdomains="true">bitwarden.pw</domain>
         <trust-anchors>
-            <!-- Only trust pre-installed CAs for bitwarden.com and all subdomains -->
+            <!-- Only trust pre-installed CAs for Bitwarden domains and all subdomains -->
             <certificates src="system" />
         </trust-anchors>
     </domain-config>

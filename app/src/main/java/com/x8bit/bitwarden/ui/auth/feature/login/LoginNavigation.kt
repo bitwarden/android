@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.login
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS: String = "email_address"
@@ -16,7 +18,6 @@ private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}?$CAPTCHA_TOKEN={
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class LoginArgs(val emailAddress: String, val captchaToken: String?) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
@@ -46,7 +47,11 @@ fun NavGraphBuilder.loginDestination(
     onNavigateToMasterPasswordHint: (emailAddress: String) -> Unit,
     onNavigateToEnterpriseSignOn: (emailAddress: String) -> Unit,
     onNavigateToLoginWithDevice: (emailAddress: String) -> Unit,
-    onNavigateToTwoFactorLogin: (emailAddress: String, password: String?) -> Unit,
+    onNavigateToTwoFactorLogin: (
+        emailAddress: String,
+        password: String?,
+        isNewDeviceVerification: Boolean,
+    ) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = LOGIN_ROUTE,

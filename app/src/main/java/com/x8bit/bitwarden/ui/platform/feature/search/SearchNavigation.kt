@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.search
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,9 +8,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 
 private const val SEARCH_TYPE: String = "search_type"
 private const val SEARCH_TYPE_SEND_ALL: String = "search_type_sends_all"
@@ -34,7 +38,6 @@ private const val SEARCH_ROUTE: String = "$SEARCH_ROUTE_PREFIX/{$SEARCH_TYPE}/{$
 /**
  * Class to retrieve search arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class SearchArgs(
     val type: SearchType,
 ) {
@@ -52,8 +55,8 @@ data class SearchArgs(
 fun NavGraphBuilder.searchDestination(
     onNavigateBack: () -> Unit,
     onNavigateToEditSend: (sendId: String) -> Unit,
-    onNavigateToEditCipher: (cipherId: String) -> Unit,
-    onNavigateToViewCipher: (cipherId: String) -> Unit,
+    onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = SEARCH_ROUTE,

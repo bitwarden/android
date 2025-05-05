@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherRepromptType
@@ -11,9 +12,9 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
@@ -232,6 +233,7 @@ private fun CipherView.toDisplayItem(
             },
         isTotp = isTotp,
         shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        cipherType = this.type,
     )
 
 private fun CipherView.toIconData(
@@ -243,7 +245,7 @@ private fun CipherView.toIconData(
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
-                usePasskeyDefaultIcon = false,
+                usePasskeyDefaultIcon = this.isActiveWithFido2Credentials,
             )
         }
 
@@ -373,6 +375,7 @@ private fun SendView.toDisplayItem(
         autofillSelectionOptions = emptyList(),
         isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
+        cipherType = null,
     )
 
 /**

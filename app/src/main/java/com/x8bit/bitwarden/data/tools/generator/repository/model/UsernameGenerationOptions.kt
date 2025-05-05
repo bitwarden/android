@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.model
 
 import androidx.annotation.Keep
-import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
+import com.bitwarden.core.data.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,6 +21,7 @@ import kotlinx.serialization.Serializable
  * @property fastMailApiKey The API key for FastMail.
  * @property anonAddyApiAccessToken The API access token for AnonAddy.
  * @property anonAddyDomainName The domain name associated with AnonAddy.
+ * @property anonAddySelfHostServerUrl The self-hosted server URL for AnonAddy.
  * @property forwardEmailApiAccessToken The API access token for Forward Email.
  * @property forwardEmailDomainName The domain name associated with Forward Email.
  * @property emailWebsite The website associated with the email service.
@@ -51,6 +52,9 @@ data class UsernameGenerationOptions(
     @SerialName("simpleLoginApiKey")
     val simpleLoginApiKey: String? = null,
 
+    @SerialName("simpleLoginSelfHostServerUrl")
+    val simpleLoginSelfHostServerUrl: String? = null,
+
     @SerialName("duckDuckGoApiKey")
     val duckDuckGoApiKey: String? = null,
 
@@ -62,6 +66,9 @@ data class UsernameGenerationOptions(
 
     @SerialName("anonAddyDomainName")
     val anonAddyDomainName: String? = null,
+
+    @SerialName("anonAddyBaseUrl")
+    val anonAddySelfHostServerUrl: String? = null,
 
     @SerialName("forwardEmailApiAccessToken")
     val forwardEmailApiAccessToken: String? = null,
@@ -122,11 +129,13 @@ data class UsernameGenerationOptions(
 @Keep
 private class UsernameTypeSerializer :
     BaseEnumeratedIntSerializer<UsernameGenerationOptions.UsernameType>(
-        UsernameGenerationOptions.UsernameType.entries.toTypedArray(),
+        className = "UsernameGenerationOptions.UsernameType",
+        values = UsernameGenerationOptions.UsernameType.entries.toTypedArray(),
     )
 
 @Keep
 private class ForwardedEmailServiceTypeSerializer :
     BaseEnumeratedIntSerializer<UsernameGenerationOptions.ForwardedEmailServiceType>(
-        UsernameGenerationOptions.ForwardedEmailServiceType.entries.toTypedArray(),
+        className = "UsernameGenerationOptions.ForwardedEmailServiceType",
+        values = UsernameGenerationOptions.ForwardedEmailServiceType.entries.toTypedArray(),
     )

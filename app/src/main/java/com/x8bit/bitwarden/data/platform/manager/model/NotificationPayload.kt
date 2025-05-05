@@ -2,8 +2,9 @@ package com.x8bit.bitwarden.data.platform.manager.model
 
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 import java.time.ZonedDateTime
 
 /**
@@ -12,6 +13,7 @@ import java.time.ZonedDateTime
  * Note: The data we receive is not always reliable, so everything is nullable and we validate the
  * data in the [PushManager] as necessary.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 sealed class NotificationPayload {
     /**
@@ -24,12 +26,12 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncCipherNotification(
-        @SerialName("Id") val cipherId: String?,
-        @SerialName("UserId") override val userId: String?,
-        @SerialName("OrganizationId") val organizationId: String?,
-        @SerialName("CollectionIds") val collectionIds: List<String>?,
+        @JsonNames("Id", "id") val cipherId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("OrganizationId", "organizationId") val organizationId: String?,
+        @JsonNames("CollectionIds", "collectionIds") val collectionIds: List<String>?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -37,10 +39,10 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncFolderNotification(
-        @SerialName("Id") val folderId: String?,
-        @SerialName("UserId") override val userId: String?,
+        @JsonNames("Id", "id") val folderId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -48,9 +50,9 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class UserNotification(
-        @SerialName("UserId") override val userId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
-        @SerialName("Date") val date: ZonedDateTime?,
+        @JsonNames("Date", "date") val date: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -58,10 +60,10 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncSendNotification(
-        @SerialName("Id") val sendId: String?,
-        @SerialName("UserId") override val userId: String?,
+        @JsonNames("Id", "id") val sendId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
+        @JsonNames("RevisionDate", "revisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -69,7 +71,7 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class PasswordlessRequestNotification(
-        @SerialName("UserId") override val userId: String?,
-        @SerialName("Id") val loginRequestId: String?,
+        @JsonNames("UserId", "userId") override val userId: String?,
+        @JsonNames("Id", "id") val loginRequestId: String?,
     ) : NotificationPayload()
 }

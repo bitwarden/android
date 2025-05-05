@@ -13,5 +13,5 @@ sealed class CreateCipherResult {
     /**
      * Generic error while creating cipher.
      */
-    data object Error : CreateCipherResult()
+    data class Error(val error: Throwable) : CreateCipherResult()
 }

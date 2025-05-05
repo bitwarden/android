@@ -3,37 +3,44 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -41,13 +48,19 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toSnackbarData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import com.x8bit.bitwarden.ui.vault.util.shortName
+import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -62,7 +75,7 @@ import javax.inject.Inject
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
-@Suppress("TooManyFunctions", "LongParameterList")
+@Suppress("TooManyFunctions", "LongParameterList", "LargeClass")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -74,7 +87,10 @@ class VaultViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
     private val snackbarRelayManager: SnackbarRelayManager,
-    featureFlagManager: FeatureFlagManager,
+    private val reviewPromptManager: ReviewPromptManager,
+    private val featureFlagManager: FeatureFlagManager,
+    private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<VaultState, VaultEvent, VaultAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -86,7 +102,6 @@ class VaultViewModel @Inject constructor(
                 .any(),
         )
         val appBarTitle = vaultFilterData.toAppBarTitle()
-        val showSshKeys = featureFlagManager.getFeatureFlag(FlagKey.SshKeyCipherItems)
         VaultState(
             appBarTitle = appBarTitle,
             initials = activeAccountSummary.initials,
@@ -101,7 +116,9 @@ class VaultViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             isRefreshing = false,
             showImportActionCard = false,
-            showSshKeys = showSshKeys,
+            flightRecorderSnackBar = settingsRepository
+                .flightRecorderData
+                .toSnackbarData(clock = clock),
         )
     },
 ) {
@@ -129,15 +146,9 @@ class VaultViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
-        combine(
-            vaultRepository.vaultDataStateFlow,
-            featureFlagManager.getFeatureFlagFlow(FlagKey.SshKeyCipherItems),
-        ) { vaultData, sshKeyCipherItemsEnabled ->
-            VaultAction.Internal.VaultDataReceive(
-                vaultData = vaultData,
-                showSshKeys = sshKeyCipherItemsEnabled,
-            )
-        }
+        vaultRepository
+            .vaultDataStateFlow
+            .map { VaultAction.Internal.VaultDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -156,16 +167,20 @@ class VaultViewModel @Inject constructor(
 
         snackbarRelayManager
             .getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY)
-            .map {
-                VaultAction.Internal.SnackbarDataReceive(it)
-            }
+            .map { VaultAction.Internal.SnackbarDataReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .flightRecorderDataFlow
+            .map { VaultAction.Internal.FlightRecorderDataReceive(data = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: VaultAction) {
         when (action) {
-            is VaultAction.AddItemClick -> handleAddItemClick()
+            is VaultAction.AddItemClick -> handleAddItemClick(action)
             is VaultAction.CardGroupClick -> handleCardClick()
             is VaultAction.FolderClick -> handleFolderItemClick(action)
             is VaultAction.CollectionClick -> handleCollectionItemClick(action)
@@ -197,6 +212,50 @@ class VaultViewModel @Inject constructor(
             is VaultAction.Internal -> handleInternalAction(action)
             VaultAction.DismissImportActionCard -> handleDismissImportActionCard()
             VaultAction.ImportActionCardClick -> handleImportActionCardClick()
+            VaultAction.LifecycleResumed -> handleLifecycleResumed()
+            VaultAction.SelectAddItemType -> handleSelectAddItemType()
+            VaultAction.DismissFlightRecorderSnackbar -> handleDismissFlightRecorderSnackbar()
+            VaultAction.FlightRecorderGoToSettingsClick -> handleFlightRecorderGoToSettingsClick()
+        }
+    }
+
+    //region VaultAction Handlers
+    private fun handleDismissFlightRecorderSnackbar() {
+        settingsRepository.dismissFlightRecorderBanner()
+    }
+
+    private fun handleFlightRecorderGoToSettingsClick() {
+        settingsRepository.dismissFlightRecorderBanner()
+        sendEvent(VaultEvent.NavigateToAbout)
+    }
+
+    private fun handleSelectAddItemType() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultState.DialogState.SelectVaultAddItemType,
+            )
+        }
+    }
+
+    private fun handleLifecycleResumed() {
+        when (specialCircumstanceManager.specialCircumstance) {
+            is SpecialCircumstance.SearchShortcut -> {
+                sendEvent(VaultEvent.NavigateToVaultSearchScreen)
+                // not clearing SpecialCircumstance as it contains necessary data
+                return
+            }
+
+            is SpecialCircumstance.VerificationCodeShortcut -> {
+                sendEvent(VaultEvent.NavigateToVerificationCodeScreen)
+                specialCircumstanceManager.specialCircumstance = null
+                return
+            }
+
+            else -> Unit
+        }
+
+        if (reviewPromptManager.shouldPromptForAppReview()) {
+            sendEvent(VaultEvent.PromptForAppReview)
         }
     }
 
@@ -219,13 +278,34 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
-    //region VaultAction Handlers
-    private fun handleAddItemClick() {
-        sendEvent(VaultEvent.NavigateToAddItemScreen)
+    private fun handleAddItemClick(action: VaultAction.AddItemClick) {
+        when (val vaultItemType = action.type) {
+            CreateVaultItemType.LOGIN,
+            CreateVaultItemType.CARD,
+            CreateVaultItemType.IDENTITY,
+            CreateVaultItemType.SECURE_NOTE,
+            CreateVaultItemType.SSH_KEY,
+                -> {
+                vaultItemType
+                    .toVaultItemCipherTypeOrNull()
+                    ?.let {
+                        sendEvent(
+                            VaultEvent.NavigateToAddItemScreen(
+                                type = it,
+                            ),
+                        )
+                    }
+            }
+
+            CreateVaultItemType.FOLDER -> {
+                sendEvent(
+                    VaultEvent.NavigateToAddFolder,
+                )
+            }
+        }
     }
 
     private fun handleCardClick() {
@@ -267,11 +347,14 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "VaultViewModel"),
+        )
         mutableStateFlow.update {
             it.copy(isSwitchingAccounts = action.accountSummary.isActive)
         }
@@ -296,14 +379,25 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.Syncing)
+        if (networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultState.DialogState.Syncing)
+            }
+            vaultRepository.sync(forced = true)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
         }
-        vaultRepository.sync(forced = true)
     }
 
     private fun handleLockClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleExitConfirmationClick() {
@@ -325,7 +419,6 @@ class VaultViewModel @Inject constructor(
         // Re-process the current vault data with the new filter
         updateViewState(
             vaultData = vaultRepository.vaultDataStateFlow.value,
-            showSshKeys = state.showSshKeys,
         )
     }
 
@@ -342,7 +435,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleVaultItemClick(action: VaultAction.VaultItemClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.vaultItem.id))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.vaultItem.id,
+                type = action.vaultItem.type,
+            ),
+        )
     }
 
     private fun handleTryAgainClick() {
@@ -355,11 +453,17 @@ class VaultViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
-        // The Pull-To-Refresh composable is already in the refreshing state.
-        // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepository.sync(forced = false)
+        viewModelScope.launch {
+            delay(250)
+            if (networkConnectionManager.isNetworkConnected) {
+                vaultRepository.sync(forced = false)
+            } else {
+                sendAction(VaultAction.Internal.InternetConnectionErrorReceived)
+            }
+        }
     }
 
     private fun handleOverflowOptionClick(action: VaultAction.OverflowOptionClick) {
@@ -417,19 +521,28 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
-        clipboardManager.setText(action.notes)
+        clipboardManager.setText(
+            text = action.notes,
+            toastDescriptorOverride = R.string.notes.asText(),
+        )
     }
 
     private fun handleCopyNumberClick(
         action: ListingItemOverflowAction.VaultAction.CopyNumberClick,
     ) {
-        clipboardManager.setText(action.number)
+        clipboardManager.setText(
+            text = action.number,
+            toastDescriptorOverride = R.string.number.asText(),
+        )
     }
 
     private fun handleCopyPasswordClick(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
-        clipboardManager.setText(action.password)
+        clipboardManager.setText(
+            text = action.password,
+            toastDescriptorOverride = R.string.password.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
         )
@@ -438,7 +551,10 @@ class VaultViewModel @Inject constructor(
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
-        clipboardManager.setText(action.securityCode)
+        clipboardManager.setText(
+            text = action.securityCode,
+            toastDescriptorOverride = R.string.security_code.asText(),
+        )
         organizationEventManager.trackEvent(
             event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
         )
@@ -456,11 +572,19 @@ class VaultViewModel @Inject constructor(
     private fun handleCopyUsernameClick(
         action: ListingItemOverflowAction.VaultAction.CopyUsernameClick,
     ) {
-        clipboardManager.setText(action.username)
+        clipboardManager.setText(
+            text = action.username,
+            toastDescriptorOverride = R.string.username.asText(),
+        )
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.VaultAction.EditClick) {
-        sendEvent(VaultEvent.NavigateToEditVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToEditVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleLaunchClick(action: ListingItemOverflowAction.VaultAction.LaunchClick) {
@@ -468,7 +592,12 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleViewClick(action: ListingItemOverflowAction.VaultAction.ViewClick) {
-        sendEvent(VaultEvent.NavigateToVaultItem(action.cipherId))
+        sendEvent(
+            event = VaultEvent.NavigateToVaultItem(
+                itemId = action.cipherId,
+                type = action.cipherType.toVaultItemCipherType(),
+            ),
+        )
     }
 
     private fun handleInternalAction(action: VaultAction.Internal) {
@@ -492,6 +621,34 @@ class VaultViewModel @Inject constructor(
             }
 
             is VaultAction.Internal.SnackbarDataReceive -> handleSnackbarDataReceive(action)
+
+            VaultAction.Internal.InternetConnectionErrorReceived -> {
+                handleInternetConnectionErrorReceived()
+            }
+
+            is VaultAction.Internal.FlightRecorderDataReceive -> {
+                handleFlightRecorderDataReceive(action)
+            }
+        }
+    }
+
+    private fun handleInternetConnectionErrorReceived() {
+        mutableStateFlow.update {
+            it.copy(
+                isRefreshing = false,
+                dialog = VaultState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            )
+        }
+    }
+
+    private fun handleFlightRecorderDataReceive(
+        action: VaultAction.Internal.FlightRecorderDataReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(flightRecorderSnackBar = action.data.toSnackbarData(clock = clock))
         }
     }
 
@@ -505,7 +662,10 @@ class VaultViewModel @Inject constructor(
         when (val result = action.result) {
             is GenerateTotpResult.Error -> Unit
             is GenerateTotpResult.Success -> {
-                clipboardManager.setText(result.code)
+                clipboardManager.setText(
+                    text = result.code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
     }
@@ -559,20 +719,21 @@ class VaultViewModel @Inject constructor(
 
         updateViewState(
             vaultData = action.vaultData,
-            showSshKeys = action.showSshKeys,
         )
     }
 
-    private fun updateViewState(vaultData: DataState<VaultData>, showSshKeys: Boolean) {
+    private fun updateViewState(vaultData: DataState<VaultData>) {
         when (vaultData) {
             is DataState.Error -> vaultErrorReceive(vaultData = vaultData)
             is DataState.Loaded -> vaultLoadedReceive(
                 vaultData = vaultData,
-                showSshKeys = showSshKeys,
             )
 
             is DataState.Loading -> vaultLoadingReceive()
-            is DataState.NoNetwork -> vaultNoNetworkReceive(vaultData = vaultData)
+            is DataState.NoNetwork -> vaultNoNetworkReceive(
+                vaultData = vaultData,
+            )
+
             is DataState.Pending -> vaultPendingReceive(vaultData = vaultData)
         }
     }
@@ -591,7 +752,7 @@ class VaultViewModel @Inject constructor(
         )
     }
 
-    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>, showSshKeys: Boolean) {
+    private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         if (state.dialog == VaultState.DialogState.Syncing) {
             sendEvent(
                 VaultEvent.ShowToast(
@@ -599,19 +760,23 @@ class VaultViewModel @Inject constructor(
                 ),
             )
         }
+        updateVaultState(vaultData.data)
+    }
+
+    private fun updateVaultState(
+        vaultData: VaultData,
+    ) {
         mutableStateFlow.update {
             it.copy(
-                viewState = vaultData.data.toViewState(
+                viewState = vaultData.toViewState(
                     baseIconUrl = state.baseIconUrl,
                     isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = showSshKeys,
                 ),
                 dialog = null,
                 isRefreshing = false,
-                showSshKeys = showSshKeys,
             )
         }
     }
@@ -620,17 +785,17 @@ class VaultViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.Loading) }
     }
 
-    private fun vaultNoNetworkReceive(vaultData: DataState.NoNetwork<VaultData>) {
-        mutableStateFlow.updateToErrorStateOrDialog(
-            baseIconUrl = state.baseIconUrl,
-            vaultData = vaultData.data,
-            vaultFilterType = vaultFilterTypeOrDefault,
-            isPremium = state.isPremium,
-            errorTitle = R.string.internet_connection_required_title.asText(),
-            isIconLoadingDisabled = state.isIconLoadingDisabled,
-            hasMasterPassword = state.hasMasterPassword,
-            errorMessage = R.string.internet_connection_required_message.asText(),
-            isRefreshing = false,
+    private fun vaultNoNetworkReceive(
+        vaultData: DataState.NoNetwork<VaultData>,
+    ) {
+        val data = vaultData.data ?: VaultData(
+            cipherViewList = emptyList(),
+            collectionViewList = emptyList(),
+            folderViewList = emptyList(),
+            sendViewList = emptyList(),
+        )
+        updateVaultState(
+            vaultData = data,
         )
     }
 
@@ -643,7 +808,6 @@ class VaultViewModel @Inject constructor(
                     isPremium = state.isPremium,
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
-                    showSshKeys = state.showSshKeys,
                 ),
             )
         }
@@ -653,12 +817,13 @@ class VaultViewModel @Inject constructor(
         action: VaultAction.Internal.ValidatePasswordResultReceive,
     ) {
         when (val result = action.result) {
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -705,6 +870,9 @@ data class VaultState(
     val vaultFilterData: VaultFilterData? = null,
     val viewState: ViewState,
     val dialog: DialogState? = null,
+    val isRefreshing: Boolean,
+    val showImportActionCard: Boolean,
+    val flightRecorderSnackBar: BitwardenSnackbarData?,
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
     val isPremium: Boolean,
@@ -712,9 +880,6 @@ data class VaultState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
-    val isRefreshing: Boolean,
-    val showImportActionCard: Boolean,
-    val showSshKeys: Boolean,
 ) : Parcelable {
 
     /**
@@ -872,7 +1037,7 @@ data class VaultState(
             /**
              * The icons shown after the item name.
              */
-            abstract val extraIconList: List<IconRes>
+            abstract val extraIconList: ImmutableList<IconData>
 
             /**
              * An optional supporting label for the vault item that provides additional information.
@@ -892,6 +1057,11 @@ data class VaultState(
             abstract val shouldShowMasterPasswordReprompt: Boolean
 
             /**
+             * The [VaultItemCipherType] this item represents.
+             */
+            abstract val type: VaultItemCipherType
+
+            /**
              * Represents a login item within the vault.
              *
              * @property username The username associated with this login item.
@@ -902,12 +1072,13 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_globe),
                 override val startIconTestTag: String = "LoginCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val username: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = username
+                override val type: VaultItemCipherType get() = VaultItemCipherType.LOGIN
             }
 
             /**
@@ -922,7 +1093,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_payment_card),
                 override val startIconTestTag: String = "CardCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 private val brand: VaultCardBrand? = null,
@@ -937,6 +1108,8 @@ data class VaultState(
                         lastFourDigits != null -> "*".asText().concat(lastFourDigits)
                         else -> null
                     }
+
+                override val type: VaultItemCipherType get() = VaultItemCipherType.CARD
             }
 
             /**
@@ -952,12 +1125,13 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_id_card),
                 override val startIconTestTag: String = "IdentityCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val fullName: Text?,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = fullName
+                override val type: VaultItemCipherType get() = VaultItemCipherType.IDENTITY
             }
 
             /**
@@ -970,11 +1144,12 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_note),
                 override val startIconTestTag: String = "SecureNoteCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SECURE_NOTE
             }
 
             /**
@@ -990,7 +1165,7 @@ data class VaultState(
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_ssh_key),
                 override val startIconTestTag: String = "SshKeyCipherIcon",
-                override val extraIconList: List<IconRes> = emptyList(),
+                override val extraIconList: ImmutableList<IconData> = persistentListOf(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
                 val publicKey: Text,
@@ -998,6 +1173,7 @@ data class VaultState(
                 val fingerprint: Text,
             ) : VaultItem() {
                 override val supportingLabel: Text? get() = null
+                override val type: VaultItemCipherType get() = VaultItemCipherType.SSH_KEY
             }
         }
     }
@@ -1014,12 +1190,19 @@ data class VaultState(
         data object Syncing : DialogState()
 
         /**
+         * Represents a dialog for selecting a vault item type to add.
+         */
+        @Parcelize
+        data object SelectVaultAddItemType : DialogState()
+
+        /**
          * Represents an error dialog with the given [title] and [message].
          */
         @Parcelize
         data class Error(
             val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
     }
 }
@@ -1036,13 +1219,16 @@ sealed class VaultEvent {
     /**
      * Navigate to the Add Item screen.
      */
-    data object NavigateToAddItemScreen : VaultEvent()
+    data class NavigateToAddItemScreen(
+        val type: VaultItemCipherType,
+    ) : VaultEvent()
 
     /**
      * Navigate to the item details screen.
      */
     data class NavigateToVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**
@@ -1050,6 +1236,7 @@ sealed class VaultEvent {
      */
     data class NavigateToEditVaultItem(
         val itemId: String,
+        val type: VaultItemCipherType,
     ) : VaultEvent()
 
     /**
@@ -1082,6 +1269,11 @@ sealed class VaultEvent {
     data object NavigateToImportLogins : VaultEvent()
 
     /**
+     * Indicates that we should prompt the user for app review.
+     */
+    data object PromptForAppReview : VaultEvent()
+
+    /**
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : VaultEvent()
@@ -1090,12 +1282,32 @@ sealed class VaultEvent {
      * Show a snackbar with the given [data].
      */
     data class ShowSnackbar(val data: BitwardenSnackbarData) : VaultEvent(), BackgroundEvent
+
+    /**
+     * Navigate to the add folder screen
+     */
+    data object NavigateToAddFolder : VaultEvent()
+
+    /**
+     * Navigate to settings.
+     */
+    data object NavigateToAbout : VaultEvent()
 }
 
 /**
  * Models actions for the [VaultScreen].
  */
 sealed class VaultAction {
+    /**
+     * User has clicked the go to settings button.
+     */
+    data object FlightRecorderGoToSettingsClick : VaultAction()
+
+    /**
+     * User has dismissed the flight recorder.
+     */
+    data object DismissFlightRecorderSnackbar : VaultAction()
+
     /**
      * User has triggered a pull to refresh.
      */
@@ -1105,7 +1317,7 @@ sealed class VaultAction {
      * Click the add an item button.
      * This can either be the floating action button or actual add an item button.
      */
-    data object AddItemClick : VaultAction()
+    data class AddItemClick(val type: CreateVaultItemType) : VaultAction()
 
     /**
      * Click the search icon.
@@ -1256,6 +1468,16 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
+     * The lifecycle of the VaultScreen has entered a resumed state.
+     */
+    data object LifecycleResumed : VaultAction()
+
+    /**
+     * User has clicked button to bring up the add item selection dialog.
+     */
+    data object SelectAddItemType : VaultAction()
+
+    /**
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
@@ -1266,6 +1488,11 @@ sealed class VaultAction {
         data class IconLoadingSettingReceive(
             val isIconLoadingDisabled: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the there is not internet connection.
+         */
+        data object InternetConnectionErrorReceived : Internal()
 
         /**
          * Indicates a result for generating a verification code has been received.
@@ -1292,7 +1519,6 @@ sealed class VaultAction {
          */
         data class VaultDataReceive(
             val vaultData: DataState<VaultData>,
-            val showSshKeys: Boolean,
         ) : Internal()
 
         /**
@@ -1308,6 +1534,13 @@ sealed class VaultAction {
          */
         data class SnackbarDataReceive(
             val data: BitwardenSnackbarData,
+        ) : Internal()
+
+        /**
+         * Indicates that the flight recorder data was received.
+         */
+        data class FlightRecorderDataReceive(
+            val data: FlightRecorderDataSet,
         ) : Internal()
     }
 }
@@ -1333,7 +1566,6 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                     hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
-                    showSshKeys = it.showSshKeys,
                 ),
                 dialog = VaultState.DialogState.Error(
                     title = errorTitle,

@@ -1,14 +1,16 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
 import android.os.Parcelable
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -30,11 +32,31 @@ class AppearanceViewModel @Inject constructor(
             theme = settingsRepository.appTheme,
         ),
 ) {
+
+    init {
+        settingsRepository
+            .appLanguageStateFlow
+            .map { AppearanceAction.Internal.AppLanguageStateUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+    }
+
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
         AppearanceAction.BackClick -> handleBackClicked()
         is AppearanceAction.LanguageChange -> handleLanguageChanged(action)
         is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
         is AppearanceAction.ThemeChange -> handleThemeChanged(action)
+        is AppearanceAction.Internal.AppLanguageStateUpdateReceive -> {
+            handleLanguageStateChange(action)
+        }
+    }
+
+    private fun handleLanguageStateChange(
+        action: AppearanceAction.Internal.AppLanguageStateUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(language = action.language)
+        }
     }
 
     private fun handleBackClicked() {
@@ -42,13 +64,7 @@ class AppearanceViewModel @Inject constructor(
     }
 
     private fun handleLanguageChanged(action: AppearanceAction.LanguageChange) {
-        mutableStateFlow.update { it.copy(language = action.language) }
         settingsRepository.appLanguage = action.language
-
-        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(
-            action.language.localeName,
-        )
-        AppCompatDelegate.setApplicationLocales(appLocale)
     }
 
     private fun handleShowWebsiteIconsToggled(action: AppearanceAction.ShowWebsiteIconsToggle) {
@@ -115,4 +131,15 @@ sealed class AppearanceAction {
     data class ThemeChange(
         val theme: AppTheme,
     ) : AppearanceAction()
+
+    /**
+     * Internal actions not sent through the UI.
+     */
+    sealed class Internal : AppearanceAction() {
+
+        /**
+         * The AppLanguageState value has updated.
+         */
+        data class AppLanguageStateUpdateReceive(val language: AppLanguage) : Internal()
+    }
 }

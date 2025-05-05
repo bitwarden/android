@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.repository
 
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.toEnvironmentUrls
+import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
-import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 
 /**
  * Primary implementation of [EnvironmentRepository].
@@ -36,6 +37,7 @@ class EnvironmentRepositoryImpl(
     override val environmentStateFlow: StateFlow<Environment> = environmentDiskSource
         .preAuthEnvironmentUrlDataFlow
         .map { it.toEnvironmentUrlsOrDefault() }
+        .onEach { Timber.d("Current environment: ${it.type}") }
         .stateIn(
             scope = scope,
             started = SharingStarted.Lazily,

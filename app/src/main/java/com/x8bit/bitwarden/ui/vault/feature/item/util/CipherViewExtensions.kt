@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
+import androidx.annotation.DrawableRes
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -11,18 +14,20 @@ import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.capitalize
 import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
+import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import kotlinx.collections.immutable.ImmutableList
 import java.time.Clock
 
 private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
@@ -30,7 +35,7 @@ private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
 private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 
 /**
- * Transforms [VaultData] into [VaultState.ViewState].
+ * Transforms [VaultData] into [VaultItemState.ViewState].
  */
 @Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun CipherView.toViewState(
@@ -41,6 +46,10 @@ fun CipherView.toViewState(
     clock: Clock = Clock.systemDefaultZone(),
     canDelete: Boolean,
     canAssignToCollections: Boolean,
+    canEdit: Boolean,
+    baseIconUrl: String,
+    isIconLoadingDisabled: Boolean,
+    relatedLocations: ImmutableList<VaultItemLocation>,
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -48,7 +57,14 @@ fun CipherView.toViewState(
             name = name,
             requiresReprompt = (reprompt == CipherRepromptType.PASSWORD && hasMasterPassword) &&
                 previousState?.common?.requiresReprompt != false,
-            customFields = fields.orEmpty().map { it.toCustomField() },
+            customFields = fields.orEmpty().map { fieldView ->
+                fieldView.toCustomField(
+                    previousState = previousState
+                        ?.common
+                        ?.customFields
+                        ?.find { it.id == fieldView.hashCode().toString() },
+                )
+            },
             lastUpdated = revisionDate.toFormattedPattern(
                 pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                 clock = clock,
@@ -73,7 +89,7 @@ fun CipherView.toViewState(
                             url = requireNotNull(it.url),
                             isLargeFile = try {
                                 requireNotNull(it.size).toLong() >= 10485760
-                            } catch (exception: NumberFormatException) {
+                            } catch (_: NumberFormatException) {
                                 false
                             },
                             isDownloadAllowed = isPremiumUser || this.organizationId != null,
@@ -83,6 +99,14 @@ fun CipherView.toViewState(
                 .orEmpty(),
             canDelete = canDelete,
             canAssignToCollections = canAssignToCollections,
+            canEdit = canEdit,
+            favorite = this.favorite,
+            passwordHistoryCount = passwordHistory?.count(),
+            iconData = this.toIconData(
+                baseIconUrl = baseIconUrl,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+            ),
+            relatedLocations = relatedLocations,
         ),
         type = when (type) {
             CipherType.LOGIN -> {
@@ -106,7 +130,6 @@ fun CipherView.toViewState(
                             pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                             clock = clock,
                         ),
-                    passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
@@ -144,6 +167,9 @@ fun CipherView.toViewState(
                                 ?.isVisible == true,
                         )
                     },
+                    paymentCardBrandIconData = card?.paymentCardBrandIconRes?.let {
+                        IconData.Local(iconRes = it)
+                    },
                 )
             }
 
@@ -176,27 +202,39 @@ fun CipherView.toViewState(
         },
     )
 
-private fun FieldView.toCustomField(): VaultItemState.ViewState.Content.Common.Custom =
+/**
+ * Transforms [FieldView] into [VaultItemState.ViewState.Content.Common.Custom].
+ */
+fun FieldView.toCustomField(
+    previousState: VaultItemState.ViewState.Content.Common.Custom?,
+): VaultItemState.ViewState.Content.Common.Custom =
     when (type) {
         FieldType.TEXT -> VaultItemState.ViewState.Content.Common.Custom.TextField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
         )
 
         FieldType.HIDDEN -> VaultItemState.ViewState.Content.Common.Custom.HiddenField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value.orZeroWidthSpace(),
             isCopyable = !value.isNullOrBlank(),
-            isVisible = false,
+            isVisible = (previousState as?
+                VaultItemState.ViewState.Content.Common.Custom.HiddenField)
+                ?.isVisible
+                ?: false,
         )
 
         FieldType.BOOLEAN -> VaultItemState.ViewState.Content.Common.Custom.BooleanField(
+            id = this.hashCode().toString(),
             name = name.orEmpty(),
             value = value?.toBoolean() ?: false,
         )
 
         FieldType.LINKED -> VaultItemState.ViewState.Content.Common.Custom.LinkedField(
+            id = this.hashCode().toString(),
             vaultLinkedFieldType = VaultLinkedFieldType.fromId(requireNotNull(linkedId)),
             name = name.orEmpty(),
         )
@@ -221,6 +259,59 @@ private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
                 clock = clock,
             ),
         )
+    }
+
+private fun CipherView.toIconData(
+    baseIconUrl: String,
+    isIconLoadingDisabled: Boolean,
+): IconData {
+    return when (this.type) {
+        CipherType.LOGIN -> {
+            login?.uris.toLoginIconData(
+                baseIconUrl = baseIconUrl,
+                isIconLoadingDisabled = isIconLoadingDisabled,
+                usePasskeyDefaultIcon = false,
+            )
+        }
+
+        CipherType.CARD -> {
+            card?.paymentCardBrandIconRes
+                ?.let { IconData.Local(iconRes = it) }
+                ?: IconData.Local(type.iconRes)
+        }
+
+        else -> {
+            IconData.Local(iconRes = this.type.iconRes)
+        }
+    }
+}
+
+@get:DrawableRes
+private val CipherType.iconRes: Int
+    get() = when (this) {
+        CipherType.SECURE_NOTE -> R.drawable.ic_note
+        CipherType.CARD -> R.drawable.ic_payment_card
+        CipherType.IDENTITY -> R.drawable.ic_id_card
+        CipherType.SSH_KEY -> R.drawable.ic_ssh_key
+        CipherType.LOGIN -> R.drawable.ic_globe
+    }
+
+@get:DrawableRes
+private val CardView.paymentCardBrandIconRes: Int?
+    get() = when (this.cardBrand) {
+        VaultCardBrand.VISA -> R.drawable.ic_payment_card_brand_visa
+        VaultCardBrand.MASTERCARD -> R.drawable.ic_payment_card_brand_mastercard
+        VaultCardBrand.AMEX -> R.drawable.ic_payment_card_brand_amex
+        VaultCardBrand.DISCOVER -> R.drawable.ic_payment_card_brand_discover
+        VaultCardBrand.DINERS_CLUB -> R.drawable.ic_payment_card_brand_diners_club
+        VaultCardBrand.JCB -> R.drawable.ic_payment_card_brand_jcb
+        VaultCardBrand.MAESTRO -> R.drawable.ic_payment_card_brand_maestro
+        VaultCardBrand.UNIONPAY -> R.drawable.ic_payment_card_brand_union_pay
+        VaultCardBrand.RUPAY -> R.drawable.ic_payment_card_brand_ru_pay
+        VaultCardBrand.SELECT,
+        VaultCardBrand.OTHER,
+        null,
+            -> null
     }
 
 private val IdentityView.identityAddress: String?

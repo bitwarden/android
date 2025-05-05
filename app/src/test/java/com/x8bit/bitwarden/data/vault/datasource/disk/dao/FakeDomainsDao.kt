@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk.dao
 
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.disk.entity.DomainsEntity
 import kotlinx.coroutines.flow.Flow
 

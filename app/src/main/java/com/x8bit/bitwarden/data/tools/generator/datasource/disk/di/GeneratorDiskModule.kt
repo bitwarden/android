@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk.di
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
+import com.bitwarden.data.datasource.disk.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSourceImpl

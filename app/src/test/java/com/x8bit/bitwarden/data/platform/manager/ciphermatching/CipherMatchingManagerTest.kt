@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull

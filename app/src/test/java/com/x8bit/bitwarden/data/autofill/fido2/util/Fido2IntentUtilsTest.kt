@@ -1,26 +1,17 @@
 package com.x8bit.bitwarden.data.autofill.fido2.util
 
 import android.content.Intent
-import android.content.pm.SigningInfo
-import android.service.credentials.BeginGetCredentialRequest
 import androidx.core.os.bundleOf
-import androidx.credentials.CreatePasswordRequest
-import androidx.credentials.CreatePublicKeyCredentialRequest
-import androidx.credentials.GetPasswordOption
-import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.provider.BeginGetPasswordOption
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
-import androidx.credentials.provider.CallingAppInfo
+import androidx.credentials.provider.BeginGetCredentialRequest
+import androidx.credentials.provider.BiometricPromptResult
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -29,8 +20,10 @@ import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -39,125 +32,120 @@ class Fido2IntentUtilsTest {
     @BeforeEach
     fun setUp() {
         mockkStatic(::isBuildVersionBelow)
-        mockkObject(PendingIntentHandler.Companion)
+        mockkObject(
+            PendingIntentHandler.Companion,
+            BeginGetCredentialRequest.Companion,
+            ProviderCreateCredentialRequest.Companion,
+            ProviderGetCredentialRequest.Companion,
+        )
         every { isBuildVersionBelow(any()) } returns false
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(::isBuildVersionBelow)
-        unmockkObject(PendingIntentHandler.Companion)
+        unmockkObject(
+            BeginGetCredentialRequest.Companion,
+            PendingIntentHandler.Companion,
+            ProviderCreateCredentialRequest.Companion,
+            ProviderGetCredentialRequest.Companion,
+        )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getFido2CredentialRequestOrNull should return Fido2CredentialRequest when present`() {
+    fun `getFido2CreateCredentialRequestOrNull should return Fido2CreateCredentialRequest when present`() {
         val intent = mockk<Intent> {
             every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
         }
-        val mockCallingRequest = mockk<CreatePublicKeyCredentialRequest> {
-            every { requestJson } returns "requestJson"
-            every { clientDataHash } returns byteArrayOf(0)
-            every { preferImmediatelyAvailableCredentials } returns false
-            every { origin } returns "mockOrigin"
-            every { isAutoSelectAllowed } returns true
-        }
-        val mockCallingAppInfo = CallingAppInfo(
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockProviderRequest = ProviderCreateCredentialRequest(
-            callingRequest = mockCallingRequest,
-            callingAppInfo = mockCallingAppInfo,
-        )
 
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
         every {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
-        } returns mockProviderRequest
+        } returns mockk(relaxed = true) {
+            every { biometricPromptResult } returns mockk(relaxed = true) {
+                every { isSuccessful } returns false
+            }
+        }
 
-        val createRequest = intent.getFido2CredentialRequestOrNull()
+        val createRequest = intent.getFido2CreateCredentialRequestOrNull()
         assertEquals(
-            Fido2CreateCredentialRequest(
-                userId = "mockUserId",
-                requestJson = mockCallingRequest.requestJson,
-                packageName = mockCallingAppInfo.packageName,
-                signingInfo = mockCallingAppInfo.signingInfo,
-                origin = mockCallingAppInfo.origin,
-            ),
-            createRequest,
+            "mockUserId",
+            createRequest?.userId,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `getFido2CredentialRequestOrNull should return null when build version is below 34`() {
+    fun `getFido2CreateCredentialRequestOrNull should set user verification based on biometric prompt result`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+        }
+        val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+            every { isSuccessful } returns false
+        }
+        val mockProviderCreateCredentialRequest =
+            mockk<ProviderCreateCredentialRequest>(relaxed = true) {
+                every { biometricPromptResult } returns mockBiometricPromptResult
+            }
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
+        } returns mockProviderCreateCredentialRequest
+
+        // Verify false is returned when biometric prompt is unsuccessful
+        var createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertFalse(createRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt is successful
+        every { mockBiometricPromptResult.isSuccessful } returns true
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assert(createRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt result is null and intent extra is true
+        every { mockProviderCreateCredentialRequest.biometricPromptResult } returns null
+        every {
+            intent.getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+        } returns true
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertTrue(createRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null and intent extra is false
+        every {
+            intent.getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+        } returns false
+        createRequest = intent.getFido2CreateCredentialRequestOrNull()
+        assertFalse(createRequest!!.isUserPreVerified)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getFido2CreateCredentialRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
 
         every { isBuildVersionBelow(34) } returns true
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getFido2CredentialRequestOrNull should return null when intent is not a provider create credential request`() {
-        val intent = mockk<Intent>()
-
-        every {
-            PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
-        } returns null
-
-        assertNull(intent.getFido2CredentialRequestOrNull())
+    fun `getFido2CreateCredentialRequestOrNull should return null when retrieveProviderCreateCredentialRequest is null`() {
+        every { PendingIntentHandler.retrieveProviderCreateCredentialRequest(any()) } returns null
+        assertNull(mockk<Intent>().getFido2CreateCredentialRequestOrNull())
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getFido2CredentialRequestOrNull should return null when calling request is not a public key credential create request`() {
-        val intent = mockk<Intent>()
-        val mockCallingRequest = mockk<CreatePasswordRequest>()
-        val mockCallingAppInfo = CallingAppInfo(
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockProviderRequest = ProviderCreateCredentialRequest(
-            callingRequest = mockCallingRequest,
-            callingAppInfo = mockCallingAppInfo,
-        )
-        every {
-            PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
-        } returns mockProviderRequest
-
-        assertNull(intent.getFido2CredentialRequestOrNull())
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getFido2CredentialRequestOrNull should return null when user id is not present in extras`() {
+    fun `getFido2CreateCredentialRequestOrNull should return null when user id is not present in extras`() {
         val intent = mockk<Intent> {
             every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
         }
-        val mockCallingRequest = mockk<CreatePublicKeyCredentialRequest> {
-            every { requestJson } returns "requestJson"
-            every { clientDataHash } returns byteArrayOf(0)
-            every { preferImmediatelyAvailableCredentials } returns false
-            every { origin } returns "mockOrigin"
-            every { isAutoSelectAllowed } returns true
-        }
-        val mockCallingAppInfo = CallingAppInfo(
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockProviderRequest = ProviderCreateCredentialRequest(
-            callingRequest = mockCallingRequest,
-            callingAppInfo = mockCallingAppInfo,
-        )
-
         every {
             PendingIntentHandler.retrieveProviderCreateCredentialRequest(intent)
-        } returns mockProviderRequest
+        } returns mockk()
 
-        assertNull(intent.getFido2CredentialRequestOrNull())
+        assertNull(intent.getFido2CreateCredentialRequestOrNull())
     }
 
     @Test
@@ -167,46 +155,67 @@ class Fido2IntentUtilsTest {
             every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
             every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
         }
-        val mockOption = GetPublicKeyCredentialOption(
-            requestJson = "requestJson",
-            clientDataHash = byteArrayOf(0),
-            allowedProviders = emptySet(),
-        )
-        val mockCallingAppInfo = CallingAppInfo(
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
-        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
-            credentialOptions = listOf(mockOption),
-            callingAppInfo = mockCallingAppInfo,
-        )
 
+        every { ProviderGetCredentialRequest.asBundle(any()) } returns bundleOf()
         every {
             PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockProviderGetCredentialRequest
+        } returns mockk(relaxed = true) {
+            every { biometricPromptResult } returns mockk(relaxed = true) {
+                every { isSuccessful } returns false
+            }
+        }
 
         val assertionRequest = intent.getFido2AssertionRequestOrNull()
 
         assertNotNull(assertionRequest)
-        assertEquals(
-            Fido2CredentialAssertionRequest(
-                userId = "mockUserId",
-                cipherId = "mockCipherId",
-                credentialId = "mockCredentialId",
-                requestJson = mockOption.requestJson,
-                clientDataHash = mockOption.clientDataHash,
-                packageName = mockCallingAppInfo.packageName,
-                signingInfo = mockCallingAppInfo.signingInfo,
-                origin = mockCallingAppInfo.origin,
-            ),
-            assertionRequest,
-        )
+        assertEquals("mockUserId", assertionRequest?.userId)
+        assertEquals("mockCipherId", assertionRequest?.cipherId)
+        assertEquals("mockCredentialId", assertionRequest?.credentialId)
+        assertEquals(false, assertionRequest?.isUserPreVerified)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getFido2AssertionRequestOrNull should set user verification based on biometric prompt result`() {
+        val intent = mockk<Intent> {
+            every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+            every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+            every {
+                getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
+            } returns false
+        }
+        val mockBiometricPromptResult = mockk<BiometricPromptResult>(relaxed = true) {
+            every { isSuccessful } returns false
+        }
+        val mockGetCredentialRequest =
+            mockk<ProviderGetCredentialRequest>(relaxed = true) {
+                every { biometricPromptResult } returns mockBiometricPromptResult
+            }
+        every { ProviderCreateCredentialRequest.asBundle(any()) } returns bundleOf()
+        every {
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
+        } returns mockGetCredentialRequest
+
+        // Verify false is returned when biometric prompt is unsuccessful
+        var assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
+
+        // Verify true is returned when biometric prompt is successful
+        every { mockBiometricPromptResult.isSuccessful } returns true
+        assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assert(assertionRequest!!.isUserPreVerified)
+
+        // Verify false is returned when biometric prompt result is null
+        every { mockGetCredentialRequest.biometricPromptResult } returns null
+        assertionRequest = intent.getFido2AssertionRequestOrNull()
+        assertFalse(assertionRequest!!.isUserPreVerified)
     }
 
     @Test
     fun `getFido2AssertionRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
+
         every { isBuildVersionBelow(34) } returns true
 
         val assertionRequest = intent.getFido2AssertionRequestOrNull()
@@ -228,91 +237,41 @@ class Fido2IntentUtilsTest {
         assertNull(assertionRequest)
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `getFido2AssertionRequestOrNull should return null when no passkey credential options are present in request`() {
-        val intent = mockk<Intent>()
-
-        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
-            credentialOptions = listOf(GetPasswordOption()),
-            callingAppInfo = mockk(),
-        )
+    fun `getFido2AssertionRequestOrNull should return null when extras are not correctly set`() {
         every {
-            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockProviderGetCredentialRequest
+            PendingIntentHandler.retrieveProviderGetCredentialRequest(any())
+        } returns mockk()
 
-        val assertionRequest = intent.getFido2AssertionRequestOrNull()
-
-        assertNull(assertionRequest)
-    }
-
-    @Test
-    fun `getFido2AssertionRequestOrNull should return null when credential id is not in extras`() {
-        val intent = mockk<Intent> {
-            every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns null
-        }
-        val mockOption = GetPublicKeyCredentialOption(
-            requestJson = "requestJson",
-            clientDataHash = byteArrayOf(0),
-            allowedProviders = emptySet(),
+        // Verify credential ID is required
+        assertNull(
+            mockk<Intent> {
+                every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns null
+                every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+                every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            }
+                .getFido2AssertionRequestOrNull(),
         )
-        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
-            credentialOptions = listOf(mockOption),
-            callingAppInfo = mockk(),
-        )
-        every {
-            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockProviderGetCredentialRequest
 
-        val assertionRequest = intent.getFido2AssertionRequestOrNull()
-
-        assertNull(assertionRequest)
-    }
-
-    @Test
-    fun `getFido2AssertionRequestOrNull should return null when cipher id is not in extras`() {
-        val intent = mockk<Intent> {
-            every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
-            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns null
-        }
-        val mockOption = GetPublicKeyCredentialOption(
-            requestJson = "requestJson",
-            clientDataHash = byteArrayOf(0),
-            allowedProviders = emptySet(),
+        // Verify cipher ID is required
+        assertNull(
+            mockk<Intent> {
+                every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+                every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns null
+                every { getStringExtra(EXTRA_KEY_USER_ID) } returns "mockUserId"
+            }
+                .getFido2AssertionRequestOrNull(),
         )
-        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
-            credentialOptions = listOf(mockOption),
-            callingAppInfo = mockk(),
-        )
-        every {
-            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockProviderGetCredentialRequest
 
-        val assertionRequest = intent.getFido2AssertionRequestOrNull()
-        assertNull(assertionRequest)
-    }
-
-    @Test
-    fun `getFido2AssertionRequestOrNull should return null when user id is not in extras`() {
-        val intent = mockk<Intent> {
-            every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
-            every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
-            every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
-        }
-        val mockOption = GetPublicKeyCredentialOption(
-            requestJson = "requestJson",
-            clientDataHash = byteArrayOf(0),
-            allowedProviders = emptySet(),
+        // Verify user ID is required
+        assertNull(
+            mockk<Intent> {
+                every { getStringExtra(EXTRA_KEY_CREDENTIAL_ID) } returns "mockCredentialId"
+                every { getStringExtra(EXTRA_KEY_CIPHER_ID) } returns "mockCipherId"
+                every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
+            }
+                .getFido2AssertionRequestOrNull(),
         )
-        val mockProviderGetCredentialRequest = ProviderGetCredentialRequest(
-            credentialOptions = listOf(mockOption),
-            callingAppInfo = mockk(),
-        )
-        every {
-            PendingIntentHandler.retrieveProviderGetCredentialRequest(intent)
-        } returns mockProviderGetCredentialRequest
-        val assertionRequest = intent.getFido2AssertionRequestOrNull()
-        assertNull(assertionRequest)
     }
 
     @Suppress("MaxLineLength")
@@ -321,87 +280,28 @@ class Fido2IntentUtilsTest {
         val intent = mockk<Intent> {
             every { getStringExtra("user_id") } returns "mockUserId"
         }
-        val mockOption = BeginGetPublicKeyCredentialOption(
-            candidateQueryData = bundleOf(),
-            id = "mockId",
-            requestJson = "mockRequestJson",
-            clientDataHash = byteArrayOf(0),
-        )
-        val mockCallingAppInfo = CallingAppInfo(
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
-        )
 
+        every { BeginGetCredentialRequest.asBundle(any()) } returns bundleOf()
         every {
             PendingIntentHandler.retrieveBeginGetCredentialRequest(intent)
-        } returns mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns mockCallingAppInfo
-        }
+        } returns mockk()
 
-        val result = intent.getFido2GetCredentialsRequestOrNull()
-
-        assertEquals(
-            Fido2GetCredentialsRequest(
-                candidateQueryData = mockOption.candidateQueryData,
-                id = mockOption.id,
-                userId = "mockUserId",
-                requestJson = mockOption.requestJson,
-                clientDataHash = mockOption.clientDataHash,
-                packageName = mockCallingAppInfo.packageName,
-                signingInfo = mockCallingAppInfo.signingInfo,
-                origin = mockCallingAppInfo.origin,
-            ),
-            result,
-        )
+        assertNotNull(intent.getFido2GetCredentialsRequestOrNull())
     }
 
     @Test
     fun `getGido2GetCredentialsRequestOrNull should return null when build version is below 34`() {
         val intent = mockk<Intent>()
         every { isBuildVersionBelow(34) } returns true
-
         val result = intent.getFido2GetCredentialsRequestOrNull()
-
         assertNull(result)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `getFido2GetCredentialsRequestOrNull should return null when retrieveBeginGetCredentialRequest is null`() {
-        val intent = mockk<Intent> {
-            every {
-                getParcelableExtra(
-                    "android.service.credentials.extra.BEGIN_GET_CREDENTIAL_REQUEST",
-                    BeginGetCredentialRequest::class.java,
-                )
-            } returns null
-        }
-        every { PendingIntentHandler.retrieveProviderGetCredentialRequest(intent) } returns null
-        val result = intent.getFido2GetCredentialsRequestOrNull()
-        assertNull(result)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getFido2GetCredentialRequestOrNull should return null when no passkey credential options are present`() {
         val intent = mockk<Intent>()
-        every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns mockk {
-            every { beginGetCredentialOptions } returns listOf(mockk<BeginGetPasswordOption>())
-        }
-        val result = intent.getFido2GetCredentialsRequestOrNull()
-        assertNull(result)
-    }
-
-    @Test
-    fun `getFido2GetCredentialRequestOrNull should return null when calling app info is null`() {
-        val intent = mockk<Intent>()
-        val mockOption = createMockBeginGetPublicKeyCredentialOption(number = 1)
-        every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns null
-        }
+        every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns null
         val result = intent.getFido2GetCredentialsRequestOrNull()
         assertNull(result)
     }
@@ -411,22 +311,8 @@ class Fido2IntentUtilsTest {
         val intent = mockk<Intent> {
             every { getStringExtra(EXTRA_KEY_USER_ID) } returns null
         }
-        val mockOption = createMockBeginGetPublicKeyCredentialOption(number = 1)
-        every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
-            every { callingAppInfo } returns mockk()
-        }
+        every { PendingIntentHandler.retrieveBeginGetCredentialRequest(intent) } returns mockk()
         val result = intent.getFido2GetCredentialsRequestOrNull()
         assertNull(result)
     }
 }
-
-private fun createMockBeginGetPublicKeyCredentialOption(
-    number: Int,
-): BeginGetPublicKeyCredentialOption =
-    BeginGetPublicKeyCredentialOption(
-        candidateQueryData = bundleOf(),
-        id = "mockId-$number",
-        requestJson = "mockRequestJson-$number",
-        clientDataHash = byteArrayOf(0),
-    )

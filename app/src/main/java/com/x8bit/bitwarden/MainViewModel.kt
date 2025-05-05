@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -13,14 +15,18 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -28,10 +34,10 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
@@ -52,6 +58,7 @@ import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
+private const val ANIMATION_REFRESH_DELAY = 500L
 
 /**
  * A view model that helps launch actions for the [MainActivity].
@@ -61,21 +68,26 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 class MainViewModel @Inject constructor(
     accessibilitySelectionManager: AccessibilitySelectionManager,
     autofillSelectionManager: AutofillSelectionManager,
+    featureFlagManager: FeatureFlagManager,
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
     private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
-    settingsRepository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val appResumeManager: AppResumeManager,
     private val clock: Clock,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
         isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
+        isErrorReportingDialogEnabled = featureFlagManager.getFeatureFlag(
+            key = FlagKey.MobileErrorReporting,
+        ),
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -93,6 +105,12 @@ class MainViewModel @Inject constructor(
             .onEach { specialCircumstance = it }
             .launchIn(viewModelScope)
 
+        featureFlagManager
+            .getFeatureFlagFlow(key = FlagKey.MobileErrorReporting)
+            .map { MainAction.Internal.OnMobileErrorReportingReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         accessibilitySelectionManager
             .accessibilitySelectionFlow
             .map { MainAction.Internal.AccessibilitySelectionReceive(it) }
@@ -107,6 +125,11 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .launchIn(viewModelScope)
+        settingsRepository
+            .appLanguageStateFlow
+            .map { MainEvent.UpdateAppLocale(it.localeName) }
+            .onEach(::sendEvent)
             .launchIn(viewModelScope)
 
         settingsRepository
@@ -126,8 +149,7 @@ class MainViewModel @Inject constructor(
                 // Switching between account states often involves some kind of animation (ex:
                 // account switcher) that we might want to give time to finish before triggering
                 // a refresh.
-                @Suppress("MagicNumber")
-                delay(500)
+                delay(ANIMATION_REFRESH_DELAY)
                 trySendAction(MainAction.Internal.CurrentUserStateChange)
             }
             .launchIn(viewModelScope)
@@ -139,8 +161,7 @@ class MainViewModel @Inject constructor(
                     is VaultStateEvent.Locked -> {
                         // Similar to account switching, triggering this action too soon can
                         // interfere with animations or navigation logic, so we will delay slightly.
-                        @Suppress("MagicNumber")
-                        delay(500)
+                        delay(ANIMATION_REFRESH_DELAY)
                         trySendAction(MainAction.Internal.VaultUnlockStateChange)
                     }
 
@@ -165,6 +186,17 @@ class MainViewModel @Inject constructor(
 
     override fun handleAction(action: MainAction) {
         when (action) {
+            is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
+            is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
+            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.ResumeScreenDataReceived -> handleAppResumeDataUpdated(action)
+            is MainAction.AppSpecificLanguageUpdate -> handleAppSpecificLanguageUpdate(action)
+            is MainAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: MainAction.Internal) {
+        when (action) {
             is MainAction.Internal.AccessibilitySelectionReceive -> {
                 handleAccessibilitySelectionReceive(action)
             }
@@ -177,9 +209,28 @@ class MainViewModel @Inject constructor(
             is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
-            is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
-            is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
-            MainAction.OpenDebugMenu -> handleOpenDebugMenu()
+            is MainAction.Internal.OnMobileErrorReportingReceive -> {
+                handleOnMobileErrorReportingReceive(action)
+            }
+        }
+    }
+
+    private fun handleOnMobileErrorReportingReceive(
+        action: MainAction.Internal.OnMobileErrorReportingReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isErrorReportingDialogEnabled = action.isErrorReportingEnabled)
+        }
+    }
+
+    private fun handleAppSpecificLanguageUpdate(action: MainAction.AppSpecificLanguageUpdate) {
+        settingsRepository.appLanguage = action.appLanguage
+    }
+
+    private fun handleAppResumeDataUpdated(action: MainAction.ResumeScreenDataReceived) {
+        when (val data = action.screenResumeData) {
+            null -> appResumeManager.clearResumeScreen()
+            else -> appResumeManager.setResumeScreen(data)
         }
     }
 
@@ -211,6 +262,7 @@ class MainViewModel @Inject constructor(
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
+        sendEvent(MainEvent.UpdateAppTheme(osTheme = action.theme.osValue))
     }
 
     private fun handleVaultUnlockStateChange() {
@@ -257,10 +309,10 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
-        val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
-        val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
+        val fido2CreateCredentialRequest = intent.getFido2CreateCredentialRequestOrNull()
         val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
+        val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -318,28 +370,36 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2CredentialRequestData != null -> {
+            fido2CreateCredentialRequest != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CredentialManager.isUserVerified = false
+                fido2CredentialManager.isUserVerified =
+                    fido2CreateCredentialRequest.isUserPreVerified
+
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
-                        fido2CreateCredentialRequest = fido2CredentialRequestData,
+                        fido2CreateCredentialRequest = fido2CreateCredentialRequest,
                     )
 
                 // Switch accounts if the selected user is not the active user.
                 if (authRepository.activeUserId != null &&
-                    authRepository.activeUserId != fido2CredentialRequestData.userId
+                    authRepository.activeUserId != fido2CreateCredentialRequest.userId
                 ) {
-                    authRepository.switchAccount(fido2CredentialRequestData.userId)
+                    authRepository.switchAccount(fido2CreateCredentialRequest.userId)
                 }
             }
 
-            fido2CredentialAssertionRequest != null -> {
+            fido2AssertCredentialRequest != null -> {
+                // Set the user's verification status when a new FIDO 2 request is received to force
+                // explicit verification if the user's vault is unlocked when the request is
+                // received.
+                fido2CredentialManager.isUserVerified =
+                    fido2AssertCredentialRequest.isUserPreVerified
+
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(
-                        fido2AssertionRequest = fido2CredentialAssertionRequest,
+                        fido2AssertionRequest = fido2AssertCredentialRequest,
                     )
             }
 
@@ -422,7 +482,16 @@ class MainViewModel @Inject constructor(
 data class MainState(
     val theme: AppTheme,
     val isScreenCaptureAllowed: Boolean,
-) : Parcelable
+    private val isErrorReportingDialogEnabled: Boolean,
+) : Parcelable {
+    /**
+     * Contains all feature flags that are available to the UI.
+     */
+    val featureFlagsState: FeatureFlagsState
+        get() = FeatureFlagsState(
+            isErrorReportingDialogEnabled = isErrorReportingDialogEnabled,
+        )
+}
 
 /**
  * Models actions for the [MainActivity].
@@ -444,6 +513,17 @@ sealed class MainAction {
     data object OpenDebugMenu : MainAction()
 
     /**
+     * Receive event to save the app resume screen
+     */
+    data class ResumeScreenDataReceived(val screenResumeData: AppResumeScreenData?) : MainAction()
+
+    /**
+     * Receive if there is an app specific locale selection made by user
+     * in the device's settings.
+     */
+    data class AppSpecificLanguageUpdate(val appLanguage: AppLanguage) : MainAction()
+
+    /**
      * Actions for internal use by the ViewModel.
      */
     sealed class Internal : MainAction() {
@@ -453,6 +533,13 @@ sealed class MainAction {
          */
         data class AccessibilitySelectionReceive(
             val cipherView: CipherView,
+        ) : Internal()
+
+        /**
+         * Indicates the Mobile Error Reporting feature flag has been updated.
+         */
+        data class OnMobileErrorReportingReceive(
+            val isErrorReportingEnabled: Boolean,
         ) : Internal()
 
         /**
@@ -518,4 +605,18 @@ sealed class MainEvent {
      * Show a toast with the given [message].
      */
     data class ShowToast(val message: Text) : MainEvent()
+
+    /**
+     * Indicates that the app language has been updated.
+     */
+    data class UpdateAppLocale(
+        val localeName: String?,
+    ) : MainEvent()
+
+    /**
+     * Indicates that the app theme has been updated.
+     */
+    data class UpdateAppTheme(
+        val osTheme: Int,
+    ) : MainEvent()
 }

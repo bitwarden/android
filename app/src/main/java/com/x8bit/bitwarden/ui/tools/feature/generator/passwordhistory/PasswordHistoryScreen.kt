@@ -7,11 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -30,10 +29,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -72,8 +72,8 @@ fun PasswordHistoryScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.password_history),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(PasswordHistoryAction.CloseClick) }
                 },
@@ -122,8 +122,7 @@ fun PasswordHistoryScreen(
                     PasswordHistoryContent(
                         state = viewState,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .imePadding(),
+                            .fillMaxSize(),
                         onPasswordCopyClick = { password ->
                             viewModel.trySendAction(
                                 PasswordHistoryAction.PasswordCopyClick(password),
@@ -155,19 +154,23 @@ private fun PasswordHistoryContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        items(state.passwords) { password ->
+        item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+        }
+        itemsIndexed(state.passwords) { index, password ->
             PasswordHistoryListItem(
                 label = password.password,
                 supportingLabel = password.date,
                 onCopyClick = { onPasswordCopyClick(password) },
+                cardStyle = state.passwords.toListItemCardStyle(index = index),
                 modifier = Modifier
                     .testTag("GeneratedPasswordRow")
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
-            BitwardenHorizontalDivider(modifier = Modifier.fillMaxWidth())
         }
         item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }

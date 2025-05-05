@@ -99,7 +99,7 @@ fun BitwardenTopAppBar(
         .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     dividerStyle: TopAppBarDividerStyle = TopAppBarDividerStyle.ON_SCROLL,
     actions: @Composable RowScope.() -> Unit = {},
-    minimunHeight: Dp = 48.dp,
+    minimumHeight: Dp = 48.dp,
 ) {
     var titleTextHasOverflow by remember {
         mutableStateOf(false)
@@ -143,7 +143,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
-            collapsedHeight = minimunHeight,
+            collapsedHeight = minimumHeight,
             expandedHeight = 96.dp,
             title = {
                 // The height of the component is controlled and will only allow for 1 extra row,
@@ -164,7 +164,7 @@ fun BitwardenTopAppBar(
             colors = bitwardenTopAppBarColors(),
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
-            expandedHeight = minimunHeight,
+            expandedHeight = minimumHeight,
             title = {
                 Text(
                     text = title,

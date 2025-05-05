@@ -9,8 +9,9 @@ import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
@@ -449,6 +450,42 @@ class SearchTypeDataExtensionsTest {
         assertEquals(
             SearchState.ViewState.Empty(
                 message = R.string.there_are_no_items_that_match_the_search.asText(),
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `CipherViews toViewState should usePasskeyDefaultIcon based on cipher fido2 credentials`() {
+        mockkStatic(Uri::parse)
+        every { Uri.parse(any()) } returns mockk {
+            every { host } returns "www.mockuri.com"
+        }
+        val result = listOf(
+            createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            ),
+            createMockCipherView(number = 2),
+        ).toViewState(
+            searchTerm = "mock",
+            baseIconUrl = "https://vault.bitwarden.com/icons",
+            isIconLoadingDisabled = false,
+            hasMasterPassword = true,
+            isAutofill = false,
+            isPremiumUser = true,
+            isTotp = false,
+        )
+
+        assertEquals(
+            SearchState.ViewState.Content(
+                displayItems = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 1,
+                        fallbackIconRes = R.drawable.ic_bw_passkey,
+                    ),
+                    createMockDisplayItemForCipher(number = 2),
+                ),
             ),
             result,
         )

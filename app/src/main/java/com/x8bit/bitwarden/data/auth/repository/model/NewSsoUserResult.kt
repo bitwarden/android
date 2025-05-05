@@ -12,5 +12,7 @@ sealed class NewSsoUserResult {
     /**
      * There was an error while truing to create the new user.
      */
-    data object Failure : NewSsoUserResult()
+    data class Failure(
+        val error: Throwable,
+    ) : NewSsoUserResult()
 }

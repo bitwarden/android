@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -22,7 +23,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Int
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -137,7 +137,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "abcdefghikl"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -163,7 +163,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val input = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -189,7 +189,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         val password = "testtesttesttest"
         coEvery {
             mockAuthRepository.getPasswordStrength("test@test.com", password)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
@@ -252,6 +252,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `SubmitClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         val repo = mockk<AuthRepository> {
             every { captchaTokenResultFlow } returns flowOf()
             coEvery {
@@ -263,7 +264,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Error(errorMessage = "mock_error")
+            } returns RegisterResult.Error(errorMessage = "mock_error", error = error)
         }
         val viewModel = CreateAccountViewModel(
             savedStateHandle = validInputHandle,
@@ -281,6 +282,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     dialog = CreateAccountDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -368,7 +370,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Error(null)
+            } returns RegisterResult.Error(errorMessage = null, error = null)
         }
         val viewModel = CreateAccountViewModel(
             savedStateHandle = validInputHandle,
@@ -567,7 +569,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength("", "input")
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = CreateAccountViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,

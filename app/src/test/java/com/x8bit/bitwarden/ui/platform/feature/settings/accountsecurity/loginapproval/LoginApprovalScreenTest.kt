@@ -9,9 +9,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import io.mockk.every
 import io.mockk.just
@@ -40,11 +40,12 @@ class LoginApprovalScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        setContentWithBackDispatcher {
+        setContent(
+            exitManager = exitManager,
+        ) {
             LoginApprovalScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
-                exitManager = exitManager,
             )
         }
     }

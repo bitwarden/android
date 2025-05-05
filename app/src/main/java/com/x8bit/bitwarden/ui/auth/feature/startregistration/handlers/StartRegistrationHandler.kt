@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationViewModel
 
@@ -20,7 +20,7 @@ data class StartRegistrationHandler(
     val onReceiveMarketingEmailsToggle: (Boolean) -> Unit,
     val onUnsubscribeMarketingEmailsClick: () -> Unit,
     val onServerGeologyHelpClick: () -> Unit,
-    val onBackClick: () -> Unit,
+    val onCloseClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -71,7 +71,9 @@ data class StartRegistrationHandler(
                 onServerGeologyHelpClick = {
                     viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
                 },
-                onBackClick = { viewModel.trySendAction(StartRegistrationAction.BackClick) },
+                onCloseClick = {
+                    viewModel.trySendAction(StartRegistrationAction.CloseClick)
+                },
             )
         }
     }

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -11,27 +12,35 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.NavHost
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.manager.util.ObserveScreenDataEffect
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
+import com.x8bit.bitwarden.ui.platform.feature.debugmenu.debugMenuDestination
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
-import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
+import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
  * Primary entry point for the application.
  */
+@Suppress("TooManyFunctions")
 @OmitFromCoverage
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -53,6 +62,7 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
+    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
@@ -66,16 +76,13 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        // Within the app the language will change dynamically and will be managed
-        // by the OS, but we need to ensure we properly set the language when
-        // upgrading from older versions that handle this differently.
-        settingsRepository.appLanguage.localeName?.let { localeName ->
-            val localeList = LocaleListCompat.forLanguageTags(localeName)
-            AppCompatDelegate.setApplicationLocales(localeList)
-        }
+        // Within the app the theme will change dynamically and will be managed by the
+        // OS, but we need to ensure we properly set the values when upgrading from older versions
+        // that handle this differently or when the activity restarts.
+        AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
-            val navController = rememberNavController()
+            val navController = rememberBitwardenNavController(name = "MainActivity")
             EventsEffect(viewModel = mainViewModel) { event ->
                 when (event) {
                     is MainEvent.CompleteAccessibilityAutofill -> {
@@ -94,15 +101,43 @@ class MainActivity : AppCompatActivity() {
                             )
                             .show()
                     }
+
+                    is MainEvent.UpdateAppLocale -> {
+                        AppCompatDelegate.setApplicationLocales(
+                            LocaleListCompat.forLanguageTags(event.localeName),
+                        )
+                    }
+
+                    is MainEvent.UpdateAppTheme -> {
+                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
+                    }
                 }
             }
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
-            LocalManagerProvider {
+            LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
+                ObserveScreenDataEffect(
+                    onDataUpdate = remember(mainViewModel) {
+                        {
+                            mainViewModel.trySendAction(
+                                MainAction.ResumeScreenDataReceived(it),
+                            )
+                        }
+                    },
+                )
                 BitwardenTheme(theme = state.theme) {
-                    RootNavScreen(
-                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                    NavHost(
                         navController = navController,
-                    )
+                        startDestination = ROOT_ROUTE,
+                    ) {
+                        // Nothing else should end up at this top level, we just want the ability
+                        // to have the debug menu appear on top of the rest of the app without
+                        // interacting with the state-based navigation used by the RootNavScreen.
+                        rootNavDestination { shouldShowSplashScreen = false }
+                        debugMenuDestination(
+                            onNavigateBack = { navController.popBackStack() },
+                            onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        )
+                    }
                 }
             }
         }
@@ -113,6 +148,33 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.trySendAction(
             action = MainAction.ReceiveNewIntent(
                 intent = intent,
+            ),
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // When the app resumes check for any app specific language which may have been
+        // set via the device settings. Similar to the theme setting in onCreate this
+        // ensures we properly set the values when upgrading from older versions
+        // that handle this differently or when the activity restarts.
+        val appSpecificLanguage = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val locales: LocaleListCompat = AppCompatDelegate.getApplicationLocales()
+            if (locales.isEmpty) {
+                // App is using the system language
+                null
+            } else {
+                // App has specific language settings
+                locales.get(0)?.appLanguage
+            }
+        } else {
+            // For older versions, use what ever language is available from the repository.
+            settingsRepository.appLanguage
+        }
+
+        mainViewModel.trySendAction(
+            action = MainAction.AppSpecificLanguageUpdate(
+                appLanguage = appSpecificLanguage ?: AppLanguage.DEFAULT,
             ),
         )
     }

@@ -9,26 +9,26 @@ import org.junit.jupiter.api.Test
 class StringExtensionsTest {
 
     @Test
-    fun `emails without an @ character should be invalid`() {
+    fun `isValidEmail should return appropriate value for possible email addresses`() {
         val invalidEmails = listOf(
-            "",
-            " ",
-            "test.com",
+            "" to false,
+            " " to false,
+            "test.com" to false,
+            "@" to false,
+            "@." to false,
+            "@.aa" to false,
+            "a@.aa" to false,
+            "test@test.com" to true,
+            " test@test " to false,
+            "test@test.c" to false,
+            "a@a.aa" to true,
+            "test@test.com" to true,
+            "test@test.test.com" to true,
+            "test.test@test.com" to true,
+            "test.test@test.test.com" to true,
         )
         invalidEmails.forEach {
-            assertFalse(it.isValidEmail())
-        }
-    }
-
-    @Test
-    fun `emails with an @ character should be valid`() {
-        val validEmails = listOf(
-            "@",
-            "test@test.com",
-            " test@test ",
-        )
-        validEmails.forEach {
-            assertTrue(it.isValidEmail())
+            assertEquals(it.first.isValidEmail(), it.second)
         }
     }
 
@@ -140,5 +140,69 @@ class StringExtensionsTest {
     fun `removeDiacritics should remove diacritics from the string`() {
         val result = "áéíóů".removeDiacritics()
         assertEquals("aeiou", result)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should prefix https when URI is valid and no scheme`() {
+        val uri = "example.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is empty string`() {
+        val uri = ""
+        assertNull(uri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is whitespace string`() {
+        val uri = " "
+        assertNull(uri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when URI is invalid`() {
+        val invalidUri = "invalid uri"
+        assertNull(invalidUri.prefixHttpsIfNecessaryOrNull())
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return URI unchanged when scheme is http`() {
+        val uri = "http://example.com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return URI unchanged when scheme is https`() {
+        val uri = "https://example.com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(uri, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull with long valid URI without scheme`() {
+        val uri = "longexamplewithlots.of.subdomains.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should return null when uri contains special characters`() {
+        val uri = "example-special!@#$%^&*()_+{}[].com"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertNull(actual)
+    }
+
+    @Test
+    fun `prefixHttpsIfNecessaryOrNull should prefix URI when it contains numbers and letters`() {
+        val uri = "example1234567890.com"
+        val expected = "https://$uri"
+        val actual = uri.prefixHttpsIfNecessaryOrNull()
+        assertEquals(expected, actual)
     }
 }

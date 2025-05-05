@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -21,6 +20,9 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -31,9 +33,10 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -54,6 +57,7 @@ fun SendScreen(
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     viewModel: SendViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -64,6 +68,12 @@ fun SendScreen(
             { viewModel.trySendAction(SendAction.RefreshPull) }
         },
     )
+
+    RegisterScreenDataOnLifecycleEffect(
+        appResumeStateManager = appResumeStateManager,
+    ) {
+        AppResumeScreenData.SendScreen
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -160,7 +170,6 @@ fun SendScreen(
         pullToRefreshState = pullToRefreshState,
     ) {
         val modifier = Modifier
-            .imePadding()
             .fillMaxSize()
         when (val viewState = state.viewState) {
             is SendState.ViewState.Content -> SendContent(
@@ -201,6 +210,7 @@ private fun SendDialogs(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is SendState.DialogState.Loading -> BitwardenLoadingDialog(

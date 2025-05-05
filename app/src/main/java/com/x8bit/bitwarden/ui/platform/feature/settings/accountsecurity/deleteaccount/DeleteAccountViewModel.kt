@@ -3,15 +3,15 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.DeleteAccountState.DeleteAccountDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -20,6 +20,8 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
+
+private const val SUCCESS_DIALOG_DELAY = 550L
 
 /**
  * View model for the [DeleteAccountScreen].
@@ -30,12 +32,16 @@ class DeleteAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<DeleteAccountState, DeleteAccountEvent, DeleteAccountAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: DeleteAccountState(
-        dialog = null,
-        isUnlockWithPasswordEnabled = requireNotNull(authRepository.userStateFlow.value)
-            .activeAccount
-            .hasMasterPassword,
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val account = requireNotNull(authRepository.userStateFlow.value).activeAccount
+        DeleteAccountState(
+            dialog = null,
+            isUnlockWithPasswordEnabled = account.hasMasterPassword,
+            isUserManagedByOrganization = account
+                .organizations
+                .any { it.userIsClaimedByOrganization } == true,
+        )
+    },
 ) {
 
     init {
@@ -84,13 +90,13 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountConfirmDialogClick(
         action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
     ) {
-        updateDialogState(DeleteAccountDialog.Loading)
+        updateDialogState(DeleteAccountState.DeleteAccountDialog.Loading)
         viewModelScope.launch {
             val validPasswordResult = authRepository.validatePassword(action.masterPassword)
             if ((validPasswordResult as? ValidatePasswordResult.Success)?.isValid == false) {
                 sendAction(
                     DeleteAccountAction.Internal.UpdateDialogState(
-                        DeleteAccountDialog.Error(
+                        DeleteAccountState.DeleteAccountDialog.Error(
                             message = R.string.invalid_master_password.asText(),
                         ),
                     ),
@@ -116,21 +122,32 @@ class DeleteAccountViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             DeleteAccountResult.Success -> {
-                updateDialogState(DeleteAccountDialog.DeleteSuccess)
+                viewModelScope.launch {
+                    // When deleting an account, the current activity is recreated and therefore
+                    // the composition takes place twice. Adding this delay prevents the dialog
+                    // from flashing when it is re-created.
+                    delay(timeMillis = SUCCESS_DIALOG_DELAY)
+                    sendAction(
+                        action = DeleteAccountAction.Internal.UpdateDialogState(
+                            dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess,
+                        ),
+                    )
+                }
             }
 
             is DeleteAccountResult.Error -> {
                 updateDialogState(
-                    DeleteAccountDialog.Error(
+                    DeleteAccountState.DeleteAccountDialog.Error(
                         message = result.message?.asText()
                             ?: R.string.generic_error_message.asText(),
+                        error = result.error,
                     ),
                 )
             }
         }
     }
 
-    private fun updateDialogState(dialog: DeleteAccountDialog?) {
+    private fun updateDialogState(dialog: DeleteAccountState.DeleteAccountDialog?) {
         mutableStateFlow.update {
             it.copy(dialog = dialog)
         }
@@ -147,11 +164,13 @@ class DeleteAccountViewModel @Inject constructor(
  * @param dialog The dialog for the [DeleteAccountScreen].
  * @param isUnlockWithPasswordEnabled Whether or not the user is able to unlock the vault with
  * their master password.
+ * @param isUserManagedByOrganization Whether or not the user is managed by an organization.
  */
 @Parcelize
 data class DeleteAccountState(
     val dialog: DeleteAccountDialog?,
     val isUnlockWithPasswordEnabled: Boolean,
+    val isUserManagedByOrganization: Boolean,
 ) : Parcelable {
 
     /**
@@ -170,6 +189,7 @@ data class DeleteAccountState(
         @Parcelize
         data class Error(
             val message: Text,
+            val error: Throwable? = null,
         ) : DeleteAccountDialog()
 
         /**
@@ -190,7 +210,7 @@ sealed class DeleteAccountEvent {
     data object NavigateBack : DeleteAccountEvent()
 
     /**
-     * Navigates to the [DeleteAccountConfirmationScreen].
+     * Navigates to the Delete Account Confirmation Screen.
      */
     data object NavigateToDeleteAccountConfirmationScreen : DeleteAccountEvent()
 
@@ -255,7 +275,7 @@ sealed class DeleteAccountAction {
          * An internal event to update the dialog state utilizing the synchronous action channel.
          */
         data class UpdateDialogState(
-            val dialog: DeleteAccountDialog,
+            val dialog: DeleteAccountState.DeleteAccountDialog,
         ) : Internal()
     }
 }

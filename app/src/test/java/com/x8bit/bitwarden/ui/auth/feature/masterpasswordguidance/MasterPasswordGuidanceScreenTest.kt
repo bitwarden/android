@@ -3,7 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import androidx.compose.ui.test.performScrollTo
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
@@ -24,7 +25,7 @@ class MasterPasswordGuidanceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             MasterPasswordGuidanceScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToGeneratePassword = { onNavigateToGeneratorCalled = true },
@@ -45,7 +46,8 @@ class MasterPasswordGuidanceScreenTest : BaseComposeTest() {
     @Test
     fun `Generator card click should invoke send of TryPasswordGeneratorAction`() {
         composeTestRule
-            .onNodeWithText("Use the generator to create a strong, unique password")
+            .onNodeWithText("Check out the passphrase generator")
+            .performScrollTo()
             .performClick()
 
         verify { viewModel.trySendAction(MasterPasswordGuidanceAction.TryPasswordGeneratorAction) }

@@ -45,27 +45,28 @@ fun createMockCipherView(
     cipherType: CipherType = CipherType.LOGIN,
     repromptType: CipherRepromptType = CipherRepromptType.NONE,
     totp: String? = "mockTotp-$number",
+    organizationId: String? = "mockOrganizationId-$number",
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
     fido2Credentials: List<Fido2Credential>? = null,
     sshKey: SshKeyView? = createMockSshKeyView(number = number),
+    login: LoginView? = createMockLoginView(
+        number = number,
+        totp = totp,
+        clock = clock,
+        fido2Credentials = fido2Credentials,
+    ),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
-        organizationId = "mockOrganizationId-$number",
+        organizationId = organizationId,
         folderId = folderId,
         collectionIds = listOf("mockId-$number"),
         key = "mockKey-$number",
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = cipherType,
-        login = createMockLoginView(
-            number = number,
-            totp = totp,
-            clock = clock,
-            fido2Credentials = fido2Credentials,
-        )
-            .takeIf { cipherType == CipherType.LOGIN },
+        login = login.takeIf { cipherType == CipherType.LOGIN },
         creationDate = clock.instant(),
         deletedDate = if (isDeleted) {
             clock.instant()
@@ -97,6 +98,7 @@ fun createMockLoginView(
     number: Int,
     totp: String? = "mockTotp-$number",
     clock: Clock = FIXED_CLOCK,
+    hasUris: Boolean = true,
     fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
 ): LoginView =
     LoginView(
@@ -104,7 +106,7 @@ fun createMockLoginView(
         password = "mockPassword-$number",
         passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
-        uris = listOf(createMockUriView(number = number)),
+        uris = listOf(createMockUriView(number = number)).takeIf { hasUris },
         totp = totp,
         fido2Credentials = fido2Credentials,
     )
@@ -115,13 +117,14 @@ fun createMockLoginView(
 fun createMockSdkFido2CredentialList(
     number: Int,
     clock: Clock = FIXED_CLOCK,
-): List<Fido2Credential> = listOf(createMockSdkFido2Credential(number, clock))
+): List<Fido2Credential> = listOf(createMockSdkFido2Credential(number = number, clock = clock))
 
 /**
  * Create a mock [Fido2Credential] with a given [number].
  */
 fun createMockSdkFido2Credential(
     number: Int,
+    rpId: String = "mockRpId-$number",
     clock: Clock = FIXED_CLOCK,
 ): Fido2Credential = Fido2Credential(
     credentialId = "mockCredentialId-$number",
@@ -129,7 +132,7 @@ fun createMockSdkFido2Credential(
     keyAlgorithm = "mockKeyAlgorithm-$number",
     keyCurve = "mockKeyCurve-$number",
     keyValue = "mockKeyValue-$number",
-    rpId = "mockRpId-$number",
+    rpId = rpId,
     userHandle = "mockUserHandle-$number",
     userName = "mockUserName-$number",
     counter = "mockCounter-$number",
@@ -145,11 +148,12 @@ fun createMockSdkFido2Credential(
 fun createMockFido2CredentialAutofillView(
     number: Int,
     cipherId: String? = null,
+    rpId: String = "mockRpId-$number",
 ): Fido2CredentialAutofillView =
     Fido2CredentialAutofillView(
         credentialId = "mockCredentialId-$number".encodeToByteArray(),
         cipherId = cipherId ?: "mockCipherId-$number",
-        rpId = "mockRpId-$number",
+        rpId = rpId,
         userNameForUi = "mockUserNameForUi-$number",
         userHandle = "mockUserHandle-$number".encodeToByteArray(),
     )
@@ -180,14 +184,14 @@ fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): Att
 /**
  * Create a mock [CardView] with a given [number].
  */
-fun createMockCardView(number: Int): CardView =
+fun createMockCardView(number: Int, brand: String = "mockBrand-$number"): CardView =
     CardView(
         number = "mockNumber-$number",
         expMonth = "mockExpMonth-$number",
         code = "mockCode-$number",
         expYear = "mockExpirationYear-$number",
         cardholderName = "mockCardholderName-$number",
-        brand = "mockBrand-$number",
+        brand = brand,
     )
 
 /**

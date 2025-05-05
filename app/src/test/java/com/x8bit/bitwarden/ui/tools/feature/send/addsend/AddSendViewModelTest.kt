@@ -3,7 +3,14 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -13,12 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
@@ -26,7 +29,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
@@ -63,7 +65,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
-        every { setText(any<String>()) } just runs
+        every { setText(any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
@@ -83,6 +85,9 @@ class AddSendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePolicies(type = PolicyTypeJson.SEND_OPTIONS) } returns emptyList()
+    }
+    private val networkConnectionManager = mockk<NetworkConnectionManager> {
+        every { isNetworkConnected } returns true
     }
 
     @BeforeEach
@@ -153,36 +158,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `SaveClick with createSend success should emit NavigateBack and ShowShareSheet when not an external shared`() =
-        runTest {
-            val viewState = DEFAULT_VIEW_STATE.copy(
-                common = DEFAULT_COMMON_STATE.copy(name = "input"),
-            )
-            val initialState = DEFAULT_STATE.copy(viewState = viewState)
-            val mockSendView = mockk<SendView>()
-            every { viewState.toSendView(clock) } returns mockSendView
-            val sendUrl = "www.test.com/send/test"
-            val resultSendView = mockk<SendView> {
-                every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
-            }
-            coEvery {
-                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-            } returns CreateSendResult.Success(sendView = resultSendView)
-            val viewModel = createViewModel(initialState)
-
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.SaveClick)
-                assertEquals(AddSendEvent.NavigateBack, awaitItem())
-                assertEquals(AddSendEvent.ShowShareSheet(sendUrl), awaitItem())
-            }
-            assertEquals(initialState, viewModel.stateFlow.value)
-            coVerify(exactly = 1) {
-                vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `SaveClick with createSend success should copy the send URL to the clipboard and emit NavigateBack`() =
         runTest {
             val viewState = DEFAULT_VIEW_STATE.copy(
@@ -207,12 +182,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AddSendAction.SaveClick)
                 assertEquals(AddSendEvent.NavigateBack, awaitItem())
+                assertEquals(
+                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    awaitItem(),
+                )
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(sendUrl)
             }
         }
 
@@ -242,12 +220,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 viewModel.trySendAction(AddSendAction.SaveClick)
                 assertEquals(AddSendEvent.ExitApp, awaitItem())
+                assertEquals(
+                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    awaitItem(),
+                )
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
                 vaultRepository.createSend(sendView = mockSendView, fileUri = null)
                 specialCircumstanceManager.specialCircumstance = null
-                clipboardManager.setText(sendUrl)
             }
         }
 
@@ -261,7 +242,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-        } returns CreateSendResult.Error("Fail")
+        } returns CreateSendResult.Error(message = "Fail", error = null)
         val viewModel = createViewModel(initialState)
 
         viewModel.stateFlow.test {
@@ -356,7 +337,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.updateSend(sendId = sendId, sendView = mockSendView)
-        } returns UpdateSendResult.Error(errorMessage = errorMessage)
+        } returns UpdateSendResult.Error(errorMessage = errorMessage, error = null)
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(initialState, AddSendType.EditItem(sendId))
 
@@ -488,7 +469,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(AddSendAction.CopyLinkClick)
 
         verify(exactly = 1) {
-            clipboardManager.setText(sendUrl)
+            clipboardManager.setText(
+                text = sendUrl,
+                toastDescriptorOverride = R.string.send_link.asText(),
+            )
         }
     }
 
@@ -509,7 +493,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val sendId = "mockId-1"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
             val initialState = DEFAULT_STATE.copy(
                 addSendType = AddSendType.EditItem(sendItemId = sendId),
             )
@@ -558,7 +542,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val errorMessage = "Fail"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = errorMessage)
+            } returns RemovePasswordSendResult.Error(errorMessage = errorMessage, error = null)
             val mockSendView = createMockSendView(number = 1)
             every {
                 mockSendView.toViewState(
@@ -624,8 +608,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `DeleteClick vaultRepository deleteSend Error should show error dialog`() = runTest {
+        val error = Throwable("Ooops")
         val sendId = "mockId-1"
-        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+        coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error(
+            error = error,
+        )
         val initialState = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = sendId),
         )
@@ -659,6 +646,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                     dialogState = AddSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 awaitItem(),
@@ -742,47 +730,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
                     ),
                 ),
             ),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `ExpirationDateChange should store the new expiration date`() {
-        val viewModel = createViewModel()
-        val newDeletionDate = ZonedDateTime.parse("2024-09-13T00:00Z")
-        // DEFAULT expiration date is null
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-
-        viewModel.trySendAction(AddSendAction.ExpirationDateChange(newDeletionDate))
-
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = DEFAULT_VIEW_STATE.copy(
-                    common = DEFAULT_COMMON_STATE.copy(
-                        expirationDate = newDeletionDate,
-                    ),
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `ClearExpirationDate should clear the expiration date`() {
-        val initialState = DEFAULT_STATE.copy(
-            viewState = DEFAULT_VIEW_STATE.copy(
-                DEFAULT_COMMON_STATE.copy(
-                    expirationDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
-                ),
-            ),
-        )
-        val viewModel = createViewModel(initialState)
-
-        viewModel.trySendAction(AddSendAction.ClearExpirationDate)
-
-        assertEquals(
-            // DEFAULT expiration date is null
-            DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
     }
@@ -1022,6 +969,46 @@ class AddSendViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `If there is no network connection, show dialog and do not attempt add send`() = runTest {
+        val viewState = DEFAULT_VIEW_STATE.copy(
+            common = DEFAULT_COMMON_STATE.copy(name = "input"),
+        )
+        val initialState = DEFAULT_STATE.copy(
+            shouldFinishOnComplete = true,
+            isShared = true,
+            viewState = viewState,
+        )
+        val mockSendView = mockk<SendView>()
+        every { viewState.toSendView(clock) } returns mockSendView
+        val sendUrl = "www.test.com/send/test"
+        val resultSendView = mockk<SendView> {
+            every { toSendUrl(DEFAULT_ENVIRONMENT_URL) } returns sendUrl
+        }
+        coEvery {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        } returns CreateSendResult.Success(sendView = resultSendView)
+        val viewModel = createViewModel(initialState)
+        every { networkConnectionManager.isNetworkConnected } returns false
+
+        viewModel.trySendAction(AddSendAction.SaveClick)
+        assertEquals(
+            initialState.copy(
+                dialogState = AddSendState.DialogState.Error(
+                    title = R.string.internet_connection_required_title.asText(),
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify(
+            exactly = 0,
+        ) {
+            vaultRepository.createSend(sendView = mockSendView, fileUri = null)
+        }
+    }
+
     private fun createViewModel(
         state: AddSendState? = null,
         addSendType: AddSendType = AddSendType.AddItem,
@@ -1046,6 +1033,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         clipboardManager = clipboardManager,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
+        networkConnectionManager = networkConnectionManager,
     )
 
     companion object {
@@ -1074,7 +1062,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             selectedType = DEFAULT_SELECTED_TYPE_STATE,
         )
 
-        private const val DEFAULT_ENVIRONMENT_URL = "https://vault.bitwarden.com/#/send/"
+        private const val DEFAULT_ENVIRONMENT_URL = "https://send.bitwarden.com/#"
 
         private val DEFAULT_STATE = AddSendState(
             addSendType = AddSendType.AddItem,

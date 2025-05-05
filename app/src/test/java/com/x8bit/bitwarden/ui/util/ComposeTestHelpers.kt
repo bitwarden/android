@@ -13,6 +13,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -23,8 +24,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToString
 import androidx.compose.ui.text.LinkAnnotation
+import com.x8bit.bitwarden.ui.platform.components.coachmark.IsCoachMarkToolTipKey
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertTrue
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -45,11 +47,29 @@ val isProgressBar: SemanticsMatcher
     }
 
 /**
+ * A [SemanticsMatcher] user to find Popup nodes used specifically for CoachMarkToolTips
+ */
+val isCoachMarkToolTip: SemanticsMatcher
+    get() = SemanticsMatcher("Node is used to show tool tip for active coach mark.") {
+        it.config
+            .getOrNull(IsCoachMarkToolTipKey) == true
+    }
+
+/**
  * Asserts that no dialog currently exists.
  */
 fun ComposeContentTestRule.assertNoDialogExists() {
     this
         .onNode(isDialog())
+        .assertDoesNotExist()
+}
+
+/**
+ * Asserts that no popup currently exists.
+ */
+fun ComposeContentTestRule.assertNoPopupExists() {
+    this
+        .onNode(isPopup())
         .assertDoesNotExist()
 }
 
@@ -169,7 +189,7 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
                 ?: throw AssertionError(
                     """
                     No action with label $label
-                    
+
                     Available actions: $customActions
                     in
                     $tree
@@ -182,27 +202,34 @@ fun SemanticsNodeInteraction.performCustomAccessibilityAction(label: String) {
  * Helper function to assert link annotation is applied to the given text in
  * the [mainString] and invoke click action if it is found.
  */
+@Suppress("NestedBlockDepth")
 fun ComposeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
     mainString: String,
-    highLightText: String,
-    expectedStart: Int,
-    expectedEnd: Int,
+    expectedLinkCount: Int? = null,
 ) {
     this
-        .onNodeWithText(mainString)
+        .onNodeWithText(mainString, substring = true, ignoreCase = true)
         .fetchSemanticsNode()
         .config
         .getOrNull(SemanticsProperties.Text)
         ?.let { text ->
             text.forEach {
-                it.getLinkAnnotations(expectedStart, expectedEnd)
-                    .forEach { annotationRange ->
+                val linkAnnotations = it.getLinkAnnotations(0, it.length)
+                if (linkAnnotations.isEmpty()) {
+                    throw AssertionError(
+                        "No link annotation found",
+                    )
+                } else {
+                    linkAnnotations.forEach { annotationRange ->
                         val annotation = annotationRange.item as? LinkAnnotation.Clickable
                         val tag = annotation?.tag
                         assertNotNull(tag)
-                        assertTrue(highLightText.equals(tag, ignoreCase = true))
                         annotation?.linkInteractionListener?.onClick(annotation)
                     }
+                    expectedLinkCount?.let {
+                        assertEquals(expectedLinkCount, linkAnnotations.size)
+                    }
+                }
             }
         }
 }

@@ -12,32 +12,42 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
  * within the context of adding items to a vault.
  *
  * @property onNameTextChange Handles the action when the name text is changed.
- * @property onFolderSelected Handles the action when a folder is selected.
+ * @property onSelectOrAddFolderForItem Handles the action when a folder is selected.
  * @property onToggleFavorite Handles the action when the favorite toggle is changed.
  * @property onToggleMasterPasswordReprompt Handles the action when the master password
  * reprompt toggle is changed.
  * @property onNotesTextChange Handles the action when the notes text is changed.
- * @property onOwnerSelected Handles the action when a owner is selected.
+ * @property onPresentOwnerOptions Handles showing the list of ownership options.
+ * @property onOwnerSelected Handles the action when a owner is select.
  * @property onTooltipClick Handles the action when the tooltip button is clicked.
  * @property onAddNewCustomFieldClick Handles the action when the add new custom field
  * button is clicked.
  * @property onCustomFieldValueChange Handles the action when the field's value changes.
  * @property onCollectionSelect Handles the action when a collection is selected.
+ * @property onHiddenFieldVisibilityChange Handles the action when the hidden field visibility
+ * @property onSelectOrAddFolderForItem Handles the action when a folder is selected.
+ * @property onChangeToExistingFolder Handles the action when the folder is changed.
+ * @property onOnAddFolder Handles the action when a new folder is added.
+ * @property onDismissBottomSheet Handles when the current bottom sheet is dismissed.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditCommonHandlers(
     val onNameTextChange: (String) -> Unit,
-    val onFolderSelected: (VaultAddEditState.Folder) -> Unit,
     val onToggleFavorite: (Boolean) -> Unit,
     val onToggleMasterPasswordReprompt: (Boolean) -> Unit,
     val onNotesTextChange: (String) -> Unit,
-    val onOwnerSelected: (VaultAddEditState.Owner) -> Unit,
+    val onPresentOwnerOptions: () -> Unit,
+    val onOwnerSelected: (String?) -> Unit,
     val onTooltipClick: () -> Unit,
     val onAddNewCustomFieldClick: (CustomFieldType, String) -> Unit,
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
     val onCollectionSelect: (VaultCollection) -> Unit,
     val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
+    val onSelectOrAddFolderForItem: () -> Unit,
+    val onChangeToExistingFolder: (String?) -> Unit,
+    val onOnAddFolder: (String) -> Unit,
+    val onDismissBottomSheet: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -54,11 +64,14 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NameTextChange(newName),
                     )
                 },
-                onFolderSelected = { newFolder ->
+                onSelectOrAddFolderForItem = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.FolderChange(
-                            newFolder,
-                        ),
+                        VaultAddEditAction.Common.SelectOrAddFolderForItem,
+                    )
+                },
+                onPresentOwnerOptions = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.SelectOwnerForItem,
                     )
                 },
                 onToggleFavorite = { isFavorite ->
@@ -78,9 +91,11 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.NotesTextChange(newNotes),
                     )
                 },
-                onOwnerSelected = { newOwnership ->
+                onOwnerSelected = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.OwnershipChange(newOwnership),
+                        VaultAddEditAction.Common.OwnershipChange(
+                            ownerId = it,
+                        ),
                     )
                 },
                 onTooltipClick = {
@@ -121,6 +136,25 @@ data class VaultAddEditCommonHandlers(
                 onHiddenFieldVisibilityChange = {
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = it),
+                    )
+                },
+                onChangeToExistingFolder = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.FolderChange(
+                            folderId = it,
+                        ),
+                    )
+                },
+                onOnAddFolder = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.AddNewFolder(
+                            newFolderName = it,
+                        ),
+                    )
+                },
+                onDismissBottomSheet = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.DismissBottomSheet,
                     )
                 },
             )

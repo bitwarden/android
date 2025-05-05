@@ -30,7 +30,7 @@ platform :android do
   desc "Assemble FDroid release APK"
   lane :assembleFDroidReleaseApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Fdroid",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -43,7 +43,7 @@ platform :android do
   desc "Assemble F-Droid Beta APK"
   lane :assembleFDroidBetaApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Fdroid",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -56,7 +56,7 @@ platform :android do
   desc "Assemble Play Store release APK"
   lane :assemblePlayStoreReleaseApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Standard",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -69,7 +69,7 @@ platform :android do
   desc "Assemble Play Store release APK"
   lane :assemblePlayStoreBetaApk do |options|
     buildAndSignBitwarden(
-      taskName: "assemble",
+      taskName: "app:assemble",
       flavor: "Standard",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -82,7 +82,7 @@ platform :android do
   desc "Bundle Play Store release"
   lane :bundlePlayStoreRelease do |options|
     buildAndSignBitwarden(
-      taskName: "bundle",
+      taskName: "app:bundle",
       flavor: "Standard",
       buildType: "Release",
       storeFile: options[:storeFile],
@@ -95,7 +95,7 @@ platform :android do
   desc "Bundle Play Store release"
   lane :bundlePlayStoreBeta do |options|
     buildAndSignBitwarden(
-      taskName: "bundle",
+      taskName: "app:bundle",
       flavor: "Standard",
       buildType: "Beta",
       storeFile: options[:storeFile],
@@ -105,10 +105,17 @@ platform :android do
     )
   end
 
-  desc "Runs Standard Debug tests and generates Kover report"
+  desc "Runs lint, tests, and generates Kover reports for all project modules"
   lane :check do
     gradle(
-        tasks: ["testStandardDebug", "lintStandardDebug", "detekt", "koverXmlReportStandardDebug"]
+        tasks: [
+          "detekt",
+          "lintStandardDebug",
+          "lintDebug",
+          "testStandardDebug",
+          "testDebug",
+          "koverXmlReportMergedCoverage",
+        ]
     )
   end
 
@@ -161,7 +168,7 @@ platform :android do
     # Save changes
     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
-  
+
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
   private_lane :buildAndSignBitwarden do |options|
     gradle(
@@ -187,7 +194,7 @@ platform :android do
     firebase_app_distribution(
       app: "1:64530857057:android:f8d67b786db1b844",
       android_artifact_type: "APK",
-      android_artifact_path: "app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk",
+      android_artifact_path: "app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk",
       service_credentials_file: options[:service_credentials_file],
       groups: "internal-prod-group, livefront",
       release_notes: "#{releaseNotes}",
@@ -203,7 +210,7 @@ platform :android do
     firebase_app_distribution(
       app: "1:64530857057:android:54c1ae56b269b959887e20",
       android_artifact_type: "APK",
-      android_artifact_path: "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk",
+      android_artifact_path: "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk",
       service_credentials_file: options[:service_credentials_file],
       groups: "internal-prod-group, livefront",
       release_notes: "#{releaseNotes}",
@@ -219,7 +226,7 @@ platform :android do
     firebase_app_distribution(
       app: "1:439897860529:android:b143708734b99c0e3fb590",
       android_artifact_type: "APK",
-      android_artifact_path: "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk",
+      android_artifact_path: "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk",
       service_credentials_file: options[:service_credentials_file],
       groups: "internal-prod-group, livefront",
       release_notes: "#{releaseNotes}"
@@ -233,7 +240,7 @@ platform :android do
       track: "internal",
       release_status: "completed",
       rollout: "1",
-      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab",
     )
   end
 
@@ -244,7 +251,7 @@ platform :android do
       track: "internal",
       release_status: "completed",
       rollout: "1",
-      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab",
     )
   end
 
@@ -256,5 +263,125 @@ platform :android do
       pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
     )
     releaseNotes
+  end
+
+  # Authenticator
+  desc "Apply build version information"
+  fastlane_require "time"
+  lane :setAuthenticatorBuildVersionInfo do |options|
+
+    # Read-in app build config file.
+    buildConfigPath = "../authenticator/build.gradle.kts"
+    buildConfigFile = File.open(buildConfigPath)
+    buildConfigText = buildConfigFile.read
+    buildConfigFile.close
+
+    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
+    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+
+    if options[:versionName].nil? or options[:versionName].to_s.empty?
+        puts "Fetching latest tags from origin..."
+        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
+        puts "Getting latest version name from previous git tag..."
+        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
+        puts "Using tag #{latestTag} to calculate version name..."
+        latestTag.slice!(0)
+        puts "Current version name resolved to #{latestTag}."
+
+        versionParts = latestTag.split(".")
+        currentMajor = versionParts[0]
+        currentMinor = versionParts[1]
+        currentRevision = versionParts[2]
+
+        currentDate = Time.new
+        major = currentDate.year.to_s
+        minor = currentDate.strftime "%-m"
+
+        revision = 0
+        if currentMajor == major and currentMinor == minor
+            revision = currentRevision.to_i + 1
+        end
+        nextVersionName = "#{major}.#{minor}.#{revision}"
+    else
+        nextVersionName = options[:versionName].to_s
+    end
+
+    # Replace version information.
+    puts "Setting version code to #{options[:versionCode]}."
+    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
+    puts "Setting version name to #{nextVersionName}."
+    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
+
+    # Save changes
+    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+  end
+
+  desc "Assemble debug variants"
+  lane :buildAuthenticatorDebug do
+    gradle(
+      task: "authenticator:assemble",
+      build_type: "Debug",
+      print_command: false,
+    )
+  end
+
+  desc "Assemble and sign release APK"
+  lane :buildAuthenticatorRelease do |options|
+    gradle(
+      task: "authenticator:assemble",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
+  desc "Bundle and sign release AAB"
+  lane :bundleAuthenticatorRelease do |options|
+    gradle(
+        task: "authenticator:bundle",
+        build_type: "Release",
+        properties: {
+          "android.injected.signing.store.file" => options[:storeFile],
+          "android.injected.signing.store.password" => options[:storePassword],
+          "android.injected.signing.key.alias" => options[:keyAlias],
+          "android.injected.signing.key.password" => options[:keyPassword]
+        },
+        print_command: false,
+    )
+  end
+
+  desc "Publish release AAB to Firebase"
+  lane :distributeAuthenticatorReleaseBundleToFirebase do |options|
+    release_notes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "- %s"
+    )
+
+    puts "Release notes #{release_notes}"
+
+    firebase_app_distribution(
+      app: "1:867301491091:android:50b626dba42a361651e866",
+      android_artifact_type: "AAB",
+      android_artifact_path: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
+      service_credentials_file: options[:serviceCredentialsFile],
+      groups: "internal-prod-group, livefront",
+      release_notes: release_notes,
+    )
+  end
+
+  desc "Publish release to Google Play Store"
+  lane :publishAuthenticatorReleaseToGooglePlayStore do |options|
+    upload_to_play_store(
+      package_name: "com.bitwarden.authenticator",
+      json_key: options[:serviceCredentialsFile],
+      track: "internal",
+      aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
+      mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
+    )
   end
 end

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -9,7 +10,6 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredCollections
@@ -39,7 +39,6 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
     vaultFilterType: VaultFilterType,
-    showSshKeys: Boolean,
 ): VaultState.ViewState {
 
     val filteredCipherViewListWithDeletedItems =
@@ -47,7 +46,6 @@ fun VaultData.toViewState(
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
-        .filterSshKeysIfNecessary(showSshKeys)
 
     val filteredFolderViewList = folderViewList
         .toFilteredList(
@@ -63,17 +61,14 @@ fun VaultData.toViewState(
     val noFolderItems = filteredCipherViewList
         .filter { it.folderId.isNullOrBlank() }
 
-    val itemTypesCount: Int = if (showSshKeys) {
-        CipherType.entries
-    } else {
-        CipherType.entries.filterNot { it == CipherType.SSH_KEY }
-    }
-        .size
+    val itemTypesCount: Int = CipherType.entries.size
 
     return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
+        val shouldShowUnGroupedItems = filteredCollectionViewList.isEmpty() &&
+            noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD
         VaultState.ViewState.Content(
             itemTypesCount = itemTypesCount,
             totpItemsCount = if (isPremium) {
@@ -110,7 +105,7 @@ fun VaultData.toViewState(
                     )
                 }
                 .let { folderItems ->
-                    if (noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD) {
+                    if (shouldShowUnGroupedItems) {
                         folderItems
                     } else {
                         folderItems.plus(
@@ -131,7 +126,7 @@ fun VaultData.toViewState(
                         isPremiumUser = isPremium,
                     )
                 }
-                .takeIf { it.size < NO_FOLDER_ITEM_THRESHOLD }
+                .takeIf { shouldShowUnGroupedItems }
                 .orEmpty(),
             collectionItems = filteredCollectionViewList
                 .filter { it.id != null }
@@ -355,16 +350,3 @@ fun List<CollectionView>.toFilteredList(
                 }
             }
         }
-
-/**
- * Filters out all [CipherView]s that are of type [CipherType.SSH_KEY] if [showSshKeys] is false.
- *
- * @param showSshKeys Whether to show SSH keys in the vault.
- */
-@JvmName("filterSshKeysIfNecessary")
-fun List<CipherView>.filterSshKeysIfNecessary(showSshKeys: Boolean): List<CipherView> =
-    if (showSshKeys) {
-        this
-    } else {
-        filter { it.type != CipherType.SSH_KEY }
-    }

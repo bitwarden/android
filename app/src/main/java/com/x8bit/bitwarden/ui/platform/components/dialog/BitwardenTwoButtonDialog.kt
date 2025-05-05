@@ -126,7 +126,7 @@ fun BitwardenTwoButtonDialog(
                         .testTag("DismissAlertButton")
                         .padding(horizontal = 4.dp),
                     label = dismissButtonText,
-                    labelTextColor = dismissTextColor,
+                    contentColor = dismissTextColor,
                     onClick = onDismissClick,
                 )
                 BitwardenTextButton(
@@ -134,7 +134,7 @@ fun BitwardenTwoButtonDialog(
                         .testTag("AcceptAlertButton")
                         .padding(horizontal = 4.dp),
                     label = confirmButtonText,
-                    labelTextColor = confirmTextColor,
+                    contentColor = confirmTextColor,
                     onClick = onConfirmClick,
                 )
             }

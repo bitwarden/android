@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.di
 
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
@@ -33,7 +33,7 @@ object GeneratorRepositoryModule {
         vaultSdkSource: VaultSdkSource,
         passwordHistoryDiskSource: PasswordHistoryDiskSource,
         dispatcherManager: DispatcherManager,
-        policyManager: PolicyManager,
+        reviewPromptManager: ReviewPromptManager,
     ): GeneratorRepository = GeneratorRepositoryImpl(
         clock = clock,
         generatorSdkSource = generatorSdkSource,
@@ -42,6 +42,6 @@ object GeneratorRepositoryModule {
         vaultSdkSource = vaultSdkSource,
         passwordHistoryDiskSource = passwordHistoryDiskSource,
         dispatcherManager = dispatcherManager,
-        policyManager = policyManager,
+        reviewPromptManager = reviewPromptManager,
     )
 }

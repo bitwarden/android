@@ -20,8 +20,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.ClickableTextHighlight
-import com.x8bit.bitwarden.ui.platform.base.util.createClickableAnnotatedString
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -68,15 +66,10 @@ fun ImportLoginsInstructionStep(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = createClickableAnnotatedString(
-                mainString = stringResource(R.string.need_help_check_out_import_help),
-                highlights = listOf(
-                    ClickableTextHighlight(
-                        textToHighlight = stringResource(R.string.import_help_highlight),
-                        onTextClick = onHelpClick,
-                    ),
-                ),
-            ),
+            text = R.string.need_help_check_out_import_help
+                .toAnnotatedString {
+                    onHelpClick()
+                },
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier.standardHorizontalMargin(),

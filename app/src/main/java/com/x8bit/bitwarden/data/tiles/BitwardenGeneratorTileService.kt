@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.Keep
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Runnable
 import javax.inject.Inject
 
 /**

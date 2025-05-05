@@ -1,58 +1,47 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.only
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.toDp
-import com.x8bit.bitwarden.ui.platform.components.navigation.BitwardenNavigationBarItem
+import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
+import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.settings.about.navigateToAbout
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Top level composable for the Vault Unlocked Screen.
@@ -61,10 +50,12 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 @Composable
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
-    onNavigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
-    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    navController: NavHostController = rememberBitwardenNavController(
+        name = "VaultUnlockedNavBarScreen",
+    ),
+    onNavigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddSend: () -> Unit,
@@ -76,36 +67,46 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
-            val navOptions = vaultUnlockedNavBarScreenNavOptions(tabToNavigateTo = event.tab)
             when (event) {
                 is VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen,
                 is VaultUnlockedNavBarEvent.NavigateToVaultScreen,
                     -> {
-                    navigateToVaultGraph(navOptions)
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToVaultGraph(navOptions = it)
+                    }
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSendScreen -> {
-                    navigateToSendGraph(navOptions)
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
+                VaultUnlockedNavBarEvent.NavigateToSendScreen,
+                    -> {
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToSendGraph(navOptions = it)
+                    }
                 }
 
                 VaultUnlockedNavBarEvent.Shortcut.NavigateToGeneratorScreen,
                 VaultUnlockedNavBarEvent.NavigateToGeneratorScreen,
                     -> {
-                    navigateToGeneratorGraph(navOptions)
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToGeneratorGraph(navOptions = it)
+                    }
                 }
 
-                VaultUnlockedNavBarEvent.NavigateToSettingsScreen -> {
-                    navigateToSettingsGraph(navOptions)
-                }
-
-                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen -> {
-                    navigateToSettingsGraph(navOptions)
+                VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen,
+                VaultUnlockedNavBarEvent.NavigateToSettingsScreen,
+                    -> {
+                    navigateToTabOrRoot(tabToNavigateTo = event.tab) {
+                        navigateToSettingsGraph(navOptions = it)
+                    }
                 }
             }
         }
@@ -141,6 +142,9 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
         onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
         onNavigateToImportLogins = onNavigateToImportLogins,
+        onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+        onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+        onNavigateToRecordedLogs = onNavigateToRecordedLogs,
     )
 }
 
@@ -156,9 +160,9 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateToVaultAddItem: (VaultItemCipherType, String?, String?) -> Unit,
-    onNavigateToVaultItem: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
+    navigateToVaultAddItem: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItem: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     navigateToAddSend: () -> Unit,
@@ -170,41 +174,42 @@ private fun VaultUnlockedNavBarScaffold(
     navigateToPasswordHistory: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
     onNavigateToSetupAutoFillScreen: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
 ) {
-    var shouldDimNavBar by remember { mutableStateOf(false) }
+    var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
     // This scaffold will host screens that contain top bars while not hosting one itself.
     // We need to ignore the all insets here and let the content screens handle it themselves.
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val navigationItems = persistentListOf<NavigationItem>(
+        VaultUnlockedNavBarTab.Vault(
+            labelRes = state.vaultNavBarLabelRes,
+            contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
+        ),
+        VaultUnlockedNavBarTab.Send,
+        VaultUnlockedNavBarTab.Generator,
+        VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
+    )
     BitwardenScaffold(
         contentWindowInsets = WindowInsets(0.dp),
-        bottomBar = {
-            Box {
-                var appBarHeightPx by remember { mutableIntStateOf(0) }
-                VaultBottomAppBar(
-                    state = state,
-                    navController = navController,
-                    vaultTabClickedAction = vaultTabClickedAction,
-                    sendTabClickedAction = sendTabClickedAction,
-                    generatorTabClickedAction = generatorTabClickedAction,
-                    settingsTabClickedAction = settingsTabClickedAction,
-                    modifier = Modifier
-                        .testTag("NavigationBarContainer")
-                        .onGloballyPositioned {
-                            appBarHeightPx = it.size.height
-                        },
-                )
-                BitwardenAnimatedScrim(
-                    isVisible = shouldDimNavBar,
-                    onClick = {
-                        // Do nothing
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(appBarHeightPx.toDp()),
-                )
-            }
-        },
+        navigationData = ScaffoldNavigationData(
+            navigationItems = navigationItems,
+            selectedNavigationItem = navigationItems.find {
+                navBackStackEntry.isCurrentRoute(route = it.graphRoute)
+            },
+            onNavigationClick = { navigationItem ->
+                when (navigationItem) {
+                    VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction()
+                    VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
+                    is VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
+                    is VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
+                }
+            },
+            shouldDimNavigation = shouldDimNavBar,
+        ),
     ) {
         // Because this Scaffold has a bottom navigation bar, the NavHost will:
         // - consume the vertical navigation bar insets.
@@ -212,9 +217,6 @@ private fun VaultUnlockedNavBarScaffold(
         NavHost(
             navController = navController,
             startDestination = VAULT_GRAPH_ROUTE,
-            modifier = Modifier
-                .consumeWindowInsets(WindowInsets.navigationBars.only(WindowInsetsSides.Vertical))
-                .consumeWindowInsets(WindowInsets.ime),
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,
@@ -226,10 +228,13 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToVaultItemScreen = onNavigateToVaultItem,
                 onNavigateToVaultEditItemScreen = onNavigateToVaultEditItem,
                 onNavigateToSearchVault = onNavigateToSearchVault,
-                onDimBottomNavBarRequest = { shouldDim ->
-                    shouldDimNavBar = shouldDim
-                },
+                onDimBottomNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
                 onNavigateToImportLogins = onNavigateToImportLogins,
+                onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
+                onNavigateToAboutScreen = {
+                    navController.navigateToSettingsGraphRoot()
+                    navController.navigateToAbout(isPreAuth = false)
+                },
             )
             sendGraph(
                 navController = navController,
@@ -239,6 +244,7 @@ private fun VaultUnlockedNavBarScaffold(
             )
             generatorGraph(
                 onNavigateToPasswordHistory = { navigateToPasswordHistory() },
+                onDimNavBarRequest = { shouldDim -> shouldDimNavBar = shouldDim },
             )
             settingsGraph(
                 navController = navController,
@@ -249,107 +255,48 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToSetupUnlockScreen = onNavigateToSetupUnlockScreen,
                 onNavigateToSetupAutoFillScreen = onNavigateToSetupAutoFillScreen,
                 onNavigateToImportLogins = onNavigateToImportLogins,
-            )
-        }
-    }
-}
-
-@Composable
-private fun VaultBottomAppBar(
-    state: VaultUnlockedNavBarState,
-    navController: NavHostController,
-    vaultTabClickedAction: () -> Unit,
-    sendTabClickedAction: () -> Unit,
-    generatorTabClickedAction: () -> Unit,
-    settingsTabClickedAction: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    BottomAppBar(
-        containerColor = BitwardenTheme.colorScheme.background.secondary,
-        modifier = modifier,
-    ) {
-        val destinations = listOf(
-            VaultUnlockedNavBarTab.Vault(
-                labelRes = state.vaultNavBarLabelRes,
-                contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
-            ),
-            VaultUnlockedNavBarTab.Send,
-            VaultUnlockedNavBarTab.Generator,
-            VaultUnlockedNavBarTab.Settings(state.notificationState.settingsTabNotificationCount),
-        )
-        // Collecting the back stack entry here as state is crucial to ensuring that the items
-        // below recompose when the navigation state changes to update the selected tab.
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        destinations.forEach { destination ->
-            BitwardenNavigationBarItem(
-                labelRes = destination.labelRes,
-                contentDescriptionRes = destination.contentDescriptionRes,
-                selectedIconRes = destination.iconResSelected,
-                unselectedIconRes = destination.iconRes,
-                notificationCount = destination.notificationCount,
-                isSelected = navBackStackEntry.isCurrentTab(tab = destination),
-                onClick = when (destination) {
-                    is VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction
-                    VaultUnlockedNavBarTab.Send -> sendTabClickedAction
-                    VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction
-                    is VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction
-                },
-                modifier = Modifier.testTag(tag = destination.testTag),
+                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
             )
         }
     }
 }
 
 /**
- * Helper function to generate [NavOptions] for [VaultUnlockedNavBarScreen].
- *
- * @param tabToNavigateTo The [VaultUnlockedNavBarTab] to prepare the NavOptions for.
- * NavOptions are determined on whether or not the tab is already selected.
+ * Helper function to determine how to navigate to a specified [VaultUnlockedNavBarTab].
+ * If direct navigation is required, the [navigate] lambda will be invoked with the appropriate
+ * [NavOptions].
  */
-private fun NavController.vaultUnlockedNavBarScreenNavOptions(
+private fun NavController.navigateToTabOrRoot(
     tabToNavigateTo: VaultUnlockedNavBarTab,
-): NavOptions {
-    val returnToCurrentSubRoot = currentBackStackEntry.isCurrentTab(tabToNavigateTo)
-    val currentSubRootGraph = currentDestination?.parent?.id
-    // determine the destination to navigate to, if we are navigating to the same sub-root for the
-    // selected tab we want to find the start destination of the sub-root and pop up to it, which
-    // will maintain its state (i.e. scroll position). If we are navigating to a different sub-root,
-    // we can safely pop up to the start of the graph, the "home" tab destination.
-    val popUpToDestination = graph
-        .getSubgraphStartDestinationOrNull(currentSubRootGraph)
-        .takeIf { returnToCurrentSubRoot }
-        ?: graph.findStartDestination().id
-    // If we are popping up the start of the whole nav graph we want to maintain the state of the
-    // the popped destinations in the other sub-roots. If we are navigating to the same sub-root,
-    // we want to pop off the nested destinations without maintaining their state.
-    val maintainStateOfPoppedDestinations = !returnToCurrentSubRoot
-    return navOptions {
-        popUpTo(popUpToDestination) {
-            saveState = maintainStateOfPoppedDestinations
-        }
-        launchSingleTop = true
-        restoreState = maintainStateOfPoppedDestinations
+    navigate: (NavOptions) -> Unit,
+) {
+    if (tabToNavigateTo.startDestinationRoute == currentDestination?.route) {
+        // We are at the start destination already, so nothing to do.
+        return
+    } else if (currentDestination?.parent?.route == tabToNavigateTo.graphRoute) {
+        // We are not at the start destination but we are in the correct graph,
+        // so lets pop up to the start destination.
+        popBackStack(route = tabToNavigateTo.startDestinationRoute, inclusive = false)
+    } else {
+        // We are not in correct graph at all, so navigate there.
+        navigate(
+            navOptions {
+                popUpTo(id = graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            },
+        )
     }
 }
 
 /**
  * Determine if the current destination is the same as the given tab.
  */
-private fun NavBackStackEntry?.isCurrentTab(tab: VaultUnlockedNavBarTab): Boolean =
-    this?.destination?.hierarchy?.any {
-        it.route == tab.route
-    } == true
-
-/**
- * Helper function to determine the start destination of a subgraph.
- *
- * @param subgraphId the id of the subgraph to find the start destination of.
- *
- * @return the ID of the start destination of the subgraph, or null if the subgraph does not exist.
- */
-private fun NavGraph.getSubgraphStartDestinationOrNull(subgraphId: Int?): Int? {
-    subgraphId ?: return null
-    return nodes[subgraphId]?.let {
-        (it as? NavGraph)?.findStartDestination()?.id
-    }
-}
+private fun NavBackStackEntry?.isCurrentRoute(route: String): Boolean =
+    this
+        ?.destination
+        ?.hierarchy
+        ?.any { it.route == route } == true

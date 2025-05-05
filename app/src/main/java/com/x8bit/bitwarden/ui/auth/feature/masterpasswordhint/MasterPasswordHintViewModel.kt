@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -77,14 +77,12 @@ class MasterPasswordHintViewModel @Inject constructor(
         }
 
         if (email.isBlank()) {
-            val errorMessage =
-                R.string.validation_field_required.asText(R.string.email_address.asText())
-
             mutableStateFlow.update {
                 it.copy(
                     dialog = MasterPasswordHintState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = errorMessage,
+                        message = R.string.validation_field_required
+                            .asText(R.string.email_address.asText()),
                     ),
                 )
             }
@@ -121,7 +119,7 @@ class MasterPasswordHintViewModel @Inject constructor(
     private fun handlePasswordHintResult(
         action: MasterPasswordHintAction.Internal.PasswordHintResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is PasswordHintResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(dialog = MasterPasswordHintState.DialogState.PasswordHintSent)
@@ -129,13 +127,13 @@ class MasterPasswordHintViewModel @Inject constructor(
             }
 
             is PasswordHintResult.Error -> {
-                val errorMessage = action.result.message?.asText()
-                    ?: R.string.generic_error_message.asText()
                 mutableStateFlow.update {
                     it.copy(
                         dialog = MasterPasswordHintState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = errorMessage,
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -192,6 +190,7 @@ data class MasterPasswordHintState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
     }
 }

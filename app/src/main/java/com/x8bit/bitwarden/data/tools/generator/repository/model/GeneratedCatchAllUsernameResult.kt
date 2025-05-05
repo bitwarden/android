@@ -15,5 +15,5 @@ sealed class GeneratedCatchAllUsernameResult {
     /**
      * There was an error during the operation.
      */
-    data object InvalidRequest : GeneratedCatchAllUsernameResult()
+    data class InvalidRequest(val error: Throwable) : GeneratedCatchAllUsernameResult()
 }

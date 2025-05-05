@@ -15,20 +15,34 @@ sealed class VaultUnlockResult {
      */
     data class AuthenticationError(
         val message: String? = null,
+        override val error: Throwable?,
+    ) : VaultUnlockResult(), VaultUnlockError
+
+    /**
+     * Unable to decode biometrics key.
+     */
+    data class BiometricDecodingError(
+        override val error: Throwable?,
     ) : VaultUnlockResult(), VaultUnlockError
 
     /**
      * Unable to access user state information.
      */
-    data object InvalidStateError : VaultUnlockResult(), VaultUnlockError
+    data class InvalidStateError(
+        override val error: Throwable?,
+    ) : VaultUnlockResult(), VaultUnlockError
 
     /**
      * Generic error thrown by Bitwarden SDK.
      */
-    data object GenericError : VaultUnlockResult(), VaultUnlockError
+    data class GenericError(
+        override val error: Throwable?,
+    ) : VaultUnlockResult(), VaultUnlockError
 }
 
 /**
  * Sealed interface to denote that a [VaultUnlockResult] is an error result.
  */
-sealed interface VaultUnlockError
+sealed interface VaultUnlockError {
+    val error: Throwable?
+}

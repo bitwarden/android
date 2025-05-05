@@ -14,17 +14,16 @@ interface BiometricsEncryptionManager {
     ): Cipher?
 
     /**
+     * Clears the data associated with the users biometrics.
+     */
+    fun clearBiometrics(userId: String)
+
+    /**
      * Gets the [Cipher] built from a keystore, or creates one if it doesn't already exist.
      */
     fun getOrCreateCipher(
         userId: String,
     ): Cipher?
-
-    /**
-     * Sets up biometrics to ensure future integrity checks work properly. If this method has never
-     * been called [isBiometricIntegrityValid] will return false.
-     */
-    fun setupBiometrics(userId: String)
 
     /**
      * Checks to verify that the biometrics integrity is still valid. This returns `true` if the

@@ -2,12 +2,13 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -42,6 +43,9 @@ class OtherViewModelTest : BaseViewModelTest() {
         every { isScreenCaptureAllowed = any() } just runs
     }
     private val vaultRepository = mockk<VaultRepository>()
+    private val networkConnectionManager = mockk<NetworkConnectionManager> {
+        every { isNetworkConnected } returns true
+    }
 
     @Test
     fun `initial state should be correct when not set`() {
@@ -179,6 +183,26 @@ class OtherViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `SyncNowButtonClick should show error dialog if no network connection`() = runTest {
+        every { networkConnectionManager.isNetworkConnected } returns false
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(OtherAction.SyncNowButtonClick)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = OtherState.DialogState.Error(
+                        title = R.string.internet_connection_required_title.asText(),
+                        message = R.string.internet_connection_required_message.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+        }
+        verify(exactly = 0) { vaultRepository.sync(forced = true) }
+    }
+
     private fun createViewModel(
         state: OtherState? = null,
     ) = OtherViewModel(
@@ -187,16 +211,17 @@ class OtherViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
+            set("isPreAuth", state?.isPreAuth == true)
         },
+        networkConnectionManager = networkConnectionManager,
     )
-
-    companion object {
-        private val DEFAULT_STATE = OtherState(
-            allowScreenCapture = false,
-            allowSyncOnRefresh = false,
-            clearClipboardFrequency = ClearClipboardFrequency.NEVER,
-            lastSyncTime = "10/26/2023 12:00 PM",
-            dialogState = null,
-        )
-    }
 }
+
+private val DEFAULT_STATE = OtherState(
+    isPreAuth = false,
+    allowScreenCapture = false,
+    allowSyncOnRefresh = false,
+    clearClipboardFrequency = ClearClipboardFrequency.NEVER,
+    lastSyncTime = "10/26/2023 12:00 PM",
+    dialogState = null,
+)

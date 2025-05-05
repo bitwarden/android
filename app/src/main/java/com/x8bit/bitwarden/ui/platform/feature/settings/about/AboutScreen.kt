@@ -1,16 +1,14 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.about
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -19,30 +17,31 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenPushRow
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -58,20 +57,21 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun AboutScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToFlightRecorder: () -> Unit,
+    onNavigateToRecordedLogs: () -> Unit,
     viewModel: AboutViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            is AboutEvent.NavigateToWebVault -> {
-                intentManager.launchUri(event.vaultUrl.toUri())
-            }
-
+            is AboutEvent.NavigateToWebVault -> intentManager.launchUri(event.vaultUrl.toUri())
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
+            AboutEvent.NavigateToFlightRecorder -> onNavigateToFlightRecorder()
+            AboutEvent.NavigateToRecordedLogs -> onNavigateToRecordedLogs()
 
-            AboutEvent.NavigateToFeedbackForm -> {
-                intentManager.launchUri("https://livefrontinc.typeform.com/to/irgrRu4a".toUri())
+            AboutEvent.NavigateToFlightRecorderHelp -> {
+                intentManager.launchUri("https://bitwarden.com/help/flight-recorder".toUri())
             }
 
             AboutEvent.NavigateToHelpCenter -> {
@@ -84,13 +84,6 @@ fun AboutScreen(
 
             AboutEvent.NavigateToLearnAboutOrganizations -> {
                 intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
-            }
-
-            AboutEvent.NavigateToRateApp -> {
-                intentManager.launchUri(
-                    uri =
-                    "https://play.google.com/store/apps/details?id=com.x8bit.bitwarden".toUri(),
-                )
             }
         }
     }
@@ -112,7 +105,7 @@ fun AboutScreen(
             )
         },
     ) {
-        ContentColumn(
+        AboutScreenContent(
             state = state,
             modifier = Modifier.fillMaxSize(),
             onHelpCenterClick = remember(viewModel) {
@@ -124,14 +117,17 @@ fun AboutScreen(
             onLearnAboutOrgsClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick) }
             },
-            onRateTheAppClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.RateAppClick) }
-            },
-            onGiveFeedbackClick = remember(viewModel) {
-                { viewModel.trySendAction(AboutAction.GiveFeedbackClick) }
-            },
             onSubmitCrashLogsCheckedChange = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
+            },
+            onFlightRecorderCheckedChange = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.FlightRecorderCheckedChange(it)) }
+            },
+            onFlightRecorderTooltipClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.FlightRecorderTooltipClick) }
+            },
+            onViewRecordedLogsClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.ViewRecordedLogsClick) }
             },
             onVersionClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.VersionClick) }
@@ -145,14 +141,15 @@ fun AboutScreen(
 
 @Suppress("LongMethod")
 @Composable
-private fun ContentColumn(
+private fun AboutScreenContent(
     state: AboutState,
     onHelpCenterClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
-    onRateTheAppClick: () -> Unit,
-    onGiveFeedbackClick: () -> Unit,
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderTooltipClick: () -> Unit,
+    onViewRecordedLogsClick: () -> Unit,
     onVersionClick: () -> Unit,
     onWebVaultClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -161,72 +158,88 @@ private fun ContentColumn(
         modifier = modifier
             .verticalScroll(rememberScrollState()),
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
-        if (state.shouldShowCrashLogsButton) {
-            BitwardenSwitch(
-                label = stringResource(id = R.string.submit_crash_logs),
-                isChecked = state.isSubmitCrashLogsEnabled,
-                onCheckedChange = onSubmitCrashLogsCheckedChange,
-                modifier = Modifier
-                    .testTag("SubmitCrashLogsSwitch")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                contentDescription = stringResource(id = R.string.submit_crash_logs),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        CrashLogsCard(
+            isVisible = state.shouldShowCrashLogsButton,
+            isEnabled = state.isSubmitCrashLogsEnabled,
+            onSubmitCrashLogsCheckedChange = onSubmitCrashLogsCheckedChange,
+        )
+        FlightRecorderCard(
+            isVisible = state.shouldShowFlightRecorder,
+            isFlightRecorderEnabled = state.isFlightRecorderEnabled,
+            logExpiration = state.flightRecorderSubtext,
+            onFlightRecorderCheckedChange = onFlightRecorderCheckedChange,
+            onFlightRecorderTooltipClick = onFlightRecorderTooltipClick,
+            onViewRecordedLogsClick = onViewRecordedLogsClick,
+        )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.bitwarden_help_center),
             onConfirmClick = onHelpCenterClick,
             dialogTitle = stringResource(id = R.string.continue_to_help_center),
-            modifier = Modifier.testTag("BitwardenHelpCenterRow"),
             dialogMessage = stringResource(
                 id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
             ),
+            withDivider = false,
+            cardStyle = CardStyle.Top(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag(tag = "BitwardenHelpCenterRow"),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.privacy_policy),
             onConfirmClick = onPrivacyPolicyClick,
             dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
-            modifier = Modifier.testTag("PrivacyPolicyRow"),
             dialogMessage = stringResource(
                 id = R.string.privacy_policy_description_long,
             ),
+            withDivider = false,
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag(tag = "PrivacyPolicyRow"),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.web_vault),
             onConfirmClick = onWebVaultClick,
-            modifier = Modifier.testTag("BitwardenWebVaultRow"),
             dialogTitle = stringResource(id = R.string.continue_to_web_app),
             dialogMessage = stringResource(
                 id = R.string.explore_more_features_of_your_bitwarden_account_on_the_web_app,
             ),
+            withDivider = false,
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag(tag = "BitwardenWebVaultRow"),
         )
         BitwardenExternalLinkRow(
             text = stringResource(id = R.string.learn_org),
             onConfirmClick = onLearnAboutOrgsClick,
             dialogTitle = stringResource(id = R.string.continue_to_x, "bitwarden.com"),
-            modifier = Modifier.testTag("LearnAboutOrganizationsRow"),
             dialogMessage = stringResource(
                 id = R.string.learn_about_organizations_description_long,
             ),
-        )
-        BitwardenExternalLinkRow(
-            text = stringResource(R.string.give_feedback),
-            onConfirmClick = onGiveFeedbackClick,
-            modifier = Modifier.testTag("GiveFeedbackRow"),
-            dialogTitle = stringResource(R.string.continue_to_give_feedback),
-            dialogMessage = stringResource(R.string.continue_to_provide_feedback),
+            withDivider = false,
+            cardStyle = CardStyle.Middle(),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag(tag = "LearnAboutOrganizationsRow"),
         )
         CopyRow(
             text = state.version,
             onClick = onVersionClick,
-            modifier = Modifier.testTag("CopyAboutInfoRow"),
+            modifier = Modifier
+                .standardHorizontalMargin()
+                .fillMaxWidth()
+                .testTag("CopyAboutInfoRow"),
         )
         Box(
             modifier = Modifier
-                .defaultMinSize(minHeight = 56.dp)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .defaultMinSize(minHeight = 60.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
@@ -237,7 +250,67 @@ private fun ContentColumn(
                 color = BitwardenTheme.colorScheme.text.primary,
             )
         }
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
+}
+
+@Composable
+private fun ColumnScope.CrashLogsCard(
+    isVisible: Boolean,
+    isEnabled: Boolean,
+    onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
+) {
+    if (!isVisible) return
+    BitwardenSwitch(
+        label = stringResource(id = R.string.submit_crash_logs),
+        contentDescription = stringResource(id = R.string.submit_crash_logs),
+        isChecked = isEnabled,
+        onCheckedChange = onSubmitCrashLogsCheckedChange,
+        cardStyle = CardStyle.Full,
+        modifier = Modifier
+            .testTag(tag = "SubmitCrashLogsSwitch")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
+}
+
+@Composable
+private fun ColumnScope.FlightRecorderCard(
+    isVisible: Boolean,
+    isFlightRecorderEnabled: Boolean,
+    logExpiration: Text?,
+    onFlightRecorderCheckedChange: (Boolean) -> Unit,
+    onFlightRecorderTooltipClick: () -> Unit,
+    onViewRecordedLogsClick: () -> Unit,
+) {
+    if (!isVisible) return
+    BitwardenSwitch(
+        label = stringResource(id = R.string.flight_recorder),
+        isChecked = isFlightRecorderEnabled,
+        onCheckedChange = onFlightRecorderCheckedChange,
+        tooltip = TooltipData(
+            contentDescription = stringResource(id = R.string.flight_recorder_help),
+            onClick = onFlightRecorderTooltipClick,
+        ),
+        subtext = logExpiration?.invoke(),
+        cardStyle = CardStyle.Top(),
+        modifier = Modifier
+            .testTag(tag = "FlightRecorderSwitch")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    BitwardenPushRow(
+        text = stringResource(id = R.string.view_recorded_logs),
+        onClick = onViewRecordedLogsClick,
+        cardStyle = CardStyle.Bottom,
+        modifier = Modifier
+            .testTag(tag = "ViewRecordedLogs")
+            .fillMaxWidth()
+            .standardHorizontalMargin(),
+    )
+    Spacer(modifier = Modifier.height(height = 8.dp))
 }
 
 @Composable
@@ -246,54 +319,47 @@ private fun CopyRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val resources = LocalContext.current.resources
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
-                onClick = onClick,
-            )
-            .semantics(mergeDescendants = true) {
-                contentDescription = text.toString(resources)
-            },
+    BitwardenTextRow(
+        text = text(),
+        onClick = onClick,
+        withDivider = false,
+        cardStyle = CardStyle.Bottom,
+        modifier = modifier,
     ) {
-        Row(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 56.dp)
-                .padding(start = 16.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .weight(1f),
-                text = text(),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.primary,
-            )
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_copy),
-                contentDescription = null,
-                tint = BitwardenTheme.colorScheme.icon.primary,
-            )
-        }
-        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+        Icon(
+            painter = rememberVectorPainter(id = R.drawable.ic_copy),
+            contentDescription = null,
+            tint = BitwardenTheme.colorScheme.icon.primary,
+            modifier = Modifier.mirrorIfRtl(),
+        )
     }
 }
 
 @Preview
 @Composable
-private fun CopyRow_preview() {
+private fun AboutScreenContent_preview() {
     BitwardenTheme {
-        CopyRow(
-            text = "Copyable Text".asText(),
-            onClick = { },
+        AboutScreenContent(
+            state = AboutState(
+                version = "Version: 1.0.0 (1)".asText(),
+                deviceData = "device_data".asText(),
+                ciData = "ci_data".asText(),
+                isSubmitCrashLogsEnabled = false,
+                copyrightInfo = "".asText(),
+                shouldShowCrashLogsButton = true,
+                isFlightRecorderEnabled = true,
+                shouldShowFlightRecorder = true,
+                flightRecorderSubtext = "Expires 3/21/25 at 3:20 PM".asText(),
+            ),
+            onHelpCenterClick = {},
+            onPrivacyPolicyClick = {},
+            onLearnAboutOrgsClick = {},
+            onSubmitCrashLogsCheckedChange = { },
+            onFlightRecorderCheckedChange = { },
+            onFlightRecorderTooltipClick = {},
+            onViewRecordedLogsClick = {},
+            onVersionClick = {},
+            onWebVaultClick = {},
         )
     }
 }

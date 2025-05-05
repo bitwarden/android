@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.PowerManager
 import android.view.accessibility.AccessibilityManager
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManagerImpl
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
@@ -21,7 +22,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.parser.AccessibilityParse
 import com.x8bit.bitwarden.data.autofill.accessibility.processor.BitwardenAccessibilityProcessor
 import com.x8bit.bitwarden.data.autofill.accessibility.processor.BitwardenAccessibilityProcessorImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -57,10 +57,10 @@ object AccessibilityModule {
     @Singleton
     @Provides
     fun providesAccessibilityEnabledManager(
-        accessibilityManager: AccessibilityManager,
+        @ApplicationContext context: Context,
     ): AccessibilityEnabledManager =
         AccessibilityEnabledManagerImpl(
-            accessibilityManager = accessibilityManager,
+            context = context,
         )
 
     @Singleton

@@ -13,5 +13,20 @@ sealed class Fido2CredentialAssertionResult {
     /**
      * Indicates there was an error and the assertion was not successful.
      */
-    data object Error : Fido2CredentialAssertionResult()
+    sealed class Error : Fido2CredentialAssertionResult() {
+        /**
+         * Indicates the relying party ID was missing from the request.
+         */
+        data object MissingRpId : Error()
+
+        /**
+         * Indicates the host URL was missing from the request.
+         */
+        data object MissingHostUrl : Error()
+
+        /**
+         * Indicates an internal error occurred.
+         */
+        data object InternalError : Error()
+    }
 }

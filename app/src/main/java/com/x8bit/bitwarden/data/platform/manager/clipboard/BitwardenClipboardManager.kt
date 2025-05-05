@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.clipboard
 
 import androidx.compose.ui.text.AnnotatedString
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 
 /**
  * Wrapper class for using the clipboard.
@@ -29,6 +29,15 @@ interface BitwardenClipboardManager {
         text: String,
         isSensitive: Boolean = true,
         toastDescriptorOverride: String? = null,
+    )
+
+    /**
+     * See [setText] for more details.
+     */
+    fun setText(
+        text: String,
+        isSensitive: Boolean = true,
+        toastDescriptorOverride: Text,
     )
 
     /**

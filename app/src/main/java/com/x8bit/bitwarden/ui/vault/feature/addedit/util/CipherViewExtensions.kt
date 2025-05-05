@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -13,7 +14,6 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -178,7 +178,11 @@ private fun List<FolderView>.toSelectedFolderId(cipherView: CipherView?): String
         ?.folderId
         ?.takeIf { id -> id in map { it.id } }
 
-private fun List<FolderView>.toAvailableFolders(
+/**
+ * Maps a list of [FolderView]s to a list of available [VaultAddEditState.Folder]s with
+ * a default first item of "None."
+ */
+fun List<FolderView>.toAvailableFolders(
     resourceManager: ResourceManager,
 ): List<VaultAddEditState.Folder> =
     listOf(
@@ -188,7 +192,7 @@ private fun List<FolderView>.toAvailableFolders(
         ),
     )
         .plus(
-            map { VaultAddEditState.Folder(name = it.name, id = it.id.toString()) },
+            map { VaultAddEditState.Folder(name = it.name, id = it.id) },
         )
 
 private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String? =

@@ -12,7 +12,6 @@ class CheckEmailHandler(
     val onOpenEmailAppClick: () -> Unit,
     val onChangeEmailClick: () -> Unit,
     val onBackClick: () -> Unit,
-    val onLoginClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -22,7 +21,6 @@ class CheckEmailHandler(
         fun create(viewModel: CheckEmailViewModel) = CheckEmailHandler(
             onChangeEmailClick = { viewModel.trySendAction(CheckEmailAction.ChangeEmailClick) },
             onOpenEmailAppClick = { viewModel.trySendAction(CheckEmailAction.OpenEmailClick) },
-            onLoginClick = { viewModel.trySendAction(CheckEmailAction.LoginClick) },
             onBackClick = { viewModel.trySendAction(CheckEmailAction.BackClick) },
         )
     }

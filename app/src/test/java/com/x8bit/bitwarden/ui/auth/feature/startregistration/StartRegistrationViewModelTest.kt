@@ -3,15 +3,16 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
@@ -27,7 +28,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -189,6 +189,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         val repo = mockk<AuthRepository> {
             every { captchaTokenResultFlow } returns flowOf()
             coEvery {
@@ -197,7 +198,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     name = NAME,
                     receiveMarketingEmails = true,
                 )
-            } returns SendVerificationEmailResult.Error(errorMessage = "mock_error")
+            } returns SendVerificationEmailResult.Error(errorMessage = "mock_error", error = error)
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
@@ -217,6 +218,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     dialog = StartRegistrationDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -308,7 +310,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             featureFlagManager = featureFlagManager,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(BackClick)
+            viewModel.trySendAction(CloseClick)
             assertEquals(NavigateBack, awaitItem())
         }
     }

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model
 
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * Represents the languages supported by the app.

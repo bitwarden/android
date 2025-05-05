@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 
 /**
  * Get the title for the given auth method.
@@ -118,5 +118,7 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
 val TwoFactorAuthMethod.imageRes: Int?
     get() = when (this) {
         TwoFactorAuthMethod.YUBI_KEY -> R.drawable.yubi_key
+        TwoFactorAuthMethod.EMAIL -> R.drawable.img_new_device_verification
+        TwoFactorAuthMethod.AUTHENTICATOR_APP -> R.drawable.img_authenticator
         else -> null
     }

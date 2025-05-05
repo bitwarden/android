@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.data.autofill.util
 
+import android.app.Activity
 import android.app.PendingIntent
 import android.app.assist.AssistStructure
 import android.content.Context
@@ -10,13 +11,13 @@ import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
 import kotlin.random.Random
 
@@ -147,3 +148,12 @@ fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
 fun Intent.getTotpCopyIntentOrNull(): AutofillTotpCopyData? =
     getBundleExtra(AUTOFILL_BUNDLE_KEY)
         ?.getSafeParcelableExtra(AUTOFILL_TOTP_COPY_DATA_KEY)
+
+/**
+ * Checks if the given [Activity] was created for Autofill. This is useful to avoid locking the
+ * vault if one of the Autofill services starts the only instance of the [MainActivity].
+ */
+val Activity.createdForAutofill: Boolean
+    get() = intent.getAutofillSelectionDataOrNull() != null ||
+        intent.getAutofillSaveItemOrNull() != null ||
+        intent.getAutofillAssistStructureOrNull() != null

@@ -10,9 +10,17 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.auth.feature.environment.EnvironmentState.DialogState
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.keychain.KeyChainManager
+import com.x8bit.bitwarden.ui.platform.manager.keychain.model.PrivateKeyAliasSelectionResult
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -26,6 +34,12 @@ class EnvironmentScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<EnvironmentEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
+    private val mockIntentManager = mockk<IntentManager>(relaxed = true)
+    private val mockKeyChainManager = mockk<KeyChainManager> {
+        coEvery {
+            choosePrivateKeyAlias(any())
+        } returns PrivateKeyAliasSelectionResult.Success("mockAlias")
+    }
     private val viewModel = mockk<EnvironmentViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -33,7 +47,10 @@ class EnvironmentScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = mockIntentManager,
+            keyChainManager = mockKeyChainManager,
+        ) {
             EnvironmentScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -69,7 +86,11 @@ class EnvironmentScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                shouldShowErrorDialog = true,
+                dialog = DialogState.Error(
+                    ("One or more of the URLs entered are invalid. " +
+                        "Please revise it and try to save again.")
+                        .asText(),
+                ),
             )
         }
 
@@ -96,14 +117,14 @@ class EnvironmentScreenTest : BaseComposeTest() {
     fun `error dialog OK click should send ErrorDialogDismiss action`() {
         mutableStateFlow.update {
             it.copy(
-                shouldShowErrorDialog = true,
+                dialog = DialogState.Error("Error".asText()),
             )
         }
         composeTestRule
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(EnvironmentAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }
     }
 
     @Test
@@ -112,22 +133,13 @@ class EnvironmentScreenTest : BaseComposeTest() {
             .onNodeWithText("Server URL")
             // Click to focus to see placeholder
             .performClick()
-            .assertTextEquals(
-                "Server URL",
-                "Specify the base URL of your on-premise hosted Bitwarden installation.",
-                "ex. https://bitwarden.company.com",
-                "",
-            )
+            .assertTextEquals("Server URL", "ex. https://bitwarden.company.com", "")
 
         mutableStateFlow.update { it.copy(serverUrl = "server-url") }
 
         composeTestRule
             .onNodeWithText("Server URL")
-            .assertTextEquals(
-                "Server URL",
-                "Specify the base URL of your on-premise hosted Bitwarden installation.",
-                "server-url",
-            )
+            .assertTextEquals("Server URL", "server-url")
     }
 
     @Test
@@ -138,6 +150,62 @@ class EnvironmentScreenTest : BaseComposeTest() {
                 EnvironmentAction.ServerUrlChange(serverUrl = "updated-server-url"),
             )
         }
+    }
+
+    @Test
+    fun `use system certificate click should send UseSystemKeyCertificateClick`() {
+        composeTestRule
+            .onNodeWithText("Choose system certificate")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(EnvironmentAction.ChooseSystemCertificateClick)
+        }
+    }
+
+    @Test
+    fun `ShowSystemCertificateSelection event should show system certificate selection dialog`() {
+        mutableEventFlow.tryEmit(
+            EnvironmentEvent.ShowSystemCertificateSelectionDialog(serverUrl = ""),
+        )
+        coVerify { mockKeyChainManager.choosePrivateKeyAlias(null) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `system certificate selection should send SystemCertificateSelectionResultReceive action`() {
+        coEvery {
+            mockKeyChainManager.choosePrivateKeyAlias(null)
+        } returns PrivateKeyAliasSelectionResult.Success("alias")
+
+        mutableEventFlow.tryEmit(
+            EnvironmentEvent.ShowSystemCertificateSelectionDialog(serverUrl = ""),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.SystemCertificateSelectionResultReceive(
+                    privateKeyAliasSelectionResult = PrivateKeyAliasSelectionResult.Success(
+                        alias = "alias",
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `key alias should change according to the state`() {
+        composeTestRule
+            .onNodeWithText("Certificate alias")
+            .assertTextEquals("Certificate alias", "")
+
+        mutableStateFlow.update { it.copy(keyAlias = "mock-alias") }
+
+        composeTestRule
+            .onNodeWithText("Certificate alias")
+            .assertTextEquals("Certificate alias", "mock-alias")
     }
 
     @Test
@@ -223,21 +291,13 @@ class EnvironmentScreenTest : BaseComposeTest() {
     fun `icons server URL should change according to the state`() {
         composeTestRule
             .onNodeWithText("Icons server URL")
-            .assertTextEquals(
-                "Icons server URL",
-                "For advanced users. You can specify the base URL of each service independently.",
-                "",
-            )
+            .assertTextEquals("Icons server URL", "")
 
         mutableStateFlow.update { it.copy(iconsServerUrl = "icons-url") }
 
         composeTestRule
             .onNodeWithText("Icons server URL")
-            .assertTextEquals(
-                "Icons server URL",
-                "For advanced users. You can specify the base URL of each service independently.",
-                "icons-url",
-            )
+            .assertTextEquals("Icons server URL", "icons-url")
     }
 
     @Test
@@ -252,14 +312,122 @@ class EnvironmentScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `ConfirmOverwriteCertificate dialog should display based on state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialog = DialogState.ConfirmOverwriteAlias(
+                    title = "Confirm overwrite".asText(),
+                    message = "Overwrite existing certificate?".asText(),
+                    triggeringAction = EnvironmentAction.SetCertificateInfoResultReceive(
+                        certificateFileData = mockk(),
+                        alias = "mockAlias",
+                        password = "mockPassword",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Confirm overwrite")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Overwrite existing certificate?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Cancel")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Replace certificate")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmOverwriteCertificate dialog Replace certificate click should send ConfirmOverwriteCertificate action`() {
+        val mockFileData = mockk<IntentManager.FileData>()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = DialogState.ConfirmOverwriteAlias(
+                    title = "Confirm overwrite".asText(),
+                    message = "Overwrite existing certificate?".asText(),
+                    triggeringAction = EnvironmentAction.SetCertificateInfoResultReceive(
+                        certificateFileData = mockFileData,
+                        alias = "mockAlias",
+                        password = "mockPassword",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Replace certificate")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.ConfirmOverwriteCertificateClick(
+                    EnvironmentAction.SetCertificateInfoResultReceive(
+                        certificateFileData = mockFileData,
+                        alias = "mockAlias",
+                        password = "mockPassword",
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `ConfirmOverwriteCertificate dialog Cancel click should send DismissDialog action`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = DialogState.ConfirmOverwriteAlias(
+                    title = "Confirm overwrite".asText(),
+                    message = "Overwrite existing certificate?".asText(),
+                    triggeringAction = EnvironmentAction.SetCertificateInfoResultReceive(
+                        certificateFileData = mockk(),
+                        alias = "mockAlias",
+                        password = "mockPassword",
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                EnvironmentAction.DialogDismiss,
+            )
+        }
+    }
+
     companion object {
         val DEFAULT_STATE = EnvironmentState(
             serverUrl = "",
+            keyAlias = "",
             webVaultServerUrl = "",
             apiServerUrl = "",
             identityServerUrl = "",
             iconsServerUrl = "",
-            shouldShowErrorDialog = false,
+            keyHost = null,
+            dialog = null,
+            showMutualTlsOptions = true,
         )
     }
 }

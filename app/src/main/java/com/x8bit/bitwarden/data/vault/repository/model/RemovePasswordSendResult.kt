@@ -17,5 +17,5 @@ sealed class RemovePasswordSendResult {
      * Generic error while removing the password protection from a send. The optional
      * [errorMessage] may be displayed directly in the UI when present.
      */
-    data class Error(val errorMessage: String?) : RemovePasswordSendResult()
+    data class Error(val errorMessage: String?, val error: Throwable?) : RemovePasswordSendResult()
 }

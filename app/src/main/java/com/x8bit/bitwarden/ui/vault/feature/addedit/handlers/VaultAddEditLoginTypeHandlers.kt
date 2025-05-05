@@ -26,6 +26,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * clicked.
  * @property onClearFido2CredentialClick Handles the action when the clear Fido2 credential button
  * is clicked.
+ * @property onAuthenticatorHelpToolTipClick Handles the action when the authenticator help tooltip
+ * is clicked.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
@@ -42,6 +44,9 @@ data class VaultAddEditLoginTypeHandlers(
     val onAddNewUriClick: () -> Unit,
     val onPasswordVisibilityChange: (Boolean) -> Unit,
     val onClearFido2CredentialClick: () -> Unit,
+    val onStartLoginCoachMarkTour: () -> Unit,
+    val onDismissLearnAboutLoginsCard: () -> Unit,
+    val onAuthenticatorHelpToolTipClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -101,6 +106,11 @@ data class VaultAddEditLoginTypeHandlers(
                 onAddNewUriClick = {
                     viewModel.trySendAction(VaultAddEditAction.ItemType.LoginType.AddNewUriClick)
                 },
+                onAuthenticatorHelpToolTipClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
+                    )
+                },
                 onCopyTotpKeyClick = { totpKey ->
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
@@ -121,6 +131,16 @@ data class VaultAddEditLoginTypeHandlers(
                 onClearFido2CredentialClick = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick,
+                    )
+                },
+                onStartLoginCoachMarkTour = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins,
+                    )
+                },
+                onDismissLearnAboutLoginsCard = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed,
                     )
                 },
             )

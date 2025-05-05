@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -16,16 +16,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
-import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
@@ -41,7 +42,7 @@ fun VaultItemListingContent(
     showAddTotpBanner: Boolean,
     collectionClick: (id: String) -> Unit,
     folderClick: (id: String) -> Unit,
-    vaultItemClick: (id: String) -> Unit,
+    vaultItemClick: (id: String, cipherType: CipherType?) -> Unit,
     masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -101,25 +102,25 @@ fun VaultItemListingContent(
     LazyColumn(
         modifier = modifier,
     ) {
-        item {
-            if (showAddTotpBanner) {
+        if (showAddTotpBanner) {
+            item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.add_this_authenticator_key_to_a_login),
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
         }
 
-        item {
-            if (policyDisablesSend) {
+        if (policyDisablesSend) {
+            item {
                 Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
@@ -127,83 +128,80 @@ fun VaultItemListingContent(
 
         if (state.displayCollectionList.isNotEmpty()) {
             item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.collections),
                     supportingLabel = state.displayCollectionList.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-
-            items(state.displayCollectionList) { collection ->
+            itemsIndexed(state.displayCollectionList) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = R.drawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },
                     showDivider = false,
+                    cardStyle = state
+                        .displayCollectionList
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         if (state.displayFolderList.isNotEmpty()) {
             item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.folders),
                     supportingLabel = state.displayFolderList.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-
-            items(state.displayFolderList) { folder ->
+            itemsIndexed(state.displayFolderList) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = R.drawable.ic_folder),
                     label = folder.name,
                     supportingLabel = folder.count.toString(),
                     onClick = { folderClick(folder.id) },
                     showDivider = false,
+                    cardStyle = state
+                        .displayFolderList
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-            }
-        }
-
-        if (state.shouldShowDivider) {
-            item {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
         }
 
         if (state.displayItemList.isNotEmpty()) {
             item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.items),
                     supportingLabel = state.displayItemList.size.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            items(state.displayItemList) {
+            itemsIndexed(state.displayItemList) { index, it ->
                 BitwardenListItem(
                     startIcon = it.iconData,
                     startIconTestTag = it.iconTestTag,
@@ -224,13 +222,10 @@ fun VaultItemListingContent(
                                 cipherId = it.id,
                             )
                         } else {
-                            vaultItemClick(it.id)
+                            vaultItemClick(it.id, it.type)
                         }
                     },
-                    trailingLabelIcons = it
-                        .extraIconList
-                        .toIconResources()
-                        .toPersistentList(),
+                    trailingLabelIcons = it.extraIconList,
                     selectionDataList = it
                         .overflowOptions
                         .map { option ->
@@ -263,14 +258,12 @@ fun VaultItemListingContent(
                         // Only show options if allowed
                         .filter { !policyDisablesSend }
                         .toPersistentList(),
+                    cardStyle = state
+                        .displayItemList
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            start = 16.dp,
-                            // There is some built-in padding to the menu button that makes up
-                            // the visual difference here.
-                            end = 12.dp,
-                        ),
+                        .standardHorizontalMargin(),
                 )
             }
         }

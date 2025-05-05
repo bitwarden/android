@@ -15,5 +15,6 @@ fun BitwardenCircularProgressIndicator(
     CircularProgressIndicator(
         modifier = modifier,
         color = BitwardenTheme.colorScheme.stroke.border,
+        trackColor = BitwardenTheme.colorScheme.background.tertiary,
     )
 }

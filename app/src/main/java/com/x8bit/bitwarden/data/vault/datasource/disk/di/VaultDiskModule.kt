@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.di
 
 import android.app.Application
 import androidx.room.Room
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.callback.DatabaseSchemeCallback
@@ -40,7 +40,7 @@ class VaultDiskModule {
                 klass = VaultDatabase::class.java,
                 name = "vault_database",
             )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(dropAllTables = false)
             .addCallback(DatabaseSchemeCallback(databaseSchemeManager = databaseSchemeManager))
             .addTypeConverter(ZonedDateTimeTypeConverter())
             .build()

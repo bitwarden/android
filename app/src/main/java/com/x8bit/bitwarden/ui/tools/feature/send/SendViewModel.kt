@@ -4,26 +4,28 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -37,7 +39,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the send screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -46,6 +48,7 @@ class SendViewModel @Inject constructor(
     settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
     policyManager: PolicyManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -110,6 +113,22 @@ class SendViewModel @Inject constructor(
         is SendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
 
         is SendAction.Internal.PolicyUpdateReceive -> handlePolicyUpdateReceive(action)
+
+        SendAction.Internal.InternetConnectionErrorReceived -> {
+            handleInternetConnectionErrorReceived()
+        }
+    }
+
+    private fun handleInternetConnectionErrorReceived() {
+        mutableStateFlow.update {
+            it.copy(
+                isRefreshing = false,
+                dialogState = SendState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            )
+        }
     }
 
     private fun handlePullToRefreshEnableReceive(
@@ -121,13 +140,14 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendResultReceive(action: SendAction.Internal.DeleteSendResultReceive) {
-        when (action.result) {
-            DeleteSendResult.Error -> {
+        when (val result = action.result) {
+            is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -180,10 +200,15 @@ class SendViewModel @Inject constructor(
                 }
             }
 
-            is DataState.Loaded -> {
+            is DataState.NoNetwork,
+            is DataState.Loaded,
+                -> {
+                val data = dataState
+                    .data
+                    ?: SendData(sendViewList = emptyList())
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = dataState.data.toViewState(
+                        viewState = data.toViewState(
                             baseWebSendUrl = environmentRepo
                                 .environment
                                 .environmentUrlData
@@ -198,23 +223,6 @@ class SendViewModel @Inject constructor(
             DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = SendState.ViewState.Loading)
-                }
-            }
-
-            is DataState.NoNetwork -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = SendState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
-                                .asText()
-                                .concat(
-                                    " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
-                                ),
-                        ),
-                        dialogState = null,
-                        isRefreshing = false,
-                    )
                 }
             }
 
@@ -250,7 +258,7 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepo.lockVaultForCurrentUser()
+        vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleRefreshClick() {
@@ -263,14 +271,32 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSyncClick() {
-        mutableStateFlow.update {
-            it.copy(dialogState = SendState.DialogState.Loading(R.string.syncing.asText()))
+        if (networkConnectionManager.isNetworkConnected) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SendState.DialogState.Loading(
+                        message = R.string.syncing.asText(),
+                    ),
+                )
+            }
+            vaultRepo.sync(forced = true)
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SendState.DialogState.Error(
+                        R.string.internet_connection_required_title.asText(),
+                        R.string.internet_connection_required_message.asText(),
+                    ),
+                )
+            }
         }
-        vaultRepo.sync(forced = true)
     }
 
     private fun handleCopyClick(action: SendAction.CopyClick) {
-        clipboardManager.setText(text = action.sendItem.shareUrl)
+        clipboardManager.setText(
+            text = action.sendItem.shareUrl,
+            toastDescriptorOverride = R.string.send_link.asText(),
+        )
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {
@@ -317,11 +343,17 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
+    @Suppress("MagicNumber")
     private fun handleRefreshPull() {
         mutableStateFlow.update { it.copy(isRefreshing = true) }
-        // The Pull-To-Refresh composable is already in the refreshing state.
-        // We will reset that state when sendDataStateFlow emits later on.
-        vaultRepo.sync(forced = false)
+        viewModelScope.launch {
+            delay(250)
+            if (networkConnectionManager.isNetworkConnected) {
+                vaultRepo.sync(forced = false)
+            } else {
+                sendAction(SendAction.Internal.InternetConnectionErrorReceived)
+            }
+        }
     }
 }
 
@@ -378,7 +410,7 @@ data class SendState(
                 val name: String,
                 val deletionDate: String,
                 val type: Type,
-                val iconList: List<IconRes>,
+                val iconList: ImmutableList<IconData>,
                 val shareUrl: String,
                 val hasPassword: Boolean,
             ) : Parcelable {
@@ -434,6 +466,7 @@ data class SendState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -569,6 +602,11 @@ sealed class SendAction {
         data class PolicyUpdateReceive(
             val policyDisablesSend: Boolean,
         ) : Internal()
+
+        /**
+         * Indicates that the there is not internet connection.
+         */
+        data object InternetConnectionErrorReceived : Internal()
     }
 }
 

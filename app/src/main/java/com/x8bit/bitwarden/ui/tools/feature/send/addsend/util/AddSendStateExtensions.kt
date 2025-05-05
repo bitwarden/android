@@ -31,7 +31,11 @@ fun AddSendState.ViewState.Content.toSendView(
         hideEmail = common.isHideEmailChecked,
         revisionDate = clock.instant(),
         deletionDate = common.deletionDate.toInstant(),
-        expirationDate = common.expirationDate?.toInstant(),
+        expirationDate = common.expirationDate?.let {
+            // We no longer support expiration dates but is a send has one already,
+            // we just update it to match the deletion date.
+            common.deletionDate.toInstant()
+        },
     )
 
 private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =

@@ -1,25 +1,24 @@
 package com.x8bit.bitwarden.data.platform.repository
 
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.data.repository.ServerConfigRepository
+import com.bitwarden.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.FeatureFlagOverrideDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -106,10 +105,6 @@ class DebugMenuRepositoryTest {
                     FlagKey.EmailVerification.defaultValue,
                 )
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.OnboardingCarousel,
-                    FlagKey.OnboardingCarousel.defaultValue,
-                )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
                     FlagKey.OnboardingFlow.defaultValue,
                 )
@@ -128,7 +123,6 @@ class DebugMenuRepositoryTest {
             val mockServerData = mockk<ConfigResponseJson>(relaxed = true) {
                 every { featureStates } returns mapOf(
                     FlagKey.EmailVerification.keyName to JsonPrimitive(true),
-                    FlagKey.OnboardingCarousel.keyName to JsonPrimitive(false),
                     FlagKey.OnboardingFlow.keyName to JsonPrimitive(true),
                 )
             }
@@ -140,16 +134,11 @@ class DebugMenuRepositoryTest {
             debugMenuRepository.resetFeatureFlagOverrides()
 
             assertTrue(FlagKey.EmailVerification.isRemotelyConfigured)
-            assertFalse(FlagKey.OnboardingCarousel.isRemotelyConfigured)
             verify(exactly = 1) {
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(FlagKey.EmailVerification, true)
                 mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.OnboardingCarousel,
-                    false,
-                )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
                     FlagKey.OnboardingFlow,
-                    false,
+                    true,
                 )
             }
 
@@ -158,7 +147,6 @@ class DebugMenuRepositoryTest {
                 awaitItem()
                 cancel()
             }
-            unmockkStatic(FlagKey.OnboardingFlow::class)
         }
 
     @Test
@@ -202,6 +190,23 @@ class DebugMenuRepositoryTest {
             mockSettingsDiskSource.hasUserLoggedInOrCreatedAccount = false
         }
         assertTrue(lambdaHasBeenCalled)
+    }
+
+    @Test
+    fun `resetCoachMarkTourStatuses calls settings disk source setting values back to null`() {
+        every {
+            mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = any())
+        } just runs
+        every {
+            mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = any())
+        } just runs
+
+        debugMenuRepository.resetCoachMarkTourStatuses()
+
+        verify(exactly = 1) {
+            mockSettingsDiskSource.storeShouldShowGeneratorCoachMark(shouldShow = null)
+            mockSettingsDiskSource.storeShouldShowAddLoginCoachMark(shouldShow = null)
+        }
     }
 }
 

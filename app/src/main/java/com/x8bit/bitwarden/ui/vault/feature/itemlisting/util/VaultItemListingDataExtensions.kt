@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -17,7 +18,6 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
@@ -175,7 +175,7 @@ fun VaultData.toViewState(
             ?.toHostOrPathOrNull()
             ?.let { R.string.no_items_for_uri.asText(it) }
             ?: fido2CreationData
-                ?.origin
+                ?.relyingPartyIdOrNull
                 ?.toHostOrPathOrNull()
                 ?.let { R.string.no_items_for_uri.asText(it) }
             ?: totpData?.let { R.string.search_for_a_login_or_add_a_new_login.asText() }
@@ -193,12 +193,29 @@ fun VaultData.toViewState(
                         R.string.no_items_trash
                     }
 
-                    else -> R.string.no_items
+                    VaultItemListingState.ItemListingType.Vault.Card -> {
+                        R.string.no_cards
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Identity -> {
+                        R.string.no_identities
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.Login -> {
+                        R.string.no_logins
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.SecureNote -> {
+                        R.string.no_notes
+                    }
+
+                    VaultItemListingState.ItemListingType.Vault.SshKey -> {
+                        R.string.no_ssh_keys
+                    }
                 }
                     .asText()
             }
         val shouldShowAddButton = when (itemListingType) {
-            is VaultItemListingState.ItemListingType.Vault.Folder,
             VaultItemListingState.ItemListingType.Vault.Trash,
             VaultItemListingState.ItemListingType.Vault.SshKey,
                 -> false
@@ -207,16 +224,39 @@ fun VaultData.toViewState(
         }
         VaultItemListingState.ViewState.NoItems(
             header = totpData
-                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") }
-                ?: R.string.save_and_protect_your_data.asText(),
+                ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") },
             message = message,
             shouldShowAddButton = shouldShowAddButton,
             buttonText = fido2CreationData
                 ?.let { R.string.save_passkey_as_new_login.asText() }
-                ?: R.string.add_an_item.asText(),
+                ?: run {
+                    when (itemListingType) {
+                        VaultItemListingState.ItemListingType.Vault.Card -> {
+                            R.string.new_card
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.Identity -> {
+                            R.string.new_identity
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.Login -> {
+                            R.string.new_login
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.SecureNote -> {
+                            R.string.new_note
+                        }
+
+                        VaultItemListingState.ItemListingType.Vault.SshKey -> {
+                            R.string.new_ssh_key
+                        }
+
+                        else -> R.string.new_item
+                    }
+                        .asText()
+                },
             vectorRes = totpData
-                ?.let { R.drawable.img_folder_question }
-                ?: R.drawable.img_vault_items,
+                ?.let { R.drawable.img_folder_question },
         )
     }
 }
@@ -225,6 +265,7 @@ fun VaultData.toViewState(
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
 fun List<SendView>.toViewState(
+    itemListingType: VaultItemListingState.ItemListingType.Send,
     baseWebSendUrl: String,
     clock: Clock,
 ): VaultItemListingState.ViewState =
@@ -239,10 +280,17 @@ fun List<SendView>.toViewState(
         )
     } else {
         VaultItemListingState.ViewState.NoItems(
-            header = R.string.save_and_protect_your_data.asText(),
-            message = R.string.no_items.asText(),
+            message = when (itemListingType) {
+                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.no_file_sends
+                VaultItemListingState.ItemListingType.Send.SendText -> R.string.no_text_sends
+            }
+                .asText(),
             shouldShowAddButton = true,
-            buttonText = R.string.add_an_item.asText(),
+            buttonText = when (itemListingType) {
+                VaultItemListingState.ItemListingType.Send.SendFile -> R.string.new_file_send
+                VaultItemListingState.ItemListingType.Send.SendText -> R.string.new_text_send
+            }
+                .asText(),
         )
     }
 
@@ -263,13 +311,17 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
                 .orEmpty(),
         )
 
-        is VaultItemListingState.ItemListingType.Vault.Folder -> copy(
-            folderName = folderList
+        is VaultItemListingState.ItemListingType.Vault.Folder -> {
+            val fullyQualifiedName = folderList
                 .find { it.id == folderId }
                 ?.name
-                ?.toFolderDisplayName(folderList)
-                .orEmpty(),
-        )
+            copy(
+                folderName = fullyQualifiedName
+                    ?.toFolderDisplayName()
+                    .orEmpty(),
+                fullyQualifiedName = fullyQualifiedName.orEmpty(),
+            )
+        }
 
         is VaultItemListingState.ItemListingType.Vault.Identity -> this
         is VaultItemListingState.ItemListingType.Vault.Login -> this
@@ -358,6 +410,7 @@ private fun CipherView.toDisplayItem(
         isTotp = isTotp,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
+        type = this.type,
     )
 
 private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
@@ -429,6 +482,7 @@ private fun SendView.toDisplayItem(
         shouldShowMasterPasswordReprompt = false,
         isFido2Creation = false,
         isTotp = false,
+        type = null,
     )
 
 @get:DrawableRes

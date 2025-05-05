@@ -3,7 +3,10 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -25,8 +28,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -186,7 +187,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> Unit
+            is PasswordStrengthResult.Error -> Unit
         }
     }
 
@@ -209,6 +210,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = registerAccountResult.error,
                         ),
                     )
                 }
@@ -272,6 +274,11 @@ class CompleteRegistrationViewModel @Inject constructor(
                 message = R.string.account_created_success.asText(),
             ),
         )
+
+        authRepository.setOnboardingStatus(
+            status = OnboardingStatus.NOT_STARTED,
+        )
+
         // If the login result is Success the state based navigation will take care of it.
         // otherwise we need to navigate to the login screen.
         if (action.loginResult !is LoginResult.Success) {
@@ -519,6 +526,7 @@ sealed class CompleteRegistrationDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : CompleteRegistrationDialog()
 }
 

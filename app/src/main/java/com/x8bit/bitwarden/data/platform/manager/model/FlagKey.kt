@@ -29,23 +29,30 @@ sealed class FlagKey<out T : Any> {
                 AuthenticatorSync,
                 EmailVerification,
                 OnboardingFlow,
-                OnboardingCarousel,
                 ImportLoginsFlow,
-                SshKeyCipherItems,
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
+                MutualTls,
+                SingleTapPasskeyCreation,
+                SingleTapPasskeyAuthentication,
+                AnonAddySelfHostAlias,
+                SimpleLoginSelfHostAlias,
+                ChromeAutofill,
+                MobileErrorReporting,
+                FlightRecorder,
+                PreAuthSettings,
             )
         }
     }
 
     /**
-     *  Data object holding the key for syncing with the Bitwarden Authenticator app.
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
      */
     data object AuthenticatorSync : FlagKey<Boolean>() {
-        override val keyName: String = "enable-authenticator-sync-android"
+        override val keyName: String = "enable-pm-bwa-sync"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -58,10 +65,19 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
-     * Data object holding the feature flag key for the Onboarding Carousel feature.
+     * Data object holding the key for syncing with the Bitwarden Authenticator app.
      */
-    data object OnboardingCarousel : FlagKey<Boolean>() {
-        override val keyName: String = "native-carousel-flow"
+    data object MobileErrorReporting : FlagKey<Boolean>() {
+        override val keyName: String = "mobile-error-reporting"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the key for enabling the flught recorder feature.
+     */
+    data object FlightRecorder : FlagKey<Boolean>() {
+        override val keyName: String = "enable-pm-flight-recorder"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = false
     }
@@ -72,7 +88,7 @@ sealed class FlagKey<out T : Any> {
     data object OnboardingFlow : FlagKey<Boolean>() {
         override val keyName: String = "native-create-account-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -80,15 +96,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
-        override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the SSH key cipher items feature.
-     */
-    data object SshKeyCipherItems : FlagKey<Boolean>() {
-        override val keyName: String = "ssh-key-vault-item"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
     }
@@ -120,6 +127,80 @@ sealed class FlagKey<out T : Any> {
         override val keyName: String = "cxp-export-mobile"
         override val defaultValue: Boolean = false
         override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the Cipher Key Encryption feature.
+     */
+    data object CipherKeyEncryption : FlagKey<Boolean>() {
+        override val keyName: String = "cipher-key-encryption"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key for the Mutual TLS feature.
+     */
+    data object MutualTls : FlagKey<Boolean>() {
+        override val keyName: String = "mutual-tls"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable single tap passkey creation.
+     */
+    data object SingleTapPasskeyCreation : FlagKey<Boolean>() {
+        override val keyName: String = "single-tap-passkey-creation"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable single tap passkey authentication.
+     */
+    data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
+        override val keyName: String = "single-tap-passkey-authentication"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable AnonAddy (addy.io) self host alias
+     * generation.
+     */
+    data object AnonAddySelfHostAlias : FlagKey<Boolean>() {
+        override val keyName: String = "anon-addy-self-host-alias"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable SimpleLogin self-host alias generation.
+     */
+    data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
+        override val keyName: String = "simple-login-self-host-alias"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the checking for Chrome's third party
+     * autofill.
+     */
+    data object ChromeAutofill : FlagKey<Boolean>() {
+        override val keyName: String = "android-chrome-autofill"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
+     * Data object holding the feature flag key to enable the settings menu before login.
+     */
+    data object PreAuthSettings : FlagKey<Boolean>() {
+        override val keyName: String = "enable-pm-prelogin-settings"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = false
     }
 
     //region Dummy keys for testing

@@ -6,14 +6,15 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,7 +38,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             DeleteAccountScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToDeleteAccountConfirmation = {
@@ -71,7 +72,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
     fun `loading dialog presence should update with dialog state`() {
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -80,7 +81,7 @@ class DeleteAccountScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertExists()
     }
 
@@ -213,9 +214,48 @@ class DeleteAccountScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `if isUserManagedByOrganization should display cannot delete message and hide delete button`() {
+        composeTestRule
+            .onNodeWithText("Cannot delete your account")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("This action cannot be completed because your account " +
+                "is owned by an organization. " +
+                "Contact your organization administrator for additional details.")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Delete account")
+            .filterToOne(hasClickAction())
+            .assertExists()
+
+        mutableStateFlow.update {
+            it.copy(isUserManagedByOrganization = true)
+        }
+
+        composeTestRule
+            .onNodeWithText("Cannot delete your account")
+            .assertExists()
+
+        composeTestRule
+            .onNodeWithText("This action cannot be completed because your account " +
+                "is owned by an organization. " +
+                "Contact your organization administrator for additional details.")
+            .assertExists()
+
+        composeTestRule
+            .onAllNodesWithText("Delete account")
+            .filterToOne(hasClickAction())
+            .assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )

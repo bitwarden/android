@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.sdk
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
-import com.bitwarden.sdk.ClientGenerators
+import com.bitwarden.sdk.GeneratorClients
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 
@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
  * Implementation of [GeneratorSdkSource] that delegates password generation.
  *
  * @property sdkClientManager The [SdkClientManager] used to retrieve an instance of the
- * [ClientGenerators] provided by the Bitwarden SDK.
+ * [GeneratorClients] provided by the Bitwarden SDK.
  */
 class GeneratorSdkSourceImpl(
     sdkClientManager: SdkClientManager,

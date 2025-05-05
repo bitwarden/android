@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -10,17 +9,16 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
+    private val mutableAppLanguageStateFlow = MutableStateFlow(AppLanguage.DEFAULT)
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { appLanguage } returns AppLanguage.DEFAULT
         every { appTheme } returns AppTheme.DEFAULT
@@ -28,16 +26,7 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabled = true } just runs
         every { appTheme = AppTheme.DARK } just runs
-    }
-
-    @BeforeEach
-    fun setup() {
-        mockkStatic(AppCompatDelegate::setApplicationLocales)
-    }
-
-    @AfterEach
-    fun teardown() {
-        unmockkStatic(AppCompatDelegate::setApplicationLocales)
+        every { appLanguageStateFlow } returns mutableAppLanguageStateFlow
     }
 
     @Test
@@ -63,31 +52,31 @@ class AppearanceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on LanguageChange should update state and store language`() = runTest {
-        val viewModel = createViewModel(
-            settingsRepository = mockSettingsRepository,
-        )
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE,
-                awaitItem(),
-            )
-            viewModel.trySendAction(
-                AppearanceAction.LanguageChange(AppLanguage.ENGLISH),
-            )
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    language = AppLanguage.ENGLISH,
-                ),
-                awaitItem(),
-            )
-        }
-        verify {
-            AppCompatDelegate.setApplicationLocales(any())
-            mockSettingsRepository.appLanguage
-            mockSettingsRepository.appLanguage = AppLanguage.ENGLISH
-        }
+    fun `on LanguageChange should store updated language in repository`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(AppearanceAction.LanguageChange(AppLanguage.ENGLISH))
+
+        verify { mockSettingsRepository.appLanguage = AppLanguage.ENGLISH }
     }
+
+    @Test
+    fun `on AppLanguageStateFlow value updated, view model language state should change`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+                mutableAppLanguageStateFlow.update { AppLanguage.AFRIKAANS }
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        language = AppLanguage.AFRIKAANS,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `on ShowWebsiteIconsToggle should update state and store the value`() = runTest {
@@ -126,11 +115,11 @@ class AppearanceViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(theme = AppTheme.DARK),
                 awaitItem(),
             )
+        }
 
-            verify {
-                mockSettingsRepository.appTheme
-                mockSettingsRepository.appTheme = AppTheme.DARK
-            }
+        verify(exactly = 1) {
+            mockSettingsRepository.appTheme
+            mockSettingsRepository.appTheme = AppTheme.DARK
         }
     }
 

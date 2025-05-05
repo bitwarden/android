@@ -1,18 +1,25 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.content.Context
 import android.net.Uri
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.service.DownloadService
 import com.x8bit.bitwarden.data.platform.util.sdkAgnosticTransferTo
-import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
+import com.x8bit.bitwarden.data.vault.manager.model.ZipFileResult
 import kotlinx.coroutines.withContext
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.UUID
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * The buffer size to be used when reading from an input stream.
@@ -22,7 +29,6 @@ private const val BUFFER_SIZE: Int = 1024
 /**
  * The default implementation of the [FileManager] interface.
  */
-@OmitFromCoverage
 class FileManagerImpl(
     private val context: Context,
     private val downloadService: DownloadService,
@@ -31,6 +37,9 @@ class FileManagerImpl(
 
     override val filesDirectory: String
         get() = context.filesDir.absolutePath
+
+    override val logsDirectory: String
+        get() = "${context.dataDir}/logs"
 
     override suspend fun delete(vararg files: File) {
         withContext(dispatcherManager.io) {
@@ -44,7 +53,7 @@ class FileManagerImpl(
             .getDataStream(url)
             .fold(
                 onSuccess = { it },
-                onFailure = { return DownloadResult.Failure },
+                onFailure = { return DownloadResult.Failure(error = it) },
             )
 
         // Create a temporary file in cache to write to
@@ -66,7 +75,7 @@ class FileManagerImpl(
                         }
                         fos.flush()
                     } catch (e: RuntimeException) {
-                        return@withContext DownloadResult.Failure
+                        return@withContext DownloadResult.Failure(error = e)
                     }
                 }
             }
@@ -94,7 +103,7 @@ class FileManagerImpl(
                     }
             }
             true
-        } catch (exception: RuntimeException) {
+        } catch (_: RuntimeException) {
             false
         }
     }
@@ -111,7 +120,7 @@ class FileManagerImpl(
                     }
             }
             true
-        } catch (exception: RuntimeException) {
+        } catch (_: RuntimeException) {
             false
         }
     }
@@ -136,6 +145,36 @@ class FileManagerImpl(
             }
         }
 
+    override suspend fun zipUriToCache(
+        uri: Uri,
+    ): ZipFileResult =
+        runCatching {
+            withContext(dispatcherManager.io) {
+                val sourceFile = File(uri.toString())
+                if (!sourceFile.exists()) {
+                    ZipFileResult.NothingToZip
+                } else {
+                    val zipFile = File.createTempFile(
+                        "bitwarden_flight_recorder",
+                        ".zip",
+                        context.cacheDir,
+                    )
+                    FileOutputStream(zipFile).use { fos ->
+                        BufferedOutputStream(fos).use { bos ->
+                            ZipOutputStream(bos).use { zos ->
+                                zos.zipFiles(sourceFile = sourceFile)
+                            }
+                        }
+                    }
+                    ZipFileResult.Success(file = zipFile)
+                }
+            }
+        }
+            .fold(
+                onFailure = { ZipFileResult.Failure(error = it) },
+                onSuccess = { it },
+            )
+
     override suspend fun writeUriToCache(fileUri: Uri): Result<File> =
         runCatching {
             withContext(dispatcherManager.io) {
@@ -154,4 +193,41 @@ class FileManagerImpl(
                 File(context.filesDir, tempFileName)
             }
         }
+}
+
+/**
+ * A helper function to write the files to a zip file.
+ */
+@Suppress("NestedBlockDepth")
+private fun ZipOutputStream.zipFiles(
+    sourceFile: File,
+    parentDir: String? = null,
+) {
+    if (sourceFile.isDirectory) {
+        val parentDirName = sourceFile.name + File.separator
+        val entry = ZipEntry(parentDirName).apply {
+            this.time = sourceFile.lastModified()
+            this.size = sourceFile.length()
+        }
+        this.putNextEntry(entry)
+        sourceFile.listFiles().orEmpty().forEach { file ->
+            this.zipFiles(sourceFile = file, parentDir = parentDirName)
+        }
+    } else {
+        FileInputStream(sourceFile).use { fis ->
+            BufferedInputStream(fis).use { bis ->
+                val entry = ZipEntry("${parentDir.orEmpty()}/${sourceFile.name}").apply {
+                    this.time = sourceFile.lastModified()
+                    this.size = sourceFile.length()
+                }
+                this.putNextEntry(entry)
+                val data = ByteArray(BUFFER_SIZE)
+                while (true) {
+                    val readBytes = bis.read(data)
+                    if (readBytes == -1) break
+                    this.write(data, 0, readBytes)
+                }
+            }
+        }
+    }
 }

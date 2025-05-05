@@ -249,6 +249,76 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on init with SendShortcut special circumstance should navigate to the send screen with shortcut event`() =
+        runTest {
+            every {
+                specialCircumstancesManager.specialCircumstance
+            } returns SpecialCircumstance.SendShortcut
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen,
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                specialCircumstancesManager.specialCircumstance
+                specialCircumstancesManager.specialCircumstance = null
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on init with VerificationCodeShortcut special circumstance should navigate to the Vault screen with shortcut event`() =
+        runTest {
+            every {
+                specialCircumstancesManager.specialCircumstance
+            } returns SpecialCircumstance.VerificationCodeShortcut
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                        labelRes = R.string.my_vault,
+                        contentDescRes = R.string.my_vault,
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                specialCircumstancesManager.specialCircumstance
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on init with SearchShortcut special circumstance should navigate to the Vault screen with shortcut event`() =
+        runTest {
+            every {
+                specialCircumstancesManager.specialCircumstance
+            } returns SpecialCircumstance.SearchShortcut("")
+
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                        labelRes = R.string.my_vault,
+                        contentDescRes = R.string.my_vault,
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                specialCircumstancesManager.specialCircumstance
+            }
+        }
+
     private fun createViewModel() =
         VaultUnlockedNavBarViewModel(
             authRepository = authRepository,

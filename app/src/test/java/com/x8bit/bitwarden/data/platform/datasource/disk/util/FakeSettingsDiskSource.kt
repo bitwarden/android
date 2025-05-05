@@ -1,14 +1,19 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.util
 
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
+import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant
 
 /**
@@ -16,8 +21,11 @@ import java.time.Instant
  */
 class FakeSettingsDiskSource : SettingsDiskSource {
 
-    private val mutableAppThemeFlow =
-        bufferedMutableSharedFlow<AppTheme>(replay = 1)
+    private val mutableAppLanguageFlow = bufferedMutableSharedFlow<AppLanguage?>(replay = 1)
+
+    private val mutableAppThemeFlow = bufferedMutableSharedFlow<AppTheme>(replay = 1)
+
+    private val mutableScreenCaptureAllowedFlow = bufferedMutableSharedFlow<Boolean?>(replay = 1)
 
     private val mutableLastSyncCallFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
@@ -39,9 +47,15 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableHasUserLoggedInOrCreatedAccount =
         bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableScreenCaptureAllowedFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+    private val mutableShouldShowAddLoginCoachMarkFlow = bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableShouldShowGeneratorCoachMarkFlow =
+        bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableFlightRecorderDataFlow =
+        bufferedMutableSharedFlow<FlightRecorderDataSet?>(replay = 1)
+
+    private var storedAppLanguage: AppLanguage? = null
     private var storedAppTheme: AppTheme = AppTheme.DEFAULT
     private val storedLastSyncTime = mutableMapOf<String, Instant?>()
     private val storedVaultTimeoutActions = mutableMapOf<String, VaultTimeoutAction?>()
@@ -57,14 +71,21 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedIsCrashLoggingEnabled: Boolean? = null
     private var storedHasUserLoggedInOrCreatedAccount: Boolean? = null
     private var storedInitialAutofillDialogShown: Boolean? = null
-    private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
+    private var storedScreenCaptureAllowed: Boolean? = null
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
+    private val storedAppResumeScreenData = mutableMapOf<String, String?>()
     private val userSignIns = mutableMapOf<String, Boolean>()
     private val userShowAutoFillBadge = mutableMapOf<String, Boolean?>()
     private val userShowUnlockBadge = mutableMapOf<String, Boolean?>()
     private val userShowImportLoginsBadge = mutableMapOf<String, Boolean?>()
     private val vaultRegisteredForExport = mutableMapOf<String, Boolean?>()
+    private var addCipherActionCount: Int? = null
+    private var generatedActionCount: Int? = null
+    private var createSendActionCount: Int? = null
+    private var hasSeenAddLoginCoachMark: Boolean? = null
+    private var hasSeenGeneratorCoachMark: Boolean? = null
+    private var storedFlightRecorderData: FlightRecorderDataSet? = null
 
     private val mutableShowAutoFillSettingBadgeFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -78,7 +99,15 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableVaultRegisteredForExportFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    override var appLanguage: AppLanguage? = null
+    override var appLanguage: AppLanguage?
+        get() = storedAppLanguage
+        set(value) {
+            storedAppLanguage = value
+            mutableAppLanguageFlow.tryEmit(value)
+        }
+
+    override val appLanguageFlow: Flow<AppLanguage?>
+        get() = mutableAppLanguageFlow.onSubscription { emit(appLanguage) }
 
     override var appTheme: AppTheme
         get() = storedAppTheme
@@ -91,6 +120,16 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableAppThemeFlow.onSubscription {
             emit(appTheme)
         }
+
+    override var screenCaptureAllowed: Boolean?
+        get() = storedScreenCaptureAllowed
+        set(value) {
+            storedScreenCaptureAllowed = value
+            mutableScreenCaptureAllowedFlow.tryEmit(value)
+        }
+
+    override val screenCaptureAllowedFlow: Flow<Boolean?>
+        get() = mutableScreenCaptureAllowedFlow.onSubscription { emit(screenCaptureAllowed) }
 
     override var systemBiometricIntegritySource: String?
         get() = storedSystemBiometricIntegritySource
@@ -139,6 +178,17 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
             emit(hasUserLoggedInOrCreatedAccount)
         }
+
+    override var flightRecorderData: FlightRecorderDataSet?
+        get() = storedFlightRecorderData
+        set(value) {
+            storedFlightRecorderData = value
+            mutableFlightRecorderDataFlow.tryEmit(value)
+        }
+
+    override val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
+        get() = mutableFlightRecorderDataFlow
+            .onSubscription { emit(storedFlightRecorderData) }
 
     override fun getAccountBiometricIntegrityValidity(
         userId: String,
@@ -280,21 +330,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedBlockedAutofillUris[userId] = blockedAutofillUris
     }
 
-    override fun getScreenCaptureAllowed(userId: String): Boolean? =
-        storedScreenCaptureAllowed[userId]
-
-    override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> {
-        return getMutableScreenCaptureAllowedFlow(userId)
-    }
-
-    override fun storeScreenCaptureAllowed(
-        userId: String,
-        isScreenCaptureAllowed: Boolean?,
-    ) {
-        storedScreenCaptureAllowed[userId] = isScreenCaptureAllowed
-        getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)
-    }
-
     override fun storeUseHasLoggedInPreviously(userId: String) {
         userSignIns[userId] = true
     }
@@ -353,13 +388,73 @@ class FakeSettingsDiskSource : SettingsDiskSource {
             emit(getVaultRegisteredForExport(userId = userId))
         }
 
-    //region Private helper functions
-    private fun getMutableScreenCaptureAllowedFlow(userId: String): MutableSharedFlow<Boolean?> {
-        return mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
-            bufferedMutableSharedFlow(replay = 1)
-        }
+    override fun getAddCipherActionCount(): Int? {
+        return addCipherActionCount
     }
 
+    override fun storeAddCipherActionCount(count: Int?) {
+        addCipherActionCount = count
+    }
+
+    override fun getGeneratedResultActionCount(): Int? {
+        return generatedActionCount
+    }
+
+    override fun storeGeneratedResultActionCount(count: Int?) {
+        generatedActionCount = count
+    }
+
+    override fun getCreateSendActionCount(): Int? {
+        return createSendActionCount
+    }
+
+    override fun storeCreateSendActionCount(count: Int?) {
+        createSendActionCount = count
+    }
+
+    override fun getShouldShowAddLoginCoachMark(): Boolean? {
+        return hasSeenAddLoginCoachMark
+    }
+
+    override fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?) {
+        hasSeenAddLoginCoachMark = shouldShow
+        mutableShouldShowAddLoginCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?> =
+        mutableShouldShowAddLoginCoachMarkFlow.onSubscription {
+            emit(getShouldShowAddLoginCoachMark())
+        }
+
+    override fun getShouldShowGeneratorCoachMark(): Boolean? =
+        hasSeenGeneratorCoachMark
+
+    override fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?) {
+        hasSeenGeneratorCoachMark = shouldShow
+        mutableShouldShowGeneratorCoachMarkFlow.tryEmit(shouldShow)
+    }
+
+    override fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?> =
+        mutableShouldShowGeneratorCoachMarkFlow.onSubscription {
+            emit(hasSeenGeneratorCoachMark)
+        }
+
+    override fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?) {
+        storedAppResumeScreenData[userId] = screenData.let { Json.encodeToString(it) }
+    }
+
+    override fun getAppResumeScreen(userId: String): AppResumeScreenData? {
+        return storedAppResumeScreenData[userId]?.let { Json.decodeFromStringOrNull(it) }
+    }
+
+    /**
+     * Asserts that the stored [FlightRecorderDataSet] matches the [expected] one.
+     */
+    fun assertFlightRecorderData(expected: FlightRecorderDataSet) {
+        assertEquals(expected, storedFlightRecorderData)
+    }
+
+    //region Private helper functions
     private fun getMutableLastSyncTimeFlow(
         userId: String,
     ): MutableSharedFlow<Instant?> =

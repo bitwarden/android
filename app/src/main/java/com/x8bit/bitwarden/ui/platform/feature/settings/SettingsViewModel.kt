@@ -1,16 +1,20 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.Text
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,8 +28,10 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     specialCircumstanceManager: SpecialCircumstanceManager,
     firstTimeActionManager: FirstTimeActionManager,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
+        isPreAuth = SettingsArgs(savedStateHandle = savedStateHandle).isPreAuth,
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,
@@ -58,10 +64,15 @@ class SettingsViewModel @Inject constructor(
     }
 
     override fun handleAction(action: SettingsAction): Unit = when (action) {
+        is SettingsAction.CloseClick -> handleCloseClick()
         is SettingsAction.SettingsClick -> handleAccountSecurityClick(action)
         is SettingsAction.Internal.SettingsNotificationCountUpdate -> {
             handleSettingsNotificationCountUpdate(action)
         }
+    }
+
+    private fun handleCloseClick() {
+        sendEvent(SettingsEvent.NavigateBack)
     }
 
     private fun handleSettingsNotificationCountUpdate(
@@ -109,10 +120,26 @@ class SettingsViewModel @Inject constructor(
  * Models the state of the settings screen.
  */
 data class SettingsState(
+    private val isPreAuth: Boolean,
     private val autoFillCount: Int,
     private val securityCount: Int,
     private val vaultCount: Int,
 ) {
+    val shouldShowCloseButton: Boolean = isPreAuth
+    val settingRows: ImmutableList<Settings> = Settings
+        .entries
+        .filter { setting ->
+            when (setting) {
+                Settings.ACCOUNT_SECURITY -> !isPreAuth
+                Settings.AUTO_FILL -> !isPreAuth
+                Settings.VAULT -> !isPreAuth
+                Settings.APPEARANCE -> true
+                Settings.OTHER -> true
+                Settings.ABOUT -> true
+            }
+        }
+        .toImmutableList()
+
     val notificationBadgeCountMap: Map<Settings, Int> = mapOf(
         Settings.ACCOUNT_SECURITY to securityCount,
         Settings.AUTO_FILL to autoFillCount,
@@ -124,6 +151,11 @@ data class SettingsState(
  * Models events for the settings screen.
  */
 sealed class SettingsEvent {
+    /**
+     * Navigates back. This is only possible prior to login.
+     */
+    data object NavigateBack : SettingsEvent()
+
     /**
      * Navigate to the about screen.
      */
@@ -165,6 +197,11 @@ sealed class SettingsEvent {
  */
 sealed class SettingsAction {
     /**
+     * THe user has clicked the close button
+     */
+    data object CloseClick : SettingsAction()
+
+    /**
      * User clicked a settings row.
      */
     data class SettingsClick(
@@ -194,30 +231,37 @@ sealed class SettingsAction {
  */
 enum class Settings(
     val text: Text,
+    @DrawableRes val vectorIconRes: Int,
     val testTag: String,
 ) {
     ACCOUNT_SECURITY(
         text = R.string.account_security.asText(),
+        vectorIconRes = R.drawable.ic_locked,
         testTag = "AccountSecuritySettingsButton",
     ),
     AUTO_FILL(
         text = R.string.autofill.asText(),
+        vectorIconRes = R.drawable.ic_check_mark,
         testTag = "AutofillSettingsButton",
     ),
     VAULT(
         text = R.string.vault.asText(),
+        vectorIconRes = R.drawable.ic_vault_thin,
         testTag = "VaultSettingsButton",
     ),
     APPEARANCE(
         text = R.string.appearance.asText(),
+        vectorIconRes = R.drawable.ic_paintbrush,
         testTag = "AppearanceSettingsButton",
     ),
     OTHER(
         text = R.string.other.asText(),
+        vectorIconRes = R.drawable.ic_filter,
         testTag = "OtherSettingsButton",
     ),
     ABOUT(
         text = R.string.about.asText(),
+        vectorIconRes = R.drawable.ic_info_circle,
         testTag = "AboutSettingsButton",
     ),
 }

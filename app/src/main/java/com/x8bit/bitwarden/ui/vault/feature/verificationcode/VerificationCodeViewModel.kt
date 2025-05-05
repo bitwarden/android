@@ -2,20 +2,20 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
@@ -106,7 +106,10 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(action: VerificationCodeAction.CopyClick) {
-        clipboardManager.setText(text = action.text)
+        clipboardManager.setText(
+            text = action.text,
+            toastDescriptorOverride = R.string.verification_code_totp.asText(),
+        )
     }
 
     private fun handleItemClick(action: VerificationCodeAction.ItemClick) {
@@ -116,7 +119,7 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun handleLockClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handleRefreshClick() {
@@ -210,9 +213,10 @@ class VerificationCodeViewModel @Inject constructor(
         verificationCodeData:
         DataState.NoNetwork<List<VerificationCodeItem>>,
     ) {
-        if (verificationCodeData.data != null) {
+        val data = verificationCodeData.data
+        if (data != null) {
             updateStateWithVerificationCodeData(
-                verificationCodeData = verificationCodeData.data,
+                verificationCodeData = data,
                 clearDialogState = true,
             )
         } else {
@@ -258,9 +262,10 @@ class VerificationCodeViewModel @Inject constructor(
     }
 
     private fun vaultErrorReceive(vaultData: DataState.Error<List<VerificationCodeItem>>) {
-        if (vaultData.data != null) {
+        val data = vaultData.data
+        if (data != null) {
             updateStateWithVerificationCodeData(
-                verificationCodeData = vaultData.data,
+                verificationCodeData = data,
                 clearDialogState = true,
             )
         } else {

@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -9,8 +11,6 @@ import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.SyncVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
@@ -38,7 +38,6 @@ class ImportLoginsViewModel @Inject constructor(
             ImportLoginsState(
                 dialogState = null,
                 viewState = ImportLoginsState.ViewState.InitialContent,
-                isVaultSyncing = false,
                 showBottomSheet = false,
                 // attempt to trim the scheme of the vault url
                 currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
@@ -73,7 +72,7 @@ class ImportLoginsViewModel @Inject constructor(
     private fun handleSuccessSyncAcknowledged() {
         mutableStateFlow.update {
             it.copy(
-                isVaultSyncing = false,
+                dialogState = null,
                 showBottomSheet = false,
             )
         }
@@ -96,10 +95,7 @@ class ImportLoginsViewModel @Inject constructor(
 
     private fun handleRetryVaultSync() {
         mutableStateFlow.update {
-            it.copy(
-                isVaultSyncing = true,
-                dialogState = null,
-            )
+            it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
         syncVault()
     }
@@ -111,7 +107,6 @@ class ImportLoginsViewModel @Inject constructor(
             is SyncVaultDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        isVaultSyncing = false,
                         dialogState = ImportLoginsState.DialogState.Error(),
                     )
                 }
@@ -124,15 +119,15 @@ class ImportLoginsViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             showBottomSheet = true,
-                            isVaultSyncing = false,
+                            dialogState = null,
                         )
                     }
                 } else {
                     mutableStateFlow.update {
                         it.copy(
-                            isVaultSyncing = false,
                             dialogState = ImportLoginsState.DialogState.Error(
-                                R.string.no_logins_were_imported.asText(),
+                                message = R.string.no_logins_were_imported.asText(),
+                                title = R.string.import_error.asText(),
                             ),
                         )
                     }
@@ -142,7 +137,7 @@ class ImportLoginsViewModel @Inject constructor(
     }
 
     private fun handleMoveToSyncInProgress() {
-        mutableStateFlow.update { it.copy(isVaultSyncing = true) }
+        mutableStateFlow.update { it.copy(dialogState = ImportLoginsState.DialogState.Syncing) }
         syncVault()
     }
 
@@ -224,7 +219,6 @@ class ImportLoginsViewModel @Inject constructor(
 data class ImportLoginsState(
     val dialogState: DialogState?,
     val viewState: ViewState,
-    val isVaultSyncing: Boolean,
     val showBottomSheet: Boolean,
     val currentWebVaultUrl: String,
     val snackbarRelay: SnackbarRelay,
@@ -259,7 +253,14 @@ data class ImportLoginsState(
          */
         data class Error(
             override val message: Text = R.string.generic_error_message.asText(),
-        ) : DialogState() {
+            override val title: Text? = null,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indication and ongoing manual sync.
+         */
+        data object Syncing : DialogState() {
+            override val message: Text = R.string.syncing_logins_loading_message.asText()
             override val title: Text? = null
         }
     }

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -85,6 +84,7 @@ private fun VaultMoveToOrganizationScaffold(
                 title = stringResource(id = R.string.an_error_has_occurred),
                 message = dialog.message(),
                 onDismissRequest = dismissClick,
+                throwable = dialog.throwable,
             )
         }
 
@@ -118,7 +118,6 @@ private fun VaultMoveToOrganizationScaffold(
         },
     ) {
         val modifier = Modifier
-            .imePadding()
             .fillMaxSize()
         when (state.viewState) {
             is VaultMoveToOrganizationState.ViewState.Content -> {

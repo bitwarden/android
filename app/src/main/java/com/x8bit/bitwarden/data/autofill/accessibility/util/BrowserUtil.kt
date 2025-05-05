@@ -47,6 +47,7 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     Browser(packageName = "com.jamal2367.styx", urlFieldId = "search"),
     Browser(packageName = "com.kiwibrowser.browser", urlFieldId = "url_bar"),
     Browser(packageName = "com.kiwibrowser.browser.dev", urlFieldId = "url_bar"),
+    Browser(packageName = "com.ktllq.play", urlFieldId = "url_bar"),
     Browser(packageName = "com.microsoft.emmx", urlFieldId = "url_bar"),
     Browser(packageName = "com.microsoft.emmx.beta", urlFieldId = "url_bar"),
     Browser(packageName = "com.microsoft.emmx.canary", urlFieldId = "url_bar"),
@@ -90,8 +91,10 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
             it.split(' ', ' ').firstOrNull()
         },
     ),
+    Browser(packageName = "com.yjllq.chrome.beta", urlFieldId = "search_box"),
     Browser(packageName = "com.yjllq.internet", urlFieldId = "search_box"),
     Browser(packageName = "com.yjllq.kito", urlFieldId = "search_box"),
+    Browser(packageName = "com.yjllqint.kito", urlFieldId = "search_box"),
     Browser(packageName = "com.yujian.ResideMenuDemo", urlFieldId = "search_box"),
     Browser(packageName = "com.z28j.feel", urlFieldId = "g2"),
     Browser(packageName = "idm.internet.download.manager", urlFieldId = "search"),
@@ -127,6 +130,11 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
         packageName = "org.gnu.icecat",
         // 2nd = Anticipation
         possibleUrlFieldIds = listOf("url_bar_title", "mozac_browser_toolbar_url_view"),
+    ),
+    Browser(
+        packageName = "org.ironfoxoss.ironfox",
+        // 2nd = Legacy
+        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
     ),
     Browser(packageName = "org.mozilla.fenix", urlFieldId = "mozac_browser_toolbar_url_view"),
     // [DEPRECATED ENTRY]
@@ -191,11 +199,6 @@ private val ACCESSIBILITY_SUPPORTED_BROWSERS = listOf(
     ),
     Browser(packageName = "org.ungoogled.chromium.extensions.stable", urlFieldId = "url_bar"),
     Browser(packageName = "org.ungoogled.chromium.stable", urlFieldId = "url_bar"),
-    Browser(
-        packageName = "us.spotco.fennec_dos",
-        // 2nd = Legacy
-        possibleUrlFieldIds = listOf("mozac_browser_toolbar_url_view", "url_bar_title"),
-    ),
 
     // [Section B] Entries only present here
     // TODO: Test the compatibility of these with Autofill Framework

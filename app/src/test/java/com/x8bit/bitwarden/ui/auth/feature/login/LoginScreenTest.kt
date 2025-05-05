@@ -14,7 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -64,15 +64,16 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             LoginScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToMasterPasswordHint = { onNavigateToMasterPasswordHintCalled = true },
                 onNavigateToEnterpriseSignOn = { onNavigateToEnterpriseSignOnCalled = true },
                 onNavigateToLoginWithDevice = { onNavigateToLoginWithDeviceCalled = true },
-                onNavigateToTwoFactorLogin = { _, _ -> onNavigateToTwoFactorLoginCalled = true },
+                onNavigateToTwoFactorLogin = { _, _, _ -> onNavigateToTwoFactorLoginCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
                 keyboardController = keyboardController,
             )
         }

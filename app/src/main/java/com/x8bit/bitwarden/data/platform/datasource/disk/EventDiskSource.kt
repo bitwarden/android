@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
+import com.bitwarden.network.model.OrganizationEventJson
 
 /**
  * Primary access point for disk information related to event data.

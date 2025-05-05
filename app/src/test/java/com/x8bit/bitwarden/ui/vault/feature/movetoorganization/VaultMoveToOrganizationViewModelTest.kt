@@ -2,6 +2,11 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.R
@@ -10,16 +15,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.coEvery
@@ -303,6 +303,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         mutableCollectionFlow.tryEmit(value = DataState.Loaded(DEFAULT_COLLECTIONS))
         mutableVaultItemFlow.tryEmit(value = DataState.Loaded(createMockCipherView(number = 1)))
+        val error = Throwable("Fail")
         coEvery {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
@@ -310,7 +311,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
-        } returns ShareCipherResult.Error
+        } returns ShareCipherResult.Error(error = error)
         viewModel.stateFlow.test {
             assertEquals(
                 initialState.copy(
@@ -340,6 +341,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                     viewState = VaultMoveToOrganizationState.ViewState.Content(
                         organizations = createMockOrganizationList(),
@@ -496,6 +498,8 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockOrganizationId-2",
@@ -503,6 +507,8 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockOrganizationId-3",
@@ -510,6 +516,8 @@ private val DEFAULT_USER_STATE = UserState(
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = null,
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             trustedDevice = null,

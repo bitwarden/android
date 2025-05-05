@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.auth
 
 import androidx.navigation.NavController
@@ -6,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
 import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
@@ -41,6 +44,8 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.startRegistrationDe
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.welcomeDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToPreAuthSettings
+import com.x8bit.bitwarden.ui.platform.feature.settings.preAuthSettingsDestinations
 
 const val AUTH_GRAPH_ROUTE: String = "auth_graph"
 
@@ -83,9 +88,6 @@ fun NavGraphBuilder.authGraph(
         )
         checkEmailDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateBackToLanding = {
-                navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
-            },
         )
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -129,6 +131,7 @@ fun NavGraphBuilder.authGraph(
                 navController.navigateToEnvironment()
             },
             onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
+            onNavigateToPreAuthSettings = { navController.navigateToPreAuthSettings() },
         )
         welcomeDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
@@ -153,11 +156,12 @@ fun NavGraphBuilder.authGraph(
                     loginType = LoginWithDeviceType.OTHER_DEVICE,
                 )
             },
-            onNavigateToTwoFactorLogin = { emailAddress, password ->
+            onNavigateToTwoFactorLogin = { emailAddress, password, isNewDeviceVerification ->
                 navController.navigateToTwoFactorLogin(
                     emailAddress = emailAddress,
                     password = password,
                     orgIdentifier = null,
+                    isNewDeviceVerification = isNewDeviceVerification,
                 )
             },
         )
@@ -211,6 +215,7 @@ fun NavGraphBuilder.authGraph(
                 )
             },
         )
+        preAuthSettingsDestinations(navController = navController)
     }
 }
 

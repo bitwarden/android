@@ -1,30 +1,31 @@
 package com.x8bit.bitwarden.ui.vault.feature.importlogins
 
 import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
-import androidx.compose.ui.test.printToLog
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -52,11 +53,12 @@ class ImportLoginsScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContentWithBackDispatcher {
+        setContent(
+            intentManager = intentManager,
+        ) {
             ImportLoginsScreen(
                 onNavigateBack = { navigateBackCalled = true },
                 viewModel = viewModel,
-                intentManager = intentManager,
             )
         }
     }
@@ -349,14 +351,15 @@ class ImportLoginsScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Loading content is displayed when isVaultSyncing is true`() {
+    fun `Loading content is displayed when dialog state is syncing`() {
+        composeTestRule.assertNoPopupExists()
         mutableImportLoginsStateFlow.update {
-            it.copy(isVaultSyncing = true)
+            it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
-        composeTestRule.onRoot().printToLog("woo")
         composeTestRule
             .onNodeWithText(text = "Syncing logins...")
             .assertIsDisplayed()
+            .assert(hasAnyAncestor(isPopup()))
     }
 
     @Test
@@ -385,7 +388,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.RetryVaultSync)
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText("Import logins later")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
@@ -420,7 +423,7 @@ class ImportLoginsScreenTest : BaseComposeTest() {
         verifyActionSent(ImportLoginsAction.RetryVaultSync)
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText("Import logins later")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
@@ -489,7 +492,6 @@ class ImportLoginsScreenTest : BaseComposeTest() {
 private val DEFAULT_STATE = ImportLoginsState(
     dialogState = null,
     viewState = ImportLoginsState.ViewState.InitialContent,
-    isVaultSyncing = false,
     showBottomSheet = false,
     currentWebVaultUrl = "vault.bitwarden.com",
     snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,

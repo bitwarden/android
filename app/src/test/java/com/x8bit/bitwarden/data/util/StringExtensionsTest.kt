@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.hasHttpProtocol
 import com.x8bit.bitwarden.data.platform.util.hasPort
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
+import com.x8bit.bitwarden.data.platform.util.isIpAddress
 import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import io.mockk.every
@@ -186,7 +187,6 @@ class StringExtensionsTest {
 
     @Test
     fun `hasPort returns true when port is present`() {
-        val uriString = "www.google.com:8080"
         assertTrue("www.google.com:8080".hasPort())
     }
 
@@ -198,6 +198,12 @@ class StringExtensionsTest {
     @Test
     fun `hasPort return true when port is present and custom scheme is present`() {
         val uriString = "androidapp://www.google.com:8080"
+        assertTrue(uriString.hasPort())
+    }
+
+    @Test
+    fun `hasPort returns true when URI is IP address and port`() {
+        val uriString = "192.168.1.1:8080"
         assertTrue(uriString.hasPort())
     }
 
@@ -224,4 +230,48 @@ class StringExtensionsTest {
         val uriString = "androidapp://www.google.com:8080"
         assertEquals("www.google.com:8080", uriString.getHostWithPortOrNull())
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getHostWithPortOrNull should return host with port when URI is IP address with port and scheme`() {
+        val uriString = "https://192.168.1.1:8080"
+        assertEquals("192.168.1.1:8080", uriString.getHostWithPortOrNull())
+    }
+
+    @Test
+    fun `isIpAddress should return correct value for various IP addresses`() {
+        testIpAddresses.forEach { (ipAddress, expected) ->
+            assertEquals(expected, ipAddress.isIpAddress()) { "Failed for $ipAddress" }
+        }
+    }
+
+    private val testIpAddresses = listOf(
+        "192.168.1.1" to true,
+        "10.0.0.5:8080" to true,
+        "255.255.255.0:9000" to true,
+        "0.0.0.0" to true,
+        "256.1.1.1" to false,
+        "10.1.1" to false,
+        "10.1.1.1:abc" to false,
+        "10.1.1.1:-1" to false,
+        "10.1.1.1:" to false,
+        "10.1.1.1:0" to true,
+        "1.1.1.1:123" to true,
+        "1.1.1.1:65535" to true,
+        "1.1.1.1:65536" to false,
+        "1.1.1.1:99999" to false,
+        ":1234" to false,
+        "255.255.255.255:65535" to true,
+        "255.255.255.255:0" to true,
+        "255.255.255.255:" to false,
+        "255.255.255.255:-1" to false,
+        "http://192.168.1.1" to true,
+        "https://10.0.0.5:8080" to true,
+        "http://255.255.255.0:9000" to true,
+        "https://0.0.0.0" to true,
+        "http://256.1.1.1" to false,
+        "https://10.1.1" to false,
+        "http://10.1.1.1:abc" to false,
+        "https://10.1.1.1:-1" to false,
+    )
 }

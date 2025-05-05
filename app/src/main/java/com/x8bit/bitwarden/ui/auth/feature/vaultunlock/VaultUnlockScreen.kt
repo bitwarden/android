@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -37,8 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.inputFieldVisibilityToggleTestTag
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputLabel
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTestTag
@@ -46,7 +43,11 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboard
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -58,6 +59,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
@@ -65,7 +67,17 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 import javax.crypto.Cipher
+
+/**
+ * Time slice to delay auto-focusing on the password/pin field. Because of the refresh that
+ * takes place when switching accounts or changing the lock status we want to delay this
+ * longer than the delay in place for sending those actions in [com.x8bit.bitwarden.MainViewModel]
+ * defined by `ANIMATION_REFRESH_DELAY`. We need to  ensure this value is
+ * always greater.
+ */
+private const val AUTO_FOCUS_DELAY = 575L
 
 /**
  * The top level composable for the Vault Unlock screen.
@@ -89,7 +101,7 @@ fun VaultUnlockScreen(
         }
     }
 
-    val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
+    val onBiometricsUnlockSuccess: (cipher: Cipher) -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
     }
     val onBiometricsLockOut: () -> Unit = remember(viewModel) {
@@ -116,15 +128,15 @@ fun VaultUnlockScreen(
                 )
             }
 
-            VaultUnlockEvent.Fido2CredentialAssertionError -> {
+            is VaultUnlockEvent.Fido2CredentialAssertionError -> {
                 fido2CompletionManager.completeFido2Assertion(
-                    result = Fido2CredentialAssertionResult.Error,
+                    result = AssertFido2CredentialResult.Error(message = event.message),
                 )
             }
 
-            VaultUnlockEvent.Fido2GetCredentialsError -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(
-                    result = Fido2GetCredentialsResult.Error,
+            is VaultUnlockEvent.Fido2GetCredentialsError -> {
+                fido2CompletionManager.completeFido2GetCredentialsRequest(
+                    result = GetFido2CredentialsResult.Error(message = event.message),
                 )
             }
         }
@@ -144,6 +156,7 @@ fun VaultUnlockScreen(
             onDismissRequest = remember(viewModel) {
                 { viewModel.trySendAction(VaultUnlockAction.DismissDialog) }
             },
+            throwable = dialog.throwable,
         )
 
         VaultUnlockState.VaultUnlockDialog.Loading -> BitwardenLoadingDialog(
@@ -247,7 +260,20 @@ fun VaultUnlockScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
             if (!state.hideInput) {
+                // When switching from an unlocked account to a locked account, the
+                // current activity is recreated and therefore the composition takes place
+                // twice. Adding this delay prevents the MP or Pin field
+                // from auto focusing on the first composition which creates a visual jank where
+                // the keyboard shows, disappears, and then shows again.
+                var autoFocusDelayCompleted by rememberSaveable {
+                    mutableStateOf(false)
+                }
+                LaunchedEffect(Unit) {
+                    delay(AUTO_FOCUS_DELAY)
+                    autoFocusDelayCompleted = true
+                }
                 BitwardenPasswordField(
                     label = state.vaultUnlockType.unlockScreenInputLabel(),
                     value = state.input,
@@ -258,28 +284,20 @@ fun VaultUnlockScreen(
                     showPasswordTestTag = state
                         .vaultUnlockType
                         .inputFieldVisibilityToggleTestTag,
-                    modifier = Modifier
-                        .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    autoFocus = state.showKeyboard,
+                    autoFocus = state.showKeyboard && autoFocusDelayCompleted,
                     imeAction = ImeAction.Done,
                     keyboardActions = KeyboardActions(
                         onDone = remember(viewModel) {
                             { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
                         },
                     ),
-                )
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = state.vaultUnlockType.unlockScreenMessage(),
-                    style = BitwardenTheme.typography.bodyMedium,
-                    color = BitwardenTheme.colorScheme.text.primary,
+                    supportingText = state.vaultUnlockType.unlockScreenMessage(),
+                    passwordFieldTestTag = state.vaultUnlockType.unlockScreenInputTestTag,
+                    cardStyle = CardStyle.Top(hasDivider = false),
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
-                Spacer(modifier = Modifier.height(8.dp))
             }
             Text(
                 text = stringResource(
@@ -287,11 +305,17 @@ fun VaultUnlockScreen(
                     state.email,
                     state.environmentUrl,
                 ),
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.primary,
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .testTag("UserAndEnvironmentDataLabel")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
+                    .cardStyle(
+                        cardStyle = if (state.hideInput) CardStyle.Full else CardStyle.Bottom,
+                        paddingStart = 16.dp,
+                        paddingEnd = 16.dp,
+                        paddingTop = 0.dp,
+                    )
                     .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -302,7 +326,7 @@ fun VaultUnlockScreen(
                         { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
                     },
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -312,7 +336,7 @@ fun VaultUnlockScreen(
                     textAlign = TextAlign.Start,
                     style = BitwardenTheme.typography.bodyMedium,
                     color = BitwardenTheme.colorScheme.status.error,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier.standardHorizontalMargin(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
             }
@@ -325,7 +349,7 @@ fun VaultUnlockScreen(
                     isEnabled = state.input.isNotEmpty(),
                     modifier = Modifier
                         .testTag("UnlockVaultButton")
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }

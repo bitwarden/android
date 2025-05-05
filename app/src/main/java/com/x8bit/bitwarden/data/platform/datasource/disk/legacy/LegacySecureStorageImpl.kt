@@ -10,7 +10,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.security.InvalidAlgorithmParameterException
@@ -172,7 +172,7 @@ private class AndroidKeyStore(
     private val useSymmetricPreferenceKey: String = "essentials_use_symmetric"
 
     private val prefsMasterKey = "SecureStorageKey"
-    private val initializationVectorLen = 12; // Android supports an IV of 12 for AES/GCM
+    private val initializationVectorLen = 12 // Android supports an IV of 12 for AES/GCM
 
     init {
         keyStore.load(null)

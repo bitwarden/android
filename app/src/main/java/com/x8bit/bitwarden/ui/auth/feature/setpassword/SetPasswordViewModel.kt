@@ -5,11 +5,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -30,7 +31,11 @@ class SetPasswordViewModel @Inject constructor(
 ) : BaseViewModel<SetPasswordState, SetPasswordEvent, SetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val organizationIdentifier = authRepository.ssoOrganizationIdentifier
-        if (organizationIdentifier.isNullOrBlank()) authRepository.logout()
+        if (organizationIdentifier.isNullOrBlank()) {
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "SetPasswordViewModel"),
+            )
+        }
         SetPasswordState(
             dialogState = null,
             organizationIdentifier = organizationIdentifier.orEmpty(),
@@ -71,7 +76,7 @@ class SetPasswordViewModel @Inject constructor(
      * Dismiss the view if the user cancels the set master password functionality.
      */
     private fun handleCancelClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "SetPasswordViewModel"))
     }
 
     /**
@@ -179,13 +184,14 @@ class SetPasswordViewModel @Inject constructor(
     private fun handleReceiveSetPasswordResult(
         action: SetPasswordAction.Internal.ReceiveSetPasswordResult,
     ) {
-        when (action.result) {
-            SetPasswordResult.Error -> {
+        when (val result = action.result) {
+            is SetPasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = SetPasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -267,6 +273,7 @@ data class SetPasswordState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

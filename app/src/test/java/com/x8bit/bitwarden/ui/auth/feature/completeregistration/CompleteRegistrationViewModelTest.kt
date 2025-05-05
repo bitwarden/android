@@ -2,7 +2,11 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_2
@@ -14,14 +18,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.BackClick
@@ -30,13 +32,15 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -55,7 +59,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
      * after the user has entered all valid inputs.
      */
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
-    private val mockAuthRepository = mockk<AuthRepository>() {
+    private val mockAuthRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         coEvery {
             login(
@@ -76,6 +80,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isMasterPasswordStrong = any(),
             )
         } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
+
+        coEvery {
+            setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        } just Runs
     }
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -119,7 +127,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         val input = "abcdefghikl"
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, input)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(input))
 
@@ -130,7 +138,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `Passwords not matching should have non-valid state`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(PASSWORD))
 
@@ -170,6 +178,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `CallToActionClick register returns error should update errorDialogState`() = runTest {
+        val error = Throwable("Fail!")
         coEvery {
             mockAuthRepository.register(
                 email = EMAIL,
@@ -180,7 +189,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(errorMessage = "mock_error")
+        } returns RegisterResult.Error(errorMessage = "mock_error", error = error)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
@@ -194,6 +203,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     dialog = CompleteRegistrationDialog.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
+                        error = error,
                     ),
                 ),
                 awaitItem(),
@@ -222,6 +232,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             assertTrue(awaitItem() is CompleteRegistrationEvent.ShowToast)
             expectNoEvents()
         }
+        verify(exactly = 1) {
+            mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -245,6 +258,9 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
             }
+            verify(exactly = 1) {
+                mockAuthRepository.setOnboardingStatus(OnboardingStatus.NOT_STARTED)
+            }
         }
 
     @Test
@@ -259,7 +275,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 shouldCheckDataBreaches = false,
                 isMasterPasswordStrong = true,
             )
-        } returns RegisterResult.Error(null)
+        } returns RegisterResult.Error(errorMessage = null, error = null)
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE)
         viewModel.trySendAction(CompleteRegistrationAction.ContinueWithBreachedPasswordClick)
         coVerify {
@@ -432,7 +448,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel()
         viewModel.trySendAction(PasswordInputChange(PASSWORD))
         viewModel.stateFlow.test {
@@ -467,7 +483,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             mutableGeneratorResultFlow.emit(GeneratorResult.Password(PASSWORD))
             viewModel.stateFlow.test {
@@ -586,7 +602,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             val input = "abcdefghikl"
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, input)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(input))
             val expectedState = DEFAULT_STATE.copy(
@@ -607,7 +623,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         runTest {
             coEvery {
                 mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
-            } returns PasswordStrengthResult.Error
+            } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(PASSWORD))
             val expectedState = DEFAULT_STATE.copy(
@@ -628,7 +644,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick with no email not should show dialog`() = runTest {
         coEvery {
             mockAuthRepository.getPasswordStrength("", PASSWORD)
-        } returns PasswordStrengthResult.Error
+        } returns PasswordStrengthResult.Error(error = Throwable("Fail!"))
         val viewModel = createCompleteRegistrationViewModel(
             DEFAULT_STATE.copy(userEmail = ""),
         )

@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -103,6 +103,24 @@ sealed class SpecialCircumstance : Parcelable {
      */
     @Parcelize
     data object AccountSecurityShortcut : SpecialCircumstance()
+
+    /**
+     * Deeplink to the Send.
+     */
+    @Parcelize
+    data object SendShortcut : SpecialCircumstance()
+
+    /**
+     * Deeplink to the Search.
+     */
+    @Parcelize
+    data class SearchShortcut(val searchTerm: String) : SpecialCircumstance()
+
+    /**
+     * Deeplink to the Verification Code.
+     */
+    @Parcelize
+    data object VerificationCodeShortcut : SpecialCircumstance()
 
     /**
      * A subset of [SpecialCircumstance] that are only relevant in a pre-login state and should be

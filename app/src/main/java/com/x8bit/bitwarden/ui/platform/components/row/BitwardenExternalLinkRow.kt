@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param text The label for the row as a [String].
  * @param onConfirmClick The callback when the confirm button of the dialog is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The modifier to be applied to the layout.
  * @param description An optional description label to be displayed below the [text].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
@@ -36,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenExternalLinkRow(
     text: String,
     onConfirmClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
     description: String? = null,
     withDivider: Boolean = true,
@@ -51,6 +54,7 @@ fun BitwardenExternalLinkRow(
         onClick = { shouldShowDialog = true },
         modifier = modifier,
         withDivider = withDivider,
+        cardStyle = cardStyle,
     ) {
         Icon(
             modifier = Modifier.mirrorIfRtl(),
@@ -85,6 +89,7 @@ private fun BitwardenExternalLinkRow_preview() {
             onConfirmClick = { },
             dialogTitle = "",
             dialogMessage = "",
+            cardStyle = CardStyle.Full,
         )
     }
 }

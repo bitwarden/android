@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifiedOrganizationDomainSsoDetailsResponse.VerifiedOrganizationDomainSsoDetail
+import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse.VerifiedOrganizationDomainSsoDetail
 
 /**
  * Response types when checking for an email's claimed domain organization.
@@ -18,5 +18,7 @@ sealed class VerifiedOrganizationDomainSsoDetailsResult {
     /**
      * The request failed.
      */
-    data object Failure : VerifiedOrganizationDomainSsoDetailsResult()
+    data class Failure(
+        val error: Throwable,
+    ) : VerifiedOrganizationDomainSsoDetailsResult()
 }

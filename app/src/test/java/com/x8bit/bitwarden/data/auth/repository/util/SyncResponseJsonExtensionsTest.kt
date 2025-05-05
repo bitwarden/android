@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
@@ -23,6 +23,8 @@ class SyncResponseJsonExtensionsTest {
                 shouldManageResetPassword = false,
                 shouldUseKeyConnector = false,
                 role = OrganizationType.ADMIN,
+                keyConnectorUrl = "mockKeyConnectorUrl-1",
+                userIsClaimedByOrganization = false,
             ),
             createMockOrganization(number = 1).toOrganization(),
         )
@@ -38,6 +40,8 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = false,
                     shouldUseKeyConnector = true,
                     role = OrganizationType.ADMIN,
+                    keyConnectorUrl = "mockKeyConnectorUrl-1",
+                    userIsClaimedByOrganization = false,
                 ),
                 Organization(
                     id = "mockId-2",
@@ -45,10 +49,14 @@ class SyncResponseJsonExtensionsTest {
                     shouldManageResetPassword = true,
                     shouldUseKeyConnector = false,
                     role = OrganizationType.USER,
+                    keyConnectorUrl = "mockKeyConnectorUrl-2",
+                    userIsClaimedByOrganization = false,
                 ),
             ),
             listOf(
-                createMockOrganization(number = 1).copy(shouldUseKeyConnector = true),
+                createMockOrganization(number = 1).copy(
+                    shouldUseKeyConnector = true,
+                ),
                 createMockOrganization(number = 2, shouldManageResetPassword = true)
                     .copy(type = OrganizationType.USER),
             )

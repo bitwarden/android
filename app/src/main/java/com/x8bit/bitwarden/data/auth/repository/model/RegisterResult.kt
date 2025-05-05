@@ -23,7 +23,10 @@ sealed class RegisterResult {
      *
      * @param errorMessage a message describing the error.
      */
-    data class Error(val errorMessage: String?) : RegisterResult()
+    data class Error(
+        val errorMessage: String?,
+        val error: Throwable?,
+    ) : RegisterResult()
 
     /**
      * Password hash was found in a data breach.

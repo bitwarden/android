@@ -14,9 +14,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
@@ -24,6 +26,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
@@ -47,17 +50,19 @@ class AutoFillScreenTest : BaseComposeTest() {
         every { startSystemAutofillSettingsActivity() } answers { isSystemSettingsRequestSuccess }
         every { startCredentialManagerSettings(any()) } just runs
         every { startSystemAccessibilitySettingsActivity() } just runs
+        every { startChromeAutofillSettingsActivity(any()) } returns true
     }
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             AutoFillScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
-                viewModel = viewModel,
-                intentManager = intentManager,
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                viewModel = viewModel,
             )
         }
     }
@@ -369,7 +374,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     fun `on default URI match type click should display dialog`() {
         composeTestRule.assertNoDialogExists()
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .assert(!hasAnyAncestor(isDialog()))
             .performClick()
@@ -383,7 +388,7 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `on default URI match type dialog item click should send DefaultUriMatchTypeSelect and close the dialog`() {
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -402,11 +407,10 @@ class AutoFillScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on default URI match type dialog cancel click should close the dialog`() {
         composeTestRule
-            .onNodeWithText("Default URI match detection")
+            .onNodeWithContentDescription(label = "Default URI match detection.", substring = true)
             .performScrollTo()
             .performClick()
 
@@ -422,19 +426,19 @@ class AutoFillScreenTest : BaseComposeTest() {
     @Test
     fun `default URI match type should update according to state`() {
         composeTestRule
-            .onNodeWithText("Base domain")
+            .onNodeWithContentDescription(label = "Base domain", substring = true)
             .assertExists()
         composeTestRule
-            .onNodeWithText("Starts with")
+            .onNodeWithContentDescription(label = "Starts with", substring = true)
             .assertDoesNotExist()
         mutableStateFlow.update {
             it.copy(defaultUriMatchType = UriMatchType.STARTS_WITH)
         }
         composeTestRule
-            .onNodeWithText("Base domain")
+            .onNodeWithContentDescription(label = "Base domain", substring = true)
             .assertDoesNotExist()
         composeTestRule
-            .onNodeWithText("Starts with")
+            .onNodeWithContentDescription(label = "Starts with", substring = true)
             .assertExists()
     }
 
@@ -488,7 +492,7 @@ class AutoFillScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
 
-        verify { viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick) }
+        verify { viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick) }
     }
 
     @Test
@@ -506,6 +510,83 @@ class AutoFillScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToSetupAutofill)
         assertTrue(onNavigateToSetupAutoFillScreenCalled)
     }
+
+    @Test
+    fun `ChromeAutofillSettingsCard is only displayed when there are options in the list`() {
+        val chromeAutofillSupportingText =
+            "Improves login filling for supported websites on Chrome. " +
+                "Once enabled, you’ll be directed to Chrome settings to enable " +
+                "third-party autofill."
+
+        composeTestRule
+            .onNodeWithText(chromeAutofillSupportingText)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                chromeAutofillSettingsOptions = persistentListOf(
+                    ChromeAutofillSettingsOption.Stable(enabled = true),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(chromeAutofillSupportingText)
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `when Chrome autofill options are clicked the correct action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                isAutoFillServicesEnabled = true,
+                chromeAutofillSettingsOptions = persistentListOf(
+                    ChromeAutofillSettingsOption.Stable(enabled = true),
+                    ChromeAutofillSettingsOption.Beta(enabled = false),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Use Chrome autofill integration")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Use Chrome autofill integration (Beta)")
+            .performScrollTo()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.BETA),
+            )
+            viewModel.trySendAction(
+                AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.STABLE),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when NavigateToChromeAutofillSettings events are sent they invoke the intent manager with the correct release channel`() {
+        mutableEventFlow.tryEmit(
+            AutoFillEvent.NavigateToChromeAutofillSettings(
+                ChromeReleaseChannel.STABLE,
+            ),
+        )
+        mutableEventFlow.tryEmit(
+            AutoFillEvent.NavigateToChromeAutofillSettings(
+                ChromeReleaseChannel.BETA,
+            ),
+        )
+
+        verify(exactly = 1) {
+            intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.BETA)
+            intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.STABLE)
+        }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -519,4 +600,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
+    chromeAutofillSettingsOptions = persistentListOf(),
 )

@@ -16,5 +16,5 @@ sealed class UpdateSendResult {
      * Generic error while updating a send. The optional [errorMessage] may be displayed directly
      * in the UI when present.
      */
-    data class Error(val errorMessage: String?) : UpdateSendResult()
+    data class Error(val errorMessage: String?, val error: Throwable?) : UpdateSendResult()
 }

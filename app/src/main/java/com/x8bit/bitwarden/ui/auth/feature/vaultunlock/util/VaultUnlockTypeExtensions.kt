@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util
 import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  * A title to use on the Vault Unlock screen.

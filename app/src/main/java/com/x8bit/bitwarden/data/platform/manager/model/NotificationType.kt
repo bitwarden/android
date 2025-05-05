@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import androidx.annotation.Keep
-import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
+import com.bitwarden.core.data.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -63,5 +63,7 @@ enum class NotificationType {
 }
 
 @Keep
-private class NotificationTypeSerializer :
-    BaseEnumeratedIntSerializer<NotificationType>(NotificationType.entries.toTypedArray())
+private class NotificationTypeSerializer : BaseEnumeratedIntSerializer<NotificationType>(
+    className = "NotificationType",
+    values = NotificationType.entries.toTypedArray(),
+)

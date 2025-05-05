@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -29,7 +29,7 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
 /**
  * Returns [Fido2CreateCredentialRequest] when contained in the given [SpecialCircumstance].
  */
-fun SpecialCircumstance.toFido2RequestOrNull(): Fido2CreateCredentialRequest? =
+fun SpecialCircumstance.toFido2CreateRequestOrNull(): Fido2CreateCredentialRequest? =
     when (this) {
         is SpecialCircumstance.Fido2Save -> this.fido2CreateCredentialRequest
         else -> null

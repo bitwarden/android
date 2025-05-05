@@ -7,13 +7,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.util.createPasswordlessRequestDataIntent
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn

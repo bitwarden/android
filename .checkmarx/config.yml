@@ -8,4 +8,4 @@ checkmarx:
     configs:
       sast:
         # Exclude test directories
-        filter: "!app/src/test/**"
+        filter: "**/test/**,!**/androidTest/**,!**/commonTest/**,!**/jvmTest/**,!**/jsTest/**,!**/iosTest/**"

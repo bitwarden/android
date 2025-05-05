@@ -6,14 +6,14 @@ import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.Client
-import com.bitwarden.sdk.ClientAuth
-import com.bitwarden.sdk.ClientPlatform
+import com.bitwarden.sdk.PlatformClient
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -25,8 +25,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
-    private val clientAuth = mockk<ClientAuth>()
-    private val clientPlatform = mockk<ClientPlatform> {
+    private val clientAuth = mockk<AuthClient>()
+    private val clientPlatform = mockk<PlatformClient> {
         coEvery { loadFlags(any()) } just runs
     }
     private val client = mockk<Client> {

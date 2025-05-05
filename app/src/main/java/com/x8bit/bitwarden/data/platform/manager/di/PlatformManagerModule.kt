@@ -3,23 +3,31 @@ package com.x8bit.bitwarden.data.platform.manager.di
 import android.app.Application
 import android.content.Context
 import androidx.core.content.getSystemService
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.manager.DispatcherManagerImpl
+import com.bitwarden.data.repository.ServerConfigRepository
+import com.bitwarden.network.BitwardenServiceClient
+import com.bitwarden.network.service.EventService
+import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import com.x8bit.bitwarden.data.platform.manager.AppStateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.manager.CertificateManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.DebugMenuFeatureFlagManagerImpl
@@ -29,28 +37,34 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
-import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManager
+import com.x8bit.bitwarden.data.platform.manager.NativeLibraryManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriter
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderWriterImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessor
@@ -58,9 +72,10 @@ import com.x8bit.bitwarden.data.platform.processor.AuthenticatorBridgeProcessorI
 import com.x8bit.bitwarden.data.platform.repository.AuthenticatorBridgeRepository
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -83,6 +98,34 @@ object PlatformManagerModule {
     fun provideAppStateManager(
         application: Application,
     ): AppStateManager = AppStateManagerImpl(application = application)
+
+    @Provides
+    @Singleton
+    fun provideFlightRecorderWriter(
+        clock: Clock,
+        fileManager: FileManager,
+        dispatcherManager: DispatcherManager,
+    ): FlightRecorderWriter = FlightRecorderWriterImpl(
+        clock = clock,
+        fileManager = fileManager,
+        dispatcherManager = dispatcherManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideFlightRecorderManager(
+        @ApplicationContext context: Context,
+        clock: Clock,
+        dispatcherManager: DispatcherManager,
+        settingsDiskSource: SettingsDiskSource,
+        flightRecorderWriter: FlightRecorderWriter,
+    ): FlightRecorderManager = FlightRecorderManagerImpl(
+        context = context,
+        clock = clock,
+        dispatcherManager = dispatcherManager,
+        settingsDiskSource = settingsDiskSource,
+        flightRecorderWriter = flightRecorderWriter,
+    )
 
     @Provides
     @Singleton
@@ -133,13 +176,11 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideClock(): Clock = Clock.systemDefaultZone()
-
-    @Provides
-    @Singleton
     fun provideBiometricsEncryptionManager(
+        authDiskSource: AuthDiskSource,
         settingsDiskSource: SettingsDiskSource,
     ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(
+        authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
     )
 
@@ -185,10 +226,16 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun provideNativeLibraryManager(): NativeLibraryManager = NativeLibraryManagerImpl()
+
+    @Provides
+    @Singleton
     fun provideSdkClientManager(
         featureFlagManager: FeatureFlagManager,
+        nativeLibraryManager: NativeLibraryManager,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
+        nativeLibraryManager = nativeLibraryManager,
     )
 
     @Provides
@@ -197,14 +244,14 @@ object PlatformManagerModule {
         authRepository: AuthRepository,
         environmentRepository: EnvironmentRepository,
         serverConfigRepository: ServerConfigRepository,
-        refreshAuthenticator: RefreshAuthenticator,
+        bitwardenServiceClient: BitwardenServiceClient,
         dispatcherManager: DispatcherManager,
     ): NetworkConfigManager =
         NetworkConfigManagerImpl(
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             serverConfigRepository = serverConfigRepository,
-            refreshAuthenticator = refreshAuthenticator,
+            bitwardenServiceClient = bitwardenServiceClient,
             dispatcherManager = dispatcherManager,
         )
 
@@ -212,8 +259,10 @@ object PlatformManagerModule {
     @Singleton
     fun provideNetworkConnectionManager(
         application: Application,
+        dispatcherManager: DispatcherManager,
     ): NetworkConnectionManager = NetworkConnectionManagerImpl(
         context = application.applicationContext,
+        dispatcherManager = dispatcherManager,
     )
 
     @Provides
@@ -310,4 +359,46 @@ object PlatformManagerModule {
         authDiskSource = authDiskSource,
         settingsDiskSource = settingsDiskSource,
     )
+
+    @Provides
+    @Singleton
+    fun provideReviewPromptManager(
+        authDiskSource: AuthDiskSource,
+        settingsDiskSource: SettingsDiskSource,
+        autofillEnabledManager: AutofillEnabledManager,
+        accessibilityEnabledManager: AccessibilityEnabledManager,
+    ): ReviewPromptManager = ReviewPromptManagerImpl(
+        authDiskSource = authDiskSource,
+        settingsDiskSource = settingsDiskSource,
+        autofillEnabledManager = autofillEnabledManager,
+        accessibilityEnabledManager = accessibilityEnabledManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideKeyManager(
+        @ApplicationContext context: Context,
+        environmentRepository: EnvironmentRepository,
+    ): CertificateManager = CertificateManagerImpl(
+        context = context,
+        environmentRepository = environmentRepository,
+    )
+
+    @Provides
+    @Singleton
+    fun provideAppResumeManager(
+        settingsDiskSource: SettingsDiskSource,
+        authDiskSource: AuthDiskSource,
+        authRepository: AuthRepository,
+        vaultLockManager: VaultLockManager,
+        clock: Clock,
+    ): AppResumeManager {
+        return AppResumeManagerImpl(
+            settingsDiskSource = settingsDiskSource,
+            authDiskSource = authDiskSource,
+            authRepository = authRepository,
+            vaultLockManager = vaultLockManager,
+            clock = clock,
+        )
+    }
 }

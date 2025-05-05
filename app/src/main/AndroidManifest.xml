@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
     <!-- Protect access to AuthenticatorBridgeService using this custom permission.
 
     Note that each build type uses a different value for knownCerts.
@@ -320,6 +320,11 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.HOME" />
         </intent>
+        <!-- To Query Chrome Beta: -->
+        <package android:name="com.chrome.beta" />
+
+        <!-- To Query Chrome Stable: -->
+        <package android:name="com.android.chrome" />
     </queries>
 
 </manifest>

@@ -4,17 +4,17 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -39,14 +39,15 @@ class FolderAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val folderAddEditType = FolderAddEditArgs(savedStateHandle).folderAddEditType
+            val folderAddEditArgs = FolderAddEditArgs(savedStateHandle)
             FolderAddEditState(
-                folderAddEditType = folderAddEditType,
-                viewState = when (folderAddEditType) {
+                folderAddEditType = folderAddEditArgs.folderAddEditType,
+                viewState = when (folderAddEditArgs.folderAddEditType) {
                     is FolderAddEditType.AddItem -> FolderAddEditState.ViewState.Content("")
                     is FolderAddEditType.EditItem -> FolderAddEditState.ViewState.Loading
                 },
                 dialog = null,
+                parentFolderName = folderAddEditArgs.parentFolderName?.takeUnless { it.isEmpty() },
             )
         },
 ) {
@@ -111,7 +112,13 @@ class FolderAddEditViewModel @Inject constructor(
                 FolderAddEditType.AddItem -> {
                     val result = vaultRepository.createFolder(
                         FolderView(
-                            name = content.folderName,
+                            name = state
+                                .parentFolderName
+                                ?.let {
+                                    "$it/"
+                                }
+                                .orEmpty() +
+                                content.folderName,
                             id = folderAddEditType.folderId,
                             revisionDate = DateTime.now(),
                         ),
@@ -243,12 +250,13 @@ class FolderAddEditViewModel @Inject constructor(
             it.copy(dialog = null)
         }
 
-        when (action.result) {
+        when (val result = action.result) {
             is UpdateFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -268,12 +276,13 @@ class FolderAddEditViewModel @Inject constructor(
             it.copy(dialog = null)
         }
 
-        when (action.result) {
+        when (val result = action.result) {
             is CreateFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -289,12 +298,13 @@ class FolderAddEditViewModel @Inject constructor(
     private fun handleDeleteResultReceive(
         action: FolderAddEditAction.Internal.DeleteFolderResultReceive,
     ) {
-        when (action.result) {
-            DeleteFolderResult.Error -> {
+        when (val result = action.result) {
+            is DeleteFolderResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = FolderAddEditState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -327,6 +337,7 @@ data class FolderAddEditState(
     val folderAddEditType: FolderAddEditType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val parentFolderName: String?,
 ) : Parcelable {
 
     /**
@@ -390,6 +401,7 @@ data class FolderAddEditState(
         @Parcelize
         data class Error(
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
     }
 }

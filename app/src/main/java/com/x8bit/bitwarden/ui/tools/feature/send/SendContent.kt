@@ -6,20 +6,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
-import kotlinx.collections.immutable.toImmutableList
 
 private const val SEND_TYPES_COUNT: Int = 2
 
@@ -36,14 +38,18 @@ fun SendContent(
 ) {
     LazyColumn(modifier = modifier) {
         item {
-            if (policyDisablesSend) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+        }
+        if (policyDisablesSend) {
+            item {
                 BitwardenInfoCalloutCard(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
                         .testTag("SendOptionsPolicyInEffectLabel")
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
         }
 
@@ -53,8 +59,10 @@ fun SendContent(
                 supportingLabel = SEND_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item {
@@ -63,10 +71,11 @@ fun SendContent(
                 supportingLabel = state.textTypeCount.toString(),
                 startIcon = rememberVectorPainter(id = R.drawable.ic_file_text),
                 onClick = sendHandlers.onTextTypeClick,
+                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SendTextFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -76,10 +85,11 @@ fun SendContent(
                 supportingLabel = state.fileTypeCount.toString(),
                 startIcon = rememberVectorPainter(id = R.drawable.ic_file),
                 onClick = sendHandlers.onFileTypeClick,
+                cardStyle = CardStyle.Bottom,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SendFileFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -90,16 +100,18 @@ fun SendContent(
                 supportingLabel = state.sendItems.size.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        items(state.sendItems) {
+        itemsIndexed(state.sendItems) { index, it ->
             SendListItem(
                 startIcon = IconData.Local(it.type.iconRes),
                 label = it.name,
                 supportingLabel = it.deletionDate,
-                trailingLabelIcons = it.iconList.toImmutableList(),
+                trailingLabelIcons = it.iconList,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },
@@ -111,14 +123,12 @@ fun SendContent(
                 } else {
                     null
                 },
+                cardStyle = state
+                    .sendItems
+                    .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                 modifier = Modifier
                     .testTag("SendCell")
-                    .padding(
-                        start = 16.dp,
-                        // There is some built-in padding to the menu button that makes up
-                        // the visual difference here.
-                        end = 12.dp,
-                    )
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
         }

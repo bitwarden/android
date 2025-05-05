@@ -6,13 +6,16 @@ import androidx.annotation.DrawableRes
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.network.model.TwoFactorDataModel
+import com.bitwarden.network.util.availableAuthMethods
+import com.bitwarden.network.util.preferredAuthMethod
+import com.bitwarden.network.util.twoFactorDisplayEmail
+import com.bitwarden.network.util.twoFactorDuoAuthUrl
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.datasource.network.util.availableAuthMethods
-import com.x8bit.bitwarden.data.auth.datasource.network.util.preferredAuthMethod
-import com.x8bit.bitwarden.data.auth.datasource.network.util.twoFactorDisplayEmail
-import com.x8bit.bitwarden.data.auth.datasource.network.util.twoFactorDuoAuthUrl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
@@ -23,15 +26,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -62,17 +62,19 @@ class TwoFactorLoginViewModel @Inject constructor(
                 authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
                 availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,
                 codeInput = "",
-                displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
+                displayEmail = authRepository.twoFactorResponse?.twoFactorDisplayEmail
+                    ?: args.emailAddress,
                 dialogState = null,
                 isContinueButtonEnabled = authRepository
                     .twoFactorResponse
                     .preferredAuthMethod
                     .isContinueButtonEnabled,
-                isRememberMeEnabled = false,
+                isRememberEnabled = false,
                 captchaToken = null,
                 email = args.emailAddress,
                 password = args.password,
                 orgIdentifier = args.orgIdentifier,
+                isNewDeviceVerification = args.isNewDeviceVerification,
             )
         },
 ) {
@@ -187,10 +189,12 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Update the state with the new text and enable or disable the continue button.
      */
     private fun handleCodeInputChanged(action: TwoFactorLoginAction.CodeInputChanged) {
+        @Suppress("MagicNumber")
+        val minLength = if (state.isNewDeviceVerification) 8 else 6
         mutableStateFlow.update {
             it.copy(
                 codeInput = action.input,
-                isContinueButtonEnabled = action.input.length >= 6,
+                isContinueButtonEnabled = action.input.length >= minLength,
             )
         }
     }
@@ -304,6 +308,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.invalid_verification_code.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -321,8 +326,33 @@ class TwoFactorLoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = loginResult.errorMessage?.asText()
+                                ?: R.string.invalid_verification_code.asText(),
+                        ),
+                    )
+                }
+            }
+
             // NO-OP: Let the auth flow handle navigation after this.
             is LoginResult.Success -> Unit
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
+
+            // NO-OP: This result should not be possible here
+            is LoginResult.ConfirmKeyConnectorDomain -> Unit
         }
     }
 
@@ -377,11 +407,12 @@ class TwoFactorLoginViewModel @Inject constructor(
         action: TwoFactorLoginAction.Internal.ReceiveWebAuthResult,
     ) {
         when (val result = action.webAuthResult) {
-            WebAuthResult.Failure -> {
+            is WebAuthResult.Failure -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TwoFactorLoginState.DialogState.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -403,7 +434,7 @@ class TwoFactorLoginViewModel @Inject constructor(
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
 
-        when (action.resendEmailResult) {
+        when (val result = action.resendEmailResult) {
             // Display a dialog for an error result.
             is ResendEmailResult.Error -> {
                 mutableStateFlow.update {
@@ -411,6 +442,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                         dialogState = TwoFactorLoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.verification_email_not_sent.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -435,7 +467,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     private fun handleRememberMeToggle(action: TwoFactorLoginAction.RememberMeToggle) {
         mutableStateFlow.update {
             it.copy(
-                isRememberMeEnabled = action.isChecked,
+                isRememberEnabled = action.isChecked,
             )
         }
     }
@@ -460,7 +492,11 @@ class TwoFactorLoginViewModel @Inject constructor(
 
         // Resend the email notification.
         viewModelScope.launch {
-            val result = authRepository.resendVerificationCodeEmail()
+            val result = if (!state.isNewDeviceVerification) {
+                authRepository.resendVerificationCodeEmail()
+            } else {
+                authRepository.resendNewDeviceOtp()
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
@@ -545,17 +581,27 @@ class TwoFactorLoginViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.email,
-                password = state.password,
-                twoFactorData = TwoFactorDataModel(
-                    code = code,
-                    method = state.authMethod.value.toString(),
-                    remember = state.isRememberMeEnabled,
-                ),
-                captchaToken = state.captchaToken,
-                orgIdentifier = state.orgIdentifier,
-            )
+            val result = if (state.isNewDeviceVerification) {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    newDeviceOtp = code,
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            } else {
+                authRepository.login(
+                    email = state.email,
+                    password = state.password,
+                    twoFactorData = TwoFactorDataModel(
+                        code = code,
+                        method = state.authMethod.value.toString(),
+                        remember = state.isRememberEnabled,
+                    ),
+                    captchaToken = state.captchaToken,
+                    orgIdentifier = state.orgIdentifier,
+                )
+            }
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveLoginResult(
                     loginResult = result,
@@ -576,7 +622,8 @@ data class TwoFactorLoginState(
     val dialogState: DialogState?,
     val displayEmail: String,
     val isContinueButtonEnabled: Boolean,
-    val isRememberMeEnabled: Boolean,
+    val isRememberEnabled: Boolean,
+    val isNewDeviceVerification: Boolean,
     // Internal
     val captchaToken: String?,
     val email: String,
@@ -617,6 +664,7 @@ data class TwoFactorLoginState(
         data class Error(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

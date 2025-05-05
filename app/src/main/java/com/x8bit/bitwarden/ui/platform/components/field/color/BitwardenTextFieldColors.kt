@@ -11,10 +11,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  */
 @Composable
 fun bitwardenTextFieldButtonColors(): TextFieldColors = bitwardenTextFieldColors(
-    unfocusedBorderColor = BitwardenTheme.colorScheme.stroke.divider,
-    focusedBorderColor = BitwardenTheme.colorScheme.stroke.divider,
+    unfocusedBorderColor = Color.Transparent,
+    focusedBorderColor = Color.Transparent,
     disabledTextColor = BitwardenTheme.colorScheme.text.primary,
-    disabledBorderColor = BitwardenTheme.colorScheme.stroke.divider,
+    disabledBorderColor = Color.Transparent,
     disabledLeadingIconColor = BitwardenTheme.colorScheme.icon.primary,
     disabledTrailingIconColor = BitwardenTheme.colorScheme.icon.primary,
     disabledLabelColor = BitwardenTheme.colorScheme.text.secondary,
@@ -27,10 +27,10 @@ fun bitwardenTextFieldButtonColors(): TextFieldColors = bitwardenTextFieldColors
  */
 @Composable
 fun bitwardenTextFieldColors(
-    unfocusedBorderColor: Color = BitwardenTheme.colorScheme.stroke.divider,
-    focusedBorderColor: Color = BitwardenTheme.colorScheme.stroke.border,
+    focusedBorderColor: Color = Color.Transparent,
+    unfocusedBorderColor: Color = Color.Transparent,
     disabledTextColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
-    disabledBorderColor: Color = BitwardenTheme.colorScheme.outlineButton.borderDisabled,
+    disabledBorderColor: Color = Color.Transparent,
     disabledLeadingIconColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
     disabledTrailingIconColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
     disabledLabelColor: Color = BitwardenTheme.colorScheme.outlineButton.foregroundDisabled,
@@ -48,8 +48,8 @@ fun bitwardenTextFieldColors(
     unfocusedContainerColor = Color.Transparent,
     disabledContainerColor = Color.Transparent,
     errorContainerColor = Color.Transparent,
-    cursorColor = BitwardenTheme.colorScheme.icon.primary,
-    errorCursorColor = BitwardenTheme.colorScheme.icon.primary,
+    cursorColor = BitwardenTheme.colorScheme.text.interaction,
+    errorCursorColor = BitwardenTheme.colorScheme.text.interaction,
     textSelectionColors = TextSelectionColors(
         handleColor = BitwardenTheme.colorScheme.stroke.border,
         backgroundColor = BitwardenTheme.colorScheme.stroke.border.copy(alpha = 0.4f),

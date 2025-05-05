@@ -1,6 +1,6 @@
-name: Android Bug Report
+name: Password Manager Android App Bug Report
 description: File a bug report
-labels: [ bug ]
+labels: [ "app:password-manager", "bug" ]
 body:
   - type: markdown
     attributes:

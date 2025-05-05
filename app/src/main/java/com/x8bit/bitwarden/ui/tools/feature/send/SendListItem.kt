@@ -13,10 +13,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconRes
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import kotlinx.collections.immutable.ImmutableList
@@ -37,6 +35,7 @@ import kotlinx.collections.immutable.toPersistentList
  * @param onDeleteClick The lambda to be invoked when the delete option is clicked from the menu.
  * @param onRemovePasswordClick The lambda to be invoked when the remove password option is clicked
  * from the menu, if `null` the remove password button is not displayed.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
  */
@@ -46,7 +45,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: IconData,
-    trailingLabelIcons: ImmutableList<IconRes>,
+    trailingLabelIcons: ImmutableList<IconData>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -54,6 +53,7 @@ fun SendListItem(
     onShareClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onRemovePasswordClick: (() -> Unit)?,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(false) }
@@ -61,14 +61,7 @@ fun SendListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
-        trailingLabelIcons = trailingLabelIcons
-            .map {
-                IconResource(
-                    iconPainter = rememberVectorPainter(it.iconRes),
-                    contentDescription = it.contentDescription(),
-                )
-            }
-            .toPersistentList(),
+        trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
             SelectionItemData(
@@ -98,6 +91,7 @@ fun SendListItem(
             .filter { showMoreOptions }
             .toPersistentList(),
         optionsTestTag = "Options",
+        cardStyle = cardStyle,
         modifier = modifier,
     )
     if (shouldShowDeleteConfirmationDialog) {
@@ -116,7 +110,7 @@ fun SendListItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun SendListItem_preview() {
     BitwardenTheme {
@@ -132,6 +126,7 @@ private fun SendListItem_preview() {
             onShareClick = {},
             onDeleteClick = {},
             onRemovePasswordClick = null,
+            cardStyle = CardStyle.Full,
         )
     }
 }

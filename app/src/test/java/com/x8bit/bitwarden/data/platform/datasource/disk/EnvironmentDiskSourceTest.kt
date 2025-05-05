@@ -2,11 +2,10 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import androidx.core.content.edit
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals

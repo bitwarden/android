@@ -2,19 +2,20 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
@@ -35,12 +36,13 @@ class LandingViewModelTest : BaseViewModelTest() {
         every { logout(any()) } just runs
     }
     private val vaultRepository: VaultRepository = mockk(relaxed = true) {
-        every { lockVault(any()) } just runs
+        every { lockVault(any(), any()) } just runs
     }
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
     private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
         every { getFeatureFlag(FlagKey.EmailVerification) } returns false
+        every { getFeatureFlag(FlagKey.PreAuthSettings) } returns false
     }
 
     @Test
@@ -60,7 +62,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     emailInput = rememberedEmail,
                     isContinueButtonEnabled = true,
-                    isRememberMeEnabled = true,
+                    isRememberEmailEnabled = true,
                 ),
                 awaitItem(),
             )
@@ -107,7 +109,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             emailInput = "test",
             isContinueButtonEnabled = false,
-            isRememberMeEnabled = true,
+            isRememberEmailEnabled = true,
         )
         val handle = SavedStateHandle(mapOf("state" to expectedState))
         val viewModel = createViewModel(savedStateHandle = handle)
@@ -126,7 +128,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LandingAction.LockAccountClick(accountSummary))
 
-        verify { vaultRepository.lockVault(userId = accountUserId) }
+        verify { vaultRepository.lockVault(userId = accountUserId, isUserInitiated = true) }
     }
 
     @Test
@@ -139,7 +141,12 @@ class LandingViewModelTest : BaseViewModelTest() {
 
         viewModel.trySendAction(LandingAction.LogoutAccountClick(accountSummary))
 
-        verify { authRepository.logout(userId = accountUserId) }
+        verify(exactly = 1) {
+            authRepository.logout(
+                userId = accountUserId,
+                reason = LogoutReason.Click(source = "LandingViewModel"),
+            )
+        }
     }
 
     @Test
@@ -206,6 +213,29 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `AppSettingsClick should emit NavigateToLogin`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LandingAction.AppSettingsClick)
+            assertEquals(LandingEvent.NavigateToSettings, awaitItem())
+        }
+    }
+
+    @Test
+    fun `PreAuthSettingFlagReceive should update the state accordingly`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+
+            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(true))
+            assertEquals(DEFAULT_STATE.copy(showSettingsButton = true), awaitItem())
+
+            viewModel.trySendAction(LandingAction.Internal.PreAuthSettingFlagReceive(false))
+            assertEquals(DEFAULT_STATE.copy(showSettingsButton = false), awaitItem())
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `ContinueButtonClick with an email input matching an existing account on same environment that is logged in should show the account already added dialog`() {
@@ -242,7 +272,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             emailInput = rememberedEmail,
             isContinueButtonEnabled = true,
-            isRememberMeEnabled = true,
+            isRememberEmailEnabled = true,
             accountSummaries = accountSummaries,
         )
         assertEquals(
@@ -298,7 +328,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             val initialState = DEFAULT_STATE.copy(
                 emailInput = rememberedEmail,
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEmailEnabled = true,
                 accountSummaries = accountSummaries,
             )
             assertEquals(
@@ -359,7 +389,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             val initialState = DEFAULT_STATE.copy(
                 emailInput = rememberedEmail,
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEmailEnabled = true,
                 accountSummaries = accountSummaries,
             )
             assertEquals(
@@ -434,7 +464,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(LandingAction.RememberMeToggle(true))
             assertEquals(
                 viewModel.stateFlow.value,
-                DEFAULT_STATE.copy(isRememberMeEnabled = true),
+                DEFAULT_STATE.copy(isRememberEmailEnabled = true),
             )
         }
     }
@@ -594,16 +624,15 @@ class LandingViewModelTest : BaseViewModelTest() {
     )
 
     //endregion Helper methods
-
-    companion object {
-        private val DEFAULT_STATE = LandingState(
-            emailInput = "",
-            isContinueButtonEnabled = false,
-            isRememberMeEnabled = false,
-            selectedEnvironmentType = Environment.Type.US,
-            selectedEnvironmentLabel = Environment.Us.label,
-            dialog = null,
-            accountSummaries = emptyList(),
-        )
-    }
 }
+
+private val DEFAULT_STATE = LandingState(
+    emailInput = "",
+    isContinueButtonEnabled = false,
+    isRememberEmailEnabled = false,
+    selectedEnvironmentType = Environment.Type.US,
+    selectedEnvironmentLabel = Environment.Us.label,
+    dialog = null,
+    accountSummaries = emptyList(),
+    showSettingsButton = false,
+)

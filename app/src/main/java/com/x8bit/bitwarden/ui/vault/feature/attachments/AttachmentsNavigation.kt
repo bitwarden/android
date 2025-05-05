@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.vault.feature.attachments
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val ATTACHMENTS_CIPHER_ID = "cipher_id"
@@ -16,7 +18,6 @@ private const val ATTACHMENTS_ROUTE = "$ATTACHMENTS_ROUTE_PREFIX/{$ATTACHMENTS_C
 /**
  * Class to retrieve arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class AttachmentsArgs(val cipherId: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         cipherId = checkNotNull(savedStateHandle.get<String>(ATTACHMENTS_CIPHER_ID)),

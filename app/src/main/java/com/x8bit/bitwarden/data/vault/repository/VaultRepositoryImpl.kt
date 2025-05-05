@@ -4,8 +4,28 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.combineDataStates
+import com.bitwarden.core.data.repository.util.map
+import com.bitwarden.core.data.repository.util.mapNullable
+import com.bitwarden.core.data.repository.util.updateToPendingOrLoading
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.flatMap
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.network.model.CreateFileSendResponse
+import com.bitwarden.network.model.CreateSendJsonResponse
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UpdateFolderResponseJson
+import com.bitwarden.network.model.UpdateSendResponseJson
+import com.bitwarden.network.service.CiphersService
+import com.bitwarden.network.service.FolderService
+import com.bitwarden.network.service.SendsService
+import com.bitwarden.network.service.SyncService
+import com.bitwarden.network.util.isNoConnectionError
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
@@ -16,41 +36,25 @@ import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.DatabaseSchemeManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
-import com.x8bit.bitwarden.data.platform.repository.util.map
-import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndUnlocked
-import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
-import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
-import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -113,8 +117,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.security.GeneralSecurityException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
+import javax.crypto.Cipher
 
 /**
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
@@ -144,6 +150,7 @@ class VaultRepositoryImpl(
     pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
+    private val reviewPromptManager: ReviewPromptManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
     VaultLockManager by vaultLockManager {
@@ -505,11 +512,13 @@ class VaultRepositoryImpl(
     ): DecryptFido2CredentialAutofillViewResult {
         return vaultSdkSource
             .decryptFido2CredentialAutofillViews(
-                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error,
+                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error(
+                    error = NoActiveUserException(),
+                ),
                 cipherViews = cipherViewList.toTypedArray(),
             )
             .fold(
-                onFailure = { DecryptFido2CredentialAutofillViewResult.Error },
+                onFailure = { DecryptFido2CredentialAutofillViewResult.Error(error = it) },
                 onSuccess = { DecryptFido2CredentialAutofillViewResult.Success(it) },
             )
     }
@@ -540,19 +549,58 @@ class VaultRepositoryImpl(
         ),
     )
 
-    override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+    override suspend fun unlockVaultWithBiometrics(cipher: Cipher): VaultUnlockResult {
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val biometricsKey = authDiskSource
             .getUserBiometricUnlockKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
-        return unlockVaultForUser(
-            userId = userId,
-            initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
-                decryptedUserKey = biometricsKey,
-            ),
-        )
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Biometric key"),
+            )
+        val iv = authDiskSource.getUserBiometricInitVector(userId = userId)
+        val decryptedUserKey = iv
+            ?.let {
+                try {
+                    cipher
+                        .doFinal(biometricsKey.toByteArray(Charsets.ISO_8859_1))
+                        .decodeToString()
+                } catch (e: GeneralSecurityException) {
+                    return VaultUnlockResult.BiometricDecodingError(error = e)
+                }
+            }
+            ?: biometricsKey
+        val encryptedBiometricsKey = if (iv == null) {
+            // Attempting to setup an encrypted pin before unlocking, if this fails we send back
+            // the biometrics error and users will need to sign in another way and re-setup
+            // biometrics.
+            try {
+                cipher
+                    .doFinal(biometricsKey.encodeToByteArray())
+                    .toString(Charsets.ISO_8859_1)
+            } catch (e: GeneralSecurityException) {
+                return VaultUnlockResult.BiometricDecodingError(error = e)
+            }
+        } else {
+            null
+        }
+        return this
+            .unlockVaultForUser(
+                userId = userId,
+                initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
+                    decryptedUserKey = decryptedUserKey,
+                ),
+            )
             .also {
                 if (it is VaultUnlockResult.Success) {
+                    encryptedBiometricsKey?.let {
+                        // If this key is present, we store it and the associated IV for future use
+                        // since we want to migrate the user to a more secure form of biometrics.
+                        authDiskSource.storeUserBiometricUnlockKey(
+                            userId = userId,
+                            biometricsKey = it,
+                        )
+                        authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
+                    }
                     deriveTemporaryPinProtectedUserKeyIfNecessary(userId = userId)
                 }
             }
@@ -561,9 +609,12 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val userKey = authDiskSource.getUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("User key"),
+            )
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Password(
@@ -581,9 +632,12 @@ class VaultRepositoryImpl(
     override suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult {
-        val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
+        val userId = activeUserId
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val pinProtectedUserKey = authDiskSource.getPinProtectedUserKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Pin protected key"),
+            )
         return unlockVaultForUser(
             userId = userId,
             initUserCryptoMethod = InitUserCryptoMethod.Pin(
@@ -597,7 +651,8 @@ class VaultRepositoryImpl(
         sendView: SendView,
         fileUri: Uri?,
     ): CreateSendResult {
-        val userId = activeUserId ?: return CreateSendResult.Error(message = null)
+        val userId = activeUserId
+            ?: return CreateSendResult.Error(message = null, error = NoActiveUserException())
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -614,6 +669,7 @@ class VaultRepositoryImpl(
                     is CreateSendJsonResponse.Invalid -> {
                         return CreateSendResult.Error(
                             message = createSendResponse.firstValidationErrorMessage,
+                            error = null,
                         )
                     }
 
@@ -631,8 +687,11 @@ class VaultRepositoryImpl(
                 )
             }
             .fold(
-                onFailure = { CreateSendResult.Error(message = null) },
-                onSuccess = { CreateSendResult.Success(it) },
+                onFailure = { CreateSendResult.Error(message = null, error = it) },
+                onSuccess = {
+                    reviewPromptManager.registerCreateSendAction()
+                    CreateSendResult.Success(it)
+                },
             )
     }
 
@@ -640,7 +699,11 @@ class VaultRepositoryImpl(
         sendId: String,
         sendView: SendView,
     ): UpdateSendResult {
-        val userId = activeUserId ?: return UpdateSendResult.Error(null)
+        val userId = activeUserId
+            ?: return UpdateSendResult.Error(
+                errorMessage = null,
+                error = NoActiveUserException(),
+            )
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -653,11 +716,11 @@ class VaultRepositoryImpl(
                 )
             }
             .fold(
-                onFailure = { UpdateSendResult.Error(errorMessage = null) },
+                onFailure = { UpdateSendResult.Error(errorMessage = null, error = it) },
                 onSuccess = { response ->
                     when (response) {
                         is UpdateSendResponseJson.Invalid -> {
-                            UpdateSendResult.Error(errorMessage = response.message)
+                            UpdateSendResult.Error(errorMessage = response.message, error = null)
                         }
 
                         is UpdateSendResponseJson.Success -> {
@@ -667,9 +730,12 @@ class VaultRepositoryImpl(
                                     userId = userId,
                                     send = response.send.toEncryptedSdkSend(),
                                 )
-                                .getOrNull()
-                                ?.let { UpdateSendResult.Success(sendView = it) }
-                                ?: UpdateSendResult.Error(errorMessage = null)
+                                .fold(
+                                    onSuccess = { UpdateSendResult.Success(sendView = it) },
+                                    onFailure = {
+                                        UpdateSendResult.Error(errorMessage = null, error = it)
+                                    },
+                                )
                         }
                     }
                 },
@@ -677,14 +743,21 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun removePasswordSend(sendId: String): RemovePasswordSendResult {
-        val userId = activeUserId ?: return RemovePasswordSendResult.Error(null)
+        val userId = activeUserId
+            ?: return RemovePasswordSendResult.Error(
+                errorMessage = null,
+                error = NoActiveUserException(),
+            )
         return sendsService
             .removeSendPassword(sendId = sendId)
             .fold(
                 onSuccess = { response ->
                     when (response) {
                         is UpdateSendResponseJson.Invalid -> {
-                            RemovePasswordSendResult.Error(errorMessage = response.message)
+                            RemovePasswordSendResult.Error(
+                                errorMessage = response.message,
+                                error = null,
+                            )
                         }
 
                         is UpdateSendResponseJson.Success -> {
@@ -694,24 +767,30 @@ class VaultRepositoryImpl(
                                     userId = userId,
                                     send = response.send.toEncryptedSdkSend(),
                                 )
-                                .getOrNull()
-                                ?.let { RemovePasswordSendResult.Success(sendView = it) }
-                                ?: RemovePasswordSendResult.Error(errorMessage = null)
+                                .fold(
+                                    onSuccess = { RemovePasswordSendResult.Success(sendView = it) },
+                                    onFailure = {
+                                        RemovePasswordSendResult.Error(
+                                            errorMessage = null,
+                                            error = it,
+                                        )
+                                    },
+                                )
                         }
                     }
                 },
-                onFailure = { RemovePasswordSendResult.Error(errorMessage = null) },
+                onFailure = { RemovePasswordSendResult.Error(errorMessage = null, error = it) },
             )
     }
 
     override suspend fun deleteSend(sendId: String): DeleteSendResult {
-        val userId = activeUserId ?: return DeleteSendResult.Error
+        val userId = activeUserId ?: return DeleteSendResult.Error(error = NoActiveUserException())
         return sendsService
             .deleteSend(sendId)
             .onSuccess { vaultDiskSource.deleteSend(userId, sendId) }
             .fold(
                 onSuccess = { DeleteSendResult.Success },
-                onFailure = { DeleteSendResult.Error },
+                onFailure = { DeleteSendResult.Error(error = it) },
             )
     }
 
@@ -719,7 +798,8 @@ class VaultRepositoryImpl(
         totpCode: String,
         time: DateTime,
     ): GenerateTotpResult {
-        val userId = activeUserId ?: return GenerateTotpResult.Error
+        val userId = activeUserId
+            ?: return GenerateTotpResult.Error(error = NoActiveUserException())
         return vaultSdkSource.generateTotp(
             time = time,
             userId = userId,
@@ -732,12 +812,13 @@ class VaultRepositoryImpl(
                         periodSeconds = it.period.toInt(),
                     )
                 },
-                onFailure = { GenerateTotpResult.Error },
+                onFailure = { GenerateTotpResult.Error(error = it) },
             )
     }
 
     override suspend fun createFolder(folderView: FolderView): CreateFolderResult {
-        val userId = activeUserId ?: return CreateFolderResult.Error
+        val userId = activeUserId
+            ?: return CreateFolderResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .encryptFolder(
                 userId = userId,
@@ -753,7 +834,7 @@ class VaultRepositoryImpl(
             .flatMap { vaultSdkSource.decryptFolder(userId, it.toEncryptedSdkFolder()) }
             .fold(
                 onSuccess = { CreateFolderResult.Success(folderView = it) },
-                onFailure = { CreateFolderResult.Error },
+                onFailure = { CreateFolderResult.Error(error = it) },
             )
     }
 
@@ -761,7 +842,10 @@ class VaultRepositoryImpl(
         folderId: String,
         folderView: FolderView,
     ): UpdateFolderResult {
-        val userId = activeUserId ?: return UpdateFolderResult.Error(null)
+        val userId = activeUserId ?: return UpdateFolderResult.Error(
+            errorMessage = null,
+            error = NoActiveUserException(),
+        )
         return vaultSdkSource
             .encryptFolder(
                 userId = userId,
@@ -786,21 +870,30 @@ class VaultRepositoryImpl(
                                 )
                                 .fold(
                                     onSuccess = { UpdateFolderResult.Success(it) },
-                                    onFailure = { UpdateFolderResult.Error(errorMessage = null) },
+                                    onFailure = {
+                                        UpdateFolderResult.Error(
+                                            errorMessage = null,
+                                            error = it,
+                                        )
+                                    },
                                 )
                         }
 
                         is UpdateFolderResponseJson.Invalid -> {
-                            UpdateFolderResult.Error(response.message)
+                            UpdateFolderResult.Error(
+                                errorMessage = response.message,
+                                error = null,
+                            )
                         }
                     }
                 },
-                onFailure = { UpdateFolderResult.Error(it.message) },
+                onFailure = { UpdateFolderResult.Error(it.message, error = it) },
             )
     }
 
     override suspend fun deleteFolder(folderId: String): DeleteFolderResult {
-        val userId = activeUserId ?: return DeleteFolderResult.Error
+        val userId = activeUserId
+            ?: return DeleteFolderResult.Error(error = NoActiveUserException())
         return folderService
             .deleteFolder(
                 folderId = folderId,
@@ -811,7 +904,7 @@ class VaultRepositoryImpl(
             }
             .fold(
                 onSuccess = { DeleteFolderResult.Success },
-                onFailure = { DeleteFolderResult.Error },
+                onFailure = { DeleteFolderResult.Error(error = it) },
             )
     }
 
@@ -826,7 +919,8 @@ class VaultRepositoryImpl(
     }
 
     override suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult {
-        val userId = activeUserId ?: return ExportVaultDataResult.Error
+        val userId = activeUserId
+            ?: return ExportVaultDataResult.Error(error = NoActiveUserException())
         val folders = vaultDiskSource
             .getFolders(userId)
             .firstOrNull()
@@ -849,7 +943,7 @@ class VaultRepositoryImpl(
             )
             .fold(
                 onSuccess = { ExportVaultDataResult.Success(it) },
-                onFailure = { ExportVaultDataResult.Error },
+                onFailure = { ExportVaultDataResult.Error(error = it) },
             )
     }
 
@@ -917,9 +1011,11 @@ class VaultRepositoryImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Private key"),
+            )
         val organizationKeys = authDiskSource
             .getOrganizationKeys(userId = userId)
         return unlockVault(
@@ -1382,7 +1478,10 @@ class VaultRepositoryImpl(
                     // Log the user out if the stamps do not match
                     localSecurityStamp?.let {
                         if (serverSecurityStamp != localSecurityStamp) {
-                            userLogoutManager.softLogout(userId = userId, isExpired = true)
+                            userLogoutManager.softLogout(
+                                userId = userId,
+                                reason = LogoutReason.SecurityStamp,
+                            )
                             return SyncVaultDataResult.Error(throwable = null)
                         }
                     }

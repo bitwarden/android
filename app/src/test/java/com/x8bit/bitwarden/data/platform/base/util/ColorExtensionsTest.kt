@@ -26,7 +26,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a dark color in light mode should use the surface color`() =
-        runTestWithTheme(theme = AppTheme.LIGHT) {
+        setContent(theme = AppTheme.LIGHT) {
             assertEquals(
                 BitwardenTheme.colorScheme.background.primary,
                 Color.Blue.toSafeOverlayColor(),
@@ -35,7 +35,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a dark color in dark mode should use the onSurface color`() =
-        runTestWithTheme(theme = AppTheme.DARK) {
+        setContent(theme = AppTheme.DARK) {
             assertEquals(
                 BitwardenTheme.colorScheme.text.primary,
                 Color.Blue.toSafeOverlayColor(),
@@ -44,7 +44,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a light color in light mode should use the onSurface color`() =
-        runTestWithTheme(theme = AppTheme.LIGHT) {
+        setContent(theme = AppTheme.LIGHT) {
             assertEquals(
                 BitwardenTheme.colorScheme.text.primary,
                 Color.Yellow.toSafeOverlayColor(),
@@ -53,7 +53,7 @@ class ColorExtensionsTest : BaseComposeTest() {
 
     @Test
     fun `toSafeOverlayColor for a light color in dark mode should use the surface color`() =
-        runTestWithTheme(theme = AppTheme.DARK) {
+        setContent(theme = AppTheme.DARK) {
             assertEquals(
                 BitwardenTheme.colorScheme.background.primary,
                 Color.Yellow.toSafeOverlayColor(),

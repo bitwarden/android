@@ -14,5 +14,7 @@ sealed class ValidatePinResult {
     /**
      * There was an error determining if the validity of the PIN.
      */
-    data object Error : ValidatePinResult()
+    data class Error(
+        val error: Throwable,
+    ) : ValidatePinResult()
 }

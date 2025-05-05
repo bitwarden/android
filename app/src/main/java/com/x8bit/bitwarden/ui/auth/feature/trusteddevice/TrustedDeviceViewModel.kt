@@ -6,11 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -34,7 +35,11 @@ class TrustedDeviceViewModel @Inject constructor(
             val isAuthenticated = authRepository.authStateFlow.value is AuthState.Authenticated
             val account = authRepository.userStateFlow.value?.activeAccount
             val trustedDevice = account?.trustedDevice
-            if (trustedDevice == null || !isAuthenticated) authRepository.logout()
+            if (trustedDevice == null || !isAuthenticated) {
+                authRepository.logout(
+                    reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+                )
+            }
             TrustedDeviceState(
                 dialogState = null,
                 emailAddress = account?.email.orEmpty(),
@@ -74,13 +79,14 @@ class TrustedDeviceViewModel @Inject constructor(
     private fun handleReceiveNewSsoUserResult(
         action: TrustedDeviceAction.Internal.ReceiveNewSsoUserResult,
     ) {
-        when (action.result) {
-            NewSsoUserResult.Failure -> {
+        when (val result = action.result) {
+            is NewSsoUserResult.Failure -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = TrustedDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -94,7 +100,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleBackClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "TrustedDeviceViewModel"))
     }
 
     private fun handleDismissDialog() {
@@ -134,7 +140,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleNotYouClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "TrustedDeviceViewModel"))
     }
 }
 
@@ -163,6 +169,7 @@ data class TrustedDeviceState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val error: Throwable?,
         ) : DialogState()
 
         /**

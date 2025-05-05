@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
-import android.content.pm.SigningInfo
+import androidx.core.os.bundleOf
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
@@ -140,7 +140,7 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
-                assertNull(specialCircumstance.toFido2RequestOrNull())
+                assertNull(specialCircumstance.toFido2CreateRequestOrNull())
             }
     }
 
@@ -148,10 +148,8 @@ class SpecialCircumstanceExtensionsTest {
     fun `toFido2RequestOrNull should return a non-null value for Fido2Save`() {
         val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
             userId = "mockUserId",
-            requestJson = "mockRequestJson",
-            packageName = "mockPackageName",
-            signingInfo = SigningInfo(),
-            origin = "mockOrigin",
+            isUserPreVerified = false,
+            requestData = bundleOf(),
         )
         assertEquals(
             fido2CreateCredentialRequest,
@@ -159,7 +157,7 @@ class SpecialCircumstanceExtensionsTest {
                 .Fido2Save(
                     fido2CreateCredentialRequest = fido2CreateCredentialRequest,
                 )
-                .toFido2RequestOrNull(),
+                .toFido2CreateRequestOrNull(),
         )
     }
 

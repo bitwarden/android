@@ -41,6 +41,7 @@ fun SendEmpty(
         modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
         if (policyDisablesSend) {
+            Spacer(modifier = Modifier.height(12.dp))
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.send_disabled_warning),
                 modifier = Modifier

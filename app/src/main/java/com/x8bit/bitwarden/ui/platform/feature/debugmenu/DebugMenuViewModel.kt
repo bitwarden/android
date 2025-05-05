@@ -7,6 +7,9 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -25,7 +28,7 @@ class DebugMenuViewModel @Inject constructor(
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
-    initialState = DebugMenuState(featureFlags = emptyMap()),
+    initialState = DebugMenuState(featureFlags = persistentMapOf()),
 ) {
 
     private var featureFlagResetJob: Job? = null
@@ -48,7 +51,12 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.ResetFeatureFlagValues -> handleResetFeatureFlagValues()
             DebugMenuAction.RestartOnboarding -> handleResetOnboardingStatus()
             DebugMenuAction.RestartOnboardingCarousel -> handleResetOnboardingCarousel()
+            DebugMenuAction.ResetCoachMarkTourStatuses -> handleResetCoachMarkTourStatuses()
         }
+    }
+
+    private fun handleResetCoachMarkTourStatuses() {
+        debugMenuRepository.resetCoachMarkTourStatuses()
     }
 
     private fun handleResetOnboardingCarousel() {
@@ -76,7 +84,7 @@ class DebugMenuViewModel @Inject constructor(
 
     private fun handleUpdateFeatureFlagMap(action: DebugMenuAction.Internal.UpdateFeatureFlagMap) {
         mutableStateFlow.update {
-            it.copy(featureFlags = action.newMap)
+            it.copy(featureFlags = action.newMap.toImmutableMap())
         }
     }
 
@@ -89,7 +97,7 @@ class DebugMenuViewModel @Inject constructor(
  * State for the [DebugMenuViewModel]
  */
 data class DebugMenuState(
-    val featureFlags: Map<FlagKey<Any>, Any>,
+    val featureFlags: ImmutableMap<FlagKey<Any>, Any>,
 )
 
 /**
@@ -132,6 +140,11 @@ sealed class DebugMenuAction {
      * The user has clicked the restart onboarding button for the onboarding section.
      */
     data object RestartOnboardingCarousel : DebugMenuAction()
+
+    /**
+     * User has clicked to reset coach mark values.
+     */
+    data object ResetCoachMarkTourStatuses : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.

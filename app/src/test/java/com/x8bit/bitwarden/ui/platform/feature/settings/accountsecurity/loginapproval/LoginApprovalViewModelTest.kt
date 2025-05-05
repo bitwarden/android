@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -14,10 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -210,7 +210,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             viewState = LoginApprovalState.ViewState.Error,
         )
         val viewModel = createViewModel()
-        mutableAuthRequestSharedFlow.tryEmit(AuthRequestUpdatesResult.Error)
+        mutableAuthRequestSharedFlow.tryEmit(AuthRequestUpdatesResult.Error(error = Throwable()))
         assertEquals(expected, viewModel.stateFlow.value)
     }
 
@@ -383,6 +383,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ErrorDialogDismiss should update state`() = runTest {
         val viewModel = createViewModel()
+        val error = Throwable("Fail!")
         coEvery {
             mockAuthRepository.updateAuthRequest(
                 requestId = REQUEST_ID,
@@ -390,7 +391,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 publicKey = PUBLIC_KEY,
                 isApproved = false,
             )
-        } returns AuthRequestResult.Error
+        } returns AuthRequestResult.Error(error = error)
         viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
 
         assertEquals(
@@ -399,6 +400,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                 dialogState = LoginApprovalState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
         )

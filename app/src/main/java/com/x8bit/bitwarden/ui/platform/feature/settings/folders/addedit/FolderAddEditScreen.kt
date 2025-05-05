@@ -2,9 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -24,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
@@ -34,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -127,16 +131,20 @@ fun FolderAddEditScreen(
                 Column(
                     modifier = Modifier.fillMaxSize(),
                 ) {
+                    Spacer(modifier = Modifier.height(height = 12.dp))
                     BitwardenTextField(
                         label = stringResource(id = R.string.name),
                         value = viewState.folderName,
                         onValueChange = remember(viewModel) {
                             { viewModel.trySendAction(FolderAddEditAction.NameTextChange(it)) }
                         },
+                        textFieldTestTag = "FolderNameField",
+                        cardStyle = CardStyle.Full,
                         modifier = Modifier
-                            .padding(16.dp)
+                            .standardHorizontalMargin()
                             .fillMaxWidth(),
                     )
+                    Spacer(modifier = Modifier.navigationBarsPadding())
                 }
             }
 
@@ -170,6 +178,7 @@ private fun FolderAddEditItemDialogs(
             title = stringResource(id = R.string.an_error_has_occurred),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         null -> Unit

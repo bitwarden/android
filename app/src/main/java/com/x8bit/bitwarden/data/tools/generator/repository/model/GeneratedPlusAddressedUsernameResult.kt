@@ -14,5 +14,5 @@ sealed class GeneratedPlusAddressedUsernameResult {
     /**
      * There was an error during the operation.
      */
-    data object InvalidRequest : GeneratedPlusAddressedUsernameResult()
+    data class InvalidRequest(val error: Throwable) : GeneratedPlusAddressedUsernameResult()
 }

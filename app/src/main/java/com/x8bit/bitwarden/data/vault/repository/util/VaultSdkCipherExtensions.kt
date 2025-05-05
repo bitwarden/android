@@ -2,6 +2,16 @@
 
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.network.model.AttachmentJsonRequest
+import com.bitwarden.network.model.CipherJsonRequest
+import com.bitwarden.network.model.CipherRepromptTypeJson
+import com.bitwarden.network.model.CipherTypeJson
+import com.bitwarden.network.model.FieldTypeJson
+import com.bitwarden.network.model.LinkedIdTypeJson
+import com.bitwarden.network.model.SecureNoteTypeJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.UriMatchTypeJson
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
@@ -19,16 +29,6 @@ import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SshKey
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
-import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.FieldTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.LinkedIdTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SecureNoteTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 

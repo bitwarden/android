@@ -5,14 +5,17 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher.Companion.expectValue
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasProgressBarRangeInfo
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChildren
@@ -27,11 +30,13 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -45,6 +50,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 @Suppress("LargeClass")
 class GeneratorScreenTest : BaseComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
+    private var onDimNavBarRequest: Boolean? = null
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
 
@@ -56,15 +62,19 @@ class GeneratorScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
+    private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+            appResumeStateManager = appResumeStateManager,
+        ) {
             GeneratorScreen(
                 viewModel = viewModel,
                 onNavigateToPasswordHistory = { onNavigateToPasswordHistoryScreenCalled = true },
                 onNavigateBack = {},
-                intentManager = intentManager,
+                onDimNavBarRequest = { onDimNavBarRequest = it },
             )
         }
     }
@@ -78,7 +88,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .assertIsDisplayed()
     }
 
@@ -95,7 +105,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .assertIsDisplayed()
     }
 
@@ -117,7 +127,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on select click should send SelectClick`() {
+    fun `on save click should send SaveClick`() {
         updateState(
             DEFAULT_STATE.copy(
                 generatorMode = GeneratorMode.Modal.Username(website = null),
@@ -125,11 +135,11 @@ class GeneratorScreenTest : BaseComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Select")
+            .onNodeWithText(text = "Save")
             .performClick()
 
         verify {
-            viewModel.trySendAction(GeneratorAction.SelectClick)
+            viewModel.trySendAction(GeneratorAction.SaveClick)
         }
     }
 
@@ -193,7 +203,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `clicking the Copy button should send CopyClick action`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Copy")
+            .onNodeWithText(text = "Copy")
             .performClick()
 
         verify {
@@ -294,7 +304,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -302,7 +312,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -425,7 +435,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -446,7 +456,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -471,7 +481,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -491,7 +501,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "$initialMinNumbers")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -507,7 +517,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -528,7 +538,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "1")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -554,7 +564,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -574,7 +584,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "$initialSpecialChars")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -667,7 +677,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -698,7 +708,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Minimum numbers")
             .assertTextEquals("Minimum numbers", "7")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .assertIsDisplayed()
@@ -718,7 +728,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -748,7 +758,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Minimum special")
             .assertTextEquals("Minimum special", "7")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -798,7 +808,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "5")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -828,7 +838,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -855,7 +865,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("\u2212"))
             .performScrollTo()
             .performClick()
@@ -876,7 +886,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "$initialNumWords")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -897,7 +907,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Number of words")
             .assertTextEquals("Number of words", "3")
-            .onSiblings()
+            .onChildren()
             .filterToOne(hasContentDescription("+"))
             .performScrollTo()
             .performClick()
@@ -1054,7 +1064,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 
@@ -1112,6 +1122,84 @@ class GeneratorScreenTest : BaseComposeTest() {
                     ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        val newServerUrl = "https://addyio.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .AddyIo
+                    .SelfHostServerUrlChange(
+                        url = newServerUrl,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_AddyIo state, self host server url field should show based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = true,
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .AddyIo(),
+                    ),
+                ),
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate Disabling the feature flag
+        updateState(
+            DEFAULT_STATE.copy(
+                shouldShowAnonAddySelfHostServerUrlField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertIsNotDisplayed()
     }
 
     //endregion Addy.Io Service Type Tests
@@ -1218,7 +1306,7 @@ class GeneratorScreenTest : BaseComposeTest() {
         val newAccessToken = "accessToken"
 
         composeTestRule
-            .onNodeWithText("API access token")
+            .onNodeWithText("API access token (required)")
             .performScrollTo()
             .performTextInput(newAccessToken)
 
@@ -1274,6 +1362,93 @@ class GeneratorScreenTest : BaseComposeTest() {
                 ),
             )
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, updating self host server url text input should send SelfHostServerUrlChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+            ),
+        )
+
+        val newSelfHostServerUrl = "https://simplelogin.local"
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .performTextInput(newSelfHostServerUrl)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .SimpleLogin
+                    .SelfHostServerUrlChange(url = newSelfHostServerUrl),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_SimpleLogin state, should display self host server url field based on state`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = true,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        // Simulate disabling the feature flag.
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .SimpleLogin(),
+                    ),
+                ),
+                shouldShowSimpleLoginSelfHostServerField = false,
+            ),
+        )
+
+        composeTestRule
+            .onNodeWithText("Self-host server URL")
+            .assertDoesNotExist()
     }
 
     //endregion SimpleLogin Service Type Tests
@@ -1366,11 +1541,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //region Username Type Tests
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in Username state, clicking the tooltip icon should send the TooltipClick action`() {
         updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
 
+        @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithContentDescription(
                 label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
@@ -1521,6 +1696,236 @@ class GeneratorScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(GeneratorAction.LifecycleResume) }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card shows when default mode and shouldShowCoachMarkTour is true`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not show when default mode and shouldShowCoachMarkTour is false`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = false),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not show when modal mode and shouldShowCoachMarkTour is true`() {
+        updateState(
+            state = DEFAULT_STATE.copy(
+                shouldShowCoachMarkTour = true,
+                generatorMode = GeneratorMode.Modal.Password,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Explore generator card does not when default mode, shouldShowCoachMarkTour is true, and main type is not password`() {
+        updateState(
+            state = DEFAULT_STATE.copy(
+                shouldShowCoachMarkTour = true,
+                generatorMode = GeneratorMode.Modal.Password,
+                selectedType = GeneratorState.MainType.Username(),
+            ),
+        )
+        composeTestRule
+            .onNodeWithText("Explore the generator")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `Clicking close button on generator card send ExploreGeneratorCardDismissed action`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close")
+                    and hasAnySibling(hasText("Explore the generator")),
+            )
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.ExploreGeneratorCardDismissed)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Clicking call to action button on generator card send StartExploreGeneratorTour action`() {
+        updateState(
+            state = DEFAULT_STATE.copy(shouldShowCoachMarkTour = true),
+        )
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(GeneratorAction.StartExploreGeneratorTour)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when StartCoachMarkTour event is received the first coach mark is shown and onDimNavBarRequest sends value of true `() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        assertTrue(onDimNavBarRequest == true)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark close button is clicked no coach mark should be showing and onDimNavBarRequest sends the value of false`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close") and
+                    hasAnyAncestor(isCoachMarkToolTip),
+            )
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+
+        assertTrue(onDimNavBarRequest == false)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark next button is clicked should progress to the next coach mark`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when a coach mark back button is clicked should return to previous coach mark`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Back")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `The full coach mark tour can be completed showing all steps`() {
+        mutableEventFlow.tryEmit(GeneratorEvent.StartCoachMarkTour)
+
+        composeTestRule
+            .onNodeWithText("1 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("3 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("4 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+        composeTestRule
+            .onNodeWithText("5 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("6 OF 6")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+    }
+
     //endregion Random Word Tests
 
     private fun updateState(state: GeneratorState) {
@@ -1532,4 +1937,7 @@ private val DEFAULT_STATE = GeneratorState(
     generatedText = "",
     selectedType = GeneratorState.MainType.Password(),
     currentEmailAddress = "currentEmail",
+    shouldShowCoachMarkTour = false,
+    shouldShowAnonAddySelfHostServerUrlField = true,
+    shouldShowSimpleLoginSelfHostServerField = true,
 )

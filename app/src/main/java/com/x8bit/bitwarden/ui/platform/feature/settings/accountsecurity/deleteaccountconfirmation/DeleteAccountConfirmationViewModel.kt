@@ -8,8 +8,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -132,10 +132,11 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(
-                dialog = when (action.requestOtpResult) {
+                dialog = when (val result = action.requestOtpResult) {
                     is RequestOtpResult.Error -> {
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         )
                     }
 
@@ -156,6 +157,7 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = result.error,
                         )
                     }
 
@@ -201,6 +203,7 @@ data class DeleteAccountConfirmationState(
         data class Error(
             val title: Text = R.string.an_error_has_occurred.asText(),
             val message: Text,
+            val error: Throwable? = null,
         ) : DeleteAccountConfirmationDialog()
 
         /**

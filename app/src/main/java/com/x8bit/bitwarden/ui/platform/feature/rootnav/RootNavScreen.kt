@@ -1,19 +1,17 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_AUTO_FILL_AS_ROOT_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_COMPLETE_ROUTE
@@ -29,11 +27,12 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink.navigateToExpiredRegistrationLinkScreen
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToPreventAccountLockout
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.REMOVE_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.navigateToRemovePassword
 import com.x8bit.bitwarden.ui.auth.feature.removepassword.removePasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
+import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordScreen
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.SET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
@@ -44,7 +43,7 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
 import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
-import com.x8bit.bitwarden.ui.platform.feature.debugmenu.setupDebugMenuDestination
+import com.x8bit.bitwarden.ui.platform.components.util.rememberBitwardenNavController
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
@@ -58,6 +57,7 @@ import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -72,7 +72,7 @@ import java.util.concurrent.atomic.AtomicReference
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController = rememberBitwardenNavController(name = "RootNavScreen"),
     onSplashScreenRemoved: () -> Unit = {},
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -94,11 +94,14 @@ fun RootNavScreen(
         splashDestination()
         authGraph(navController)
         removePasswordDestination()
-        resetPasswordDestination()
+        resetPasswordDestination(
+            onNavigateToPreventAccountLockOut = {
+                navController.navigateToPreventAccountLockout()
+            },
+        )
         trustedDeviceGraph(navController)
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
-        setupDebugMenuDestination(onNavigateBack = { navController.popBackStack() })
         setupUnlockDestinationAsRoot()
         setupAutoFillDestinationAsRoot()
         setupCompleteDestination()
@@ -146,7 +149,7 @@ fun RootNavScreen(
 
     // In some scenarios on an emulator the Activity can leak when recreated
     // if we don't first clear focus anytime we change the root destination.
-    (LocalContext.current as? Activity)?.currentFocus?.clearFocus()
+    LocalActivity.current?.currentFocus?.clearFocus()
 
     // When state changes, navigate to different root navigation state
     val rootNavOptions = navOptions {
@@ -181,7 +184,10 @@ fun RootNavScreen(
             }
 
             RootNavState.RemovePassword -> navController.navigateToRemovePassword(rootNavOptions)
-            RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
+            RootNavState.ResetPassword -> {
+                navController.navigateToResetPasswordScreen(rootNavOptions)
+            }
+
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
@@ -209,7 +215,8 @@ fun RootNavScreen(
             is RootNavState.VaultUnlockedForAutofillSave -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultAddEdit(
-                    vaultAddEditType = VaultAddEditType.AddItem(
+                    args = VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
                         vaultItemCipherType = VaultItemCipherType.LOGIN,
                     ),
                     navOptions = rootNavOptions,

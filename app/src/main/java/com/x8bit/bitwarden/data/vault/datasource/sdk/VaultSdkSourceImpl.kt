@@ -8,13 +8,14 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.ClientVault
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.sdk.VaultClient
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -31,8 +32,8 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.datasource.sdk.BaseSdkSource
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.DeriveKeyConnectorResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
@@ -48,7 +49,7 @@ import java.io.File
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
- * [ClientVault].
+ * [VaultClient].
  */
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
@@ -75,18 +76,28 @@ class VaultSdkSourceImpl(
         email: String,
         password: String,
         kdf: Kdf,
-    ): Result<String> =
+    ): Result<DeriveKeyConnectorResult> =
         runCatchingWithLogs {
-            getClient(userId = userId)
-                .crypto()
-                .deriveKeyConnector(
-                    request = DeriveKeyConnectorRequest(
-                        userKeyEncrypted = userKeyEncrypted,
-                        password = password,
-                        kdf = kdf,
-                        email = email,
-                    ),
-                )
+            try {
+                val key = getClient(userId = userId)
+                    .crypto()
+                    .deriveKeyConnector(
+                        request = DeriveKeyConnectorRequest(
+                            userKeyEncrypted = userKeyEncrypted,
+                            password = password,
+                            kdf = kdf,
+                            email = email,
+                        ),
+                    )
+                DeriveKeyConnectorResult.Success(key)
+            } catch (exception: BitwardenException) {
+                when {
+                    exception.message == "Wrong password" -> {
+                        DeriveKeyConnectorResult.WrongPasswordError
+                    }
+                    else -> DeriveKeyConnectorResult.Error(exception)
+                }
+            }
         }
 
     override suspend fun derivePinKey(
@@ -169,7 +180,10 @@ class VaultSdkSourceImpl(
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is an incorrect key/password.
-                InitializeCryptoResult.AuthenticationError(message = exception.message)
+                InitializeCryptoResult.AuthenticationError(
+                    message = exception.message,
+                    error = exception,
+                )
             }
         }
 
@@ -187,6 +201,7 @@ class VaultSdkSourceImpl(
                 // The only truly expected error from the SDK is for incorrect keys.
                 InitializeCryptoResult.AuthenticationError(
                     message = exception.message,
+                    error = exception,
                 )
             }
         }

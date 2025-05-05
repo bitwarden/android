@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
-import android.content.pm.SigningInfo
+import androidx.core.os.bundleOf
 
 fun createMockFido2CredentialAssertionRequest(
     number: Int = 1,
@@ -10,9 +10,6 @@ fun createMockFido2CredentialAssertionRequest(
         userId = userId,
         cipherId = "mockCipherId-$number",
         credentialId = "mockCredentialId-$number",
-        requestJson = "mockRequestJson-$number",
-        clientDataHash = byteArrayOf(0),
-        packageName = "mockPackageName-$number",
-        signingInfo = SigningInfo(),
-        origin = "mockOrigin-$number",
+        isUserPreVerified = false,
+        requestData = bundleOf(),
     )

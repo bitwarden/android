@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 
@@ -25,7 +27,6 @@ private const val PASSWORD_HISTORY_ROUTE: String =
 /**
  * Class to retrieve password history arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class PasswordHistoryArgs(
     val passwordHistoryMode: GeneratorPasswordHistoryMode,
 ) {

@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.AuthClient
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -19,9 +19,19 @@ interface VaultLockManager {
     val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
 
     /**
+     * Flow that indicates whether the active user is actively unlocking the vault.
+     */
+    val isActiveUserUnlockingFlow: StateFlow<Boolean>
+
+    /**
      * Flow that emits whenever any vault is locked or unlocked.
      */
     val vaultStateEventFlow: Flow<VaultStateEvent>
+
+    /**
+     * Whether the user is coming from the lock flow or not.
+     */
+    var isFromLockFlow: Boolean
 
     /**
      * Whether or not the vault is currently locked for the given [userId].
@@ -36,12 +46,12 @@ interface VaultLockManager {
     /**
      * Locks the vault for the user with the given [userId].
      */
-    fun lockVault(userId: String)
+    fun lockVault(userId: String, isUserInitiated: Boolean)
 
     /**
      * Locks the vault for the current user if currently unlocked.
      */
-    fun lockVaultForCurrentUser()
+    fun lockVaultForCurrentUser(isUserInitiated: Boolean)
 
     /**
      * Attempt to unlock the vault with the specified user information.
@@ -69,7 +79,7 @@ interface VaultLockManager {
      * [vaultUnlockDataStateFlow] is up-to-date.
      *
      * This is only meant to be used when the SDK unlocks the vault as a side-effect of some other
-     * function, such as [ClientAuth.makeRegisterTdeKeys]. When using the regular [unlockVault]
+     * function, such as [AuthClient.makeRegisterTdeKeys]. When using the regular [unlockVault]
      * functions, this is not necessary.
      */
     suspend fun syncVaultState(userId: String)

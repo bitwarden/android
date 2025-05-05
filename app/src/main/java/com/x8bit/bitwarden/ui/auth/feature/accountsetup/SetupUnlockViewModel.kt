@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -11,8 +13,6 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -65,8 +65,12 @@ class SetupUnlockViewModel @Inject constructor(
             SetupUnlockAction.EnableBiometricsClick -> handleEnableBiometricsClick()
             SetupUnlockAction.SetUpLaterClick -> handleSetUpLaterClick()
             SetupUnlockAction.DismissDialog -> handleDismissDialog()
-            is SetupUnlockAction.UnlockWithBiometricToggle -> {
-                handleUnlockWithBiometricToggle(action)
+            SetupUnlockAction.UnlockWithBiometricToggleDisabled -> {
+                handleUnlockWithBiometricToggleDisabled()
+            }
+
+            is SetupUnlockAction.UnlockWithBiometricToggleEnabled -> {
+                handleUnlockWithBiometricToggleEnabled(action)
             }
 
             is SetupUnlockAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
@@ -127,23 +131,23 @@ class SetupUnlockViewModel @Inject constructor(
         }
     }
 
-    private fun handleUnlockWithBiometricToggle(
-        action: SetupUnlockAction.UnlockWithBiometricToggle,
+    private fun handleUnlockWithBiometricToggleDisabled() {
+        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+    }
+
+    private fun handleUnlockWithBiometricToggleEnabled(
+        action: SetupUnlockAction.UnlockWithBiometricToggleEnabled,
     ) {
-        if (action.isEnabled) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = SetupUnlockState.DialogState.Loading(R.string.saving.asText()),
-                    isUnlockWithBiometricsEnabled = true,
-                )
-            }
-            viewModelScope.launch {
-                val result = settingsRepository.setupBiometricsKey()
-                sendAction(SetupUnlockAction.Internal.BiometricsKeyResultReceive(result))
-            }
-        } else {
-            settingsRepository.clearBiometricsKey()
-            mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = SetupUnlockState.DialogState.Loading(R.string.saving.asText()),
+                isUnlockWithBiometricsEnabled = true,
+            )
+        }
+        viewModelScope.launch {
+            val result = settingsRepository.setupBiometricsKey(cipher = action.cipher)
+            sendAction(SetupUnlockAction.Internal.BiometricsKeyResultReceive(result = result))
         }
     }
 
@@ -160,7 +164,7 @@ class SetupUnlockViewModel @Inject constructor(
                 settingsRepository.storeUnlockPin(
                     pin = state.pin,
                     shouldRequireMasterPasswordOnRestart =
-                    state.shouldRequireMasterPasswordOnRestart,
+                        state.shouldRequireMasterPasswordOnRestart,
                 )
             }
         }
@@ -178,7 +182,7 @@ class SetupUnlockViewModel @Inject constructor(
         action: SetupUnlockAction.Internal.BiometricsKeyResultReceive,
     ) {
         when (action.result) {
-            BiometricsKeyResult.Error -> {
+            is BiometricsKeyResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = null,
@@ -204,7 +208,7 @@ class SetupUnlockViewModel @Inject constructor(
         } else {
             OnboardingStatus.AUTOFILL_SETUP
         }
-        authRepository.setOnboardingStatus(state.userId, nextStep)
+        authRepository.setOnboardingStatus(nextStep)
     }
 }
 
@@ -272,10 +276,15 @@ sealed class SetupUnlockEvent {
  */
 sealed class SetupUnlockAction {
     /**
-     * User toggled the unlock with biometrics switch.
+     * User toggled the unlock with biometrics switch to off.
      */
-    data class UnlockWithBiometricToggle(
-        val isEnabled: Boolean,
+    data object UnlockWithBiometricToggleDisabled : SetupUnlockAction()
+
+    /**
+     * User toggled the unlock with biometrics switch to on.
+     */
+    data class UnlockWithBiometricToggleEnabled(
+        val cipher: Cipher,
     ) : SetupUnlockAction()
 
     /**

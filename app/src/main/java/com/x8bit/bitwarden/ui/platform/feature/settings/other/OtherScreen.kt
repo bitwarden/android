@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
+import android.content.res.Resources
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -33,22 +35,23 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the other screen.
  */
-@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OtherScreen(
@@ -74,6 +77,9 @@ fun OtherScreen(
 
     OtherDialogs(
         dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(OtherAction.DismissDialog) }
+        },
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -93,44 +99,71 @@ fun OtherScreen(
             )
         },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
+        OtherContent(
+            state = state,
+            onEnableSyncCheckChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
+            },
+            onSyncClick = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
+            },
+            onClipboardFrequencyChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
+            },
+            onScreenCaptureChange = remember(viewModel) {
+                { viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it)) }
+            },
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
+}
+
+@Suppress("LongMethod")
+@Composable
+private fun OtherContent(
+    state: OtherState,
+    onEnableSyncCheckChange: (Boolean) -> Unit,
+    onSyncClick: () -> Unit,
+    onClipboardFrequencyChange: (ClearClipboardFrequency) -> Unit,
+    onScreenCaptureChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.verticalScroll(rememberScrollState()),
+    ) {
+        Spacer(modifier = Modifier.height(height = 12.dp))
+        if (!state.isPreAuth) {
             BitwardenSwitch(
                 label = stringResource(id = R.string.enable_sync_on_refresh),
-                description = stringResource(id = R.string.enable_sync_on_refresh_description),
+                supportingText = stringResource(id = R.string.enable_sync_on_refresh_description),
                 isChecked = state.allowSyncOnRefresh,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.AllowSyncToggle(it)) }
-                },
+                onCheckedChange = onEnableSyncCheckChange,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("SyncOnRefreshSwitch")
-                    .padding(horizontal = 16.dp),
+                    .testTag(tag = "SyncOnRefreshSwitch")
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             BitwardenOutlinedButton(
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.SyncNowButtonClick) }
-                },
+                onClick = onSyncClick,
                 label = stringResource(id = R.string.sync_now),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("SyncNowButton")
-                    .padding(horizontal = 16.dp),
+                    .testTag(tag = "SyncNowButton")
+                    .standardHorizontalMargin(),
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .testTag("LastSyncLabel")
-                    .padding(horizontal = 16.dp),
+                    .testTag(tag = "LastSyncLabel")
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
             ) {
@@ -138,7 +171,7 @@ fun OtherScreen(
                     text = stringResource(id = R.string.last_sync),
                     style = BitwardenTheme.typography.bodySmall,
                     color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier.padding(start = 16.dp, end = 2.dp),
+                    modifier = Modifier.padding(end = 2.dp),
                 )
                 Text(
                     text = state.lastSyncTime,
@@ -147,29 +180,31 @@ fun OtherScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
             ClearClipboardFrequencyRow(
                 currentSelection = state.clearClipboardFrequency,
-                onFrequencySelection = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
-                },
+                onFrequencySelection = onClipboardFrequencyChange,
                 modifier = Modifier
-                    .testTag("ClearClipboardChooser")
-                    .fillMaxWidth(),
+                    .testTag(tag = "ClearClipboardChooser")
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
             )
 
-            ScreenCaptureRow(
-                currentValue = state.allowScreenCapture,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.AllowScreenCaptureToggle(it)) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("AllowScreenCaptureSwitch")
-                    .padding(horizontal = 16.dp),
-            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
+
+        ScreenCaptureRow(
+            currentValue = state.allowScreenCapture,
+            onValueChange = onScreenCaptureChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(tag = "AllowScreenCaptureSwitch")
+                .standardHorizontalMargin(),
+        )
+
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
@@ -191,6 +226,7 @@ private fun ScreenCaptureRow(
                 shouldShowScreenCaptureConfirmDialog = true
             }
         },
+        cardStyle = CardStyle.Full,
         modifier = modifier,
     )
 
@@ -215,51 +251,40 @@ private fun ClearClipboardFrequencyRow(
     currentSelection: ClearClipboardFrequency,
     onFrequencySelection: (ClearClipboardFrequency) -> Unit,
     modifier: Modifier = Modifier,
+    resources: Resources = LocalContext.current.resources,
 ) {
-    var shouldShowClearClipboardDialog by remember { mutableStateOf(false) }
-
-    BitwardenTextRow(
-        text = stringResource(id = R.string.clear_clipboard),
-        description = stringResource(id = R.string.clear_clipboard_description),
-        onClick = { shouldShowClearClipboardDialog = true },
+    BitwardenMultiSelectButton(
+        label = stringResource(id = R.string.clear_clipboard),
+        supportingText = stringResource(id = R.string.clear_clipboard_description),
+        options = ClearClipboardFrequency.entries.map { it.displayLabel() }.toImmutableList(),
+        selectedOption = currentSelection.displayLabel(),
+        onOptionSelected = { selectedFrequency ->
+            onFrequencySelection(
+                ClearClipboardFrequency
+                    .entries
+                    .first { it.displayLabel.toString(resources) == selectedFrequency },
+            )
+        },
+        textFieldTestTag = "ClearClipboardAfterLabel",
+        cardStyle = CardStyle.Full,
         modifier = modifier,
-    ) {
-        Text(
-            text = currentSelection.displayLabel.invoke(),
-            style = BitwardenTheme.typography.labelSmall,
-            color = BitwardenTheme.colorScheme.text.primary,
-            modifier = Modifier.testTag("ClearClipboardAfterLabel"),
-        )
-    }
-
-    if (shouldShowClearClipboardDialog) {
-        BitwardenSelectionDialog(
-            title = stringResource(id = R.string.clear_clipboard),
-            onDismissRequest = { shouldShowClearClipboardDialog = false },
-        ) {
-            ClearClipboardFrequency.entries.forEach { option ->
-                BitwardenSelectionRow(
-                    text = option.displayLabel,
-                    isSelected = option == currentSelection,
-                    onClick = {
-                        shouldShowClearClipboardDialog = false
-                        onFrequencySelection(
-                            ClearClipboardFrequency.entries.first { it == option },
-                        )
-                    },
-                )
-            }
-        }
-    }
+    )
 }
 
 @Composable
 private fun OtherDialogs(
     dialogState: OtherState.DialogState?,
+    onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
         is OtherState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialogState.message(),
+        )
+
+        is OtherState.DialogState.Error -> BitwardenBasicDialog(
+            title = dialogState.title.invoke(),
+            message = dialogState.message(),
+            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit

@@ -6,7 +6,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest

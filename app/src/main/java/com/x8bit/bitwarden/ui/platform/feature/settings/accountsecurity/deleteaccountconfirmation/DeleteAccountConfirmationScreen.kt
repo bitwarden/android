@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -111,6 +112,7 @@ private fun DeleteAccountConfirmationDialogs(
             BitwardenBasicDialog(
                 title = dialogState.title(),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = onDismissDialog,
             )
         }
@@ -152,6 +154,7 @@ private fun DeleteAccountConfirmationContent(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Done,
             autoFocus = true,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

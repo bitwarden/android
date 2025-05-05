@@ -3,27 +3,31 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 
+@Suppress("LargeClass")
 class FolderAddEditViewModelTest : BaseViewModelTest() {
 
     private val mutableFoldersStateFlow =
@@ -132,6 +136,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
+                parentFolderName = null,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -175,6 +180,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Error(
                     R.string.generic_error_message.asText(),
                 ),
+                parentFolderName = null,
             )
 
             val viewModel = createViewModel(
@@ -193,14 +199,17 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     @Test
     fun `DeleteClick with DeleteFolderResult Failure should show an error dialog`() =
         runTest {
+            val error = Throwable("Oops")
             val stateWithDialog = FolderAddEditState(
                 folderAddEditType = FolderAddEditType.EditItem((DEFAULT_EDIT_ITEM_ID)),
                 dialog = FolderAddEditState.DialogState.Error(
                     R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
+                parentFolderName = null,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -224,7 +233,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
             coEvery {
                 vaultRepository.deleteFolder(folderId = DEFAULT_EDIT_ITEM_ID)
-            } returns DeleteFolderResult.Error
+            } returns DeleteFolderResult.Error(error = error)
 
             viewModel.trySendAction(FolderAddEditAction.DeleteClick)
 
@@ -243,6 +252,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = "",
                 ),
+                parentFolderName = null,
             )
 
             val stateWithDialog = stateWithoutName.copy(
@@ -277,6 +287,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
+                parentFolderName = null,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -301,6 +312,83 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick createFolder with no parentFolderNamePresent should just create folder with entered name`() =
+        runTest {
+            mockkStatic(DateTime::class)
+            every { DateTime.now() } returns Instant.MIN
+            val viewModel =
+                createViewModel(
+                    createSavedStateHandleWithState(
+                        FolderAddEditState(
+                            folderAddEditType = FolderAddEditType.AddItem,
+                            viewState = FolderAddEditState.ViewState.Content(
+                                folderName = DEFAULT_FOLDER_NAME,
+                            ),
+                            dialog = null,
+                            parentFolderName = null,
+                        ),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(mockk())
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+            coVerify(
+                exactly = 1,
+            ) {
+                vaultRepository.createFolder(
+                    folderView = FolderView(
+                        name = DEFAULT_FOLDER_NAME,
+                        id = null,
+                        revisionDate = Instant.MIN,
+                    ),
+                )
+            }
+            unmockkStatic(DateTime::class)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode, SaveClick createFolder with a parentFolderNamePresent should prepend the parent folder to the entered name`() =
+        runTest {
+            mockkStatic(DateTime::class)
+            every { DateTime.now() } returns Instant.MIN
+            val parentFolderName = "parent/folder"
+            val viewModel =
+                createViewModel(
+                    createSavedStateHandleWithState(
+                        FolderAddEditState(
+                            folderAddEditType = FolderAddEditType.AddItem,
+                            viewState = FolderAddEditState.ViewState.Content(
+                                folderName = DEFAULT_FOLDER_NAME,
+                            ),
+                            dialog = null,
+                            parentFolderName = parentFolderName,
+                        ),
+                    ),
+                )
+
+            coEvery {
+                vaultRepository.createFolder(any())
+            } returns CreateFolderResult.Success(mockk())
+            viewModel.trySendAction(FolderAddEditAction.SaveClick)
+            coVerify(
+                exactly = 1,
+            ) {
+                vaultRepository.createFolder(
+                    folderView = FolderView(
+                        name = "$parentFolderName/$DEFAULT_FOLDER_NAME",
+                        id = null,
+                        revisionDate = Instant.MIN,
+                    ),
+                )
+            }
+            unmockkStatic(DateTime::class)
+        }
+
     @Test
     fun `in add mode, SaveClick createFolder error should show an error dialog`() = runTest {
         val state = FolderAddEditState(
@@ -309,6 +397,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             viewState = FolderAddEditState.ViewState.Content(
                 folderName = DEFAULT_FOLDER_NAME,
             ),
+            parentFolderName = null,
         )
 
         val viewModel = createViewModel(
@@ -317,9 +406,10 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
 
+        val error = Throwable("Oops")
         coEvery {
             vaultRepository.createFolder(any())
-        } returns CreateFolderResult.Error
+        } returns CreateFolderResult.Error(error = error)
 
         viewModel.trySendAction(FolderAddEditAction.SaveClick)
 
@@ -327,6 +417,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
                     R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -344,6 +435,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Content(
                     folderName = DEFAULT_FOLDER_NAME,
                 ),
+                parentFolderName = null,
             )
 
             val stateWithoutDialog = stateWithDialog.copy(
@@ -389,6 +481,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
             viewState = FolderAddEditState.ViewState.Content(
                 folderName = DEFAULT_FOLDER_NAME,
             ),
+            parentFolderName = null,
         )
 
         val viewModel = createViewModel(
@@ -396,6 +489,7 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 state = state,
             ),
         )
+        val error = Throwable("Oops")
 
         mutableFoldersStateFlow.value =
             DataState.Loaded(
@@ -408,14 +502,15 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
         coEvery {
             vaultRepository.updateFolder(any(), any())
-        } returns UpdateFolderResult.Error(errorMessage = null)
+        } returns UpdateFolderResult.Error(errorMessage = null, error = error)
 
         viewModel.trySendAction(FolderAddEditAction.SaveClick)
 
         assertEquals(
             state.copy(
                 dialog = FolderAddEditState.DialogState.Error(
-                    R.string.generic_error_message.asText(),
+                    message = R.string.generic_error_message.asText(),
+                    throwable = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -664,6 +759,7 @@ private val DEFAULT_STATE = FolderAddEditState(
     viewState = FolderAddEditState.ViewState.Loading,
     dialog = FolderAddEditState.DialogState.Loading("Loading".asText()),
     folderAddEditType = FolderAddEditType.AddItem,
+    parentFolderName = null,
 )
 
 private const val DEFAULT_EDIT_ITEM_ID = "edit_id"

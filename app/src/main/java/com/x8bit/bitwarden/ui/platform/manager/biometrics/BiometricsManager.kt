@@ -29,7 +29,7 @@ interface BiometricsManager {
      * Display a prompt for setting up or verifying biometrics.
      */
     fun promptBiometrics(
-        onSuccess: (cipher: Cipher?) -> Unit,
+        onSuccess: (cipher: Cipher) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,

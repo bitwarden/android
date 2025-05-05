@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -11,9 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -34,7 +34,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { setOnboardingStatus(userId = any(), status = any()) } just runs
+        every { setOnboardingStatus(status = any()) } just runs
     }
 
     private val mutableAutofillEnabledStateFlow = MutableStateFlow(false)
@@ -78,7 +78,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
         }
@@ -98,7 +97,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             }
             verify(exactly = 0) {
                 authRepository.setOnboardingStatus(
-                    userId = DEFAULT_USER_ID,
                     status = OnboardingStatus.AUTOFILL_SETUP,
                 )
             }
@@ -111,7 +109,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
         verify {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.AUTOFILL_SETUP,
             )
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = true)
@@ -126,7 +123,6 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupUnlockAction.ContinueClick)
         verify(exactly = 1) {
             authRepository.setOnboardingStatus(
-                userId = DEFAULT_USER_ID,
                 status = OnboardingStatus.FINAL_STEP,
             )
             firstTimeActionManager.storeShowUnlockSettingBadge(showBadge = false)
@@ -142,42 +138,44 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
             verify {
                 authRepository.setOnboardingStatus(
-                    userId = DEFAULT_USER_ID,
                     status = OnboardingStatus.FINAL_STEP,
                 )
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() {
+    fun `on UnlockWithBiometricToggleDisabled should call clearBiometricsKey and update the state`() {
         val initialState = DEFAULT_STATE.copy(isUnlockWithBiometricsEnabled = true)
         every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
-        every { settingsRepository.clearBiometricsKey() } just runs
+        every { biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID) } just runs
         val viewModel = createViewModel(initialState)
         assertEquals(initialState, viewModel.stateFlow.value)
 
-        viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false))
+        viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleDisabled)
 
         assertEquals(
             initialState.copy(isUnlockWithBiometricsEnabled = false),
             viewModel.stateFlow.value,
         )
         verify(exactly = 1) {
-            settingsRepository.clearBiometricsKey()
+            biometricsEncryptionManager.clearBiometrics(userId = DEFAULT_USER_ID)
         }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle true and setupBiometricsKey error should update the state accordingly`() =
+    fun `on UnlockWithBiometricToggleEnabled and setupBiometricsKey error should update the state accordingly`() =
         runTest {
-            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Error
+            coEvery {
+                settingsRepository.setupBiometricsKey(CIPHER)
+            } returns BiometricsKeyResult.Error(error = Throwable("Fail!"))
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 viewModel.trySendAction(
-                    SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true),
+                    SetupUnlockAction.UnlockWithBiometricToggleEnabled(cipher = CIPHER),
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
@@ -197,21 +195,23 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify(exactly = 1) {
-                settingsRepository.setupBiometricsKey()
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on UnlockWithBiometricToggle true and setupBiometricsKey success should call update the state accordingly`() =
+    fun `on UnlockWithBiometricToggleEnabled and setupBiometricsKey success should call update the state accordingly`() =
         runTest {
-            coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Success
+            coEvery {
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
+            } returns BiometricsKeyResult.Success
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
                 viewModel.trySendAction(
-                    SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true),
+                    SetupUnlockAction.UnlockWithBiometricToggleEnabled(cipher = CIPHER),
                 )
                 assertEquals(
                     DEFAULT_STATE.copy(
@@ -231,7 +231,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 )
             }
             coVerify(exactly = 1) {
-                settingsRepository.setupBiometricsKey()
+                settingsRepository.setupBiometricsKey(cipher = CIPHER)
             }
         }
 

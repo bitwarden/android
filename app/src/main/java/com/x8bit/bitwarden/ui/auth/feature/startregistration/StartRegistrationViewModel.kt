@@ -3,6 +3,10 @@ package com.x8bit.bitwarden.ui.auth.feature.startregistration
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.model.Environment.Type
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
@@ -10,9 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
@@ -27,8 +29,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAc
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -94,7 +94,7 @@ class StartRegistrationViewModel @Inject constructor(
             is ContinueClick -> handleContinueClick()
             is EmailInputChange -> handleEmailInputChanged(action)
             is NameInputChange -> handleNameInputChanged(action)
-            is BackClick -> handleBackClick()
+            is CloseClick -> handleCloseClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
             is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
                 action,
@@ -173,7 +173,7 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleBackClick() {
+    private fun handleCloseClick() {
         sendEvent(StartRegistrationEvent.NavigateBack)
     }
 
@@ -246,7 +246,6 @@ class StartRegistrationViewModel @Inject constructor(
         result: ReceiveSendVerificationEmailResult,
     ) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
-
             is SendVerificationEmailResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -256,6 +255,7 @@ class StartRegistrationViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = sendVerificationEmailResult.error,
                         ),
                     )
                 }
@@ -314,6 +314,7 @@ sealed class StartRegistrationDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : StartRegistrationDialog()
 }
 
@@ -383,9 +384,9 @@ sealed class StartRegistrationAction {
     data object ContinueClick : StartRegistrationAction()
 
     /**
-     * User clicked back.
+     * Indicates that the top-bar close button was clicked.
      */
-    data object BackClick : StartRegistrationAction()
+    data object CloseClick : StartRegistrationAction()
 
     /**
      * Email input changed.

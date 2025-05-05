@@ -66,7 +66,7 @@ abstract class BaseViewModel<S, E, A>(
      * Any changes to internal state that first require asynchronous work should post a follow-up
      * action that may be used to then update the state synchronously.
      */
-    protected abstract fun handleAction(action: A): Unit
+    protected abstract fun handleAction(action: A)
 
     /**
      * Convenience method for sending an action to the [actionChannel].

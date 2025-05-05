@@ -5,15 +5,20 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -35,7 +40,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             OtherScreen(
                 viewModel = viewModel,
                 onNavigateBack = { haveCalledNavigateBack = true },
@@ -45,7 +50,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture confirm should send AllowScreenCaptureToggle`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule.onNodeWithText("Yes").performClick()
         composeTestRule.assertNoDialogExists()
 
@@ -54,7 +59,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture cancel should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -64,7 +69,7 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on allow screen capture row click should display confirm enable screen capture dialog`() {
-        composeTestRule.onNodeWithText("Allow screen capture").performClick()
+        composeTestRule.onNodeWithText("Allow screen capture").performScrollTo().performClick()
         composeTestRule
             .onAllNodesWithText("Allow screen capture")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -85,7 +90,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard row click should show show clipboard selection dialog`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Clear clipboard")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -94,7 +105,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard dialog item click should send ClearClipboardFrequencyChange`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("10 seconds")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -112,7 +129,13 @@ class OtherScreenTest : BaseComposeTest() {
 
     @Test
     fun `on clear clipboard dialog cancel should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Clear clipboard").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Never. Clear clipboard. " +
+                    "Automatically clear copied values from your clipboard.",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule.onNodeWithText("Cancel").performClick()
         composeTestRule.assertNoDialogExists()
     }
@@ -132,7 +155,7 @@ class OtherScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.assertNoPopupExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -142,11 +165,44 @@ class OtherScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isDialog()))
+            .assert(hasAnyAncestor(isPopup()))
+    }
+
+    @Test
+    fun `should display correct items according to state`() {
+        mutableStateFlow.update { it.copy(isPreAuth = false) }
+        composeTestRule.onRoot().printToLog(tag = "BRIAN")
+        composeTestRule
+            .onNodeWithText(text = "Allow sync on refresh")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Sync now")
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Clear clipboard", useUnmergedTree = true)
+            .assertExists()
+        composeTestRule
+            .onNodeWithText(text = "Allow screen capture")
+            .assertExists()
+
+        mutableStateFlow.update { it.copy(isPreAuth = true) }
+        composeTestRule
+            .onNodeWithText(text = "Allow sync on refresh")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Sync now")
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Clear clipboard", useUnmergedTree = true)
+            .assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText(text = "Allow screen capture")
+            .assertExists()
     }
 }
 
 private val DEFAULT_STATE = OtherState(
+    isPreAuth = false,
     allowScreenCapture = false,
     allowSyncOnRefresh = false,
     clearClipboardFrequency = ClearClipboardFrequency.NEVER,

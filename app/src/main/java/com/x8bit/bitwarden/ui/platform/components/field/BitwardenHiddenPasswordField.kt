@@ -1,14 +1,21 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -16,27 +23,35 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param label Label for the text field.
  * @param value Current text on the text field.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier Modifier for the composable.
+ * @param passwordFieldTestTag The optional test tag associated with the inner password field.
  */
 @Composable
 fun BitwardenHiddenPasswordField(
-    label: String,
+    label: String?,
     value: String,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    passwordFieldTestTag: String? = null,
 ) {
-    OutlinedTextField(
-        modifier = modifier,
-        textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-        label = { Text(text = label) },
-        value = value,
-        onValueChange = { },
-        visualTransformation = PasswordVisualTransformation(),
-        singleLine = true,
-        enabled = false,
-        readOnly = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-        colors = bitwardenTextFieldColors(),
-    )
+    CompositionLocalProvider(value = LocalTextToolbar provides BitwardenEmptyTextToolbar) {
+        TextField(
+            modifier = modifier
+                .cardStyle(cardStyle = cardStyle, paddingVertical = 6.dp)
+                .nullableTestTag(tag = passwordFieldTestTag),
+            textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
+            label = label?.let { { Text(text = it) } },
+            value = value,
+            onValueChange = { },
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true,
+            enabled = false,
+            readOnly = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            colors = bitwardenTextFieldColors(),
+        )
+    }
 }
 
 @Preview
@@ -46,6 +61,7 @@ private fun BitwardenHiddenPasswordField_preview() {
         BitwardenHiddenPasswordField(
             label = "Label",
             value = "Password",
+            cardStyle = CardStyle.Full,
         )
     }
 }

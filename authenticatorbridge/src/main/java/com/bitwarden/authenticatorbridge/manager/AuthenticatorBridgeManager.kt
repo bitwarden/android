@@ -1,7 +1,5 @@
 package com.bitwarden.authenticatorbridge.manager
 
-import android.content.Intent
-import android.net.Uri
 import com.bitwarden.authenticatorbridge.IAuthenticatorBridgeService
 import com.bitwarden.authenticatorbridge.manager.model.AccountSyncState
 import kotlinx.coroutines.flow.StateFlow

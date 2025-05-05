@@ -4,7 +4,7 @@ import android.net.Uri
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -51,7 +51,7 @@ class QrCodeScanViewModel @Inject constructor(
         val scannedCode = action.qrCode
 
         if (scannedCode.isBlank() || !scannedCode.startsWith(TOTP_CODE_PREFIX)) {
-            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
+            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError())
             sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
@@ -59,14 +59,14 @@ class QrCodeScanViewModel @Inject constructor(
         val scannedCodeUri = Uri.parse(scannedCode)
         val secretValue = scannedCodeUri.getQueryParameter(SECRET)
         if (secretValue == null || !secretValue.isBase32()) {
-            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
+            vaultRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError())
             sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
 
         val values = scannedCodeUri.queryParameterNames
         if (!areParametersValid(scannedCode, values)) {
-            result = TotpCodeResult.CodeScanningError
+            result = TotpCodeResult.CodeScanningError()
         }
 
         vaultRepository.emitTotpCodeResult(result)

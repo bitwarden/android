@@ -22,7 +22,7 @@ class SetupCompleteViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(mockUserState)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { setOnboardingStatus(any(), any()) } just runs
+        every { setOnboardingStatus(any()) } just runs
     }
 
     @Test
@@ -52,7 +52,6 @@ class SetupCompleteViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(SetupCompleteAction.CompleteSetup)
         verify {
             authRepository.setOnboardingStatus(
-                DEFAULT_USER_ID,
                 OnboardingStatus.COMPLETE,
             )
         }

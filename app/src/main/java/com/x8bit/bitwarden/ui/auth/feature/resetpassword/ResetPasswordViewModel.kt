@@ -5,15 +5,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -34,16 +40,30 @@ class ResetPasswordViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ResetPasswordState, ResetPasswordEvent, ResetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: ResetPasswordState(
-            policies = authRepository.passwordPolicies.toDisplayLabels(),
-            resetReason = authRepository.passwordResetReason,
-            dialogState = null,
-            currentPasswordInput = "",
-            passwordInput = "",
-            retypePasswordInput = "",
-            passwordHintInput = "",
-        ),
+        ?: run {
+            val policies = authRepository.passwordPolicies
+            ResetPasswordState(
+                policies = policies.toDisplayLabels(),
+                resetReason = authRepository.passwordResetReason,
+                dialogState = null,
+                currentPasswordInput = "",
+                passwordInput = "",
+                retypePasswordInput = "",
+                passwordHintInput = "",
+                passwordStrengthState = PasswordStrengthState.NONE,
+                minimumPasswordLength = policies
+                    .toStrictestPolicy()
+                    .minLength
+                    ?: MIN_PASSWORD_LENGTH,
+            )
+        },
 ) {
+    /**
+     * Keeps track of async request to get password strength. Should be cancelled
+     * when user input changes.
+     */
+    private var passwordStrengthJob: Job = Job().apply { complete() }
+
     init {
         // As state updates, write to saved state handle.
         stateFlow
@@ -54,7 +74,7 @@ class ResetPasswordViewModel @Inject constructor(
     override fun handleAction(action: ResetPasswordAction) {
         when (action) {
             ResetPasswordAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
-            ResetPasswordAction.SubmitClick -> handleSubmitClicked()
+            ResetPasswordAction.SaveClick -> handleSaveClicked()
             ResetPasswordAction.DialogDismiss -> handleDialogDismiss()
 
             is ResetPasswordAction.CurrentPasswordInputChanged -> {
@@ -82,6 +102,58 @@ class ResetPasswordViewModel @Inject constructor(
             is ResetPasswordAction.Internal.ReceiveValidatePasswordResult -> {
                 handleReceiveValidatePasswordResult(action)
             }
+
+            is ResetPasswordAction.Internal.ReceivePasswordStrengthResult -> {
+                handlePasswordStrengthResult(action)
+            }
+
+            ResetPasswordAction.LearnHowPreventLockoutClick -> {
+                handleLearnHowToPreventLockoutClick()
+            }
+        }
+    }
+
+    private fun handleLearnHowToPreventLockoutClick() {
+        sendEvent(ResetPasswordEvent.NavigateToPreventAccountLockout)
+    }
+
+    private fun checkPasswordStrength(input: String) {
+        // Update password strength:
+        passwordStrengthJob.cancel()
+        if (input.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(passwordStrengthState = PasswordStrengthState.NONE)
+            }
+        } else {
+            passwordStrengthJob = viewModelScope.launch {
+                val result = authRepository.getPasswordStrength(
+                    password = input,
+                )
+                trySendAction(ResetPasswordAction.Internal.ReceivePasswordStrengthResult(result))
+            }
+        }
+    }
+
+    private fun handlePasswordStrengthResult(
+        action: ResetPasswordAction.Internal.ReceivePasswordStrengthResult,
+    ) {
+        when (val result = action.result) {
+            is PasswordStrengthResult.Success -> {
+                val updatedState = when (result.passwordStrength) {
+                    PasswordStrength.LEVEL_0 -> PasswordStrengthState.WEAK_1
+                    PasswordStrength.LEVEL_1 -> PasswordStrengthState.WEAK_2
+                    PasswordStrength.LEVEL_2 -> PasswordStrengthState.WEAK_3
+                    PasswordStrength.LEVEL_3 -> PasswordStrengthState.GOOD
+                    PasswordStrength.LEVEL_4 -> PasswordStrengthState.STRONG
+                }
+                mutableStateFlow.update {
+                    it.copy(
+                        passwordStrengthState = updatedState,
+                    )
+                }
+            }
+
+            is PasswordStrengthResult.Error -> Unit
         }
     }
 
@@ -89,13 +161,13 @@ class ResetPasswordViewModel @Inject constructor(
      * Dismiss the view if the user confirms logging out.
      */
     private fun handleConfirmLogoutClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "ResetPasswordViewModel"))
     }
 
     /**
      * Validate the user's current password when they submit.
      */
-    private fun handleSubmitClicked() {
+    private fun handleSaveClicked() {
         // Display an error dialog if the new password field is blank.
         if (state.passwordInput.isBlank()) {
             mutableStateFlow.update {
@@ -175,6 +247,7 @@ class ResetPasswordViewModel @Inject constructor(
                 passwordInput = action.input,
             )
         }
+        checkPasswordStrength(input = action.input)
     }
 
     /**
@@ -212,14 +285,15 @@ class ResetPasswordViewModel @Inject constructor(
         // End the loading state.
         mutableStateFlow.update { it.copy(dialogState = null) }
 
-        when (action.result) {
+        when (val result = action.result) {
             // Display an alert if there was an error.
-            ResetPasswordResult.Error -> {
+            is ResetPasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -237,14 +311,15 @@ class ResetPasswordViewModel @Inject constructor(
     private fun handleReceiveValidatePasswordResult(
         action: ResetPasswordAction.Internal.ReceiveValidatePasswordResult,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             // Display an alert if there was an error.
-            ValidatePasswordResult.Error -> {
+            is ValidatePasswordResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -354,6 +429,8 @@ data class ResetPasswordState(
     val passwordInput: String,
     val retypePasswordInput: String,
     val passwordHintInput: String,
+    val passwordStrengthState: PasswordStrengthState,
+    val minimumPasswordLength: Int,
 ) : Parcelable {
     /**
      * Represents the current state of any dialogs on the screen.
@@ -367,6 +444,7 @@ data class ResetPasswordState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -382,7 +460,13 @@ data class ResetPasswordState(
 /**
  * Models events for the Reset Password screen.
  */
-sealed class ResetPasswordEvent
+sealed class ResetPasswordEvent {
+
+    /**
+     * Navigate to the LearnToPreventLockout screen
+     */
+    data object NavigateToPreventAccountLockout : ResetPasswordEvent()
+}
 
 /**
  * Models actions for the Reset Password screen.
@@ -394,9 +478,9 @@ sealed class ResetPasswordAction {
     data object ConfirmLogoutClick : ResetPasswordAction()
 
     /**
-     * Indicates that the user has clicked the submit button.
+     * Indicates that the user has clicked the save button.
      */
-    data object SubmitClick : ResetPasswordAction()
+    data object SaveClick : ResetPasswordAction()
 
     /**
      * Indicates that the dialog has been dismissed.
@@ -424,6 +508,11 @@ sealed class ResetPasswordAction {
     data class PasswordHintInputChanged(val input: String) : ResetPasswordAction()
 
     /**
+     * Indicates user clicked the "Learn ways..." text
+     */
+    data object LearnHowPreventLockoutClick : ResetPasswordAction()
+
+    /**
      * Models actions that the [ResetPasswordViewModel] might send itself.
      */
     sealed class Internal : ResetPasswordAction() {
@@ -446,6 +535,13 @@ sealed class ResetPasswordAction {
          */
         data class ReceiveValidatePasswordAgainstPoliciesResult(
             val meetsRequirements: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates a password strength result has been received.
+         */
+        data class ReceivePasswordStrengthResult(
+            val result: PasswordStrengthResult,
         ) : Internal()
     }
 }

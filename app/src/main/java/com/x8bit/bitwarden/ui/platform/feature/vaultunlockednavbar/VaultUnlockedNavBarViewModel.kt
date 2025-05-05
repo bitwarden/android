@@ -69,6 +69,29 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
                 sendEvent(VaultUnlockedNavBarEvent.Shortcut.NavigateToSettingsScreen)
             }
 
+            SpecialCircumstance.SendShortcut -> {
+                sendEvent(VaultUnlockedNavBarEvent.Shortcut.NavigateToSendScreen)
+                specialCircumstancesManager.specialCircumstance = null
+            }
+
+            is SpecialCircumstance.SearchShortcut -> {
+                sendEvent(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                        labelRes = state.vaultNavBarLabelRes,
+                        contentDescRes = state.vaultNavBarContentDescriptionRes,
+                    ),
+                )
+            }
+
+            is SpecialCircumstance.VerificationCodeShortcut -> {
+                sendEvent(
+                    VaultUnlockedNavBarEvent.Shortcut.NavigateToVaultScreen(
+                        labelRes = state.vaultNavBarLabelRes,
+                        contentDescRes = state.vaultNavBarContentDescriptionRes,
+                    ),
+                )
+            }
+
             else -> Unit
         }
     }
@@ -293,6 +316,13 @@ sealed class VaultUnlockedNavBarEvent {
          */
         data object NavigateToSettingsScreen : Shortcut() {
             override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Settings()
+        }
+
+        /**
+         * Navigate to the Send Screen.
+         */
+        data object NavigateToSendScreen : Shortcut() {
+            override val tab: VaultUnlockedNavBarTab = VaultUnlockedNavBarTab.Send
         }
     }
 }

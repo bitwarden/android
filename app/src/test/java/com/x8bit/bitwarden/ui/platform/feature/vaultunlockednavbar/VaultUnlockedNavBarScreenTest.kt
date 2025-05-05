@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.navOptions
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.FakeNavHostController
 import io.mockk.every
@@ -41,7 +41,7 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                 VaultUnlockedNavBarScreen(
                     viewModel = viewModel,
                     navController = fakeNavHostController,
-                    onNavigateToVaultAddItem = { _, _, _ -> },
+                    onNavigateToVaultAddItem = {},
                     onNavigateToVaultItem = {},
                     onNavigateToVaultEditItem = {},
                     onNavigateToAddSend = {},
@@ -56,6 +56,9 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
                     onNavigateToSetupAutoFillScreen = {},
                     onNavigateToSetupUnlockScreen = {},
                     onNavigateToImportLogins = {},
+                    onNavigateToAddFolderScreen = {},
+                    onNavigateToFlightRecorder = {},
+                    onNavigateToRecordedLogs = {},
                 )
             }
         }

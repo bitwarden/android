@@ -2,8 +2,9 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.test.onNodeWithText
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
 import io.mockk.mockk
@@ -30,7 +31,7 @@ class QrCodeScanScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             QrCodeScanScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
@@ -89,17 +90,23 @@ class QrCodeScanScreenTest : BaseComposeTest() {
     @Config(qualifiers = "land")
     @Test
     fun `clicking on manual text should send ManualEntryTextClick in landscape mode`() = runTest {
-        // TODO Update the tests once clickable text issue is resolved (BIT-1357)
         composeTestRule
-            .onNodeWithText("Enter key manually", substring = true)
-            .assertExists()
+            .onNodeWithText(text = "Cannot scan QR code? Enter key manually")
+            .performCustomAccessibilityAction(label = "Enter key manually")
+
+        verify {
+            viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick)
+        }
     }
 
     @Test
     fun `clicking on manual text should send ManualEntryTextClick`() = runTest {
-        // TODO Update the tests once clickable text issue is resolved (BIT-1357)
         composeTestRule
-            .onNodeWithText("Enter key manually", substring = true)
-            .assertExists()
+            .onNodeWithText(text = "Cannot scan QR code? Enter key manually")
+            .performCustomAccessibilityAction(label = "Enter key manually")
+
+        verify {
+            viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick)
+        }
     }
 }

@@ -3,19 +3,19 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -151,12 +151,13 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         action: VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive,
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
-        when (action.shareCipherResult) {
+        when (val result = action.shareCipherResult) {
             is ShareCipherResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultMoveToOrganizationState.DialogState.Error(
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -173,9 +174,10 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         vaultData: DataState.Error<Triple<CipherView?, List<CollectionView>, UserState?>>,
     ) {
         mutableStateFlow.update {
-            if (vaultData.data != null) {
+            val data = vaultData.data
+            if (data != null) {
                 it.copy(
-                    viewState = vaultData.data.toViewState(),
+                    viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
                         message = R.string.generic_error_message.asText(),
                     ),
@@ -215,9 +217,10 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         vaultData: DataState.NoNetwork<Triple<CipherView?, List<CollectionView>, UserState?>>,
     ) {
         mutableStateFlow.update {
-            if (vaultData.data != null) {
+            val data = vaultData.data
+            if (data != null) {
                 it.copy(
-                    viewState = vaultData.data.toViewState(),
+                    viewState = data.toViewState(),
                     dialogState = VaultMoveToOrganizationState.DialogState.Error(
                         message = R.string.internet_connection_required_title
                             .asText()
@@ -358,6 +361,7 @@ data class VaultMoveToOrganizationState(
         @Parcelize
         data class Error(
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**

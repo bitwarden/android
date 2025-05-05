@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.data.auth.manager.di
 
 import android.content.Context
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.service.AccountsService
+import com.bitwarden.network.service.AuthRequestsService
+import com.bitwarden.network.service.DevicesService
+import com.bitwarden.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManagerImpl
@@ -13,6 +14,8 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManager
 import com.x8bit.bitwarden.data.auth.manager.KeyConnectorManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
@@ -22,7 +25,6 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PushManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
@@ -131,4 +133,10 @@ object AuthManagerModule {
     @Singleton
     fun providesAddTotpItemFromAuthenticatorManager(): AddTotpItemFromAuthenticatorManager =
         AddTotpItemFromAuthenticatorManagerImpl()
+
+    @Provides
+    @Singleton
+    fun providesAuthTokenManager(
+        authDiskSource: AuthDiskSource,
+    ): AuthTokenManager = AuthTokenManagerImpl(authDiskSource = authDiskSource)
 }

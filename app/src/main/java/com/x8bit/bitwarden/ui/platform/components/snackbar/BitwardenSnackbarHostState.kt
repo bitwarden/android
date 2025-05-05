@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.components.snackbar
 
+import android.os.Parcelable
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -9,16 +10,21 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.bitwarden.ui.util.Text
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 
 /**
  * A custom state holder for [BitwardenSnackbarData] and manging a snackbar host with the
  * passed in [SnackbarHostState].
  */
 @Stable
-class BitwardenSnackbarHostState(
+data class BitwardenSnackbarHostState(
     val snackbarHostState: SnackbarHostState,
+    val scope: CoroutineScope,
 ) {
     /**
      * The current snackbar data to be displayed.
@@ -31,14 +37,24 @@ class BitwardenSnackbarHostState(
      * through the message parameter of the [SnackbarHostState.showSnackbar] method. This key
      * can be used to identify the correct snackbar data to show in the host.
      */
-    suspend fun showSnackbar(
+    fun showSnackbar(
         snackbarData: BitwardenSnackbarData,
         duration: SnackbarDuration = SnackbarDuration.Short,
-    ): SnackbarResult {
-        currentSnackbarData = snackbarData
-        return snackbarHostState
-            .showSnackbar(message = snackbarData.key, duration = duration)
-            .also { currentSnackbarData = null }
+        onActionPerformed: () -> Unit = { },
+        onDismiss: () -> Unit = { },
+    ) {
+        scope.launch {
+            currentSnackbarData = snackbarData
+            snackbarHostState
+                .showSnackbar(message = snackbarData.key, duration = duration)
+                .also {
+                    currentSnackbarData = null
+                    when (it) {
+                        SnackbarResult.Dismissed -> onDismiss()
+                        SnackbarResult.ActionPerformed -> onActionPerformed()
+                    }
+                }
+        }
     }
 }
 
@@ -51,13 +67,14 @@ class BitwardenSnackbarHostState(
  * @property key The unique key for the [BitwardenSnackbarData].
  */
 @Immutable
+@Parcelize
 data class BitwardenSnackbarData(
     val message: Text,
     val messageHeader: Text? = null,
     val actionLabel: Text? = null,
     val withDismissAction: Boolean = false,
-) {
-    val key: String = this.hashCode().toString()
+) : Parcelable {
+    val key: String get() = this.hashCode().toString()
 }
 
 /**
@@ -66,6 +83,7 @@ data class BitwardenSnackbarData(
 @Composable
 fun rememberBitwardenSnackbarHostState(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    scope: CoroutineScope = rememberCoroutineScope(),
 ) = remember {
-    BitwardenSnackbarHostState(snackbarHostState)
+    BitwardenSnackbarHostState(snackbarHostState = snackbarHostState, scope = scope)
 }

@@ -1,11 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import android.content.pm.SigningInfo
+import androidx.core.os.bundleOf
+import androidx.credentials.provider.ProviderCreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -18,17 +22,23 @@ class Fido2CredentialRequestExtensionsTest {
     @BeforeEach
     fun setUp() {
         mockkStatic(UUID::class)
+        mockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(UUID::class)
+        unmockkObject(ProviderCreateCredentialRequest.Companion)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `toDefaultAddTypeContent should return the correct content when calling app is not privileged`() {
         every { UUID.randomUUID().toString() } returns "uuid"
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk(relaxed = true) {
+            every { callingRequest.origin } returns null
+            every { callingAppInfo.packageName } returns "mockPackageName-1"
+        }
         assertEquals(
             VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(
@@ -49,10 +59,8 @@ class Fido2CredentialRequestExtensionsTest {
             ),
             Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
-                requestJson = "mockRequestJson-1",
-                packageName = "mockPackageName-1",
-                signingInfo = SigningInfo(),
-                origin = null,
+                isUserPreVerified = false,
+                requestData = bundleOf(),
             )
                 .toDefaultAddTypeContent(
                     attestationOptions = createMockPasskeyAttestationOptions(1),
@@ -64,6 +72,10 @@ class Fido2CredentialRequestExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toDefaultAddTypeContent should return the correct content when calling app is privileged`() {
+        every { ProviderCreateCredentialRequest.fromBundle(any()) } returns mockk(relaxed = true) {
+            every { callingRequest.origin } returns "www.test.com"
+            every { callingAppInfo.packageName } returns "mockPackageName-1"
+        }
         every { UUID.randomUUID().toString() } returns "uuid"
         assertEquals(
             VaultAddEditState.ViewState.Content(
@@ -85,10 +97,8 @@ class Fido2CredentialRequestExtensionsTest {
             ),
             Fido2CreateCredentialRequest(
                 userId = "mockUserId-1",
-                requestJson = "mockRequestJson-1",
-                packageName = "mockPackageName-1",
-                signingInfo = SigningInfo(),
-                origin = "www.test.com",
+                isUserPreVerified = false,
+                requestData = bundleOf(),
             )
                 .toDefaultAddTypeContent(
                     attestationOptions = createMockPasskeyAttestationOptions(number = 1),

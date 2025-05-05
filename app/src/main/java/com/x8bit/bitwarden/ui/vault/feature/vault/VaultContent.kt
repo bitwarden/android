@@ -3,24 +3,25 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
-import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 
 private const val TOTP_TYPES_COUNT: Int = 1
 private const val TRASH_TYPES_COUNT: Int = 1
@@ -34,12 +35,14 @@ fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
     onOverflowOptionClick: (action: ListingItemOverflowAction.VaultAction) -> Unit,
-    showSshKeys: Boolean,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
     ) {
+        item {
+            Spacer(modifier = Modifier.height(height = 12.dp))
+        }
         if (state.totpItemsCount > 0) {
             item {
                 BitwardenListHeaderText(
@@ -47,8 +50,10 @@ fun VaultContent(
                     supportingLabel = TOTP_TYPES_COUNT.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
             item {
@@ -57,12 +62,14 @@ fun VaultContent(
                     label = stringResource(id = R.string.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
                     onClick = vaultHandlers.verificationCodesClick,
-                    showDivider = true,
+                    showDivider = false,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("VerificationCodesFilter")
-                        .padding(16.dp),
+                        .standardHorizontalMargin(),
                 )
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
@@ -73,22 +80,17 @@ fun VaultContent(
                     supportingLabel = state.favoriteItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-
-            items(state.favoriteItems) { favoriteItem ->
+            itemsIndexed(state.favoriteItems) { index, favoriteItem ->
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
                     startIconTestTag = favoriteItem.startIconTestTag,
-                    trailingLabelIcons = favoriteItem
-                        .extraIconList
-                        .toIconResources()
-                        .toPersistentList(),
+                    trailingLabelIcons = favoriteItem.extraIconList,
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
@@ -102,24 +104,17 @@ fun VaultContent(
                             vaultHandlers.overflowOptionClick(action)
                         }
                     },
+                    cardStyle = state
+                        .favoriteItems
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("CipherCell")
-                        .padding(
-                            start = 16.dp,
-                            // There is some built-in padding to the menu button that makes up
-                            // the visual difference here.
-                            end = 12.dp,
-                        ),
+                        .standardHorizontalMargin(),
                 )
             }
-
             item {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                )
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
@@ -129,12 +124,10 @@ fun VaultContent(
                 supportingLabel = state.itemTypesCount.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item {
@@ -145,10 +138,11 @@ fun VaultContent(
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = vaultHandlers.loginGroupClick,
                 showDivider = false,
+                cardStyle = CardStyle.Top(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("LoginFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -160,10 +154,11 @@ fun VaultContent(
                 supportingLabel = state.cardItemsCount.toString(),
                 onClick = vaultHandlers.cardGroupClick,
                 showDivider = false,
+                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("CardFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -175,10 +170,11 @@ fun VaultContent(
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = vaultHandlers.identityGroupClick,
                 showDivider = false,
+                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("IdentityFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
@@ -190,94 +186,85 @@ fun VaultContent(
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
                 showDivider = false,
+                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("SecureNoteFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
-        if (showSshKeys) {
-            item {
-                BitwardenGroupItem(
-                    startIcon = rememberVectorPainter(id = R.drawable.ic_ssh_key),
-                    startIconTestTag = "SshKeyCipherIcon",
-                    label = stringResource(id = R.string.type_ssh_key),
-                    supportingLabel = state.sshKeyItemsCount.toString(),
-                    onClick = vaultHandlers.sshKeyGroupClick,
-                    showDivider = false,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("SshKeyFilter")
-                        .padding(horizontal = 16.dp),
-                )
-            }
+        item {
+            BitwardenGroupItem(
+                startIcon = rememberVectorPainter(id = R.drawable.ic_ssh_key),
+                startIconTestTag = "SshKeyCipherIcon",
+                label = stringResource(id = R.string.type_ssh_key),
+                supportingLabel = state.sshKeyItemsCount.toString(),
+                onClick = vaultHandlers.sshKeyGroupClick,
+                showDivider = false,
+                cardStyle = CardStyle.Bottom,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("SshKeyFilter")
+                    .standardHorizontalMargin(),
+            )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
 
         if (state.folderItems.isNotEmpty()) {
-            item {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                )
-            }
-
             item {
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.folders),
                     supportingLabel = state.folderItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            item {
-                Spacer(modifier = Modifier.height(4.dp))
-            }
-
-            items(state.folderItems) { folder ->
+            itemsIndexed(state.folderItems) { index, folder ->
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = R.drawable.ic_folder),
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { vaultHandlers.folderClick(folder) },
                     showDivider = false,
+                    cardStyle = state
+                        .folderItems
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("FolderFilter")
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
         if (state.noFolderItems.isNotEmpty()) {
-            item {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                )
-            }
-
             item {
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.folder_none),
                     supportingLabel = state.noFolderItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
-            items(state.noFolderItems) { noFolderItem ->
+            itemsIndexed(state.noFolderItems) { index, noFolderItem ->
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
                     startIconTestTag = noFolderItem.startIconTestTag,
-                    trailingLabelIcons = noFolderItem
-                        .extraIconList
-                        .toIconResources()
-                        .toPersistentList(),
+                    trailingLabelIcons = noFolderItem.extraIconList,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
@@ -291,54 +278,52 @@ fun VaultContent(
                             vaultHandlers.overflowOptionClick(action)
                         }
                     },
+                    cardStyle = state
+                        .noFolderItems
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("CipherCell")
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
             }
         }
 
         if (state.collectionItems.isNotEmpty()) {
-            item {
-                BitwardenHorizontalDivider(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp),
-                )
-            }
-
             item {
                 BitwardenListHeaderText(
                     label = stringResource(id = R.string.collections),
                     supportingLabel = state.collectionItems.count().toString(),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .standardHorizontalMargin()
                         .padding(horizontal = 16.dp),
                 )
+                Spacer(modifier = Modifier.height(height = 8.dp))
             }
 
-            items(state.collectionItems) { collection ->
+            itemsIndexed(state.collectionItems) { index, collection ->
                 BitwardenGroupItem(
                     startIcon = rememberVectorPainter(id = R.drawable.ic_collections),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { vaultHandlers.collectionClick(collection) },
                     showDivider = false,
+                    cardStyle = state
+                        .collectionItems
+                        .toListItemCardStyle(index = index, dividerPadding = 56.dp),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("CollectionFilter")
-                        .padding(horizontal = 16.dp),
+                        .standardHorizontalMargin(),
                 )
             }
-        }
-
-        item {
-            BitwardenHorizontalDivider(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 16.dp),
-            )
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+            }
         }
 
         item {
@@ -347,12 +332,10 @@ fun VaultContent(
                 supportingLabel = TRASH_TYPES_COUNT.toString(),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .standardHorizontalMargin()
                     .padding(horizontal = 16.dp),
             )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
         item {
@@ -362,13 +345,17 @@ fun VaultContent(
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,
                 showDivider = false,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .fillMaxWidth()
                     .testTag("TrashFilter")
-                    .padding(horizontal = 16.dp),
+                    .standardHorizontalMargin(),
             )
         }
 
-        item { Spacer(modifier = Modifier.height(88.dp)) }
+        item {
+            Spacer(modifier = Modifier.height(height = 88.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
     }
 }

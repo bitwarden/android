@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.model
 
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.ui.util.Text
 
 /**
  * Represents the result of a FIDO 2 Get Credentials request.
@@ -24,5 +25,7 @@ sealed class Fido2GetCredentialsResult {
     /**
      * Indicates an error was encountered when querying for matching credentials.
      */
-    data object Error : Fido2GetCredentialsResult()
+    data class Error(
+        val message: Text,
+    ) : Fido2GetCredentialsResult()
 }

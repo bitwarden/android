@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
@@ -9,10 +11,8 @@ import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 
+@Suppress("LargeClass")
 class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     private val mutableCreateAuthRequestWithUpdatesFlow =
@@ -322,6 +323,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     @Test
     fun `on createAuthRequestWithUpdates Success and login error should should update the state`() =
         runTest {
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.login(
                     email = EMAIL,
@@ -332,7 +334,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
                     captchaToken = null,
                 )
-            } returns LoginResult.Error(null)
+            } returns LoginResult.Error(errorMessage = null, error = error)
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.stateFlow.test {
@@ -364,6 +366,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                             dialogState = LoginWithDeviceState.DialogState.Error(
                                 title = R.string.an_error_has_occurred.asText(),
                                 message = R.string.generic_error_message.asText(),
+                                error = error,
                             ),
                             loginData = DEFAULT_LOGIN_DATA,
                         ),
@@ -452,6 +455,140 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on createAuthRequestWithUpdates Success and login CertificateError should should update the state`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.CertificateError
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.stateFlow.test {
+                    assertEquals(DEFAULT_STATE, awaitItem())
+                    mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                            dialogState = LoginWithDeviceState.DialogState.Loading(
+                                message = R.string.logging_in.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            dialogState = LoginWithDeviceState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on createAuthRequestWithUpdates Success and NewDeviceVerification with message should update dialogState`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = DEFAULT_LOGIN_DATA.requestId,
+                    accessCode = DEFAULT_LOGIN_DATA.accessCode,
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                    masterPasswordHash = DEFAULT_LOGIN_DATA.masterPasswordHash,
+                    captchaToken = null,
+                )
+            } returns LoginResult.NewDeviceVerification(errorMessage = "new device verification required")
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.stateFlow.test {
+                    assertEquals(DEFAULT_STATE, awaitItem())
+                    mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                        CreateAuthRequestResult.Success(
+                            authRequest = AUTH_REQUEST,
+                            privateKey = AUTH_REQUEST_PRIVATE_KEY,
+                            accessCode = AUTH_REQUEST_ACCESS_CODE,
+                        ),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                            dialogState = LoginWithDeviceState.DialogState.Loading(
+                                message = R.string.logging_in.asText(),
+                            ),
+                        ),
+                        awaitItem(),
+                    )
+                    assertEquals(
+                        DEFAULT_STATE.copy(
+                            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                                fingerprintPhrase = "",
+                            ),
+                            dialogState = LoginWithDeviceState.DialogState.Error(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = "new device verification required".asText(),
+                            ),
+                            loginData = DEFAULT_LOGIN_DATA,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = EMAIL,
+                    requestId = AUTH_REQUEST.id,
+                    accessCode = AUTH_REQUEST_ACCESS_CODE,
+                    asymmetricalKey = requireNotNull(AUTH_REQUEST.key),
+                    requestPrivateKey = AUTH_REQUEST_PRIVATE_KEY,
+                    masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
+                    captchaToken = null,
+                )
+            }
+        }
+
     @Test
     fun `on captchaTokenResultFlow missing token should should display error dialog`() = runTest {
         val viewModel = createViewModel()
@@ -512,9 +649,12 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `on createAuthRequestWithUpdates Error received should show content with error dialog`() {
+        val error = Throwable("Fail!")
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
-        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Error)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+            value = CreateAuthRequestResult.Error(error = error),
+        )
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
@@ -524,6 +664,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                 dialogState = LoginWithDeviceState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
             viewModel.stateFlow.value,

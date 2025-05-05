@@ -1,0 +1,30 @@
+name: Crowdin Push - Authenticator
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JAVA_VERSION: 17
+
+jobs:
+  crowdin-push:
+    name: Crowdin Push
+    runs-on: ubuntu-24.04
+    env:
+      _CROWDIN_PROJECT_ID: "673718"
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Upload sources
+        uses: crowdin/github-action@b8012bd5491b8aa8578b73ab5b5f5e7c94aaa6e2 # v2.7.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
+        with:
+          config: crowdin-bwa.yml
+          upload_sources: true
+          upload_translations: false

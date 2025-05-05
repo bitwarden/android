@@ -5,21 +5,20 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,7 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberTopAppBarState
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,8 +47,9 @@ import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
-import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
@@ -58,8 +57,9 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
@@ -223,20 +223,27 @@ private fun PendingRequestsContent(
         LazyColumn(
             modifier = Modifier.weight(weight = 1f, fill = false),
         ) {
-            items(state.requests) { request ->
+            item {
+                Spacer(modifier = Modifier.height(height = 12.dp))
+            }
+            itemsIndexed(state.requests) { index, request ->
                 PendingRequestItem(
                     fingerprintPhrase = request.fingerprintPhrase,
                     platform = request.platform,
                     timestamp = request.timestamp,
                     onNavigateToLoginApproval = onNavigateToLoginApproval,
+                    cardStyle = state.requests.toListItemCardStyle(
+                        index = index,
+                        dividerPadding = 0.dp,
+                    ),
                     modifier = Modifier
                         .testTag("LoginRequestCell")
                         .fillMaxWidth()
-                        .bottomDivider(),
+                        .standardHorizontalMargin(),
                 )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.decline_all_requests),
@@ -244,9 +251,11 @@ private fun PendingRequestsContent(
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
                 .testTag("DeclineAllRequestsButton")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(height = 16.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
@@ -260,29 +269,25 @@ private fun PendingRequestItem(
     platform: String,
     timestamp: String,
     onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+            .defaultMinSize(minHeight = 60.dp)
+            .cardStyle(
+                cardStyle = cardStyle,
                 onClick = { onNavigateToLoginApproval(fingerprintPhrase) },
+                paddingHorizontal = 16.dp,
             ),
         horizontalAlignment = Alignment.Start,
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
         Text(
             text = stringResource(id = R.string.fingerprint_phrase),
             style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             textAlign = TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -294,8 +299,7 @@ private fun PendingRequestItem(
             textAlign = TextAlign.Start,
             modifier = Modifier
                 .testTag("FingerprintValueLabel")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -310,18 +314,15 @@ private fun PendingRequestItem(
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.padding(horizontal = 16.dp),
             )
+            Spacer(modifier = Modifier.width(width = 16.dp))
             Text(
                 text = timestamp,
                 style = BitwardenTheme.typography.labelSmall,
                 color = BitwardenTheme.colorScheme.text.secondary,
                 textAlign = TextAlign.End,
-                modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 

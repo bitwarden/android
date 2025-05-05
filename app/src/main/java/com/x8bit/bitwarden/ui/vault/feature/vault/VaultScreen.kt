@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,12 +26,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
+import com.x8bit.bitwarden.ui.platform.components.animation.AnimateNullableContentVisibility
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -44,43 +48,58 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
+import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbar
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalAppReviewManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val APP_REVIEW_DELAY = 3000L
 
 /**
  * The vault screen for the application.
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun VaultScreen(
     viewModel: VaultViewModel = hiltViewModel(),
-    onNavigateToVaultAddItemScreen: () -> Unit,
-    onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVerificationCodeScreen: () -> Unit,
     onNavigateToVaultItemListingScreen: (vaultItemType: VaultItemListingType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutScreen: () -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
+    appReviewManager: AppReviewManager = LocalAppReviewManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -92,9 +111,34 @@ fun VaultScreen(
         },
     )
     val snackbarHostState = rememberBitwardenSnackbarHostState()
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                viewModel.trySendAction(VaultAction.LifecycleResumed)
+            }
+
+            else -> Unit
+        }
+    }
+    val scope = rememberCoroutineScope()
+    val launchPrompt = remember {
+        {
+            scope.launch {
+                delay(APP_REVIEW_DELAY)
+                appReviewManager.promptForReview()
+            }
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            VaultEvent.NavigateToAddItemScreen -> onNavigateToVaultAddItemScreen()
+            is VaultEvent.NavigateToAddItemScreen -> {
+                onNavigateToVaultAddItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = event.type,
+                    ),
+                )
+            }
 
             VaultEvent.NavigateToVaultSearchScreen -> onNavigateToSearchVault(SearchType.Vault.All)
 
@@ -102,9 +146,18 @@ fun VaultScreen(
                 onNavigateToVerificationCodeScreen()
             }
 
-            is VaultEvent.NavigateToVaultItem -> onNavigateToVaultItemScreen(event.itemId)
+            is VaultEvent.NavigateToVaultItem -> {
+                onNavigateToVaultItemScreen(VaultItemArgs(event.itemId, event.type))
+            }
 
-            is VaultEvent.NavigateToEditVaultItem -> onNavigateToVaultEditItemScreen(event.itemId)
+            is VaultEvent.NavigateToEditVaultItem -> {
+                onNavigateToVaultEditItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.itemId),
+                        vaultItemCipherType = event.type,
+                    ),
+                )
+            }
 
             is VaultEvent.NavigateToItemListing -> {
                 onNavigateToVaultItemListingScreen(event.itemListingType)
@@ -124,6 +177,15 @@ fun VaultScreen(
             }
 
             is VaultEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
+            VaultEvent.PromptForAppReview -> {
+                launchPrompt.invoke()
+            }
+
+            VaultEvent.NavigateToAddFolder -> {
+                onNavigateToAddFolderScreen(null)
+            }
+
+            VaultEvent.NavigateToAbout -> onNavigateToAboutScreen()
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
@@ -255,9 +317,23 @@ private fun VaultScreenScaffold(
             }
         },
         snackbarHost = {
-            BitwardenSnackbarHost(
-                bitwardenHostState = snackbarHostState,
-            )
+            AnimateNullableContentVisibility(
+                targetState = state.flightRecorderSnackBar,
+                label = "AnimateFlightRecorderSnackbar",
+            ) { data ->
+                BitwardenSnackbar(
+                    bitwardenSnackbarData = data,
+                    onDismiss = vaultHandlers.dismissFlightRecorderSnackbar,
+                    onActionClick = vaultHandlers.flightRecorderGoToSettingsClick,
+                )
+            }
+            if (state.flightRecorderSnackBar == null) {
+                // We don't want additional animations from the Animated Visibility and we only
+                // want this displayed if the flight recorder snackbar is not set.
+                BitwardenSnackbarHost(
+                    bitwardenHostState = snackbarHostState,
+                )
+            }
         },
         floatingActionButton = {
             AnimatedVisibility(
@@ -266,7 +342,7 @@ private fun VaultScreenScaffold(
                 exit = scaleOut(),
             ) {
                 BitwardenFloatingActionButton(
-                    onClick = vaultHandlers.addItemClickAction,
+                    onClick = vaultHandlers.selectAddItemTypeClickAction,
                     painter = rememberVectorPainter(id = R.drawable.ic_plus_large),
                     contentDescription = stringResource(id = R.string.add_item),
                     modifier = Modifier.testTag(tag = "AddItemButton"),
@@ -295,7 +371,6 @@ private fun VaultScreenScaffold(
             when (val viewState = state.viewState) {
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
-                    showSshKeys = state.showSshKeys,
                     vaultHandlers = vaultHandlers,
                     onOverflowOptionClick = { masterPasswordRepromptAction = it },
                     modifier = Modifier.fillMaxSize(),
@@ -326,8 +401,16 @@ private fun VaultScreenScaffold(
                         )
                     }
                     VaultNoItems(
+                        vectorRes = R.drawable.img_vault_items,
+                        headerText = stringResource(id = R.string.save_and_protect_your_data),
+                        message = stringResource(
+                            R.string.the_vault_protects_more_than_just_passwords,
+                        ),
+                        buttonText = stringResource(R.string.new_login),
                         policyDisablesSend = false,
-                        addItemClickAction = vaultHandlers.addItemClickAction,
+                        addItemClickAction = {
+                            vaultHandlers.addItemClickAction(CreateVaultItemType.LOGIN)
+                        },
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -355,6 +438,14 @@ private fun VaultDialogs(
         is VaultState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
+            throwable = dialogState.error,
+            onDismissRequest = vaultHandlers.dialogDismiss,
+        )
+
+        VaultState.DialogState.SelectVaultAddItemType -> VaultItemSelectionDialog(
+            onOptionSelected = {
+                vaultHandlers.addItemClickAction(it)
+            },
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 

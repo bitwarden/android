@@ -38,7 +38,10 @@ class EncryptionUtilTest {
     @Test
     fun `toFingerprint should return success when there are no internal exceptions`() {
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isSuccess)
@@ -49,7 +52,10 @@ class EncryptionUtilTest {
         mockkStatic(MessageDigest::class)
         every { MessageDigest.getInstance("SHA-256") } throws NoSuchAlgorithmException()
         val keyData = SymmetricEncryptionKeyData(
-            symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
+            symmetricEncryptionKey = generateSecretKey()
+                .getOrThrow()
+                .encoded
+                .toByteArrayContainer(),
         )
         val result = keyData.toFingerprint()
         assertTrue(result.isFailure)
@@ -100,7 +106,7 @@ class EncryptionUtilTest {
             .decrypt(SYMMETRIC_KEY)
         assertEquals(
             SHARED_ACCOUNT_DATA,
-            result.getOrThrow()
+            result.getOrThrow(),
         )
     }
 
@@ -123,7 +129,7 @@ class EncryptionUtilTest {
     }
 
     @Test
-    @Suppress("MaxLIneLength")
+    @Suppress("MaxLineLength")
     fun `decrypt EncryptedAddTotpLoginItemData should return success when there are no internal exceptions`() {
         val result = ENCRYPTED_ADD_TOTP_ITEM.decrypt(SYMMETRIC_KEY)
         assertTrue(result.isSuccess)
@@ -148,7 +154,7 @@ class EncryptionUtilTest {
             .decrypt(SYMMETRIC_KEY)
         assertEquals(
             ADD_TOTP_ITEM,
-            result.getOrThrow()
+            result.getOrThrow(),
         )
     }
 
@@ -168,16 +174,16 @@ private val SHARED_ACCOUNT_DATA = SharedAccountData(
             email = "johnyapples@test.com",
             environmentLabel = "bitwarden.com",
             totpUris = listOf("test.com"),
-        )
-    )
+        ),
+    ),
 )
 
 private val ADD_TOTP_ITEM = AddTotpLoginItemData(
-    totpUri = "test.com"
+    totpUri = "test.com",
 )
 
 private val SYMMETRIC_KEY = SymmetricEncryptionKeyData(
-    symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer()
+    symmetricEncryptionKey = generateSecretKey().getOrThrow().encoded.toByteArrayContainer(),
 )
 
 private val ENCRYPTED_SHARED_ACCOUNT_DATA =

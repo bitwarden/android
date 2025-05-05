@@ -2,18 +2,19 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -34,7 +35,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         every { authStateFlow } returns mutableAuthStateFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { shouldTrustDevice = any() } just runs
-        every { logout() } just runs
+        every { logout(reason = any()) } just runs
     }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -44,7 +45,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -54,7 +57,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -66,7 +71,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         createViewModel()
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -77,7 +84,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(TrustedDeviceAction.BackClick)
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 
@@ -109,8 +118,11 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ContinueClick with createNewSsoUser failure should display the error dialog state`() =
         runTest {
+            val error = Throwable("Fail!")
             every { authRepository.shouldTrustDevice = true } just runs
-            coEvery { authRepository.createNewSsoUser() } returns NewSsoUserResult.Failure
+            coEvery {
+                authRepository.createNewSsoUser()
+            } returns NewSsoUserResult.Failure(error = error)
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -129,6 +141,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                         dialogState = TrustedDeviceState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = error,
                         ),
                     ),
                     awaitItem(),
@@ -218,7 +231,9 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(TrustedDeviceAction.NotYouClick)
 
         verify(exactly = 1) {
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "TrustedDeviceViewModel"),
+            )
         }
     }
 

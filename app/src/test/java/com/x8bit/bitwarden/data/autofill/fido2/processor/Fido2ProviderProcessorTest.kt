@@ -2,14 +2,15 @@ package com.x8bit.bitwarden.data.autofill.fido2.processor
 
 import android.app.PendingIntent
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
+import androidx.biometric.BiometricManager
 import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
-import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
@@ -19,45 +20,43 @@ import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
-import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.vault.CipherView
+import androidx.credentials.provider.CredentialEntry
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkConstructor
+import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.slot
-import io.mockk.unmockkConstructor
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.serialization.encodeToString
+import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import javax.crypto.Cipher
 
 class Fido2ProviderProcessorTest {
 
@@ -65,26 +64,27 @@ class Fido2ProviderProcessorTest {
 
     private val context: Context = mockk()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
-    private val mutableCiphersStateFlow = MutableStateFlow<DataState<List<CipherView>>>(
-        DataState.Loaded(emptyList()),
-    )
     private val authRepository: AuthRepository = mockk {
         every { activeUserId } returns "mockActiveUserId"
         every { userStateFlow } returns mutableUserStateFlow
     }
-    private val vaultRepository: VaultRepository = mockk {
-        every { ciphersStateFlow } returns mutableCiphersStateFlow
-    }
     private val passkeyAssertionOptions = createMockPasskeyAssertionOptions(number = 1)
+    private val credentialEntries = listOf(mockk<CredentialEntry>(relaxed = true))
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
         every { getPasskeyAssertionOptionsOrNull(any()) } returns passkeyAssertionOptions
+        coEvery {
+            getPublicKeyCredentialEntries(any(), any())
+        } returns credentialEntries.asSuccess()
     }
-    private val fido2CredentialStore: Fido2CredentialStore = mockk()
     private val intentManager: IntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk()
+    private val featureFlagManager: FeatureFlagManager = mockk {
+        every { getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
+        every { getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication) } returns false
+    }
     private val cancellationSignal: CancellationSignal = mockk()
 
-    private val json = PlatformNetworkModule.providesJson()
     private val clock = FIXED_CLOCK
 
     @BeforeEach
@@ -92,18 +92,28 @@ class Fido2ProviderProcessorTest {
         fido2Processor = Fido2ProviderProcessorImpl(
             context,
             authRepository,
-            vaultRepository,
-            fido2CredentialStore,
             fido2CredentialManager,
             intentManager,
             clock,
+            biometricsEncryptionManager,
+            featureFlagManager,
             dispatcherManager,
         )
+
+        mockkStatic(::isBuildVersionBelow)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when user id is null`() {
-        val request: BeginCreateCredentialRequest = mockk()
+        val request: BeginCreateCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
+        }
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
         val captureSlot = slot<CreateCredentialException>()
@@ -124,7 +134,10 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processCreateCredentialRequest should invoke callback with error on password create request`() {
-        val request: BeginCreatePasswordCredentialRequest = mockk()
+        val request: BeginCreatePasswordCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+            every { candidateQueryData } returns Bundle()
+        }
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
         val captureSlot = slot<CreateCredentialException>()
@@ -142,7 +155,9 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when json is null or empty`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk()
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
@@ -164,7 +179,9 @@ class Fido2ProviderProcessorTest {
 
     @Test
     fun `processCreateCredentialRequest should invoke callback with error when user state null`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk()
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
@@ -187,7 +204,9 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processCreateCredentialRequest should invoke callback with result when user state is valid`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk()
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
@@ -220,9 +239,12 @@ class Fido2ProviderProcessorTest {
         assertEquals(DEFAULT_USER_STATE.accounts[0].email, capturedEntry.accountName)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `processCreateCredentialRequest should generate result entries for each user account`() {
-        val request: BeginCreatePublicKeyCredentialRequest = mockk()
+    fun `processCreateCredentialRequest should generate correct entries based on state`() {
+        val request: BeginCreatePublicKeyCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
         val candidateQueryData: Bundle = mockk()
         val callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException> =
             mockk()
@@ -244,6 +266,11 @@ class Fido2ProviderProcessorTest {
                 any(),
             )
         } returns mockIntent
+        every {
+            biometricsEncryptionManager.getOrCreateCipher(any())
+        } returns mockk<Cipher>()
+        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns true
+        every { isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) } returns false
 
         fido2Processor.processCreateCredentialRequest(request, cancellationSignal, callback)
 
@@ -260,11 +287,46 @@ class Fido2ProviderProcessorTest {
         DEFAULT_USER_STATE.accounts.forEachIndexed { index, mockAccount ->
             assertEquals(mockAccount.email, captureSlot.captured.createEntries[index].accountName)
         }
+
+        // Verify all entries have biometric prompt data when feature flag is enabled
+        assertTrue(captureSlot.captured.createEntries.all { it.biometricPromptData != null }) {
+            "Expected all entries to have biometric prompt data."
+        }
+
+        // Verify entries have the correct authenticators when cipher is not null
+        assertTrue(
+            captureSlot.captured.createEntries.all {
+                it.biometricPromptData?.allowedAuthenticators == BiometricManager.Authenticators.BIOMETRIC_STRONG
+            },
+        ) { "Expected all entries to have BIOMETRIC_STRONG authenticators." }
+
+        // Verify entries have no biometric prompt data when cipher is null
+        every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns null
+        fido2Processor.processCreateCredentialRequest(request, cancellationSignal, callback)
+        assertTrue(
+            captureSlot.captured.createEntries.all { it.biometricPromptData == null },
+        ) { "Expected all entries to have null biometric prompt data." }
+
+        // Disable single tap feature flag to verify all entries do not have biometric prompt data
+        every { featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyCreation) } returns false
+        fido2Processor.processCreateCredentialRequest(request, cancellationSignal, callback)
+        assertTrue(
+            captureSlot.captured.createEntries.all { it.biometricPromptData == null },
+        ) { "Expected all entries to not have biometric prompt data." }
     }
 
     @Test
     fun `processGetCredentialRequest should invoke callback with error when user state is null`() {
-        val request: BeginGetCredentialRequest = mockk()
+        val request: BeginGetCredentialRequest = mockk {
+            every { callingAppInfo } returns mockk(relaxed = true)
+            every {
+                beginGetCredentialOptions
+            } returns listOf(
+                mockk<BeginGetPasswordOption> {
+                    every { candidateQueryData } returns Bundle()
+                },
+            )
+        }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
         every { cancellationSignal.setOnCancelListener(any()) } just runs
@@ -283,16 +345,20 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processGetCredentialRequest should invoke callback with authentication action when vault is locked`() {
-        val request: BeginGetCredentialRequest = mockk()
+        val request: BeginGetCredentialRequest = mockk {
+            every { beginGetCredentialOptions } returns listOf(
+                mockk<BeginGetPasswordOption> {
+                    every { candidateQueryData } returns Bundle()
+                },
+            )
+            every { callingAppInfo } returns mockk(relaxed = true)
+        }
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<BeginGetCredentialResponse>()
         val mockIntent: PendingIntent = mockk()
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-            .copy(
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
                 accounts = listOf(
-                    DEFAULT_USER_STATE
-                        .accounts
-                        .first { it.userId == "mockUserId-1" }
+                    DEFAULT_USER_STATE.accounts.first { it.userId == "mockUserId-1" }
                         .copy(isVaultUnlocked = false),
                 ),
             )
@@ -336,174 +402,104 @@ class Fido2ProviderProcessorTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processGetCredentialRequest should invoke callback with error when option is not BeginGetPublicKeyCredentialOption`() {
-        val request: BeginGetCredentialRequest = mockk {
-            every { beginGetCredentialOptions } returns listOf(mockk<BeginGetPasswordOption>())
+    fun `processGetCredentialRequest should invoke callback with error when option is not BeginGetPublicKeyCredentialOption`() =
+        runTest {
+            val request: BeginGetCredentialRequest = mockk {
+                every { beginGetCredentialOptions } returns listOf(
+                    mockk<BeginGetPasswordOption> {
+                        every { candidateQueryData } returns Bundle()
+                    },
+                )
+                every { callingAppInfo } returns mockk(relaxed = true)
+            }
+            val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> =
+                mockk()
+            val captureSlot = slot<GetCredentialException>()
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            every { cancellationSignal.setOnCancelListener(any()) } just runs
+            every { callback.onError(capture(captureSlot)) } just runs
+
+            fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
+
+            verify(exactly = 1) { callback.onError(any()) }
+            verify(exactly = 0) { callback.onResult(any()) }
+
+            assertTrue(captureSlot.captured is GetCredentialUnknownException)
+            assertEquals("Unsupported option.", captureSlot.captured.errorMessage)
         }
-        val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
-        val captureSlot = slot<GetCredentialException>()
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { callback.onError(capture(captureSlot)) } just runs
-
-        fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
-
-        verify(exactly = 1) { callback.onError(any()) }
-        verify(exactly = 0) { callback.onResult(any()) }
-
-        assert(captureSlot.captured is GetCredentialUnsupportedException)
-        assertEquals("Unsupported option.", captureSlot.captured.errorMessage)
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processGetCredentialRequest should invoke callback with error when option does not contain valid request json`() {
-        val mockOption = BeginGetPublicKeyCredentialOption(
-            candidateQueryData = Bundle(),
-            id = "",
-            requestJson = json.encodeToString(passkeyAssertionOptions),
-        )
-        val request: BeginGetCredentialRequest = mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
+    fun `processGetCredentialRequest should invoke callback with error when discovering passkey fails`() =
+        runTest {
+            val mockOption = BeginGetPublicKeyCredentialOption(
+                candidateQueryData = Bundle(),
+                id = "",
+                requestJson = "{}",
+            )
+            val request: BeginGetCredentialRequest = mockk {
+                every { beginGetCredentialOptions } returns listOf(mockOption)
+                every { callingAppInfo } returns mockk(relaxed = true)
+            }
+            val callback =
+                mockk<OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException>>()
+            val captureSlot = slot<GetCredentialException>()
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            every { cancellationSignal.setOnCancelListener(any()) } just runs
+            every { callback.onError(capture(captureSlot)) } just runs
+            coEvery {
+                fido2CredentialManager.getPublicKeyCredentialEntries(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                    option = mockOption,
+                )
+            } returns Result.failure(Exception("Error decrypting credentials."))
+
+            fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
+
+            verify(exactly = 1) { callback.onError(any()) }
+            verify(exactly = 0) { callback.onResult(any()) }
+            // TODO: [PM-9515] Uncomment when SDK bug is fixed.
+            // coVerify(exactly = 1) {
+            //    vaultRepository.silentlyDiscoverCredentials(
+            //        userId = DEFAULT_USER_STATE.activeUserId,
+            //        fido2CredentialStore = fido2CredentialStore,
+            //        relyingPartyId = "mockRelyingPartyId-1",
+            //    )
+            // }
+
+            assertTrue(captureSlot.captured is GetCredentialUnknownException)
+            assertEquals("Error decrypting credentials.", captureSlot.captured.errorMessage)
         }
-        every {
-            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
-        } returns null
-        val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
-        val captureSlot = slot<GetCredentialException>()
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { callback.onError(capture(captureSlot)) } just runs
-
-        fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
-
-        verify(exactly = 1) { callback.onError(any()) }
-        verify(exactly = 0) { callback.onResult(any()) }
-
-        assert(captureSlot.captured is GetCredentialUnknownException)
-        assertEquals("Invalid data.", captureSlot.captured.errorMessage)
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `processGetCredentialRequest should invoke callback with error when discovering passkey fails`() {
-        val mockOption = BeginGetPublicKeyCredentialOption(
-            candidateQueryData = Bundle(),
-            id = "",
-            requestJson = json.encodeToString(passkeyAssertionOptions),
-        )
-        val request: BeginGetCredentialRequest = mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
+    fun `processGetCredentialRequest should invoke callback with filtered and discovered passkeys`() =
+        runTest {
+            val mockOption = BeginGetPublicKeyCredentialOption(
+                candidateQueryData = Bundle(),
+                id = "",
+                requestJson = "{}",
+            )
+            val request: BeginGetCredentialRequest = mockk {
+                every { beginGetCredentialOptions } returns listOf(mockOption)
+                every { callingAppInfo } returns mockk(relaxed = true)
+            }
+            val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> =
+                mockk()
+            val captureSlot = slot<BeginGetCredentialResponse>()
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+
+            every { cancellationSignal.setOnCancelListener(any()) } just runs
+            every { callback.onResult(capture(captureSlot)) } just runs
+
+            fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
+
+            assertEquals(1, captureSlot.captured.credentialEntries.size)
+            assertEquals(
+                credentialEntries,
+                captureSlot.captured.credentialEntries,
+            )
         }
-        val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
-        val captureSlot = slot<GetCredentialException>()
-        val mockCipherViews = listOf(createMockCipherView(number = 1))
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-        mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { callback.onError(capture(captureSlot)) } just runs
-        coEvery {
-            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
-        } returns DecryptFido2CredentialAutofillViewResult.Error
-        coEvery {
-            vaultRepository.silentlyDiscoverCredentials(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                fido2CredentialStore = fido2CredentialStore,
-                relyingPartyId = "mockRelyingPartyId-1",
-            )
-        } returns Throwable().asFailure()
-
-        fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
-
-        verify(exactly = 1) { callback.onError(any()) }
-        verify(exactly = 0) { callback.onResult(any()) }
-        // TODO: [PM-9515] Uncomment when SDK bug is fixed.
-        // coVerify(exactly = 1) {
-        //    vaultRepository.silentlyDiscoverCredentials(
-        //        userId = DEFAULT_USER_STATE.activeUserId,
-        //        fido2CredentialStore = fido2CredentialStore,
-        //        relyingPartyId = "mockRelyingPartyId-1",
-        //    )
-        // }
-
-        assert(captureSlot.captured is GetCredentialUnknownException)
-        assertEquals("Error decrypting credentials.", captureSlot.captured.errorMessage)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `processGetCredentialRequest should invoke callback with filtered and discovered passkeys`() {
-        val mockOption = BeginGetPublicKeyCredentialOption(
-            candidateQueryData = Bundle(),
-            id = "",
-            requestJson = json.encodeToString(passkeyAssertionOptions),
-        )
-        val request: BeginGetCredentialRequest = mockk {
-            every { beginGetCredentialOptions } returns listOf(mockOption)
-        }
-        val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
-        val captureSlot = slot<BeginGetCredentialResponse>()
-        val mockCipherViews = listOf(createMockCipherView(number = 1))
-        val mockFido2CredentialAutofillViews = listOf(
-            createMockFido2CredentialAutofillView(number = 1),
-        )
-        val mockIntent: PendingIntent = mockk()
-        val mockPublicKeyCredentialEntry: PublicKeyCredentialEntry = mockk()
-        mutableUserStateFlow.value = DEFAULT_USER_STATE
-        mutableCiphersStateFlow.value = DataState.Loaded(mockCipherViews)
-        every { cancellationSignal.setOnCancelListener(any()) } just runs
-        every { callback.onResult(capture(captureSlot)) } just runs
-        coEvery {
-            vaultRepository.silentlyDiscoverCredentials(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                fido2CredentialStore = fido2CredentialStore,
-                relyingPartyId = "mockRelyingPartyId-1",
-            )
-        } returns mockFido2CredentialAutofillViews.asSuccess()
-        coEvery {
-            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
-        } returns DecryptFido2CredentialAutofillViewResult.Success(mockFido2CredentialAutofillViews)
-        every {
-            intentManager.createFido2GetCredentialPendingIntent(
-                action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
-                userId = DEFAULT_USER_STATE.activeUserId,
-                credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
-                cipherId = mockFido2CredentialAutofillViews.first().cipherId,
-                requestCode = any(),
-            )
-        } returns mockIntent
-
-        mockkConstructor(PublicKeyCredentialEntry.Builder::class)
-        every {
-            anyConstructed<PublicKeyCredentialEntry.Builder>().build()
-        } returns mockPublicKeyCredentialEntry
-
-        fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
-
-        verify(exactly = 0) { callback.onError(any()) }
-        // TODO: [PM-9515] Uncomment when SDK bug is fixed.
-        // verify(exactly = 1) {
-        //    callback.onResult(any())
-        //    intentManager.createFido2GetCredentialPendingIntent(
-        //        action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
-        //        credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
-        //        cipherId = mockFido2CredentialAutofillViews.first().cipherId,
-        //        requestCode = any(),
-        //    )
-        // }
-        // coVerify(exactly = 1) {
-        //    vaultRepository.silentlyDiscoverCredentials(
-        //        userId = DEFAULT_USER_STATE.activeUserId,
-        //        fido2CredentialStore = fido2CredentialStore,
-        //        relyingPartyId = "mockRelyingPartyId-1",
-        //    )
-        // }
-
-        assertEquals(1, captureSlot.captured.credentialEntries.size)
-        assertEquals(mockPublicKeyCredentialEntry, captureSlot.captured.credentialEntries.first())
-
-        unmockkConstructor(PublicKeyCredentialEntry.Builder::class)
-    }
 }
 
 private val DEFAULT_USER_STATE = UserState(

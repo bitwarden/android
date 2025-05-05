@@ -4,12 +4,17 @@ import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -17,6 +22,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
@@ -39,6 +45,12 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { firstTimeStateFlow } returns mutableFirstTimeStateFlow
         every { storeShowAutoFillSettingBadge(any()) } just runs
     }
+
+    private val mutableChromeAutofillStatusFlow = MutableStateFlow(DEFAULT_AUTOFILL_STATUS)
+    private val chromeThirdPartyAutofillEnabledManager =
+        mockk<ChromeThirdPartyAutofillEnabledManager> {
+            every { chromeThirdPartyAutofillStatusFlow } returns mutableChromeAutofillStatusFlow
+        }
 
     private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } returns true
@@ -330,7 +342,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             mutableFirstTimeStateFlow.update { it.copy(showSetupAutofillCard = true) }
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AutoFillAction.AutoFillActionCardCtaClick)
+                viewModel.trySendAction(AutoFillAction.AutofillActionCardCtaClick)
                 assertEquals(
                     AutoFillEvent.NavigateToSetupAutofill,
                     awaitItem(),
@@ -354,6 +366,55 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when ChromeAutofillStatusReceive with updated information is processed state updates as expected`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+                mutableChromeAutofillStatusFlow.update {
+                    it.copy(
+                        stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA.copy(isAvailable = true),
+                    )
+                }
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        chromeAutofillSettingsOptions = persistentListOf(
+                            ChromeAutofillSettingsOption.Stable(enabled = false),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when ChromeAutofillSelected action is handled the correct NavigateToChromeAutofillSettings event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.STABLE),
+                )
+                assertEquals(
+                    AutoFillEvent.NavigateToChromeAutofillSettings(ChromeReleaseChannel.STABLE),
+                    awaitItem(),
+                )
+                viewModel.trySendAction(
+                    AutoFillAction.ChromeAutofillSelected(ChromeReleaseChannel.BETA),
+                )
+                assertEquals(
+                    AutoFillEvent.NavigateToChromeAutofillSettings(ChromeReleaseChannel.BETA),
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -361,6 +422,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
+        chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
     )
 }
 
@@ -375,4 +437,15 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     defaultUriMatchType = UriMatchType.DOMAIN,
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
+    chromeAutofillSettingsOptions = persistentListOf(),
+)
+
+private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
+    isAvailable = false,
+    isThirdPartyEnabled = false,
+)
+
+private val DEFAULT_AUTOFILL_STATUS = ChromeThirdPartyAutofillStatus(
+    stableStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
+    betaChannelStatusData = DEFAULT_CHROME_AUTOFILL_DATA,
 )

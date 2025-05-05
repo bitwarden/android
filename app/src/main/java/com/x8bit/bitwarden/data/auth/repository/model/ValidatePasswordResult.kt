@@ -15,5 +15,7 @@ sealed class ValidatePasswordResult {
     /**
      * There was an error determining if the validity of the password.
      */
-    data object Error : ValidatePasswordResult()
+    data class Error(
+        val error: Throwable,
+    ) : ValidatePasswordResult()
 }

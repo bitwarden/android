@@ -2,7 +2,9 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -15,10 +17,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
+import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toImmutableList
 import java.time.ZonedDateTime
@@ -43,7 +48,9 @@ fun SendDeletionDateChooser(
     val options = DeletionOptions.entries.associateWith { it.text() }
     var selectedOption: DeletionOptions by rememberSaveable { mutableStateOf(defaultOption) }
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
+            .cardStyle(cardStyle = CardStyle.Full, paddingVertical = 0.dp),
     ) {
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.deletion_date),
@@ -59,11 +66,12 @@ fun SendDeletionDateChooser(
                     )
                 }
             },
+            insets = PaddingValues(top = 6.dp, bottom = 4.dp),
+            cardStyle = null,
         )
-
         AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
             Column {
-                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
                 AddSendCustomDateChooser(
                     dateLabel = stringResource(id = R.string.deletion_date),
                     timeLabel = stringResource(id = R.string.deletion_time),
@@ -75,8 +83,8 @@ fun SendDeletionDateChooser(
                 )
             }
         }
-
-        Spacer(modifier = Modifier.height(4.dp))
+        BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
             text = stringResource(id = R.string.deletion_date_info),
             style = BitwardenTheme.typography.bodySmall,
@@ -85,6 +93,7 @@ fun SendDeletionDateChooser(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(height = 12.dp))
     }
 }
 

@@ -6,8 +6,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.ImmutableList
@@ -24,6 +24,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param onClick The lambda to be invoked when the item is clicked.
  * @param overflowOptions List of options to display for the item.
  * @param onOverflowOptionClick The lambda to be invoked when an overflow option is clicked.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
  */
@@ -35,8 +36,9 @@ fun VaultEntryListItem(
     onClick: () -> Unit,
     overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
     onOverflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
-    trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
+    trailingLabelIcons: ImmutableList<IconData> = persistentListOf(),
     supportingLabel: String? = null,
 ) {
     BitwardenListItem(
@@ -55,10 +57,11 @@ fun VaultEntryListItem(
                 )
             }
             .toImmutableList(),
+        cardStyle = cardStyle,
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun VaultEntryListItem_preview() {
     BitwardenTheme {
@@ -70,6 +73,7 @@ private fun VaultEntryListItem_preview() {
             onClick = {},
             overflowOptions = persistentListOf(),
             onOverflowOptionClick = {},
+            cardStyle = CardStyle.Full,
             modifier = Modifier,
         )
     }

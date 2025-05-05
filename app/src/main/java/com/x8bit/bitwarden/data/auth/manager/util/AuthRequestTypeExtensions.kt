@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager.util
 
-import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
+import com.bitwarden.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 
 /**

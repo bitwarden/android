@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -35,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
@@ -43,6 +42,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -123,6 +123,7 @@ fun ExportVaultScreen(
             BitwardenBasicDialog(
                 title = dialog.title?.invoke(),
                 message = dialog.message(),
+                throwable = dialog.error,
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(ExportVaultAction.DialogDismiss) }
                 },
@@ -191,16 +192,15 @@ private fun ExportVaultScreenContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-
+        Spacer(modifier = Modifier.height(height = 12.dp))
         if (state.policyPreventsExport) {
             BitwardenInfoCalloutCard(
                 text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
                 modifier = Modifier
                     .testTag("DisablePrivateVaultPolicyLabel")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -219,15 +219,15 @@ private fun ExportVaultScreenContent(
                 onExportFormatOptionSelected(selectedOption)
             },
             isEnabled = !state.policyPreventsExport,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .testTag("FileFormatPicker")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+            Spacer(modifier = Modifier.height(8.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }
             BitwardenPasswordField(
                 label = stringResource(id = R.string.file_password),
@@ -235,20 +235,27 @@ private fun ExportVaultScreenContent(
                 onValueChange = onFilePasswordInputChanged,
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
-                hint = stringResource(id = R.string.password_used_to_export),
+                supportingContent = {
+                    PasswordStrengthIndicator(
+                        state = state.passwordStrengthState,
+                        currentCharacterCount = state.passwordInput.length,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Text(
+                        text = stringResource(id = R.string.password_used_to_export),
+                        style = BitwardenTheme.typography.bodySmall,
+                        color = BitwardenTheme.colorScheme.text.secondary,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                },
+                showPasswordTestTag = "FilePasswordEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("FilePasswordEntry")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.height(8.dp))
 
-            PasswordStrengthIndicator(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                state = state.passwordStrengthState,
-                currentCharacterCount = state.passwordInput.length,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             BitwardenPasswordField(
                 label = stringResource(id = R.string.confirm_file_password),
@@ -256,16 +263,15 @@ private fun ExportVaultScreenContent(
                 onValueChange = onConfirmFilePasswordInputChanged,
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
+                passwordFieldTestTag = "ConfirmFilePasswordEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("ConfirmFilePasswordEntry")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.height(16.dp))
         }
 
         if (state.showSendCodeButton) {
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
@@ -274,7 +280,7 @@ private fun ExportVaultScreenContent(
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.primary,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -286,7 +292,7 @@ private fun ExportVaultScreenContent(
                 isEnabled = !state.policyPreventsExport,
                 modifier = Modifier
                     .testTag("SendTOTPCodeButton")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -296,49 +302,40 @@ private fun ExportVaultScreenContent(
                 label = stringResource(id = R.string.verification_code),
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
-                hint = stringResource(id = R.string.confirm_your_identity),
+                supportingText = stringResource(id = R.string.confirm_your_identity),
                 onValueChange = onPasswordInputChanged,
                 keyboardType = KeyboardType.Number,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
         } else {
+            Spacer(modifier = Modifier.height(height = 8.dp))
             BitwardenPasswordField(
                 label = stringResource(id = R.string.master_password),
+                supportingText = stringResource(
+                    id = R.string.export_vault_master_password_description,
+                ),
                 value = state.passwordInput,
                 readOnly = state.policyPreventsExport,
                 onValueChange = onPasswordInputChanged,
+                passwordFieldTestTag = "MasterPasswordEntry",
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .testTag("MasterPasswordEntry")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(id = R.string.export_vault_master_password_description),
-                textAlign = TextAlign.Start,
-                style = BitwardenTheme.typography.bodyMedium,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
         }
 
+        Spacer(modifier = Modifier.height(height = 16.dp))
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.export_vault),
             onClick = onExportVaultClick,
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier
                 .testTag("ExportVaultButton")
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
     }

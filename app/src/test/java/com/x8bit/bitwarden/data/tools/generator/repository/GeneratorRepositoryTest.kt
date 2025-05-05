@@ -1,28 +1,28 @@
 package com.x8bit.bitwarden.data.tools.generator.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.util.asFailure
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.manager.ReviewPromptManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
-import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassph
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswordResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPlusAddressedUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
+import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -43,6 +44,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -52,6 +54,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class GeneratorRepositoryTest {
@@ -70,7 +73,9 @@ class GeneratorRepositoryTest {
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
     private val dispatcherManager = FakeDispatcherManager()
-    private val policyManager: PolicyManager = mockk()
+    private val reviewPromptManager: ReviewPromptManager = mockk {
+        every { registerGeneratedResultAction() } just runs
+    }
 
     private val repository = GeneratorRepositoryImpl(
         clock = fixedClock,
@@ -80,7 +85,7 @@ class GeneratorRepositoryTest {
         passwordHistoryDiskSource = passwordHistoryDiskSource,
         vaultSdkSource = vaultSdkSource,
         dispatcherManager = dispatcherManager,
-        policyManager = policyManager,
+        reviewPromptManager = reviewPromptManager,
     )
 
     @Suppress("MaxLineLength")
@@ -194,7 +199,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generatePassword(request, true)
 
-        assertEquals(GeneratedPasswordResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedPasswordResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generatePassword(request) }
     }
 
@@ -252,7 +259,9 @@ class GeneratorRepositoryTest {
 
             val result = repository.generatePassphrase(request)
 
-            assertEquals(GeneratedPassphraseResult.InvalidRequest, result)
+            assertEquals(
+                GeneratedPassphraseResult.InvalidRequest(error = exception), result,
+            )
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
 
@@ -291,7 +300,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generatePlusAddressedEmail(request)
 
-        assertEquals(GeneratedPlusAddressedUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedPlusAddressedUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
     }
 
@@ -326,7 +337,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generateCatchAllEmail(request)
 
-        assertEquals(GeneratedCatchAllUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedCatchAllUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generateCatchAllEmail(request) }
     }
 
@@ -361,7 +374,9 @@ class GeneratorRepositoryTest {
 
         val result = repository.generateRandomWordUsername(request)
 
-        assertEquals(GeneratedRandomWordUsernameResult.InvalidRequest, result)
+        assertEquals(
+            GeneratedRandomWordUsernameResult.InvalidRequest(error = exception), result,
+        )
         coVerify { generatorSdkSource.generateRandomWord(request) }
     }
 
@@ -404,7 +419,10 @@ class GeneratorRepositoryTest {
             val result = repository.generateForwardedServiceUsername(request)
 
             assertEquals(
-                GeneratedForwardedServiceUsernameResult.InvalidRequest(exception.message),
+                GeneratedForwardedServiceUsernameResult.InvalidRequest(
+                    message = exception.message,
+                    error = exception,
+                ),
                 result,
             )
             coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
@@ -640,6 +658,7 @@ class GeneratorRepositoryTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
@@ -693,6 +712,7 @@ class GeneratorRepositoryTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
@@ -724,6 +744,7 @@ class GeneratorRepositoryTest {
                 catchAllEmailDomain = "example.com",
                 firefoxRelayApiAccessToken = "access_token_firefox_relay",
                 simpleLoginApiKey = "api_key_simple_login",
+                simpleLoginSelfHostServerUrl = "https://simplelogin.local",
                 duckDuckGoApiKey = "api_key_duck_duck_go",
                 fastMailApiKey = "api_key_fast_mail",
                 anonAddyApiAccessToken = "access_token_anon_addy",
@@ -739,6 +760,17 @@ class GeneratorRepositoryTest {
             coVerify(exactly = 0) {
                 generatorDiskSource.storeUsernameGenerationOptions(any(), any())
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `emitGeneratorResult should update the flow and increment the action count as side affect`() =
+        runTest {
+            repository.generatorResultFlow.test {
+                repository.emitGeneratorResult(GeneratorResult.Password("foo"))
+                assertEquals(GeneratorResult.Password("foo"), awaitItem())
+            }
+            verify(exactly = 1) { reviewPromptManager.registerGeneratedResultAction() }
         }
 }
 
@@ -773,6 +805,8 @@ private val USER_STATE = UserStateJson(
                         keyConnectorUrl = "keyConnectorUrl",
                     ),
                 ),
+                isTwoFactorEnabled = false,
+                creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
             ),
             tokens = AccountTokensJson(
                 accessToken = "accessToken",

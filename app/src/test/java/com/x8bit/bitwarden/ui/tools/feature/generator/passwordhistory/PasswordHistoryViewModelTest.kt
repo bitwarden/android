@@ -2,17 +2,18 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
@@ -37,7 +38,9 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
     private val fakeGeneratorRepository = FakeGeneratorRepository()
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val fakeVaultRepository: VaultRepository = mockk {
@@ -217,18 +220,18 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `PasswordCopyClick action should call setText on the ClipboardManager`() {
+    fun `PasswordCopyClick action should call setText on the ClipboardManager`() = runTest {
         val viewModel = createViewModel()
         val generatedPassword = PasswordHistoryState.GeneratedPassword(
             password = "testPassword",
             date = "01/01/23",
         )
-        every { clipboardManager.setText(text = generatedPassword.password) } just runs
-
         viewModel.trySendAction(PasswordHistoryAction.PasswordCopyClick(generatedPassword))
-
         verify(exactly = 1) {
-            clipboardManager.setText(text = generatedPassword.password)
+            clipboardManager.setText(
+                text = generatedPassword.password,
+                toastDescriptorOverride = R.string.password.asText(),
+            )
         }
     }
 

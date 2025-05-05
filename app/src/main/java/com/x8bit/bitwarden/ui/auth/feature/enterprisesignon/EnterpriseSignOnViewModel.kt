@@ -4,6 +4,9 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.baseIdentityUrl
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -16,15 +19,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseIdentityUrl
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -108,8 +108,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 handleOnGenerateUriForSsoResult(action)
             }
 
-            EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
-                handleOnSsoPrevalidationFailure()
+            is EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
+                handleOnSsoPrevalidationFailure(action)
             }
 
             is EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive -> {
@@ -131,6 +131,14 @@ class EnterpriseSignOnViewModel @Inject constructor(
             is EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive -> {
                 handleOnVerifiedOrganizationDomainSsoDetailsReceive(action)
             }
+
+            EnterpriseSignOnAction.CancelKeyConnectorDomainClick -> {
+                handleCancelKeyConnectorDomainClick()
+            }
+
+            EnterpriseSignOnAction.ConfirmKeyConnectorDomainClick -> {
+                handleConfirmKeyConnectorDomainClick()
+            }
         }
     }
 
@@ -146,7 +154,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
-    @Suppress("MaxLineLength")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -159,25 +166,20 @@ class EnterpriseSignOnViewModel @Inject constructor(
             }
 
             is LoginResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = loginResult.errorMessage?.asText()
-                                ?: R.string.login_sso_error.asText(),
-                        ),
-                    )
-                }
+                showError(
+                    message = loginResult.errorMessage?.asText()
+                        ?: R.string.login_sso_error.asText(),
+                    error = loginResult.error,
+                )
             }
 
             is LoginResult.UnofficialServerError -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
-                                .asText(),
-                        ),
-                    )
-                }
+                @Suppress("MaxLineLength")
+                showError(
+                    message = R.string
+                        .this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server
+                        .asText(),
+                )
             }
 
             is LoginResult.Success -> {
@@ -194,6 +196,23 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     ),
                 )
             }
+
+            LoginResult.CertificateError -> {
+                showError(message = R.string.we_couldnt_verify_the_servers_certificate.asText())
+            }
+
+            is LoginResult.NewDeviceVerification -> {
+                showError(
+                    message = loginResult.errorMessage?.asText()
+                        ?: R.string.login_sso_error.asText(),
+                )
+            }
+
+            is LoginResult.ConfirmKeyConnectorDomain -> {
+                showKeyConnectorDomainConfirmation(
+                    keyConnectorDomain = loginResult.domain,
+                )
+            }
         }
     }
 
@@ -204,8 +223,13 @@ class EnterpriseSignOnViewModel @Inject constructor(
         sendEvent(EnterpriseSignOnEvent.NavigateToSsoLogin(action.uri))
     }
 
-    private fun handleOnSsoPrevalidationFailure() {
-        showDefaultError()
+    private fun handleOnSsoPrevalidationFailure(
+        action: EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure,
+    ) {
+        showError(
+            message = action.message?.asText() ?: R.string.login_sso_error.asText(),
+            error = action.error,
+        )
     }
 
     private fun handleOnOrganizationDomainSsoDetailsFailure() {
@@ -296,9 +320,10 @@ class EnterpriseSignOnViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.organization_sso_identifier_required.asText(),
                     ),
-                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
+                    orgIdentifierInput = authRepository.rememberedOrgIdentifier.orEmpty(),
                 )
             }
             return
@@ -363,15 +388,11 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         val organizationIdentifier = state.orgIdentifierInput
         if (organizationIdentifier.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        message = R.string.validation_field_required.asText(
-                            R.string.org_identifier.asText(),
-                        ),
-                    ),
-                )
-            }
+            showError(
+                message = R.string.validation_field_required.asText(
+                    R.string.org_identifier.asText(),
+                ),
+            )
             return
         }
 
@@ -380,7 +401,12 @@ class EnterpriseSignOnViewModel @Inject constructor(
         viewModelScope.launch {
             when (val prevalidateSso = authRepository.prevalidateSso(organizationIdentifier)) {
                 is PrevalidateSsoResult.Failure -> {
-                    sendAction(EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure)
+                    sendAction(
+                        action = EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure(
+                            message = prevalidateSso.message,
+                            error = prevalidateSso.error,
+                        ),
+                    )
                 }
 
                 is PrevalidateSsoResult.Success -> {
@@ -399,7 +425,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
         when (ssoCallbackResult) {
             is SsoCallbackResult.MissingCode -> {
-                showDefaultError()
+                showError()
             }
 
             is SsoCallbackResult.Success -> {
@@ -418,7 +444,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
                 } else {
-                    showDefaultError()
+                    showError()
                 }
             }
         }
@@ -480,11 +506,17 @@ class EnterpriseSignOnViewModel @Inject constructor(
         sendAction(EnterpriseSignOnAction.Internal.OnGenerateUriForSsoResult(Uri.parse(uri)))
     }
 
-    private fun showDefaultError() {
+    private fun showError(
+        title: Text = R.string.an_error_has_occurred.asText(),
+        message: Text = R.string.login_sso_error.asText(),
+        error: Throwable? = null,
+    ) {
         mutableStateFlow.update {
             it.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
-                    message = R.string.login_sso_error.asText(),
+                    title = title,
+                    message = message,
+                    error = error,
                 ),
             )
         }
@@ -498,6 +530,29 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 ),
             )
         }
+    }
+
+    private fun showKeyConnectorDomainConfirmation(keyConnectorDomain: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = EnterpriseSignOnState.DialogState.KeyConnectorDomain(
+                    keyConnectorDomain = keyConnectorDomain,
+                ),
+            )
+        }
+    }
+
+    private fun handleConfirmKeyConnectorDomainClick() {
+        showLoading()
+        viewModelScope.launch {
+            val result = authRepository.continueKeyConnectorLogin()
+            sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
+        }
+    }
+
+    private fun handleCancelKeyConnectorDomainClick() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        authRepository.cancelKeyConnectorLogin()
     }
 }
 
@@ -520,8 +575,9 @@ data class EnterpriseSignOnState(
          */
         @Parcelize
         data class Error(
-            val title: Text? = null,
+            val title: Text,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -530,6 +586,14 @@ data class EnterpriseSignOnState(
         @Parcelize
         data class Loading(
             val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog indicating that the user needs to confirm the [keyConnectorDomain].
+         */
+        @Parcelize
+        data class KeyConnectorDomain(
+            val keyConnectorDomain: String,
         ) : DialogState()
     }
 }
@@ -587,6 +651,18 @@ sealed class EnterpriseSignOnAction {
     data object LogInClick : EnterpriseSignOnAction()
 
     /**
+     * Indicates that the confirm button has been clicked
+     * on the KeyConnector confirmation dialog.
+     */
+    data object ConfirmKeyConnectorDomainClick : EnterpriseSignOnAction()
+
+    /**
+     * Indicates that the cancel button has been clicked
+     * on the KeyConnector confirmation dialog.
+     */
+    data object CancelKeyConnectorDomainClick : EnterpriseSignOnAction()
+
+    /**
      * Indicates that the organization identifier input has changed.
      */
     data class OrgIdentifierInputChange(
@@ -615,7 +691,10 @@ sealed class EnterpriseSignOnAction {
         /**
          * SSO prevalidation failed.
          */
-        data object OnSsoPrevalidationFailure : Internal()
+        data class OnSsoPrevalidationFailure(
+            val message: String?,
+            val error: Throwable?,
+        ) : Internal()
 
         /**
          * A result was received when requesting an [OrganizationDomainSsoDetailsResult].

@@ -4,7 +4,14 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -12,12 +19,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
-import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
@@ -25,9 +29,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.shouldFinishOnComplete
@@ -70,6 +71,7 @@ class AddSendViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
+    private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -151,8 +153,6 @@ class AddSendViewModel @Inject constructor(
         AddSendAction.ShareLinkClick -> handleShareLinkClick()
         is AddSendAction.CloseClick -> handleCloseClick()
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
-        is AddSendAction.ExpirationDateChange -> handleExpirationDateChange(action)
-        AddSendAction.ClearExpirationDate -> handleClearExpirationDate()
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
         is AddSendAction.FileTypeClick -> handleFileTypeClick()
@@ -192,6 +192,7 @@ class AddSendViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -199,17 +200,12 @@ class AddSendViewModel @Inject constructor(
 
             is CreateSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                if (state.isShared) {
-                    navigateBack()
-                    clipboardManager.setText(result.sendView.toSendUrl(state.baseWebSendUrl))
-                } else {
-                    navigateBack()
-                    sendEvent(
-                        AddSendEvent.ShowShareSheet(
-                            message = result.sendView.toSendUrl(state.baseWebSendUrl),
-                        ),
-                    )
-                }
+                navigateBack()
+                sendEvent(
+                    AddSendEvent.ShowShareSheet(
+                        message = result.sendView.toSendUrl(state.baseWebSendUrl),
+                    ),
+                )
             }
         }
     }
@@ -227,6 +223,7 @@ class AddSendViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -247,13 +244,14 @@ class AddSendViewModel @Inject constructor(
     private fun handleDeleteSendResultReceive(
         action: AddSendAction.Internal.DeleteSendResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
                         ),
                     )
                 }
@@ -280,6 +278,7 @@ class AddSendViewModel @Inject constructor(
                                 .errorMessage
                                 ?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            result.error,
                         ),
                     )
                 }
@@ -377,7 +376,12 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCopyLinkClick() {
         onContent {
-            it.common.sendUrl?.let { sendUrl -> clipboardManager.setText(text = sendUrl) }
+            it.common.sendUrl?.let { sendUrl ->
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.send_link.asText(),
+                )
+            }
         }
     }
 
@@ -459,16 +463,6 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
-    private fun handleExpirationDateChange(action: AddSendAction.ExpirationDateChange) {
-        updateCommonContent {
-            it.copy(expirationDate = action.expirationDate)
-        }
-    }
-
-    private fun handleClearExpirationDate() {
-        updateCommonContent { it.copy(expirationDate = null) }
-    }
-
     @Suppress("LongMethod")
     private fun handleSaveClick() {
         onContent { content ->
@@ -512,6 +506,17 @@ class AddSendViewModel @Inject constructor(
                     }
                     return@onContent
                 }
+            }
+            if (!networkConnectionManager.isNetworkConnected) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = AddSendState.DialogState.Error(
+                            title = R.string.internet_connection_required_title.asText(),
+                            message = R.string.internet_connection_required_message.asText(),
+                        ),
+                    )
+                }
+                return@onContent
             }
             mutableStateFlow.update {
                 it.copy(
@@ -835,6 +840,7 @@ data class AddSendState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -985,16 +991,6 @@ sealed class AddSendAction {
      * The user changed the deletion date.
      */
     data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddSendAction()
-
-    /**
-     * The user changed the expiration date.
-     */
-    data class ExpirationDateChange(val expirationDate: ZonedDateTime?) : AddSendAction()
-
-    /**
-     * The user has cleared the expiration date.
-     */
-    data object ClearExpirationDate : AddSendAction()
 
     /**
      * Models actions that the [AddSendViewModel] itself might send.

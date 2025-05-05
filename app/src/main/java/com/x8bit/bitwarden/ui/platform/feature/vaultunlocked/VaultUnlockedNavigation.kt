@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
@@ -20,6 +23,10 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingr
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.exportVaultDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToFlightRecorder
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.navigateToRecordedLogs
+import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.recordedLogsDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.folderAddEditDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit.navigateToFolderAddEdit
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.foldersDestination
@@ -50,7 +57,6 @@ import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.navigateToVaultMo
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.vaultMoveToOrganizationDestination
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.vaultQrCodeScanDestination
-import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 const val VAULT_UNLOCKED_GRAPH_ROUTE: String = "vault_unlocked_graph"
 
@@ -74,33 +80,23 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     ) {
         vaultItemListingDestinationAsRoot(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(vaultItemId = it) },
-            onNavigateToVaultAddItemScreen = { cipherType, selectedFolderId, collectionId ->
-                navController.navigateToVaultAddEdit(
-                    VaultAddEditType.AddItem(cipherType),
-                    selectedFolderId,
-                    collectionId,
-                )
-            },
+            onNavigateToVaultItemScreen = { navController.navigateToVaultItem(it) },
+            onNavigateToVaultAddItemScreen = { navController.navigateToVaultAddEdit(it) },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
-            onNavigateToVaultEditItemScreen = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
+            onNavigateToVaultEditItemScreen = { navController.navigateToVaultAddEdit(it) },
+            onNavigateToAddFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    folderAddEditType = FolderAddEditType.AddItem,
+                    parentFolderName = it,
+                )
             },
         )
         vaultUnlockedNavBarDestination(
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
-            onNavigateToVaultAddItem = { cipherType, selectedFolderId, collectionId ->
-                navController.navigateToVaultAddEdit(
-                    VaultAddEditType.AddItem(cipherType),
-                    selectedFolderId,
-                    collectionId,
-                )
-            },
+            onNavigateToVaultAddItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
-            onNavigateToVaultEditItem = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
-            },
+            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
             onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
             onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
@@ -117,6 +113,24 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToImportLogins = {
                 navController.navigateToImportLoginsScreen(snackbarRelay = it)
             },
+            onNavigateToAddFolderScreen = {
+                navController.navigateToFolderAddEdit(
+                    folderAddEditType = FolderAddEditType.AddItem,
+                    parentFolderName = it,
+                )
+            },
+            onNavigateToFlightRecorder = {
+                navController.navigateToFlightRecorder(isPreAuth = false)
+            },
+            onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
+        )
+        flightRecorderDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
+        recordedLogsDestination(
+            isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
         )
         deleteAccountDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -154,15 +168,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         vaultItemDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToVaultEditItem = { vaultItemId, isClone ->
-                navController.navigateToVaultAddEdit(
-                    if (isClone) {
-                        VaultAddEditType.CloneItem(vaultItemId)
-                    } else {
-                        VaultAddEditType.EditItem(vaultItemId)
-                    },
-                )
-            },
+            onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToMoveToOrganization = { vaultItemId, showOnlyCollections ->
                 navController.navigateToVaultMoveToOrganization(
                     vaultItemId = vaultItemId,
@@ -211,9 +217,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
-            onNavigateToEditCipher = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.EditItem(it))
-            },
+            onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
         )
         attachmentDestination(

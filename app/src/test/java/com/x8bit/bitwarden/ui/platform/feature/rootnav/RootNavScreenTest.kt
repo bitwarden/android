@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import java.time.Clock
 import java.time.Instant
@@ -18,6 +19,11 @@ import java.time.ZoneOffset
 
 class RootNavScreenTest : BaseComposeTest() {
     private val fakeNavHostController = FakeNavHostController()
+    private val rootNavStateFlow = MutableStateFlow<RootNavState>(RootNavState.Splash)
+    private val viewModel = mockk<RootNavViewModel> {
+        every { eventFlow } returns emptyFlow()
+        every { stateFlow } returns rootNavStateFlow
+    }
 
     private val expectedNavOptions = navOptions {
         // When changing root navigation state, pop everything else off the back stack:
@@ -29,18 +35,21 @@ class RootNavScreenTest : BaseComposeTest() {
         restoreState = false
     }
 
-    @Test
-    fun `initial route should be splash`() {
-        val viewModel = mockk<RootNavViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns MutableStateFlow(RootNavState.Splash)
-        }
-        composeTestRule.setContent {
+    private var isSplashScreenRemoved: Boolean = false
+
+    @Before
+    fun setup() {
+        setContent {
             RootNavScreen(
                 viewModel = viewModel,
                 navController = fakeNavHostController,
+                onSplashScreenRemoved = { isSplashScreenRemoved = true },
             )
         }
+    }
+
+    @Test
+    fun `initial route should be splash`() {
         composeTestRule.runOnIdle {
             fakeNavHostController.assertCurrentRoute("splash")
         }
@@ -48,19 +57,6 @@ class RootNavScreenTest : BaseComposeTest() {
 
     @Test
     fun `when root nav destination changes, navigation should follow`() = runTest {
-        val rootNavStateFlow = MutableStateFlow<RootNavState>(RootNavState.Splash)
-        val viewModel = mockk<RootNavViewModel>(relaxed = true) {
-            every { eventFlow } returns emptyFlow()
-            every { stateFlow } returns rootNavStateFlow
-        }
-        var isSplashScreenRemoved = false
-        composeTestRule.setContent {
-            RootNavScreen(
-                viewModel = viewModel,
-                navController = fakeNavHostController,
-                onSplashScreenRemoved = { isSplashScreenRemoved = true },
-            )
-        }
         composeTestRule.runOnIdle {
             fakeNavHostController.assertCurrentRoute("splash")
         }
@@ -170,10 +166,9 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to vault unlocked for autofill save works as expected:
-        rootNavStateFlow.value =
-            RootNavState.VaultUnlockedForAutofillSave(
-                autofillSaveItem = mockk(),
-            )
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSave(
+            autofillSaveItem = mockk(),
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "vault_add_edit_item/add",
@@ -182,11 +177,10 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to vault unlocked for autofill works as expected:
-        rootNavStateFlow.value =
-            RootNavState.VaultUnlockedForAutofillSelection(
-                activeUserId = "userId",
-                type = AutofillSelectionData.Type.LOGIN,
-            )
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForAutofillSelection(
+            activeUserId = "userId",
+            type = AutofillSelectionData.Type.LOGIN,
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "vault_item_listing_as_root/login",
@@ -195,11 +189,10 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to vault unlocked for Fido2Save works as expected:
-        rootNavStateFlow.value =
-            RootNavState.VaultUnlockedForFido2Save(
-                activeUserId = "activeUserId",
-                fido2CreateCredentialRequest = mockk(),
-            )
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForFido2Save(
+            activeUserId = "activeUserId",
+            fido2CreateCredentialRequest = mockk(),
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "vault_item_listing_as_root/login",
@@ -208,36 +201,31 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to vault unlocked for Fido2Assertion works as expected:
-        rootNavStateFlow.value =
-            RootNavState.VaultUnlockedForFido2Assertion(
-                activeUserId = "activeUserId",
-                fido2CredentialAssertionRequest = mockk(),
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForFido2Assertion(
+            activeUserId = "activeUserId",
+            fido2CredentialAssertionRequest = mockk(),
+        )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_item_listing_as_root/login",
+                navOptions = expectedNavOptions,
             )
-        composeTestRule
-            .runOnIdle {
-                fakeNavHostController.assertLastNavigation(
-                    route = "vault_item_listing_as_root/login",
-                    navOptions = expectedNavOptions,
-                )
-            }
+        }
 
         // Make sure navigating to vault unlocked for Fido2GetCredentials works as expected:
-        rootNavStateFlow.value =
-            RootNavState.VaultUnlockedForFido2GetCredentials(
-                activeUserId = "activeUserId",
-                fido2GetCredentialsRequest = mockk(),
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForFido2GetCredentials(
+            activeUserId = "activeUserId",
+            fido2GetCredentialsRequest = mockk(),
+        )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_item_listing_as_root/login",
+                navOptions = expectedNavOptions,
             )
-        composeTestRule
-            .runOnIdle {
-                fakeNavHostController.assertLastNavigation(
-                    route = "vault_item_listing_as_root/login",
-                    navOptions = expectedNavOptions,
-                )
-            }
+        }
 
         // Make sure navigating to account lock setup works as expected:
-        rootNavStateFlow.value =
-            RootNavState.OnboardingAccountLockSetup
+        rootNavStateFlow.value = RootNavState.OnboardingAccountLockSetup
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "setup_unlock_as_root/true",
@@ -246,8 +234,7 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to account autofill setup works as expected:
-        rootNavStateFlow.value =
-            RootNavState.OnboardingAutoFillSetup
+        rootNavStateFlow.value = RootNavState.OnboardingAutoFillSetup
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "setup_auto_fill_as_root/true",
@@ -256,8 +243,7 @@ class RootNavScreenTest : BaseComposeTest() {
         }
 
         // Make sure navigating to account setup complete works as expected:
-        rootNavStateFlow.value =
-            RootNavState.OnboardingStepsComplete
+        rootNavStateFlow.value = RootNavState.OnboardingStepsComplete
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "setup_complete",

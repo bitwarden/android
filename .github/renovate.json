@@ -1,32 +1,56 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>bitwarden/renovate-config"],
-  "enabledManagers": ["github-actions", "gradle", "bundler"],
+  "extends": [
+    "github>bitwarden/renovate-config"
+  ],
+  "enabledManagers": [
+    "github-actions",
+    "gradle",
+    "bundler"
+  ],
   "packageRules": [
     {
       "groupName": "gh minor",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
     },
     {
       "groupName": "gradle minor",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchManagers": ["gradle"]
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchManagers": [
+        "gradle"
+      ]
     },
     {
       "groupName": "kotlin",
       "description": "Kotlin and Compose dependencies that must be updated together to maintain compatibility.",
-      "matchPackagePatterns": [
-        "androidx.compose:compose-bom",
-        "org.jetbrains.kotlin.*",
-        "com.google.devtools.ksp"
+      "matchManagers": [
+        "gradle"
       ],
-      "matchManagers": ["gradle"]
+      "matchPackageNames": [
+        "/androidx.compose:compose-bom/",
+        "/androidx.lifecycle:*/",
+        "/org.jetbrains.kotlin.*/",
+        "/com.google.devtools.ksp/"
+      ]
     },
     {
       "groupName": "bundler minor",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchManagers": ["bundler"]
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchManagers": [
+        "bundler"
+      ]
     }
   ]
 }

@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.enterprisesignon
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val ENTERPRISE_SIGN_ON_PREFIX = "enterprise_sign_on "
@@ -16,7 +18,6 @@ private const val ENTERPRISE_SIGN_ON_ROUTE = "$ENTERPRISE_SIGN_ON_PREFIX/{$EMAIL
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class EnterpriseSignOnArgs(val emailAddress: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,

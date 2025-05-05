@@ -18,11 +18,14 @@ import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.requestFocus
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -48,6 +51,7 @@ import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import javax.crypto.Cipher
@@ -76,16 +80,17 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Assertion(any()) } just runs
-        every { completeFido2GetCredentialRequest(any()) } just runs
+        every { completeFido2GetCredentialsRequest(any()) } just runs
     }
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+            fido2CompletionManager = fido2CompletionManager,
+        ) {
             VaultUnlockScreen(
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
-                fido2CompletionManager = fido2CompletionManager,
             )
         }
     }
@@ -125,10 +130,16 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on Fido2GetCredentialsError should call completeFido2GetCredentialRequest on fido2CompletionManager`() {
-        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2GetCredentialsError)
+        mutableEventFlow.tryEmit(
+            VaultUnlockEvent.Fido2GetCredentialsError(
+                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            ),
+        )
         verify(exactly = 1) {
-            fido2CompletionManager.completeFido2GetCredentialRequest(
-                result = Fido2GetCredentialsResult.Error,
+            fido2CompletionManager.completeFido2GetCredentialsRequest(
+                result = GetFido2CredentialsResult.Error(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
             )
         }
     }
@@ -136,10 +147,10 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on Fido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
-        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError)
+        mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError("".asText()))
         verify(exactly = 1) {
             fido2CompletionManager.completeFido2Assertion(
-                result = Fido2CredentialAssertionResult.Error,
+                result = AssertFido2CredentialResult.Error("".asText()),
             )
         }
     }
@@ -466,8 +477,9 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `state with input and without biometrics should request focus on input field`() {
+    fun `state with input and without biometrics should request focus on input field`() = runTest {
         mutableStateFlow.update { it.copy(hideInput = false, isBiometricEnabled = false) }
+        dispatcher.advanceTimeByAndRunCurrent(600L)
         composeTestRule
             .onNodeWithText("Master password")
             .performScrollTo()
@@ -634,4 +646,5 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
     hasMasterPassword = true,
+    isFromLockFlow = false,
 )

@@ -8,6 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
 import dagger.Module
 import dagger.Provides
@@ -24,18 +27,31 @@ import dagger.hilt.android.scopes.ActivityScoped
 object ActivityAutofillModule {
 
     @ActivityScoped
+    @ActivityScopedManager
+    @Provides
+    fun provideActivityScopedChromeThirdPartyAutofillManager(
+        activity: Activity,
+    ): ChromeThirdPartyAutofillManager = ChromeThirdPartyAutofillManagerImpl(
+        context = activity.baseContext,
+    )
+
+    @ActivityScoped
     @Provides
     fun provideAutofillActivityManager(
         @ActivityScopedManager autofillManager: AutofillManager,
+        @ActivityScopedManager chromeThirdPartyAutofillManager: ChromeThirdPartyAutofillManager,
         appStateManager: AppStateManager,
         autofillEnabledManager: AutofillEnabledManager,
         lifecycleScope: LifecycleCoroutineScope,
+        chromeThirdPartyAutofillEnabledManager: ChromeThirdPartyAutofillEnabledManager,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
+            chromeThirdPartyAutofillManager = chromeThirdPartyAutofillManager,
             appStateManager = appStateManager,
             autofillEnabledManager = autofillEnabledManager,
             lifecycleScope = lifecycleScope,
+            chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
         )
 
     /**

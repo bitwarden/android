@@ -4,17 +4,26 @@ import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2AssertionRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
@@ -22,8 +31,6 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMess
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -52,6 +59,8 @@ class VaultUnlockViewModel @Inject constructor(
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val fido2CredentialManager: Fido2CredentialManager,
+    private val appResumeManager: AppResumeManager,
+    private val vaultLockManager: VaultLockManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
@@ -69,9 +78,13 @@ class VaultUnlockViewModel @Inject constructor(
         val hasNoMasterPassword = !activeAccount.hasMasterPassword
         if (!activeAccount.hasManualUnlockMechanism) {
             // There is no valid way to unlock this app.
-            authRepository.logout()
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "VaultUnlockViewModel"),
+            )
         }
+
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
+
         val showAccountMenu =
             VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
@@ -91,11 +104,11 @@ class VaultUnlockViewModel @Inject constructor(
             showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
-            // TODO: [PM-13075] Handle Fido2GetCredentialsRequest special circumstance
-            fido2GetCredentialsRequest = null,
-            // TODO: [PM-13076] Handle Fido2CredentialAssertionRequest special circumstance
-            fido2CredentialAssertionRequest = null,
+            fido2GetCredentialsRequest = specialCircumstance?.toFido2GetCredentialsRequestOrNull(),
+            fido2CredentialAssertionRequest = specialCircumstance?.toFido2AssertionRequestOrNull(),
+            fido2CreateCredentialRequest = specialCircumstance?.toFido2CreateRequestOrNull(),
             hasMasterPassword = activeAccount.hasMasterPassword,
+            isFromLockFlow = vaultLockManager.isFromLockFlow,
         )
     },
 ) {
@@ -116,6 +129,11 @@ class VaultUnlockViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
         promptForBiometricsIfAvailable()
+
+        // only when navigating from vault to lock we should not display biometrics
+        // subsequent views of the lock screen should display biometrics if available
+        vaultLockManager.isFromLockFlow = false
+        mutableStateFlow.update { it.copy(isFromLockFlow = false) }
     }
 
     override fun onCleared() {
@@ -161,7 +179,7 @@ class VaultUnlockViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = null)
         }
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Biometrics.NoLongerSupported)
         authRepository.hasPendingAccountAddition = true
     }
 
@@ -173,11 +191,21 @@ class VaultUnlockViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
         when {
             state.fido2GetCredentialsRequest != null -> {
-                sendEvent(VaultUnlockEvent.Fido2GetCredentialsError)
+                sendEvent(
+                    VaultUnlockEvent.Fido2GetCredentialsError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                )
             }
 
             state.fido2CredentialAssertionRequest != null -> {
-                sendEvent(VaultUnlockEvent.Fido2CredentialAssertionError)
+                sendEvent(
+                    VaultUnlockEvent.Fido2CredentialAssertionError(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    ),
+                )
             }
 
             else -> Unit
@@ -185,7 +213,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleConfirmLogoutClick() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Click(source = "VaultUnlockViewModel"))
     }
 
     private fun handleInputChanged(action: VaultUnlockAction.InputChanged) {
@@ -195,11 +223,14 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClick(action: VaultUnlockAction.LockAccountClick) {
-        vaultRepo.lockVault(userId = action.accountSummary.userId)
+        vaultRepo.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClick(action: VaultUnlockAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "VaultUnlockViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClick(action: VaultUnlockAction.SwitchAccountClick) {
@@ -207,7 +238,7 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleBiometricsLockOut() {
-        authRepository.logout()
+        authRepository.logout(reason = LogoutReason.Biometrics.Lockout)
     }
 
     private fun handleBiometricsUnlockClick() {
@@ -231,13 +262,9 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleBiometricsUnlockSuccess(action: VaultUnlockAction.BiometricsUnlockSuccess) {
         val activeUserId = authRepository.activeUserId ?: return
-        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId, action.cipher)) {
-            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
-            return
-        }
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
-            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics()
+            val vaultUnlockResult = vaultRepo.unlockVaultWithBiometrics(cipher = action.cipher)
             sendAction(
                 VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
                     userId = activeUserId,
@@ -312,9 +339,10 @@ class VaultUnlockViewModel @Inject constructor(
 
         // Mark the user verified for this session if the unlock result is Success.
         fido2CredentialManager.isUserVerified =
-            action.vaultUnlockResult is VaultUnlockResult.Success
+            action.vaultUnlockResult is VaultUnlockResult.Success &&
+                state.isUnlockingForFido2Request
 
-        when (action.vaultUnlockResult) {
+        when (val result = action.vaultUnlockResult) {
             is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -325,29 +353,47 @@ class VaultUnlockViewModel @Inject constructor(
                             } else {
                                 state.vaultUnlockType.unlockScreenErrorMessage
                             },
+                            throwable = result.error?.takeIf { _ -> action.isBiometricLogin },
                         ),
                     )
                 }
             }
 
-            VaultUnlockResult.GenericError,
-            VaultUnlockResult.InvalidStateError,
+            is VaultUnlockResult.BiometricDecodingError -> {
+                biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+                mutableStateFlow.update {
+                    it.copy(
+                        isBiometricsValid = false,
+                        dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                            title = R.string.biometrics_failed.asText(),
+                            message = R.string.biometrics_decoding_failure.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is VaultUnlockResult.GenericError,
+            is VaultUnlockResult.InvalidStateError,
                 -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = (result as? VaultUnlockResult.InvalidStateError)?.error
+                                ?: (result as? VaultUnlockResult.GenericError)?.error,
                         ),
                     )
                 }
             }
 
             VaultUnlockResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
-                if (state.isBiometricEnabled && !state.isBiometricsValid) {
-                    biometricsEncryptionManager.setupBiometrics(action.userId)
+                if (specialCircumstanceManager.specialCircumstance == null) {
+                    specialCircumstanceManager.specialCircumstance =
+                        appResumeManager.getResumeSpecialCircumstance()
                 }
+
+                mutableStateFlow.update { it.copy(dialog = null) }
                 // Don't do anything, we'll navigate to the right place.
             }
         }
@@ -379,6 +425,7 @@ class VaultUnlockViewModel @Inject constructor(
             val accountSummaries = userState.toAccountSummaries()
             val activeAccountSummary = userState.toActiveAccountSummary()
             it.copy(
+                userId = userState.activeUserId,
                 initials = activeAccountSummary.initials,
                 avatarColorString = activeAccountSummary.avatarColorHex,
                 accountSummaries = accountSummaries,
@@ -396,7 +443,7 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun promptForBiometricsIfAvailable() {
         val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
-        if (state.showBiometricLogin && cipher != null) {
+        if (state.showBiometricLogin && cipher != null && !state.isFromLockFlow) {
             sendEvent(
                 VaultUnlockEvent.PromptForBiometrics(
                     cipher = cipher,
@@ -428,7 +475,9 @@ data class VaultUnlockState(
     val userId: String,
     val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    val fido2CreateCredentialRequest: Fido2CreateCredentialRequest? = null,
     private val hasMasterPassword: Boolean,
+    val isFromLockFlow: Boolean,
 ) : Parcelable {
 
     /**
@@ -447,18 +496,19 @@ data class VaultUnlockState(
     val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
 
     /**
-     * Indicates if the vault is being unlocked as a result of receiving a FIDO 2 request.
-     */
-    val isUnlockingForFido2Request: Boolean
-        get() = fido2GetCredentialsRequest != null ||
-            fido2CredentialAssertionRequest != null
-
-    /**
      * Returns the user ID present in the current FIDO 2 request, or null when no FIDO 2 request is
      * present.
      */
     val fido2RequestUserId: String?
         get() = fido2GetCredentialsRequest?.userId ?: fido2CredentialAssertionRequest?.userId
+
+    /**
+     * Indicates if the Vault is being unlocked for a FIDO 2 request.
+     */
+    val isUnlockingForFido2Request: Boolean
+        get() = fido2GetCredentialsRequest != null ||
+            fido2CredentialAssertionRequest != null ||
+            fido2CreateCredentialRequest != null
 
     /**
      * If the user requires biometrics to be able to unlock the account.
@@ -480,6 +530,7 @@ data class VaultUnlockState(
         data class Error(
             val title: Text,
             val message: Text,
+            val throwable: Throwable? = null,
         ) : VaultUnlockDialog()
 
         /**
@@ -515,12 +566,12 @@ sealed class VaultUnlockEvent {
     /**
      * Completes the FIDO2 get credentials request with an error response.
      */
-    data object Fido2GetCredentialsError : VaultUnlockEvent()
+    data class Fido2GetCredentialsError(val message: Text) : VaultUnlockEvent()
 
     /**
      * Completes the FIDO2 credential assertion request with an error response.
      */
-    data object Fido2CredentialAssertionError : VaultUnlockEvent()
+    data class Fido2CredentialAssertionError(val message: Text) : VaultUnlockEvent()
 }
 
 /**
@@ -586,7 +637,7 @@ sealed class VaultUnlockAction {
      * The user has received a successful response from the biometrics call.
      */
     data class BiometricsUnlockSuccess(
-        val cipher: Cipher?,
+        val cipher: Cipher,
     ) : VaultUnlockAction()
 
     /**

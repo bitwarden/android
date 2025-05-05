@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.legacy
 
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import io.mockk.every
 import io.mockk.just

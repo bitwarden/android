@@ -2,7 +2,7 @@ package com.x8bit.bitwarden
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * An activity to be launched and then immediately closed so that the OS Shade can be collapsed

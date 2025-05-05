@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
+import com.bitwarden.network.model.OrganizationType
 
 /**
  * Represents an organization a user may be a member of.
@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
  * own password.
  * @property shouldUseKeyConnector Indicates that the organization uses a key connector.
  * @property role The user's role in the organization.
+ * @property keyConnectorUrl The key connector domain (if applicable).
  */
 data class Organization(
     val id: String,
@@ -18,4 +19,6 @@ data class Organization(
     val shouldManageResetPassword: Boolean,
     val shouldUseKeyConnector: Boolean,
     val role: OrganizationType,
+    val keyConnectorUrl: String?,
+    val userIsClaimedByOrganization: Boolean,
 )

@@ -9,6 +9,7 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -49,6 +50,11 @@ interface IntentManager {
     fun startCredentialManagerSettings(context: Context)
 
     /**
+     * Starts the Chrome autofill settings activity for the provided [ChromeReleaseChannel].
+     */
+    fun startChromeAutofillSettingsActivity(releaseChannel: ChromeReleaseChannel): Boolean
+
+    /**
      * Start an activity to view the given [uri] in an external browser.
      */
     fun launchUri(uri: Uri)
@@ -61,6 +67,11 @@ interface IntentManager {
     fun getActivityResultLauncher(
         onResult: (ActivityResult) -> Unit,
     ): ManagedActivityResultLauncher<Intent, ActivityResult>
+
+    /**
+     * Launches the share sheet with the given [title] and file.
+     */
+    fun shareFile(title: String? = null, fileUri: Uri)
 
     /**
      * Launches the share sheet with the given [text].
@@ -117,11 +128,13 @@ interface IntentManager {
      * Creates a pending intent to use when providing
      * [androidx.credentials.provider.CredentialEntry] instances for FIDO 2 credential filling.
      */
+    @Suppress("LongParameterList")
     fun createFido2GetCredentialPendingIntent(
         action: String,
         userId: String,
         credentialId: String,
         cipherId: String,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent
 

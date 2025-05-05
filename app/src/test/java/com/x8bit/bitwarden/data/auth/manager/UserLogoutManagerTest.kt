@@ -3,13 +3,14 @@ package com.x8bit.bitwarden.data.auth.manager
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.network.model.KdfTypeJson
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
@@ -30,6 +31,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import java.time.ZonedDateTime
 
 @ExtendWith(MainDispatcherExtension::class)
 class UserLogoutManagerTest {
@@ -84,7 +86,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_1
         every { authDiskSource.userState } returns SINGLE_USER_STATE_1
 
-        userLogoutManager.logout(userId = USER_ID_1)
+        userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
 
         verify { authDiskSource.userState = null }
         assertDataCleared(userId = userId)
@@ -98,7 +100,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_1
         every { authDiskSource.userState } returns MULTI_USER_STATE
 
-        userLogoutManager.logout(userId = USER_ID_1)
+        userLogoutManager.logout(userId = USER_ID_1, reason = LogoutReason.Timeout)
 
         verify { authDiskSource.userState = SINGLE_USER_STATE_2 }
         assertDataCleared(userId = userId)
@@ -110,7 +112,7 @@ class UserLogoutManagerTest {
         val userId = USER_ID_2
         every { authDiskSource.userState } returns MULTI_USER_STATE
 
-        userLogoutManager.logout(userId = USER_ID_2)
+        userLogoutManager.logout(userId = USER_ID_2, reason = LogoutReason.Timeout)
 
         verify { authDiskSource.userState = SINGLE_USER_STATE_1 }
         assertDataCleared(userId = userId)
@@ -133,7 +135,7 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
 
-        userLogoutManager.softLogout(userId = userId)
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
         verify { authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null) }
         assertDataCleared(userId = userId)
@@ -169,7 +171,7 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
 
-        userLogoutManager.softLogout(userId = userId)
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
 
         verify(exactly = 1) {
             authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null)
@@ -185,7 +187,7 @@ class UserLogoutManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `softLogout with isExpired true should switch active user and keep previous user in accounts list but display the login expired toast`() {
+    fun `softLogout with security stamp reason should switch active user and keep previous user in accounts list but display the login expired toast`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
@@ -200,7 +202,7 @@ class UserLogoutManagerTest {
             settingsDiskSource.getVaultTimeoutAction(userId = userId)
         } returns vaultTimeoutAction
 
-        userLogoutManager.softLogout(userId = userId, isExpired = true)
+        userLogoutManager.softLogout(userId = userId, reason = LogoutReason.SecurityStamp)
 
         verify(exactly = 1) {
             authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null)
@@ -256,6 +258,8 @@ private val ACCOUNT_1 = AccountJson(
         kdfMemory = 16,
         kdfParallelism = 4,
         userDecryptionOptions = null,
+        isTwoFactorEnabled = false,
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
@@ -281,6 +285,8 @@ private val ACCOUNT_2 = AccountJson(
         kdfMemory = null,
         kdfParallelism = null,
         userDecryptionOptions = null,
+        isTwoFactorEnabled = false,
+        creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
     ),
     tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_2,

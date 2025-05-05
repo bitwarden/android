@@ -21,10 +21,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -82,15 +84,16 @@ fun AddEditBlockedUriDialog(
                 BitwardenTextField(
                     label = stringResource(id = R.string.enter_uri),
                     isError = errorMessage != null,
-                    hint = errorMessage ?: stringResource(
+                    supportingText = errorMessage ?: stringResource(
                         id = R.string.format_x_separate_multiple_ur_is_with_a_comma,
                         "http://domain.com",
                     ),
                     value = uri,
                     onValueChange = onUriChange,
                     keyboardType = KeyboardType.Uri,
+                    cardStyle = CardStyle.Full,
                     modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }

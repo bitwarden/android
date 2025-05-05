@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.data.autofill.accessibility.manager
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.accessibility.model.AccessibilityAction
 import com.x8bit.bitwarden.data.autofill.accessibility.util.toUriOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

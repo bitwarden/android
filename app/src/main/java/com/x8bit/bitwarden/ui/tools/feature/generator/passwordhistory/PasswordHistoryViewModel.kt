@@ -3,17 +3,17 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.PasswordHistoryState.GeneratedPassword
@@ -131,7 +131,10 @@ class PasswordHistoryViewModel @Inject constructor(
     }
 
     private fun handleCopyClick(password: GeneratedPassword) {
-        clipboardManager.setText(text = password.password)
+        clipboardManager.setText(
+            text = password.password,
+            toastDescriptorOverride = R.string.password.asText(),
+        )
     }
 
     private fun List<PasswordHistoryView>?.toViewState(): PasswordHistoryState.ViewState {

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -10,7 +11,6 @@ import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isNotDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -19,20 +19,23 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
@@ -46,34 +49,48 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
 import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 @Suppress("LargeClass")
 class VaultScreenTest : BaseComposeTest() {
+    private var onNavigateToAboutCalled = false
     private var onNavigateToImportLoginsCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToVaultItemId: String? = null
-    private var onNavigateToVaultEditItemId: String? = null
+    private var onNavigateToVaultItemArgs: VaultItemArgs? = null
+    private var onNavigateToVaultEditItemArgs: VaultAddEditArgs? = null
     private var onNavigateToVaultItemListingType: VaultItemListingType? = null
     private var onDimBottomNavBarRequestCalled = false
     private var onNavigateToVerificationCodeScreen = false
     private var onNavigateToSearchScreen = false
+    private var onNavigateToAddFolderCalled = false
+    private var onNavigateToAddFolderParentFolderName: String? = null
     private val exitManager = mockk<ExitManager>(relaxed = true)
     private val intentManager = mockk<IntentManager>(relaxed = true)
-
+    private val appReviewManager: AppReviewManager = mockk {
+        every { promptForReview() } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultViewModel>(relaxed = true) {
@@ -83,12 +100,16 @@ class VaultScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent(
+            exitManager = exitManager,
+            intentManager = intentManager,
+            appReviewManager = appReviewManager,
+        ) {
             VaultScreen(
                 viewModel = viewModel,
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToVaultItemScreen = { onNavigateToVaultItemId = it },
-                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemId = it },
+                onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
+                onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemArgs = it },
                 onNavigateToVaultItemListingScreen = { onNavigateToVaultItemListingType = it },
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
@@ -97,8 +118,11 @@ class VaultScreenTest : BaseComposeTest() {
                     onNavigateToImportLoginsCalled = true
                     assertEquals(SnackbarRelay.MY_VAULT_RELAY, it)
                 },
-                exitManager = exitManager,
-                intentManager = intentManager,
+                onNavigateToAddFolderScreen = { folderName ->
+                    onNavigateToAddFolderCalled = true
+                    onNavigateToAddFolderParentFolderName = folderName
+                },
+                onNavigateToAboutScreen = { onNavigateToAboutCalled = true },
             )
         }
     }
@@ -556,6 +580,21 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `syncing dialog should be displayed according to state`() {
+        composeTestRule.assertNoPopupExists()
+        composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.Syncing)
+        }
+
+        composeTestRule
+            .onNodeWithText("Syncing...")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isPopup()))
+    }
+
+    @Test
     fun `Error screen should be shown according to the state`() {
         val errorMessage = "Error message"
         val tryAgainButtonText = "Try again"
@@ -633,10 +672,10 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `floating action button click should send AddItemClick action`() {
+    fun `floating action button click should send SelectAddItemType action`() {
         mutableStateFlow.update { it.copy(viewState = VaultState.ViewState.NoItems) }
         composeTestRule.onNodeWithContentDescription("Add Item").performClick()
-        verify { viewModel.trySendAction(VaultAction.AddItemClick) }
+        verify { viewModel.trySendAction(VaultAction.SelectAddItemType) }
     }
 
     @Test
@@ -646,12 +685,14 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("New login")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(VaultAction.AddItemClick) }
+        verify { viewModel.trySendAction(VaultAction.AddItemClick(CreateVaultItemType.LOGIN)) }
     }
 
     @Test
     fun `NavigateToAddItemScreen event should call onNavigateToVaultAddItemScreen`() {
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToAddItemScreen)
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToAddItemScreen(type = VaultItemCipherType.LOGIN),
+        )
         assertTrue(onNavigateToVaultAddItemScreenCalled)
     }
 
@@ -664,15 +705,28 @@ class VaultScreenTest : BaseComposeTest() {
     @Test
     fun `NavigateToVaultItem event should call onNavigateToVaultItemScreen`() {
         val id = "id4321"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultItemId)
+        val type = VaultItemCipherType.LOGIN
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToVaultItem(itemId = id, type = type))
+        assertEquals(
+            VaultItemArgs(vaultItemId = id, cipherType = type),
+            onNavigateToVaultItemArgs,
+        )
     }
 
     @Test
     fun `NavigateToEditVaultItem event should call onNavigateToVaultEditItemScreen`() {
         val id = "id1234"
-        mutableEventFlow.tryEmit(VaultEvent.NavigateToEditVaultItem(itemId = id))
-        assertEquals(id, onNavigateToVaultEditItemId)
+        val type = VaultItemCipherType.CARD
+        mutableEventFlow.tryEmit(
+            VaultEvent.NavigateToEditVaultItem(itemId = id, type = type),
+        )
+        assertEquals(
+            VaultAddEditArgs(
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = id),
+                vaultItemCipherType = type,
+            ),
+            onNavigateToVaultEditItemArgs,
+        )
     }
 
     @Test
@@ -887,7 +941,7 @@ class VaultScreenTest : BaseComposeTest() {
             .assertTextEquals(collectionsHeader)
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText(collectionName)
+            .onNodeWithTextAfterScroll(collectionName)
             .assertTextEquals(collectionName, collectionCount.toString())
     }
 
@@ -1200,6 +1254,12 @@ class VaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `when NavigateToAbout is sent, it should call onNavigateToAbout`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAbout)
+        assertTrue(onNavigateToAboutCalled)
+    }
+
+    @Test
     fun `when ShowSnackbar is sent snackbar should be displayed`() {
         val data = BitwardenSnackbarData("message".asText())
         mutableEventFlow.tryEmit(VaultEvent.ShowSnackbar(data))
@@ -1225,7 +1285,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key group is displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     sshKeyItemsCount = count,
                 ),
@@ -1235,12 +1294,6 @@ class VaultScreenTest : BaseComposeTest() {
             .onNodeWithText("SSH key")
             .assertTextEquals("SSH key", count.toString())
             .assertIsDisplayed()
-
-        // Verify SSH key group is hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("SSH key")
-            .assertIsNotDisplayed()
     }
 
     @Test
@@ -1248,7 +1301,6 @@ class VaultScreenTest : BaseComposeTest() {
         // Verify SSH key vault items are displayed when showSshKeys is true
         mutableStateFlow.update {
             it.copy(
-                showSshKeys = true,
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                     noFolderItems = listOf(
                         VaultState.ViewState.VaultItem.SshKey(
@@ -1267,13 +1319,117 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithTextAfterScroll("mockSshKey")
             .isDisplayed()
-
-        // Verify SSH key vault items are hidden when showSshKeys is false
-        mutableStateFlow.update { it.copy(showSshKeys = false) }
-        composeTestRule
-            .onNodeWithText("mockSshKey")
-            .isNotDisplayed()
     }
+
+    @Test
+    fun `LifecycleResumed action is sent when the screen is resumed`() {
+        verify { viewModel.trySendAction(VaultAction.LifecycleResumed) }
+    }
+
+    @Test
+    fun `PromptForAppReview triggers app review manager`() {
+        mutableEventFlow.tryEmit(VaultEvent.PromptForAppReview)
+        dispatcher.advanceTimeByAndRunCurrent(4000L)
+        verify(exactly = 1) { appReviewManager.promptForReview() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `NavigateToAddItemScreen event calls onNavigateToAddFolder callback when cipher item type is FOLDER`() {
+        mutableEventFlow.tryEmit(VaultEvent.NavigateToAddFolder)
+        assertTrue(onNavigateToAddFolderCalled)
+        assertNull(onNavigateToAddFolderParentFolderName)
+    }
+
+    @Test
+    fun `SelectVaultAddItemType dialog state show vault item type selection dialog`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Type")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `when option is selected in SelectVaultAddItemType dialog add item action is sent`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultAction.DialogDismiss)
+            viewModel.trySendAction(
+                VaultAction.AddItemClick(
+                    CreateVaultItemType.CARD,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `on FlightRecorder Snackbar close click sends the DismissFlightRecorderSnackbar`() =
+        runTest {
+            mutableStateFlow.update {
+                it.copy(
+                    flightRecorderSnackBar = BitwardenSnackbarData(
+                        message = R.string.flight_recorder_banner_message.asText(
+                            "4/12/25",
+                            "9:15 AM",
+                        ),
+                        messageHeader = R.string.flight_recorder_banner_title.asText(),
+                        actionLabel = R.string.go_to_settings.asText(),
+                        withDismissAction = true,
+                    ),
+                )
+            }
+
+            composeTestRule.onNodeWithText(text = "Flight recorder on").assertIsDisplayed()
+            composeTestRule.onNodeWithContentDescription(label = "Close").performClick()
+            verify(exactly = 1) {
+                viewModel.trySendAction(VaultAction.DismissFlightRecorderSnackbar)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on FlightRecorder Snackbar go to setting click sends the FlightRecorderGoToSettingsClick`() =
+        runTest {
+            mutableStateFlow.update {
+                it.copy(
+                    flightRecorderSnackBar = BitwardenSnackbarData(
+                        message = R.string.flight_recorder_banner_message.asText(
+                            "4/12/25",
+                            "9:15 AM",
+                        ),
+                        messageHeader = R.string.flight_recorder_banner_title.asText(),
+                        actionLabel = R.string.go_to_settings.asText(),
+                        withDismissAction = true,
+                    ),
+                )
+            }
+
+            composeTestRule.onNodeWithText(text = "Flight recorder on").assertIsDisplayed()
+            composeTestRule.onNodeWithText(text = "Go to settings").performClick()
+            verify(exactly = 1) {
+                viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)
+            }
+        }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1328,7 +1484,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     hasMasterPassword = true,
     isRefreshing = false,
     showImportActionCard = false,
-    showSshKeys = false,
+    flightRecorderSnackBar = null,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

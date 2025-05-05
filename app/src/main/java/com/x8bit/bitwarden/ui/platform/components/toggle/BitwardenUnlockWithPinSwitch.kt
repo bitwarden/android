@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 
 /**
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
  * @param isUnlockWithPinEnabled Indicates whether or not the pin unlocking is enabled.
  * @param onUnlockWithPinToggleAction Callback that is invoked when the current state of the switch
  * changes.
+ * @param cardStyle Indicates the type of card style to be applied.
  * @param modifier The [Modifier] to be applied to the switch.
  */
 @Suppress("LongMethod")
@@ -27,6 +29,7 @@ fun BitwardenUnlockWithPinSwitch(
     isUnlockWithPasswordEnabled: Boolean,
     isUnlockWithPinEnabled: Boolean,
     onUnlockWithPinToggleAction: (UnlockWithPinState) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowPinInputDialog by rememberSaveable { mutableStateOf(value = false) }
@@ -43,6 +46,7 @@ fun BitwardenUnlockWithPinSwitch(
                 onUnlockWithPinToggleAction(UnlockWithPinState.Disabled)
             }
         },
+        cardStyle = cardStyle,
         modifier = modifier,
     )
 

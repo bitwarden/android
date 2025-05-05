@@ -40,10 +40,10 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@d156388eb19639ec20ade50009f3d199ce1e2808 # v4.1.0
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
 
       - name: Cache Gradle files
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -53,7 +53,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -62,13 +62,13 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
         with:
           bundler-cache: true
 
@@ -85,7 +85,7 @@ jobs:
         run: bundle exec fastlane assembleDebugApks
 
       - name: Upload test reports on failure
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         if: failure()
         with:
           name: test-reports
@@ -106,7 +106,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
         with:
           bundler-cache: true
 
@@ -157,10 +157,10 @@ jobs:
           --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@d156388eb19639ec20ade50009f3d199ce1e2808 # v4.1.0
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
 
       - name: Cache Gradle files
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -170,7 +170,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -179,10 +179,19 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Update app CI Build info
+        run: |
+          ./scripts/update_app_ci_build_info.sh \
+          $GITHUB_REPOSITORY \
+          $GITHUB_REF_NAME \
+          $GITHUB_SHA \
+          $GITHUB_RUN_ID \
+          $GITHUB_RUN_ATTEMPT
 
       - name: Increment version
         run: |
@@ -244,78 +253,78 @@ jobs:
 
       - name: Upload release Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.aab
-          path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab
+          path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab
           if-no-files-found: error
 
       - name: Upload beta Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.aab
-          path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab
+          path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab
           if-no-files-found: error
 
       - name: Upload release .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.apk
-          path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk
+          path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk
           if-no-files-found: error
 
       - name: Upload beta .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.apk
-          path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk
+          path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk
           if-no-files-found: error
 
       # When building variants other than 'prod'
       - name: Upload debug .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
-          path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk
+          path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden.dev.apk
           if-no-files-found: error
 
       - name: Create checksum for release .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         run: |
-          sha256sum "app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk" \
+          sha256sum "app/build/outputs/apk/standard/release/com.x8bit.bitwarden.apk" \
             > ./com.x8bit.bitwarden.apk-sha256.txt
 
       - name: Create checksum for beta .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         run: |
-          sha256sum "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk" \
+          sha256sum "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden.beta.apk" \
             > ./com.x8bit.bitwarden.beta.apk-sha256.txt
 
       - name: Create checksum for release .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         run: |
-          sha256sum "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab" \
+          sha256sum "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab" \
             > ./com.x8bit.bitwarden.aab-sha256.txt
 
       - name: Create checksum for beta .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         run: |
-          sha256sum "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab" \
+          sha256sum "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden.beta.aab" \
             > ./com.x8bit.bitwarden.beta.aab-sha256.txt
 
       - name: Create checksum for Debug .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         run: |
-          sha256sum "app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk" \
+          sha256sum "app/build/outputs/apk/standard/debug/com.x8bit.bitwarden.dev.apk" \
            > ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
 
       - name: Upload .apk SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.apk-sha256.txt
           path: ./com.x8bit.bitwarden.apk-sha256.txt
@@ -323,7 +332,7 @@ jobs:
 
       - name: Upload .apk SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta.apk-sha256.txt
@@ -331,7 +340,7 @@ jobs:
 
       - name: Upload .aab SHA file for release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.aab-sha256.txt
           path: ./com.x8bit.bitwarden.aab-sha256.txt
@@ -339,7 +348,7 @@ jobs:
 
       - name: Upload .aab SHA file for beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta.aab-sha256.txt
           path: ./com.x8bit.bitwarden.beta.aab-sha256.txt
@@ -347,7 +356,7 @@ jobs:
 
       - name: Upload .apk SHA file for debug
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk-sha256.txt
@@ -396,7 +405,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
         with:
           bundler-cache: true
 
@@ -433,10 +442,10 @@ jobs:
           --name app_fdroid_firebase-creds.json --file ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json --output none
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@d156388eb19639ec20ade50009f3d199ce1e2808 # v4.1.0
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
 
       - name: Cache Gradle files
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -446,7 +455,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -455,10 +464,19 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Update app CI Build info
+        run: |
+          ./scripts/update_app_ci_build_info.sh \
+          $GITHUB_REPOSITORY \
+          $GITHUB_REF_NAME \
+          $GITHUB_SHA \
+          $GITHUB_RUN_ID \
+          $GITHUB_RUN_ATTEMPT
 
       # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
@@ -497,38 +515,38 @@ jobs:
           keyPassword:"${{ env.FDROID_BETA_KEY_PASSWORD }}"
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden-fdroid.apk
-          path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk
+          path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk
           if-no-files-found: error
 
       - name: Create checksum for F-Droid artifact
         run: |
-          sha256sum "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk" \
+          sha256sum "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid.apk" \
           > ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid SHA file
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden-fdroid.apk-sha256.txt
           if-no-files-found: error
 
       - name: Upload F-Droid Beta .apk artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk
-          path: app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden-fdroid-beta.apk
+          path: app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden.beta-fdroid.apk
           if-no-files-found: error
 
       - name: Create checksum for F-Droid Beta artifact
         run: |
-          sha256sum "app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden-fdroid-beta.apk" \
+          sha256sum "app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden.beta-fdroid.apk" \
           > ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
 
       - name: Upload F-Droid Beta SHA file
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt
           path: ./com.x8bit.bitwarden.beta-fdroid.apk-sha256.txt

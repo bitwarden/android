@@ -13,5 +13,8 @@ sealed class PasswordHintResult {
     /**
      * There was an error.
      */
-    data class Error(val message: String?) : PasswordHintResult()
+    data class Error(
+        val message: String?,
+        val error: Throwable?,
+    ) : PasswordHintResult()
 }

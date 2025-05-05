@@ -12,5 +12,8 @@ sealed class DeleteAccountResult {
     /**
      * There was an error deleting the account.
      */
-    data class Error(val message: String?) : DeleteAccountResult()
+    data class Error(
+        val message: String?,
+        val error: Throwable?,
+    ) : DeleteAccountResult()
 }

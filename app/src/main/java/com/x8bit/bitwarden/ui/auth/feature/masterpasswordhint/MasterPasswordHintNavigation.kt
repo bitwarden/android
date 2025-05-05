@@ -1,3 +1,5 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS: String = "email_address"
@@ -15,7 +17,6 @@ private const val MASTER_PASSWORD_HINT_ROUTE: String = "master_password_hint/{$E
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-@OmitFromCoverage
 data class MasterPasswordHintArgs(val emailAddress: String) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,

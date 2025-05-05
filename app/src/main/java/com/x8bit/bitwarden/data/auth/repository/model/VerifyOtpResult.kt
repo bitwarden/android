@@ -13,5 +13,8 @@ sealed class VerifyOtpResult {
     /**
      * Represents a failure to verify the one-time passcode.
      */
-    data class NotVerified(val errorMessage: String?) : VerifyOtpResult()
+    data class NotVerified(
+        val errorMessage: String?,
+        val error: Throwable,
+    ) : VerifyOtpResult()
 }

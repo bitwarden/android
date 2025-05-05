@@ -2,11 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.setpassword
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -26,21 +27,27 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `null ssoOrganizationIdentifier logs user out`() = runTest {
-        every { authRepository.logout() } just runs
+        every { authRepository.logout(reason = any()) } just runs
         every { authRepository.ssoOrganizationIdentifier } returns null
         createViewModel()
-        verify {
-            authRepository.logout()
+        verify(exactly = 1) {
+            authRepository.logout(
+                reason = LogoutReason.InvalidState(source = "SetPasswordViewModel"),
+            )
             authRepository.ssoOrganizationIdentifier
         }
     }
 
     @Test
     fun `CancelClick calls logout`() = runTest {
-        every { authRepository.logout() } just runs
+        every { authRepository.logout(reason = any()) } just runs
         val viewModel = createViewModel()
         viewModel.trySendAction(SetPasswordAction.CancelClick)
-        verify { authRepository.logout() }
+        verify(exactly = 1) {
+            authRepository.logout(
+                reason = LogoutReason.Click(source = "SetPasswordViewModel"),
+            )
+        }
     }
 
     @Test

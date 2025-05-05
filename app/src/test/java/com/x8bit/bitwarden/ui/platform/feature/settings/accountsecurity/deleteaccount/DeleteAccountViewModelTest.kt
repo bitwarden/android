@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -9,9 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -87,18 +87,23 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
                 authRepo.deleteAccountWithMasterPassword(masterPassword)
             } returns DeleteAccountResult.Success
 
-            viewModel.trySendAction(
-                DeleteAccountAction.DeleteAccountConfirmDialogClick(
-                    masterPassword,
-                ),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess),
-                viewModel.stateFlow.value,
-            )
-
-            coVerify {
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(
+                    action = DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess,
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify(exactly = 1) {
                 authRepo.deleteAccountWithMasterPassword(masterPassword)
             }
         }
@@ -126,12 +131,13 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     fun `on DeleteAccountClick should update dialog state when deleteAccount fails`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
+        val error = Throwable("Fail!")
         coEvery {
             authRepo.validatePassword(any())
         } returns ValidatePasswordResult.Success(isValid = true)
         coEvery {
             authRepo.deleteAccountWithMasterPassword(masterPassword)
-        } returns DeleteAccountResult.Error(message = null)
+        } returns DeleteAccountResult.Error(message = null, error = error)
 
         viewModel.trySendAction(DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword))
 
@@ -139,6 +145,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(
                 dialog = DeleteAccountState.DeleteAccountDialog.Error(
                     message = R.string.generic_error_message.asText(),
+                    error = error,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -157,14 +164,9 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepo.validatePassword(any())
             } returns ValidatePasswordResult.Success(isValid = false)
-            coEvery {
-                authRepo.deleteAccountWithMasterPassword(masterPassword)
-            } returns DeleteAccountResult.Error(message = null)
 
             viewModel.trySendAction(
-                DeleteAccountAction.DeleteAccountConfirmDialogClick(
-                    masterPassword,
-                ),
+                DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword),
             )
 
             assertEquals(
@@ -253,4 +255,5 @@ private val DEFAULT_USER_STATE: UserState = UserState(
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
     isUnlockWithPasswordEnabled = true,
+    isUserManagedByOrganization = false,
 )

@@ -69,6 +69,10 @@ val darkBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak2 = PrimitiveColors.yellow200,
         error = PrimitiveColors.red200,
     ),
+    illustration = BitwardenColorScheme.IllustrationColors(
+        outline = PrimitiveColors.blue500,
+        backgroundPrimary = PrimitiveColors.blue200,
+    ),
 )
 
 /**
@@ -136,6 +140,10 @@ val lightBitwardenColorScheme: BitwardenColorScheme = BitwardenColorScheme(
         weak1 = PrimitiveColors.red300,
         weak2 = PrimitiveColors.yellow300,
         error = PrimitiveColors.red300,
+    ),
+    illustration = BitwardenColorScheme.IllustrationColors(
+        outline = PrimitiveColors.blue700,
+        backgroundPrimary = PrimitiveColors.blue100,
     ),
 )
 
@@ -210,6 +218,10 @@ fun dynamicBitwardenColorScheme(
             weak1 = defaultTheme.status.weak1,
             weak2 = defaultTheme.status.weak2,
             error = defaultTheme.status.error,
+        ),
+        illustration = BitwardenColorScheme.IllustrationColors(
+            outline = materialColorScheme.tertiaryContainer,
+            backgroundPrimary = materialColorScheme.onTertiaryContainer,
         ),
     )
 }

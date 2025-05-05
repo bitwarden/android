@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.autofill.di
 
 import android.content.Context
 import android.view.autofill.AutofillManager
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilder
 import com.x8bit.bitwarden.data.autofill.builder.FillResponseBuilderImpl
@@ -15,16 +16,18 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillTotpManagerImpl
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
+import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManagerImpl
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParserImpl
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -53,6 +56,15 @@ object AutofillModule {
     @Provides
     fun providesAutofillEnabledManager(): AutofillEnabledManager =
         AutofillEnabledManagerImpl()
+
+    @Singleton
+    @Provides
+    fun providesChromeAutofillEnabledManager(
+        featureFlagManager: FeatureFlagManager,
+    ): ChromeThirdPartyAutofillEnabledManager =
+        ChromeThirdPartyAutofillEnabledManagerImpl(
+            featureFlagManager = featureFlagManager,
+        )
 
     @Singleton
     @Provides

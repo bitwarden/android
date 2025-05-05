@@ -11,10 +11,10 @@ import androidx.core.os.persistableBundleOf
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import java.util.concurrent.TimeUnit
 
@@ -46,14 +46,13 @@ class BitwardenClipboardManagerImpl(
                 },
         )
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
-            val descriptor = toastDescriptorOverride ?: text
-            Toast
-                .makeText(
-                    context,
-                    context.resources.getString(R.string.value_has_been_copied, descriptor),
-                    Toast.LENGTH_SHORT,
+            val descriptor = toastDescriptorOverride
+                ?.let { context.resources.getString(R.string.value_has_been_copied, it) }
+                ?: context.resources.getString(
+                    R.string.value_has_been_copied,
+                    context.resources.getString(R.string.value),
                 )
-                .show()
+            Toast.makeText(context, descriptor, Toast.LENGTH_SHORT).show()
         }
 
         val frequency = clearClipboardFrequencySeconds ?: return
@@ -72,6 +71,14 @@ class BitwardenClipboardManagerImpl(
 
     override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: String?) {
         setText(text.toAnnotatedString(), isSensitive, toastDescriptorOverride)
+    }
+
+    override fun setText(text: String, isSensitive: Boolean, toastDescriptorOverride: Text) {
+        setText(
+            text.toAnnotatedString(),
+            isSensitive,
+            toastDescriptorOverride.toString(context.resources),
+        )
     }
 
     override fun setText(text: Text, isSensitive: Boolean, toastDescriptorOverride: String?) {

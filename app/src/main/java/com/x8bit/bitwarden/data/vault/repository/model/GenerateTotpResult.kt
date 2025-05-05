@@ -16,5 +16,5 @@ sealed class GenerateTotpResult {
     /**
      * An error occurred while generating the code.
      */
-    data object Error : GenerateTotpResult()
+    data class Error(val error: Throwable) : GenerateTotpResult()
 }

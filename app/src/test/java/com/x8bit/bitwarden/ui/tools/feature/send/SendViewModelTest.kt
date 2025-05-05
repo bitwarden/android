@@ -2,22 +2,23 @@ package com.x8bit.bitwarden.ui.tools.feature.send
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
 import io.mockk.every
@@ -27,8 +28,10 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -40,7 +43,9 @@ class SendViewModelTest : BaseViewModelTest() {
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
     private val mutableSendDataFlow = MutableStateFlow<DataState<SendData>>(DataState.Loading)
 
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
     private val environmentRepo: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
     }
@@ -54,6 +59,10 @@ class SendViewModelTest : BaseViewModelTest() {
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(type = PolicyTypeJson.DISABLE_SEND) } returns emptyList()
         every { getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND) } returns emptyFlow()
+    }
+
+    private val networkConnectionManager: NetworkConnectionManager = mockk {
+        every { isNetworkConnected } returns true
     }
 
     @BeforeEach
@@ -93,12 +102,12 @@ class SendViewModelTest : BaseViewModelTest() {
     @Test
     fun `LockClick should lock the vault`() {
         val viewModel = createViewModel()
-        every { vaultRepo.lockVaultForCurrentUser() } just runs
+        every { vaultRepo.lockVaultForCurrentUser(any()) } just runs
 
         viewModel.trySendAction(SendAction.LockClick)
 
         verify {
-            vaultRepo.lockVaultForCurrentUser()
+            vaultRepo.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 
@@ -129,7 +138,8 @@ class SendViewModelTest : BaseViewModelTest() {
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
         }
-        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Error
+        val error = Throwable("Oops")
+        coEvery { vaultRepo.deleteSend(sendId) } returns DeleteSendResult.Error(error = error)
 
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
@@ -146,6 +156,7 @@ class SendViewModelTest : BaseViewModelTest() {
                     dialogState = SendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 awaitItem(),
@@ -177,7 +188,7 @@ class SendViewModelTest : BaseViewModelTest() {
             }
             coEvery {
                 vaultRepo.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -239,18 +250,39 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CopyClick should call setText on the ClipboardManager`() {
+    fun `on SyncClick should show the no network dialog if no connection is available`() {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+        viewModel.trySendAction(SendAction.SyncClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SendState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
+            vaultRepo.sync(forced = true)
+        }
+    }
+
+    @Test
+    fun `CopyClick should call setText on the ClipboardManager`() = runTest {
         val viewModel = createViewModel()
         val testUrl = "www.test.com/"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { shareUrl } returns testUrl
         }
-        every { clipboardManager.setText(testUrl) } just runs
-
         viewModel.trySendAction(SendAction.CopyClick(sendItem))
-
         verify(exactly = 1) {
-            clipboardManager.setText(testUrl)
+            clipboardManager.setText(
+                text = testUrl,
+                toastDescriptorOverride = R.string.send_link.asText(),
+            )
         }
     }
 
@@ -372,31 +404,26 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `VaultRepository SendData NoNetwork should update view state to Error`() = runTest {
-        val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
-        val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
+    fun `VaultRepository SendData NoNetwork should update view state to Empty when there is no data`() =
+        runTest {
+            val dialogState = SendState.DialogState.Loading(R.string.syncing.asText())
+            val viewModel = createViewModel(state = DEFAULT_STATE.copy(dialogState = dialogState))
 
-        viewModel.eventFlow.test {
-            mutableSendDataFlow.value = DataState.NoNetwork()
-        }
+            viewModel.eventFlow.test {
+                mutableSendDataFlow.value = DataState.NoNetwork()
+            }
 
-        assertEquals(
-            DEFAULT_STATE.copy(
-                viewState = SendState.ViewState.Error(
-                    message = R.string.internet_connection_required_title
-                        .asText()
-                        .concat(
-                            " ".asText(),
-                            R.string.internet_connection_required_message.asText(),
-                        ),
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = SendState.ViewState.Empty,
+                    dialogState = null,
+                    isRefreshing = false,
                 ),
-                dialogState = null,
-                isRefreshing = false,
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `VaultRepository SendData Pending should update view state`() {
@@ -417,14 +444,40 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `RefreshPull should call vault repository sync`() {
+    fun `RefreshPull should call vault repository sync`() = runTest {
         every { vaultRepo.sync(forced = false) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(SendAction.RefreshPull)
-
+        advanceTimeBy(300)
         verify(exactly = 1) {
+            vaultRepo.sync(forced = false)
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `RefreshPull should show network error if no internet connection`() = runTest {
+        val viewModel = createViewModel()
+        every {
+            networkConnectionManager.isNetworkConnected
+        } returns false
+
+        viewModel.trySendAction(SendAction.RefreshPull)
+        advanceTimeBy(300)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isRefreshing = false,
+                dialogState = SendState.DialogState.Error(
+                    R.string.internet_connection_required_title.asText(),
+                    R.string.internet_connection_required_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) {
             vaultRepo.sync(forced = false)
         }
     }
@@ -460,6 +513,7 @@ class SendViewModelTest : BaseViewModelTest() {
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
         policyManager = policyManager,
+        networkConnectionManager = networkConnectionManager,
     )
 }
 

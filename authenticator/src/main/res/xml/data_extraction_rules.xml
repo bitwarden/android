@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <include
+            domain="sharedpref"
+            path="com.bitwarden.authenticator_preferences.xml" />
+        <include
+            domain="database"
+            path="." />
+    </cloud-backup>
+    <device-transfer>
+        <include
+            domain="sharedpref"
+            path="com.bitwarden.authenticator_preferences.xml" />
+        <include
+            domain="database"
+            path="." />
+    </device-transfer>
+</data-extraction-rules>

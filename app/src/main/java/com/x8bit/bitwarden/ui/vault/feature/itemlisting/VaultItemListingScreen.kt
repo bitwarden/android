@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -38,9 +39,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
-import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
+import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.scaffold.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -51,10 +52,14 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
+import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
+import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
-import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -66,14 +71,11 @@ import kotlinx.collections.immutable.toImmutableList
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToVaultItem: (id: String) -> Unit,
-    onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
+    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (
-        vaultItemCipherType: VaultItemCipherType,
-        selectedFolderId: String?,
-        selectedCollectionId: String?,
-    ) -> Unit,
+    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    onNavigateToAddFolder: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -102,7 +104,7 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemListingEvent.NavigateToVaultItem -> {
-                onNavigateToVaultItem(event.id)
+                onNavigateToVaultItemScreen(VaultItemArgs(event.id, event.type))
             }
 
             is VaultItemListingEvent.ShowShareSheet -> {
@@ -115,14 +117,22 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
                 onNavigateToVaultAddItemScreen(
-                    event.vaultItemCipherType,
-                    event.selectedFolderId,
-                    event.selectedCollectionId,
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.AddItem,
+                        vaultItemCipherType = event.vaultItemCipherType,
+                        selectedFolderId = event.selectedFolderId,
+                        selectedCollectionId = event.selectedCollectionId,
+                    ),
                 )
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {
-                onNavigateToVaultEditItemScreen(event.cipherId)
+                onNavigateToVaultEditItemScreen(
+                    VaultAddEditArgs(
+                        vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = event.cipherId),
+                        vaultItemCipherType = event.cipherType,
+                    ),
+                )
             }
 
             is VaultItemListingEvent.NavigateToUrl -> {
@@ -175,10 +185,14 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
-                fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
+                fido2CompletionManager.completeFido2GetCredentialsRequest(event.result)
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
+
+            is VaultItemListingEvent.NavigateToAddFolder -> {
+                onNavigateToAddFolder(event.parentFolderName)
+            }
         }
     }
 
@@ -188,9 +202,9 @@ fun VaultItemListingScreen(
             { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
         },
         onDismissFido2ErrorDialog = remember(viewModel) {
-            {
+            { errorMessage ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2ErrorDialogClick,
+                    VaultItemListingsAction.DismissFido2ErrorDialogClick(message = errorMessage),
                 )
             }
         },
@@ -261,6 +275,13 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onVaultItemTypeSelected = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ItemTypeToAddSelected(itemType = it),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -280,7 +301,7 @@ fun VaultItemListingScreen(
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
     onDismissRequest: () -> Unit,
-    onDismissFido2ErrorDialog: () -> Unit,
+    onDismissFido2ErrorDialog: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
     onRetryFido2PasswordVerification: (cipherId: String) -> Unit,
@@ -289,12 +310,14 @@ private fun VaultItemListingDialogs(
     onSubmitPinSetUpFido2Verification: (pin: String, cipherId: String) -> Unit,
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
+    onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
+            throwable = dialogState.throwable,
         )
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
@@ -304,7 +327,7 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
-            onDismissRequest = onDismissFido2ErrorDialog,
+            onDismissRequest = { onDismissFido2ErrorDialog(dialogState.message) },
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
@@ -375,6 +398,14 @@ private fun VaultItemListingDialogs(
                 onDismissRequest = {
                     onRetryPinSetUpFido2Verification(dialogState.selectedCipherId)
                 },
+            )
+        }
+
+        is VaultItemListingState.DialogState.VaultItemTypeSelection -> {
+            VaultItemSelectionDialog(
+                onDismissRequest = onDismissRequest,
+                onOptionSelected = onVaultItemTypeSelected,
+                excludedOptions = dialogState.excludedOptions,
             )
         }
 
@@ -473,8 +504,8 @@ private fun VaultItemListingScaffold(
                     vaultItemClick = vaultItemListingHandlers.itemClick,
                     collectionClick = vaultItemListingHandlers.collectionClick,
                     folderClick = vaultItemListingHandlers.folderClick,
-                    masterPasswordRepromptSubmit =
-                    vaultItemListingHandlers.masterPasswordRepromptSubmit,
+                    masterPasswordRepromptSubmit = vaultItemListingHandlers
+                        .masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,
                     modifier = Modifier.fillMaxSize(),
                 )

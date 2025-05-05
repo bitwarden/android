@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
 
@@ -12,6 +15,7 @@ const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
  */
 fun NavGraphBuilder.generatorGraph(
     onNavigateToPasswordHistory: () -> Unit,
+    onDimNavBarRequest: (Boolean) -> Unit,
 ) {
     navigation(
         route = GENERATOR_GRAPH_ROUTE,
@@ -19,6 +23,7 @@ fun NavGraphBuilder.generatorGraph(
     ) {
         generatorDestination(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
+            onDimNavBarRequest = onDimNavBarRequest,
         )
     }
 }

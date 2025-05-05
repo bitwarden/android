@@ -18,5 +18,8 @@ sealed class EmailTokenResult {
     /**
      * There was an error validating the token.
      */
-    data class Error(val message: String?) : EmailTokenResult()
+    data class Error(
+        val message: String?,
+        val error: Throwable?,
+    ) : EmailTokenResult()
 }

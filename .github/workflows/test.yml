@@ -6,42 +6,34 @@ on:
       - "main"
       - "rc"
       - "hotfix-rc"
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize]
   merge_group:
     type: [checks_requested]
   workflow_dispatch:
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  JAVA_VERSION: 17
+  _JAVA_VERSION: 17
+  _GITHUB_ACTION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}
+
 
 jobs:
-  check-run:
-    name: Check PR run
-    uses: bitwarden/gh-actions/.github/workflows/check-run.yml@main
-
   test:
     name: Test
     runs-on: ubuntu-24.04
-    needs: check-run
     permissions:
-      contents: read
-      issues: write
       packages: read
       pull-requests: write
 
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Validate Gradle wrapper
-        uses: gradle/actions/wrapper-validation@d156388eb19639ec20ade50009f3d199ce1e2808 # v4.1.0
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
 
       - name: Cache Gradle files
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ~/.gradle/caches
@@ -51,7 +43,7 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Cache build output
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a # v4.1.2
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -60,15 +52,15 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
         with:
           bundler-cache: true
 
       - name: Configure JDK
-        uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4.5.0
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
         with:
           distribution: "temurin"
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version: ${{ env._JAVA_VERSION }}
 
       - name: Install Fastlane
         run: |
@@ -77,19 +69,48 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Build and test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Used in settings.gradle.kts to download the SDK from GitHub Maven Packages
         run: |
           bundle exec fastlane check
 
-      - name: Upload test reports on failure
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        if: failure()
+      - name: Upload test reports
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
         with:
           name: test-reports
-          path: app/build/reports/tests/
+          path: |
+            build/reports/kover/reportMergedCoverage.xml
+            app/build/reports/tests/
+            authenticator/build/reports/tests/
+            authenticatorbridge/build/reports/tests/
+            core/build/reports/tests/
+            data/build/reports/tests/
+            network/build/reports/tests/
+            ui/build/reports/tests/
 
       - name: Upload to codecov.io
-        uses: codecov/codecov-action@b9fd7d16f6d7d1b5d2bec1a2887e65ceed900238 # v4.6.0
+        id: upload-to-codecov
+        uses: codecov/codecov-action@ad3126e916f78f00edff4ed0317cf185271ccc2d # v5.4.2
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        continue-on-error: true
         with:
-          file: app/build/reports/kover/reportStandardDebug.xml
+          os: linux
+          files: build/reports/kover/reportMergedCoverage.xml
+          fail_ci_if_error: true
+          disable_search: true
+
+      - name: Comment PR if tests failed
+        if: steps.upload-to-codecov.outcome == 'failure' && (github.event_name == 'push' || github.event_name == 'pull_request')
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+            PR_NUMBER: ${{ github.event.number }}
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            RUN_ACTOR: ${{ github.triggering_actor }}
+        run: |
+          echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
+          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
+
+          if [ ! -z "$PR_NUMBER" ]; then
+            message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
+            gh pr comment --repo $GITHUB_REPOSITORY $PR_NUMBER --body "$message"
+          fi

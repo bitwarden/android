@@ -12,5 +12,5 @@ sealed class ShareCipherResult {
     /**
      * Generic error while sharing cipher.
      */
-    data object Error : ShareCipherResult()
+    data class Error(val error: Throwable) : ShareCipherResult()
 }

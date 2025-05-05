@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -28,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -46,14 +44,17 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * Top level composable for the setup unlock screen.
@@ -75,7 +76,7 @@ fun SetupUnlockScreen(
                 showBiometricsPrompt = true
                 biometricsManager.promptBiometrics(
                     onSuccess = {
-                        handler.unlockWithBiometricToggle()
+                        handler.unlockWithBiometricToggle(it)
                         showBiometricsPrompt = false
                     },
                     onCancel = { showBiometricsPrompt = false },
@@ -144,23 +145,23 @@ private fun SetupUnlockScreenContent(
     handler: SetupUnlockHandler,
     modifier: Modifier = Modifier,
     biometricsManager: BiometricsManager,
-    config: Configuration = LocalConfiguration.current,
 ) {
     Column(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
-        if (config.isPortrait) {
-            SetupUnlockHeaderPortrait()
-        } else {
-            SetupUnlockHeaderLandscape()
+        when (rememberWindowSize()) {
+            WindowSize.Compact -> SetupUnlockHeaderCompact()
+            WindowSize.Medium -> SetupUnlockHeaderMedium()
         }
 
         Spacer(modifier = Modifier.height(height = 24.dp))
+        val biometricSupportStatus = biometricsManager.biometricSupportStatus
         BitwardenUnlockWithBiometricsSwitch(
-            biometricSupportStatus = biometricsManager.biometricSupportStatus,
+            biometricSupportStatus = biometricSupportStatus,
             isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
             onDisableBiometrics = handler.onDisableBiometrics,
             onEnableBiometrics = handler.onEnableBiometrics,
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
                 .testTag(tag = "UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
@@ -170,6 +171,11 @@ private fun SetupUnlockScreenContent(
             isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
             isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
             onUnlockWithPinToggleAction = handler.onUnlockWithPinToggle,
+            cardStyle = if (biometricSupportStatus == BiometricSupportStatus.NOT_SUPPORTED) {
+                CardStyle.Full
+            } else {
+                CardStyle.Bottom
+            },
             modifier = Modifier
                 .testTag(tag = "UnlockWithPinSwitch")
                 .fillMaxWidth()
@@ -234,7 +240,7 @@ private fun SetUpLaterButton(
 }
 
 @Composable
-private fun ColumnScope.SetupUnlockHeaderPortrait() {
+private fun ColumnScope.SetupUnlockHeaderCompact() {
     Spacer(modifier = Modifier.height(height = 32.dp))
     Image(
         painter = rememberVectorPainter(id = R.drawable.account_setup),
@@ -272,7 +278,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
 }
 
 @Composable
-private fun SetupUnlockHeaderLandscape(
+private fun SetupUnlockHeaderMedium(
     modifier: Modifier = Modifier,
 ) {
     Row(

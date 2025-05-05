@@ -9,9 +9,9 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
 import io.mockk.mockk
@@ -41,7 +41,7 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             PasswordHistoryScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -72,7 +72,7 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
 
     @Test
     fun `navigation icon click should trigger navigate back`() {
-        composeTestRule.onNodeWithContentDescription("Close").performClick()
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
 
         verify {
             viewModel.trySendAction(

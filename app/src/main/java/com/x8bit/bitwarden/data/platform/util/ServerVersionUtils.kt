@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import kotlin.text.split
-import kotlin.text.toIntOrNull
+import com.bitwarden.data.datasource.disk.model.ServerConfig
 
 private const val VERSION_SEPARATOR = "."
 private const val SUFFIX_SEPARATOR = "-"

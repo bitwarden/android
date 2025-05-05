@@ -1,9 +1,7 @@
 package com.bitwarden.authenticatorbridge.model
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.Instant
 
 /**
  * Models a serializable list of shared accounts to be shared with other applications.
@@ -46,5 +44,3 @@ internal data class SharedAccountDataJson(
         val totpUris: List<String>,
     )
 }
-
-

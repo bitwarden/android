@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import app.cash.turbine.test
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -12,14 +14,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserKeyConnectorState
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.time.ZonedDateTime
 
 class AuthDiskSourceExtensionsTest {
     private val authDiskSource: AuthDiskSource = FakeAuthDiskSource()
@@ -193,6 +194,8 @@ class AuthDiskSourceExtensionsTest {
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
+                            keyConnectorUrl = "mockKeyConnectorUrl-1",
+                            userIsClaimedByOrganization = false,
                         ),
                     ),
                 ),
@@ -205,6 +208,8 @@ class AuthDiskSourceExtensionsTest {
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
+                            keyConnectorUrl = "mockKeyConnectorUrl-2",
+                            userIsClaimedByOrganization = false,
                         ),
                     ),
                 ),
@@ -217,6 +222,8 @@ class AuthDiskSourceExtensionsTest {
                             shouldManageResetPassword = false,
                             shouldUseKeyConnector = false,
                             role = OrganizationType.ADMIN,
+                            keyConnectorUrl = "mockKeyConnectorUrl-3",
+                            userIsClaimedByOrganization = false,
                         ),
                     ),
                 ),
@@ -364,6 +371,8 @@ class AuthDiskSourceExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    keyConnectorUrl = "mockKeyConnectorUrl-1",
+                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -395,6 +404,8 @@ class AuthDiskSourceExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    keyConnectorUrl = "mockKeyConnectorUrl-1",
+                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -407,6 +418,8 @@ class AuthDiskSourceExtensionsTest {
                                     shouldManageResetPassword = false,
                                     shouldUseKeyConnector = false,
                                     role = OrganizationType.ADMIN,
+                                    keyConnectorUrl = "mockKeyConnectorUrl-2",
+                                    userIsClaimedByOrganization = false,
                                 ),
                             ),
                         ),
@@ -525,6 +538,8 @@ private val MOCK_PROFILE = AccountJson.Profile(
     kdfMemory = null,
     kdfParallelism = null,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = false,
+    creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
 )
 
 private val MOCK_ACCOUNT = AccountJson(

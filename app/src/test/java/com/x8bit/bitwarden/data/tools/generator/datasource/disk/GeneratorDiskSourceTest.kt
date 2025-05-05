@@ -1,10 +1,9 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk
 
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.bitwarden.data.datasource.disk.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -54,6 +53,7 @@ class GeneratorDiskSourceTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
@@ -158,6 +158,7 @@ class GeneratorDiskSourceTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",
@@ -196,6 +197,7 @@ class GeneratorDiskSourceTest {
             catchAllEmailDomain = "example.com",
             firefoxRelayApiAccessToken = "access_token_firefox_relay",
             simpleLoginApiKey = "api_key_simple_login",
+            simpleLoginSelfHostServerUrl = "https://simplelogin.local",
             duckDuckGoApiKey = "api_key_duck_duck_go",
             fastMailApiKey = "api_key_fast_mail",
             anonAddyApiAccessToken = "access_token_anon_addy",

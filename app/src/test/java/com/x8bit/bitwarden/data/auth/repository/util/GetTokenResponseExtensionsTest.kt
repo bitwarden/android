@@ -1,14 +1,15 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.JwtTokenDataJson
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
-import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
@@ -141,6 +142,8 @@ private val PROFILE_1 = AccountJson.Profile(
     kdfMemory = 16,
     kdfParallelism = 4,
     userDecryptionOptions = null,
+    isTwoFactorEnabled = null,
+    creationDate = null,
 )
 private val ACCOUNT_1 = AccountJson(
     profile = PROFILE_1,
@@ -164,6 +167,8 @@ private val ACCOUNT_2 = AccountJson(
         kdfMemory = null,
         kdfParallelism = null,
         userDecryptionOptions = null,
+        isTwoFactorEnabled = null,
+        creationDate = null,
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

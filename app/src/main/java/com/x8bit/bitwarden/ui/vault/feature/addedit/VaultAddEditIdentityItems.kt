@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,18 +12,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
-import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
-import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -32,24 +26,20 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @Suppress("LongMethod")
 fun LazyListScope.vaultAddEditIdentityItems(
-    commonState: VaultAddEditState.ViewState.Content.Common,
     identityState: VaultAddEditState.ViewState.Content.ItemType.Identity,
-    isAddItemMode: Boolean,
-    commonTypeHandlers: VaultAddEditCommonHandlers,
     identityItemTypeHandlers: VaultAddEditIdentityTypeHandlers,
 ) {
     item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            label = stringResource(id = R.string.name),
-            value = commonState.name,
-            onValueChange = commonTypeHandlers.onNameTextChange,
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.personal_details),
             modifier = Modifier
-                .testTag("ItemNameEntry")
                 .fillMaxWidth()
+                .standardHorizontalMargin()
                 .padding(horizontal = 16.dp),
         )
     }
+
     item {
         Spacer(modifier = Modifier.height(8.dp))
         TitleMultiSelectButton(
@@ -58,404 +48,245 @@ fun LazyListScope.vaultAddEditIdentityItems(
             modifier = Modifier
                 .testTag("IdentityTitlePicker")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.first_name),
             value = identityState.firstName,
             onValueChange = identityItemTypeHandlers.onFirstNameTextChange,
+            textFieldTestTag = "IdentityFirstNameEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityFirstNameEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.middle_name),
             value = identityState.middleName,
             onValueChange = identityItemTypeHandlers.onMiddleNameTextChange,
+            textFieldTestTag = "IdentityMiddleNameEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityMiddleNameEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.last_name),
             value = identityState.lastName,
             onValueChange = identityItemTypeHandlers.onLastNameTextChange,
+            textFieldTestTag = "IdentityLastNameEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityLastNameEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.username),
             value = identityState.username,
             onValueChange = identityItemTypeHandlers.onUsernameTextChange,
+            textFieldTestTag = "IdentityUsernameEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityUsernameEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.company),
             value = identityState.company,
             onValueChange = identityItemTypeHandlers.onCompanyTextChange,
+            textFieldTestTag = "IdentityCompanyEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("IdentityCompanyEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.identification),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+    }
+    item {
         BitwardenTextField(
             label = stringResource(id = R.string.ssn),
             value = identityState.ssn,
             onValueChange = identityItemTypeHandlers.onSsnTextChange,
+            textFieldTestTag = "IdentitySsnEntry",
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
-                .testTag("IdentitySsnEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.passport_number),
             value = identityState.passportNumber,
             onValueChange = identityItemTypeHandlers.onPassportNumberTextChange,
+            textFieldTestTag = "IdentityPassportNumberEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityPassportNumberEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.license_number),
             value = identityState.licenseNumber,
             onValueChange = identityItemTypeHandlers.onLicenseNumberTextChange,
+            textFieldTestTag = "IdentityLicenseNumberEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("IdentityLicenseNumberEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.contact_info),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+    }
+    item {
         BitwardenTextField(
             label = stringResource(id = R.string.email),
             value = identityState.email,
             onValueChange = identityItemTypeHandlers.onEmailTextChange,
+            textFieldTestTag = "IdentityEmailEntry",
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
-                .testTag("IdentityEmailEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.phone),
             value = identityState.phone,
             onValueChange = identityItemTypeHandlers.onPhoneTextChange,
+            textFieldTestTag = "IdentityPhoneEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("IdentityPhoneEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        BitwardenListHeaderText(
+            label = stringResource(id = R.string.address),
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin()
+                .padding(horizontal = 16.dp),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
+    }
+    item {
         BitwardenTextField(
             label = stringResource(id = R.string.address1),
             value = identityState.address1,
             onValueChange = identityItemTypeHandlers.onAddress1TextChange,
+            textFieldTestTag = "IdentityAddressOneEntry",
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
-                .testTag("IdentityAddressOneEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.address2),
             value = identityState.address2,
             onValueChange = identityItemTypeHandlers.onAddress2TextChange,
+            textFieldTestTag = "IdentityAddressTwoEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityAddressTwoEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.address3),
             value = identityState.address3,
             onValueChange = identityItemTypeHandlers.onAddress3TextChange,
+            textFieldTestTag = "IdentityAddressThreeEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityAddressThreeEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.city_town),
             value = identityState.city,
             onValueChange = identityItemTypeHandlers.onCityTextChange,
+            textFieldTestTag = "IdentityCityEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityCityEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.state_province),
             value = identityState.state,
             onValueChange = identityItemTypeHandlers.onStateTextChange,
+            textFieldTestTag = "IdentityStateEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityStateEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.zip_postal_code),
             value = identityState.zip,
             onValueChange = identityItemTypeHandlers.onZipTextChange,
+            textFieldTestTag = "IdentityPostalCodeEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("IdentityPostalCodeEntry")
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
     }
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.country),
             value = identityState.country,
             onValueChange = identityItemTypeHandlers.onCountryTextChange,
-            modifier = Modifier
-                .testTag("IdentityCountryEntry")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.miscellaneous),
+            textFieldTestTag = "IdentityCountryEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .standardHorizontalMargin(),
         )
-    }
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenMultiSelectButton(
-            label = stringResource(id = R.string.folder),
-            options = commonState
-                .availableFolders
-                .map { it.name }
-                .toImmutableList(),
-            selectedOption = commonState.selectedFolder?.name,
-            onOptionSelected = { selectedFolderName ->
-                commonTypeHandlers.onFolderSelected(
-                    commonState
-                        .availableFolders
-                        .first { it.name == selectedFolderName },
-                )
-            },
-            modifier = Modifier
-                .testTag("FolderPicker")
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenSwitch(
-            label = stringResource(
-                id = R.string.favorite,
-            ),
-            isChecked = commonState.favorite,
-            onCheckedChange = commonTypeHandlers.onToggleFavorite,
-            modifier = Modifier
-                .testTag("ItemFavoriteToggle")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    if (commonState.isUnlockWithPasswordEnabled) {
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenSwitch(
-                label = stringResource(id = R.string.password_prompt),
-                isChecked = commonState.masterPasswordReprompt,
-                onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-                modifier = Modifier
-                    .testTag("MasterPasswordRepromptToggle")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                actions = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_question_circle,
-                        contentDescription = stringResource(
-                            id = R.string.master_password_re_prompt_help,
-                        ),
-                        onClick = commonTypeHandlers.onTooltipClick,
-                        contentColor = BitwardenTheme.colorScheme.icon.secondary,
-                    )
-                },
-            )
-        }
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.notes),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            singleLine = false,
-            label = stringResource(id = R.string.notes),
-            value = commonState.notes,
-            onValueChange = commonTypeHandlers.onNotesTextChange,
-            modifier = Modifier
-                .testTag("ItemNotesEntry")
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
-        BitwardenListHeaderText(
-            label = stringResource(id = R.string.custom_fields),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    items(commonState.customFieldData) { customItem ->
-        Spacer(modifier = Modifier.height(8.dp))
-        VaultAddEditCustomField(
-            customField = customItem,
-            onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
-            onCustomFieldAction = commonTypeHandlers.onCustomFieldActionSelect,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            supportedLinkedTypes = persistentListOf(
-                VaultLinkedFieldType.TITLE,
-                VaultLinkedFieldType.MIDDLE_NAME,
-                VaultLinkedFieldType.ADDRESS_1,
-                VaultLinkedFieldType.ADDRESS_2,
-                VaultLinkedFieldType.ADDRESS_3,
-                VaultLinkedFieldType.CITY,
-                VaultLinkedFieldType.STATE,
-                VaultLinkedFieldType.POSTAL_CODE,
-                VaultLinkedFieldType.COUNTRY,
-                VaultLinkedFieldType.COMPANY,
-                VaultLinkedFieldType.EMAIL,
-                VaultLinkedFieldType.PHONE,
-                VaultLinkedFieldType.SSN,
-                VaultLinkedFieldType.IDENTITY_USERNAME,
-                VaultLinkedFieldType.PASSPORT_NUMBER,
-                VaultLinkedFieldType.LICENSE_NUMBER,
-                VaultLinkedFieldType.FIRST_NAME,
-                VaultLinkedFieldType.LAST_NAME,
-                VaultLinkedFieldType.FULL_NAME,
-            ),
-            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
-        )
-    }
-
-    item {
-        Spacer(modifier = Modifier.height(16.dp))
-        VaultAddEditCustomFieldsButton(
-            onFinishNamingClick = commonTypeHandlers.onAddNewCustomFieldClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
-    }
-
-    if (isAddItemMode && commonState.hasOrganizations) {
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            BitwardenListHeaderText(
-                label = stringResource(id = R.string.ownership),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenMultiSelectButton(
-                label = stringResource(id = R.string.who_owns_this_item),
-                options = commonState
-                    .availableOwners
-                    .map { it.name }
-                    .toImmutableList(),
-                selectedOption = commonState.selectedOwner?.name,
-                onOptionSelected = { selectedOwnerName ->
-                    commonTypeHandlers.onOwnerSelected(
-                        commonState
-                            .availableOwners
-                            .first { it.name == selectedOwnerName },
-                    )
-                },
-                modifier = Modifier
-                    .testTag("ItemOwnershipPicker")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-        }
-        if (commonState.selectedOwnerId != null) {
-            collectionItemsSelector(
-                collectionList = commonState.selectedOwner?.collections,
-                onCollectionSelect = commonTypeHandlers.onCollectionSelect,
-            )
-        }
-    }
-    item {
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
@@ -480,6 +311,7 @@ private fun TitleMultiSelectButton(
                     .first { it.value.toString(resources) == selectedString },
             )
         },
+        cardStyle = CardStyle.Top(),
         modifier = modifier,
     )
 }

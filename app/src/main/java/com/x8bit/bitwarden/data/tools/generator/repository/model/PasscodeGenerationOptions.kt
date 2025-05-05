@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.model
 
 import androidx.annotation.Keep
-import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
+import com.bitwarden.core.data.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -91,5 +91,6 @@ data class PasscodeGenerationOptions(
 @Keep
 private class PasscodeTypeSerializer :
     BaseEnumeratedIntSerializer<PasscodeGenerationOptions.PasscodeType>(
-        PasscodeGenerationOptions.PasscodeType.entries.toTypedArray(),
+        className = "PasscodeGenerationOptions.PasscodeType",
+        values = PasscodeGenerationOptions.PasscodeType.entries.toTypedArray(),
     )

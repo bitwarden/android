@@ -15,7 +15,7 @@ class SetupCompleteScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        setContentWithBackDispatcher {
+        setContent {
             SetupCompleteScreen(viewModel = viewModel)
         }
     }

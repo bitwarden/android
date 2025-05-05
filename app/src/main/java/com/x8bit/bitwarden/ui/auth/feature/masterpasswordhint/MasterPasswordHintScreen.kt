@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -21,14 +22,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The top level composable for the Login screen.
@@ -69,6 +71,7 @@ fun MasterPasswordHintScreen(
                     ?.invoke()
                     ?: stringResource(id = R.string.an_error_has_occurred),
                 message = dialogState.message(),
+                throwable = dialogState.error,
                 onDismissRequest = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
                 },
@@ -107,9 +110,10 @@ fun MasterPasswordHintScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
         ) {
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenTextField(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
                 value = state.emailInput,
                 onValueChange = remember(viewModel) {
@@ -117,19 +121,12 @@ fun MasterPasswordHintScreen(
                 },
                 label = stringResource(id = R.string.email_address),
                 keyboardType = KeyboardType.Email,
+                textFieldTestTag = "MasterPasswordHintEmailField",
+                supportingText = stringResource(id = R.string.enter_email_for_hint),
+                cardStyle = CardStyle.Full,
             )
-
-            Text(
-                text = stringResource(id = R.string.enter_email_for_hint),
-                style = BitwardenTheme.typography.bodySmall,
-                color = BitwardenTheme.colorScheme.text.secondary,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 4.dp,
-                        horizontal = 16.dp,
-                    ),
-            )
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }

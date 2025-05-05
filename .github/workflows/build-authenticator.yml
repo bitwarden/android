@@ -1,0 +1,289 @@
+name: Build Authenticator
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      version-name:
+        description: "Optional. Version string to use, in X.Y.Z format. Overrides default in the project."
+        required: false
+        type: string
+      version-code:
+        description: "Optional. Build number to use. Overrides default of GitHub run number."
+        required: false
+        type: number
+      distribute-to-firebase:
+        description: "Optional. Distribute artifacts to Firebase."
+        required: false
+        default: false
+        type: boolean
+      publish-to-play-store:
+        description: "Optional. Deploy bundle artifact to Google Play Store"
+        required: false
+        default: false
+        type: boolean
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JAVA_VERSION: 17
+
+jobs:
+  build:
+    name: Build Authenticator
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
+
+      - name: Cache Gradle files
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Check Authenticator
+        run: bundle exec fastlane check
+
+      - name: Build Authenticator
+        run: bundle exec fastlane buildAuthenticatorDebug
+
+  publish_playstore:
+    name: Publish Authenticator Play Store artifacts
+    needs:
+      - build
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: ["aab", "apk"]
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      - name: Log in to Azure
+        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+          mkdir -p ${{ github.workspace }}/keystores
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_apk-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_apk-keystore.jks --output none
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_aab-keystore.jks --file ${{ github.workspace }}/keystores/authenticator_aab-keystore.jks --output none
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name com.bitwarden.authenticator-google-services.json --file ${{ github.workspace }}/authenticator/src/google-services.json --output none
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name com.bitwarden.authenticator.dev-google-services.json --file ${{ github.workspace }}/authenticator/src/debug/google-services.json --output none
+
+      - name: Download Firebase credentials
+        if : ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_play_firebase-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json --output none
+
+      - name: Download Play Store credentials
+        if: ${{ inputs.publish-to-play-store }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
+      - name: Verify Play Store credentials
+        if: ${{ inputs.publish-to-play-store }}
+        run: |
+          bundle exec fastlane run validate_play_store_json_key \
+          json_key:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }}
+
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4.3.1
+
+      - name: Cache Gradle files
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      - name: Cache build output
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Configure JDK
+        uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
+        with:
+          distribution: "temurin"
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Increment version
+        run: |
+          DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
+          VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
+          bundle exec fastlane setAuthenticatorBuildVersionInfo \
+          versionCode:$VERSION_CODE \
+          versionName:${{ inputs.version-name || '' }}
+
+          regex='versionName = "([^"]+)"'
+          if [[ "$(cat authenticator/build.gradle.kts)" =~ $regex ]]; then
+            VERSION_NAME="${BASH_REMATCH[1]}"
+          fi
+          echo "Version Name: ${VERSION_NAME}" >> $GITHUB_STEP_SUMMARY
+          echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
+
+      - name: Generate release Play Store bundle
+        if: ${{ matrix.variant == 'aab' }}
+        run: |
+          bundle exec fastlane bundleAuthenticatorRelease \
+          storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
+          storePassword:'${{ secrets.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
+          keyAlias:authenticatorupload \
+          keyPassword:'${{ secrets.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
+
+      - name: Generate release Play Store APK
+        if: ${{ matrix.variant == 'apk' }}
+        run: |
+          bundle exec fastlane buildAuthenticatorRelease \
+          storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
+          storePassword:'${{ secrets.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
+          keyAlias:bitwardenauthenticator \
+          keyPassword:'${{ secrets.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
+
+      - name: Upload release Play Store .aab artifact
+        if: ${{ matrix.variant == 'aab' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: com.bitwarden.authenticator.aab
+          path: authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab
+          if-no-files-found: error
+
+      - name: Upload release .apk artifact
+        if: ${{ matrix.variant == 'apk' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: com.bitwarden.authenticator.apk
+          path: authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk
+          if-no-files-found: error
+
+      - name: Create checksum file for Release AAB
+        if: ${{ matrix.variant == 'aab' }}
+        run: |
+          sha256sum "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab" \
+            > ./authenticator-android-aab-sha256.txt
+
+      - name: Create checksum for release .apk artifact
+        if: ${{ matrix.variant == 'apk' }}
+        run: |
+          sha256sum "authenticator/build/outputs/apk/release/com.bitwarden.authenticator.apk" \
+            > ./authenticator-android-apk-sha256.txt
+
+      - name: Upload .apk SHA file for release
+        if: ${{ matrix.variant == 'apk' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: authenticator-android-apk-sha256.txt
+          path: ./authenticator-android-apk-sha256.txt
+          if-no-files-found: error
+
+      - name: Upload .aab SHA file for release
+        if: ${{ matrix.variant == 'aab' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: authenticator-android-aab-sha256.txt
+          path: ./authenticator-android-aab-sha256.txt
+          if-no-files-found: error
+
+      - name: Install Firebase app distribution plugin
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
+        run: bundle exec fastlane add_plugin firebase_app_distribution
+
+      - name: Publish release bundle to Firebase
+        if: ${{ matrix.variant == 'aab' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
+        env:
+          FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeAuthenticatorReleaseBundleToFirebase \
+          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
+
+      # Only publish bundles to Play Store when `publish-to-play-store` is true while building
+      # bundles
+      - name: Publish release bundle to Google Play Store
+        if: ${{ inputs.publish-to-play-store && matrix.variant == 'aab' }}
+        env:
+          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_store-creds.json
+        run: |
+          bundle exec fastlane publishAuthenticatorReleaseToGooglePlayStore \
+          serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \

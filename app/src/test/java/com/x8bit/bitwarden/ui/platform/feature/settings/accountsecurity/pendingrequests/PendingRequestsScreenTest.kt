@@ -11,7 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
@@ -55,12 +55,13 @@ class PendingRequestsScreenTest : BaseComposeTest() {
         mockkStatic(::isBuildVersionBelow)
         every { isFdroid } returns false
         every { isBuildVersionBelow(any()) } returns false
-        composeTestRule.setContent {
+        setContent(
+            permissionsManager = permissionsManager,
+        ) {
             PendingRequestsScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLoginApproval = { _ -> onNavigateToLoginApprovalCalled = true },
                 viewModel = viewModel,
-                permissionsManager = permissionsManager,
             )
         }
     }

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -10,7 +11,6 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import javax.crypto.Cipher
 
 /**
  * Responsible for managing vault data inside the network layer.
@@ -189,7 +190,7 @@ interface VaultRepository : CipherManager, VaultLockManager {
     /**
      * Attempt to unlock the vault using the stored biometric key for the currently active user.
      */
-    suspend fun unlockVaultWithBiometrics(): VaultUnlockResult
+    suspend fun unlockVaultWithBiometrics(cipher: Cipher): VaultUnlockResult
 
     /**
      * Attempt to unlock the vault with the given [masterPassword] and for the currently active

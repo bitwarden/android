@@ -13,5 +13,5 @@ sealed class TotpCodeResult {
     /**
      * There was an error scanning the code.
      */
-    data object CodeScanningError : TotpCodeResult()
+    data class CodeScanningError(val error: Throwable? = null) : TotpCodeResult()
 }

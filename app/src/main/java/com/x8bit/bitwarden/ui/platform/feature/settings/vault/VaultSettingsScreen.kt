@@ -3,8 +3,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -30,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenActionCard
 import com.x8bit.bitwarden.ui.platform.components.card.actionCardExitAnimation
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -106,6 +110,7 @@ fun VaultSettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            Spacer(modifier = Modifier.height(12.dp))
             AnimatedVisibility(
                 visible = state.shouldShowImportCard,
                 label = "ImportLoginsActionCard",
@@ -132,7 +137,7 @@ fun VaultSettingsScreen(
                     },
                     modifier = Modifier
                         .standardHorizontalMargin()
-                        .padding(top = 12.dp, bottom = 16.dp),
+                        .padding(bottom = 16.dp),
                 )
             }
             BitwardenTextRow(
@@ -140,9 +145,11 @@ fun VaultSettingsScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) }
                 },
-                withDivider = true,
+                withDivider = false,
+                cardStyle = CardStyle.Top(),
                 modifier = Modifier
                     .testTag("FoldersLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -151,9 +158,11 @@ fun VaultSettingsScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) }
                 },
-                withDivider = true,
+                withDivider = false,
+                cardStyle = CardStyle.Middle(),
                 modifier = Modifier
                     .testTag("ExportVaultLabel")
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -163,9 +172,11 @@ fun VaultSettingsScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
                     },
-                    withDivider = true,
+                    withDivider = false,
+                    cardStyle = CardStyle.Bottom,
                     modifier = Modifier
                         .testTag("ImportItemsLinkItemView")
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             } else {
@@ -174,18 +185,21 @@ fun VaultSettingsScreen(
                     onConfirmClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultSettingsAction.ImportItemsClick) }
                     },
-                    withDivider = true,
+                    withDivider = false,
                     dialogTitle = stringResource(id = R.string.continue_to_web_app),
-                    dialogMessage =
-                    stringResource(
+                    dialogMessage = stringResource(
                         id = R.string.you_can_import_data_to_your_vault_on_x,
                         state.importUrl,
                     ),
+                    cardStyle = CardStyle.Bottom,
                     modifier = Modifier
                         .testTag("ImportItemsLinkItemView")
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
             }
+            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }

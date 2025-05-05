@@ -1,12 +1,25 @@
 package com.x8bit.bitwarden.ui.platform.components.model
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
+import com.bitwarden.ui.util.Text
 import kotlinx.parcelize.Parcelize
 
 /**
  * A class to denote the type of icon being passed.
  */
+@Parcelize
 sealed class IconData : Parcelable {
+
+    /**
+     * The icon content description.
+     */
+    abstract val contentDescription: Text?
+
+    /**
+     * The icon test tag.
+     */
+    abstract val testTag: String?
 
     /**
      * Data class representing the resources required for an icon.
@@ -15,7 +28,9 @@ sealed class IconData : Parcelable {
      */
     @Parcelize
     data class Local(
-        val iconRes: Int,
+        @DrawableRes val iconRes: Int,
+        override val contentDescription: Text? = null,
+        override val testTag: String? = null,
     ) : IconData()
 
     /**
@@ -27,6 +42,8 @@ sealed class IconData : Parcelable {
     @Parcelize
     data class Network(
         val uri: String,
-        val fallbackIconRes: Int,
+        @DrawableRes val fallbackIconRes: Int,
+        override val contentDescription: Text? = null,
+        override val testTag: String? = null,
     ) : IconData()
 }

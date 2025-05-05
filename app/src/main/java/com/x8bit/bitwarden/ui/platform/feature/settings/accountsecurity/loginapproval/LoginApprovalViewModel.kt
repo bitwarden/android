@@ -12,8 +12,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -177,7 +177,7 @@ class LoginApprovalViewModel @Inject constructor(
     private fun handleApproveRequestResultReceived(
         action: LoginApprovalAction.Internal.ApproveRequestResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
                 sendClosingEvent()
@@ -189,6 +189,7 @@ class LoginApprovalViewModel @Inject constructor(
                         dialogState = LoginApprovalState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -239,7 +240,7 @@ class LoginApprovalViewModel @Inject constructor(
     private fun handleDeclineRequestResultReceived(
         action: LoginApprovalAction.Internal.DeclineRequestResultReceive,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
                 sendClosingEvent()
@@ -251,6 +252,7 @@ class LoginApprovalViewModel @Inject constructor(
                         dialogState = LoginApprovalState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            error = result.error,
                         ),
                     )
                 }
@@ -327,6 +329,7 @@ data class LoginApprovalState(
         data class Error(
             val title: Text?,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**

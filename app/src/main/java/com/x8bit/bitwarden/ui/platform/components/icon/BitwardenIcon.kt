@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
@@ -14,25 +15,23 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
  * Represents a Bitwarden icon that is either locally loaded or loaded using glide.
  *
  * @param iconData Label for the text field.
- * @param tint the color to be applied as the tint for the icon.
  * @param modifier A [Modifier] for the composable.
- * @param contentDescription A description of the switch's UI for accessibility purposes.
+ * @param tint the color to be applied as the tint for the icon.
  */
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun BitwardenIcon(
     iconData: IconData,
-    tint: Color,
     modifier: Modifier = Modifier,
-    contentDescription: String? = null,
+    tint: Color = Color.Unspecified,
 ) {
     when (iconData) {
         is IconData.Network -> {
             GlideImage(
                 model = iconData.uri,
                 failure = placeholder(iconData.fallbackIconRes),
-                contentDescription = contentDescription,
-                modifier = modifier,
+                contentDescription = iconData.contentDescription?.invoke(),
+                modifier = modifier.nullableTestTag(tag = iconData.testTag),
             ) {
                 it.placeholder(iconData.fallbackIconRes)
             }
@@ -41,9 +40,9 @@ fun BitwardenIcon(
         is IconData.Local -> {
             Icon(
                 painter = rememberVectorPainter(id = iconData.iconRes),
-                contentDescription = contentDescription,
+                contentDescription = iconData.contentDescription?.invoke(),
                 tint = tint,
-                modifier = modifier,
+                modifier = modifier.nullableTestTag(tag = iconData.testTag),
             )
         }
     }

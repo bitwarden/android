@@ -1,27 +1,36 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.concurrentMapOf
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
+import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppCreationState
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
@@ -33,9 +42,11 @@ import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,8 +59,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.time.Clock
 import kotlin.time.Duration.Companion.minutes
 
 /**
@@ -62,6 +76,7 @@ private const val MAXIMUM_INVALID_UNLOCK_ATTEMPTS = 5
  */
 @Suppress("TooManyFunctions", "LongParameterList")
 class VaultLockManagerImpl(
+    private val clock: Clock,
     private val authDiskSource: AuthDiskSource,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -70,13 +85,15 @@ class VaultLockManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     dispatcherManager: DispatcherManager,
+    context: Context,
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     /**
-     * This [Map] tracks all active timeout [Job]s that are running using the user ID as the key.
+     * This [Map] tracks all active timeout [Job]s that are running and their associated data using
+     * the user ID as the key.
      */
-    private val userIdTimerJobMap = mutableMapOf<String, Job>()
+    private val userIdTimerJobMap: MutableMap<String, TimeoutJobData> = concurrentMapOf()
 
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
@@ -87,8 +104,30 @@ class VaultLockManagerImpl(
     override val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
         get() = mutableVaultUnlockDataStateFlow.asStateFlow()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val isActiveUserUnlockingFlow: StateFlow<Boolean>
+        get() = authDiskSource
+            .activeUserIdChangesFlow
+            .flatMapLatest { activeUserId ->
+                vaultUnlockDataStateFlow.map { vaultUnlockData ->
+                    vaultUnlockData.any {
+                        it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
+                    }
+                }
+            }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = mutableVaultUnlockDataStateFlow.value.any {
+                    it.userId == activeUserId && it.status == VaultUnlockData.Status.UNLOCKING
+                },
+            )
+
     override val vaultStateEventFlow: Flow<VaultStateEvent>
         get() = mutableVaultStateEventSharedFlow.asSharedFlow()
+
+    override var isFromLockFlow: Boolean = false
 
     init {
         observeAppCreationChanges()
@@ -96,6 +135,10 @@ class VaultLockManagerImpl(
         observeUserSwitchingChanges()
         observeVaultTimeoutChanges()
         observeUserLogoutResults()
+        context.registerReceiver(
+            ScreenStateBroadcastReceiver(),
+            IntentFilter(Intent.ACTION_SCREEN_ON),
+        )
     }
 
     override fun isVaultUnlocked(userId: String): Boolean =
@@ -104,13 +147,17 @@ class VaultLockManagerImpl(
     override fun isVaultUnlocking(userId: String): Boolean =
         mutableVaultUnlockDataStateFlow.value.statusFor(userId) == VaultUnlockData.Status.UNLOCKING
 
-    override fun lockVault(userId: String) {
+    override fun lockVault(userId: String, isUserInitiated: Boolean) {
+        isFromLockFlow = isUserInitiated
         setVaultToLocked(userId = userId)
     }
 
-    override fun lockVaultForCurrentUser() {
+    override fun lockVaultForCurrentUser(isUserInitiated: Boolean) {
         activeUserId?.let {
-            lockVault(it)
+            lockVault(
+                userId = it,
+                isUserInitiated = isUserInitiated,
+            )
         }
     }
 
@@ -122,7 +169,7 @@ class VaultLockManagerImpl(
         privateKey: String,
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
+    ): VaultUnlockResult = withContext(context = NonCancellable) {
         flow {
             setVaultToUnlocking(userId = userId)
             emit(
@@ -154,7 +201,7 @@ class VaultLockManagerImpl(
                     .fold(
                         onFailure = {
                             incrementInvalidUnlockCount(userId = userId)
-                            VaultUnlockResult.GenericError
+                            VaultUnlockResult.GenericError(error = it)
                         },
                         onSuccess = { initializeCryptoResult ->
                             initializeCryptoResult
@@ -180,10 +227,9 @@ class VaultLockManagerImpl(
                                 .also {
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
-                                        setVaultToUnlocked(userId = userId)
-                                        trustedDeviceManager.trustThisDeviceIfNecessary(
-                                            userId = userId,
-                                        )
+                                        trustedDeviceManager
+                                            .trustThisDeviceIfNecessary(userId = userId)
+                                            .also { setVaultToUnlocked(userId = userId) }
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }
@@ -194,6 +240,7 @@ class VaultLockManagerImpl(
         }
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
+    }
 
     override suspend fun waitUntilUnlocked(userId: String) {
         vaultUnlockDataStateFlow
@@ -232,7 +279,7 @@ class VaultLockManagerImpl(
         )
 
         if (invalidUnlockAttempts >= MAXIMUM_INVALID_UNLOCK_ATTEMPTS) {
-            userLogoutManager.logout(userId = userId)
+            userLogoutManager.logout(userId = userId, reason = LogoutReason.TooManyUnlockAttempts)
         }
     }
 
@@ -268,6 +315,10 @@ class VaultLockManagerImpl(
         )
         if (!wasVaultLocked) {
             mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Locked(userId = userId))
+            authDiskSource.storeLastLockTimestamp(
+                userId = userId,
+                lastLockTimestamp = clock.instant(),
+            )
         }
     }
 
@@ -305,29 +356,40 @@ class VaultLockManagerImpl(
     }
 
     private fun observeAppCreationChanges() {
+        var isFirstCreated = true
         appStateManager
             .appCreatedStateFlow
             .onEach { appCreationState ->
                 when (appCreationState) {
-                    AppCreationState.CREATED -> Unit
-                    AppCreationState.DESTROYED -> handleOnDestroyed()
+                    is AppCreationState.Created -> {
+                        handleOnCreated(
+                            createdForAutofill = appCreationState.isAutoFill,
+                            isFirstCreated = isFirstCreated,
+                        )
+                        isFirstCreated = false
+                    }
+
+                    AppCreationState.Destroyed -> Unit
                 }
             }
             .launchIn(unconfinedScope)
     }
 
-    private fun handleOnDestroyed() {
-        activeUserId?.let { userId ->
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
+    private fun handleOnCreated(
+        createdForAutofill: Boolean,
+        isFirstCreated: Boolean,
+    ) {
+        val userId = activeUserId ?: return
+        checkForVaultTimeout(
+            userId = userId,
+            checkTimeoutReason = CheckTimeoutReason.AppCreated(
+                firstTimeCreation = isFirstCreated,
+                createdForAutofill = createdForAutofill,
+            ),
+        )
     }
 
     private fun observeAppForegroundChanges() {
-        var isFirstForeground = true
-
         appStateManager
             .appForegroundStateFlow
             .onEach { appForegroundState ->
@@ -336,10 +398,7 @@ class VaultLockManagerImpl(
                         handleOnBackground()
                     }
 
-                    AppForegroundState.FOREGROUNDED -> {
-                        handleOnForeground(isFirstForeground = isFirstForeground)
-                        isFirstForeground = false
-                    }
+                    AppForegroundState.FOREGROUNDED -> handleOnForeground()
                 }
             }
             .launchIn(unconfinedScope)
@@ -349,19 +408,13 @@ class VaultLockManagerImpl(
         val userId = activeUserId ?: return
         checkForVaultTimeout(
             userId = userId,
-            checkTimeoutReason = CheckTimeoutReason.APP_BACKGROUNDED,
+            checkTimeoutReason = CheckTimeoutReason.AppBackgrounded,
         )
     }
 
-    private fun handleOnForeground(isFirstForeground: Boolean) {
+    private fun handleOnForeground() {
         val userId = activeUserId ?: return
-        userIdTimerJobMap[userId]?.cancel()
-        if (isFirstForeground) {
-            checkForVaultTimeout(
-                userId = userId,
-                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
-            )
-        }
+        userIdTimerJobMap.remove(key = userId)?.job?.cancel()
     }
 
     private fun observeUserSwitchingChanges() {
@@ -457,11 +510,11 @@ class VaultLockManagerImpl(
         currentActiveUserId: String,
     ) {
         // Make sure to clear the now-active user's timeout job.
-        userIdTimerJobMap[currentActiveUserId]?.cancel()
+        userIdTimerJobMap.remove(key = currentActiveUserId)?.job?.cancel()
         // Check if the user's timeout action should be performed as we switch away.
         checkForVaultTimeout(
             userId = previousActiveUserId,
-            checkTimeoutReason = CheckTimeoutReason.USER_CHANGED,
+            checkTimeoutReason = CheckTimeoutReason.UserChanged,
         )
     }
 
@@ -491,10 +544,19 @@ class VaultLockManagerImpl(
 
             VaultTimeout.OnAppRestart -> {
                 // If this is an app restart, trigger the timeout action; otherwise ignore.
-                if (checkTimeoutReason == CheckTimeoutReason.APP_RESTARTED) {
-                    // On restart the vault should be locked already but we may need to soft-logout
-                    // the user.
-                    handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+                if (checkTimeoutReason is CheckTimeoutReason.AppCreated) {
+                    // We need to check the timeout action on the first time creation no matter what
+                    // for all subsequent creations we should check if this is for autofill and
+                    // and if it is we skip checking the timeout action.
+                    if (
+                        checkTimeoutReason.firstTimeCreation ||
+                        !checkTimeoutReason.createdForAutofill
+                    ) {
+                        handleTimeoutAction(
+                            userId = userId,
+                            vaultTimeoutAction = vaultTimeoutAction,
+                        )
+                    }
                 }
             }
 
@@ -502,21 +564,23 @@ class VaultLockManagerImpl(
                 when (checkTimeoutReason) {
                     // Always preform the timeout action on app restart to ensure the user is
                     // in the correct state.
-                    CheckTimeoutReason.APP_RESTARTED -> {
-                        handleTimeoutAction(
-                            userId = userId,
-                            vaultTimeoutAction = vaultTimeoutAction,
-                        )
+                    is CheckTimeoutReason.AppCreated -> {
+                        if (checkTimeoutReason.firstTimeCreation) {
+                            handleTimeoutAction(
+                                userId = userId,
+                                vaultTimeoutAction = vaultTimeoutAction,
+                            )
+                        }
                     }
 
                     // User no longer active or engaging with the app.
-                    CheckTimeoutReason.APP_BACKGROUNDED,
-                    CheckTimeoutReason.USER_CHANGED,
+                    CheckTimeoutReason.AppBackgrounded,
+                    CheckTimeoutReason.UserChanged,
                         -> {
                         handleTimeoutActionWithDelay(
                             userId = userId,
                             vaultTimeoutAction = vaultTimeoutAction,
-                            delayInMs = vaultTimeout
+                            delayMs = vaultTimeout
                                 .vaultTimeoutInMinutes
                                 ?.minutes
                                 ?.inWholeMilliseconds
@@ -529,20 +593,26 @@ class VaultLockManagerImpl(
     }
 
     /**
-     * Performs the [VaultTimeoutAction] for the given [userId] after the [delayInMs] has passed.
+     * Performs the [VaultTimeoutAction] for the given [userId] after the [delayMs] has passed.
      *
      * @see handleTimeoutAction
      */
     private fun handleTimeoutActionWithDelay(
         userId: String,
         vaultTimeoutAction: VaultTimeoutAction,
-        delayInMs: Long,
+        delayMs: Long,
     ) {
-        userIdTimerJobMap[userId]?.cancel()
-        userIdTimerJobMap[userId] = unconfinedScope.launch {
-            delay(timeMillis = delayInMs)
-            handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
-        }
+        userIdTimerJobMap.remove(key = userId)?.job?.cancel()
+        userIdTimerJobMap[userId] = TimeoutJobData(
+            job = unconfinedScope.launch {
+                delay(timeMillis = delayMs)
+                userIdTimerJobMap.remove(key = userId)
+                handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+            },
+            vaultTimeoutAction = vaultTimeoutAction,
+            startTimeMs = clock.millis(),
+            durationMs = delayMs,
+        )
     }
 
     /**
@@ -559,7 +629,7 @@ class VaultLockManagerImpl(
             }
 
             VaultTimeoutAction.LOGOUT -> {
-                userLogoutManager.softLogout(userId = userId)
+                userLogoutManager.softLogout(userId = userId, reason = LogoutReason.Timeout)
             }
         }
     }
@@ -569,9 +639,11 @@ class VaultLockManagerImpl(
         initUserCryptoMethod: InitUserCryptoMethod,
     ): VaultUnlockResult {
         val account = authDiskSource.userState?.accounts?.get(userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(error = NoActiveUserException())
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
-            ?: return VaultUnlockResult.InvalidStateError
+            ?: return VaultUnlockResult.InvalidStateError(
+                error = MissingPropertyException("Private key"),
+            )
         val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
             userId = userId,
@@ -589,11 +661,60 @@ class VaultLockManagerImpl(
     }
 
     /**
-     * Helper enum that indicates the reason we are checking for timeout.
+     * A custom [BroadcastReceiver] that listens for when the screen is powered on and restarts the
+     * vault timeout jobs to ensure they complete at the correct time.
+     *
+     * This is necessary because the [delay] function in a coroutine will not keep accurate time
+     * when the screen is off. We do not cancel the job when the screen is off, this allows the
+     * job to complete as-soon-as possible if the screen is powered off for an extended period.
      */
-    private enum class CheckTimeoutReason {
-        APP_BACKGROUNDED,
-        APP_RESTARTED,
-        USER_CHANGED,
+    private inner class ScreenStateBroadcastReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            userIdTimerJobMap.map { (userId, data) ->
+                handleTimeoutActionWithDelay(
+                    userId = userId,
+                    vaultTimeoutAction = data.vaultTimeoutAction,
+                    delayMs = data.durationMs - (clock.millis() - data.startTimeMs)
+                        .coerceAtLeast(minimumValue = 0L),
+                )
+            }
+        }
+    }
+
+    /**
+     * A wrapper class containing all relevant data concerning a timeout action [Job].
+     */
+    private data class TimeoutJobData(
+        val job: Job,
+        val vaultTimeoutAction: VaultTimeoutAction,
+        val startTimeMs: Long,
+        val durationMs: Long,
+    )
+
+    /**
+     * Helper sealed class which denotes the reason to check the vault timeout.
+     */
+    private sealed class CheckTimeoutReason {
+        /**
+         * Indicates the app has been backgrounded but is still running.
+         */
+        data object AppBackgrounded : CheckTimeoutReason()
+
+        /**
+         * Indicates the app has entered a Created state.
+         *
+         * @param firstTimeCreation if this is the first time the process is being created.
+         * @param createdForAutofill if the the creation event is due to an activity being launched
+         * for autofill.
+         */
+        data class AppCreated(
+            val firstTimeCreation: Boolean,
+            val createdForAutofill: Boolean,
+        ) : CheckTimeoutReason()
+
+        /**
+         * Indicates that the current user has changed.
+         */
+        data object UserChanged : CheckTimeoutReason()
     }
 }

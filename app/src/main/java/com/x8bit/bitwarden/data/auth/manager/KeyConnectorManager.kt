@@ -2,8 +2,9 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.KeyConnectorResponse
 import com.bitwarden.crypto.Kdf
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorMasterKeyResponseJson
+import com.bitwarden.network.model.KdfTypeJson
+import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
+import com.x8bit.bitwarden.data.auth.manager.model.MigrateExistingUserToKeyConnectorResult
 
 /**
  * Manager used to interface with a key connector.
@@ -28,7 +29,7 @@ interface KeyConnectorManager {
         email: String,
         masterPassword: String,
         kdf: Kdf,
-    ): Result<Unit>
+    ): Result<MigrateExistingUserToKeyConnectorResult>
 
     /**
      * Migrates a new user to use the key connector.

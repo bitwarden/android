@@ -4,8 +4,13 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
@@ -19,13 +24,9 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -74,14 +75,15 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             shouldShowEnableAuthenticatorSync =
-            featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
-                !isBuildVersionBelow(Build.VERSION_CODES.S),
+                featureFlagManager.getFeatureFlag(FlagKey.AuthenticatorSync) &&
+                    !isBuildVersionBelow(Build.VERSION_CODES.S),
             userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
             vaultTimeoutPolicyMinutes = null,
             vaultTimeoutPolicyAction = null,
             shouldShowUnlockActionCard = false,
+            removeUnlockWithPinPolicyEnabled = false,
         )
     },
 ) {
@@ -106,6 +108,16 @@ class AccountSecurityViewModel @Inject constructor(
                     vaultTimeoutPolicies = policies.mapNotNull {
                         it.policyInformation as? PolicyInformation.VaultTimeout
                     },
+                )
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN)
+            .map { policies ->
+                AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive(
+                    removeUnlockWithPinPolicyEnabled = policies.isNotEmpty(),
                 )
             }
             .onEach(::sendAction)
@@ -172,8 +184,12 @@ class AccountSecurityViewModel @Inject constructor(
         is AccountSecurityAction.CustomVaultTimeoutSelect -> handleCustomVaultTimeoutSelect(action)
         is AccountSecurityAction.VaultTimeoutActionSelect -> handleVaultTimeoutActionSelect(action)
         AccountSecurityAction.TwoStepLoginClick -> handleTwoStepLoginClick()
-        is AccountSecurityAction.UnlockWithBiometricToggle -> {
-            handleUnlockWithBiometricToggle(action)
+        AccountSecurityAction.UnlockWithBiometricToggleDisabled -> {
+            handleUnlockWithBiometricToggleDisabled()
+        }
+
+        is AccountSecurityAction.UnlockWithBiometricToggleEnabled -> {
+            handleUnlockWithBiometricToggleEnabled(action)
         }
 
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
@@ -210,7 +226,9 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleConfirmLogoutClick() {
         mutableStateFlow.update { it.copy(dialog = null) }
-        authRepository.logout()
+        authRepository.logout(
+            reason = LogoutReason.Click(source = "AccountSecurityViewModel"),
+        )
     }
 
     private fun handleDeleteAccountClick() {
@@ -250,7 +268,7 @@ class AccountSecurityViewModel @Inject constructor(
     }
 
     private fun handleLockNowClick() {
-        vaultRepository.lockVaultForCurrentUser()
+        vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
     }
 
     private fun handlePushNotificationConfirm() {
@@ -313,24 +331,24 @@ class AccountSecurityViewModel @Inject constructor(
         sendEvent(AccountSecurityEvent.NavigateToTwoStepLogin(webSettingsUrl))
     }
 
-    private fun handleUnlockWithBiometricToggle(
-        action: AccountSecurityAction.UnlockWithBiometricToggle,
+    private fun handleUnlockWithBiometricToggleDisabled() {
+        biometricsEncryptionManager.clearBiometrics(userId = state.userId)
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+        validateVaultTimeoutAction()
+    }
+
+    private fun handleUnlockWithBiometricToggleEnabled(
+        action: AccountSecurityAction.UnlockWithBiometricToggleEnabled,
     ) {
-        if (action.enabled) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
-                    isUnlockWithBiometricsEnabled = true,
-                )
-            }
-            viewModelScope.launch {
-                val result = settingsRepository.setupBiometricsKey()
-                sendAction(AccountSecurityAction.Internal.BiometricsKeyResultReceive(result))
-            }
-        } else {
-            settingsRepository.clearBiometricsKey()
-            mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
-            validateVaultTimeoutAction()
+        mutableStateFlow.update {
+            it.copy(
+                dialog = AccountSecurityDialog.Loading(R.string.saving.asText()),
+                isUnlockWithBiometricsEnabled = true,
+            )
+        }
+        viewModelScope.launch {
+            val result = settingsRepository.setupBiometricsKey(cipher = action.cipher)
+            sendAction(AccountSecurityAction.Internal.BiometricsKeyResultReceive(result = result))
         }
     }
 
@@ -350,7 +368,7 @@ class AccountSecurityViewModel @Inject constructor(
                 settingsRepository.storeUnlockPin(
                     pin = state.pin,
                     shouldRequireMasterPasswordOnRestart =
-                    state.shouldRequireMasterPasswordOnRestart,
+                        state.shouldRequireMasterPasswordOnRestart,
                 )
             }
         }
@@ -386,6 +404,20 @@ class AccountSecurityViewModel @Inject constructor(
             is AccountSecurityAction.Internal.PinProtectedLockUpdate -> {
                 handlePinProtectedLockUpdate(action)
             }
+
+            is AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive -> {
+                handleRemovePinPolicyUpdate(action)
+            }
+        }
+    }
+
+    private fun handleRemovePinPolicyUpdate(
+        action: AccountSecurityAction.Internal.RemovePinPolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                removeUnlockWithPinPolicyEnabled = action.removeUnlockWithPinPolicyEnabled,
+            )
         }
     }
 
@@ -435,7 +467,7 @@ class AccountSecurityViewModel @Inject constructor(
         action: AccountSecurityAction.Internal.BiometricsKeyResultReceive,
     ) {
         when (action.result) {
-            BiometricsKeyResult.Error -> {
+            is BiometricsKeyResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = null,
@@ -520,6 +552,7 @@ data class AccountSecurityState(
     val vaultTimeoutPolicyMinutes: Int?,
     val vaultTimeoutPolicyAction: String?,
     val shouldShowUnlockActionCard: Boolean,
+    val removeUnlockWithPinPolicyEnabled: Boolean,
 ) : Parcelable {
     /**
      * Indicates that there is a mechanism for unlocking your vault in place.
@@ -717,10 +750,15 @@ sealed class AccountSecurityAction {
     data object TwoStepLoginClick : AccountSecurityAction()
 
     /**
-     * User toggled the unlock with biometrics switch.
+     * User toggled the unlock with biometrics switch to off.
      */
-    data class UnlockWithBiometricToggle(
-        val enabled: Boolean,
+    data object UnlockWithBiometricToggleDisabled : AccountSecurityAction()
+
+    /**
+     * User toggled the unlock with biometrics switch to on.
+     */
+    data class UnlockWithBiometricToggleEnabled(
+        val cipher: Cipher,
     ) : AccountSecurityAction()
 
     /**
@@ -776,6 +814,13 @@ sealed class AccountSecurityAction {
          */
         data class PolicyUpdateReceive(
             val vaultTimeoutPolicies: List<PolicyInformation.VaultTimeout>?,
+        ) : Internal()
+
+        /**
+         * A remove pin policy update has been received.
+         */
+        data class RemovePinPolicyUpdateReceive(
+            val removeUnlockWithPinPolicyEnabled: Boolean,
         ) : Internal()
 
         /**

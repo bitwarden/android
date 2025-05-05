@@ -157,6 +157,18 @@ val bitwardenTypography: BitwardenTypography = BitwardenTypography(
         ),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
     ),
+    bodyMediumEmphasis = TextStyle(
+        fontSize = 13.sp,
+        lineHeight = 18.sp,
+        fontFamily = FontFamily(Font(R.font.dm_sans_regular)),
+        fontWeight = FontWeight.W700,
+        letterSpacing = 0.sp,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None,
+        ),
+        platformStyle = PlatformTextStyle(includeFontPadding = false),
+    ),
     bodySmall = TextStyle(
         fontSize = 12.sp,
         lineHeight = 16.sp,

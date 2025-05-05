@@ -16,10 +16,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
@@ -50,6 +50,8 @@ class LandingScreenTest : BaseComposeTest() {
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
     private var onNavigateToStartRegistrationCalled = false
+    private var onNavigateToPreAuthSettingsCalled = false
+
     private val mutableEventFlow = bufferedMutableSharedFlow<LandingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LandingViewModel>(relaxed = true) {
@@ -59,7 +61,7 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             LandingScreen(
                 onNavigateToCreateAccount = { onNavigateToCreateAccountCalled = true },
                 onNavigateToLogin = { capturedEmail ->
@@ -68,6 +70,7 @@ class LandingScreenTest : BaseComposeTest() {
                 },
                 onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
                 onNavigateToStartRegistration = { onNavigateToStartRegistrationCalled = true },
+                onNavigateToPreAuthSettings = { onNavigateToPreAuthSettingsCalled = true },
                 viewModel = viewModel,
             )
         }
@@ -245,17 +248,17 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `remember me should be toggled on or off according to the state`() {
-        composeTestRule.onNodeWithText("Remember me").assertIsOff()
+        composeTestRule.onNodeWithText("Remember email").assertIsOff()
 
-        mutableStateFlow.update { it.copy(isRememberMeEnabled = true) }
+        mutableStateFlow.update { it.copy(isRememberEmailEnabled = true) }
 
-        composeTestRule.onNodeWithText("Remember me").assertIsOn()
+        composeTestRule.onNodeWithText("Remember email").assertIsOn()
     }
 
     @Test
     fun `remember me click should send RememberMeToggle action`() {
         composeTestRule
-            .onNodeWithText("Remember me")
+            .onNodeWithText("Remember email")
             .performClick()
         verify {
             viewModel.trySendAction(LandingAction.RememberMeToggle(true))
@@ -264,9 +267,33 @@ class LandingScreenTest : BaseComposeTest() {
 
     @Test
     fun `create account click should send CreateAccountClick action`() {
-        composeTestRule.onNodeWithText("Create account").performScrollTo().performClick()
+        composeTestRule.onNodeWithText("Create an account").performScrollTo().performClick()
         verify {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
+        }
+    }
+
+    @Test
+    fun `app settings button should be displayed according to state`() {
+        mutableStateFlow.update { it.copy(showSettingsButton = false) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .assertDoesNotExist()
+        mutableStateFlow.update { it.copy(showSettingsButton = true) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .assertExists()
+    }
+
+    @Test
+    fun `on app settings click should send AppSettingsClick action`() {
+        mutableStateFlow.update { it.copy(showSettingsButton = true) }
+        composeTestRule
+            .onNodeWithText(text = "App settings")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(LandingAction.AppSettingsClick)
         }
     }
 
@@ -312,6 +339,18 @@ class LandingScreenTest : BaseComposeTest() {
     fun `NavigateToEnvironment event should call onNavigateToEvent`() {
         mutableEventFlow.tryEmit(LandingEvent.NavigateToEnvironment)
         assertTrue(onNavigateToEnvironmentCalled)
+    }
+
+    @Test
+    fun `NavigateToStartRegistration event should call onNavigateToStartRegistration`() {
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToStartRegistration)
+        assertTrue(onNavigateToStartRegistrationCalled)
+    }
+
+    @Test
+    fun `NavigateToSettings event should call onNavigateToPreAuthSettings`() {
+        mutableEventFlow.tryEmit(LandingEvent.NavigateToSettings)
+        assertTrue(onNavigateToPreAuthSettingsCalled)
     }
 
     @Test
@@ -473,9 +512,10 @@ private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
 private val DEFAULT_STATE = LandingState(
     emailInput = "",
     isContinueButtonEnabled = true,
-    isRememberMeEnabled = false,
+    isRememberEmailEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
     selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
+    showSettingsButton = false,
 )

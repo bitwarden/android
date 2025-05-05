@@ -1,16 +1,19 @@
 package com.x8bit.bitwarden.data.auth.repository
 
+import com.bitwarden.network.model.GetTokenResponseJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
+import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
@@ -36,7 +39,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -230,9 +232,32 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     ): LoginResult
 
     /**
+     * Repeat the previous login attempt but this time with New Device OTP
+     * information. Password is included if available to unlock the vault after
+     * authentication. Updated access token will be reflected in [authStateFlow].
+     */
+    suspend fun login(
+        email: String,
+        password: String?,
+        newDeviceOtp: String,
+        captchaToken: String?,
+        orgIdentifier: String?,
+    ): LoginResult
+
+    /**
+     * Continue the previously halted login attempt.
+     */
+    suspend fun continueKeyConnectorLogin(): LoginResult
+
+    /**
+     * Cancel the previously halted login attempt.
+     */
+    fun cancelKeyConnectorLogin()
+
+    /**
      * Log out the current user.
      */
-    fun logout()
+    fun logout(reason: LogoutReason)
 
     /**
      * Requests that a one-time passcode be sent to the user's email.
@@ -250,6 +275,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Resend the email with the two-factor verification code.
      */
     suspend fun resendVerificationCodeEmail(): ResendEmailResult
+
+    /**
+     * Resend the email with the new device verification code.
+     */
+    suspend fun resendNewDeviceOtp(): ResendEmailResult
 
     /**
      * Switches to the account corresponding to the given [userId] if possible.
@@ -361,8 +391,10 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
 
     /**
      * Get the password strength for the given [email] and [password] combo.
+     * If no value is passed for the [email] will use the active email of the current active
+     * account via the [userStateFlow].
      */
-    suspend fun getPasswordStrength(email: String, password: String): PasswordStrengthResult
+    suspend fun getPasswordStrength(email: String? = null, password: String): PasswordStrengthResult
 
     /**
      * Validates the master password for the current logged in user.
@@ -400,5 +432,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Update the value of the onboarding status for the user.
      */
-    fun setOnboardingStatus(userId: String, status: OnboardingStatus?)
+    fun setOnboardingStatus(status: OnboardingStatus)
+
+    /**
+     * Leaves the organization that matches the given [organizationId]
+     */
+    suspend fun leaveOrganization(
+        organizationId: String,
+    ): LeaveOrganizationResult
 }

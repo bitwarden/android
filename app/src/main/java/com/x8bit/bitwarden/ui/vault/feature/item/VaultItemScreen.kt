@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,11 +39,13 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
+import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultIdentityItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultSshKeyItemTypeHandlers
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 
 /**
  * Displays the vault item screen.
@@ -56,7 +57,7 @@ fun VaultItemScreen(
     viewModel: VaultItemViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateToVaultAddEditItem: (vaultItemId: String, isClone: Boolean) -> Unit,
+    onNavigateToVaultAddEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToMoveToOrganization: (vaultItemId: String, showOnlyCollections: Boolean) -> Unit,
     onNavigateToAttachments: (vaultItemId: String) -> Unit,
     onNavigateToPasswordHistory: (vaultItemId: String) -> Unit,
@@ -80,7 +81,16 @@ fun VaultItemScreen(
             VaultItemEvent.NavigateBack -> onNavigateBack()
 
             is VaultItemEvent.NavigateToAddEdit -> {
-                onNavigateToVaultAddEditItem(event.itemId, event.isClone)
+                onNavigateToVaultAddEditItem(
+                    VaultAddEditArgs(
+                        vaultAddEditType = if (event.isClone) {
+                            VaultAddEditType.CloneItem(vaultItemId = event.itemId)
+                        } else {
+                            VaultAddEditType.EditItem(vaultItemId = event.itemId)
+                        },
+                        vaultItemCipherType = event.type,
+                    ),
+                )
             }
 
             is VaultItemEvent.NavigateToPasswordHistory -> {
@@ -127,11 +137,7 @@ fun VaultItemScreen(
             }
         },
         onConfirmDeleteClick = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemAction.Common.ConfirmDeleteClick,
-                )
-            }
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
         },
         onConfirmCloneWithoutFido2Credential = remember(viewModel) {
             {
@@ -141,9 +147,7 @@ fun VaultItemScreen(
             }
         },
         onConfirmRestoreAction = remember(viewModel) {
-            {
-                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
-            }
+            { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
         },
     )
 
@@ -154,7 +158,7 @@ fun VaultItemScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.view_item),
+                title = state.title(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
@@ -257,7 +261,6 @@ fun VaultItemScreen(
         VaultItemContent(
             viewState = state.viewState,
             modifier = Modifier
-                .imePadding()
                 .fillMaxSize(),
             vaultCommonItemTypeHandlers = remember(viewModel) {
                 VaultCommonItemTypeHandlers.create(viewModel = viewModel)
@@ -291,6 +294,7 @@ private fun VaultItemDialogs(
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
             title = null,
             message = dialog.message(),
+            throwable = dialog.error,
             onDismissRequest = onDismissRequest,
         )
 
@@ -404,6 +408,7 @@ private fun VaultItemContent(
                     VaultItemSshKeyContent(
                         commonState = viewState.common,
                         sshKeyItemState = viewState.type,
+                        vaultCommonItemTypeHandlers = vaultCommonItemTypeHandlers,
                         vaultSshKeyItemTypeHandlers = vaultSshKeyItemTypeHandlers,
                         modifier = modifier,
                     )

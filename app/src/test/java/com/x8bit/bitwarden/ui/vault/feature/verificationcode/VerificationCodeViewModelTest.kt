@@ -2,6 +2,12 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.net.Uri
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -9,15 +15,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
@@ -39,7 +40,9 @@ import org.junit.jupiter.api.Test
 
 class VerificationCodeViewModelTest : BaseViewModelTest() {
 
-    private val clipboardManager: BitwardenClipboardManager = mockk()
+    private val clipboardManager: BitwardenClipboardManager = mockk {
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
+    }
 
     private val mutableAuthCodeFlow =
         MutableStateFlow<DataState<List<VerificationCodeItem>>>(DataState.Loading)
@@ -103,15 +106,17 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `onCopyClick should call setText on the ClipboardManager`() {
+    fun `onCopyClick should call setText on the ClipboardManager`() = runTest {
         val authCode = "123456"
         val viewModel = createViewModel()
-        every { clipboardManager.setText(text = authCode) } just runs
 
         viewModel.trySendAction(VerificationCodeAction.CopyClick(authCode))
 
         verify(exactly = 1) {
-            clipboardManager.setText(text = authCode)
+            clipboardManager.setText(
+                text = authCode,
+                toastDescriptorOverride = R.string.verification_code_totp.asText(),
+            )
         }
     }
 
@@ -126,13 +131,13 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `LockClick should call lockVaultForCurrentUser`() {
-        every { vaultRepository.lockVaultForCurrentUser() } just runs
+        every { vaultRepository.lockVaultForCurrentUser(any()) } just runs
         val viewModel = createViewModel()
 
         viewModel.trySendAction(VerificationCodeAction.LockClick)
 
         verify(exactly = 1) {
-            vaultRepository.lockVaultForCurrentUser()
+            vaultRepository.lockVaultForCurrentUser(isUserInitiated = true)
         }
     }
 

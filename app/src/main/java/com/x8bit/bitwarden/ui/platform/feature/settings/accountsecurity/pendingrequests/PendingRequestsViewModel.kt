@@ -3,12 +3,12 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -169,7 +169,7 @@ class PendingRequestsViewModel @Inject constructor(
                 }
             }
 
-            AuthRequestsUpdatesResult.Error -> {
+            is AuthRequestsUpdatesResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         authRequests = emptyList(),

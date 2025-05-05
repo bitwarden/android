@@ -14,5 +14,7 @@ sealed class UserFingerprintResult {
     /**
      * There was an error getting the user fingerprint.
      */
-    data object Error : UserFingerprintResult()
+    data class Error(
+        val error: Throwable,
+    ) : UserFingerprintResult()
 }

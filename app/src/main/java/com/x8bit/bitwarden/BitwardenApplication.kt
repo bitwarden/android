@@ -1,13 +1,15 @@
 package com.x8bit.bitwarden
 
 import android.app.Application
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
-import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConfigManager
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -22,6 +24,9 @@ class BitwardenApplication : Application() {
     lateinit var logsManager: LogsManager
 
     @Inject
+    lateinit var networkConnectionManager: NetworkConnectionManager
+
+    @Inject
     lateinit var networkConfigManager: NetworkConfigManager
 
     @Inject
@@ -32,4 +37,9 @@ class BitwardenApplication : Application() {
 
     @Inject
     lateinit var restrictionManager: RestrictionManager
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        Timber.w("onLowMemory")
+    }
 }

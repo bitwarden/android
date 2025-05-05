@@ -6,8 +6,8 @@ import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import javax.crypto.Cipher
 
 /**
@@ -43,14 +43,14 @@ class BiometricsManagerImpl(
         }
 
     override fun promptBiometrics(
-        onSuccess: (cipher: Cipher?) -> Unit,
+        onSuccess: (cipher: Cipher) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
         cipher: Cipher,
     ) {
         configureAndDisplayPrompt(
-            onSuccess = onSuccess,
+            onSuccess = { it?.let(block = onSuccess) ?: onError() },
             onCancel = onCancel,
             onLockOut = onLockOut,
             onError = onError,

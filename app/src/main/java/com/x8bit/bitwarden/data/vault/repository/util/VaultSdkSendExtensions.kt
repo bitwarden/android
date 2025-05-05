@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
+import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
+import com.bitwarden.network.model.SendJsonRequest
+import com.bitwarden.network.model.SendTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 

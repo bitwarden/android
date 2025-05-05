@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
+import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -17,6 +19,21 @@ interface SettingsDiskSource {
      * The currently persisted app language (or `null` if not set).
      */
     var appLanguage: AppLanguage?
+
+    /**
+     * Emits updates that track [AppLanguage].
+     */
+    val appLanguageFlow: Flow<AppLanguage?>
+
+    /**
+     * The currently persisted setting for whether screen capture is allowed.
+     */
+    var screenCaptureAllowed: Boolean?
+
+    /**
+     * Emits updates that track [screenCaptureAllowed].
+     */
+    val screenCaptureAllowedFlow: Flow<Boolean?>
 
     /**
      * Has the initial autofill dialog been shown to the user.
@@ -67,6 +84,16 @@ interface SettingsDiskSource {
      * Emits updates that track [hasUserLoggedInOrCreatedAccount].
      */
     val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
+
+    /**
+     * The current status of whether the flight recorder is enabled.
+     */
+    var flightRecorderData: FlightRecorderDataSet?
+
+    /**
+     * Emits updates that track [flightRecorderData].
+     */
+    val flightRecorderDataFlow: Flow<FlightRecorderDataSet?>
 
     /**
      * Clears all the settings data for the given user.
@@ -232,21 +259,6 @@ interface SettingsDiskSource {
     )
 
     /**
-     * Gets whether or not the given [userId] has enabled screen capture.
-     */
-    fun getScreenCaptureAllowed(userId: String): Boolean?
-
-    /**
-     * Emits updates that track [getScreenCaptureAllowed] for the given [userId].
-     */
-    fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?>
-
-    /**
-     * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
-     */
-    fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)
-
-    /**
      * Records a user sign in for the given [userId]. This data is expected to remain on
      * disk until storage is cleared or the app is uninstalled.
      */
@@ -325,4 +337,75 @@ interface SettingsDiskSource {
      * Emits updates that track [getVaultRegisteredForExport] for the given [userId].
      */
     fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?>
+
+    /**
+     * Gets the number of qualifying add cipher actions for the device.
+     */
+    fun getAddCipherActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed "add" cipher actions taken place on the device.
+     */
+    fun storeAddCipherActionCount(count: Int?)
+
+    /**
+     * Gets the number of qualifying generated result actions for the device.
+     */
+    fun getGeneratedResultActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed generated password or username result actions taken
+     * for the device.
+     */
+    fun storeGeneratedResultActionCount(count: Int?)
+
+    /**
+     * Gets the number of qualifying create send actions for the device.
+     */
+    fun getCreateSendActionCount(): Int?
+
+    /**
+     * Stores the given [count] completed create send actions for the device.
+     */
+    fun storeCreateSendActionCount(count: Int?)
+
+    /**
+     * Gets the Boolean value of if the Add Login CoachMark tour has been interacted with.
+     */
+    fun getShouldShowAddLoginCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Add Login CoachMark tour has been interacted with
+     */
+    fun storeShouldShowAddLoginCoachMark(shouldShow: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "ShouldShowAddLoginCoachMark" value.
+     */
+    fun getShouldShowAddLoginCoachMarkFlow(): Flow<Boolean?>
+
+    /**
+     * Gets the Boolean value of if the Generator CoachMark tour has been interacted with.
+     */
+    fun getShouldShowGeneratorCoachMark(): Boolean?
+
+    /**
+     * Stores a value for if the Generator CoachMark tour has been interacted with
+     */
+    fun storeShouldShowGeneratorCoachMark(shouldShow: Boolean?)
+
+    /**
+     * Returns an [Flow] to observe updates to the "ShouldShowGeneratorCoachMark" value.
+     */
+    fun getShouldShowGeneratorCoachMarkFlow(): Flow<Boolean?>
+
+    /**
+     * Stores the given [screenData] as the screen to resume to identified by [userId].
+     */
+    fun storeAppResumeScreen(userId: String, screenData: AppResumeScreenData?)
+
+    /**
+     * Gets the screen data to resume to for the device identified by [userId] or null if no screen
+     */
+    fun getAppResumeScreen(userId: String): AppResumeScreenData?
 }

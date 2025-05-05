@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.data.repository.model.Environment
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.x8bit.bitwarden.BuildConfig
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import timber.log.Timber
 
 /**
@@ -25,9 +25,6 @@ class LogsManagerImpl(
         set(value) {
             settingsRepository.isCrashLoggingEnabled = value
             Firebase.crashlytics.isCrashlyticsCollectionEnabled = value
-            if (BuildConfig.HAS_LOGS_ENABLED) {
-                Timber.plant(Timber.DebugTree())
-            }
             if (value) {
                 Timber.plant(nonfatalErrorTree)
             } else if (Timber.forest().contains(nonfatalErrorTree)) {
@@ -51,6 +48,9 @@ class LogsManagerImpl(
 
     init {
         legacyAppCenterMigrator.migrateIfNecessary()
+        if (BuildConfig.HAS_LOGS_ENABLED) {
+            Timber.plant(Timber.DebugTree())
+        }
         isEnabled = settingsRepository.isCrashLoggingEnabled
     }
 

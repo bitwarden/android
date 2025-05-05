@@ -74,31 +74,8 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `OnboardingFeatureFlagUpdated should update showNewOnboardingUi in state`() {
-        val viewModel = createViewModel()
-        mutableFeatureFlagFlow.value = true
-        val expectedState = DEFAULT_STATE.copy(
-            showNewOnboardingUi = true,
-        )
-        assertEquals(expectedState, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `OnLoginClick action should send NavigateToLanding event`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.LoginClick)
-            assertEquals(
-                CheckEmailEvent.NavigateBackToLanding,
-                awaitItem(),
-            )
-        }
-    }
-
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =
         CheckEmailViewModel(
-            featureFlagManager = featureFlagManager,
             savedStateHandle = SavedStateHandle().also {
                 it["email"] = EMAIL
                 it["state"] = state
@@ -109,7 +86,6 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
         private const val EMAIL = "test@gmail.com"
         private val DEFAULT_STATE = CheckEmailState(
             email = EMAIL,
-            showNewOnboardingUi = false,
         )
     }
 }

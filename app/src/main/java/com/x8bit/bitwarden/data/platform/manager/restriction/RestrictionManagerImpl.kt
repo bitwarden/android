@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.RestrictionsManager
 import android.os.Bundle
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.data.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.manager.AppStateManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

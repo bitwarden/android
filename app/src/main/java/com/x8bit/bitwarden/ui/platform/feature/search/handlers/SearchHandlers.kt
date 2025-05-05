@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.handlers
 
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.ui.platform.feature.search.MasterPasswordRepromptData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchAction
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchViewModel
@@ -12,7 +13,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 data class SearchHandlers(
     val onBackClick: () -> Unit,
     val onDismissRequest: () -> Unit,
-    val onItemClick: (String) -> Unit,
+    val onItemClick: (cipherId: String, cipherType: CipherType?) -> Unit,
     val onAutofillItemClick: (String) -> Unit,
     val onAutofillAndSaveItemClick: (String) -> Unit,
     val onMasterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
@@ -30,7 +31,14 @@ data class SearchHandlers(
             SearchHandlers(
                 onBackClick = { viewModel.trySendAction(SearchAction.BackClick) },
                 onDismissRequest = { viewModel.trySendAction(SearchAction.DismissDialogClick) },
-                onItemClick = { viewModel.trySendAction(SearchAction.ItemClick(it)) },
+                onItemClick = { cipherId, cipherType ->
+                    viewModel.trySendAction(
+                        SearchAction.ItemClick(
+                            itemId = cipherId,
+                            cipherType = cipherType,
+                        ),
+                    )
+                },
                 onAutofillItemClick = {
                     viewModel.trySendAction(SearchAction.AutofillItemClick(it))
                 },

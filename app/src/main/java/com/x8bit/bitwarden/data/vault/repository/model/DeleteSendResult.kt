@@ -13,5 +13,5 @@ sealed class DeleteSendResult {
     /**
      * Generic error while deleting a send.
      */
-    data object Error : DeleteSendResult()
+    data class Error(val error: Throwable) : DeleteSendResult()
 }

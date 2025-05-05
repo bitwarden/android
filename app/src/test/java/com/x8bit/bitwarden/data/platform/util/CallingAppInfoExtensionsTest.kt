@@ -31,46 +31,6 @@ class CallingAppInfoExtensionsTest {
     }
 
     @Test
-    fun `getFido2RpOrNull should return null when origin is populated with invalid URI`() {
-        val mockCallingAppInfo = mockk<CallingAppInfo> {
-            every { isOriginPopulated() } returns true
-            every { origin } returns "invalidUri9685%^$^&(*"
-        }
-
-        assertNull(mockCallingAppInfo.getFido2RpIdOrNull())
-    }
-
-    @Test
-    fun `getFido2RpOrNull should return origin when origin is populated`() {
-        val mockCallingAppInfo = mockk<CallingAppInfo> {
-            every { isOriginPopulated() } returns true
-            every { origin } returns "mockUri"
-        }
-
-        assertEquals("mockUri", mockCallingAppInfo.getFido2RpIdOrNull())
-    }
-
-    @Test
-    fun `getFido2RpOrNull should return null when origin is null`() {
-        val mockCallingAppInfo = mockk<CallingAppInfo> {
-            every { isOriginPopulated() } returns true
-            every { origin } returns null
-        }
-
-        assertNull(mockCallingAppInfo.getFido2RpIdOrNull())
-    }
-
-    @Test
-    fun `getFido2RpOrNull should return package name when origin is not populated`() {
-        val mockCallingAppInfo = mockk<CallingAppInfo> {
-            every { isOriginPopulated() } returns false
-            every { packageName } returns "mockPackageName"
-        }
-
-        assertEquals("mockPackageName", mockCallingAppInfo.getFido2RpIdOrNull())
-    }
-
-    @Test
     fun `getCallingAppApkFingerprint should return key hash`() {
         val mockMessageDigest = mockk<MessageDigest> {
             every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
@@ -85,7 +45,7 @@ class CallingAppInfoExtensionsTest {
         val appInfo = mockk<CallingAppInfo> {
             every { packageName } returns "packageName"
             every { signingInfo } returns mockSigningInfo
-            every { origin } returns null
+            every { getOrigin(any()) } returns null
         }
         assertEquals(
             DEFAULT_SIGNATURE_HASH,
@@ -107,7 +67,7 @@ class CallingAppInfoExtensionsTest {
         val appInfo = mockk<CallingAppInfo> {
             every { packageName } returns "packageName"
             every { signingInfo } returns mockSigningInfo
-            every { origin } returns null
+            every { getOrigin(any()) } returns null
         }
         assertNull(appInfo.getSignatureFingerprintAsHexString())
     }
@@ -120,7 +80,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Success,
+            Fido2ValidateOriginResult.Success("origin"),
             mockAppInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),
@@ -164,7 +124,7 @@ class CallingAppInfoExtensionsTest {
     fun `validatePrivilegedApp should return PrivilegedAppNotAllowed when calling app is not present in allow list`() {
         val appInfo = mockk<CallingAppInfo> {
             every { packageName } returns "packageName"
-            every { origin } returns "origin"
+            every { getOrigin(any()) } returns "origin"
         }
 
         assertEquals(

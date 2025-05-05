@@ -6,13 +6,15 @@ import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,7 +39,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             TrustedDeviceScreen(
                 viewModel = viewModel,
                 onNavigateToAdminApproval = { onNavigateToAdminApprovalEmail = it },
@@ -245,17 +247,17 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
 
     @Test
     fun `dialog should update according to state`() {
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.assertNoPopupExists()
 
         mutableStateFlow.update {
             it.copy(
                 dialogState = TrustedDeviceState.DialogState.Loading(message = "Loading".asText()),
             )
         }
-        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+        composeTestRule.onNode(isPopup()).assertIsDisplayed()
         composeTestRule
             .onNodeWithText(text = "Loading")
-            .assert(hasAnyAncestor(isDialog()))
+            .assert(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -263,6 +265,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
                 dialogState = TrustedDeviceState.DialogState.Error(
                     title = "Hello".asText(),
                     message = "World".asText(),
+                    error = null,
                 ),
             )
         }
@@ -277,7 +280,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.assertNoPopupExists()
     }
 }
 

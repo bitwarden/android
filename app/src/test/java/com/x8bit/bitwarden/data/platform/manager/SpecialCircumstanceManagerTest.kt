@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import io.mockk.every
 import io.mockk.mockk
@@ -55,7 +55,7 @@ class SpecialCircumstanceManagerTest {
 
                 specialCircumstanceManager.specialCircumstance = preLoginSpecialCircumstance
                 assertEquals(preLoginSpecialCircumstance, awaitItem())
-                val mockUserAccount = mockk<UserState.Account>() {
+                val mockUserAccount = mockk<UserState.Account> {
                     every { isLoggedIn } returns true
                 }
                 val mockUserState = mockk<UserState> {
@@ -76,7 +76,7 @@ class SpecialCircumstanceManagerTest {
 
                 specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
                 assertEquals(SpecialCircumstance.VaultShortcut, awaitItem())
-                val mockUserAccount = mockk<UserState.Account>() {
+                val mockUserAccount = mockk<UserState.Account> {
                     every { isLoggedIn } returns true
                 }
                 val mockUserState = mockk<UserState> {

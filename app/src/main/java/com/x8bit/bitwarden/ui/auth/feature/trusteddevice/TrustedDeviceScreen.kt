@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,11 +17,13 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,12 +31,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.handlers.TrustedDeviceHandlers
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -118,15 +121,16 @@ private fun TrustedDeviceScaffold(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
             BitwardenSwitch(
                 label = stringResource(id = R.string.remember_this_device),
-                description = stringResource(id = R.string.turn_off_using_public_device),
+                supportingText = stringResource(id = R.string.turn_off_using_public_device),
                 isChecked = state.isRemembered,
                 onCheckedChange = handlers.onRememberToggle,
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
                     .testTag("RememberThisDeviceSwitch")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -136,7 +140,7 @@ private fun TrustedDeviceScaffold(
                     label = stringResource(id = R.string.continue_text),
                     onClick = handlers.onContinueClick,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -148,7 +152,7 @@ private fun TrustedDeviceScaffold(
                     onClick = handlers.onApproveWithDeviceClick,
                     modifier = Modifier
                         .testTag("ApproveWithOtherDeviceButton")
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -159,7 +163,7 @@ private fun TrustedDeviceScaffold(
                     label = stringResource(id = R.string.request_admin_approval),
                     onClick = handlers.onApproveWithAdminClick,
                     modifier = Modifier
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth()
                         .testTag("RequestAdminApprovalButton"),
                 )
@@ -172,7 +176,7 @@ private fun TrustedDeviceScaffold(
                     onClick = handlers.onApproveWithPasswordClick,
                     modifier = Modifier
                         .testTag("ApproveWithMasterPasswordButton")
-                        .padding(horizontal = 16.dp)
+                        .standardHorizontalMargin()
                         .fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -187,9 +191,10 @@ private fun TrustedDeviceScaffold(
                 ),
                 style = BitwardenTheme.typography.bodyMedium,
                 color = BitwardenTheme.colorScheme.text.secondary,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .testTag("LoggingInAsLabel")
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
@@ -198,9 +203,12 @@ private fun TrustedDeviceScaffold(
                 onClick = handlers.onNotYouButtonClick,
                 style = BitwardenTheme.typography.labelLarge,
                 innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                modifier = Modifier.testTag("NotYouLabel"),
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+                    .testTag("NotYouLabel"),
             )
 
+            Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -215,6 +223,7 @@ private fun TrustedDeviceDialogs(
         is TrustedDeviceState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = handlers.onDismissDialog,
         )
 

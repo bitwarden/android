@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -19,10 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -33,15 +33,15 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun AttachmentItemContent(
     attachmentItem: VaultItemState.ViewState.Content.Common.AttachmentItem,
     onAttachmentDownloadClick: (VaultItemState.ViewState.Content.Common.AttachmentItem) -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     var shouldShowPremiumWarningDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowSizeWarningDialog by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = modifier
-            .bottomDivider()
-            .defaultMinSize(minHeight = 56.dp)
-            .padding(vertical = 8.dp)
+            .defaultMinSize(minHeight = 60.dp)
+            .cardStyle(cardStyle = cardStyle, paddingStart = 16.dp)
             .testTag("CipherAttachment"),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -51,7 +51,8 @@ fun AttachmentItemContent(
             style = BitwardenTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
                 .testTag("AttachmentNameLabel"),
         )
 

@@ -18,9 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -37,12 +39,16 @@ fun PasswordHistoryListItem(
     label: String,
     supportingLabel: String,
     onCopyClick: () -> Unit,
+    cardStyle: CardStyle,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier
-            .padding(vertical = 16.dp)
-            .then(modifier),
+        modifier = modifier
+            .cardStyle(
+                cardStyle = cardStyle,
+                paddingStart = 16.dp,
+                paddingEnd = 4.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(1f)) {
@@ -90,6 +96,7 @@ private fun PasswordHistoryListItem_preview() {
             label = "8gr6uY8CLYQwzr#",
             supportingLabel = "8/24/2023 11:07 AM",
             onCopyClick = {},
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),

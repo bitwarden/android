@@ -4,6 +4,15 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
@@ -16,7 +25,6 @@ import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySele
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -27,10 +35,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
@@ -45,14 +49,13 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -88,7 +91,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
-        every { setText(any<String>()) } just runs
+        every { setText(text = any<String>(), toastDescriptorOverride = any<Text>()) } just runs
     }
     private val policyManager: PolicyManager = mockk<PolicyManager> {
         every {
@@ -195,8 +198,19 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item without totp should emit NavigateToViewCipher`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
-            assertEquals(SearchEvent.NavigateToViewCipher(cipherId = "mock"), awaitItem())
+            viewModel.trySendAction(
+                SearchAction.ItemClick(
+                    itemId = "mock",
+                    cipherType = CipherType.LOGIN,
+                ),
+            )
+            assertEquals(
+                SearchEvent.NavigateToViewCipher(
+                    cipherId = "mock",
+                    cipherType = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -206,8 +220,16 @@ class SearchViewModelTest : BaseViewModelTest() {
             SpecialCircumstance.AddTotpLoginItem(mockk())
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
-            assertEquals(SearchEvent.NavigateToEditCipher(cipherId = "mock"), awaitItem())
+            viewModel.trySendAction(
+                SearchAction.ItemClick(itemId = "mock", cipherType = CipherType.LOGIN),
+            )
+            assertEquals(
+                SearchEvent.NavigateToEditCipher(
+                    cipherId = "mock",
+                    cipherType = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -215,7 +237,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `ItemClick for send item should emit NavigateToEditSend`() = runTest {
         val viewModel = createViewModel(DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All))
         viewModel.eventFlow.test {
-            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
+            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock", cipherType = null))
             assertEquals(SearchEvent.NavigateToEditSend(sendId = "mock"), awaitItem())
         }
     }
@@ -253,6 +275,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherView = setupForAutofill()
         val cipherId = CIPHER_ID
         val errorMessage = "Server error"
+        val error = Throwable("Oof")
         val updatedCipherView = cipherView.copy(
             login = createMockLoginView(number = 1, clock = clock).copy(
                 uris = listOf(createMockUriView(number = 1)) +
@@ -269,7 +292,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 cipherId = cipherId,
                 cipherView = updatedCipherView,
             )
-        } returns UpdateCipherResult.Error(errorMessage)
+        } returns UpdateCipherResult.Error(errorMessage = errorMessage, error = error)
 
         viewModel.stateFlow.test {
             assertEquals(INITIAL_STATE_FOR_AUTOFILL, awaitItem())
@@ -292,6 +315,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = null,
                             message = errorMessage.asText(),
+                            throwable = error,
                         ),
                     ),
                 awaitItem(),
@@ -420,9 +444,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             setupForAutofill()
             val cipherId = CIPHER_ID
             val password = "password"
+            val error = Throwable("Fail!")
             coEvery {
                 authRepository.validatePassword(password = password)
-            } returns ValidatePasswordResult.Error
+            } returns ValidatePasswordResult.Error(error = error)
             val viewModel = createViewModel()
             assertEquals(
                 INITIAL_STATE_FOR_AUTOFILL,
@@ -443,6 +468,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     dialogState = SearchState.DialogState.Error(
                         title = null,
                         message = R.string.generic_error_message.asText(),
+                        throwable = error,
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -613,7 +639,13 @@ class SearchViewModelTest : BaseViewModelTest() {
                         ),
                     ),
                 )
-                assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
+                assertEquals(
+                    SearchEvent.NavigateToEditCipher(
+                        cipherId = cipherId,
+                        cipherType = VaultItemCipherType.LOGIN,
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
@@ -635,13 +667,20 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
+                                cipherType = CipherType.LOGIN,
                                 requiresPasswordReprompt = true,
                             ),
                         ),
                     ),
                 )
                 // Edit actions should navigate to the Edit screen
-                assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
+                assertEquals(
+                    SearchEvent.NavigateToEditCipher(
+                        cipherId = cipherId,
+                        cipherType = VaultItemCipherType.LOGIN,
+                    ),
+                    awaitItem(),
+                )
             }
         }
 
@@ -660,25 +699,31 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Send CopyUrlClick should call setText on clipboardManager`() {
-        val sendUrl = "www.test.com"
-        every { clipboardManager.setText(sendUrl) } just runs
-        val viewModel = createViewModel()
-        viewModel.trySendAction(
-            SearchAction.OverflowOptionClick(
-                ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
-            ),
-        )
-        verify(exactly = 1) {
-            clipboardManager.setText(text = sendUrl)
+    fun `OverflowOptionClick Send CopyUrlClick should call setText on clipboardManager`() =
+        runTest {
+            val sendUrl = "www.test.com"
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
+                ),
+            )
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = sendUrl,
+                    toastDescriptorOverride = R.string.link.asText(),
+                )
+            }
         }
-    }
 
     @Test
     fun `OverflowOptionClick Send DeleteClick with deleteSend error should display error dialog`() =
         runTest {
+            val error = Throwable("Ahhh")
             val sendId = "sendId1234"
-            coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Error
+            coEvery {
+                vaultRepository.deleteSend(sendId)
+            } returns DeleteSendResult.Error(error = error)
             val viewModel = createViewModel()
 
             viewModel.stateFlow.test {
@@ -701,6 +746,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         dialogState = SearchState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
+                            throwable = error,
                         ),
                     ),
                     awaitItem(),
@@ -749,7 +795,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val sendId = "sendId1234"
             coEvery {
                 vaultRepository.removePasswordSend(sendId)
-            } returns RemovePasswordSendResult.Error(errorMessage = null)
+            } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
 
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
@@ -813,7 +859,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(notes)
+                clipboardManager.setText(
+                    text = notes,
+                    toastDescriptorOverride = R.string.notes.asText(),
+                )
             }
         }
 
@@ -831,7 +880,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(number)
+                clipboardManager.setText(
+                    text = number,
+                    toastDescriptorOverride = R.string.number.asText(),
+                )
             }
         }
 
@@ -854,7 +906,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 1) {
-                clipboardManager.setText(code)
+                clipboardManager.setText(
+                    text = code,
+                    toastDescriptorOverride = R.string.totp.asText(),
+                )
             }
         }
 
@@ -863,10 +918,10 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopyTotpClick with GenerateTotpCode failure should not call setText on the ClipboardManager`() =
         runTest {
             val totpCode = "totpCode"
-
+            val error = Throwable("Fail")
             coEvery {
                 vaultRepository.generateTotp(totpCode, clock.instant())
-            } returns GenerateTotpResult.Error
+            } returns GenerateTotpResult.Error(error = error)
 
             val viewModel = createViewModel()
             viewModel.trySendAction(
@@ -876,7 +931,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             )
 
             verify(exactly = 0) {
-                clipboardManager.setText(text = any<String>())
+                clipboardManager.setText(
+                    text = any<String>(),
+                    toastDescriptorOverride = any<Text>(),
+                )
             }
         }
 
@@ -897,7 +955,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(password)
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
                 )
@@ -921,7 +982,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(securityCode)
+                clipboardManager.setText(
+                    text = securityCode,
+                    toastDescriptorOverride = R.string.security_code.asText(),
+                )
                 organizationEventManager.trackEvent(
                     event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
                 )
@@ -942,7 +1006,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                 ),
             )
             verify(exactly = 1) {
-                clipboardManager.setText(username)
+                clipboardManager.setText(
+                    text = username,
+                    toastDescriptorOverride = R.string.username.asText(),
+                )
             }
         }
 
@@ -955,11 +1022,18 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
                         requiresPasswordReprompt = true,
                     ),
                 ),
             )
-            assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
+            assertEquals(
+                SearchEvent.NavigateToEditCipher(
+                    cipherId = cipherId,
+                    cipherType = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -978,16 +1052,25 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
+    fun `OverflowOptionClick Vault ViewClick should emit NavigateToViewCipher`() = runTest {
         val cipherId = "cipherId-9876"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.ViewClick(
+                        cipherId = cipherId,
+                        cipherType = CipherType.LOGIN,
+                    ),
                 ),
             )
-            assertEquals(SearchEvent.NavigateToViewCipher(cipherId), awaitItem())
+            assertEquals(
+                SearchEvent.NavigateToViewCipher(
+                    cipherId = cipherId,
+                    cipherType = VaultItemCipherType.LOGIN,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -1554,7 +1637,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     viewState = SearchState.ViewState.Loading,
     dialogState = null,
     vaultFilterData = null,
-    baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
+    baseWebSendUrl = "https://send.bitwarden.com/#",
     baseIconUrl = "https://vault.bitwarden.com/icons",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,

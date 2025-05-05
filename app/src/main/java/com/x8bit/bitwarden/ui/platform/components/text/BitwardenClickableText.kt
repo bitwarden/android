@@ -3,15 +3,23 @@ package com.x8bit.bitwarden.ui.platform.components.text
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,27 +41,45 @@ fun BitwardenClickableText(
     onClick: () -> Unit,
     style: TextStyle,
     modifier: Modifier = Modifier,
+    leadingIcon: Painter? = null,
     innerPadding: PaddingValues = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
+    isEnabled: Boolean = true,
     cornerSize: Dp = 28.dp,
     color: Color = BitwardenTheme.colorScheme.text.interaction,
 ) {
-    Text(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .clip(RoundedCornerShape(cornerSize))
+            .defaultMinSize(minHeight = 48.dp)
+            .clip(shape = RoundedCornerShape(size = cornerSize))
             .clickable(
-                indication = ripple(
-                    bounded = true,
-                    color = BitwardenTheme.colorScheme.background.pressed,
-                ),
+                indication = ripple(color = BitwardenTheme.colorScheme.background.pressed),
                 interactionSource = remember { MutableInteractionSource() },
+                enabled = isEnabled,
                 onClick = onClick,
             )
-            .padding(innerPadding),
-        text = label,
-        textAlign = TextAlign.Start,
-        color = color,
-        style = style,
-    )
+            .padding(paddingValues = innerPadding),
+    ) {
+        leadingIcon?.let {
+            Icon(
+                painter = leadingIcon,
+                contentDescription = null,
+                tint = if (isEnabled) {
+                    color
+                } else {
+                    BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                },
+                modifier = Modifier.size(size = 16.dp),
+            )
+            Spacer(modifier = Modifier.width(width = 8.dp))
+        }
+        Text(
+            text = label,
+            textAlign = TextAlign.Start,
+            color = color,
+            style = style,
+        )
+    }
 }
 
 @Preview

@@ -88,6 +88,9 @@
     <compatibility-package
         android:name="com.kiwibrowser.browser.dev"
         android:maxLongVersionCode="10000000000" />
+     <compatibility-package
+        android:name="com.ktllq.play"
+        android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.lemurbrowser.exts"
         android:maxLongVersionCode="10000000000" />
@@ -170,10 +173,16 @@
         android:name="com.yandex.browser"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="com.yjllq.chrome.beta"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="com.yjllq.internet"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.yjllq.kito"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
+        android:name="com.yjllqint.kito"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="com.yujian.ResideMenuDemo"
@@ -239,6 +248,9 @@
         android:name="org.gnu.icecat"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
+        android:name="org.ironfoxoss.ironfox"
+        android:maxLongVersionCode="10000000000" />
+    <compatibility-package
         android:name="org.mozilla.fenix"
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
@@ -273,11 +285,5 @@
         android:maxLongVersionCode="10000000000" />
     <compatibility-package
         android:name="org.ungoogled.chromium.stable"
-        android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="us.spotco.fennec_dos"
-        android:maxLongVersionCode="10000000000" />
-    <compatibility-package
-        android:name="us.spotco.mulch"
         android:maxLongVersionCode="10000000000" />
 </autofill-service>

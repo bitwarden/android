@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.manager.resource
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * Primary implementation of [ResourceManager].

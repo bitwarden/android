@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
@@ -286,6 +287,7 @@ private fun AccountSummaryItem(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .testTag("AccountCell")
+            .requiredHeightIn(min = 60.dp)
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -304,14 +306,14 @@ private fun AccountSummaryItem(
                 painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
                 contentDescription = null,
                 tint = accountSummary.avatarColor,
-                modifier = Modifier.size(40.dp),
+                modifier = Modifier.size(24.dp),
             )
 
             Text(
                 text = accountSummary.initials,
                 style = BitwardenTheme.typography.titleMedium
                     // Do not allow scaling
-                    .copy(fontSize = 16.dp.toUnscaledTextUnit()),
+                    .copy(fontSize = 12.dp.toUnscaledTextUnit()),
                 color = accountSummary.avatarColor.toSafeOverlayColor(),
                 modifier = Modifier.clearAndSetSemantics { },
             )
@@ -436,7 +438,7 @@ private fun AddAccountItem(
 
         Text(
             text = stringResource(id = R.string.add_account),
-            style = BitwardenTheme.typography.bodyLarge,
+            style = BitwardenTheme.typography.labelMedium,
             color = BitwardenTheme.colorScheme.text.interaction,
         )
     }

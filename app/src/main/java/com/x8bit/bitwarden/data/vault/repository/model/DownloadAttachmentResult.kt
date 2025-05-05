@@ -14,5 +14,5 @@ sealed class DownloadAttachmentResult {
     /**
      * The attachment could not be downloaded.
      */
-    data object Failure : DownloadAttachmentResult()
+    data class Failure(val error: Throwable) : DownloadAttachmentResult()
 }

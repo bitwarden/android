@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.util
 
+import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 
 /**
  * Returns a human-readable display label for the given [Environment.Type].

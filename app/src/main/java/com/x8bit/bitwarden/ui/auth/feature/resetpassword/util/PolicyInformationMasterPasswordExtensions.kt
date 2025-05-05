@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.resetpassword.util
 
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 
 /**
  * Convert a list of master password policies into a list of text instructions

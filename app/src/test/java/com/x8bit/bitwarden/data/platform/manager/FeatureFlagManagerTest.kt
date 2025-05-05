@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
+import com.bitwarden.data.datasource.disk.model.ServerConfig
+import com.bitwarden.network.model.ConfigResponseJson
+import com.bitwarden.network.model.ConfigResponseJson.EnvironmentJson
+import com.bitwarden.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
 import com.x8bit.bitwarden.data.platform.util.isServerVersionAtLeast
@@ -27,7 +27,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `sdkFeatureFlags should return set feature flags`() {
-        val expected = mapOf("enableCipherKeyEncryption" to true)
+        val expected = mapOf("enableCipherKeyEncryption" to false)
 
         val actual = manager.sdkFeatureFlags
 

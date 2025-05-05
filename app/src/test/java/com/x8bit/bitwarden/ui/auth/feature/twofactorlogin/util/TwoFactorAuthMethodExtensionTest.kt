@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
+import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -135,8 +135,8 @@ class TwoFactorAuthMethodExtensionTest {
     @Test
     fun `imageRes returns the expected value`() {
         mapOf(
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to null,
-            TwoFactorAuthMethod.EMAIL to null,
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.drawable.img_authenticator,
+            TwoFactorAuthMethod.EMAIL to R.drawable.img_new_device_verification,
             TwoFactorAuthMethod.DUO to null,
             TwoFactorAuthMethod.YUBI_KEY to R.drawable.yubi_key,
             TwoFactorAuthMethod.U2F to null,

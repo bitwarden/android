@@ -1,16 +1,17 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 import org.junit.Assert.assertEquals
+import java.time.Instant
 
 class FakeAuthDiskSource : AuthDiskSource {
 
@@ -54,12 +55,14 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
     private val storedDeviceKey = mutableMapOf<String, String?>()
     private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
+    private val storedBiometricInitVectors = mutableMapOf<String, ByteArray?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedAuthenticationSyncKeys = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
     private val storedOnboardingStatus = mutableMapOf<String, OnboardingStatus?>()
     private val storedShowImportLogins = mutableMapOf<String, Boolean?>()
+    private val storedLastLockTimestampState = mutableMapOf<String, Instant?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -81,6 +84,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
+        storedBiometricInitVectors.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
@@ -221,6 +225,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedPendingAuthRequests[userId] = pendingAuthRequest
     }
 
+    override fun getUserBiometricInitVector(userId: String): ByteArray? =
+        storedBiometricInitVectors[userId]
+
+    override fun storeUserBiometricInitVector(userId: String, iv: ByteArray?) {
+        storedBiometricInitVectors[userId] = iv
+    }
+
     override fun getUserBiometricUnlockKey(userId: String): String? =
         storedBiometricKeys[userId]
 
@@ -297,6 +308,14 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun getShowImportLoginsFlow(userId: String): Flow<Boolean?> =
         getMutableShowImportLoginsFlow(userId)
             .onSubscription { emit(getShowImportLogins(userId)) }
+
+    override fun getLastLockTimestamp(userId: String): Instant? {
+        return storedLastLockTimestampState[userId]
+    }
+
+    override fun storeLastLockTimestamp(userId: String, lastLockTimestamp: Instant?) {
+        storedLastLockTimestampState[userId] = lastLockTimestamp
+    }
 
     /**
      * Assert the the [isTdeLoginComplete] was stored successfully using the [userId].
@@ -408,6 +427,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [iv] was stored successfully using the [userId].
+     */
+    fun assertBiometricInitVector(userId: String, iv: ByteArray?) {
+        assertEquals(iv, storedBiometricInitVectors[userId])
+    }
+
+    /**
      * Assert that the [biometricsKey] was stored successfully using the [userId].
      */
     fun assertBiometricsKey(userId: String, biometricsKey: String?) {
@@ -439,6 +465,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         policies: List<SyncResponseJson.Policy>?,
     ) {
         assertEquals(policies, storedPolicies[userId])
+    }
+
+    /**
+     * Assert that the last lock timestamp was stored successfully using the [userId].
+     */
+    fun assertLastLockTimestamp(userId: String, expectedValue: Instant?) {
+        assertEquals(expectedValue, storedLastLockTimestampState[userId])
     }
 
     //region Private helper functions

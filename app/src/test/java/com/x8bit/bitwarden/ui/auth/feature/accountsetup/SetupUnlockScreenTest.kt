@@ -2,24 +2,27 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -63,10 +66,11 @@ class SetupUnlockScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+        ) {
             SetupUnlockScreen(
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
             )
         }
@@ -84,7 +88,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         @Suppress("MaxLineLength")
         composeTestRule
             .onNodeWithText(
-                text = "Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.",
+                text = "Set up biometrics or choose a PIN code to quickly access your vault and Autofill your logins.",
             )
             .performScrollTo()
             .assertExists()
@@ -112,7 +116,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleDisabled`() {
         mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = true) }
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
@@ -120,7 +124,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .assertIsOn()
             .performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleDisabled)
         }
     }
 
@@ -187,8 +191,9 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggleEnabled on success`() {
         composeTestRule
             .onNodeWithText(text = "Unlock with Biometrics")
             .performScrollTo()
@@ -204,7 +209,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsOff()
         verify(exactly = 1) {
-            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true))
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggleEnabled(CIPHER))
         }
     }
 
@@ -253,8 +258,8 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
         composeTestRule
             .onAllNodesWithText(
-                text = "Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if " +
-                    "you ever fully log out of the application.",
+                text = "Your PIN must be at least 4 characters. Your PIN settings will be reset " +
+                    "if you ever fully log out of the application.",
             )
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
@@ -302,9 +307,8 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `PIN input dialog Submit click with empty pin should clear the dialog and send UnlockWithPinToggle Disabled`() {
+    fun `PIN input dialog with empty pin should disable submit button`() {
         mutableStateFlow.update {
             it.copy(isUnlockWithPinEnabled = false)
         }
@@ -316,14 +320,7 @@ class SetupUnlockScreenTest : BaseComposeTest() {
         composeTestRule
             .onAllNodesWithText(text = "Submit")
             .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                SetupUnlockAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
-            )
-        }
-        composeTestRule.assertNoDialogExists()
+            .assertIsNotEnabled()
     }
 
     @Suppress("MaxLineLength")
@@ -576,14 +573,14 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     @Test
     fun `Loading Dialog should be displayed according to state`() {
         val title = "title"
-        composeTestRule.assertNoDialogExists()
+        composeTestRule.assertNoPopupExists()
 
         mutableStateFlow.update {
             it.copy(dialogState = SetupUnlockState.DialogState.Loading(title = title.asText()))
         }
         composeTestRule
             .onAllNodesWithText(text = title)
-            .filterToOne(hasAnyAncestor(isDialog()))
+            .filterToOne(hasAnyAncestor(isPopup()))
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }

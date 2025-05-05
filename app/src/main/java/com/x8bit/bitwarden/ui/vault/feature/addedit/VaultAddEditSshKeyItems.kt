@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,32 +14,17 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditSshKeyTypeHandlers
 
 /**
  * The UI for adding and editing a SSH key cipher.
  */
 fun LazyListScope.vaultAddEditSshKeyItems(
-    commonState: VaultAddEditState.ViewState.Content.Common,
     sshKeyState: VaultAddEditState.ViewState.Content.ItemType.SshKey,
-    commonTypeHandlers: VaultAddEditCommonHandlers,
     sshKeyTypeHandlers: VaultAddEditSshKeyTypeHandlers,
 ) {
-    item {
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextField(
-            label = stringResource(id = R.string.name),
-            value = commonState.name,
-            onValueChange = commonTypeHandlers.onNameTextChange,
-            modifier = Modifier
-                .testTag("ItemNameEntry")
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
-    }
-
     item {
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
@@ -48,15 +32,15 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             value = sshKeyState.publicKey,
             readOnly = true,
             onValueChange = { },
+            textFieldTestTag = "PublicKeyEntry",
+            cardStyle = CardStyle.Top(),
             modifier = Modifier
-                .testTag("PublicKeyEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenPasswordField(
             label = stringResource(id = R.string.private_key),
             value = sshKeyState.privateKey,
@@ -65,37 +49,35 @@ fun LazyListScope.vaultAddEditSshKeyItems(
             showPassword = sshKeyState.showPrivateKey,
             showPasswordChange = { sshKeyTypeHandlers.onPrivateKeyVisibilityChange(it) },
             showPasswordTestTag = "ViewPrivateKeyButton",
+            passwordFieldTestTag = "PrivateKeyEntry",
+            cardStyle = CardStyle.Middle(),
             modifier = Modifier
-                .testTag("PrivateKeyEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
     }
 
     item {
-        Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextField(
             label = stringResource(id = R.string.fingerprint),
             value = sshKeyState.fingerprint,
             readOnly = true,
             onValueChange = { /* no-op */ },
+            textFieldTestTag = "FingerprintEntry",
+            cardStyle = CardStyle.Bottom,
             modifier = Modifier
-                .testTag("FingerprintEntry")
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun VaultAddEditSshKeyItems_preview() {
     BitwardenTheme {
         LazyColumn {
             vaultAddEditSshKeyItems(
-                commonState = VaultAddEditState.ViewState.Content.Common(
-                    name = "SSH Key",
-                ),
                 sshKeyState = VaultAddEditState.ViewState.Content.ItemType.SshKey(
                     publicKey = "public key",
                     privateKey = "private key",
@@ -103,20 +85,6 @@ private fun VaultAddEditSshKeyItems_preview() {
                     showPublicKey = false,
                     showPrivateKey = false,
                     showFingerprint = false,
-                ),
-                commonTypeHandlers = VaultAddEditCommonHandlers(
-                    onNameTextChange = { },
-                    onFolderSelected = { },
-                    onToggleFavorite = { },
-                    onToggleMasterPasswordReprompt = { },
-                    onNotesTextChange = { },
-                    onOwnerSelected = { },
-                    onTooltipClick = { },
-                    onAddNewCustomFieldClick = { _, _ -> },
-                    onCustomFieldValueChange = { },
-                    onCustomFieldActionSelect = { _, _ -> },
-                    onCollectionSelect = { },
-                    onHiddenFieldVisibilityChange = { },
                 ),
                 sshKeyTypeHandlers = VaultAddEditSshKeyTypeHandlers(
                     onPrivateKeyVisibilityChange = { },

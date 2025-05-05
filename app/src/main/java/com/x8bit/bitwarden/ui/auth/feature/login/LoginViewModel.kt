@@ -10,13 +10,14 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -108,11 +109,14 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleLockAccountClicked(action: LoginAction.LockAccountClick) {
-        vaultRepository.lockVault(userId = action.accountSummary.userId)
+        vaultRepository.lockVault(userId = action.accountSummary.userId, isUserInitiated = true)
     }
 
     private fun handleLogoutAccountClicked(action: LoginAction.LogoutAccountClick) {
-        authRepository.logout(userId = action.accountSummary.userId)
+        authRepository.logout(
+            userId = action.accountSummary.userId,
+            reason = LogoutReason.Click(source = "LoginViewModel"),
+        )
     }
 
     private fun handleSwitchAccountClicked(action: LoginAction.SwitchAccountClick) {
@@ -143,7 +147,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -165,6 +169,9 @@ class LoginViewModel @Inject constructor(
                 )
             }
 
+            // NO-OP: This result should not be possible here
+            is LoginResult.ConfirmKeyConnectorDomain -> Unit
+
             is LoginResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -172,6 +179,7 @@ class LoginViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = loginResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = loginResult.error,
                         ),
                     )
                 }
@@ -190,6 +198,28 @@ class LoginViewModel @Inject constructor(
 
             is LoginResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
+            }
+
+            LoginResult.CertificateError -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.we_couldnt_verify_the_servers_certificate.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is LoginResult.NewDeviceVerification -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                sendEvent(
+                    LoginEvent.NavigateToTwoFactorLogin(
+                        emailAddress = state.emailAddress,
+                        password = state.passwordInput,
+                        isNewDeviceVerification = true,
+                    ),
+                )
             }
         }
     }
@@ -302,8 +332,9 @@ data class LoginState(
          */
         @Parcelize
         data class Error(
-            val title: Text?,
+            val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -355,6 +386,7 @@ sealed class LoginEvent {
     data class NavigateToTwoFactorLogin(
         val emailAddress: String,
         val password: String?,
+        val isNewDeviceVerification: Boolean = false,
     ) : LoginEvent()
 
     /**

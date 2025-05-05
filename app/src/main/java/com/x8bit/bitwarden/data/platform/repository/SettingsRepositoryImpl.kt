@@ -2,6 +2,9 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import com.bitwarden.authenticatorbridge.util.generateSecretKey
+import com.bitwarden.data.manager.DispatcherManager
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -10,26 +13,22 @@ import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
+import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.flightrecorder.FlightRecorderManager
 import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -37,6 +36,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.Instant
+import javax.crypto.Cipher
 
 private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 
@@ -50,11 +50,12 @@ class SettingsRepositoryImpl(
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    flightRecorderManager: FlightRecorderManager,
     accessibilityEnabledManager: AccessibilityEnabledManager,
     policyManager: PolicyManager,
     dispatcherManager: DispatcherManager,
-) : SettingsRepository {
+) : SettingsRepository,
+    FlightRecorderManager by flightRecorderManager {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -64,6 +65,16 @@ class SettingsRepositoryImpl(
         set(value) {
             settingsDiskSource.appLanguage = value
         }
+
+    override val appLanguageStateFlow: StateFlow<AppLanguage>
+        get() = settingsDiskSource
+            .appLanguageFlow
+            .map { it ?: AppLanguage.DEFAULT }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = appLanguage,
+            )
 
     override var appTheme: AppTheme by settingsDiskSource::appTheme
 
@@ -323,36 +334,19 @@ class SettingsRepositoryImpl(
         autofillEnabledManager.isAutofillEnabledStateFlow
 
     override var isScreenCaptureAllowed: Boolean
-        get() = activeUserId
-            ?.let { settingsDiskSource.getScreenCaptureAllowed(it) }
-            ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
+        get() = settingsDiskSource.screenCaptureAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
         set(value) {
-            val userId = activeUserId ?: return
-            settingsDiskSource.storeScreenCaptureAllowed(
-                userId = userId,
-                isScreenCaptureAllowed = value,
-            )
+            settingsDiskSource.screenCaptureAllowed = value
         }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
-        get() = authDiskSource
-            .userStateFlow
-            .flatMapLatest { userState ->
-                userState
-                    ?.activeUserId
-                    ?.let {
-                        settingsDiskSource.getScreenCaptureAllowedFlow(userId = it)
-                            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
-                    }
-                    ?: flowOf(DEFAULT_IS_SCREEN_CAPTURE_ALLOWED)
-            }
+        get() = settingsDiskSource
+            .screenCaptureAllowedFlow
+            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Lazily,
-                initialValue = activeUserId
-                    ?.let { settingsDiskSource.getScreenCaptureAllowed(userId = it) }
-                    ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
+                initialValue = isScreenCaptureAllowed,
             )
 
     init {
@@ -371,12 +365,13 @@ class SettingsRepositoryImpl(
     }
 
     override suspend fun getUserFingerprint(): UserFingerprintResult {
-        val userId = activeUserId ?: return UserFingerprintResult.Error
+        val userId = activeUserId
+            ?: return UserFingerprintResult.Error(error = NoActiveUserException())
 
         return vaultSdkSource
             .getUserFingerprint(userId)
             .fold(
-                onFailure = { UserFingerprintResult.Error },
+                onFailure = { UserFingerprintResult.Error(error = it) },
                 onSuccess = { UserFingerprintResult.Success(it) },
             )
     }
@@ -482,23 +477,24 @@ class SettingsRepositoryImpl(
         }
     }
 
-    override suspend fun setupBiometricsKey(): BiometricsKeyResult {
-        val userId = activeUserId ?: return BiometricsKeyResult.Error
-        biometricsEncryptionManager.setupBiometrics(userId)
+    override suspend fun setupBiometricsKey(cipher: Cipher): BiometricsKeyResult {
+        val userId = activeUserId
+            ?: return BiometricsKeyResult.Error(error = NoActiveUserException())
         return vaultSdkSource
             .getUserEncryptionKey(userId = userId)
-            .onSuccess {
-                authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = it)
+            .onSuccess { biometricsKey ->
+                authDiskSource.storeUserBiometricUnlockKey(
+                    userId = userId,
+                    biometricsKey = cipher
+                        .doFinal(biometricsKey.encodeToByteArray())
+                        .toString(Charsets.ISO_8859_1),
+                )
+                authDiskSource.storeUserBiometricInitVector(userId = userId, iv = cipher.iv)
             }
             .fold(
                 onSuccess = { BiometricsKeyResult.Success },
-                onFailure = { BiometricsKeyResult.Error },
+                onFailure = { BiometricsKeyResult.Error(error = it) },
             )
-    }
-
-    override fun clearBiometricsKey() {
-        val userId = activeUserId ?: return
-        authDiskSource.storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
     }
 
     override fun storeUnlockPin(

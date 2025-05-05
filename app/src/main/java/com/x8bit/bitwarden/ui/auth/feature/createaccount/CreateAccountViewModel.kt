@@ -4,6 +4,9 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -24,9 +27,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pri
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -128,7 +128,7 @@ class CreateAccountViewModel @Inject constructor(
                 }
             }
 
-            PasswordStrengthResult.Error -> {
+            is PasswordStrengthResult.Error -> {
                 // Leave UI the same
             }
         }
@@ -180,6 +180,7 @@ class CreateAccountViewModel @Inject constructor(
                             title = R.string.an_error_has_occurred.asText(),
                             message = registerAccountResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
+                            error = registerAccountResult.error,
                         ),
                     )
                 }
@@ -464,6 +465,7 @@ sealed class CreateAccountDialog : Parcelable {
     data class Error(
         val title: Text?,
         val message: Text,
+        val error: Throwable? = null,
     ) : CreateAccountDialog()
 }
 

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,13 +40,15 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.image.BitwardenGifImage
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.isPortrait
+import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * Top level composable for the Auto-fill setup screen.
@@ -167,6 +167,7 @@ private fun SetupAutoFillContent(
             ),
             isChecked = state.autofillEnabled,
             onCheckedChange = onAutofillServiceChanged,
+            cardStyle = CardStyle.Full,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -196,21 +197,24 @@ private fun SetupAutoFillContent(
 @Composable
 private fun SetupAutoFillContentHeader(
     modifier: Modifier = Modifier,
-    configuration: Configuration = LocalConfiguration.current,
 ) {
-    if (configuration.isPortrait) {
-        Column(
-            modifier = modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            OrderedHeaderContent()
+    when (rememberWindowSize()) {
+        WindowSize.Compact -> {
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                OrderedHeaderContent()
+            }
         }
-    } else {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            OrderedHeaderContent()
+
+        WindowSize.Medium -> {
+            Row(
+                modifier = modifier,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                OrderedHeaderContent()
+            }
         }
     }
 }

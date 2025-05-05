@@ -1,47 +1,56 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
+import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.provider.CallingAppInfo
+import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.DateTime
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.autofill.fido2.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.CoachMarkTourType
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
-import com.x8bit.bitwarden.ui.platform.base.util.Text
-import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
@@ -49,10 +58,12 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerData
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toAvailableFolders
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.messageResourceId
 import com.x8bit.bitwarden.ui.vault.feature.util.canAssignToCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.hasDeletePermissionInAtLeastOneCollection
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
@@ -62,8 +73,11 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -103,13 +117,17 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
+    private val networkConnectionManager: NetworkConnectionManager,
+    private val firstTimeActionManager: FirstTimeActionManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val vaultAddEditType = VaultAddEditArgs(savedStateHandle).vaultAddEditType
-            val selectedFolderId = VaultAddEditArgs(savedStateHandle).selectedFolderId
-            val selectedCollectionId = VaultAddEditArgs(savedStateHandle).selectedCollectionId
+            val args = VaultAddEditArgs(savedStateHandle = savedStateHandle)
+            val vaultAddEditType = args.vaultAddEditType
+            val vaultCipherType = args.vaultItemCipherType
+            val selectedFolderId = args.selectedFolderId
+            val selectedCollectionId = args.selectedCollectionId
             val isIndividualVaultDisabled = policyManager
                 .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
                 .any()
@@ -121,14 +139,15 @@ class VaultAddEditViewModel @Inject constructor(
             // Check for totp data to pre-populate
             val totpData = specialCircumstance?.toTotpDataOrNull()
             // Check for Fido2 data to pre-populate
-            val fido2CreationRequest = specialCircumstance?.toFido2RequestOrNull()
-            val fido2AttestationOptions = fido2CreationRequest?.let { request ->
-                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request.requestJson)
-            }
+            val fido2CreationRequest = specialCircumstance?.toFido2CreateRequestOrNull()
+            val fido2AttestationOptions = fido2CreationRequest?.requestJson
+                ?.let { request ->
+                    fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request)
+                }
 
             // Exit on save if handling an autofill, Fido2 Attestation, or TOTP link
             val shouldExitOnSave = autofillSaveItem != null ||
-                fido2AttestationOptions != null
+                fido2CreationRequest != null
 
             val dialogState = if (!settingsRepository.initialAutofillDialogShown &&
                 vaultAddEditType is VaultAddEditType.AddItem &&
@@ -141,6 +160,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
+                cipherType = vaultCipherType,
                 viewState = when (vaultAddEditType) {
                     is VaultAddEditType.AddItem -> {
                         autofillSelectionData
@@ -157,7 +177,7 @@ class VaultAddEditViewModel @Inject constructor(
                                     selectedCollectionId = selectedCollectionId,
                                 ),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
-                                type = vaultAddEditType.vaultItemCipherType.toItemType(),
+                                type = vaultCipherType.toItemType(),
                             )
                     }
 
@@ -165,11 +185,14 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = dialogState,
+                bottomSheetState = null,
                 totpData = totpData,
+                fido2CreateCredentialRequest = fido2CreationRequest,
                 // Set special conditions for autofill and fido2 save
-                shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
+                shouldShowCloseButton = autofillSaveItem == null && fido2CreationRequest == null,
                 shouldExitOnSave = shouldExitOnSave,
-                supportedItemTypes = getSupportedItemTypeOptions(),
+                shouldShowCoachMarkTour = false,
+                shouldClearSpecialCircumstance = autofillSelectionData == null,
             )
         },
 ) {
@@ -200,6 +223,12 @@ class VaultAddEditViewModel @Inject constructor(
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
+        vaultRepository
+            .foldersStateFlow
+            .map { VaultAddEditAction.Internal.AvailableFoldersReceive(folderData = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         generatorRepository
             .generatorResultFlow
             .map { result ->
@@ -208,6 +237,16 @@ class VaultAddEditViewModel @Inject constructor(
                     it.viewState is VaultAddEditState.ViewState.Content
                 }
                 VaultAddEditAction.Internal.GeneratorResultReceive(generatorResult = result)
+            }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        firstTimeActionManager
+            .shouldShowAddLoginCoachMarkFlow
+            .map { shouldShowTour ->
+                VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive(
+                    shouldShowCoachMarkTour = shouldShowTour,
+                )
             }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -235,7 +274,6 @@ class VaultAddEditViewModel @Inject constructor(
                 handleCustomFieldValueChange(action)
             }
 
-            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
             is VaultAddEditAction.Common.NameTextChange -> handleNameTextInputChange(action)
             is VaultAddEditAction.Common.NotesTextChange -> handleNotesTextInputChange(action)
             is VaultAddEditAction.Common.OwnershipChange -> handleOwnershipTextInputChange(action)
@@ -251,7 +289,6 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.CloseClick -> handleCloseClick()
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
-            is VaultAddEditAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
             is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
                 handleAddNewCustomFieldClick(action)
             }
@@ -290,8 +327,8 @@ class VaultAddEditViewModel @Inject constructor(
                 handleUserVerificationCancelled()
             }
 
-            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
-                handleFido2ErrorDialogDismissed()
+            is VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
+                handleFido2ErrorDialogDismissed(action)
             }
 
             VaultAddEditAction.Common.UserVerificationNotSupported -> {
@@ -320,76 +357,24 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.DismissFido2VerificationDialogClick -> {
                 handleDismissFido2VerificationDialogClick()
             }
-        }
-    }
 
-    private fun handleTypeOptionSelect(action: VaultAddEditAction.Common.TypeOptionSelect) {
-        when (action.typeOption) {
-            VaultAddEditState.ItemTypeOption.LOGIN -> handleSwitchToAddLoginItem()
-            VaultAddEditState.ItemTypeOption.CARD -> handleSwitchToAddCardItem()
-            VaultAddEditState.ItemTypeOption.IDENTITY -> handleSwitchToAddIdentityItem()
-            VaultAddEditState.ItemTypeOption.SECURE_NOTES -> handleSwitchToAddSecureNotesItem()
-            VaultAddEditState.ItemTypeOption.SSH_KEYS -> handleSwitchToSshKeyItem()
-        }
-    }
+            is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
 
-    private fun handleSwitchToAddLoginItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.LOGIN,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
+            VaultAddEditAction.Common.SelectOrAddFolderForItem -> {
+                handleSelectOrAddFolderForItem()
+            }
 
-    private fun handleSwitchToAddSecureNotesItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SECURE_NOTES,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
+            is VaultAddEditAction.Common.AddNewFolder -> {
+                handleAddNewFolder(action)
+            }
 
-    private fun handleSwitchToAddCardItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.CARD,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
+            VaultAddEditAction.Common.SelectOwnerForItem -> {
+                handleSelectOwnerForItem()
+            }
 
-    private fun handleSwitchToAddIdentityItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.IDENTITY,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
-        }
-    }
-
-    private fun handleSwitchToSshKeyItem() {
-        updateContent { currentContent ->
-            currentContent.copy(
-                common = currentContent.clearNonSharedData(),
-                type = currentContent.previousItemTypeOrDefault(
-                    itemType = VaultAddEditState.ItemTypeOption.SSH_KEYS,
-                ),
-                previousItemTypes = currentContent.toUpdatedPreviousItemTypes(),
-            )
+            VaultAddEditAction.Common.DismissBottomSheet -> {
+                handleDismissBottomSheet()
+            }
         }
     }
 
@@ -408,6 +393,16 @@ class VaultAddEditViewModel @Inject constructor(
                 message = R.string.select_one_collection.asText(),
             )
             return@onContent
+        } else if (
+            !networkConnectionManager.isNetworkConnected
+        ) {
+            showDialog(
+                dialogState = VaultAddEditState.DialogState.Generic(
+                    title = R.string.internet_connection_required_title.asText(),
+                    message = R.string.internet_connection_required_message.asText(),
+                ),
+            )
+            return@onContent
         }
 
         mutableStateFlow.update {
@@ -418,10 +413,12 @@ class VaultAddEditViewModel @Inject constructor(
             )
         }
 
-        specialCircumstanceManager.specialCircumstance
-            ?.toFido2RequestOrNull()
+        state.fido2CreateCredentialRequest
             ?.let { request ->
-                handleFido2RequestSpecialCircumstance(request, content.toCipherView())
+                handleProviderCreateCredentialRequest(
+                    request.providerRequest,
+                    content.toCipherView(),
+                )
                 return@onContent
             }
 
@@ -448,71 +445,79 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleFido2RequestSpecialCircumstance(
-        request: Fido2CreateCredentialRequest,
+    private fun handleProviderCreateCredentialRequest(
+        request: ProviderCreateCredentialRequest,
+        cipherView: CipherView,
+    ) {
+        request
+            .getCreatePasskeyCredentialRequestOrNull()
+            ?.let { handleCreatePublicKeyCredentialRequest(request.callingAppInfo, it, cipherView) }
+            ?: run { handleUnsupportedProviderCreateCredentialRequest() }
+    }
+
+    private fun handleCreatePublicKeyCredentialRequest(
+        callingAppInfo: CallingAppInfo,
+        request: CreatePublicKeyCredentialRequest,
         cipherView: CipherView,
     ) {
         if (cipherView.isActiveWithFido2Credentials) {
             mutableStateFlow.update {
                 it.copy(dialog = VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt)
             }
-        } else {
-            registerFido2Credential(request, cipherView)
-        }
-    }
-
-    private fun registerFido2Credential(
-        request: Fido2CreateCredentialRequest,
-        cipherView: CipherView,
-    ) {
-
-        if (fido2CredentialManager.isUserVerified) {
-            registerFido2CredentialToCipher(request, cipherView)
             return
         }
 
-        val createOptions = fido2CredentialManager
-            .getPasskeyAttestationOptionsOrNull(request.requestJson)
-            ?: run {
-                showFido2ErrorDialog()
-                return
-            }
+        if (fido2CredentialManager.isUserVerified) {
+            registerFido2CredentialToCipher(callingAppInfo, request, cipherView)
+            return
+        }
 
-        when (createOptions.authenticatorSelection.userVerification) {
+        when (val requirement = fido2CredentialManager.getUserVerificationRequirement(request)) {
             UserVerificationRequirement.DISCOURAGED -> {
-                registerFido2CredentialToCipher(request, cipherView)
+                registerFido2CredentialToCipher(callingAppInfo, request, cipherView)
             }
 
-            UserVerificationRequirement.PREFERRED -> {
-                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
-            }
-
-            UserVerificationRequirement.REQUIRED -> {
-                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+            else -> {
+                sendEvent(
+                    VaultAddEditEvent.Fido2UserVerification(
+                        isRequired = requirement == UserVerificationRequirement.REQUIRED,
+                    ),
+                )
             }
         }
     }
 
     private fun registerFido2CredentialToCipher(
-        request: Fido2CreateCredentialRequest,
+        callingAppInfo: CallingAppInfo,
+        request: CreatePublicKeyCredentialRequest,
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
             val userId = authRepository.activeUserId
                 ?: run {
-                    showFido2ErrorDialog()
+                    showFido2ErrorDialog(
+                        R.string.passkey_operation_failed_because_user_could_not_be_verified
+                            .asText(),
+                    )
                     return@launch
                 }
             val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = userId,
-                    fido2CreateCredentialRequest = request,
+                    callingAppInfo = callingAppInfo,
+                    createPublicKeyCredentialRequest = request,
                     selectedCipherView = cipherView,
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
             )
         }
+    }
+
+    private fun handleUnsupportedProviderCreateCredentialRequest() {
+        showFido2ErrorDialog(
+            R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
+        )
     }
 
     private fun handleAttachmentsClick() {
@@ -581,20 +586,27 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleConfirmOverwriteExistingPasskeyClick() {
-        specialCircumstanceManager
-            .specialCircumstance
-            ?.toFido2RequestOrNull()
+        state
+            .fido2CreateCredentialRequest
+            ?.providerRequest
             ?.let { request ->
                 onContent { content ->
-                    registerFido2Credential(request, content.toCipherView())
+                    handleProviderCreateCredentialRequest(
+                        request,
+                        content.toCipherView(),
+                    )
                 }
             }
-            ?: showFido2ErrorDialog()
+            ?: showFido2ErrorDialog(
+                R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+            )
     }
 
     private fun handleUserVerificationLockOut() {
         fido2CredentialManager.isUserVerified = false
-        showFido2ErrorDialog()
+        showFido2ErrorDialog(
+            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+        )
     }
 
     private fun handleUserVerificationSuccess() {
@@ -603,30 +615,35 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun getRequestAndRegisterCredential() =
-        specialCircumstanceManager
-            .specialCircumstance
-            ?.toFido2RequestOrNull()
+        state.fido2CreateCredentialRequest
+            ?.providerRequest
             ?.let { request ->
                 onContent { content ->
-                    registerFido2CredentialToCipher(
+                    handleProviderCreateCredentialRequest(
                         request = request,
                         cipherView = content.toCipherView(),
                     )
                 }
             }
-            ?: showFido2ErrorDialog()
+            ?: showFido2ErrorDialog(
+                R.string.passkey_operation_failed_because_the_request_is_unsupported.asText(),
+            )
 
     private fun handleUserVerificationFail() {
         fido2CredentialManager.isUserVerified = false
-        showFido2ErrorDialog()
+        showFido2ErrorDialog(
+            R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+        )
     }
 
-    private fun handleFido2ErrorDialogDismissed() {
+    private fun handleFido2ErrorDialogDismissed(
+        action: VaultAddEditAction.Common.Fido2ErrorDialogDismissed,
+    ) {
         fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Error,
+                result = RegisterFido2CredentialResult.Error(action.message),
             ),
         )
     }
@@ -636,7 +653,7 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Cancelled,
+                result = RegisterFido2CredentialResult.Cancelled,
             ),
         )
     }
@@ -649,11 +666,13 @@ class VaultAddEditViewModel @Inject constructor(
             .value
             ?.activeAccount
             ?: run {
-                showFido2ErrorDialog()
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                )
                 return
             }
 
-        if (activeAccount.vaultUnlockType == VaultUnlockType.PIN) {
+        if (settingsRepository.isUnlockWithPinEnabled) {
             mutableStateFlow.update {
                 it.copy(dialog = VaultAddEditState.DialogState.Fido2PinPrompt)
             }
@@ -734,7 +753,52 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDismissFido2VerificationDialogClick() {
-        showFido2ErrorDialog()
+        showFido2ErrorDialog(
+            R.string.passkey_operation_failed_because_user_could_not_be_verified
+                .asText(),
+        )
+    }
+
+    private fun handleSelectOrAddFolderForItem() {
+        mutableStateFlow.update {
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection,
+            )
+        }
+    }
+
+    private fun handleSelectOwnerForItem() {
+        mutableStateFlow.update {
+            it.copy(
+                bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection,
+            )
+        }
+    }
+
+    private fun handleDismissBottomSheet() {
+        mutableStateFlow.update {
+            it.copy(
+                bottomSheetState = null,
+            )
+        }
+    }
+
+    private fun handleAddNewFolder(action: VaultAddEditAction.Common.AddNewFolder) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Loading(R.string.saving.asText()),
+            )
+        }
+        viewModelScope.launch {
+            val result = vaultRepository.createFolder(
+                FolderView(
+                    name = action.newFolderName,
+                    id = null,
+                    revisionDate = DateTime.now(),
+                ),
+            )
+            sendAction(VaultAddEditAction.Internal.AddFolderResultReceive(result = result))
+        }
     }
 
     private fun handleAddNewCustomFieldClick(
@@ -835,7 +899,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.FolderChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedFolderId = action.folder.id)
+            commonContent.copy(selectedFolderId = action.folderId)
         }
     }
 
@@ -867,7 +931,7 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Common.OwnershipChange,
     ) {
         updateCommonContent { commonContent ->
-            commonContent.copy(selectedOwnerId = action.ownership.id)
+            commonContent.copy(selectedOwnerId = action.ownerId)
         }
     }
 
@@ -883,7 +947,6 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(VaultAddEditEvent.NavigateToTooltipUri)
     }
 
-    @Suppress("MaxLineLength")
     private fun handleCollectionSelect(
         action: VaultAddEditAction.Common.CollectionSelect,
     ) {
@@ -959,7 +1022,34 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick -> {
                 handleLoginClearFido2Credential()
             }
+
+            VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed -> {
+                handleLearnAboutLoginsDismissed()
+            }
+
+            VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins -> {
+                handleStartLearnAboutLogins()
+            }
+
+            VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick -> {
+                handleAuthenticatorHelpToolTipClick()
+            }
         }
+    }
+
+    private fun handleStartLearnAboutLogins() {
+        coachMarkTourCompleted()
+        sendEvent(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+    }
+
+    private fun handleLearnAboutLoginsDismissed() {
+        coachMarkTourCompleted()
+    }
+
+    private fun coachMarkTourCompleted() {
+        firstTimeActionManager.markCoachMarkTourCompleted(
+            tourCompleted = CoachMarkTourType.ADD_LOGIN,
+        )
     }
 
     private fun handleLoginUsernameTextInputChange(
@@ -1050,7 +1140,10 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginCopyTotpKeyText(
         action: VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick,
     ) {
-        clipboardManager.setText(text = action.totpKey)
+        clipboardManager.setText(
+            text = action.totpKey,
+            toastDescriptorOverride = R.string.authenticator_key.asText(),
+        )
     }
 
     private fun handleLoginClearTotpKey() {
@@ -1437,6 +1530,53 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.ValidateFido2PinResultReceive -> {
                 handleValidateFido2PinResultReceive(action)
             }
+
+            is VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive -> {
+                handleShouldShowAddLoginCoachMarkValueChange(action)
+            }
+
+            is VaultAddEditAction.Internal.AddFolderResultReceive -> handleAddFolderResult(action)
+            is VaultAddEditAction.Internal.AvailableFoldersReceive -> {
+                handleAvailableFoldersReceive(action)
+            }
+        }
+    }
+
+    private fun handleAvailableFoldersReceive(
+        action: VaultAddEditAction.Internal.AvailableFoldersReceive,
+    ) {
+        action
+            .folderData
+            .data
+            ?.let {
+                updateCommonContent { commonContent ->
+                    commonContent.copy(
+                        availableFolders = it.toAvailableFolders(resourceManager = resourceManager),
+                    )
+                }
+            }
+    }
+
+    private fun handleShouldShowAddLoginCoachMarkValueChange(
+        action: VaultAddEditAction.Internal.ShouldShowAddLoginCoachMarkValueChangeReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                shouldShowCoachMarkTour = action.shouldShowCoachMarkTour,
+            )
+        }
+    }
+
+    private fun handleAddFolderResult(action: VaultAddEditAction.Internal.AddFolderResultReceive) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = null,
+            )
+        }
+        updateCommonContent {
+            it.copy(
+                selectedFolderId = (action.result as? CreateFolderResult.Success)?.folderView?.id,
+            )
         }
     }
 
@@ -1445,13 +1585,20 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         clearDialogState()
 
-        when (action.createCipherResult) {
+        when (val result = action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                showGenericErrorDialog()
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
             }
 
             is CreateCipherResult.Success -> {
-                specialCircumstanceManager.specialCircumstance = null
+                if (state.shouldClearSpecialCircumstance) {
+                    specialCircumstanceManager.specialCircumstance = null
+                }
                 if (state.shouldExitOnSave) {
                     sendEvent(event = VaultAddEditEvent.ExitApp)
                 } else {
@@ -1470,11 +1617,15 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
-                showGenericErrorDialog(
-                    message = result
-                        .errorMessage
-                        ?.asText()
-                        ?: R.string.generic_error_message.asText(),
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = result
+                            .errorMessage
+                            ?.asText()
+                            ?: R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
                 )
             }
 
@@ -1491,9 +1642,14 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
-        when (action.result) {
-            DeleteCipherResult.Error -> {
-                showErrorDialog(message = R.string.generic_error_message.asText())
+        when (val result = action.result) {
+            is DeleteCipherResult.Error -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    ),
+                )
             }
 
             DeleteCipherResult.Success -> {
@@ -1508,7 +1664,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    @Suppress("LongMethod")
     private fun handleVaultDataReceive(action: VaultAddEditAction.Internal.VaultDataReceive) {
         when (val vaultDataState = action.vaultData) {
             is DataState.Error -> {
@@ -1541,16 +1696,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             is DataState.NoNetwork -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        viewState = VaultAddEditState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
-                                .asText()
-                                .concat(
-                                    " ".asText(),
-                                    R.string.internet_connection_required_message.asText(),
-                                ),
-                        ),
+                mutableStateFlow.update { currentState ->
+                    currentState.determineContentState(
+                        vaultData = vaultDataState.data,
+                        userData = action.userData,
                     )
                 }
             }
@@ -1567,25 +1716,33 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun VaultAddEditState.determineContentState(
-        vaultData: VaultData,
+        vaultData: VaultData?,
         userData: UserState?,
     ): VaultAddEditState {
+        val internalVaultData = vaultData
+            ?: VaultData(
+                cipherViewList = emptyList(),
+                collectionViewList = emptyList(),
+                folderViewList = emptyList(),
+                sendViewList = emptyList(),
+                fido2CredentialAutofillViewList = null,
+            )
         val isIndividualVaultDisabled = policyManager
             .getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
             .any()
         return copy(
-            viewState = vaultData.cipherViewList
+            viewState = internalVaultData.cipherViewList
                 .find { it.id == vaultAddEditType.vaultItemId }
                 .validateCipherOrReturnErrorState(
                     currentAccount = userData?.activeAccount,
                     vaultAddEditType = vaultAddEditType,
                 ) { currentAccount, cipherView ->
 
-                    val canDelete = vaultData
+                    val canDelete = internalVaultData
                         .collectionViewList
                         .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
 
-                    val canAssignToCollections = vaultData
+                    val canAssignToCollections = internalVaultData
                         .collectionViewList
                         .canAssignToCollections(cipherView?.collectionIds)
 
@@ -1603,8 +1760,8 @@ class VaultAddEditViewModel @Inject constructor(
                         )
                         ?: viewState)
                         .appendFolderAndOwnerData(
-                            folderViewList = vaultData.folderViewList,
-                            collectionViewList = vaultData
+                            folderViewList = internalVaultData.folderViewList,
+                            collectionViewList = internalVaultData
                                 .collectionViewList
                                 .filter { !it.readOnly },
                             activeAccount = currentAccount,
@@ -1616,7 +1773,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleVaultTotpCodeReceive(action: VaultAddEditAction.Internal.TotpCodeReceive) {
-        when (action.totpResult) {
+        when (val result = action.totpResult) {
             is TotpCodeResult.Success -> {
                 sendEvent(
                     event = VaultAddEditEvent.ShowToast(
@@ -1625,14 +1782,17 @@ class VaultAddEditViewModel @Inject constructor(
                 )
 
                 updateLoginContent { loginType ->
-                    loginType.copy(totp = action.totpResult.code)
+                    loginType.copy(totp = result.code)
                 }
             }
 
-            TotpCodeResult.CodeScanningError -> {
-                showErrorDialog(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.authenticator_key_read_error.asText(),
+            is TotpCodeResult.CodeScanningError -> {
+                showDialog(
+                    dialogState = VaultAddEditState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.authenticator_key_read_error.asText(),
+                        error = result.error,
+                    ),
                 )
             }
         }
@@ -1663,17 +1823,26 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handlePasswordBreachReceive(
         action: VaultAddEditAction.Internal.PasswordBreachReceive,
     ) {
-        val message = when (val result = action.result) {
-            is BreachCountResult.Error -> R.string.generic_error_message.asText()
-            is BreachCountResult.Success -> {
-                if (result.breachCount > 0) {
-                    R.string.password_exposed.asText(result.breachCount)
-                } else {
-                    R.string.password_safe.asText()
+        showDialog(
+            dialogState = when (val result = action.result) {
+                is BreachCountResult.Error -> {
+                    VaultAddEditState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                        error = result.error,
+                    )
                 }
-            }
-        }
-        showErrorDialog(message = message)
+
+                is BreachCountResult.Success -> {
+                    VaultAddEditState.DialogState.Generic(
+                        message = if (result.breachCount > 0) {
+                            R.string.password_exposed.asText(result.breachCount)
+                        } else {
+                            R.string.password_safe.asText()
+                        },
+                    )
+                }
+            },
+        )
     }
 
     private fun handleFido2RegisterCredentialResultReceive(
@@ -1683,17 +1852,24 @@ class VaultAddEditViewModel @Inject constructor(
         when (action.result) {
             is Fido2RegisterCredentialResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+                sendEvent(
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        RegisterFido2CredentialResult.Error(
+                            action.result.messageResourceId.asText(),
+                        ),
+                    ),
+                )
             }
 
             is Fido2RegisterCredentialResult.Success -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
-            }
-
-            Fido2RegisterCredentialResult.Cancelled -> {
-                // no-op: The OS will handle re-displaying the system prompt.
+                sendEvent(
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        RegisterFido2CredentialResult.Success(action.result.responseJson),
+                    ),
+                )
             }
         }
-        sendEvent(VaultAddEditEvent.CompleteFido2Registration(action.result))
     }
 
     private fun handleValidateFido2PasswordResultReceive(
@@ -1702,8 +1878,11 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePasswordResult.Error -> {
-                showFido2ErrorDialog()
+            is ValidatePasswordResult.Error -> {
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                )
             }
 
             is ValidatePasswordResult.Success -> {
@@ -1724,8 +1903,10 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
 
         when (action.result) {
-            ValidatePinResult.Error -> {
-                showFido2ErrorDialog()
+            is ValidatePinResult.Error -> {
+                showFido2ErrorDialog(
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                )
             }
 
             is ValidatePinResult.Success -> {
@@ -1747,7 +1928,9 @@ class VaultAddEditViewModel @Inject constructor(
                 it.copy(dialog = errorDialogState)
             }
         } else {
-            showFido2ErrorDialog()
+            showFido2ErrorDialog(
+                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            )
         }
     }
 
@@ -1757,6 +1940,10 @@ class VaultAddEditViewModel @Inject constructor(
 
         getRequestAndRegisterCredential()
     }
+
+    private fun handleAuthenticatorHelpToolTipClick() {
+        sendEvent(VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri)
+    }
     //endregion Internal Type Handlers
 
     //region Utility Functions
@@ -1765,13 +1952,10 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
-    private fun showFido2ErrorDialog() {
+    private fun showFido2ErrorDialog(message: Text) {
         mutableStateFlow.update {
             it.copy(
-                dialog = VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
-                ),
+                dialog = VaultAddEditState.DialogState.Fido2Error(message),
             )
         }
     }
@@ -1779,21 +1963,16 @@ class VaultAddEditViewModel @Inject constructor(
     private fun showGenericErrorDialog(
         message: Text = R.string.generic_error_message.asText(),
     ) {
-        showErrorDialog(
-            title = R.string.an_error_has_occurred.asText(),
-            message = message,
+        showDialog(
+            dialogState = VaultAddEditState.DialogState.Generic(
+                title = R.string.an_error_has_occurred.asText(),
+                message = message,
+            ),
         )
     }
 
-    private fun showErrorDialog(title: Text? = null, message: Text) {
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultAddEditState.DialogState.Generic(
-                    title = title,
-                    message = message,
-                ),
-            )
-        }
+    private fun showDialog(dialogState: VaultAddEditState.DialogState?) {
+        mutableStateFlow.update { it.copy(dialog = dialogState) }
     }
 
     private inline fun onContent(
@@ -1881,47 +2060,6 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun VaultAddEditState.ViewState.Content.clearNonSharedData():
-        VaultAddEditState.ViewState.Content.Common =
-        common.copy(
-            customFieldData = common.customFieldData
-                .filterNot { it is VaultAddEditState.Custom.LinkedField },
-        )
-
-    private fun VaultAddEditState.ViewState.Content.toUpdatedPreviousItemTypes():
-        Map<VaultAddEditState.ItemTypeOption, VaultAddEditState.ViewState.Content.ItemType> =
-        previousItemTypes
-            .toMutableMap()
-            .apply { set(type.itemTypeOption, type) }
-
-    private fun VaultAddEditState.ViewState.Content.previousItemTypeOrDefault(
-        itemType: VaultAddEditState.ItemTypeOption,
-    ): VaultAddEditState.ViewState.Content.ItemType =
-        previousItemTypes.getOrDefault(
-            key = itemType,
-            defaultValue = when (itemType) {
-                VaultAddEditState.ItemTypeOption.LOGIN -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Login()
-                }
-
-                VaultAddEditState.ItemTypeOption.CARD -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Card()
-                }
-
-                VaultAddEditState.ItemTypeOption.IDENTITY -> {
-                    VaultAddEditState.ViewState.Content.ItemType.Identity()
-                }
-
-                VaultAddEditState.ItemTypeOption.SECURE_NOTES -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SecureNotes
-                }
-
-                VaultAddEditState.ItemTypeOption.SSH_KEYS -> {
-                    VaultAddEditState.ViewState.Content.ItemType.SshKey()
-                }
-            },
-        )
-
     @Suppress("MaxLineLength")
     private suspend fun VaultAddEditState.ViewState.Content.createCipherForAddAndCloneItemStates(): CreateCipherResult {
         return common.selectedOwner?.collections
@@ -1975,13 +2113,17 @@ class VaultAddEditViewModel @Inject constructor(
 @Parcelize
 data class VaultAddEditState(
     val vaultAddEditType: VaultAddEditType,
+    val cipherType: VaultItemCipherType,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val bottomSheetState: BottomSheetState?,
     val shouldShowCloseButton: Boolean = true,
-    val supportedItemTypes: List<ItemTypeOption>,
     // Internal
     val shouldExitOnSave: Boolean = false,
+    val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
+    val fido2CreateCredentialRequest: Fido2CreateCredentialRequest? = null,
+    private val shouldShowCoachMarkTour: Boolean,
 ) : Parcelable {
 
     /**
@@ -1989,9 +2131,23 @@ data class VaultAddEditState(
      */
     val screenDisplayName: Text
         get() = when (vaultAddEditType) {
-            is VaultAddEditType.AddItem -> R.string.add_item.asText()
-            is VaultAddEditType.EditItem -> R.string.edit_item.asText()
-            is VaultAddEditType.CloneItem -> R.string.add_item.asText()
+            is VaultAddEditType.AddItem,
+            is VaultAddEditType.CloneItem,
+                -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> R.string.new_login.asText()
+                VaultItemCipherType.CARD -> R.string.new_card.asText()
+                VaultItemCipherType.IDENTITY -> R.string.new_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> R.string.new_note.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.new_passkey.asText()
+            }
+
+            is VaultAddEditType.EditItem -> when (cipherType) {
+                VaultItemCipherType.LOGIN -> R.string.edit_login.asText()
+                VaultItemCipherType.CARD -> R.string.edit_card.asText()
+                VaultItemCipherType.IDENTITY -> R.string.edit_identity.asText()
+                VaultItemCipherType.SECURE_NOTE -> R.string.edit_note.asText()
+                VaultItemCipherType.SSH_KEY -> R.string.edit_passkey.asText()
+            }
         }
 
     /**
@@ -2029,6 +2185,11 @@ data class VaultAddEditState(
             ?.common
             ?.canAssignToCollections
             ?: false
+
+    val shouldShowLearnAboutNewLogins: Boolean
+        get() = shouldShowCoachMarkTour &&
+            ((viewState as? ViewState.Content)?.type is ViewState.Content.ItemType.Login) &&
+            isAddItemMode
 
     /**
      * Enum representing the main type options for the vault, such as LOGIN, CARD, etc.
@@ -2139,6 +2300,11 @@ data class VaultAddEditState(
                 abstract val itemTypeOption: ItemTypeOption
 
                 /**
+                 * A list of all the linked field types supported by this [ItemType].
+                 */
+                abstract val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+
+                /**
                  * Represents the login item information.
                  *
                  * @property username The username required for the login item.
@@ -2170,6 +2336,12 @@ data class VaultAddEditState(
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
 
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.PASSWORD,
+                            VaultLinkedFieldType.USERNAME,
+                        )
+
                     /**
                      * Indicates whether the passkey can or cannot be removed.
                      */
@@ -2196,6 +2368,16 @@ data class VaultAddEditState(
                     val securityCode: String = "",
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.CARD
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.CARDHOLDER_NAME,
+                            VaultLinkedFieldType.EXPIRATION_MONTH,
+                            VaultLinkedFieldType.EXPIRATION_YEAR,
+                            VaultLinkedFieldType.SECURITY_CODE,
+                            VaultLinkedFieldType.BRAND,
+                            VaultLinkedFieldType.NUMBER,
+                        )
                 }
 
                 /**
@@ -2241,8 +2423,30 @@ data class VaultAddEditState(
                     val zip: String = "",
                     val country: String = "",
                 ) : ItemType() {
-
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.IDENTITY
+
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf(
+                            VaultLinkedFieldType.TITLE,
+                            VaultLinkedFieldType.MIDDLE_NAME,
+                            VaultLinkedFieldType.ADDRESS_1,
+                            VaultLinkedFieldType.ADDRESS_2,
+                            VaultLinkedFieldType.ADDRESS_3,
+                            VaultLinkedFieldType.CITY,
+                            VaultLinkedFieldType.STATE,
+                            VaultLinkedFieldType.POSTAL_CODE,
+                            VaultLinkedFieldType.COUNTRY,
+                            VaultLinkedFieldType.COMPANY,
+                            VaultLinkedFieldType.EMAIL,
+                            VaultLinkedFieldType.PHONE,
+                            VaultLinkedFieldType.SSN,
+                            VaultLinkedFieldType.IDENTITY_USERNAME,
+                            VaultLinkedFieldType.PASSPORT_NUMBER,
+                            VaultLinkedFieldType.LICENSE_NUMBER,
+                            VaultLinkedFieldType.FIRST_NAME,
+                            VaultLinkedFieldType.LAST_NAME,
+                            VaultLinkedFieldType.FULL_NAME,
+                        )
                 }
 
                 /**
@@ -2251,6 +2455,8 @@ data class VaultAddEditState(
                 @Parcelize
                 data object SecureNotes : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SECURE_NOTES
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
                 }
 
                 /**
@@ -2270,6 +2476,8 @@ data class VaultAddEditState(
                     val showFingerprint: Boolean = false,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SSH_KEYS
+                    override val vaultLinkedFieldTypes: ImmutableList<VaultLinkedFieldType>
+                        get() = persistentListOf()
                 }
             }
 
@@ -2364,6 +2572,23 @@ data class VaultAddEditState(
     ) : Parcelable
 
     /**
+     * Displays a bottom sheet.
+     */
+    sealed class BottomSheetState : Parcelable {
+        /**
+         * Displays a folder selection bottom sheet.
+         */
+        @Parcelize
+        data object FolderSelection : BottomSheetState()
+
+        /**
+         * Displays a owner selection bottom sheet.
+         */
+        @Parcelize
+        data object OwnerSelection : BottomSheetState()
+    }
+
+    /**
      * Displays a dialog.
      */
     @Parcelize
@@ -2376,6 +2601,7 @@ data class VaultAddEditState(
         data class Generic(
             val title: Text? = null,
             val message: Text,
+            val error: Throwable? = null,
         ) : DialogState()
 
         /**
@@ -2514,7 +2740,7 @@ sealed class VaultAddEditEvent {
      * @property result the result of FIDO 2 credential registration.
      */
     data class CompleteFido2Registration(
-        val result: Fido2RegisterCredentialResult,
+        val result: RegisterFido2CredentialResult,
     ) : BackgroundEvent, VaultAddEditEvent()
 
     /**
@@ -2525,6 +2751,16 @@ sealed class VaultAddEditEvent {
     data class Fido2UserVerification(
         val isRequired: Boolean,
     ) : BackgroundEvent, VaultAddEditEvent()
+
+    /**
+     * Start the coach mark guided tour of the add login content.
+     */
+    data object StartAddLoginItemCoachMarkTour : VaultAddEditEvent()
+
+    /**
+     * Navigate the user to the tooltip URI for Authenticator key help.
+     */
+    data object NavigateToAuthenticatorKeyTooltipUri : VaultAddEditEvent()
 }
 
 /**
@@ -2583,15 +2819,6 @@ sealed class VaultAddEditAction {
         data object ConfirmOverwriteExistingPasskeyClick : Common()
 
         /**
-         * Represents the action when a type option is selected.
-         *
-         * @property typeOption The selected type option.
-         */
-        data class TypeOptionSelect(
-            val typeOption: VaultAddEditState.ItemTypeOption,
-        ) : Common()
-
-        /**
          * Fired when the name text input is changed.
          *
          * @property name The new name text.
@@ -2601,9 +2828,9 @@ sealed class VaultAddEditAction {
         /**
          * Fired when the folder text input is changed.
          *
-         * @property folder The new folder text.
+         * @property folderId The new folder id.
          */
-        data class FolderChange(val folder: VaultAddEditState.Folder) : Common()
+        data class FolderChange(val folderId: String?) : Common()
 
         /**
          * Fired when the Favorite toggle is changed.
@@ -2628,11 +2855,11 @@ sealed class VaultAddEditAction {
         data class NotesTextChange(val notes: String) : Common()
 
         /**
-         * Fired when the ownership text input is changed.
+         * Fired when the owner text input is changed.
          *
-         * @property ownership The new ownership text.
+         * @property ownerId The new owner id.
          */
-        data class OwnershipChange(val ownership: VaultAddEditState.Owner) : Common()
+        data class OwnershipChange(val ownerId: String?) : Common()
 
         /**
          * Represents the action to add a new custom field.
@@ -2700,7 +2927,7 @@ sealed class VaultAddEditAction {
         /**
          * The user has dismissed the FIDO 2 credential error dialog.
          */
-        data object Fido2ErrorDialogDismissed : Common()
+        data class Fido2ErrorDialogDismissed(val message: Text) : Common()
 
         /**
          * User verification cannot be performed with device biometrics or credentials.
@@ -2747,6 +2974,26 @@ sealed class VaultAddEditAction {
          * The user has clicked to dismiss the FIDO 2 password or PIN verification dialog.
          */
         data object DismissFido2VerificationDialogClick : Common()
+
+        /**
+         * The user has clicked on folder selection card for the item.
+         */
+        data object SelectOrAddFolderForItem : Common()
+
+        /**
+         * The user has clicked on owner selection card for the item.
+         */
+        data object SelectOwnerForItem : Common()
+
+        /**
+         * The user has dismissed the current bottom sheet.
+         */
+        data object DismissBottomSheet : Common()
+
+        /**
+         * The user has selected to add a new folder to associate with the item.
+         */
+        data class AddNewFolder(val newFolderName: String) : Common()
     }
 
     /**
@@ -2835,6 +3082,21 @@ sealed class VaultAddEditAction {
              * Represents the action to clear the fido2 credential.
              */
             data object ClearFido2CredentialClick : LoginType()
+
+            /**
+             * User has clicked the call to action on the learn about logins card.
+             */
+            data object StartLearnAboutLogins : LoginType()
+
+            /**
+             * User has dismissed the learn about logins card.
+             */
+            data object LearnAboutLoginsDismissed : LoginType()
+
+            /**
+             * User has clicked the call to action on the authenticator help tooltip.
+             */
+            data object AuthenticatorHelpToolTipClick : LoginType()
         }
 
         /**
@@ -3011,7 +3273,6 @@ sealed class VaultAddEditAction {
              *
              * @property expirationMonth The selected expiration month.
              */
-            @Suppress("MaxLineLength")
             data class ExpirationMonthSelect(
                 val expirationMonth: VaultCardExpirationMonth,
             ) : CardType()
@@ -3123,13 +3384,26 @@ sealed class VaultAddEditAction {
         data class ValidateFido2PinResultReceive(
             val result: ValidatePinResult,
         ) : Internal()
+
+        /**
+         * The value for the shouldShowAddLoginCoachMark has changed.
+         */
+        data class ShouldShowAddLoginCoachMarkValueChangeReceive(
+            val shouldShowCoachMarkTour: Boolean,
+        ) : Internal()
+
+        /**
+         * Received a result for attempting to add a folder.
+         */
+        data class AddFolderResultReceive(
+            val result: CreateFolderResult,
+        ) : Internal()
+
+        /**
+         * Received an update to the available folders.
+         */
+        data class AvailableFoldersReceive(
+            val folderData: DataState<List<FolderView>>,
+        ) : Internal()
     }
 }
-
-/**
- * Returns a list of item type options that can be selected during item creation.
- *
- * TODO: [PM-10413] Allow SSH key creation when the SDK supports it.
- */
-private fun getSupportedItemTypeOptions() = VaultAddEditState.ItemTypeOption.entries
-    .filter { it != VaultAddEditState.ItemTypeOption.SSH_KEYS }

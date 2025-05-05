@@ -12,5 +12,7 @@ sealed class ResetPasswordResult {
     /**
      * There was an error resetting the password.
      */
-    data object Error : ResetPasswordResult()
+    data class Error(
+        val error: Throwable,
+    ) : ResetPasswordResult()
 }

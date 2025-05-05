@@ -3,15 +3,18 @@ package com.x8bit.bitwarden.ui.autofill.fido2.manager
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.drawable.Icon
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
@@ -39,6 +42,7 @@ class Fido2CompletionManagerTest {
 
     private val mockActivity = mockk<Activity> {
         every { packageName } returns "packageName"
+        every { resources } returns mockk(relaxed = true)
         every { setResult(Activity.RESULT_OK, any()) } just runs
         every { finish() } just runs
     }
@@ -53,7 +57,7 @@ class Fido2CompletionManagerTest {
 
         @Test
         fun `completeFido2Registration should perform no operations`() {
-            val mockRegistrationResult = mockk<Fido2RegisterCredentialResult>()
+            val mockRegistrationResult = mockk<RegisterFido2CredentialResult>()
             fido2CompletionManager.completeFido2Registration(mockRegistrationResult)
             verify {
                 mockRegistrationResult wasNot Called
@@ -63,7 +67,7 @@ class Fido2CompletionManagerTest {
 
         @Test
         fun `completeFido2Assertion should perform no operations`() {
-            val mockAssertionResult = mockk<Fido2CredentialAssertionResult>()
+            val mockAssertionResult = mockk<AssertFido2CredentialResult>()
             fido2CompletionManager.completeFido2Assertion(mockAssertionResult)
             verify {
                 mockAssertionResult wasNot Called
@@ -73,8 +77,8 @@ class Fido2CompletionManagerTest {
 
         @Test
         fun `completeFido2GetCredentials should perform no operations`() {
-            val mockGetCredentialResult = mockk<Fido2GetCredentialsResult>()
-            fido2CompletionManager.completeFido2GetCredentialRequest(mockGetCredentialResult)
+            val mockGetCredentialResult = mockk<GetFido2CredentialsResult>()
+            fido2CompletionManager.completeFido2GetCredentialsRequest(mockGetCredentialResult)
             verify {
                 mockGetCredentialResult wasNot Called
                 mockActivity wasNot Called
@@ -89,9 +93,10 @@ class Fido2CompletionManagerTest {
 
         @BeforeEach
         fun setUp() {
-            fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity, mockIntentManager)
+            fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity)
             mockkConstructor(Intent::class)
             mockkObject(PendingIntentHandler.Companion)
+            mockkStatic(Icon::class)
             every {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
             } just runs
@@ -105,6 +110,7 @@ class Fido2CompletionManagerTest {
             unmockkConstructor(Intent::class, PublicKeyCredentialEntry.Builder::class)
             unmockkObject(PendingIntentHandler.Companion)
             unmockkStatic(PendingIntent::class)
+            unmockkStatic(Icon::class)
         }
 
         @Suppress("MaxLineLength")
@@ -112,8 +118,8 @@ class Fido2CompletionManagerTest {
         fun `completeFido2Registration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
             fido2CompletionManager
                 .completeFido2Registration(
-                    Fido2RegisterCredentialResult.Success(
-                        registrationResponse = "registrationResponse",
+                    RegisterFido2CredentialResult.Success(
+                        responseJson = "registrationResponse",
                     ),
                 )
 
@@ -126,9 +132,10 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2Registration(Fido2RegisterCredentialResult.Error)
+                .completeFido2Registration(RegisterFido2CredentialResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
+                mockActivity.resources
                 PendingIntentHandler.setCreateCredentialException(any(), any())
             }
         }
@@ -137,7 +144,7 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
             fido2CompletionManager
-                .completeFido2Registration(Fido2RegisterCredentialResult.Cancelled)
+                .completeFido2Registration(RegisterFido2CredentialResult.Cancelled)
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
@@ -148,7 +155,7 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Assertion should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
             fido2CompletionManager
-                .completeFido2Assertion(Fido2CredentialAssertionResult.Success("responseJson"))
+                .completeFido2Assertion(AssertFido2CredentialResult.Success("responseJson"))
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialResponse(any(), any())
@@ -159,10 +166,27 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2Assertion(Fido2CredentialAssertionResult.Error)
+                .completeFido2Assertion(AssertFido2CredentialResult.Error("".asText()))
 
             verifyActivityResultIsSetAndFinishedAfter {
-                PendingIntentHandler.setGetCredentialException(any(), any())
+                mockActivity.resources
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialUnknownException>(),
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Cancelled`() {
+            fido2CompletionManager
+                .completeFido2Assertion(AssertFido2CredentialResult.Cancelled)
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(
+                    any(),
+                    any<GetCredentialCancellationException>(),
+                )
             }
         }
 
@@ -170,11 +194,11 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2GetCredentials should set BeginGetCredentialResponse, set activity result, then finish activity when result is Success`() {
             fido2CompletionManager
-                .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialsResult.Success(
+                .completeFido2GetCredentialsRequest(
+                    GetFido2CredentialsResult.Success(
                         userId = "mockUserId",
-                        options = mockk(),
-                        credentials = emptyList(),
+                        credentialEntries = emptyList(),
+                        option = mockk(),
                     ),
                 )
 
@@ -185,40 +209,37 @@ class Fido2CompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2GetCredentials should create a PublicKeyCredentialEntry and clear authentication actions when result is Success`() {
+        fun `completeFido2GetCredentials clear authentication actions when result is Success`() {
             mockkConstructor(PublicKeyCredentialEntry.Builder::class)
             mockkStatic(PendingIntent::class)
 
             val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
-            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
 
-            every {
-                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
-            } returns mockCredentialEntry
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_PASSKEY_INTENT,
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
+                    isUserVerified = false,
                     requestCode = any(),
                 )
             } returns mockk()
             every { mockActivity.getString(any()) } returns "No username"
+            every { Icon.createWithResource(mockActivity, any()) } returns mockk<Icon>()
 
             fido2CompletionManager
-                .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialsResult.Success(
+                .completeFido2GetCredentialsRequest(
+                    GetFido2CredentialsResult.Success(
                         userId = "mockUserId",
-                        options = mockk(),
-                        credentials = mockFido2AutofillViewList,
+                        credentialEntries = listOf(mockCredentialEntry),
+                        option = mockk(),
                     ),
                 )
 
             val responseSlot = slot<BeginGetCredentialResponse>()
             verify {
-                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
                 PendingIntentHandler.setBeginGetCredentialResponse(
                     intent = any(),
                     response = capture(responseSlot),
@@ -235,59 +256,13 @@ class Fido2CompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2GetCredentials should set username to default value when userNameForUi is null`() {
-            mockkConstructor(PublicKeyCredentialEntry.Builder::class)
-            mockkStatic(PendingIntent::class)
-            val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
-            val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
-                .copy(userNameForUi = null)
-            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
-
-            every {
-                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
-            } returns mockCredentialEntry
-            every {
-                mockIntentManager.createFido2GetCredentialPendingIntent(
-                    action = GET_PASSKEY_INTENT,
-                    userId = "mockUserId",
-                    credentialId = mockFido2AutofillView.credentialId.toString(),
-                    cipherId = mockFido2AutofillView.cipherId,
-                    requestCode = any(),
-                )
-            } returns mockk()
-            every { mockActivity.getString(any()) } returns "No Username"
-
-            fido2CompletionManager
-                .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialsResult.Success(
-                        userId = "mockUserId",
-                        options = mockk(),
-                        credentials = mockFido2AutofillViewList,
-                    ),
-                )
-
-            val responseSlot = slot<BeginGetCredentialResponse>()
-            verify {
-                mockActivity.getString(R.string.no_username)
-                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
-                PendingIntentHandler.setBeginGetCredentialResponse(
-                    intent = any(),
-                    response = capture(responseSlot),
-                )
-            }
-
-            assertEquals(
-                listOf(mockCredentialEntry),
-                responseSlot.captured.credentialEntries,
-            )
-        }
-
-        @Suppress("MaxLineLength")
-        @Test
         fun `completeFido2GetCredentials should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2GetCredentialRequest(Fido2GetCredentialsResult.Error)
+                .completeFido2GetCredentialsRequest(
+                    GetFido2CredentialsResult.Error("".asText()),
+                )
             verifyActivityResultIsSetAndFinishedAfter {
+                mockActivity.resources
                 PendingIntentHandler.setGetCredentialException(any(), any())
             }
         }

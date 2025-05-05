@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.auth.manager
 
+import com.bitwarden.core.data.util.asSuccess
+import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.manager.util.toUserStateJson
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 
 /**
@@ -55,5 +55,5 @@ class TrustedDeviceManagerImpl(
             authDiskSource.storeIsTdeLoginComplete(userId = userId, isTdeLoginComplete = true)
         }
         .also { authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null) }
-        .map { Unit }
+        .map { }
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -64,50 +65,21 @@ fun BlockAutoFillScreen(
         }
     }
 
-    when (val dialogState = state.dialog) {
-        is BlockAutoFillState.DialogState.AddEdit -> {
-            AddEditBlockedUriDialog(
-                uri = dialogState.uri,
-                isEdit = dialogState.originalUri != null,
-                errorMessage = dialogState.errorMessage?.invoke(),
-                onUriChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it))
-                    }
-                },
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
-                },
-                onDeleteClick = if (dialogState.isEdit) {
-                    remember(viewModel, dialogState) {
-                        {
-                            dialogState.originalUri?.let { originalUri ->
-                                viewModel.trySendAction(
-                                    BlockAutoFillAction.RemoveUriClick(originalUri),
-                                )
-                            }
-                        }
-                    }
-                } else {
-                    null
-                },
-                onCancelClick = remember(viewModel) {
-                    { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
-                },
-                onSaveClick = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            BlockAutoFillAction.SaveUri(
-                                newUri = it,
-                            ),
-                        )
-                    }
-                },
-            )
-        }
-
-        null -> Unit
-    }
+    BlockAutoFillDialogs(
+        dialogState = state.dialog,
+        onUriTextChange = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.UriTextChange(uri = it)) }
+        },
+        onSaveClick = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.SaveUri(newUri = it)) }
+        },
+        onRemoveClick = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.RemoveUriClick(it)) }
+        },
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(BlockAutoFillAction.DismissDialog) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -194,7 +166,41 @@ fun BlockAutoFillScreen(
                     }
                 }
             }
+            item {
+                Spacer(modifier = Modifier.height(height = 16.dp))
+                Spacer(modifier = Modifier.navigationBarsPadding())
+            }
         }
+    }
+}
+
+@Composable
+private fun BlockAutoFillDialogs(
+    dialogState: BlockAutoFillState.DialogState? = null,
+    onUriTextChange: (String) -> Unit,
+    onSaveClick: (String) -> Unit,
+    onRemoveClick: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is BlockAutoFillState.DialogState.AddEdit -> {
+            AddEditBlockedUriDialog(
+                uri = dialogState.uri,
+                isEdit = dialogState.originalUri != null,
+                errorMessage = dialogState.errorMessage?.invoke(),
+                onUriChange = onUriTextChange,
+                onDismissRequest = onDismissRequest,
+                onDeleteClick = if (dialogState.isEdit) {
+                    { dialogState.originalUri?.let { onRemoveClick(it) } }
+                } else {
+                    null
+                },
+                onCancelClick = onDismissRequest,
+                onSaveClick = onSaveClick,
+            )
+        }
+
+        null -> Unit
     }
 }
 
@@ -211,12 +217,15 @@ private fun BlockAutoFillNoItems(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.height(height = 24.dp))
         Image(
             painter = rememberVectorPainter(
                 id = R.drawable.blocked_uri,
             ),
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .size(size = 124.dp)
+                .align(Alignment.CenterHorizontally),
         )
         Spacer(modifier = Modifier.height(32.dp))
 
@@ -249,6 +258,7 @@ private fun BlockAutoFillListItem(
 ) {
     Row(
         modifier = Modifier
+            .defaultMinSize(minHeight = 60.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(
@@ -257,7 +267,6 @@ private fun BlockAutoFillListItem(
                 onClick = onClick,
             )
             .bottomDivider(paddingStart = 16.dp)
-            .defaultMinSize(minHeight = 56.dp)
             .padding(end = 8.dp, top = 16.dp, bottom = 16.dp)
             .then(modifier),
         horizontalArrangement = Arrangement.SpaceBetween,

@@ -1,27 +1,24 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.di
 
+import com.bitwarden.network.BitwardenServiceClient
+import com.bitwarden.network.bitwardenServiceClient
+import com.bitwarden.network.interceptor.BaseUrlsProvider
+import com.bitwarden.network.model.BitwardenServiceClientConfig
+import com.bitwarden.network.service.ConfigService
+import com.bitwarden.network.service.EventService
+import com.bitwarden.network.service.PushService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
-import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
-import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.Retrofits
-import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.serializer.ZonedDateTimeSerializer
-import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
-import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
+import com.x8bit.bitwarden.data.auth.manager.AuthTokenManager
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_NAME
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_CLIENT_VERSION
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_VALUE_USER_AGENT
+import com.x8bit.bitwarden.data.platform.manager.CertificateManager
+import com.x8bit.bitwarden.data.platform.util.isDevBuild
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
-import retrofit2.create
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -35,74 +32,42 @@ object PlatformNetworkModule {
     @Provides
     @Singleton
     fun providesConfigService(
-        retrofits: Retrofits,
-    ): ConfigService = ConfigServiceImpl(retrofits.unauthenticatedApiRetrofit.create())
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): ConfigService = bitwardenServiceClient.configService
 
     @Provides
     @Singleton
     fun providesEventService(
-        retrofits: Retrofits,
-    ): EventService = EventServiceImpl(
-        eventApi = retrofits.authenticatedEventsRetrofit.create(),
-    )
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): EventService = bitwardenServiceClient.eventService
 
     @Provides
     @Singleton
     fun providePushService(
-        retrofits: Retrofits,
+        bitwardenServiceClient: BitwardenServiceClient,
+    ): PushService = bitwardenServiceClient.pushService
+
+    @Provides
+    @Singleton
+    fun provideBitwardenServiceClient(
+        authTokenManager: AuthTokenManager,
+        baseUrlsProvider: BaseUrlsProvider,
         authDiskSource: AuthDiskSource,
-    ): PushService = PushServiceImpl(
-        pushApi = retrofits.authenticatedApiRetrofit.create(),
-        appId = authDiskSource.uniqueAppId,
+        certificateManager: CertificateManager,
+        clock: Clock,
+    ): BitwardenServiceClient = bitwardenServiceClient(
+        BitwardenServiceClientConfig(
+            clock = clock,
+            appIdProvider = authDiskSource,
+            clientData = BitwardenServiceClientConfig.ClientData(
+                userAgent = HEADER_VALUE_USER_AGENT,
+                clientName = HEADER_VALUE_CLIENT_NAME,
+                clientVersion = HEADER_VALUE_CLIENT_VERSION,
+            ),
+            authTokenProvider = authTokenManager,
+            baseUrlsProvider = baseUrlsProvider,
+            certificateProvider = certificateManager,
+            enableHttpBodyLogging = isDevBuild,
+        ),
     )
-
-    @Provides
-    @Singleton
-    fun providesAuthTokenInterceptor(
-        authDiskSource: AuthDiskSource,
-    ): AuthTokenInterceptor = AuthTokenInterceptor(authDiskSource = authDiskSource)
-
-    @Provides
-    @Singleton
-    fun providesHeadersInterceptor(): HeadersInterceptor = HeadersInterceptor()
-
-    @Provides
-    @Singleton
-    fun providesRefreshAuthenticator(): RefreshAuthenticator = RefreshAuthenticator()
-
-    @Provides
-    @Singleton
-    fun provideRetrofits(
-        authTokenInterceptor: AuthTokenInterceptor,
-        baseUrlInterceptors: BaseUrlInterceptors,
-        headersInterceptor: HeadersInterceptor,
-        refreshAuthenticator: RefreshAuthenticator,
-        json: Json,
-    ): Retrofits =
-        RetrofitsImpl(
-            authTokenInterceptor = authTokenInterceptor,
-            baseUrlInterceptors = baseUrlInterceptors,
-            headersInterceptor = headersInterceptor,
-            refreshAuthenticator = refreshAuthenticator,
-            json = json,
-        )
-
-    @Provides
-    @Singleton
-    fun providesJson(): Json = Json {
-
-        // If there are keys returned by the server not modeled by a serializable class,
-        // ignore them.
-        // This makes additive server changes non-breaking.
-        ignoreUnknownKeys = true
-
-        // We allow for nullable values to have keys missing in the JSON response.
-        explicitNulls = false
-        serializersModule = SerializersModule {
-            contextual(ZonedDateTimeSerializer())
-        }
-
-        // Respect model default property values.
-        coerceInputValues = true
-    }
 }

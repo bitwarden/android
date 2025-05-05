@@ -16,7 +16,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
@@ -27,8 +28,8 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -60,11 +61,12 @@ class CreateAccountScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            intentManager = intentManager,
+        ) {
             CreateAccountScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToLogin = { _, _ -> onNavigateToLoginCalled = true },
-                intentManager = intentManager,
                 viewModel = viewModel,
             )
         }
@@ -94,20 +96,20 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `accept policies should be toggled on or off according to the state`() {
         composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
+            .onNodeWithText("By activating this switch, you agree", substring = true)
             .assertIsOff()
 
         mutableStateFlow.update { it.copy(isAcceptPoliciesToggled = true) }
 
         composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
+            .onNodeWithText("By activating this switch, you agree", substring = true)
             .assertIsOn()
     }
 
     @Test
     fun `accept policies click should send AcceptPoliciesToggle action`() {
         composeTestRule
-            .onNodeWithText("By activating this switch you agree", substring = true)
+            .onNodeWithText("By activating this switch, you agree", substring = true)
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(AcceptPoliciesToggle(true)) }
@@ -286,18 +288,18 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `terms of service click should send TermsClick action`() {
         composeTestRule
-            .onNodeWithText("Terms of Service")
+            .onNodeWithText(text = "Terms of Service", substring = true)
             .performScrollTo()
-            .performClick()
+            .performCustomAccessibilityAction("Terms of Service")
         verify { viewModel.trySendAction(CreateAccountAction.TermsClick) }
     }
 
     @Test
     fun `privacy policy click should send PrivacyPolicyClick action`() {
         composeTestRule
-            .onNodeWithText("Privacy Policy")
+            .onNodeWithText(text = "Privacy Policy", substring = true)
             .performScrollTo()
-            .performClick()
+            .performCustomAccessibilityAction("Privacy Policy")
         verify { viewModel.trySendAction(CreateAccountAction.PrivacyPolicyClick) }
     }
 

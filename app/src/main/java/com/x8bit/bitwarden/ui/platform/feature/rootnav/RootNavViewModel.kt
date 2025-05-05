@@ -2,19 +2,19 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.util.parseJwtTokenDataOrNull
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.util.parseJwtTokenDataOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -133,27 +133,33 @@ class RootNavViewModel @Inject constructor(
                     is SpecialCircumstance.Fido2Save -> {
                         RootNavState.VaultUnlockedForFido2Save(
                             activeUserId = userState.activeUserId,
-                            fido2CreateCredentialRequest = specialCircumstance.fido2CreateCredentialRequest,
+                            fido2CreateCredentialRequest =
+                                specialCircumstance.fido2CreateCredentialRequest,
                         )
                     }
 
                     is SpecialCircumstance.Fido2Assertion -> {
                         RootNavState.VaultUnlockedForFido2Assertion(
                             activeUserId = userState.activeUserId,
-                            fido2CredentialAssertionRequest = specialCircumstance.fido2AssertionRequest,
+                            fido2CredentialAssertionRequest =
+                                specialCircumstance.fido2AssertionRequest,
                         )
                     }
 
                     is SpecialCircumstance.Fido2GetCredentials -> {
                         RootNavState.VaultUnlockedForFido2GetCredentials(
                             activeUserId = userState.activeUserId,
-                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
+                            fido2GetCredentialsRequest =
+                                specialCircumstance.fido2GetCredentialsRequest,
                         )
                     }
 
                     SpecialCircumstance.AccountSecurityShortcut,
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
+                    SpecialCircumstance.SendShortcut,
+                    is SpecialCircumstance.SearchShortcut,
+                    SpecialCircumstance.VerificationCodeShortcut,
                     null,
                         -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 

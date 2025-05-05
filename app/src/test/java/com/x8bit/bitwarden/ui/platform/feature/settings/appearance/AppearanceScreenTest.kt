@@ -8,8 +8,11 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.printToLog
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -34,7 +37,7 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             AppearanceScreen(
                 onNavigateBack = { haveCalledNavigateBack = true },
                 viewModel = viewModel,
@@ -50,7 +53,10 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on language row click should display language selection dialog`() {
-        composeTestRule.onNodeWithText("Language").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default (System). Language")
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Language")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -58,9 +64,12 @@ class AppearanceScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on language selection dialog item click should send LanguageChange and show dialog`() {
+    fun `on language selection dialog item click should send LanguageChange`() {
         // Clicking the Language row shows the language selection dialog
-        composeTestRule.onNodeWithText("Language").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default (System). Language")
+            .performScrollTo()
+            .performClick()
         // Selecting a language dismisses this dialog and displays the confirmation
         composeTestRule
             .onAllNodesWithText("Afrikaans")
@@ -70,17 +79,6 @@ class AppearanceScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Afrikaans")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsNotDisplayed()
-
-        // Should show confirmation dialog
-        composeTestRule
-            .onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        // Clicking "Ok" should dismiss confirmation dialog
-        composeTestRule.onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        composeTestRule.assertNoDialogExists()
 
         verify {
             viewModel.trySendAction(
@@ -93,7 +91,10 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on language selection dialog cancel click should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Language").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(label = "Default (System). Language")
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -103,7 +104,13 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on theme row click should display theme selection dialog`() {
-        composeTestRule.onNodeWithText("Theme").performClick()
+        composeTestRule.onRoot().printToLog("Brian")
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Default (System). Theme. Change the application's color theme",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Theme")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -112,7 +119,12 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on theme selection dialog item click should send ThemeChange`() {
-        composeTestRule.onNodeWithText("Theme").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Default (System). Theme. Change the application's color theme",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Dark")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -130,7 +142,12 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on theme selection dialog cancel click should dismiss dialog`() {
-        composeTestRule.onNodeWithText("Theme").performClick()
+        composeTestRule
+            .onNodeWithContentDescription(
+                label = "Default (System). Theme. Change the application's color theme",
+            )
+            .performScrollTo()
+            .performClick()
         composeTestRule
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))

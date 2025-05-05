@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.bitwarden.network.model.OrganizationStatusType
+import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationStatusType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -70,7 +70,6 @@ class PolicyManagerImpl(
             .getOrganizations(userId)
             ?.filter {
                 it.shouldUsePolicies &&
-                    it.isEnabled &&
                     it.status >= OrganizationStatusType.ACCEPTED &&
                     !isOrganizationExemptFromPolicies(it, type)
             }
@@ -93,13 +92,21 @@ class PolicyManagerImpl(
         organization: SyncResponseJson.Profile.Organization,
         policyType: PolicyTypeJson,
     ): Boolean =
-        if (policyType == PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT) {
-            organization.type == OrganizationType.OWNER
-        } else if (policyType == PolicyTypeJson.PASSWORD_GENERATOR) {
-            false
-        } else {
-            (organization.type == OrganizationType.OWNER ||
-                organization.type == OrganizationType.ADMIN) ||
-                organization.permissions.shouldManagePolicies
+        when (policyType) {
+            PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
+                organization.type == OrganizationType.OWNER
+            }
+
+            PolicyTypeJson.PASSWORD_GENERATOR,
+            PolicyTypeJson.REMOVE_UNLOCK_WITH_PIN,
+                -> {
+                false
+            }
+
+            else -> {
+                (organization.type == OrganizationType.OWNER ||
+                    organization.type == OrganizationType.ADMIN) ||
+                    organization.permissions.shouldManagePolicies
+            }
         }
 }

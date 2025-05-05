@@ -13,5 +13,5 @@ sealed class GeneratedPasswordResult {
     /**
      * There was an error during the operation.
      */
-    data object InvalidRequest : GeneratedPasswordResult()
+    data class InvalidRequest(val error: Throwable) : GeneratedPasswordResult()
 }

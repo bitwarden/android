@@ -7,8 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -36,12 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.network.model.TwoFactorAuthMethod
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
@@ -50,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
+import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -125,13 +129,18 @@ fun TwoFactorLoginScreen(
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val title = if (state.isNewDeviceVerification) {
+        R.string.verify_your_identity.asText()
+    } else {
+        state.authMethod.title
+    }
     BitwardenScaffold(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = state.authMethod.title(),
+                title = title(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
@@ -139,22 +148,24 @@ fun TwoFactorLoginScreen(
                     { viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick) }
                 },
                 actions = {
-                    BitwardenOverflowActionItem(
-                        menuItemDataList = state.availableAuthMethods
-                            .map {
-                                OverflowMenuItemData(
-                                    text = it.title(),
-                                    onClick = remember(viewModel) {
-                                        {
-                                            viewModel.trySendAction(
-                                                TwoFactorLoginAction.SelectAuthMethod(it),
-                                            )
-                                        }
-                                    },
-                                )
-                            }
-                            .toPersistentList(),
-                    )
+                    if (!state.isNewDeviceVerification) {
+                        BitwardenOverflowActionItem(
+                            menuItemDataList = state.availableAuthMethods
+                                .map {
+                                    OverflowMenuItemData(
+                                        text = it.title(),
+                                        onClick = remember(viewModel) {
+                                            {
+                                                viewModel.trySendAction(
+                                                    TwoFactorLoginAction.SelectAuthMethod(it),
+                                                )
+                                            }
+                                        },
+                                    )
+                                }
+                                .toPersistentList(),
+                        )
+                    }
                 },
             )
         },
@@ -190,6 +201,7 @@ private fun TwoFactorLoginDialogs(
                 ?.invoke()
                 ?: stringResource(R.string.an_error_has_occurred),
             message = dialogState.message(),
+            throwable = dialogState.error,
             onDismissRequest = onDismissRequest,
         )
 
@@ -214,34 +226,55 @@ private fun TwoFactorLoginScreenContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
+        if (state.authMethod != TwoFactorAuthMethod.YUBI_KEY) {
+            state.imageRes?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .standardHorizontalMargin()
+                        .size(124.dp),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+        Spacer(modifier = Modifier.height(height = 12.dp))
         Text(
-            text = state.authMethod.description(state.displayEmail)(),
-            textAlign = TextAlign.Start,
+            text = if (state.isNewDeviceVerification) {
+                R.string.enter_verification_code_new_device.asText(state.displayEmail).invoke()
+            } else {
+                state.authMethod.description(
+                    state.displayEmail,
+                ).invoke()
+            },
+            textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             color = BitwardenTheme.colorScheme.text.primary,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        state.imageRes?.let {
-            Spacer(modifier = Modifier.height(12.dp))
-            Image(
-                painter = painterResource(id = it),
-                contentDescription = null,
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+        if (state.authMethod == TwoFactorAuthMethod.YUBI_KEY) {
+            state.imageRes?.let {
+                Spacer(modifier = Modifier.height(12.dp))
+                Image(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+            }
         }
 
         if (state.shouldShowCodeInput) {
@@ -255,31 +288,35 @@ private fun TwoFactorLoginScreenContent(
                 keyboardActions = KeyboardActions(
                     onDone = { onContinueButtonClick() },
                 ),
+                cardStyle = CardStyle.Full,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
         }
 
-        BitwardenSwitch(
-            label = stringResource(id = R.string.remember_me),
-            isChecked = state.isRememberMeEnabled,
-            onCheckedChange = onRememberMeToggle,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+        if (!state.isNewDeviceVerification) {
+            BitwardenSwitch(
+                label = stringResource(id = R.string.remember),
+                isChecked = state.isRememberEnabled,
+                onCheckedChange = onRememberMeToggle,
+                cardStyle = CardStyle.Full,
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .fillMaxWidth(),
+            )
+        }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(height = 24.dp))
 
         BitwardenFilledButton(
             label = state.buttonText(),
             onClick = onContinueButtonClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -290,10 +327,12 @@ private fun TwoFactorLoginScreenContent(
                 label = stringResource(id = R.string.send_verification_code_again),
                 onClick = onResendEmailButtonClick,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .standardHorizontalMargin()
                     .fillMaxWidth(),
             )
         }
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
 
@@ -303,17 +342,18 @@ private fun TwoFactorLoginScreenContentPreview() {
     BitwardenTheme {
         TwoFactorLoginScreenContent(
             state = TwoFactorLoginState(
-                TwoFactorAuthMethod.EMAIL,
+                authMethod = TwoFactorAuthMethod.EMAIL,
                 availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL),
                 codeInput = "",
                 dialogState = null,
                 displayEmail = "email@dot.com",
                 isContinueButtonEnabled = true,
-                isRememberMeEnabled = true,
+                isRememberEnabled = true,
                 captchaToken = null,
                 email = "",
                 password = "",
                 orgIdentifier = null,
+                isNewDeviceVerification = true,
             ),
             onCodeInputChange = {},
             onContinueButtonClick = {},

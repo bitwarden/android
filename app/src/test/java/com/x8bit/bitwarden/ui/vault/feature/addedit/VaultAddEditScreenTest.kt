@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -15,6 +18,7 @@ import androidx.compose.ui.test.click
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.hasText
@@ -28,26 +32,29 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
+import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
@@ -70,6 +77,7 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -109,7 +117,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent(
+            permissionsManager = fakePermissionManager,
+            exitManager = exitManager,
+            intentManager = intentManager,
+            fido2CompletionManager = fido2CompletionManager,
+            biometricsManager = biometricsManager,
+        ) {
             VaultAddEditScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToQrCodeScanScreen = { onNavigateQrCodeScanScreenCalled = true },
@@ -120,11 +134,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 onNavigateToAttachments = { onNavigateToAttachmentsId = it },
                 onNavigateToMoveToOrganization = { id, _ -> onNavigateToMoveToOrganizationId = id },
                 viewModel = viewModel,
-                permissionsManager = fakePermissionManager,
-                exitManager = exitManager,
-                intentManager = intentManager,
-                fido2CompletionManager = fido2CompletionManager,
-                biometricsManager = biometricsManager,
             )
         }
     }
@@ -147,6 +156,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             intentManager.launchUri(
                 "https://bitwarden.com/help/managing-items/#protect-individual-items".toUri(),
+            )
+        }
+    }
+
+    @Test
+    fun `on NavigateToAuthenticatorKeyTooltipUri Event should invoke IntentManager`() {
+        mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToAuthenticatorKeyTooltipUri)
+        verify {
+            intentManager.launchUri(
+                "https://bitwarden.com/help/integrated-authenticator".toUri(),
             )
         }
     }
@@ -203,8 +222,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
-        val result = Fido2RegisterCredentialResult.Success(
-            registrationResponse = "mockRegistrationResponse",
+        val result = RegisterFido2CredentialResult.Success(
+            responseJson = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
         verify { fido2CompletionManager.completeFido2Registration(result) }
@@ -441,7 +460,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
-        verify { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.Fido2ErrorDialogDismissed("mockMessage".asText()),
+            )
+        }
     }
 
     @Test
@@ -606,55 +629,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a Type Option should send TypeOptionSelect action`() {
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "Login")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.TypeOptionSelect(VaultAddEditState.ItemTypeOption.LOGIN),
-            )
-        }
-    }
-
-    @Test
-    fun `the Type Option field should display the text of the selected item type`() {
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(
-                viewState = VaultAddEditState.ViewState.Content(
-                    common = VaultAddEditState.ViewState.Content.Common(),
-                    type = VaultAddEditState.ViewState.Content.ItemType.Card(),
-                    isIndividualVaultDisabled = false,
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Card. Type")
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun `in ItemType_Login state the password should change according to state`() {
         composeTestRule
             .onNodeWithTextAfterScroll("Password")
             .assertTextEquals("Password", "")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Check if password has been exposed.")
+            .onNodeWithTextAfterScroll("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Generate password")
@@ -679,7 +660,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onNodeWithText("Password")
             .assertTextEquals("Password", "••••••••")
         composeTestRule
-            .onNodeWithContentDescription("Check if password has been exposed.")
+            .onNodeWithText("Check password for data breaches")
             .assertIsDisplayed()
         composeTestRule
             .onNodeWithContentDescription("Generate password")
@@ -831,9 +812,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Password")
-            .onSiblings()
-            .filterToOne(hasContentDescription("Check if password has been exposed."))
+            .onNodeWithTextAfterScroll(text = "Check password for data breaches")
             .performClick()
 
         verify {
@@ -852,7 +831,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
-            .onSiblings()
+            .onChildren()
             .onLast()
             .performClick()
 
@@ -881,7 +860,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Password")
-            .onSiblings()
+            .onChildren()
             .onLast()
             .performClick()
 
@@ -1005,24 +984,20 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("TOTP")
-            .assertTextEquals("TOTP", "TestCode")
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "TestCode")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = "NewTestCode") }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("TOTP")
-            .assertTextEquals("TOTP", "NewTestCode")
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "NewTestCode")
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
-
-        composeTestRule
-            .onNodeWithText("TOTP")
-            .assertDoesNotExist()
     }
 
     @Suppress("MaxLineLength")
@@ -1076,7 +1051,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll("Camera")
+            .onNodeWithTextAfterScroll("Set up authenticator key")
             .performClick()
 
         verify {
@@ -1089,13 +1064,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in ItemType_Login state SetupTOTP button should be present based on state`() {
+    fun `in ItemType_Login state Set up authenticator key button should always be present`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1103,8 +1078,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = "Set up TOTP")
-            .assertIsNotDisplayed()
+            .onNodeWithText(text = "Set up authenticator key")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
@@ -1113,7 +1088,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         fakePermissionManager.checkPermissionResult = true
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1130,7 +1105,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         fakePermissionManager.getPermissionsResult = true
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1144,12 +1119,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in ItemType_Login state clicking Set up TOTP button with a negative result should send false`() {
+    fun `in ItemType_Login state clicking Set up authenticator key button with a negative result should send false`() {
         fakePermissionManager.checkPermissionResult = false
         fakePermissionManager.getPermissionsResult = false
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Set up TOTP")
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
             .performClick()
 
         verify {
@@ -1157,6 +1132,59 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                     isGranted = false,
                 ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state the SetupAuthenticatorKey button should be visible but disabled based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    canViewPassword = false,
+                    totp = null,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state the TOTP text field should be visible but disabled and the associated icon buttons should be invisible based on state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    canViewPassword = false,
+                    totp = "TestCode",
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Set up authenticator key")
+            .assertIsDisplayed()
+            .assertIsNotEnabled()
+
+        composeTestRule.assertScrollableNodeDoesNotExist("Delete")
+        composeTestRule.assertScrollableNodeDoesNotExist("Copy TOTP")
+        composeTestRule.assertScrollableNodeDoesNotExist("Camera")
+    }
+
+    @Test
+    fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
             )
         }
     }
@@ -1189,7 +1217,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login the URI control should display the text provided by the state`() {
         composeTestRule
-            .onNodeWithTextAfterScroll("URI")
+            .onNodeWithTextAfterScroll("Website (URI)")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -1203,15 +1231,15 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
             .assertTextContains("NewURI")
     }
 
     @Test
     fun `in ItemType_Login Uri settings dialog should be dismissed on cancel click`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
-            .onSiblings()
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
@@ -1237,8 +1265,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
-            .onSiblings()
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
@@ -1262,8 +1290,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login Uri settings dialog with open match detection click should open list of options`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
-            .onSiblings()
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
@@ -1322,8 +1350,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
-            .onSiblings()
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
@@ -1367,8 +1395,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "URI")
-            .onSiblings()
+            .onNodeWithTextAfterScroll(text = "Website (URI)")
+            .onChildren()
             .filterToOne(hasContentDescription(value = "Options"))
             .performClick()
 
@@ -1393,7 +1421,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `in ItemType_Login state clicking the New URI button should trigger AddNewUriClick`() {
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New URI")
+            .onNodeWithTextAfterScroll(text = "Add website")
             .performClick()
 
         verify {
@@ -2258,11 +2286,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Linked type`() {
+    fun `clicking Add field button should allow creation of Linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN
 
+        // Expand the additional options UI before interacting with it
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2294,33 +2327,88 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking a Ownership option should send OwnershipChange action`() {
+    fun `clicking a Ownership option should send SelectOwnerForItem action`() {
         updateStateWithOwners()
 
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockOwnerName-2")
-            .onLast()
-            .performScrollTo()
             .performClick()
 
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange(
-                    VaultAddEditState.Owner(
-                        id = "mockOwnerId-2",
-                        name = "mockOwnerName-2",
-                        collections = DEFAULT_COLLECTIONS,
-                    ),
-                ),
+                VaultAddEditAction.Common.SelectOwnerForItem,
             )
+        }
+    }
+
+    @Test
+    fun `should show owner selection bottom sheet when state updates to OwnerSelection`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText("Owner")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `DismissOwnerSelectionBottomSheet action sent when bottom sheet close button click`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText("Owner")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Close")
+            .filterToOne(hasAnySibling(hasText("Owner")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        dispatcher.advanceTimeByAndRunCurrent(1000L)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissBottomSheet)
+        }
+    }
+
+    @Test
+    fun `Selecting option and clicking save on owner sheet sends OwnershipChange action`() {
+        val ownerId = "1234"
+        val ownerName = "name"
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(
+                    availableOwners = listOf(
+                        VaultAddEditState.Owner(
+                            id = ownerId,
+                            name = ownerName,
+                            collections = DEFAULT_COLLECTIONS,
+                        ),
+                    ),
+                )
+            }
+                .copy(bottomSheetState = VaultAddEditState.BottomSheetState.OwnerSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText(ownerName)
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Owner")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.OwnershipChange(ownerId = ownerId))
         }
     }
 
@@ -2329,7 +2417,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -2338,7 +2426,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Who owns this item?")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Owner")
             .assertIsDisplayed()
     }
 
@@ -2411,7 +2499,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .performTextInput(text = "TestName")
 
         verify {
@@ -2426,7 +2514,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .assertTextContains("")
 
         mutableStateFlow.update { currentState ->
@@ -2434,12 +2522,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "Name")
+            .onNodeWithTextAfterScroll(text = "Item name (required)")
             .assertTextContains("NewName")
     }
 
     @Test
-    fun `clicking a Folder Option should send FolderChange action`() {
+    fun `clicking a Folder Option should send SelectOrAddFolderForItem action`() {
         updateStateWithFolders()
 
         // Opens the menu
@@ -2447,21 +2535,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
             .performClick()
 
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockFolderName-1")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.FolderChange(
-                    VaultAddEditState.Folder(
-                        id = "mockFolderId-1",
-                        name = "mockFolderName-1",
-                    ),
-                ),
+                VaultAddEditAction.Common.SelectOrAddFolderForItem,
             )
         }
     }
@@ -2484,11 +2560,140 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `should show folder selection bottom sheet when state updates to FolderSelection`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `DismissFolderSelectionBottomSheet action sent when bottom sheet close button click`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithContentDescription("Close")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        dispatcher.advanceTimeByAndRunCurrent(1000L)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissBottomSheet)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Clicking add folder button in bottom sheet hides add button and replaced with TextField`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.EditableText))
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText))
+    }
+
+    @Test
+    fun `Editing the add folder text and clicking save send AddFolder action`() {
+        mutableStateFlow.update {
+            it.copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
+        }
+        val newFolderName = "newFolderName"
+
+        composeTestRule
+            .onNodeWithText("Folders")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyNotDefined(SemanticsProperties.EditableText))
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onNodeWithText("Add folder")
+            .assertIsDisplayed()
+            .assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.EditableText))
+            .performTextInput(newFolderName)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.AddNewFolder(newFolderName))
+        }
+    }
+
+    @Test
+    fun `Selecting existing option and clicking save on folder sheet sends FolderChange action`() {
+        val folderId = "1234"
+        val folderName = "name"
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) {
+                copy(
+                    availableFolders = listOf(
+                        VaultAddEditState.Folder(
+                            id = folderId,
+                            name = folderName,
+                        ),
+                    ),
+                )
+            }
+                .copy(bottomSheetState = VaultAddEditState.BottomSheetState.FolderSelection)
+        }
+
+        composeTestRule
+            .onNodeWithText(folderName)
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        composeTestRule
+            .onAllNodesWithText("Save")
+            .filterToOne(hasAnySibling(hasText("Folders")))
+            .assertIsDisplayed()
+            .performSemanticsAction(SemanticsActions.OnClick)
+
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.FolderChange(folderId = folderId))
+        }
+    }
+
+    @Test
     fun `toggling the favorite toggle should send ToggleFavorite action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
+            .onNodeWithContentDescriptionAfterScroll("Unfavorite")
+            .assertIsDisplayed()
             .performClick()
 
         verify {
@@ -2505,22 +2710,27 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOff()
+            .onNodeWithContentDescriptionAfterScroll("Unfavorite")
+            .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) { copy(favorite = true) }
         }
 
         composeTestRule
-            .onNodeWithTextAfterScroll("Favorite")
-            .assertIsOn()
+            .onNodeWithContentDescriptionAfterScroll("Favorite")
+            .assertIsDisplayed()
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `toggling the Master password re-prompt toggle should send ToggleMasterPasswordReprompt action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
@@ -2541,6 +2751,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `re-prompt toggle should display according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
             .assertIsDisplayed()
@@ -2556,6 +2771,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll("Master password re-prompt")
@@ -2573,6 +2793,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `toggling the Master password re-prompt tooltip button should send TooltipClick action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Master password re-prompt help")
@@ -2620,39 +2845,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("NewNote")
     }
 
-    @Test
-    fun `Ownership option should send OwnershipChange action`() {
-        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
-
-        updateStateWithOwners()
-
-        // Opens the menu
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
-            )
-            .performClick()
-
-        // Choose the option from the menu
-        composeTestRule
-            .onAllNodesWithText(text = "mockOwnerName-2")
-            .onLast()
-            .performScrollTo()
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.OwnershipChange(
-                    VaultAddEditState.Owner(
-                        id = "mockOwnerId-2",
-                        name = "mockOwnerName-2",
-                        collections = DEFAULT_COLLECTIONS,
-                    ),
-                ),
-            )
-        }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_SecureNotes the Ownership control should display the text provided by the state`() {
@@ -2660,7 +2852,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "placeholder@email.com. Who owns this item?",
+                label = "placeholder@email.com. Owner",
             )
             .assertIsDisplayed()
 
@@ -2670,17 +2862,22 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "mockOwnerName-2. Who owns this item?",
+                label = "mockOwnerName-2. Owner",
             )
             .assertIsDisplayed()
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Text type`() {
+    fun `clicking Add field button should allow creation of Text type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2712,11 +2909,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should not display linked type`() {
+    fun `clicking Add field button should not display linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2730,11 +2932,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Boolean type`() {
+    fun `clicking Add field button should allow creation of Boolean type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2766,11 +2973,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `clicking New Custom Field button should allow creation of Hidden type`() {
+    fun `clicking Add field button should allow creation of Hidden type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
+        // Expand the additional options UI before interacting with it
         composeTestRule
-            .onNodeWithTextAfterScroll(text = "New custom field")
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Add field")
             .performClick()
 
         composeTestRule
@@ -2821,6 +3033,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 ),
             )
         }
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
         composeTestRule
             .onNodeWithTextAfterScroll(text = "Hidden item")
             .assertExists()
@@ -2840,6 +3056,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking and changing the custom text field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("TestText")
             .performTextClearance()
@@ -2856,6 +3077,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onNodeWithTextAfterScroll("TestHidden")
@@ -2875,6 +3101,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking and changing the custom boolean field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onNodeWithTextAfterScroll("TestBoolean")
             .performClick()
@@ -2891,6 +3122,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking custom field edit icon and Edit option sends a CustomFieldValueChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
@@ -2932,6 +3168,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking custom field edit icon and Remove option sends a CustomFieldActionSelect remove action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
             .onFirst()
@@ -2960,6 +3201,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking custom field edit icon and Move down option sends a CustomFieldActionSelect move down action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
+
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
             .onFirst()
@@ -2987,6 +3233,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking custom field edit icon and Move Up options sends a CustomFieldActionSelect move up action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
+
+        // Expand the additional options UI before interacting with it
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Additional options")
+            .performClick()
 
         composeTestRule
             .onAllNodesWithContentDescriptionAfterScroll("Edit")
@@ -3146,7 +3397,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `should display policy warning when personal vault is disabled for add item type`() {
         mutableStateFlow.update {
             it.copy(
-                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                vaultAddEditType = VaultAddEditType.AddItem,
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(
                         originalCipher = createMockCipherView(1),
@@ -3450,6 +3701,206 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
+    @Test
+    fun `CoachMark tour starts when StartAddLoginItemCoachMarkTour event received`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `CoachMark tour able to move forward and backward between coach marks`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("2 OF 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Back")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Clicking close on a coach mark should end the tour`() = runTest {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNode(
+                hasAnyAncestor(isCoachMarkToolTip) and
+                    hasContentDescription("Close"),
+            )
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `CoachMark tour is closed when user clicks done on final coach mark`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN
+        mutableEventFlow.tryEmit(VaultAddEditEvent.StartAddLoginItemCoachMarkTour)
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("1 OF 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("2 OF 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("2 OF 3")
+            .assertIsNotDisplayed()
+
+        composeTestRule
+            .onNodeWithText("3 OF 3")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("Done")
+            .performClick()
+
+        composeTestRule
+            .onNode(isCoachMarkToolTip)
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should show when state is add mode, login type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is add mode, login type content, and should show coach mark tour is false`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            shouldShowCoachMarkTour = false,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is edit mode, login type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `learn about add logins card should not show when state is add mode, card type content, and should show coach mark tour is true`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "1234"),
+            shouldShowCoachMarkTour = false,
+        )
+
+        composeTestRule
+            .onNodeWithText("Learn about new logins")
+            .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when learn about logins card is showing, clicking the close button sends LearnAboutLoginsDismissed action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNode(
+                hasContentDescription("Close")
+                    and hasAnySibling(hasText("Learn about new logins")),
+            )
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.LearnAboutLoginsDismissed,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when learn about logins card is showing, clicking the call to action sends StartLearnAboutLogins action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            vaultAddEditType = VaultAddEditType.AddItem,
+            shouldShowCoachMarkTour = true,
+        )
+
+        composeTestRule
+            .onNodeWithText("Get started")
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.StartLearnAboutLogins,
+            )
+        }
+    }
+
     //region Helper functions
 
     private fun updateLoginType(
@@ -3521,7 +3972,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         return currentState.copy(viewState = updatedType)
     }
 
-    @Suppress("MaxLineLength")
     private fun updateCommonContent(
         currentState: VaultAddEditState,
         transform: VaultAddEditState.ViewState.Content.Common.()
@@ -3567,50 +4017,57 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     companion object {
         private val DEFAULT_STATE_LOGIN_DIALOG = VaultAddEditState(
+            cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            vaultAddEditType = VaultAddEditType.AddItem,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.LOGIN,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.IDENTITY),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.IDENTITY,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.CARD),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.CARD,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
         )
 
-        @Suppress("MaxLineLength")
         private val DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS = VaultAddEditState(
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(
@@ -3618,9 +4075,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                         VaultAddEditState.Custom.BooleanField("Test ID 1", "TestBoolean", false),
                         VaultAddEditState.Custom.TextField("Test ID 2", "TestText", "TestTextVal"),
                         VaultAddEditState.Custom.HiddenField(
-                            "Test ID 3",
-                            "TestHidden",
-                            "TestHiddenVal",
+                            itemId = "Test ID 3",
+                            name = "TestHidden",
+                            value = "TestHiddenVal",
                         ),
                     ),
                 ),
@@ -3628,30 +4085,36 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SECURE_NOTE,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SECURE_NOTE,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
         )
 
         private val DEFAULT_STATE_SSH_KEYS = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SSH_KEY),
+            vaultAddEditType = VaultAddEditType.AddItem,
+            cipherType = VaultItemCipherType.SSH_KEY,
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SshKey(),
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            supportedItemTypes = VaultAddEditState.ItemTypeOption.entries,
+            bottomSheetState = null,
+            shouldShowCoachMarkTour = false,
         )
 
         private val ALTERED_COLLECTIONS = listOf(
