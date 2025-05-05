@@ -118,7 +118,7 @@ internal class BitwardenServiceClientImpl(
 
     override val configService: ConfigService by lazy {
         ConfigServiceImpl(
-            configApi = retrofits.createStaticRetrofit().create(),
+            configApi = retrofits.unauthenticatedApiRetrofit.create(),
         )
     }
 
