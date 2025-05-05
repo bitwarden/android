@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
 import androidx.core.os.bundleOf
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import io.mockk.mockk
@@ -44,14 +44,14 @@ class SpecialCircumstanceExtensionsTest {
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
             ),
-            SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = mockk(),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
             ),
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
             ),
-            SpecialCircumstance.Fido2GetCredentials(
-                fido2GetCredentialsRequest = mockk(),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -94,14 +94,14 @@ class SpecialCircumstanceExtensionsTest {
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
             ),
-            SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = mockk(),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
             ),
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
             ),
-            SpecialCircumstance.Fido2GetCredentials(
-                fido2GetCredentialsRequest = mockk(),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -133,31 +133,31 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
             ),
-            SpecialCircumstance.Fido2GetCredentials(
-                fido2GetCredentialsRequest = mockk(),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
-                assertNull(specialCircumstance.toFido2CreateRequestOrNull())
+                assertNull(specialCircumstance.toCreateCredentialRequestOrNull())
             }
     }
 
     @Test
     fun `toFido2RequestOrNull should return a non-null value for Fido2Save`() {
-        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
+        val createCredentialRequest = CreateCredentialRequest(
             userId = "mockUserId",
             isUserPreVerified = false,
             requestData = bundleOf(),
         )
         assertEquals(
-            fido2CreateCredentialRequest,
+            createCredentialRequest,
             SpecialCircumstance
-                .Fido2Save(
-                    fido2CreateCredentialRequest = fido2CreateCredentialRequest,
+                .ProviderCreateCredential(
+                    createCredentialRequest = createCredentialRequest,
                 )
-                .toFido2CreateRequestOrNull(),
+                .toCreateCredentialRequestOrNull(),
         )
     }
 
@@ -195,11 +195,11 @@ class SpecialCircumstanceExtensionsTest {
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
             ),
-            SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = mockk(),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
             ),
-            SpecialCircumstance.Fido2GetCredentials(
-                fido2GetCredentialsRequest = mockk(),
+            SpecialCircumstance.ProviderGetCredentials(
+                getCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -212,14 +212,14 @@ class SpecialCircumstanceExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toFido2GetCredentialsRequestOrNull should return a non-null value for Fido2GetCredentials`() {
-        val fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+        val fido2GetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         assertEquals(
             fido2GetCredentialsRequest,
             SpecialCircumstance
-                .Fido2GetCredentials(
-                    fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                .ProviderGetCredentials(
+                    getCredentialsRequest = fido2GetCredentialsRequest,
                 )
-                .toFido2GetCredentialsRequestOrNull(),
+                .toGetCredentialsRequestOrNull(),
         )
     }
 
@@ -242,8 +242,8 @@ class SpecialCircumstanceExtensionsTest {
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
             ),
-            SpecialCircumstance.Fido2Save(
-                fido2CreateCredentialRequest = mockk(),
+            SpecialCircumstance.ProviderCreateCredential(
+                createCredentialRequest = mockk(),
             ),
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
@@ -252,7 +252,7 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
-                assertNull(specialCircumstance.toFido2GetCredentialsRequestOrNull())
+                assertNull(specialCircumstance.toGetCredentialsRequestOrNull())
             }
     }
 
@@ -272,7 +272,7 @@ class SpecialCircumstanceExtensionsTest {
             mockk<SpecialCircumstance.AutofillSave>(),
             mockk<SpecialCircumstance.ShareNewSend>(),
             mockk<SpecialCircumstance.PasswordlessRequest>(),
-            mockk<SpecialCircumstance.Fido2Save>(),
+            mockk<SpecialCircumstance.ProviderCreateCredential>(),
             mockk<SpecialCircumstance.Fido2Assertion>(),
             mockk<SpecialCircumstance.RegistrationEvent>(),
             SpecialCircumstance.GeneratorShortcut,

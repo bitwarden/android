@@ -14,9 +14,9 @@ import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManagerImpl
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerImpl
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerUnsupportedApiImpl
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerImpl
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManagerUnsupportedApiImpl
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -45,10 +45,8 @@ fun LocalManagerProvider(
     biometricsManager: BiometricsManager = BiometricsManagerImpl(activity = activity),
     exitManager: ExitManager = ExitManagerImpl(activity = activity),
     intentManager: IntentManager = IntentManagerImpl(context = activity),
-    fido2CompletionManager: Fido2CompletionManager = createFido2CompletionManager(
-        activity = activity,
-        intentManager = intentManager,
-    ),
+    credentialProviderCompletionManager: CredentialProviderCompletionManager =
+        createCredentialProviderCompletionManager(activity = activity),
     keyChainManager: KeyChainManager = KeyChainManagerImpl(activity = activity),
     nfcManager: NfcManager = NfcManagerImpl(activity = activity),
     permissionsManager: PermissionsManager = PermissionsManagerImpl(activity = activity),
@@ -60,7 +58,7 @@ fun LocalManagerProvider(
         LocalAppReviewManager provides appReviewManager,
         LocalBiometricsManager provides biometricsManager,
         LocalExitManager provides exitManager,
-        LocalFido2CompletionManager provides fido2CompletionManager,
+        LocalCredentialProviderCompletionManager provides credentialProviderCompletionManager,
         LocalIntentManager provides intentManager,
         LocalKeyChainManager provides keyChainManager,
         LocalNfcManager provides nfcManager,
@@ -69,14 +67,13 @@ fun LocalManagerProvider(
     )
 }
 
-private fun createFido2CompletionManager(
+private fun createCredentialProviderCompletionManager(
     activity: Activity,
-    intentManager: IntentManager,
-): Fido2CompletionManager =
+): CredentialProviderCompletionManager =
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
-        Fido2CompletionManagerUnsupportedApiImpl
+        CredentialProviderCompletionManagerUnsupportedApiImpl
     } else {
-        Fido2CompletionManagerImpl(activity)
+        CredentialProviderCompletionManagerImpl(activity)
     }
 
 /**
@@ -124,7 +121,8 @@ val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf
 /**
  * Provides access to the FIDO2 completion manager throughout the app.
  */
-val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManager> =
+@Suppress("MaxLineLength")
+val LocalCredentialProviderCompletionManager: ProvidableCompositionLocal<CredentialProviderCompletionManager> =
     compositionLocalOf {
         error("CompositionLocal Fido2CompletionManager not present")
     }

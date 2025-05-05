@@ -14,8 +14,8 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
@@ -465,7 +465,7 @@ class VaultItemListingDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
-            fido2CreationData = null,
+            createCredentialRequestData = null,
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
@@ -558,7 +558,7 @@ class VaultItemListingDataExtensionsTest {
                 framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = null,
             ),
-            fido2CreationData = null,
+            createCredentialRequestData = null,
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
@@ -644,7 +644,7 @@ class VaultItemListingDataExtensionsTest {
                 framework = AutofillSelectionData.Framework.AUTOFILL,
                 uri = null,
             ),
-            fido2CreationData = null,
+            createCredentialRequestData = null,
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             totpData = null,
             isPremiumUser = true,
@@ -710,7 +710,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -733,7 +733,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -754,7 +754,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -776,7 +776,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -797,7 +797,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -818,7 +818,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -839,7 +839,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -864,7 +864,7 @@ class VaultItemListingDataExtensionsTest {
                     framework = AutofillSelectionData.Framework.AUTOFILL,
                     uri = "https://www.test.com",
                 ),
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = null,
                 isPremiumUser = true,
@@ -885,7 +885,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = Fido2CreateCredentialRequest(
+                createCredentialRequestData = CreateCredentialRequest(
                     userId = "userId",
                     isUserPreVerified = false,
                     requestData = bundleOf(),
@@ -912,7 +912,7 @@ class VaultItemListingDataExtensionsTest {
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 isIconLoadingDisabled = false,
                 autofillSelectionData = null,
-                fido2CreationData = null,
+                createCredentialRequestData = null,
                 fido2CredentialAutofillViews = null,
                 totpData = mockk<TotpData> {
                     every { accountName } returns "accountName"
@@ -1157,7 +1157,7 @@ class VaultItemListingDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
-            fido2CreationData = null,
+            createCredentialRequestData = null,
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,
@@ -1201,7 +1201,7 @@ class VaultItemListingDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = false,
             autofillSelectionData = null,
-            fido2CreationData = null,
+            createCredentialRequestData = null,
             fido2CredentialAutofillViews = null,
             totpData = null,
             isPremiumUser = true,

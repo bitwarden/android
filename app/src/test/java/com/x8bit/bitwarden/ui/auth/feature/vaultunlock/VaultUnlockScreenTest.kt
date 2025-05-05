@@ -23,9 +23,9 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -78,16 +78,16 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             )
         } just runs
     }
-    private val fido2CompletionManager: Fido2CompletionManager = mockk {
+    private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
         every { completeFido2Assertion(any()) } just runs
-        every { completeFido2GetCredentialsRequest(any()) } just runs
+        every { completeProviderGetCredentialsRequest(any()) } just runs
     }
 
     @Before
     fun setUp() {
         setContent(
             biometricsManager = biometricsManager,
-            fido2CompletionManager = fido2CompletionManager,
+            credentialProviderCompletionManager = credentialProviderCompletionManager,
         ) {
             VaultUnlockScreen(
                 viewModel = viewModel,
@@ -136,8 +136,8 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             ),
         )
         verify(exactly = 1) {
-            fido2CompletionManager.completeFido2GetCredentialsRequest(
-                result = GetFido2CredentialsResult.Error(
+            credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
+                result = GetCredentialsResult.Error(
                     R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
             )
@@ -149,7 +149,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     fun `on Fido2AssertCredentialError should call completeFido2AssertCredential on fido2CompletionManager`() {
         mutableEventFlow.tryEmit(VaultUnlockEvent.Fido2CredentialAssertionError("".asText()))
         verify(exactly = 1) {
-            fido2CompletionManager.completeFido2Assertion(
+            credentialProviderCompletionManager.completeFido2Assertion(
                 result = AssertFido2CredentialResult.Error("".asText()),
             )
         }

@@ -11,11 +11,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
@@ -664,13 +664,13 @@ class RootNavViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
-        val fido2CreateCredentialRequest = Fido2CreateCredentialRequest(
+        val createCredentialRequest = CreateCredentialRequest(
             userId = "activeUserId",
             isUserPreVerified = false,
             requestData = bundleOf(),
         )
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2Save(fido2CreateCredentialRequest)
+            SpecialCircumstance.ProviderCreateCredential(createCredentialRequest)
         mutableUserStateFlow.tryEmit(
             UserState(
                 activeUserId = "activeUserId",
@@ -703,7 +703,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         assertEquals(
             RootNavState.VaultUnlockedForFido2Save(
                 activeUserId = "activeUserId",
-                fido2CreateCredentialRequest = fido2CreateCredentialRequest,
+                createCredentialRequest = createCredentialRequest,
             ),
             viewModel.stateFlow.value,
         )
@@ -756,16 +756,16 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when the active user has an unlocked vault but there is a Fido2GetCredentials special circumstance the nav state should be VaultUnlockedForFido2GetCredentials`() {
-        val fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+    fun `when the active user has an unlocked vault but there is a ProviderGetCredentials special circumstance the nav state should be VaultUnlockedForProviderGetCredentials`() {
+        val fido2GetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         specialCircumstanceManager.specialCircumstance =
-            SpecialCircumstance.Fido2GetCredentials(fido2GetCredentialsRequest)
+            SpecialCircumstance.ProviderGetCredentials(fido2GetCredentialsRequest)
         mutableUserStateFlow.tryEmit(MOCK_VAULT_UNLOCKED_USER_STATE)
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.VaultUnlockedForFido2GetCredentials(
+            RootNavState.VaultUnlockedForProviderGetCredentials(
                 activeUserId = "activeUserId",
-                fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                getCredentialsRequest = fido2GetCredentialsRequest,
             ),
             viewModel.stateFlow.value,
         )

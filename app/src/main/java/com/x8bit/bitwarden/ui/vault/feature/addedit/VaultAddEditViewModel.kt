@@ -20,12 +20,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
-import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
-import com.x8bit.bitwarden.data.autofill.fido2.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
+import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -38,7 +38,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2CreateRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -50,7 +50,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
@@ -105,14 +105,14 @@ private const val KEY_STATE = "state"
  * @param savedStateHandle Handles the navigation arguments of this ViewModel.
  */
 @HiltViewModel
-@Suppress("TooManyFunctions", "LargeClass", "LongParameterList")
+@Suppress("TooManyFunctions", "LargeClass", "LongParameterList", "LongMethod")
 class VaultAddEditViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
-    private val fido2CredentialManager: Fido2CredentialManager,
+    private val bitwardenCredentialManager: BitwardenCredentialManager,
     generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -142,15 +142,16 @@ class VaultAddEditViewModel @Inject constructor(
             // Check for totp data to pre-populate
             val totpData = specialCircumstance?.toTotpDataOrNull()
             // Check for Fido2 data to pre-populate
-            val fido2CreationRequest = specialCircumstance?.toFido2CreateRequestOrNull()
-            val fido2AttestationOptions = fido2CreationRequest?.requestJson
+            val providerCreateCredentialRequest =
+                specialCircumstance?.toCreateCredentialRequestOrNull()
+            val fido2AttestationOptions = providerCreateCredentialRequest?.requestJson
                 ?.let { request ->
-                    fido2CredentialManager.getPasskeyAttestationOptionsOrNull(request)
+                    bitwardenCredentialManager.getPasskeyAttestationOptionsOrNull(request)
                 }
 
             // Exit on save if handling an autofill, Fido2 Attestation, or TOTP link
             val shouldExitOnSave = autofillSaveItem != null ||
-                fido2CreationRequest != null
+                providerCreateCredentialRequest != null
 
             val dialogState = if (!settingsRepository.initialAutofillDialogShown &&
                 vaultAddEditType is VaultAddEditType.AddItem &&
@@ -169,7 +170,7 @@ class VaultAddEditViewModel @Inject constructor(
                         autofillSelectionData
                             ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: autofillSaveItem?.toDefaultAddTypeContent(isIndividualVaultDisabled)
-                            ?: fido2CreationRequest?.toDefaultAddTypeContent(
+                            ?: providerCreateCredentialRequest?.toDefaultAddTypeContent(
                                 attestationOptions = fido2AttestationOptions,
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
                             )
@@ -190,9 +191,10 @@ class VaultAddEditViewModel @Inject constructor(
                 dialog = dialogState,
                 bottomSheetState = null,
                 totpData = totpData,
-                fido2CreateCredentialRequest = fido2CreationRequest,
+                createCredentialRequest = providerCreateCredentialRequest,
                 // Set special conditions for autofill and fido2 save
-                shouldShowCloseButton = autofillSaveItem == null && fido2CreationRequest == null,
+                shouldShowCloseButton = autofillSaveItem == null &&
+                    providerCreateCredentialRequest == null,
                 shouldExitOnSave = shouldExitOnSave,
                 shouldShowCoachMarkTour = false,
                 shouldClearSpecialCircumstance = autofillSelectionData == null,
@@ -416,7 +418,7 @@ class VaultAddEditViewModel @Inject constructor(
             )
         }
 
-        state.fido2CreateCredentialRequest
+        state.createCredentialRequest
             ?.let { request ->
                 handleProviderCreateCredentialRequest(
                     request.providerRequest,
@@ -470,12 +472,15 @@ class VaultAddEditViewModel @Inject constructor(
             return
         }
 
-        if (fido2CredentialManager.isUserVerified) {
+        if (bitwardenCredentialManager.isUserVerified) {
             registerFido2CredentialToCipher(callingAppInfo, request, cipherView)
             return
         }
 
-        when (val requirement = fido2CredentialManager.getUserVerificationRequirement(request)) {
+        when (
+            val requirement =
+                bitwardenCredentialManager.getUserVerificationRequirement(request)
+        ) {
             UserVerificationRequirement.DISCOURAGED -> {
                 registerFido2CredentialToCipher(callingAppInfo, request, cipherView)
             }
@@ -505,7 +510,7 @@ class VaultAddEditViewModel @Inject constructor(
                     return@launch
                 }
             val result: Fido2RegisterCredentialResult =
-                fido2CredentialManager.registerFido2Credential(
+                bitwardenCredentialManager.registerFido2Credential(
                     userId = userId,
                     callingAppInfo = callingAppInfo,
                     createPublicKeyCredentialRequest = request,
@@ -590,7 +595,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleConfirmOverwriteExistingPasskeyClick() {
         state
-            .fido2CreateCredentialRequest
+            .createCredentialRequest
             ?.providerRequest
             ?.let { request ->
                 onContent { content ->
@@ -606,19 +611,19 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationLockOut() {
-        fido2CredentialManager.isUserVerified = false
+        bitwardenCredentialManager.isUserVerified = false
         showFido2ErrorDialog(
             R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
         )
     }
 
     private fun handleUserVerificationSuccess() {
-        fido2CredentialManager.isUserVerified = true
+        bitwardenCredentialManager.isUserVerified = true
         getRequestAndRegisterCredential()
     }
 
     private fun getRequestAndRegisterCredential() =
-        state.fido2CreateCredentialRequest
+        state.createCredentialRequest
             ?.providerRequest
             ?.let { request ->
                 onContent { content ->
@@ -633,7 +638,7 @@ class VaultAddEditViewModel @Inject constructor(
             )
 
     private fun handleUserVerificationFail() {
-        fido2CredentialManager.isUserVerified = false
+        bitwardenCredentialManager.isUserVerified = false
         showFido2ErrorDialog(
             R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
         )
@@ -642,7 +647,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleFido2ErrorDialogDismissed(
         action: VaultAddEditAction.Common.Fido2ErrorDialogDismissed,
     ) {
-        fido2CredentialManager.isUserVerified = false
+        bitwardenCredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
@@ -652,7 +657,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationCancelled() {
-        fido2CredentialManager.isUserVerified = false
+        bitwardenCredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
@@ -662,7 +667,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationNotSupported() {
-        fido2CredentialManager.isUserVerified = false
+        bitwardenCredentialManager.isUserVerified = false
 
         val activeAccount = authRepository
             .userStateFlow
@@ -1934,8 +1939,8 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleInvalidAuthentication(errorDialogState: VaultAddEditState.DialogState) {
-        fido2CredentialManager.authenticationAttempts += 1
-        if (fido2CredentialManager.hasAuthenticationAttemptsRemaining()) {
+        bitwardenCredentialManager.authenticationAttempts += 1
+        if (bitwardenCredentialManager.hasAuthenticationAttemptsRemaining()) {
             mutableStateFlow.update {
                 it.copy(dialog = errorDialogState)
             }
@@ -1947,8 +1952,8 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleValidAuthentication() {
-        fido2CredentialManager.isUserVerified = true
-        fido2CredentialManager.authenticationAttempts = 0
+        bitwardenCredentialManager.isUserVerified = true
+        bitwardenCredentialManager.authenticationAttempts = 0
 
         getRequestAndRegisterCredential()
     }
@@ -2134,7 +2139,7 @@ data class VaultAddEditState(
     val shouldExitOnSave: Boolean = false,
     val shouldClearSpecialCircumstance: Boolean = true,
     val totpData: TotpData? = null,
-    val fido2CreateCredentialRequest: Fido2CreateCredentialRequest? = null,
+    val createCredentialRequest: CreateCredentialRequest? = null,
     private val shouldShowCoachMarkTour: Boolean,
 ) : Parcelable {
 

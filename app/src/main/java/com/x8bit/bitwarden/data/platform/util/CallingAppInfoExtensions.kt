@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.util
 
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import java.security.MessageDigest
 
 /**
@@ -21,27 +21,27 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
  * Returns true if this [CallingAppInfo] is present in the privileged app [allowList]. Otherwise,
  * returns false.
  */
-fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOriginResult {
+fun CallingAppInfo.validatePrivilegedApp(allowList: String): ValidateOriginResult {
 
     if (!allowList.contains("\"package_name\": \"$packageName\"")) {
-        return Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed
+        return ValidateOriginResult.Error.PrivilegedAppNotAllowed
     }
 
     return try {
         val origin = getOrigin(allowList)
         if (origin.isNullOrEmpty()) {
-            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
+            ValidateOriginResult.Error.PasskeyNotSupportedForApp
         } else {
-            Fido2ValidateOriginResult.Success(origin)
+            ValidateOriginResult.Success(origin)
         }
     } catch (_: IllegalStateException) {
         // We know the package name is in the allow list so we can infer that this exception is
         // thrown because no matching signature is found.
-        Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
+        ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
     } catch (_: IllegalArgumentException) {
         // The allow list is not formatted correctly so we notify the user passkeys are not
         // supported for this application
-        Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
+        ValidateOriginResult.Error.PasskeyNotSupportedForApp
     }
 }
 

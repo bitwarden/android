@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 
 /**
  * Returns the string resource ID corresponding to the error message for the given

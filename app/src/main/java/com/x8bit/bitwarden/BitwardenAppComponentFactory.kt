@@ -8,7 +8,7 @@ import androidx.core.app.AppComponentFactory
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
-import com.x8bit.bitwarden.data.autofill.fido2.BitwardenFido2ProviderService
+import com.x8bit.bitwarden.data.credentials.BitwardenCredentialProviderService
 import com.x8bit.bitwarden.data.tiles.BitwardenAutofillTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenGeneratorTileService
 import com.x8bit.bitwarden.data.tiles.BitwardenVaultTileService
@@ -30,7 +30,7 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
      * * [BitwardenAccessibilityService]
      * * [BitwardenAutofillService]
      * * [BitwardenAutofillTileService]
-     * * [BitwardenFido2ProviderService]
+     * * [BitwardenCredentialProviderService]
      * * [BitwardenVaultTileService]
      * * [BitwardenGeneratorTileService]
      */
@@ -63,7 +63,7 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 super.instantiateServiceCompat(
                     cl,
-                    BitwardenFido2ProviderService::class.java.name,
+                    BitwardenCredentialProviderService::class.java.name,
                     intent,
                 )
             } else {

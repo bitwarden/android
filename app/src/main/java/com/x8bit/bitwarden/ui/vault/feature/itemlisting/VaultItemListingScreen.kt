@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -44,8 +44,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToR
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
@@ -81,7 +81,8 @@ fun VaultItemListingScreen(
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     exitManager: ExitManager = LocalExitManager.current,
-    fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
+    credentialProviderCompletionManager: CredentialProviderCompletionManager =
+        LocalCredentialProviderCompletionManager.current,
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
@@ -160,10 +161,10 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2Registration -> {
-                fido2CompletionManager.completeFido2Registration(event.result)
+                credentialProviderCompletionManager.completeFido2Registration(event.result)
             }
 
-            is VaultItemListingEvent.Fido2UserVerification -> {
+            is VaultItemListingEvent.CredentialManagerUserVerification -> {
                 biometricsManager.promptUserVerification(
                     onSuccess = {
                         userVerificationHandlers
@@ -181,11 +182,12 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2Assertion -> {
-                fido2CompletionManager.completeFido2Assertion(event.result)
+                credentialProviderCompletionManager.completeFido2Assertion(event.result)
             }
 
-            is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
-                fido2CompletionManager.completeFido2GetCredentialsRequest(event.result)
+            is VaultItemListingEvent.CompleteProviderGetCredentialsRequest -> {
+                credentialProviderCompletionManager
+                    .completeProviderGetCredentialsRequest(event.result)
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
@@ -204,7 +206,10 @@ fun VaultItemListingScreen(
         onDismissFido2ErrorDialog = remember(viewModel) {
             { errorMessage ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2ErrorDialogClick(message = errorMessage),
+                    VaultItemListingsAction
+                        .DismissCredentialManagerErrorDialogClick(
+                            message = errorMessage,
+                        ),
                 )
             }
         },
@@ -220,7 +225,7 @@ fun VaultItemListingScreen(
         onSubmitMasterPasswordFido2Verification = remember(viewModel) {
             { password, cipherId ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                    VaultItemListingsAction.MasterPasswordUserVerificationSubmit(
                         password = password,
                         selectedCipherId = cipherId,
                     ),
@@ -230,14 +235,14 @@ fun VaultItemListingScreen(
         onRetryFido2PasswordVerification = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.RetryFido2PasswordVerificationClick(it),
+                    VaultItemListingsAction.RetryUserVerificationPasswordVerificationClick(it),
                 )
             }
         },
         onSubmitPinFido2Verification = remember(viewModel) {
             { pin, cipherId ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.PinFido2VerificationSubmit(
+                    VaultItemListingsAction.PinUserVerificationSubmit(
                         pin = pin,
                         selectedCipherId = cipherId,
                     ),
@@ -247,14 +252,14 @@ fun VaultItemListingScreen(
         onRetryFido2PinVerification = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.RetryFido2PinVerificationClick(it),
+                    VaultItemListingsAction.RetryUserVerificationPinVerificationClick(it),
                 )
             }
         },
         onSubmitPinSetUpFido2Verification = remember(viewModel) {
             { pin, cipherId ->
                 viewModel.trySendAction(
-                    VaultItemListingsAction.PinFido2SetUpSubmit(
+                    VaultItemListingsAction.UserVerificationPinSetUpSubmit(
                         pin = pin,
                         selectedCipherId = cipherId,
                     ),
@@ -264,14 +269,14 @@ fun VaultItemListingScreen(
         onRetryPinSetUpFido2Verification = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.PinFido2SetUpRetryClick(it),
+                    VaultItemListingsAction.UserVerificationPinSetUpRetryClick(it),
                 )
             }
         },
         onDismissFido2Verification = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2VerificationDialogClick,
+                    VaultItemListingsAction.DismissUserVerificationDialogClick,
                 )
             }
         },
@@ -324,7 +329,7 @@ private fun VaultItemListingDialogs(
             text = dialogState.message(),
         )
 
-        is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
+        is VaultItemListingState.DialogState.CredentialManagerOperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
             onDismissRequest = { onDismissFido2ErrorDialog(dialogState.message) },
@@ -337,7 +342,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2MasterPasswordPrompt -> {
+        is VaultItemListingState.DialogState.UserVerificationMasterPasswordPrompt -> {
             BitwardenMasterPasswordDialog(
                 onConfirmClick = { password ->
                     onSubmitMasterPasswordFido2Verification(
@@ -349,7 +354,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2MasterPasswordError -> {
+        is VaultItemListingState.DialogState.UserVerificationMasterPasswordError -> {
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
@@ -359,7 +364,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2PinPrompt -> {
+        is VaultItemListingState.DialogState.UserVerificationPinPrompt -> {
             BitwardenPinDialog(
                 onConfirmClick = { pin ->
                     onSubmitPinFido2Verification(
@@ -371,7 +376,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2PinError -> {
+        is VaultItemListingState.DialogState.UserVerificationPinError -> {
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),
@@ -381,7 +386,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2PinSetUpPrompt -> {
+        is VaultItemListingState.DialogState.UserVerificationPinSetUpPrompt -> {
             PinInputDialog(
                 onCancelClick = onDismissFido2Verification,
                 onSubmitClick = { pin ->
@@ -391,7 +396,7 @@ private fun VaultItemListingDialogs(
             )
         }
 
-        is VaultItemListingState.DialogState.Fido2PinSetUpError -> {
+        is VaultItemListingState.DialogState.UserVerificationPinSetUpError -> {
             BitwardenBasicDialog(
                 title = dialogState.title?.invoke(),
                 message = dialogState.message(),

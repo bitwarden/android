@@ -1,11 +1,12 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import androidx.credentials.CredentialManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
@@ -60,16 +61,16 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the credential manager framework in order to allow the user to
-     * manually save a passkey to their vault.
+     * The app was launched via the [CredentialManager] framework in order to allow the user to
+     * manually save a credential to their vault.
      */
     @Parcelize
-    data class Fido2Save(
-        val fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
+    data class ProviderCreateCredential(
+        val createCredentialRequest: CreateCredentialRequest,
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the credential manager framework in order to authenticate a FIDO 2
+     * The app was launched via the [CredentialManager] framework in order to authenticate a
      * credential saved to the user's vault.
      */
     @Parcelize
@@ -78,12 +79,12 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the credential manager framework request to retrieve passkeys
+     * The app was launched via the [CredentialManager] framework request to retrieve credentials
      * associated with the requesting entity.
      */
     @Parcelize
-    data class Fido2GetCredentials(
-        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+    data class ProviderGetCredentials(
+        val getCredentialsRequest: GetCredentialsRequest,
     ) : SpecialCircumstance()
 
     /**

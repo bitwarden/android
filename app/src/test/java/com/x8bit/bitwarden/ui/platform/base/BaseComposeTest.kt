@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.junit4.createComposeRule
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
@@ -56,7 +56,7 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
         biometricsManager: BiometricsManager = mockk(),
         exitManager: ExitManager = mockk(),
         intentManager: IntentManager = mockk(),
-        fido2CompletionManager: Fido2CompletionManager = mockk(),
+        credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk(),
         keyChainManager: KeyChainManager = mockk(),
         nfcManager: NfcManager = mockk(),
         permissionsManager: PermissionsManager = mockk(),
@@ -71,7 +71,7 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
                 biometricsManager = biometricsManager,
                 exitManager = exitManager,
                 intentManager = intentManager,
-                fido2CompletionManager = fido2CompletionManager,
+                credentialProviderCompletionManager = credentialProviderCompletionManager,
                 keyChainManager = keyChainManager,
                 nfcManager = nfcManager,
                 permissionsManager = permissionsManager,

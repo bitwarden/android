@@ -4,7 +4,7 @@ import android.content.pm.Signature
 import android.content.pm.SigningInfo
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -80,7 +80,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Success("origin"),
+            ValidateOriginResult.Success("origin"),
             mockAppInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),
@@ -96,7 +96,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp,
+            ValidateOriginResult.Error.PasskeyNotSupportedForApp,
             appInfo.validatePrivilegedApp(
                 allowList = INVALID_ALLOW_LIST,
             ),
@@ -112,7 +112,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound,
+            ValidateOriginResult.Error.PrivilegedAppSignatureNotFound,
             appInfo.validatePrivilegedApp(
                 allowList = INVALID_ALLOW_LIST,
             ),
@@ -128,7 +128,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PrivilegedAppNotAllowed,
+            ValidateOriginResult.Error.PrivilegedAppNotAllowed,
             appInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),
@@ -143,7 +143,7 @@ class CallingAppInfoExtensionsTest {
         }
 
         assertEquals(
-            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp,
+            ValidateOriginResult.Error.PasskeyNotSupportedForApp,
             appInfo.validatePrivilegedApp(DEFAULT_ALLOW_LIST),
         )
     }

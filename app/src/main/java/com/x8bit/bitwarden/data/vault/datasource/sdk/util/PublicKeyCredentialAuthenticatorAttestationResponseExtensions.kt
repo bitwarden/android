@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.util
 
 import android.util.Base64
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
+import com.x8bit.bitwarden.data.credentials.model.Fido2AttestationResponse
 
 /**
  * Converts the SDK attestation response to a [Fido2AttestationResponse] that can be serialized into

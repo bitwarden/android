@@ -13,9 +13,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.createMockGetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -83,7 +83,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             )
         } returns false
     }
-    private val fido2CredentialManager: Fido2CredentialManager = mockk {
+    private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
         every { isUserVerified } returns true
         every { isUserVerified = any() } just runs
     }
@@ -221,8 +221,8 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `showAccountMenu should be false when unlocking for FIDO 2 credential discovery`() {
         every {
             specialCircumstanceManager.specialCircumstance
-        } returns SpecialCircumstance.Fido2GetCredentials(
-            createMockFido2GetCredentialsRequest(number = 1),
+        } returns SpecialCircumstance.ProviderGetCredentials(
+            createMockGetCredentialsRequest(number = 1),
         )
         val viewModel = createViewModel()
 
@@ -385,9 +385,9 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a FIDO2 GetCredentialsRequest should switch accounts when the requested user is not the active user`() {
-        val mockFido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+        val mockFido2GetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
         val initialState = DEFAULT_STATE.copy(
-            fido2GetCredentialsRequest = mockFido2GetCredentialsRequest,
+            getCredentialsRequest = mockFido2GetCredentialsRequest,
             accountSummaries = listOf(
                 DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
@@ -415,12 +415,12 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a FIDO2 GetCredentialsRequest should not switch accounts when the requested user is the active user`() {
-        val mockFido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(
+        val mockFido2GetCredentialsRequest = createMockGetCredentialsRequest(
             number = 1,
             userId = DEFAULT_USER_STATE.activeUserId,
         )
         val initialState = DEFAULT_STATE.copy(
-            fido2GetCredentialsRequest = mockFido2GetCredentialsRequest,
+            getCredentialsRequest = mockFido2GetCredentialsRequest,
             accountSummaries = listOf(
                 DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
                     .toAccountSummary(isActive = true),
@@ -606,7 +606,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on DismissDialog should emit Fido2GetCredentialsError when state has Fido2GetCredentialsRequest`() =
         runTest {
             val initialState = DEFAULT_STATE.copy(
-                fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1),
+                getCredentialsRequest = createMockGetCredentialsRequest(number = 1),
             )
             val viewModel = createViewModel(state = initialState)
             viewModel.trySendAction(VaultUnlockAction.DismissDialog)
@@ -1291,7 +1291,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to verified when result is Success`() {
         val viewModel = createViewModel(
             state = DEFAULT_STATE.copy(
-                fido2GetCredentialsRequest = mockk(relaxed = true),
+                getCredentialsRequest = mockk(relaxed = true),
             ),
         )
         viewModel.trySendAction(
@@ -1302,7 +1302,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        verify { fido2CredentialManager.isUserVerified = true }
+        verify { bitwardenCredentialManager.isUserVerified = true }
     }
 
     @Suppress("MaxLineLength")
@@ -1318,7 +1318,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        verify { fido2CredentialManager.isUserVerified = false }
+        verify { bitwardenCredentialManager.isUserVerified = false }
     }
 
     @Test
@@ -1367,7 +1367,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepo,
         environmentRepo = environmentRepo,
         biometricsEncryptionManager = biometricsEncryptionManager,
-        fido2CredentialManager = fido2CredentialManager,
+        bitwardenCredentialManager = bitwardenCredentialManager,
         specialCircumstanceManager = specialCircumstanceManager,
         appResumeManager = appResumeManager,
         vaultLockManager = lockManager,
