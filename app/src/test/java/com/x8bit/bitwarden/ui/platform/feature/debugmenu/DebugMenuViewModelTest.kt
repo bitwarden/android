@@ -135,6 +135,7 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.ChromeAutofill to true,
     FlagKey.MobileErrorReporting to true,
     FlagKey.FlightRecorder to true,
+    FlagKey.RestrictCipherItemDeletion to true,
     FlagKey.PreAuthSettings to true,
 )
 
@@ -154,6 +155,7 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.ChromeAutofill to false,
     FlagKey.MobileErrorReporting to false,
     FlagKey.FlightRecorder to false,
+    FlagKey.RestrictCipherItemDeletion to false,
     FlagKey.PreAuthSettings to false,
 )
 

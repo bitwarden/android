@@ -41,6 +41,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.ChromeAutofill,
     FlagKey.MobileErrorReporting,
     FlagKey.FlightRecorder,
+    FlagKey.RestrictCipherItemDeletion,
     FlagKey.PreAuthSettings,
         -> {
         @Suppress("UNCHECKED_CAST")
@@ -102,5 +103,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.ChromeAutofill -> stringResource(R.string.enable_chrome_autofill)
     FlagKey.MobileErrorReporting -> stringResource(R.string.enable_error_reporting_dialog)
     FlagKey.FlightRecorder -> stringResource(R.string.enable_flight_recorder)
+    FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
     FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
 }

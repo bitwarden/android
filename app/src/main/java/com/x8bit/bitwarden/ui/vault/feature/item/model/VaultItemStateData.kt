@@ -17,6 +17,7 @@ data class VaultItemStateData(
     val cipher: CipherView?,
     val totpCodeItemData: TotpCodeItemData?,
     val canDelete: Boolean,
+    val canRestore: Boolean,
     val canAssociateToCollections: Boolean,
     val canEdit: Boolean,
     val relatedLocations: ImmutableList<VaultItemLocation>,

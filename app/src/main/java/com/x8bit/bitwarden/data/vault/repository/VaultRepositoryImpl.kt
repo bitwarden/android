@@ -30,6 +30,7 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
@@ -169,6 +170,9 @@ class VaultRepositoryImpl(
     private val mutableCiphersStateFlow =
         MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
 
+    private val mutableCiphersListViewStateFlow =
+        MutableStateFlow<DataState<List<CipherListView>>>(DataState.Loading)
+
     private val mutableFoldersStateFlow =
         MutableStateFlow<DataState<List<FolderView>>>(DataState.Loading)
 
@@ -214,6 +218,9 @@ class VaultRepositoryImpl(
     override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
         get() = mutableCiphersStateFlow.asStateFlow()
 
+    override val ciphersListViewStateFlow: StateFlow<DataState<List<CipherListView>>>
+        get() = mutableCiphersListViewStateFlow.asStateFlow()
+
     override val domainsStateFlow: StateFlow<DataState<DomainsData>>
         get() = mutableDomainsStateFlow.asStateFlow()
 
@@ -257,6 +264,15 @@ class VaultRepositoryImpl(
                 vaultUnlockFlow = vaultUnlockDataStateFlow,
             ) { activeUserId ->
                 observeVaultDiskCiphers(activeUserId)
+            }
+            .launchIn(unconfinedScope)
+
+        mutableCiphersListViewStateFlow
+            .observeWhenSubscribedAndUnlocked(
+                userStateFlow = authDiskSource.userStateFlow,
+                vaultUnlockFlow = vaultUnlockDataStateFlow,
+            ) { activeUserId ->
+                observeVaultDiskCiphersToCipherListView(activeUserId)
             }
             .launchIn(unconfinedScope)
 
@@ -1070,6 +1086,27 @@ class VaultRepositoryImpl(
             }
             .map { it.orLoadingIfNotSynced(userId = userId) }
             .onEach { mutableCiphersStateFlow.value = it }
+
+    private fun observeVaultDiskCiphersToCipherListView(
+        userId: String,
+    ): Flow<DataState<List<CipherListView>>> =
+        vaultDiskSource
+            .getCiphers(userId = userId)
+            .onStart { mutableCiphersListViewStateFlow.updateToPendingOrLoading() }
+            .map {
+                waitUntilUnlocked(userId = userId)
+                vaultSdkSource
+                    .decryptCipherListCollection(
+                        userId = userId,
+                        cipherList = it.toEncryptedSdkCipherList(),
+                    )
+                    .fold(
+                        onSuccess = { ciphers -> DataState.Loaded(ciphers.sortAlphabetically()) },
+                        onFailure = { throwable -> DataState.Error(throwable) },
+                    )
+            }
+            .map { it.orLoadingIfNotSynced(userId = userId) }
+            .onEach { mutableCiphersListViewStateFlow.value = it }
 
     private fun observeVaultDiskDomains(
         userId: String,

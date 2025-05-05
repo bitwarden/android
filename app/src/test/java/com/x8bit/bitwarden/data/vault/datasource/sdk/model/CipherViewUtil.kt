@@ -83,6 +83,7 @@ fun createMockCipherView(
         sshKey = sshKey.takeIf { cipherType == CipherType.SSH_KEY },
         favorite = false,
         passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
+        permissions = createMockSdkCipherPermissions(),
         reprompt = repromptType,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
         edit = true,

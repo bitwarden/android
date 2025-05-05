@@ -455,6 +455,9 @@ data class SyncResponseJson(
         @SerialName("passwordHistory")
         val passwordHistory: List<PasswordHistory>?,
 
+        @SerialName("permissions")
+        val permissions: CipherPermissions?,
+
         @SerialName("revisionDate")
         @Contextual
         val revisionDate: ZonedDateTime,
@@ -767,6 +770,21 @@ data class SyncResponseJson(
             @SerialName("lastUsedDate")
             @Contextual
             val lastUsedDate: ZonedDateTime,
+        )
+
+        /**
+         * Represents a cipher permissions in the vault response.
+         *
+         * @property delete whether the delete permissions is active.
+         * @property restore whether the restore permissions is active.
+         */
+        @Serializable
+        data class CipherPermissions(
+            @SerialName("delete")
+            val delete: Boolean,
+
+            @SerialName("restore")
+            val restore: Boolean,
         )
 
         /**

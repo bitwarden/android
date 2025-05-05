@@ -326,6 +326,10 @@ private const val CIPHER_JSON = """
       "lastUsedDate": "2023-10-27T12:00:00.000Z"
     }
   ],
+  "permissions": {
+    "delete": true,
+    "restore": true
+  },
   "revisionDate": "2023-10-27T12:00:00.000Z",
   "type": 1,
   "login": {

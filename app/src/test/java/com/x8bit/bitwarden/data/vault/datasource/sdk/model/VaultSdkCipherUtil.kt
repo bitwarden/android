@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.Card
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherPermissions
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.Field
@@ -53,6 +54,7 @@ fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
         sshKey = createMockSdkSshKey(number = number),
         favorite = false,
         passwordHistory = listOf(createMockSdkPasswordHistory(number = number, clock = clock)),
+        permissions = createMockSdkCipherPermissions(),
         reprompt = CipherRepromptType.NONE,
         secureNote = createMockSdkSecureNote(),
         edit = false,
@@ -76,6 +78,18 @@ fun createMockSdkPasswordHistory(number: Int, clock: Clock): PasswordHistory =
     PasswordHistory(
         password = "mockPassword-$number",
         lastUsedDate = clock.instant(),
+    )
+
+/**
+ * Create a mock [CipherPermissions] with a given [delete] and [restore] permissions.
+ */
+fun createMockSdkCipherPermissions(
+    delete: Boolean = true,
+    restore: Boolean = true,
+): CipherPermissions =
+    CipherPermissions(
+        delete = delete,
+        restore = restore,
     )
 
 /**

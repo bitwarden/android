@@ -70,6 +70,10 @@ class FlagKeyTest {
             "enable-pm-flight-recorder",
         )
         assertEquals(
+            FlagKey.RestrictCipherItemDeletion.keyName,
+            "pm-15493-restrict-item-deletion-to-can-manage-permission",
+        )
+        assertEquals(
             FlagKey.PreAuthSettings.keyName,
             "enable-pm-prelogin-settings",
         )
@@ -94,6 +98,7 @@ class FlagKeyTest {
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
                 FlagKey.FlightRecorder,
+                FlagKey.RestrictCipherItemDeletion,
                 FlagKey.PreAuthSettings,
             ).all {
                 !it.defaultValue
@@ -129,6 +134,7 @@ class FlagKeyTest {
             listOf(
                 FlagKey.FlightRecorder,
                 FlagKey.PreAuthSettings,
+                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 !it.isRemotelyConfigured
             },

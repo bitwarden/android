@@ -41,6 +41,7 @@ fun createMockCipher(
         sshKey = createMockSshKey(number = number),
         isFavorite = false,
         passwordHistory = listOf(createMockPasswordHistory(number = number)),
+        permissions = createMockCipherPermissions(),
         reprompt = CipherRepromptTypeJson.NONE,
         secureNote = createMockSecureNote(),
         shouldEdit = false,
@@ -107,6 +108,18 @@ fun createMockPasswordHistory(number: Int): SyncResponseJson.Cipher.PasswordHist
     SyncResponseJson.Cipher.PasswordHistory(
         password = "mockPassword-$number",
         lastUsedDate = MOCK_ZONED_DATE_TIME,
+    )
+
+/**
+ * Create a mock [SyncResponseJson.Cipher.CipherPermissions].
+ */
+fun createMockCipherPermissions(
+    delete: Boolean = true,
+    restore: Boolean = true,
+): SyncResponseJson.Cipher.CipherPermissions =
+    SyncResponseJson.Cipher.CipherPermissions(
+        delete = delete,
+        restore = restore,
     )
 
 /**
