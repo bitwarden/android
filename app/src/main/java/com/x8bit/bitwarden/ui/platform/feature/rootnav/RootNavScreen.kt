@@ -1,3 +1,6 @@
+// TODO: Add tests for this (PM-21252)
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.activity.compose.LocalActivity
@@ -13,6 +16,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_AUTO_FILL_AS_ROOT_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_COMPLETE_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SETUP_UNLOCK_AS_ROOT_ROUTE
