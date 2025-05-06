@@ -127,6 +127,37 @@ fun DebugMenuScreen(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenHorizontalDivider()
+            Spacer(Modifier.height(height = 16.dp))
+            BitwardenListHeaderText(
+                label = stringResource(R.string.error_reports),
+                modifier = Modifier
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(R.string.generate_error_report),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick) }
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(height = 8.dp))
+            BitwardenFilledButton(
+                label = stringResource(R.string.generate_crash),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) }
+                },
+                isEnabled = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }

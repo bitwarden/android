@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -27,6 +28,7 @@ class DebugMenuViewModel @Inject constructor(
     featureFlagManager: FeatureFlagManager,
     private val debugMenuRepository: DebugMenuRepository,
     private val authRepository: AuthRepository,
+    private val logsManager: LogsManager,
 ) : BaseViewModel<DebugMenuState, DebugMenuEvent, DebugMenuAction>(
     initialState = DebugMenuState(featureFlags = persistentMapOf()),
 ) {
@@ -52,11 +54,23 @@ class DebugMenuViewModel @Inject constructor(
             DebugMenuAction.RestartOnboarding -> handleResetOnboardingStatus()
             DebugMenuAction.RestartOnboardingCarousel -> handleResetOnboardingCarousel()
             DebugMenuAction.ResetCoachMarkTourStatuses -> handleResetCoachMarkTourStatuses()
+            DebugMenuAction.GenerateCrashClick -> handleCrashClick()
+            DebugMenuAction.GenerateErrorReportClick -> handleErrorReportClick()
         }
     }
 
     private fun handleResetCoachMarkTourStatuses() {
         debugMenuRepository.resetCoachMarkTourStatuses()
+    }
+
+    private fun handleCrashClick(): Nothing {
+        throw IllegalStateException("User has clicked the generate crash button")
+    }
+
+    private fun handleErrorReportClick() {
+        logsManager.trackNonFatalException(
+            throwable = IllegalStateException("User has clicked the generate error report button"),
+        )
     }
 
     private fun handleResetOnboardingCarousel() {
@@ -118,8 +132,10 @@ sealed class DebugMenuAction {
     /**
      * Updates a feature flag for the given [FlagKey] to the given [newValue].
      */
-    data class UpdateFeatureFlag<T : Any>(val flagKey: FlagKey<T>, val newValue: T) :
-        DebugMenuAction()
+    data class UpdateFeatureFlag<T : Any>(
+        val flagKey: FlagKey<T>,
+        val newValue: T,
+    ) : DebugMenuAction()
 
     /**
      * The user has clicked "back" button.
@@ -145,6 +161,16 @@ sealed class DebugMenuAction {
      * User has clicked to reset coach mark values.
      */
     data object ResetCoachMarkTourStatuses : DebugMenuAction()
+
+    /**
+     * The user has clicked generate crash button.
+     */
+    data object GenerateCrashClick : DebugMenuAction()
+
+    /**
+     * The user has clicked generate error report button.
+     */
+    data object GenerateErrorReportClick : DebugMenuAction()
 
     /**
      * Internal actions not triggered from the UI.
