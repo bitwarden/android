@@ -6,23 +6,21 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.bitwarden.network.util.base64UrlDecodeOrNull
-import com.bitwarden.network.util.base64UrlEncode
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL_ADDRESS = "email_address"
-private const val PASSWORD = "password"
-private const val ORG_IDENTIFIER = "org_identifier"
-private const val TWO_FACTOR_LOGIN_PREFIX = "two_factor_login"
-private const val NEW_DEVICE_VERIFICATION = "new_device_verification"
-private const val TWO_FACTOR_LOGIN_ROUTE =
-    "$TWO_FACTOR_LOGIN_PREFIX/{$EMAIL_ADDRESS}?" +
-        "$PASSWORD={$PASSWORD}&" +
-        "$ORG_IDENTIFIER={$ORG_IDENTIFIER}&" +
-        "$NEW_DEVICE_VERIFICATION={$NEW_DEVICE_VERIFICATION}"
+/**
+ * The type-safe route for the two-factor login screen.
+ */
+@Serializable
+data class TwoFactorLoginRoute(
+    val emailAddress: String,
+    val password: String?,
+    val orgIdentifier: String?,
+    val isNewDeviceVerification: Boolean,
+)
 
 /**
  * Class to retrieve Two-Factor Login arguments from the [SavedStateHandle].
@@ -32,12 +30,18 @@ data class TwoFactorLoginArgs(
     val password: String?,
     val orgIdentifier: String?,
     val isNewDeviceVerification: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        emailAddress = checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-        password = savedStateHandle.get<String>(PASSWORD)?.base64UrlDecodeOrNull(),
-        orgIdentifier = savedStateHandle.get<String>(ORG_IDENTIFIER)?.base64UrlDecodeOrNull(),
-        isNewDeviceVerification = savedStateHandle.get<Boolean>(NEW_DEVICE_VERIFICATION) ?: false,
+)
+
+/**
+ * Constructs a [TwoFactorLoginArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toTwoFactorLoginArgs(): TwoFactorLoginArgs {
+    val route = this.toRoute<TwoFactorLoginRoute>()
+    return TwoFactorLoginArgs(
+        emailAddress = route.emailAddress,
+        password = route.password,
+        orgIdentifier = route.orgIdentifier,
+        isNewDeviceVerification = route.isNewDeviceVerification,
     )
 }
 
@@ -48,14 +52,16 @@ fun NavController.navigateToTwoFactorLogin(
     emailAddress: String,
     password: String?,
     orgIdentifier: String?,
-    navOptions: NavOptions? = null,
     isNewDeviceVerification: Boolean = false,
+    navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = "$TWO_FACTOR_LOGIN_PREFIX/$emailAddress?" +
-            "$PASSWORD=${password?.base64UrlEncode()}&" +
-            "$ORG_IDENTIFIER=${orgIdentifier?.base64UrlEncode()}&" +
-            "$NEW_DEVICE_VERIFICATION=$isNewDeviceVerification",
+        route = TwoFactorLoginRoute(
+            emailAddress = emailAddress,
+            password = password,
+            orgIdentifier = orgIdentifier,
+            isNewDeviceVerification = isNewDeviceVerification,
+        ),
         navOptions = navOptions,
     )
 }
@@ -66,23 +72,7 @@ fun NavController.navigateToTwoFactorLogin(
 fun NavGraphBuilder.twoFactorLoginDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = TWO_FACTOR_LOGIN_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-            navArgument(PASSWORD) {
-                type = NavType.StringType
-                nullable = true
-            },
-            navArgument(ORG_IDENTIFIER) {
-                type = NavType.StringType
-                nullable = true
-            },
-            navArgument(NEW_DEVICE_VERIFICATION) {
-                type = NavType.BoolType
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<TwoFactorLoginRoute> {
         TwoFactorLoginScreen(
             onNavigateBack = onNavigateBack,
         )

@@ -6,38 +6,48 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
+import kotlinx.serialization.Serializable
 
-private const val DEFAULT_MODE: String = "default"
-private const val ITEM_MODE: String = "item"
+/**
+ * The type-safe route for the password history screen.
+ */
+@Serializable
+data class PasswordHistoryRoute(
+    val passwordHistoryType: PasswordHistoryType,
+    val itemId: String?,
+)
 
-private const val PASSWORD_HISTORY_PREFIX: String = "password_history"
-private const val PASSWORD_HISTORY_MODE: String = "password_history_mode"
-private const val PASSWORD_HISTORY_ITEM_ID: String = "password_history_id"
-
-private const val PASSWORD_HISTORY_ROUTE: String =
-    PASSWORD_HISTORY_PREFIX +
-        "/{$PASSWORD_HISTORY_MODE}" +
-        "?$PASSWORD_HISTORY_ITEM_ID={$PASSWORD_HISTORY_ITEM_ID}"
+/**
+ * Indicates the type of password to be displayed.
+ */
+@Serializable
+enum class PasswordHistoryType {
+    DEFAULT,
+    ITEM,
+}
 
 /**
  * Class to retrieve password history arguments from the [SavedStateHandle].
  */
 data class PasswordHistoryArgs(
     val passwordHistoryMode: GeneratorPasswordHistoryMode,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        passwordHistoryMode = when (requireNotNull(savedStateHandle[PASSWORD_HISTORY_MODE])) {
-            DEFAULT_MODE -> GeneratorPasswordHistoryMode.Default
-            ITEM_MODE -> GeneratorPasswordHistoryMode.Item(
-                requireNotNull(savedStateHandle[PASSWORD_HISTORY_ITEM_ID]),
-            )
+)
 
-            else -> throw IllegalStateException("Unknown VaultAddEditType.")
+/**
+ * Constructs a [PasswordHistoryArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toPasswordHistoryArgs(): PasswordHistoryArgs {
+    val route = this.toRoute<PasswordHistoryRoute>()
+    return PasswordHistoryArgs(
+        passwordHistoryMode = when (route.passwordHistoryType) {
+            PasswordHistoryType.DEFAULT -> GeneratorPasswordHistoryMode.Default
+            PasswordHistoryType.ITEM -> GeneratorPasswordHistoryMode.Item(
+                itemId = requireNotNull(route.itemId),
+            )
         },
     )
 }
@@ -48,12 +58,7 @@ data class PasswordHistoryArgs(
 fun NavGraphBuilder.passwordHistoryDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = PASSWORD_HISTORY_ROUTE,
-        arguments = listOf(
-            navArgument(PASSWORD_HISTORY_MODE) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<PasswordHistoryRoute> {
         PasswordHistoryScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -68,20 +73,13 @@ fun NavController.navigateToPasswordHistory(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$PASSWORD_HISTORY_PREFIX/${passwordHistoryMode.toModeString()}" +
-            "?$PASSWORD_HISTORY_ITEM_ID=${passwordHistoryMode.toIdOrNull()}",
+        route = PasswordHistoryRoute(
+            passwordHistoryType = when (passwordHistoryMode) {
+                GeneratorPasswordHistoryMode.Default -> PasswordHistoryType.DEFAULT
+                is GeneratorPasswordHistoryMode.Item -> PasswordHistoryType.ITEM
+            },
+            itemId = (passwordHistoryMode as? GeneratorPasswordHistoryMode.Item)?.itemId,
+        ),
         navOptions = navOptions,
     )
 }
-
-private fun GeneratorPasswordHistoryMode.toModeString(): String =
-    when (this) {
-        is GeneratorPasswordHistoryMode.Default -> DEFAULT_MODE
-        is GeneratorPasswordHistoryMode.Item -> ITEM_MODE
-    }
-
-private fun GeneratorPasswordHistoryMode.toIdOrNull(): String? =
-    when (this) {
-        is GeneratorPasswordHistoryMode.Default -> null
-        is GeneratorPasswordHistoryMode.Item -> itemId
-    }

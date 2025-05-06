@@ -7,26 +7,26 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
 /**
- * Route name for [SetupCompleteScreen].
+ * The type-safe route for the setup complete screen.
  */
-const val SETUP_COMPLETE_ROUTE = "setup_complete"
+@Serializable
+data object SetupCompleteRoute
 
 /**
  * Navigate to the setup complete screen.
  */
 fun NavController.navigateToSetupCompleteScreen(navOptions: NavOptions? = null) {
-    this.navigate(SETUP_COMPLETE_ROUTE, navOptions)
+    this.navigate(route = SetupCompleteRoute, navOptions = navOptions)
 }
 
 /**
  * Add the setup complete screen to the nav graph.
  */
 fun NavGraphBuilder.setupCompleteDestination() {
-    composableWithPushTransitions(
-        route = SETUP_COMPLETE_ROUTE,
-    ) {
+    composableWithPushTransitions<SetupCompleteRoute> {
         SetupCompleteScreen()
     }
 }

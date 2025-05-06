@@ -78,7 +78,7 @@ class AddSendViewModel @Inject constructor(
         // Check to see if we are navigating here from an external source
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val shareSendType = specialCircumstance.toSendType()
-        val sendAddType = AddSendArgs(savedStateHandle).sendAddType
+        val sendAddType = savedStateHandle.toAddSendArgs().sendAddType
         AddSendState(
             shouldFinishOnComplete = specialCircumstance.shouldFinishOnComplete(),
             isShared = shareSendType != null,

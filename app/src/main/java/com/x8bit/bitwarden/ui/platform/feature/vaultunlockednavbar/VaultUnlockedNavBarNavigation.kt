@@ -11,17 +11,19 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
+import kotlinx.serialization.Serializable
 
 /**
- * The functions below pertain to entry into the [VaultUnlockedNavBarScreen].
+ * The type-safe route for the vault unlocked navbar screen.
  */
-const val VAULT_UNLOCKED_NAV_BAR_ROUTE: String = "VaultUnlockedNavBar"
+@Serializable
+data object VaultUnlockedNavbarRoute
 
 /**
  * Navigate to the [VaultUnlockedNavBarScreen].
  */
 fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) {
-    navigate(VAULT_UNLOCKED_NAV_BAR_ROUTE, navOptions)
+    navigate(route = VaultUnlockedNavbarRoute, navOptions = navOptions)
 }
 
 /**
@@ -48,9 +50,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
 ) {
-    composableWithStayTransitions(
-        route = VAULT_UNLOCKED_NAV_BAR_ROUTE,
-    ) {
+    composableWithStayTransitions<VaultUnlockedNavbarRoute> {
         VaultUnlockedNavBarScreen(
             onNavigateToVaultAddItem = onNavigateToVaultAddItem,
             onNavigateToVaultItem = onNavigateToVaultItem,

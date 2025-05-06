@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val PENDING_REQUESTS_ROUTE = "pending_requests"
+/**
+ * The type-safe route for the pending requests screen.
+ */
+@Serializable
+data object PendingRequestsRoute
 
 /**
  * Add pending requests destinations to the nav graph.
@@ -17,9 +22,7 @@ fun NavGraphBuilder.pendingRequestsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToLoginApproval: (fingerprintPhrase: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = PENDING_REQUESTS_ROUTE,
-    ) {
+    composableWithSlideTransitions<PendingRequestsRoute> {
         PendingRequestsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToLoginApproval = onNavigateToLoginApproval,
@@ -31,5 +34,5 @@ fun NavGraphBuilder.pendingRequestsDestination(
  * Navigate to the Pending Login Requests screen.
  */
 fun NavController.navigateToPendingRequests(navOptions: NavOptions? = null) {
-    navigate(PENDING_REQUESTS_ROUTE, navOptions)
+    this.navigate(route = PendingRequestsRoute, navOptions = navOptions)
 }

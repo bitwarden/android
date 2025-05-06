@@ -6,45 +6,68 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.serialization.Serializable
 
 /**
- * Route constants for [SetupUnlockScreen]
+ * The type-safe route for the setup unlock screen.
  */
-private const val SETUP_UNLOCK_PREFIX = "setup_unlock"
-private const val SETUP_UNLOCK_AS_ROOT_PREFIX = "${SETUP_UNLOCK_PREFIX}_as_root"
-private const val SETUP_UNLOCK_INITIAL_SETUP_ARG = "isInitialSetup"
-const val SETUP_UNLOCK_AS_ROOT_ROUTE = "$SETUP_UNLOCK_AS_ROOT_PREFIX/" +
-    "{$SETUP_UNLOCK_INITIAL_SETUP_ARG}"
-private const val SETUP_UNLOCK_ROUTE = "$SETUP_UNLOCK_PREFIX/{$SETUP_UNLOCK_INITIAL_SETUP_ARG}"
+sealed class SetupUnlockRoute {
+    /**
+     * The [isInitialSetup] value used in the setup unlock screen.
+     */
+    abstract val isInitialSetup: Boolean
+
+    /**
+     * The type-safe route for the standard setup unlock screen.
+     */
+    @Serializable
+    data object Standard : SetupUnlockRoute() {
+        override val isInitialSetup: Boolean get() = false
+    }
+
+    /**
+     * The type-safe route for the root setup unlock screen.
+     */
+    @Serializable
+    data object AsRoot : SetupUnlockRoute() {
+        override val isInitialSetup: Boolean get() = true
+    }
+}
 
 /**
  * Class to retrieve setup unlock arguments from the [SavedStateHandle].
  */
 data class SetupUnlockArgs(
     val isInitialSetup: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isInitialSetup = requireNotNull(savedStateHandle[SETUP_UNLOCK_INITIAL_SETUP_ARG]),
-    )
+)
+
+/**
+ * Constructs a [SetupUnlockArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toSetupUnlockArgs(): SetupUnlockArgs {
+    val route = this.toObjectRoute<SetupUnlockRoute.AsRoot>()
+        ?: this.toObjectRoute<SetupUnlockRoute.Standard>()
+    return route
+        ?.let { SetupUnlockArgs(isInitialSetup = it.isInitialSetup) }
+        ?: throw IllegalStateException("Missing correct route for SetupUnlockScreen")
 }
 
 /**
  * Navigate to the setup unlock screen.
  */
 fun NavController.navigateToSetupUnlockScreen(navOptions: NavOptions? = null) {
-    this.navigate("$SETUP_UNLOCK_PREFIX/false", navOptions)
+    this.navigate(route = SetupUnlockRoute.Standard, navOptions = navOptions)
 }
 
 /**
  * Navigate to the setup unlock screen as root.
  */
 fun NavController.navigateToSetupUnlockScreenAsRoot(navOptions: NavOptions? = null) {
-    this.navigate("$SETUP_UNLOCK_AS_ROOT_PREFIX/true", navOptions)
+    this.navigate(route = SetupUnlockRoute.AsRoot, navOptions = navOptions)
 }
 
 /**
@@ -53,10 +76,7 @@ fun NavController.navigateToSetupUnlockScreenAsRoot(navOptions: NavOptions? = nu
 fun NavGraphBuilder.setupUnlockDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = SETUP_UNLOCK_ROUTE,
-        arguments = setupUnlockArguments,
-    ) {
+    composableWithSlideTransitions<SetupUnlockRoute.Standard> {
         SetupUnlockScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -67,10 +87,7 @@ fun NavGraphBuilder.setupUnlockDestination(
  * Add the setup unlock screen to the root nav graph.
  */
 fun NavGraphBuilder.setupUnlockDestinationAsRoot() {
-    composableWithPushTransitions(
-        route = SETUP_UNLOCK_AS_ROOT_ROUTE,
-        arguments = setupUnlockArguments,
-    ) {
+    composableWithPushTransitions<SetupUnlockRoute.AsRoot> {
         SetupUnlockScreen(
             onNavigateBack = {
                 // No-Op
@@ -78,12 +95,3 @@ fun NavGraphBuilder.setupUnlockDestinationAsRoot() {
         )
     }
 }
-
-private val setupUnlockArguments = listOf(
-    navArgument(
-        name = SETUP_UNLOCK_INITIAL_SETUP_ARG,
-        builder = {
-            type = NavType.BoolType
-        },
-    ),
-)

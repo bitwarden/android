@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val AUTO_FILL_ROUTE = "settings_auto_fill"
+/**
+ * The type-safe route for the autofill screen.
+ */
+@Serializable
+data object AutofillRoute
 
 /**
  * Add settings destinations to the nav graph.
@@ -18,9 +23,7 @@ fun NavGraphBuilder.autoFillDestination(
     onNavigateToBlockAutoFillScreen: () -> Unit,
     onNavigateToSetupAutofill: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = AUTO_FILL_ROUTE,
-    ) {
+    composableWithPushTransitions<AutofillRoute> {
         AutoFillScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToBlockAutoFillScreen = onNavigateToBlockAutoFillScreen,
@@ -33,5 +36,5 @@ fun NavGraphBuilder.autoFillDestination(
  * Navigate to the auto-fill screen.
  */
 fun NavController.navigateToAutoFill(navOptions: NavOptions? = null) {
-    navigate(AUTO_FILL_ROUTE, navOptions)
+    this.navigate(route = AutofillRoute, navOptions = navOptions)
 }

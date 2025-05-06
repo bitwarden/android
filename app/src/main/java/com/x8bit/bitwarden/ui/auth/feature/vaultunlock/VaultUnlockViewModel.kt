@@ -86,7 +86,7 @@ class VaultUnlockViewModel @Inject constructor(
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
 
         val showAccountMenu =
-            VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD &&
+            savedStateHandle.toVaultUnlockArgs().unlockType == UnlockType.STANDARD &&
                 (specialCircumstance !is SpecialCircumstance.Fido2GetCredentials &&
                     specialCircumstance !is SpecialCircumstance.Fido2Assertion)
         VaultUnlockState(

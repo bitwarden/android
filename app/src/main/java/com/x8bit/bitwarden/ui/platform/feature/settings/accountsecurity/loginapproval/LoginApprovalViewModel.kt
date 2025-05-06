@@ -5,6 +5,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
@@ -12,8 +14,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -45,7 +45,7 @@ class LoginApprovalViewModel @Inject constructor(
                 specialCircumstance = specialCircumstance,
                 fingerprint = specialCircumstance
                     ?.let { "" }
-                    ?: requireNotNull(LoginApprovalArgs(savedStateHandle).fingerprint),
+                    ?: requireNotNull(savedStateHandle.toLoginApprovalArgs().fingerprint),
                 masterPasswordHash = null,
                 publicKey = "",
                 requestId = "",

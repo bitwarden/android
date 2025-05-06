@@ -93,6 +93,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(
+            SavedStateHandle::toAddSendArgs,
             AddSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
@@ -102,6 +103,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
+            SavedStateHandle::toAddSendArgs,
             AddSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
@@ -1016,15 +1018,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
     ): AddSendViewModel = AddSendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state?.copy(addSendType = addSendType))
-            set(
-                "add_send_item_type",
-                when (addSendType) {
-                    AddSendType.AddItem -> "add"
-                    is AddSendType.EditItem -> "edit"
-                },
-            )
-            set("edit_send_id", (addSendType as? AddSendType.EditItem)?.sendItemId)
             set("activityToken", activityToken)
+            every { toAddSendArgs() } returns AddSendArgs(sendAddType = addSendType)
         },
         authRepo = authRepository,
         environmentRepo = environmentRepository,

@@ -6,42 +6,69 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import kotlinx.serialization.Serializable
 
 /**
- * The functions below pertain to entry into the [GeneratorScreen].
+ * The type-safe route for the generator screen.
  */
-private const val GENERATOR_MODAL_ROUTE_PREFIX: String = "generator_modal"
-private const val GENERATOR_MODE_TYPE: String = "generator_mode_type"
-private const val GENERATOR_WEBSITE: String = "generator_website"
-private const val USERNAME_GENERATOR: String = "username_generator"
-private const val PASSWORD_GENERATOR: String = "password_generator"
+@Serializable
+sealed class GeneratorRoute {
+    /**
+     * The type-safe route for the standard generator screen.
+     */
+    @Serializable
+    data object Standard : GeneratorRoute()
 
-const val GENERATOR_ROUTE: String = "generator"
-private const val GENERATOR_MODAL_ROUTE: String =
-    "$GENERATOR_MODAL_ROUTE_PREFIX/{$GENERATOR_MODE_TYPE}?$GENERATOR_WEBSITE={$GENERATOR_WEBSITE}"
+    /**
+     * The type-safe route for the modal generator screen.
+     */
+    @Serializable
+    data class Modal(
+        val type: ModalType,
+        val website: String?,
+    ) : GeneratorRoute()
+}
+
+/**
+ * Indicates the type of modal to be displayed.
+ */
+@Serializable
+enum class ModalType {
+    PASSWORD,
+    USERNAME,
+}
 
 /**
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
  */
 data class GeneratorArgs(
     val type: GeneratorMode,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        type = when (savedStateHandle.get<String>(GENERATOR_MODE_TYPE)) {
-            USERNAME_GENERATOR -> GeneratorMode.Modal.Username(
-                website = savedStateHandle[GENERATOR_WEBSITE],
-            )
+)
 
-            PASSWORD_GENERATOR -> GeneratorMode.Modal.Password
-            else -> GeneratorMode.Default
+/**
+ * Constructs a [GeneratorArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toGeneratorArgs(): GeneratorArgs {
+    return GeneratorArgs(
+        type = try {
+            this.toModalGeneratorMode()
+        } catch (_: Exception) {
+            GeneratorMode.Default
         },
     )
+}
+
+private fun SavedStateHandle.toModalGeneratorMode(): GeneratorMode.Modal {
+    val route = this.toRoute<GeneratorRoute.Modal>()
+    return when (route.type) {
+        ModalType.PASSWORD -> GeneratorMode.Modal.Password
+        ModalType.USERNAME -> GeneratorMode.Modal.Username(website = route.website)
+    }
 }
 
 /**
@@ -51,7 +78,7 @@ fun NavGraphBuilder.generatorDestination(
     onNavigateToPasswordHistory: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
 ) {
-    composable(GENERATOR_ROUTE) {
+    composable<GeneratorRoute.Standard> {
         GeneratorScreen(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
             onNavigateBack = {},
@@ -66,16 +93,7 @@ fun NavGraphBuilder.generatorDestination(
 fun NavGraphBuilder.generatorModalDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = GENERATOR_MODAL_ROUTE,
-        arguments = listOf(
-            navArgument(GENERATOR_MODE_TYPE) { type = NavType.StringType },
-            navArgument(GENERATOR_WEBSITE) {
-                type = NavType.StringType
-                nullable = true
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<GeneratorRoute.Modal> {
         GeneratorScreen(
             onNavigateToPasswordHistory = {},
             onNavigateBack = onNavigateBack,
@@ -91,13 +109,14 @@ fun NavController.navigateToGeneratorModal(
     mode: GeneratorMode.Modal,
     navOptions: NavOptions? = null,
 ) {
-    val generatorModeType = when (mode) {
-        GeneratorMode.Modal.Password -> PASSWORD_GENERATOR
-        is GeneratorMode.Modal.Username -> USERNAME_GENERATOR
-    }
-    val website = (mode as? GeneratorMode.Modal.Username)?.website
     navigate(
-        route = "$GENERATOR_MODAL_ROUTE_PREFIX/$generatorModeType?$GENERATOR_WEBSITE=$website",
+        route = GeneratorRoute.Modal(
+            type = when (mode) {
+                GeneratorMode.Modal.Password -> ModalType.PASSWORD
+                is GeneratorMode.Modal.Username -> ModalType.USERNAME
+            },
+            website = (mode as? GeneratorMode.Modal.Username)?.website,
+        ),
         navOptions = navOptions,
     )
 }

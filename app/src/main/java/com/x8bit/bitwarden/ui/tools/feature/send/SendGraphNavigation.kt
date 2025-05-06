@@ -11,8 +11,13 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToSendItemListing
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.sendItemListingDestination
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import kotlinx.serialization.Serializable
 
-const val SEND_GRAPH_ROUTE: String = "send_graph"
+/**
+ * The type-safe route for the send graph.
+ */
+@Serializable
+data object SendGraphRoute
 
 /**
  * Add send destination to the nav graph.
@@ -23,9 +28,8 @@ fun NavGraphBuilder.sendGraph(
     onNavigateToEditSend: (sendItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
-    navigation(
-        startDestination = SEND_ROUTE,
-        route = SEND_GRAPH_ROUTE,
+    navigation<SendGraphRoute>(
+        startDestination = SendRoute,
     ) {
         sendDestination(
             onNavigateToAddSend = onNavigateToAddSend,
@@ -52,5 +56,5 @@ fun NavGraphBuilder.sendGraph(
  * via [sendGraph].
  */
 fun NavController.navigateToSendGraph(navOptions: NavOptions? = null) {
-    navigate(SEND_GRAPH_ROUTE, navOptions)
+    navigate(route = SendGraphRoute, navOptions = navOptions)
 }

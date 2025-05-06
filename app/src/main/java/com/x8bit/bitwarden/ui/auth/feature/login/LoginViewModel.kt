@@ -6,6 +6,8 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
@@ -16,8 +18,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,16 +43,23 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
-        ?: LoginState(
-            emailAddress = LoginArgs(savedStateHandle).emailAddress,
-            isLoginButtonEnabled = false,
-            passwordInput = "",
-            environmentLabel = environmentRepository.environment.label,
-            dialogState = LoginState.DialogState.Loading(R.string.loading.asText()),
-            captchaToken = LoginArgs(savedStateHandle).captchaToken,
-            accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
-            shouldShowLoginWithDevice = false,
-        ),
+        ?: run {
+            val args = savedStateHandle.toLoginArgs()
+            LoginState(
+                emailAddress = args.emailAddress,
+                isLoginButtonEnabled = false,
+                passwordInput = "",
+                environmentLabel = environmentRepository.environment.label,
+                dialogState = LoginState.DialogState.Loading(R.string.loading.asText()),
+                captchaToken = args.captchaToken,
+                accountSummaries = authRepository
+                    .userStateFlow
+                    .value
+                    ?.toAccountSummaries()
+                    .orEmpty(),
+                shouldShowLoginWithDevice = false,
+            )
+        },
 ) {
 
     init {

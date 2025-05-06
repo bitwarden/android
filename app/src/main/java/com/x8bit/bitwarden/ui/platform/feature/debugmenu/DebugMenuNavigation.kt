@@ -6,14 +6,19 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val DEBUG_MENU = "debug_menu"
+/**
+ * The type-safe route for the debug screen.
+ */
+@Serializable
+data object DebugRoute
 
 /**
  * Navigate to the setup unlock screen.
  */
 fun NavController.navigateToDebugMenuScreen() {
-    this.navigate(DEBUG_MENU) {
+    this.navigate(route = DebugRoute) {
         launchSingleTop = true
     }
 }
@@ -25,9 +30,7 @@ fun NavGraphBuilder.debugMenuDestination(
     onNavigateBack: () -> Unit,
     onSplashScreenRemoved: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = DEBUG_MENU,
-    ) {
+    composableWithPushTransitions<DebugRoute> {
         DebugMenuScreen(onNavigateBack = onNavigateBack)
         // If we are displaying the debug screen, then we can just hide the splash screen.
         onSplashScreenRemoved()

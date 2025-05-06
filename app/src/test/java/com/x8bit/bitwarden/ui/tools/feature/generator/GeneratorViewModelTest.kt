@@ -38,7 +38,9 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -46,6 +48,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -134,6 +137,16 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         } returns mutableShouldShowSimpleLoginSelfHostFlow
     }
 
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toGeneratorArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toGeneratorArgs)
+    }
+
     @Test
     fun `initial state should be correct when there is no saved state`() {
         val viewModel = createViewModel(state = null)
@@ -161,9 +174,9 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     includeNumber = false,
                 ),
             ),
-            generatorMode = GeneratorMode.Modal.Username(website = ""),
+            generatorMode = GeneratorMode.Modal.Username(website = null),
             currentEmailAddress = "currentEmail",
-            website = "",
+            website = null,
             shouldShowCoachMarkTour = true,
             shouldShowAnonAddySelfHostServerUrlField = true,
             shouldShowSimpleLoginSelfHostServerField = true,
@@ -171,8 +184,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel(
             state = null,
-            type = "username_generator",
-            website = "",
+            type = GeneratorMode.Modal.Username(website = null),
         )
         assertEquals(expected, viewModel.stateFlow.value)
     }
@@ -207,7 +219,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel(
             state = null,
-            type = "password_generator",
+            type = GeneratorMode.Modal.Password,
         )
         assertEquals(expected, viewModel.stateFlow.value)
     }
@@ -2636,13 +2648,11 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: GeneratorState? = initialPasscodeState,
-        type: String? = null,
-        website: String? = null,
+        type: GeneratorMode = GeneratorMode.Default,
     ): GeneratorViewModel = createViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            set("generator_mode_type", type)
-            set("generator_website", website)
+            every { toGeneratorArgs() } returns GeneratorArgs(type = type)
         },
     )
 

@@ -2,21 +2,26 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
-import io.mockk.mockk
-import kotlinx.coroutines.flow.MutableStateFlow
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class CheckEmailViewModelTest : BaseViewModelTest() {
-    private val mutableFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toCheckEmailArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toCheckEmailArgs)
     }
 
     @Test
@@ -76,16 +81,14 @@ class CheckEmailViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(state: CheckEmailState? = null): CheckEmailViewModel =
         CheckEmailViewModel(
-            savedStateHandle = SavedStateHandle().also {
-                it["email"] = EMAIL
-                it["state"] = state
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+                every { toCheckEmailArgs() } returns CheckEmailArgs(emailAddress = EMAIL)
             },
         )
-
-    companion object {
-        private const val EMAIL = "test@gmail.com"
-        private val DEFAULT_STATE = CheckEmailState(
-            email = EMAIL,
-        )
-    }
 }
+
+private const val EMAIL = "test@gmail.com"
+private val DEFAULT_STATE = CheckEmailState(
+    email = EMAIL,
+)

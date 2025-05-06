@@ -31,7 +31,7 @@ class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
     initialState = SettingsState(
-        isPreAuth = SettingsArgs(savedStateHandle = savedStateHandle).isPreAuth,
+        isPreAuth = savedStateHandle.toSettingsArgs().isPreAuth,
         securityCount = firstTimeActionManager.allSecuritySettingsBadgeCountFlow.value,
         autoFillCount = firstTimeActionManager.allAutofillSettingsBadgeCountFlow.value,
         vaultCount = firstTimeActionManager.allVaultSettingsBadgeCountFlow.value,

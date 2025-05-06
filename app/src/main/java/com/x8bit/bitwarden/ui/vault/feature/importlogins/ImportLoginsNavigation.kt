@@ -6,25 +6,31 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import kotlinx.serialization.Serializable
 
-private const val IMPORT_LOGINS_PREFIX = "import-logins"
-private const val IMPORT_LOGINS_NAV_ARG = "snackbarRelay"
-private const val IMPORT_LOGINS_ROUTE = "$IMPORT_LOGINS_PREFIX/{$IMPORT_LOGINS_NAV_ARG}"
+/**
+ * The type-safe route for the import logins screen.
+ */
+@Serializable
+data class ImportLoginsRoute(
+    val snackbarRelay: SnackbarRelay,
+)
 
 /**
  * Arguments for the [ImportLoginsScreen] using [SavedStateHandle].
  */
-data class ImportLoginsArgs(val snackBarRelay: SnackbarRelay) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        snackBarRelay = SnackbarRelay.valueOf(
-            requireNotNull(savedStateHandle[IMPORT_LOGINS_NAV_ARG]),
-        ),
-    )
+data class ImportLoginsArgs(val snackBarRelay: SnackbarRelay)
+
+/**
+ * Constructs a [ImportLoginsArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toImportLoginsArgs(): ImportLoginsArgs {
+    val route = this.toRoute<ImportLoginsRoute>()
+    return ImportLoginsArgs(snackBarRelay = route.snackbarRelay)
 }
 
 /**
@@ -34,7 +40,7 @@ fun NavController.navigateToImportLoginsScreen(
     snackbarRelay: SnackbarRelay,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = "$IMPORT_LOGINS_PREFIX/$snackbarRelay", navOptions = navOptions)
+    navigate(route = ImportLoginsRoute(snackbarRelay = snackbarRelay), navOptions = navOptions)
 }
 
 /**
@@ -43,15 +49,7 @@ fun NavController.navigateToImportLoginsScreen(
 fun NavGraphBuilder.importLoginsScreenDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = IMPORT_LOGINS_ROUTE,
-        arguments = listOf(
-            navArgument(IMPORT_LOGINS_NAV_ARG) {
-                type = NavType.StringType
-                nullable = false
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<ImportLoginsRoute> {
         ImportLoginsScreen(
             onNavigateBack = onNavigateBack,
         )

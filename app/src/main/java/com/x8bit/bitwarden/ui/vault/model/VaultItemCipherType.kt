@@ -1,8 +1,11 @@
 package com.x8bit.bitwarden.ui.vault.model
 
+import kotlinx.serialization.Serializable
+
 /**
  * Represents different types of ciphers that can be added/viewed.
  */
+@Serializable
 enum class VaultItemCipherType {
 
     /**

@@ -7,14 +7,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.bitwarden.core.annotation.OmitFromCoverage
+import kotlinx.serialization.Serializable
 
-const val SPLASH_ROUTE: String = "splash"
+/**
+ * The type-safe route for the splash screen.
+ */
+@Serializable
+data object SplashRoute
 
 /**
  * Add splash destinations to the nav graph.
  */
 fun NavGraphBuilder.splashDestination() {
-    composable(SPLASH_ROUTE) { SplashScreen() }
+    composable<SplashRoute> { SplashScreen() }
 }
 
 /**
@@ -23,5 +28,5 @@ fun NavGraphBuilder.splashDestination() {
 fun NavController.navigateToSplash(
     navOptions: NavOptions? = null,
 ) {
-    navigate(SPLASH_ROUTE, navOptions)
+    navigate(SplashRoute, navOptions)
 }

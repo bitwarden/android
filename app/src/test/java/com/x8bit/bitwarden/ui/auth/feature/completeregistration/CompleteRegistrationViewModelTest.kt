@@ -108,12 +108,18 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setUp() {
         specialCircumstanceManager.specialCircumstance = mockCompleteRegistrationCircumstance
-        mockkStatic(::generateUriForCaptcha)
+        mockkStatic(
+            SavedStateHandle::toCompleteRegistrationArgs,
+            ::generateUriForCaptcha,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::generateUriForCaptcha)
+        unmockkStatic(
+            SavedStateHandle::toCompleteRegistrationArgs,
+            ::generateUriForCaptcha,
+        )
     }
 
     @Test
@@ -668,11 +674,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     private fun createCompleteRegistrationViewModel(
         completeRegistrationState: CompleteRegistrationState? = DEFAULT_STATE,
     ): CompleteRegistrationViewModel = CompleteRegistrationViewModel(
-        savedStateHandle = SavedStateHandle(
-            mapOf(
-                "state" to completeRegistrationState,
-            ),
-        ),
+        savedStateHandle = SavedStateHandle().apply {
+            set(key = "state", value = completeRegistrationState)
+            every { toCompleteRegistrationArgs() } returns CompleteRegistrationArgs(
+                emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
+                verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
+                fromEmail = completeRegistrationState?.fromEmail ?: false,
+            )
+        },
         authRepository = mockAuthRepository,
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,

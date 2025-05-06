@@ -6,22 +6,33 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL_ADDRESS: String = "email_address"
-private const val CAPTCHA_TOKEN = "captcha_token"
-private const val LOGIN_ROUTE: String = "login/{$EMAIL_ADDRESS}?$CAPTCHA_TOKEN={$CAPTCHA_TOKEN}"
+/**
+ * The type-safe route for the login screen.
+ */
+@Serializable
+data class LoginRoute(
+    val emailAddress: String,
+    val captchaToken: String?,
+)
 
 /**
  * Class to retrieve login arguments from the [SavedStateHandle].
  */
-data class LoginArgs(val emailAddress: String, val captchaToken: String?) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        checkNotNull(savedStateHandle[EMAIL_ADDRESS]) as String,
-        savedStateHandle[CAPTCHA_TOKEN],
+data class LoginArgs(val emailAddress: String, val captchaToken: String?)
+
+/**
+ * Constructs a [LoginArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toLoginArgs(): LoginArgs {
+    val route = this.toRoute<LoginRoute>()
+    return LoginArgs(
+        emailAddress = route.emailAddress,
+        captchaToken = route.captchaToken,
     )
 }
 
@@ -34,8 +45,8 @@ fun NavController.navigateToLogin(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "login/$emailAddress?$CAPTCHA_TOKEN=$captchaToken",
-        navOptions,
+        route = LoginRoute(emailAddress = emailAddress, captchaToken = captchaToken),
+        navOptions = navOptions,
     )
 }
 
@@ -53,16 +64,7 @@ fun NavGraphBuilder.loginDestination(
         isNewDeviceVerification: Boolean,
     ) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = LOGIN_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-            navArgument(CAPTCHA_TOKEN) {
-                type = NavType.StringType
-                nullable = true
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<LoginRoute> {
         LoginScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToMasterPasswordHint = onNavigateToMasterPasswordHint,

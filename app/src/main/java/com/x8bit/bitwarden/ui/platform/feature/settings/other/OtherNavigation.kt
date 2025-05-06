@@ -6,22 +6,52 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.serialization.Serializable
 
-private const val IS_PRE_AUTH: String = "isPreAuth"
-private const val PRE_AUTH_OTHER_ROUTE = "pre_auth_settings_other"
-private const val OTHER_ROUTE = "settings_other"
+/**
+ * The type-safe route for the settings other screen.
+ */
+@Serializable
+sealed class SettingsOtherRoute {
+    /**
+     * Indicates that the settings other screen should be shown as a pre-authentication.
+     */
+    abstract val isPreAuth: Boolean
+
+    /**
+     * The type-safe route for the settings other screen.
+     */
+    @Serializable
+    data object Standard : SettingsOtherRoute() {
+        override val isPreAuth: Boolean get() = false
+    }
+
+    /**
+     * The type-safe route for the pre-auth settings other screen.
+     */
+    @Serializable
+    data object PreAuth : SettingsOtherRoute() {
+        override val isPreAuth: Boolean get() = true
+    }
+}
 
 /**
  * Class to retrieve other settings arguments from the [SavedStateHandle].
  */
-data class OtherArgs(val isPreAuth: Boolean) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isPreAuth = requireNotNull(savedStateHandle[IS_PRE_AUTH]),
-    )
+data class OtherArgs(val isPreAuth: Boolean)
+
+/**
+ * Constructs a [OtherArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toOtherArgs(): OtherArgs {
+    val route = this.toObjectRoute<SettingsOtherRoute.PreAuth>()
+        ?: this.toObjectRoute<SettingsOtherRoute.Standard>()
+    return route
+        ?.let { OtherArgs(isPreAuth = it.isPreAuth) }
+        ?: throw IllegalStateException("Missing correct route for SettingsOtherScreen")
 }
 
 /**
@@ -31,16 +61,14 @@ fun NavGraphBuilder.otherDestination(
     isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = getRoute(isPreAuth = isPreAuth),
-        arguments = listOf(
-            navArgument(name = IS_PRE_AUTH) {
-                type = NavType.BoolType
-                defaultValue = isPreAuth
-            },
-        ),
-    ) {
-        OtherScreen(onNavigateBack = onNavigateBack)
+    if (isPreAuth) {
+        composableWithPushTransitions<SettingsOtherRoute.PreAuth> {
+            OtherScreen(onNavigateBack = onNavigateBack)
+        }
+    } else {
+        composableWithPushTransitions<SettingsOtherRoute.Standard> {
+            OtherScreen(onNavigateBack = onNavigateBack)
+        }
     }
 }
 
@@ -51,9 +79,8 @@ fun NavController.navigateToOther(
     isPreAuth: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = getRoute(isPreAuth = isPreAuth), navOptions = navOptions)
+    this.navigate(
+        route = if (isPreAuth) SettingsOtherRoute.PreAuth else SettingsOtherRoute.Standard,
+        navOptions = navOptions,
+    )
 }
-
-private fun getRoute(
-    isPreAuth: Boolean,
-): String = if (isPreAuth) PRE_AUTH_OTHER_ROUTE else OTHER_ROUTE

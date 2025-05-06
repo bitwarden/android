@@ -39,7 +39,7 @@ class FolderAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val folderAddEditArgs = FolderAddEditArgs(savedStateHandle)
+            val folderAddEditArgs = savedStateHandle.toFolderAddEditArgs()
             FolderAddEditState(
                 folderAddEditType = folderAddEditArgs.folderAddEditType,
                 viewState = when (folderAddEditArgs.folderAddEditType) {

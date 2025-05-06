@@ -6,17 +6,20 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL_ADDRESS: String = "email_address"
-private const val VERIFICATION_TOKEN: String = "verification_token"
-private const val FROM_EMAIL: String = "from_email"
-private const val COMPLETE_REGISTRATION_PREFIX = "complete_registration"
-private const val COMPLETE_REGISTRATION_ROUTE =
-    "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$FROM_EMAIL}"
+/**
+ * The type-safe route for the complete registration screen.
+ */
+@Serializable
+data class CompleteRegistrationRoute(
+    val emailAddress: String,
+    val verificationToken: String,
+    val fromEmail: Boolean,
+)
 
 /**
  * Class to retrieve complete registration arguments from the [SavedStateHandle].
@@ -25,11 +28,17 @@ data class CompleteRegistrationArgs(
     val emailAddress: String,
     val verificationToken: String,
     val fromEmail: Boolean,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL_ADDRESS)),
-        verificationToken = checkNotNull(savedStateHandle.get<String>(VERIFICATION_TOKEN)),
-        fromEmail = checkNotNull(savedStateHandle.get<Boolean>(FROM_EMAIL)),
+)
+
+/**
+ * Constructs a [CompleteRegistrationArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toCompleteRegistrationArgs(): CompleteRegistrationArgs {
+    val route = this.toRoute<CompleteRegistrationRoute>()
+    return CompleteRegistrationArgs(
+        emailAddress = route.emailAddress,
+        verificationToken = route.verificationToken,
+        fromEmail = route.fromEmail,
     )
 }
 
@@ -43,8 +52,12 @@ fun NavController.navigateToCompleteRegistration(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        "$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$fromEmail",
-        navOptions,
+        route = CompleteRegistrationRoute(
+            emailAddress = emailAddress,
+            verificationToken = verificationToken,
+            fromEmail = fromEmail,
+        ),
+        navOptions = navOptions,
     )
 }
 
@@ -57,14 +70,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
     onNavigateToPreventAccountLockout: () -> Unit,
     onNavigateToLogin: (email: String, token: String?) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = COMPLETE_REGISTRATION_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-            navArgument(VERIFICATION_TOKEN) { type = NavType.StringType },
-            navArgument(FROM_EMAIL) { type = NavType.BoolType },
-        ),
-    ) {
+    composableWithSlideTransitions<CompleteRegistrationRoute> {
         CompleteRegistrationScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToPasswordGuidance = onNavigateToPasswordGuidance,
@@ -78,5 +84,5 @@ fun NavGraphBuilder.completeRegistrationDestination(
  * Pop up to the complete registration screen.
  */
 fun NavController.popUpToCompleteRegistration() {
-    popBackStack(route = COMPLETE_REGISTRATION_ROUTE, inclusive = false)
+    this.popBackStack(route = CompleteRegistrationRoute, inclusive = false)
 }

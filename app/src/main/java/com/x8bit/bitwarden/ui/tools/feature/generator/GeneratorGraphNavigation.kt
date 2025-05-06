@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.core.annotation.OmitFromCoverage
+import kotlinx.serialization.Serializable
 
-const val GENERATOR_GRAPH_ROUTE: String = "generator_graph"
+/**
+ * The type-safe route for the generator graph.
+ */
+@Serializable
+data object GeneratorGraphRoute
 
 /**
  * Add generator destination to the root nav graph.
@@ -17,9 +22,8 @@ fun NavGraphBuilder.generatorGraph(
     onNavigateToPasswordHistory: () -> Unit,
     onDimNavBarRequest: (Boolean) -> Unit,
 ) {
-    navigation(
-        route = GENERATOR_GRAPH_ROUTE,
-        startDestination = GENERATOR_ROUTE,
+    navigation<GeneratorGraphRoute>(
+        startDestination = GeneratorRoute.Standard,
     ) {
         generatorDestination(
             onNavigateToPasswordHistory = onNavigateToPasswordHistory,
@@ -32,5 +36,5 @@ fun NavGraphBuilder.generatorGraph(
  * Navigate to the generator graph.
  */
 fun NavController.navigateToGeneratorGraph(navOptions: NavOptions? = null) {
-    navigate(GENERATOR_GRAPH_ROUTE, navOptions)
+    this.navigate(route = GeneratorGraphRoute, navOptions = navOptions)
 }
