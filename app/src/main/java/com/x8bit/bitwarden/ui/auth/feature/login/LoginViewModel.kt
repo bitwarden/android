@@ -14,10 +14,12 @@ import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +39,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    environmentRepository: EnvironmentRepository,
+    private val environmentRepository: EnvironmentRepository,
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
@@ -157,6 +159,29 @@ class LoginViewModel @Inject constructor(
                         uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
                     ),
                 )
+            }
+
+            is LoginResult.EncryptionKeyMigrationRequired -> {
+                val vaultUrl =
+                    environmentRepository.environment.environmentUrlData.webVault.orNullIfBlank()
+                        ?: environmentRepository.environment.environmentUrlData.base.orNullIfBlank()
+                        ?: "https://bitwarden.com"
+
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message =
+                                R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                    .asText(
+                                        vaultUrl
+                                            .toUriOrNull()
+                                            ?.host
+                                            ?: vaultUrl,
+                                    ),
+                        ),
+                    )
+                }
             }
 
             is LoginResult.TwoFactorRequired -> {

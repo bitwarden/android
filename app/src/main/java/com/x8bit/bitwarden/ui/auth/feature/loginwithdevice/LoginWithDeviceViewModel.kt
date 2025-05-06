@@ -286,6 +286,7 @@ class LoginWithDeviceViewModel @Inject constructor(
 
             // NO-OP: This result should not be possible here
             is LoginResult.ConfirmKeyConnectorDomain -> Unit
+            LoginResult.EncryptionKeyMigrationRequired -> Unit
         }
     }
 

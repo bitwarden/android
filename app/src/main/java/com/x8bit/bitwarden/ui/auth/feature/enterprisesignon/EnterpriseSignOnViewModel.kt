@@ -22,9 +22,11 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -154,6 +156,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
+    @Suppress("LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -194,6 +197,23 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         emailAddress = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
                         orgIdentifier = state.orgIdentifierInput,
                     ),
+                )
+            }
+
+            is LoginResult.EncryptionKeyMigrationRequired -> {
+                val vaultUrl =
+                    environmentRepository.environment.environmentUrlData.webVault.orNullIfBlank()
+                        ?: environmentRepository.environment.environmentUrlData.base.orNullIfBlank()
+                        ?: "https://bitwarden.com"
+                @Suppress("MaxLineLength")
+                showError(message =
+                    R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                        .asText(
+                            vaultUrl
+                                .toUriOrNull()
+                                ?.host
+                                ?: vaultUrl,
+                        ),
                 )
             }
 

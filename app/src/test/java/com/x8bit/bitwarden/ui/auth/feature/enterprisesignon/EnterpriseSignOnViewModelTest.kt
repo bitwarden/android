@@ -4,6 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
+import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -436,6 +438,231 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = "new device verification required".asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ssoCallbackResultFlow Success with same state with login EncryptionKeyMigrationRequired should update dialogState with web vault url`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.EncryptionKeyMigrationRequired
+
+            environmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "",
+                    webVault = "vault.bitwarden.com",
+                ),
+            )
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("vault.bitwarden.com"),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ssoCallbackResultFlow Success with same state with login EncryptionKeyMigrationRequired should update dialogState with base url`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.EncryptionKeyMigrationRequired
+
+            environmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "base.bitwarden.com",
+                    webVault = "",
+                ),
+            )
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("base.bitwarden.com"),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.login(
+                    email = "test@gmail.com",
+                    ssoCode = "lmn",
+                    ssoCodeVerifier = "def",
+                    ssoRedirectUri = "bitwarden://sso-callback",
+                    captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ssoCallbackResultFlow Success with same state with login EncryptionKeyMigrationRequired should update dialogState with default url`() =
+        runTest {
+            val orgIdentifier = "Bitwarden"
+            coEvery {
+                authRepository.login(any(), any(), any(), any(), any(), any())
+            } returns LoginResult.EncryptionKeyMigrationRequired
+
+            environmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "",
+                    webVault = "",
+                ),
+            )
+
+            val viewModel = createViewModel(
+                ssoData = DEFAULT_SSO_DATA,
+            )
+            val ssoCallbackResult = SsoCallbackResult.Success(state = "abc", code = "lmn")
+
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Loading(
+                            R.string.logging_in.asText(),
+                        ),
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = EnterpriseSignOnState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("bitwarden.com"),
                         ),
                         orgIdentifierInput = orgIdentifier,
                     ),

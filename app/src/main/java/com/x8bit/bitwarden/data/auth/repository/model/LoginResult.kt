@@ -15,6 +15,11 @@ sealed class LoginResult {
     data class CaptchaRequired(val captchaId: String) : LoginResult()
 
     /**
+     * Encryption key migration is required.
+     */
+    data object EncryptionKeyMigrationRequired : LoginResult()
+
+    /**
      * Two-factor verification is required.
      */
     data object TwoFactorRequired : LoginResult()

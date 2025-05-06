@@ -1613,7 +1613,7 @@ class AuthRepositoryImpl(
      * A helper function to extract the common logic of logging in through
      * any of the available methods.
      */
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "MaxLineLength")
     private suspend fun loginCommon(
         email: String,
         password: String? = null,
@@ -1676,6 +1676,9 @@ class AuthRepositoryImpl(
                                     authModel = authModel,
                                     error = loginResponse.errorMessage,
                                 )
+
+                            is GetTokenResponseJson.Invalid.InvalidType.EncryptionKeyMigrationRequired ->
+                                LoginResult.EncryptionKeyMigrationRequired
 
                             is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
                                 LoginResult.Error(

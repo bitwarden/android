@@ -120,6 +120,11 @@ sealed class GetTokenResponseJson {
             data object NewDeviceVerification : InvalidType()
 
             /**
+             * Represents an invalid response indicating that a new device verification is required.
+             */
+            data object EncryptionKeyMigrationRequired : InvalidType()
+
+            /**
              * Represents generic invalid response
              */
             data object GenericInvalid : InvalidType()
@@ -128,6 +133,12 @@ sealed class GetTokenResponseJson {
         val invalidType: InvalidType
             get() = if (errorMessage?.lowercase() == "new device verification required") {
                 InvalidType.NewDeviceVerification
+            } else if (errorMessage
+                ?.lowercase()
+                ?.contains(
+                    "encryption key migration is required. please log in to the web vault at",
+                ) == true) {
+                    InvalidType.EncryptionKeyMigrationRequired
             } else {
                 InvalidType.GenericInvalid
             }
