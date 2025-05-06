@@ -1677,8 +1677,9 @@ class AuthRepositoryImpl(
                                     error = loginResponse.errorMessage,
                                 )
 
-                            is GetTokenResponseJson.Invalid.InvalidType.EncryptionKeyMigrationRequired ->
+                            is GetTokenResponseJson.Invalid.InvalidType.EncryptionKeyMigrationRequired -> {
                                 LoginResult.EncryptionKeyMigrationRequired
+                            }
 
                             is GetTokenResponseJson.Invalid.InvalidType.GenericInvalid -> {
                                 LoginResult.Error(
