@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
         viewModelScope.launch {
-            configRepository.getServerConfig(forceRefresh = false)
+            configRepository.getServerConfig(forceRefresh = true)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.provider
 
 import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseApiUrl
 import com.bitwarden.data.repository.util.baseEventsUrl
@@ -13,11 +14,17 @@ import com.bitwarden.network.interceptor.BaseUrlsProvider
 @OmitFromCoverage
 object BaseUrlsProviderImpl : BaseUrlsProvider {
     override fun getBaseApiUrl(): String =
-        Environment.Us.environmentUrlData.baseApiUrl
+        US_QA_ENV.environmentUrlData.baseApiUrl
 
     override fun getBaseIdentityUrl(): String =
-        Environment.Us.environmentUrlData.baseIdentityUrl
+        US_QA_ENV.environmentUrlData.baseIdentityUrl
 
     override fun getBaseEventsUrl(): String =
-        Environment.Us.environmentUrlData.baseEventsUrl
+        US_QA_ENV.environmentUrlData.baseEventsUrl
 }
+
+private val US_QA_ENV: Environment = Environment.SelfHosted(
+    EnvironmentUrlDataJson(
+        base = "https://vault.qa.bitwarden.pw",
+    ),
+)
