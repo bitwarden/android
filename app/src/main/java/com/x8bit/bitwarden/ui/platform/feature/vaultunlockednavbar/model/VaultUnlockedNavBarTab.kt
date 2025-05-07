@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model
 
 import android.os.Parcelable
+import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraphRoute
 import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsRoute
-import com.x8bit.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.SendGraphRoute

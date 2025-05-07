@@ -17,6 +17,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
+import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
+import com.bitwarden.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupAutofillRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupCompleteRoute
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.SetupUnlockRoute
@@ -56,10 +60,6 @@ import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraphRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
-import com.x8bit.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
-import com.x8bit.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
-import com.x8bit.bitwarden.ui.platform.theme.RootTransitionProviders
-import com.x8bit.bitwarden.ui.platform.util.toObjectNavigationRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs

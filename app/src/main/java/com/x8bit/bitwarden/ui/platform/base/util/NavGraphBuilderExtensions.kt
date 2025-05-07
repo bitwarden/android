@@ -10,7 +10,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.ui.platform.theme.TransitionProviders
+import com.bitwarden.ui.platform.theme.TransitionProviders
 import kotlin.reflect.KType
 
 /**
