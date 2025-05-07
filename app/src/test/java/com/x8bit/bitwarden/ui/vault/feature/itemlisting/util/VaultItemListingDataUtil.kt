@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -74,7 +74,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
                 isTotp = isTotp,
@@ -120,7 +120,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
                 isTotp = false,
@@ -172,7 +172,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
                 isTotp = false,
@@ -215,7 +215,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
                 isTotp = false,
@@ -258,7 +258,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SshKeyCipherIcon",
                 isTotp = false,
@@ -311,7 +311,7 @@ fun createMockDisplayItemForSend(
                 ),
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
                 isTotp = false,
@@ -354,7 +354,7 @@ fun createMockDisplayItemForSend(
                 ),
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
-                isFido2Creation = false,
+                isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
                 isTotp = false,

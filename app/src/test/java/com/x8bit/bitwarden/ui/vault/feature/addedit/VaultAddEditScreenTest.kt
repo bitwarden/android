@@ -44,8 +44,8 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.RegisterFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -108,7 +108,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private val intentManager: IntentManager = mockk {
         every { launchUri(any()) } just runs
     }
-    private val fido2CompletionManager: Fido2CompletionManager = mockk {
+    private val credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk {
         every { completeFido2Registration(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk {
@@ -121,7 +121,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             permissionsManager = fakePermissionManager,
             exitManager = exitManager,
             intentManager = intentManager,
-            fido2CompletionManager = fido2CompletionManager,
+            credentialProviderCompletionManager = credentialProviderCompletionManager,
             biometricsManager = biometricsManager,
         ) {
             VaultAddEditScreen(
@@ -226,7 +226,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             responseJson = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
-        verify { fido2CompletionManager.completeFido2Registration(result) }
+        verify { credentialProviderCompletionManager.completeFido2Registration(result) }
     }
 
     @Test

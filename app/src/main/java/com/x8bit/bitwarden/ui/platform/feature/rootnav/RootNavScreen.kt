@@ -133,7 +133,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForAuthRequest,
         is RootNavState.VaultUnlockedForFido2Save,
         is RootNavState.VaultUnlockedForFido2Assertion,
-        is RootNavState.VaultUnlockedForFido2GetCredentials,
+        is RootNavState.VaultUnlockedForProviderGetCredentials,
             -> VaultUnlockedGraphRoute
 
         RootNavState.OnboardingAccountLockSetup -> SetupUnlockRoute.AsRoot
@@ -248,7 +248,7 @@ fun RootNavScreen(
 
             is RootNavState.VaultUnlockedForFido2Save,
             is RootNavState.VaultUnlockedForFido2Assertion,
-            is RootNavState.VaultUnlockedForFido2GetCredentials,
+            is RootNavState.VaultUnlockedForProviderGetCredentials,
                 -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultItemListingAsRoot(

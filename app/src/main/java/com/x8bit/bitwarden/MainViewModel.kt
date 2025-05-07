@@ -13,13 +13,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.EmailTokenResult
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilitySelectionManager
-import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CreateCredentialRequestOrNull
-import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -72,7 +72,7 @@ class MainViewModel @Inject constructor(
     private val addTotpItemFromAuthenticatorManager: AddTotpItemFromAuthenticatorManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
-    private val fido2CredentialManager: Fido2CredentialManager,
+    private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val intentManager: IntentManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
@@ -310,8 +310,8 @@ class MainViewModel @Inject constructor(
         val hasVaultShortcut = intent.isMyVaultShortcut
         val hasAccountSecurityShortcut = intent.isAccountSecurityShortcut
         val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
-        val fido2CreateCredentialRequest = intent.getFido2CreateCredentialRequestOrNull()
-        val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
+        val createCredentialRequest = intent.getCreateCredentialRequestOrNull()
+        val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
         when {
             passwordlessRequestData != null -> {
@@ -370,23 +370,23 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2CreateCredentialRequest != null -> {
+            createCredentialRequest != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CredentialManager.isUserVerified =
-                    fido2CreateCredentialRequest.isUserPreVerified
+                bitwardenCredentialManager.isUserVerified =
+                    createCredentialRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.Fido2Save(
-                        fido2CreateCredentialRequest = fido2CreateCredentialRequest,
+                    SpecialCircumstance.ProviderCreateCredential(
+                        createCredentialRequest = createCredentialRequest,
                     )
 
                 // Switch accounts if the selected user is not the active user.
                 if (authRepository.activeUserId != null &&
-                    authRepository.activeUserId != fido2CreateCredentialRequest.userId
+                    authRepository.activeUserId != createCredentialRequest.userId
                 ) {
-                    authRepository.switchAccount(fido2CreateCredentialRequest.userId)
+                    authRepository.switchAccount(createCredentialRequest.userId)
                 }
             }
 
@@ -394,7 +394,7 @@ class MainViewModel @Inject constructor(
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
-                fido2CredentialManager.isUserVerified =
+                bitwardenCredentialManager.isUserVerified =
                     fido2AssertCredentialRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
@@ -403,10 +403,10 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            fido2GetCredentialsRequest != null -> {
+            getCredentialsRequest != null -> {
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.Fido2GetCredentials(
-                        fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                    SpecialCircumstance.ProviderGetCredentials(
+                        getCredentialsRequest = getCredentialsRequest,
                     )
             }
 

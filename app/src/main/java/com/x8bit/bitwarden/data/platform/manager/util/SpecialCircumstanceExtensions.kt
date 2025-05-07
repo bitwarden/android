@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 
@@ -27,11 +27,11 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
     }
 
 /**
- * Returns [Fido2CreateCredentialRequest] when contained in the given [SpecialCircumstance].
+ * Returns [CreateCredentialRequest] when contained in the given [SpecialCircumstance].
  */
-fun SpecialCircumstance.toFido2CreateRequestOrNull(): Fido2CreateCredentialRequest? =
+fun SpecialCircumstance.toCreateCredentialRequestOrNull(): CreateCredentialRequest? =
     when (this) {
-        is SpecialCircumstance.Fido2Save -> this.fido2CreateCredentialRequest
+        is SpecialCircumstance.ProviderCreateCredential -> this.createCredentialRequest
         else -> null
     }
 
@@ -45,11 +45,11 @@ fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertio
     }
 
 /**
- * Returns [Fido2CredentialAssertionRequest] when contained in the given [SpecialCircumstance].
+ * Returns [GetCredentialsRequest] when contained in the given [SpecialCircumstance].
  */
-fun SpecialCircumstance.toFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? =
+fun SpecialCircumstance.toGetCredentialsRequestOrNull(): GetCredentialsRequest? =
     when (this) {
-        is SpecialCircumstance.Fido2GetCredentials -> this.fido2GetCredentialsRequest
+        is SpecialCircumstance.ProviderGetCredentials -> this.getCredentialsRequest
         else -> null
     }
 

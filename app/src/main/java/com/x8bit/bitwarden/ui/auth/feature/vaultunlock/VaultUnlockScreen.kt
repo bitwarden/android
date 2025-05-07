@@ -42,9 +42,9 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenInputTes
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenKeyboardType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.AssertFido2CredentialResult
-import com.x8bit.bitwarden.ui.autofill.fido2.manager.model.GetFido2CredentialsResult
+import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
+import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -62,7 +62,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.persistentListOf
@@ -89,7 +89,8 @@ fun VaultUnlockScreen(
     viewModel: VaultUnlockViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     focusManager: FocusManager = LocalFocusManager.current,
-    fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
+    credentialProviderCompletionManager: CredentialProviderCompletionManager =
+        LocalCredentialProviderCompletionManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -129,14 +130,14 @@ fun VaultUnlockScreen(
             }
 
             is VaultUnlockEvent.Fido2CredentialAssertionError -> {
-                fido2CompletionManager.completeFido2Assertion(
+                credentialProviderCompletionManager.completeFido2Assertion(
                     result = AssertFido2CredentialResult.Error(message = event.message),
                 )
             }
 
             is VaultUnlockEvent.Fido2GetCredentialsError -> {
-                fido2CompletionManager.completeFido2GetCredentialsRequest(
-                    result = GetFido2CredentialsResult.Error(message = event.message),
+                credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
+                    result = GetCredentialsResult.Error(message = event.message),
                 )
             }
         }

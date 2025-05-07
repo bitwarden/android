@@ -8,11 +8,11 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
+import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -130,11 +130,11 @@ class RootNavViewModel @Inject constructor(
                         RootNavState.VaultUnlockedForAuthRequest
                     }
 
-                    is SpecialCircumstance.Fido2Save -> {
+                    is SpecialCircumstance.ProviderCreateCredential -> {
                         RootNavState.VaultUnlockedForFido2Save(
                             activeUserId = userState.activeUserId,
-                            fido2CreateCredentialRequest =
-                                specialCircumstance.fido2CreateCredentialRequest,
+                            createCredentialRequest =
+                                specialCircumstance.createCredentialRequest,
                         )
                     }
 
@@ -146,11 +146,11 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.Fido2GetCredentials -> {
-                        RootNavState.VaultUnlockedForFido2GetCredentials(
+                    is SpecialCircumstance.ProviderGetCredentials -> {
+                        RootNavState.VaultUnlockedForProviderGetCredentials(
                             activeUserId = userState.activeUserId,
-                            fido2GetCredentialsRequest =
-                                specialCircumstance.fido2GetCredentialsRequest,
+                            getCredentialsRequest =
+                                specialCircumstance.getCredentialsRequest,
                         )
                     }
 
@@ -292,12 +292,12 @@ sealed class RootNavState : Parcelable {
      *
      * @param activeUserId ID of the active user. Indirectly used to notify [RootNavViewModel] the
      * active user has changed.
-     * @param fido2CreateCredentialRequest System request containing FIDO credential data.
+     * @param createCredentialRequest System request containing FIDO credential data.
      */
     @Parcelize
     data class VaultUnlockedForFido2Save(
         val activeUserId: String,
-        val fido2CreateCredentialRequest: Fido2CreateCredentialRequest,
+        val createCredentialRequest: CreateCredentialRequest,
     ) : RootNavState()
 
     /**
@@ -310,13 +310,12 @@ sealed class RootNavState : Parcelable {
     ) : RootNavState()
 
     /**
-     * App should unlock the user's vault and retrieve FIDO 2 credentials associated to the relying
-     * party.
+     * App should unlock the user's vault and retrieve credentials matching the given request.
      */
     @Parcelize
-    data class VaultUnlockedForFido2GetCredentials(
+    data class VaultUnlockedForProviderGetCredentials(
         val activeUserId: String,
-        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
+        val getCredentialsRequest: GetCredentialsRequest,
     ) : RootNavState()
 
     /**
