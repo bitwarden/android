@@ -57,7 +57,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val args = TwoFactorLoginArgs(savedStateHandle)
+            val args = savedStateHandle.toTwoFactorLoginArgs()
             TwoFactorLoginState(
                 authMethod = authRepository.twoFactorResponse.preferredAuthMethod,
                 availableAuthMethods = authRepository.twoFactorResponse.availableAuthMethods,

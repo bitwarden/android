@@ -10,7 +10,6 @@ import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
-import com.bitwarden.network.util.base64UrlDecodeOrNull
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -75,15 +74,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         mockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
-            String::base64UrlDecodeOrNull,
+            SavedStateHandle::toTwoFactorLoginArgs,
         )
         mockkStatic(Uri::class)
-        every {
-            DEFAULT_ENCODED_PASSWORD.base64UrlDecodeOrNull()
-        } returns DEFAULT_PASSWORD
-        every {
-            DEFAULT_ENCODED_ORG_IDENTIFIER.base64UrlDecodeOrNull()
-        } returns DEFAULT_ORG_IDENTIFIER
     }
 
     @AfterEach
@@ -91,7 +84,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             ::generateUriForCaptcha,
             ::generateUriForWebAuth,
-            String::base64UrlDecodeOrNull,
+            SavedStateHandle::toTwoFactorLoginArgs,
         )
         unmockkStatic(Uri::class)
     }
@@ -100,9 +93,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
-            verify {
-                DEFAULT_ENCODED_PASSWORD.base64UrlDecodeOrNull()
-            }
             assertEquals(DEFAULT_STATE, awaitItem())
         }
     }
@@ -1233,12 +1223,14 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             environmentRepository = environmentRepository,
             resourceManager = resourceManager,
-            savedStateHandle = SavedStateHandle().also {
-                it["state"] = state
-                it["email_address"] = DEFAULT_EMAIL_ADDRESS
-                it["password"] = DEFAULT_ENCODED_PASSWORD
-                it["org_identifier"] = DEFAULT_ENCODED_ORG_IDENTIFIER
-                it["new_device_verification"] = false
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+                every { toTwoFactorLoginArgs() } returns TwoFactorLoginArgs(
+                    emailAddress = DEFAULT_EMAIL_ADDRESS,
+                    password = DEFAULT_PASSWORD,
+                    orgIdentifier = DEFAULT_ENCODED_ORG_IDENTIFIER,
+                    isNewDeviceVerification = false,
+                )
             },
         )
 }
@@ -1260,7 +1252,6 @@ private const val DEFAULT_EMAIL_ADDRESS = "example@email.com"
 private const val DEFAULT_ORG_IDENTIFIER = "org_identifier"
 private const val DEFAULT_ENCODED_ORG_IDENTIFIER = "org_identifier"
 private const val DEFAULT_PASSWORD = "password123"
-private const val DEFAULT_ENCODED_PASSWORD = "base64EncodedPassword"
 private val DEFAULT_STATE = TwoFactorLoginState(
     authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
     availableAuthMethods = listOf(

@@ -7,10 +7,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val PRE_AUTH_FLIGHT_RECORDER_RECORDED_LOGS_ROUTE =
-    "pre_auth_flight_recorder_recorded_logs"
-private const val FLIGHT_RECORDER_RECORDED_LOGS_ROUTE = "flight_recorder_recorded_logs"
+/**
+ * The type-safe route for the recorded logs screen.
+ */
+@Serializable
+sealed class RecordedLogsRoute {
+    /**
+     * The type-safe route for the recorded logs screen.
+     */
+    @Serializable
+    data object Standard : RecordedLogsRoute()
+
+    /**
+     * The type-safe route for the pre-auth recorded logs screen.
+     */
+    @Serializable
+    data object PreAuth : RecordedLogsRoute()
+}
 
 /**
  * Add recorded logs destination to the nav graph.
@@ -19,12 +34,18 @@ fun NavGraphBuilder.recordedLogsDestination(
     isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = getRoute(isPreAuth = isPreAuth),
-    ) {
-        RecordedLogsScreen(
-            onNavigateBack = onNavigateBack,
-        )
+    if (isPreAuth) {
+        composableWithSlideTransitions<RecordedLogsRoute.PreAuth> {
+            RecordedLogsScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
+    } else {
+        composableWithSlideTransitions<RecordedLogsRoute.Standard> {
+            RecordedLogsScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
     }
 }
 
@@ -35,14 +56,8 @@ fun NavController.navigateToRecordedLogs(
     isPreAuth: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = getRoute(isPreAuth = isPreAuth), navOptions = navOptions)
+    navigate(
+        route = if (isPreAuth) RecordedLogsRoute.PreAuth else RecordedLogsRoute.Standard,
+        navOptions = navOptions,
+    )
 }
-
-private fun getRoute(
-    isPreAuth: Boolean,
-): String =
-    if (isPreAuth) {
-        PRE_AUTH_FLIGHT_RECORDER_RECORDED_LOGS_ROUTE
-    } else {
-        FLIGHT_RECORDER_RECORDED_LOGS_ROUTE
-    }

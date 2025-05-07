@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,7 +31,7 @@ class MasterPasswordHintViewModel @Inject constructor(
 ) : BaseViewModel<MasterPasswordHintState, MasterPasswordHintEvent, MasterPasswordHintAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: MasterPasswordHintState(
-            emailInput = MasterPasswordHintArgs(savedStateHandle).emailAddress,
+            emailInput = savedStateHandle.toMasterPasswordHintArgs().emailAddress,
         ),
 ) {
     init {

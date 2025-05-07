@@ -43,7 +43,7 @@ class SetupUnlockViewModel @Inject constructor(
             cipher = biometricsEncryptionManager.getOrCreateCipher(userId = userId),
         )
         // whether or not the user has completed the initial setup prior to this.
-        val isInitialSetup = SetupUnlockArgs(savedStateHandle).isInitialSetup
+        val isInitialSetup = savedStateHandle.toSetupUnlockArgs().isInitialSetup
         SetupUnlockState(
             userId = userId,
             isUnlockWithPasswordEnabled = authRepository

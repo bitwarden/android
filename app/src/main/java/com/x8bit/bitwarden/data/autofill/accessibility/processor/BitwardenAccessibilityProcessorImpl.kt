@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.autofill.accessibility.util.isSystemPackage
 import com.x8bit.bitwarden.data.autofill.accessibility.util.shouldSkipPackage
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSelectionIntent
+import timber.log.Timber
 
 /**
  * The default implementation of the [BitwardenAccessibilityProcessor].
@@ -30,27 +31,19 @@ class BitwardenAccessibilityProcessorImpl(
         event: AccessibilityEvent,
         rootAccessibilityNodeInfoProvider: () -> AccessibilityNodeInfo?,
     ) {
+        // Only process the event if the tile was clicked
+        val accessibilityAction = accessibilityAutofillManager.accessibilityAction ?: return
         val eventNode = event.source ?: return
-        // Ignore the event when the phone is inactive
-        if (!powerManager.isInteractive) return
-        // We skip if the system package
-        if (eventNode.isSystemPackage) return
-        // We skip any package that is unsupported
-        if (eventNode.shouldSkipPackage) return
-        // We skip any package that is a launcher
-        if (launcherPackageNameManager.launcherPackages.any { it == eventNode.packageName }) {
+
+        // Prevent clearing the action until we receive a processable event in case unprocessable
+        // events are still being received from the device. This can happen on slower devices or if
+        // screen transitions are still being performed.
+        if (!eventNode.shouldProcessEvent(rootAccessibilityNodeInfoProvider)) {
             return
         }
 
-        // Only process the event if the tile was clicked
-        val accessibilityAction = accessibilityAutofillManager.accessibilityAction ?: return
-        // We only call for the root node once after all other checks
-        // have passed because it is significant performance hit
-        if (rootAccessibilityNodeInfoProvider()?.packageName != event.packageName) return
-
-        // Clear the action since we are now acting on it
+        // Clear the action since we are now acting on a supported node.
         accessibilityAutofillManager.accessibilityAction = null
-
         when (accessibilityAction) {
             is AccessibilityAction.AttemptFill -> {
                 handleAttemptFill(rootNode = eventNode, attemptFill = accessibilityAction)
@@ -58,6 +51,37 @@ class BitwardenAccessibilityProcessorImpl(
 
             AccessibilityAction.AttemptParseUri -> handleAttemptParseUri(rootNode = eventNode)
         }
+    }
+
+    private fun AccessibilityNodeInfo.shouldProcessEvent(
+        rootAccessibilityNodeInfoProvider: () -> AccessibilityNodeInfo?,
+    ): Boolean {
+        // Ignore the event when the phone is inactive.
+        if (!powerManager.isInteractive) return false
+        // We skip if the system package.
+        if (this.isSystemPackage) {
+            Timber.d("Skipping autofill for system package $packageName.")
+            return false
+        }
+        // We skip any package that is explicitly blocked.
+        if (this.shouldSkipPackage) {
+            Timber.d("Skipping autofill on block-listed package $packageName.")
+            return false
+        }
+        // We skip any package that is a launcher.
+        if (launcherPackageNameManager.launcherPackages.any { it == this.packageName }) {
+            Timber.d("Skipping autofill on launcher package $packageName.")
+            return false
+        }
+
+        // We only call for the root node once, after all other checks have passed, because it is a
+        // significant performance hit.
+        if (rootAccessibilityNodeInfoProvider()?.packageName != this.packageName) {
+            Timber.d("Skipping autofill due to package name mismatch.")
+            return false
+        }
+
+        return true
     }
 
     private fun handleAttemptParseUri(rootNode: AccessibilityNodeInfo) {

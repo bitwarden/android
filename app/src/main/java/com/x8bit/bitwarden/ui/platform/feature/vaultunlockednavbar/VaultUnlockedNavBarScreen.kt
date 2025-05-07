@@ -1,3 +1,6 @@
+// TODO: Add tests for this (PM-21252)
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.compose.foundation.layout.WindowInsets
@@ -19,6 +22,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
+import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
@@ -38,7 +42,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import kotlinx.collections.immutable.persistentListOf
@@ -216,7 +220,7 @@ private fun VaultUnlockedNavBarScaffold(
         // - consume the IME insets.
         NavHost(
             navController = navController,
-            startDestination = VAULT_GRAPH_ROUTE,
+            startDestination = VaultGraphRoute,
             enterTransition = RootTransitionProviders.Enter.fadeIn,
             exitTransition = RootTransitionProviders.Exit.fadeOut,
             popEnterTransition = RootTransitionProviders.Enter.fadeIn,

@@ -6,17 +6,20 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EMAIL_ADDRESS: String = "email_address"
-private const val LOGIN_WITH_DEVICE_PREFIX = "login_with_device"
-private const val LOGIN_TYPE: String = "login_type"
-private const val LOGIN_WITH_DEVICE_ROUTE =
-    "$LOGIN_WITH_DEVICE_PREFIX/{$EMAIL_ADDRESS}/{$LOGIN_TYPE}"
+/**
+ * The type-safe route for the login with device screen.
+ */
+@Serializable
+data class LoginWithDeviceRoute(
+    val emailAddress: String,
+    val loginType: LoginWithDeviceType,
+)
 
 /**
  * Class to retrieve login with device arguments from the [SavedStateHandle].
@@ -24,11 +27,14 @@ private const val LOGIN_WITH_DEVICE_ROUTE =
 data class LoginWithDeviceArgs(
     val emailAddress: String,
     val loginType: LoginWithDeviceType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL_ADDRESS)),
-        loginType = checkNotNull(savedStateHandle.get<LoginWithDeviceType>(LOGIN_TYPE)),
-    )
+)
+
+/**
+ * Constructs a [LoginWithDeviceArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toLoginWithDeviceArgs(): LoginWithDeviceArgs {
+    val route = this.toRoute<LoginWithDeviceRoute>()
+    return LoginWithDeviceArgs(emailAddress = route.emailAddress, loginType = route.loginType)
 }
 
 /**
@@ -40,7 +46,10 @@ fun NavController.navigateToLoginWithDevice(
     navOptions: NavOptions? = null,
 ) {
     this.navigate(
-        route = "$LOGIN_WITH_DEVICE_PREFIX/$emailAddress/$loginType",
+        route = LoginWithDeviceRoute(
+            emailAddress = emailAddress,
+            loginType = loginType,
+        ),
         navOptions = navOptions,
     )
 }
@@ -52,13 +61,7 @@ fun NavGraphBuilder.loginWithDeviceDestination(
     onNavigateBack: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = LOGIN_WITH_DEVICE_ROUTE,
-        arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
-            navArgument(LOGIN_TYPE) { type = NavType.EnumType(LoginWithDeviceType::class.java) },
-        ),
-    ) {
+    composableWithSlideTransitions<LoginWithDeviceRoute> {
         LoginWithDeviceScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToTwoFactorLogin = onNavigateToTwoFactorLogin,

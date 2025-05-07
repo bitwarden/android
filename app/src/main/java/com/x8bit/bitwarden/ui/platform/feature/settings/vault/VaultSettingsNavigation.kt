@@ -8,8 +8,13 @@ import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import kotlinx.serialization.Serializable
 
-private const val VAULT_SETTINGS_ROUTE = "vault_settings"
+/**
+ * The type-safe route for the vault settings screen.
+ */
+@Serializable
+data object VaultSettingsRoute
 
 /**
  * Add Vault Settings destinations to the nav graph.
@@ -20,9 +25,7 @@ fun NavGraphBuilder.vaultSettingsDestination(
     onNavigateToFolders: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = VAULT_SETTINGS_ROUTE,
-    ) {
+    composableWithPushTransitions<VaultSettingsRoute> {
         VaultSettingsScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToExportVault = onNavigateToExportVault,
@@ -36,5 +39,5 @@ fun NavGraphBuilder.vaultSettingsDestination(
  * Navigate to the Vault Settings screen.
  */
 fun NavController.navigateToVaultSettings(navOptions: NavOptions? = null) {
-    navigate(VAULT_SETTINGS_ROUTE, navOptions)
+    this.navigate(route = VaultSettingsRoute, navOptions = navOptions)
 }

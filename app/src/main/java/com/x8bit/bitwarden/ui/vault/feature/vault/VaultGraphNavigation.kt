@@ -15,8 +15,13 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListi
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
+import kotlinx.serialization.Serializable
 
-const val VAULT_GRAPH_ROUTE: String = "vault_graph"
+/**
+ * The type-safe route for the vault graph.
+ */
+@Serializable
+data object VaultGraphRoute
 
 /**
  * Add vault destinations to the nav graph.
@@ -33,9 +38,8 @@ fun NavGraphBuilder.vaultGraph(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToAboutScreen: () -> Unit,
 ) {
-    navigation(
-        route = VAULT_GRAPH_ROUTE,
-        startDestination = VAULT_ROUTE,
+    navigation<VaultGraphRoute>(
+        startDestination = VaultRoute,
     ) {
         vaultDestination(
             onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreen(it) },
@@ -75,5 +79,5 @@ fun NavGraphBuilder.vaultGraph(
  * Navigate to the vault graph.
  */
 fun NavController.navigateToVaultGraph(navOptions: NavOptions? = null) {
-    navigate(VAULT_GRAPH_ROUTE, navOptions)
+    this.navigate(route = VaultGraphRoute, navOptions = navOptions)
 }

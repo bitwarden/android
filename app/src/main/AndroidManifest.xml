@@ -15,7 +15,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_USER_DICTIONARY"/>
+    <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
     <!-- Protect access to AuthenticatorBridgeService using this custom permission.
 
     Note that each build type uses a different value for knownCerts.
@@ -309,6 +309,14 @@
             android:name="com.x8bit.bitwarden.data.platform.service.AuthenticatorBridgeService"
             android:exported="true"
             android:permission="${applicationId}.permission.AUTHENTICATOR_BRIDGE_SERVICE" />
+
+        <!-- Firebase SDK initOrder is 100. We use a higher order to initialize first -->
+        <provider
+            android:name=".data.platform.contentprovider.UncaughtErrorLoggingContentProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="false"
+            android:initOrder="101" />
 
     </application>
 

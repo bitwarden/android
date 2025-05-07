@@ -7,9 +7,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val PRE_AUTH_ABOUT_ROUTE = "pre_auth_settings_about"
-private const val ABOUT_ROUTE = "settings_about"
+/**
+ * The type-safe route for the settings about screen.
+ */
+@Serializable
+sealed class SettingsAboutRoute {
+    /**
+     * The type-safe route for the settings about screen.
+     */
+    @Serializable
+    data object Standard : SettingsAboutRoute()
+
+    /**
+     * The type-safe route for the pre-auth settings about screen.
+     */
+    @Serializable
+    data object PreAuth : SettingsAboutRoute()
+}
 
 /**
  * Add settings destinations to the nav graph.
@@ -20,14 +36,22 @@ fun NavGraphBuilder.aboutDestination(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = getRoute(isPreAuth = isPreAuth),
-    ) {
-        AboutScreen(
-            onNavigateBack = onNavigateBack,
-            onNavigateToFlightRecorder = onNavigateToFlightRecorder,
-            onNavigateToRecordedLogs = onNavigateToRecordedLogs,
-        )
+    if (isPreAuth) {
+        composableWithPushTransitions<SettingsAboutRoute.PreAuth> {
+            AboutScreen(
+                onNavigateBack = onNavigateBack,
+                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+            )
+        }
+    } else {
+        composableWithPushTransitions<SettingsAboutRoute.Standard> {
+            AboutScreen(
+                onNavigateBack = onNavigateBack,
+                onNavigateToFlightRecorder = onNavigateToFlightRecorder,
+                onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+            )
+        }
     }
 }
 
@@ -38,9 +62,8 @@ fun NavController.navigateToAbout(
     isPreAuth: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = getRoute(isPreAuth = isPreAuth), navOptions = navOptions)
+    navigate(
+        route = if (isPreAuth) SettingsAboutRoute.PreAuth else SettingsAboutRoute.Standard,
+        navOptions = navOptions,
+    )
 }
-
-private fun getRoute(
-    isPreAuth: Boolean,
-): String = if (isPreAuth) PRE_AUTH_ABOUT_ROUTE else ABOUT_ROUTE

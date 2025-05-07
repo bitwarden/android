@@ -79,8 +79,14 @@ class FakeNavHostController : NavHostController(context = mockk()) {
             every { id } returns graphId
             every { startDestinationId } returns graphId
             every {
-                findNode(graphId)
+                findNode(resId = graphId)
             } returns mockk { every { id } returns graphId }
+            every {
+                findNodeComprehensive(resId = any(), lastVisited = any(), searchChildren = any())
+            } returns mockk {
+                every { id } returns graphId
+                every { arguments } returns emptyMap()
+            }
         }
 
     override var graph: NavGraph

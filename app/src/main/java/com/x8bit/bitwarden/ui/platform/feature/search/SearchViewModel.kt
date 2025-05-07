@@ -87,7 +87,7 @@ class SearchViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val searchType = SearchArgs(savedStateHandle).type
+            val searchType = savedStateHandle.toSearchArgs().type
             val userState = requireNotNull(authRepo.userStateFlow.value)
             val specialCircumstance = specialCircumstanceManager.specialCircumstance
             val searchTerm = (specialCircumstance as? SpecialCircumstance.SearchShortcut)

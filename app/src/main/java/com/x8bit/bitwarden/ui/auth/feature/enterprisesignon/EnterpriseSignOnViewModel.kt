@@ -194,7 +194,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     EnterpriseSignOnEvent.NavigateToTwoFactorLogin(
-                        emailAddress = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                        emailAddress = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
                         orgIdentifier = state.orgIdentifierInput,
                     ),
                 )
@@ -450,7 +450,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                     viewModelScope.launch {
                         val result = authRepository
                             .login(
-                                email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
                                 ssoCode = ssoCallbackResult.code,
                                 ssoCodeVerifier = ssoData.codeVerifier,
                                 ssoRedirectUri = SSO_URI,
@@ -475,7 +475,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         viewModelScope.launch {
             if (featureFlagManager.getFeatureFlag(key = FlagKey.VerifiedSsoDomainEndpoint)) {
                 val result = authRepository.getVerifiedOrganizationDomainSsoDetails(
-                    email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                    email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
                 )
                 sendAction(
                     EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive(
@@ -484,7 +484,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 )
             } else {
                 val result = authRepository.getOrganizationDomainSsoDetails(
-                    email = EnterpriseSignOnArgs(savedStateHandle).emailAddress,
+                    email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
                 )
                 sendAction(
                     EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive(result),

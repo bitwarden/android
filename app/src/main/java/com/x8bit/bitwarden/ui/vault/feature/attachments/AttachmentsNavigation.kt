@@ -6,22 +6,30 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val ATTACHMENTS_CIPHER_ID = "cipher_id"
-private const val ATTACHMENTS_ROUTE_PREFIX = "attachments"
-private const val ATTACHMENTS_ROUTE = "$ATTACHMENTS_ROUTE_PREFIX/{$ATTACHMENTS_CIPHER_ID}"
+/**
+ * The type-safe route for the attachments screen.
+ */
+@Serializable
+data class AttachmentsRoute(
+    val cipherId: String,
+)
 
 /**
  * Class to retrieve arguments from the [SavedStateHandle].
  */
-data class AttachmentsArgs(val cipherId: String) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        cipherId = checkNotNull(savedStateHandle.get<String>(ATTACHMENTS_CIPHER_ID)),
-    )
+data class AttachmentsArgs(val cipherId: String)
+
+/**
+ * Constructs a [AttachmentsArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toAttachmentsArgs(): AttachmentsArgs {
+    val route = this.toRoute<AttachmentsRoute>()
+    return AttachmentsArgs(cipherId = route.cipherId)
 }
 
 /**
@@ -30,12 +38,7 @@ data class AttachmentsArgs(val cipherId: String) {
 fun NavGraphBuilder.attachmentDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = ATTACHMENTS_ROUTE,
-        arguments = listOf(
-            navArgument(ATTACHMENTS_CIPHER_ID) { type = NavType.StringType },
-        ),
-    ) {
+    composableWithSlideTransitions<AttachmentsRoute> {
         AttachmentsScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -50,7 +53,7 @@ fun NavController.navigateToAttachment(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$ATTACHMENTS_ROUTE_PREFIX/$cipherId",
+        route = AttachmentsRoute(cipherId = cipherId),
         navOptions = navOptions,
     )
 }

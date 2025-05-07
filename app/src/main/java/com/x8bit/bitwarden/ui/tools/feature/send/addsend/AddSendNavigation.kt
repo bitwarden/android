@@ -6,35 +6,56 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import kotlinx.serialization.Serializable
 
-private const val ADD_TYPE: String = "add"
-private const val EDIT_TYPE: String = "edit"
-private const val EDIT_ITEM_ID: String = "edit_send_id"
+/**
+ * The type-safe route for the add send screen.
+ */
+@Serializable
+data class AddSendRoute(
+    val type: ModeType,
+    val editSendId: String?,
+)
 
-private const val ADD_SEND_ITEM_PREFIX: String = "add_send_item"
-private const val ADD_SEND_ITEM_TYPE: String = "add_send_item_type"
-
-const val ADD_SEND_ROUTE: String =
-    "$ADD_SEND_ITEM_PREFIX/{$ADD_SEND_ITEM_TYPE}?$EDIT_ITEM_ID={$EDIT_ITEM_ID}"
+/**
+ * Indicates the mode of send to be displayed.
+ */
+@Serializable
+enum class ModeType {
+    ADD,
+    EDIT,
+}
 
 /**
  * Class to retrieve send add & edit arguments from the [SavedStateHandle].
  */
 data class AddSendArgs(
     val sendAddType: AddSendType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        sendAddType = when (requireNotNull(savedStateHandle.get<String>(ADD_SEND_ITEM_TYPE))) {
-            ADD_TYPE -> AddSendType.AddItem
-            EDIT_TYPE -> AddSendType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
-            else -> throw IllegalStateException("Unknown VaultAddEditType.")
+)
+
+/**
+ * Constructs a [AddSendArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toAddSendArgs(): AddSendArgs {
+    val route = this.toRoute<AddSendRoute>()
+    return AddSendArgs(
+        sendAddType = when (route.type) {
+            ModeType.ADD -> AddSendType.AddItem
+            ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
         },
     )
+}
+
+private fun SavedStateHandle.toAddSendType(): AddSendType {
+    val route = this.toRoute<AddSendRoute>()
+    return when (route.type) {
+        ModeType.ADD -> AddSendType.AddItem
+        ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
+    }
 }
 
 /**
@@ -43,14 +64,7 @@ data class AddSendArgs(
 fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = ADD_SEND_ROUTE,
-        arguments = listOf(
-            navArgument(ADD_SEND_ITEM_TYPE) {
-                type = NavType.StringType
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<AddSendRoute> {
         AddSendScreen(onNavigateBack = onNavigateBack)
     }
 }
@@ -62,18 +76,14 @@ fun NavController.navigateToAddSend(
     sendAddType: AddSendType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$ADD_SEND_ITEM_PREFIX/${sendAddType.toTypeString()}" +
-            "?${EDIT_ITEM_ID}=${sendAddType.toIdOrNull()}",
+    this.navigate(
+        route = AddSendRoute(
+            type = when (sendAddType) {
+                AddSendType.AddItem -> ModeType.ADD
+                is AddSendType.EditItem -> ModeType.EDIT
+            },
+            editSendId = (sendAddType as? AddSendType.EditItem)?.sendItemId,
+        ),
         navOptions = navOptions,
     )
 }
-
-private fun AddSendType.toTypeString(): String =
-    when (this) {
-        is AddSendType.AddItem -> ADD_TYPE
-        is AddSendType.EditItem -> EDIT_TYPE
-    }
-
-private fun AddSendType.toIdOrNull(): String? =
-    (this as? AddSendType.EditItem)?.sendItemId

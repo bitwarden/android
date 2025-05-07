@@ -7,19 +7,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.bitwarden.core.annotation.OmitFromCoverage
+import kotlinx.serialization.Serializable
 
 /**
- * The route for navigating to the [RemovePasswordScreen].
+ * The type-safe route for the remove password screen.
  */
-const val REMOVE_PASSWORD_ROUTE: String = "remove_password"
+@Serializable
+data object RemovePasswordRoute
 
 /**
  * Add the Remove Password screen to the nav graph.
  */
 fun NavGraphBuilder.removePasswordDestination() {
-    composable(
-        route = REMOVE_PASSWORD_ROUTE,
-    ) {
+    composable<RemovePasswordRoute> {
         RemovePasswordScreen()
     }
 }
@@ -30,5 +30,5 @@ fun NavGraphBuilder.removePasswordDestination() {
 fun NavController.navigateToRemovePassword(
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(REMOVE_PASSWORD_ROUTE, navOptions)
+    this.navigate(route = RemovePasswordRoute, navOptions = navOptions)
 }

@@ -70,14 +70,20 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::generateUriForSso)
-        mockkStatic(Uri::parse)
+        mockkStatic(
+            SavedStateHandle::toEnterpriseSignOnArgs,
+            ::generateUriForSso,
+            Uri::parse,
+        )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::generateUriForSso)
-        unmockkStatic(Uri::parse)
+        unmockkStatic(
+            SavedStateHandle::toEnterpriseSignOnArgs,
+            ::generateUriForSso,
+            Uri::parse,
+        )
     }
 
     @Test
@@ -1399,14 +1405,14 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         initialState: EnterpriseSignOnState? = null,
         ssoData: SsoResponseData? = null,
         ssoCallbackResult: SsoCallbackResult? = null,
-        savedStateHandle: SavedStateHandle = SavedStateHandle(
-            initialState = mapOf(
-                "state" to initialState,
-                "email_address" to DEFAULT_EMAIL,
-                "ssoData" to ssoData,
-                "ssoCallbackResult" to ssoCallbackResult,
-            ),
-        ),
+        savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
+            set(key = "state", value = initialState)
+            set(key = "ssoData", value = ssoData)
+            set(key = "ssoCallbackResult", value = ssoCallbackResult)
+            every {
+                toEnterpriseSignOnArgs()
+            } returns EnterpriseSignOnArgs(emailAddress = DEFAULT_EMAIL)
+        },
         isNetworkConnected: Boolean = true,
         dismissInitialDialog: Boolean = true,
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(

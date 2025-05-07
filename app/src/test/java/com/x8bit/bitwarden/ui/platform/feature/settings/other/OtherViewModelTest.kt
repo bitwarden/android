@@ -12,11 +12,15 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -45,6 +49,16 @@ class OtherViewModelTest : BaseViewModelTest() {
     private val vaultRepository = mockk<VaultRepository>()
     private val networkConnectionManager = mockk<NetworkConnectionManager> {
         every { isNetworkConnected } returns true
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toOtherArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toOtherArgs)
     }
 
     @Test
@@ -211,7 +225,7 @@ class OtherViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", state)
-            set("isPreAuth", state?.isPreAuth == true)
+            every { toOtherArgs() } returns OtherArgs(isPreAuth = state?.isPreAuth == true)
         },
         networkConnectionManager = networkConnectionManager,
     )

@@ -57,7 +57,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val args = CompleteRegistrationArgs(savedStateHandle)
+        val args = savedStateHandle.toCompleteRegistrationArgs()
         CompleteRegistrationState(
             userEmail = args.emailAddress,
             emailVerificationToken = args.verificationToken,

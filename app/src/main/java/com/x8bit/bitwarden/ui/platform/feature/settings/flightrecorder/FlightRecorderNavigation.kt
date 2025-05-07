@@ -7,9 +7,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val PRE_AUTH_FLIGHT_RECORDER_ROUTE = "pre_auth_flight_recorder_config"
-private const val FLIGHT_RECORDER_ROUTE = "flight_recorder_config"
+/**
+ * The type-safe route for the flight recorder screen.
+ */
+@Serializable
+sealed class FlightRecorderRoute {
+    /**
+     * The type-safe route for the flight recorder screen.
+     */
+    @Serializable
+    data object Standard : FlightRecorderRoute()
+
+    /**
+     * The type-safe route for the pre-auth flight recorder screen.
+     */
+    @Serializable
+    data object PreAuth : FlightRecorderRoute()
+}
 
 /**
  * Add flight recorder destination to the nav graph.
@@ -18,12 +34,18 @@ fun NavGraphBuilder.flightRecorderDestination(
     isPreAuth: Boolean,
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = getRoute(isPreAuth = isPreAuth),
-    ) {
-        FlightRecorderScreen(
-            onNavigateBack = onNavigateBack,
-        )
+    if (isPreAuth) {
+        composableWithSlideTransitions<FlightRecorderRoute.PreAuth> {
+            FlightRecorderScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
+    } else {
+        composableWithSlideTransitions<FlightRecorderRoute.Standard> {
+            FlightRecorderScreen(
+                onNavigateBack = onNavigateBack,
+            )
+        }
     }
 }
 
@@ -34,9 +56,8 @@ fun NavController.navigateToFlightRecorder(
     isPreAuth: Boolean,
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = getRoute(isPreAuth = isPreAuth), navOptions = navOptions)
+    navigate(
+        route = if (isPreAuth) FlightRecorderRoute.PreAuth else FlightRecorderRoute.Standard,
+        navOptions = navOptions,
+    )
 }
-
-private fun getRoute(
-    isPreAuth: Boolean,
-): String = if (isPreAuth) PRE_AUTH_FLIGHT_RECORDER_ROUTE else FLIGHT_RECORDER_ROUTE

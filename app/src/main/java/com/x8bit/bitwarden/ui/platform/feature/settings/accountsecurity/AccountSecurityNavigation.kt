@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import kotlinx.serialization.Serializable
 
-private const val ACCOUNT_SECURITY_ROUTE = "settings_account_security"
+/**
+ * The type-safe route for the account security screen.
+ */
+@Serializable
+data object AccountSecurityRoute
 
 /**
  * Add settings destinations to the nav graph.
@@ -19,9 +24,7 @@ fun NavGraphBuilder.accountSecurityDestination(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToSetupUnlockScreen: () -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = ACCOUNT_SECURITY_ROUTE,
-    ) {
+    composableWithPushTransitions<AccountSecurityRoute> {
         AccountSecurityScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToDeleteAccount = onNavigateToDeleteAccount,
@@ -35,5 +38,5 @@ fun NavGraphBuilder.accountSecurityDestination(
  * Navigate to the account security screen.
  */
 fun NavController.navigateToAccountSecurity(navOptions: NavOptions? = null) {
-    navigate(ACCOUNT_SECURITY_ROUTE, navOptions)
+    this.navigate(route = AccountSecurityRoute, navOptions = navOptions)
 }

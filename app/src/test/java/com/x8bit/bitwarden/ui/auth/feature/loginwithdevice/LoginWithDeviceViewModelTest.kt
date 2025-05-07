@@ -16,11 +16,16 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.ZonedDateTime
 
@@ -36,6 +41,16 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             createAuthRequestWithUpdates(email = EMAIL, authRequestType = any())
         } returns mutableCreateAuthRequestWithUpdatesFlow
         coEvery { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toLoginWithDeviceArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toLoginWithDeviceArgs)
     }
 
     @Test
@@ -728,8 +743,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             savedStateHandle = SavedStateHandle().apply {
                 set("state", state)
-                set("email_address", state?.emailAddress ?: EMAIL)
-                set("login_type", state?.loginWithDeviceType ?: LoginWithDeviceType.OTHER_DEVICE)
+                every { toLoginWithDeviceArgs() } returns LoginWithDeviceArgs(
+                    emailAddress = state?.emailAddress ?: EMAIL,
+                    loginType = state?.loginWithDeviceType ?: LoginWithDeviceType.OTHER_DEVICE,
+                )
             },
         )
 }

@@ -47,13 +47,19 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
 
     @BeforeEach
     fun setup() {
-        mockkStatic(CipherView::toViewState)
+        mockkStatic(
+            SavedStateHandle::toAttachmentsArgs,
+            CipherView::toViewState,
+        )
         mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(CipherView::toViewState)
+        unmockkStatic(
+            SavedStateHandle::toAttachmentsArgs,
+            CipherView::toViewState,
+        )
         unmockkStatic(Uri::class)
     }
 
@@ -624,7 +630,9 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepository,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
-            set("cipher_id", initialState?.cipherId ?: "mockId-1")
+            every {
+                toAttachmentsArgs()
+            } returns AttachmentsArgs(cipherId = initialState?.cipherId ?: "mockId-1")
         },
     )
 }

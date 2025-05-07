@@ -7,8 +7,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import kotlinx.serialization.Serializable
 
-private const val EXPORT_VAULT_ROUTE = "export_vault"
+/**
+ * The type-safe route for the pending requests screen.
+ */
+@Serializable
+data object ExportVaultRoute
 
 /**
  * Add the Export Vault screen to the nav graph.
@@ -16,9 +21,7 @@ private const val EXPORT_VAULT_ROUTE = "export_vault"
 fun NavGraphBuilder.exportVaultDestination(
     onNavigateBack: () -> Unit,
 ) {
-    composableWithSlideTransitions(
-        route = EXPORT_VAULT_ROUTE,
-    ) {
+    composableWithSlideTransitions<ExportVaultRoute> {
         ExportVaultScreen(
             onNavigateBack = onNavigateBack,
         )
@@ -29,5 +32,5 @@ fun NavGraphBuilder.exportVaultDestination(
  * Navigate to the Export Vault screen.
  */
 fun NavController.navigateToExportVault(navOptions: NavOptions? = null) {
-    this.navigate(EXPORT_VAULT_ROUTE, navOptions)
+    this.navigate(route = ExportVaultRoute, navOptions = navOptions)
 }

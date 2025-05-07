@@ -41,7 +41,7 @@ class ImportLoginsViewModel @Inject constructor(
                 showBottomSheet = false,
                 // attempt to trim the scheme of the vault url
                 currentWebVaultUrl = vaultUrl.toUriOrNull()?.host ?: vaultUrl,
-                snackbarRelay = ImportLoginsArgs(savedStateHandle).snackBarRelay,
+                snackbarRelay = savedStateHandle.toImportLoginsArgs().snackBarRelay,
             )
         },
     ) {

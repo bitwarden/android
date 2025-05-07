@@ -399,6 +399,7 @@ naming:
     rootPackage: ''
   MatchingDeclarationName:
     active: true
+    excludes: [ '**/ui/**/*Navigation.kt' ]
     mustBeFirst: true
   MemberNameEqualsClassName:
     active: true

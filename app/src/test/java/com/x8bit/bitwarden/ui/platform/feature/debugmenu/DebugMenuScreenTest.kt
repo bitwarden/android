@@ -4,10 +4,8 @@ import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -49,12 +47,31 @@ class DebugMenuScreenTest : BaseComposeTest() {
 
     @Test
     fun `onNavigateBack should send action to viewModel`() {
-        composeTestRule.onRoot().printToLog("djf")
         composeTestRule
             .onNodeWithContentDescription("Back")
             .performClick()
 
         verify { viewModel.trySendAction(DebugMenuAction.NavigateBack) }
+    }
+
+    @Test
+    fun `on generate crash click should send GenerateCrashClick action`() {
+        composeTestRule
+            .onNodeWithText(text = "Generate crash")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(DebugMenuAction.GenerateCrashClick) }
+    }
+
+    @Test
+    fun `on generate error report click should send GenerateErrorReportClick action`() {
+        composeTestRule
+            .onNodeWithText(text = "Generate error report")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick) }
     }
 
     @Test

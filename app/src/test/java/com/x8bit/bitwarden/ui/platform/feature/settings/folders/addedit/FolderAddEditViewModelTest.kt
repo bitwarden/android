@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -11,8 +13,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -23,7 +23,9 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -35,6 +37,16 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
 
     private val vaultRepository: VaultRepository = mockk {
         every { getVaultFolderStateFlow(DEFAULT_EDIT_ITEM_ID) } returns mutableFoldersStateFlow
+    }
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(SavedStateHandle::toFolderAddEditArgs)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(SavedStateHandle::toFolderAddEditArgs)
     }
 
     @Test
@@ -733,18 +745,12 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
     private fun createSavedStateHandleWithState(
         state: FolderAddEditState? = DEFAULT_STATE,
     ) = SavedStateHandle().apply {
-        val folderAddEditType = state?.folderAddEditType
-            ?: FolderAddEditType.AddItem
-
+        val folderAddEditType = state?.folderAddEditType ?: FolderAddEditType.AddItem
         set("state", state)
-        set(
-            "folder_add_edit_type",
-            when (folderAddEditType) {
-                FolderAddEditType.AddItem -> "add"
-                is FolderAddEditType.EditItem -> "edit"
-            },
+        every { toFolderAddEditArgs() } returns FolderAddEditArgs(
+            folderAddEditType = folderAddEditType,
+            parentFolderName = null,
         )
-        set("folder_edit_id", (folderAddEditType as? FolderAddEditType.EditItem)?.folderId)
     }
 
     private fun createViewModel(

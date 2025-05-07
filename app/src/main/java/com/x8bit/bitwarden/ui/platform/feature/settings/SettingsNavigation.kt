@@ -7,8 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import com.bitwarden.core.annotation.OmitFromCoverage
@@ -33,20 +31,57 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
+import kotlinx.serialization.Serializable
 
-private const val IS_PRE_AUTH: String = "isPreAuth"
-private const val PRE_AUTH_SETTINGS_ROUTE = "pre_auth_settings"
+/**
+ * The type-safe route for the settings graph.
+ */
+@Serializable
+data object SettingsGraphRoute
 
-const val SETTINGS_GRAPH_ROUTE: String = "settings_graph"
-const val SETTINGS_ROUTE: String = "settings"
+/**
+ * The type-safe route for the settings screen.
+ */
+@Serializable
+sealed class SettingsRoute {
+    /**
+     * Indicates that the settings screen should be shown as a pre-authentication.
+     */
+    abstract val isPreAuth: Boolean
+
+    /**
+     * The type-safe route for the settings screen in the settings graph.
+     */
+    @Serializable
+    data object Standard : SettingsRoute() {
+        override val isPreAuth: Boolean get() = false
+    }
+
+    /**
+     * The type-safe route for the pre-auth settings screen.
+     */
+    @Serializable
+    data object PreAuth : SettingsRoute() {
+        override val isPreAuth: Boolean get() = true
+    }
+}
 
 /**
  * Class to retrieve settings arguments from the [SavedStateHandle].
  */
-data class SettingsArgs(val isPreAuth: Boolean) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        isPreAuth = requireNotNull(savedStateHandle[IS_PRE_AUTH]),
-    )
+data class SettingsArgs(val isPreAuth: Boolean)
+
+/**
+ * Constructs a [SettingsArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toSettingsArgs(): SettingsArgs {
+    val route = this.toObjectRoute<SettingsRoute.PreAuth>()
+        ?: this.toObjectRoute<SettingsRoute.Standard>()
+    return route
+        ?.let { SettingsArgs(isPreAuth = it.isPreAuth) }
+        ?: this.toObjectRoute<SettingsGraphRoute>()?.let { SettingsArgs(isPreAuth = false) }
+        ?: throw IllegalStateException("Missing correct route for SettingsScreen")
 }
 
 /**
@@ -65,19 +100,10 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: (SnackbarRelay) -> Unit,
 ) {
-    navigation(
-        startDestination = SETTINGS_ROUTE,
-        route = SETTINGS_GRAPH_ROUTE,
+    navigation<SettingsGraphRoute>(
+        startDestination = SettingsRoute.Standard,
     ) {
-        composableWithRootPushTransitions(
-            route = SETTINGS_ROUTE,
-            arguments = listOf(
-                navArgument(name = IS_PRE_AUTH) {
-                    type = NavType.BoolType
-                    defaultValue = false
-                },
-            ),
-        ) {
+        composableWithRootPushTransitions<SettingsRoute.Standard> {
             SettingsScreen(
                 onNavigateBack = {},
                 onNavigateToAbout = { navController.navigateToAbout(isPreAuth = false) },
@@ -129,15 +155,7 @@ fun NavGraphBuilder.settingsGraph(
 fun NavGraphBuilder.preAuthSettingsDestinations(
     navController: NavController,
 ) {
-    composableWithSlideTransitions(
-        route = PRE_AUTH_SETTINGS_ROUTE,
-        arguments = listOf(
-            navArgument(name = IS_PRE_AUTH) {
-                type = NavType.BoolType
-                defaultValue = true
-            },
-        ),
-    ) {
+    composableWithSlideTransitions<SettingsRoute.PreAuth> {
         SettingsScreen(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToAbout = { navController.navigateToAbout(isPreAuth = true) },
@@ -176,7 +194,7 @@ fun NavGraphBuilder.preAuthSettingsDestinations(
  * Navigate to the settings graph.
  */
 fun NavController.navigateToSettingsGraph(navOptions: NavOptions? = null) {
-    navigate(SETTINGS_GRAPH_ROUTE, navOptions)
+    this.navigate(route = SettingsGraphRoute, navOptions = navOptions)
 }
 
 /**
@@ -194,12 +212,12 @@ fun NavController.navigateToSettingsGraphRoot() {
         },
     )
     // Then ensures that we are at the root
-    popBackStack(route = SETTINGS_ROUTE, inclusive = false)
+    popBackStack(route = SettingsRoute.Standard, inclusive = false)
 }
 
 /**
  * Navigate to the pre-auth settings screen.
  */
 fun NavController.navigateToPreAuthSettings(navOptions: NavOptions? = null) {
-    navigate(PRE_AUTH_SETTINGS_ROUTE, navOptions)
+    this.navigate(route = SettingsRoute.PreAuth, navOptions = navOptions)
 }

@@ -126,7 +126,7 @@ class VaultAddEditViewModel @Inject constructor(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
-            val args = VaultAddEditArgs(savedStateHandle = savedStateHandle)
+            val args = savedStateHandle.toVaultAddEditArgs()
             val vaultAddEditType = args.vaultAddEditType
             val vaultCipherType = args.vaultItemCipherType
             val selectedFolderId = args.selectedFolderId

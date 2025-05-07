@@ -6,8 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
@@ -15,45 +14,97 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import kotlinx.serialization.Serializable
 
-private const val CARD: String = "card"
-private const val COLLECTION: String = "collection"
-private const val FOLDER: String = "folder"
-private const val IDENTITY: String = "identity"
-private const val LOGIN: String = "login"
-private const val SSH_KEY: String = "ssh_key"
-private const val SECURE_NOTE: String = "secure_note"
-private const val SEND_FILE: String = "send_file"
-private const val SEND_TEXT: String = "send_text"
-private const val TRASH: String = "trash"
-private const val VAULT_ITEM_LISTING_PREFIX: String = "vault_item_listing"
-private const val VAULT_ITEM_LISTING_AS_ROOT_PREFIX: String = "vault_item_listing_as_root"
-private const val VAULT_ITEM_LISTING_TYPE: String = "vault_item_listing_type"
-private const val ID: String = "id"
-private const val VAULT_ITEM_LISTING_ROUTE: String =
-    "$VAULT_ITEM_LISTING_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
-        "?$ID={$ID}"
-private const val VAULT_ITEM_LISTING_AS_ROOT_ROUTE: String =
-    "$VAULT_ITEM_LISTING_AS_ROOT_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
-        "?$ID={$ID}"
-private const val SEND_ITEM_LISTING_PREFIX: String = "send_item_listing"
-private const val SEND_ITEM_LISTING_ROUTE: String =
-    "$SEND_ITEM_LISTING_PREFIX/{$VAULT_ITEM_LISTING_TYPE}" +
-        "?$ID={$ID}"
+/**
+ * The type-safe route for the vault item listing screen.
+ */
+@Serializable
+sealed class VaultItemListingRoute {
+    /**
+     * The type of item to be displayed.
+     */
+    abstract val type: ItemListingType
+
+    /**
+     * The optional item ID used for folder and collection types.
+     */
+    abstract val itemId: String?
+
+    /**
+     * The type-safe route for the cipher specific vault item listing screen.
+     */
+    @Serializable
+    data class CipherItemListing(
+        override val type: ItemListingType,
+        override val itemId: String?,
+    ) : VaultItemListingRoute()
+
+    /**
+     * The type-safe route for the send specific vault item listing screen.
+     */
+    @Serializable
+    data class SendItemListing(
+        override val type: ItemListingType,
+        override val itemId: String?,
+    ) : VaultItemListingRoute()
+
+    /**
+     * The type-safe route for the root vault item listing screen.
+     */
+    @Serializable
+    data class AsRoot(
+        override val type: ItemListingType,
+        override val itemId: String?,
+    ) : VaultItemListingRoute()
+}
+
+/**
+ * The type of items to be displayed.
+ */
+@Serializable
+enum class ItemListingType {
+    LOGIN,
+    IDENTITY,
+    SECURE_NOTE,
+    CARD,
+    SSH_KEY,
+    TRASH,
+    FOLDER,
+    COLLECTION,
+    SEND_FILE,
+    SEND_TEXT,
+}
 
 /**
  * Class to retrieve vault item listing arguments from the [SavedStateHandle].
  */
 data class VaultItemListingArgs(
     val vaultItemListingType: VaultItemListingType,
-) {
-    constructor(savedStateHandle: SavedStateHandle) : this(
-        vaultItemListingType = determineVaultItemListingType(
-            vaultItemListingTypeString = checkNotNull(
-                savedStateHandle[VAULT_ITEM_LISTING_TYPE],
-            ) as String,
-            id = savedStateHandle[ID],
-        ),
+)
+
+/**
+ * Constructs a [VaultItemListingArgs] from the [SavedStateHandle] and internal route data.
+ */
+fun SavedStateHandle.toVaultItemListingArgs(): VaultItemListingArgs {
+    // We just need to pull the serializable data out of the route, since they are always the same
+    // it does not matter which instance we fetch.
+    val route = this.toRoute<VaultItemListingRoute.SendItemListing>()
+    return VaultItemListingArgs(
+        vaultItemListingType = when (route.type) {
+            ItemListingType.LOGIN -> VaultItemListingType.Login
+            ItemListingType.CARD -> VaultItemListingType.Card
+            ItemListingType.IDENTITY -> VaultItemListingType.Identity
+            ItemListingType.SECURE_NOTE -> VaultItemListingType.SecureNote
+            ItemListingType.SSH_KEY -> VaultItemListingType.SshKey
+            ItemListingType.TRASH -> VaultItemListingType.Trash
+            ItemListingType.SEND_FILE -> VaultItemListingType.SendFile
+            ItemListingType.SEND_TEXT -> VaultItemListingType.SendText
+            ItemListingType.FOLDER -> VaultItemListingType.Folder(folderId = route.itemId)
+            ItemListingType.COLLECTION -> VaultItemListingType.Collection(
+                collectionId = requireNotNull(route.itemId),
+            )
+        },
     )
 }
 
@@ -70,8 +121,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
-    internalVaultItemListingDestination(
-        route = VAULT_ITEM_LISTING_ROUTE,
+    internalVaultItemListingDestination<VaultItemListingRoute.CipherItemListing>(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = { },
         onNavigateToEditSendItem = { },
@@ -96,17 +146,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
-    composableWithStayTransitions(
-        route = VAULT_ITEM_LISTING_AS_ROOT_ROUTE,
-        arguments = listOf(
-            navArgument(
-                name = VAULT_ITEM_LISTING_TYPE,
-                builder = {
-                    type = NavType.StringType
-                },
-            ),
-        ),
-    ) {
+    composableWithStayTransitions<VaultItemListingRoute.AsRoot> {
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
@@ -130,8 +170,7 @@ fun NavGraphBuilder.sendItemListingDestination(
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
-    internalVaultItemListingDestination(
-        route = SEND_ITEM_LISTING_ROUTE,
+    internalVaultItemListingDestination<VaultItemListingRoute.SendItemListing>(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = onNavigateToAddSendItem,
         onNavigateToEditSendItem = onNavigateToEditSendItem,
@@ -147,37 +186,19 @@ fun NavGraphBuilder.sendItemListingDestination(
 /**
  * Add the [VaultItemListingScreen] to the nav graph.
  */
-@Suppress("LongParameterList")
-private fun NavGraphBuilder.internalVaultItemListingDestination(
-    route: String,
-    onNavigateBack: () -> Unit,
-    onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
-    onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
-    onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
-    onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
-    onNavigateToAddSendItem: () -> Unit,
-    onNavigateToEditSendItem: (sendId: String) -> Unit,
-    onNavigateToSearch: (searchType: SearchType) -> Unit,
+@Suppress("LongParameterList", "MaxLineLength")
+private inline fun <reified T : VaultItemListingRoute> NavGraphBuilder.internalVaultItemListingDestination(
+    noinline onNavigateBack: () -> Unit,
+    noinline onNavigateToVaultItemScreen: (args: VaultItemArgs) -> Unit,
+    noinline onNavigateToVaultEditItemScreen: (args: VaultAddEditArgs) -> Unit,
+    noinline onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
+    noinline onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
+    noinline onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    noinline onNavigateToAddSendItem: () -> Unit,
+    noinline onNavigateToEditSendItem: (sendId: String) -> Unit,
+    noinline onNavigateToSearch: (searchType: SearchType) -> Unit,
 ) {
-    composableWithPushTransitions(
-        route = route,
-        arguments = listOf(
-            navArgument(
-                name = VAULT_ITEM_LISTING_TYPE,
-                builder = {
-                    type = NavType.StringType
-                },
-            ),
-            navArgument(
-                name = ID,
-                builder = {
-                    type = NavType.StringType
-                    nullable = true
-                },
-            ),
-        ),
-    ) {
+    composableWithPushTransitions<T> {
         VaultItemListingScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
@@ -199,9 +220,11 @@ fun NavController.navigateToVaultItemListing(
     vaultItemListingType: VaultItemListingType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$VAULT_ITEM_LISTING_PREFIX/${vaultItemListingType.toTypeString()}" +
-            "?$ID=${vaultItemListingType.toIdOrNull()}",
+    this.navigate(
+        route = VaultItemListingRoute.CipherItemListing(
+            type = vaultItemListingType.toItemListingType(),
+            itemId = vaultItemListingType.toIdOrNull(),
+        ),
         navOptions = navOptions,
     )
 }
@@ -214,8 +237,10 @@ fun NavController.navigateToVaultItemListingAsRoot(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = "$VAULT_ITEM_LISTING_AS_ROOT_PREFIX/${vaultItemListingType.toTypeString()}" +
-            "?$ID=${vaultItemListingType.toIdOrNull()}",
+        route = VaultItemListingRoute.AsRoot(
+            type = vaultItemListingType.toItemListingType(),
+            itemId = vaultItemListingType.toIdOrNull(),
+        ),
         navOptions = navOptions,
     )
 }
@@ -227,25 +252,27 @@ fun NavController.navigateToSendItemListing(
     vaultItemListingType: VaultItemListingType,
     navOptions: NavOptions? = null,
 ) {
-    navigate(
-        route = "$SEND_ITEM_LISTING_PREFIX/${vaultItemListingType.toTypeString()}" +
-            "?$ID=${vaultItemListingType.toIdOrNull()}",
+    this.navigate(
+        route = VaultItemListingRoute.SendItemListing(
+            type = vaultItemListingType.toItemListingType(),
+            itemId = vaultItemListingType.toIdOrNull(),
+        ),
         navOptions = navOptions,
     )
 }
 
-private fun VaultItemListingType.toTypeString(): String {
+private fun VaultItemListingType.toItemListingType(): ItemListingType {
     return when (this) {
-        is VaultItemListingType.Card -> CARD
-        is VaultItemListingType.Collection -> COLLECTION
-        is VaultItemListingType.Folder -> FOLDER
-        is VaultItemListingType.Identity -> IDENTITY
-        is VaultItemListingType.Login -> LOGIN
-        is VaultItemListingType.SecureNote -> SECURE_NOTE
-        is VaultItemListingType.Trash -> TRASH
-        is VaultItemListingType.SendFile -> SEND_FILE
-        is VaultItemListingType.SendText -> SEND_TEXT
-        is VaultItemListingType.SshKey -> SSH_KEY
+        is VaultItemListingType.Card -> ItemListingType.CARD
+        is VaultItemListingType.Collection -> ItemListingType.COLLECTION
+        is VaultItemListingType.Folder -> ItemListingType.FOLDER
+        is VaultItemListingType.Identity -> ItemListingType.IDENTITY
+        is VaultItemListingType.Login -> ItemListingType.LOGIN
+        is VaultItemListingType.SecureNote -> ItemListingType.SECURE_NOTE
+        is VaultItemListingType.Trash -> ItemListingType.TRASH
+        is VaultItemListingType.SendFile -> ItemListingType.SEND_FILE
+        is VaultItemListingType.SendText -> ItemListingType.SEND_TEXT
+        is VaultItemListingType.SshKey -> ItemListingType.SSH_KEY
     }
 }
 
@@ -262,23 +289,3 @@ private fun VaultItemListingType.toIdOrNull(): String? =
         is VaultItemListingType.SendText -> null
         is VaultItemListingType.SshKey -> null
     }
-
-private fun determineVaultItemListingType(
-    vaultItemListingTypeString: String,
-    id: String?,
-): VaultItemListingType {
-    return when (vaultItemListingTypeString) {
-        LOGIN -> VaultItemListingType.Login
-        CARD -> VaultItemListingType.Card
-        IDENTITY -> VaultItemListingType.Identity
-        SECURE_NOTE -> VaultItemListingType.SecureNote
-        SSH_KEY -> VaultItemListingType.SshKey
-        TRASH -> VaultItemListingType.Trash
-        FOLDER -> VaultItemListingType.Folder(folderId = id)
-        COLLECTION -> VaultItemListingType.Collection(collectionId = requireNotNull(id))
-        SEND_FILE -> VaultItemListingType.SendFile
-        SEND_TEXT -> VaultItemListingType.SendText
-        // This should never occur, vaultItemListingTypeString must match
-        else -> throw IllegalStateException()
-    }
-}

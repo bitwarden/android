@@ -3,8 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
+import com.x8bit.bitwarden.data.util.assertCoroutineThrows
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -42,6 +44,10 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         }
     }
 
+    private val logsManager = mockk<LogsManager> {
+        every { trackNonFatalException(throwable = any()) } just runs
+    }
+
     @Test
     fun `initial state should be correct`() {
         val viewModel = createViewModel()
@@ -71,6 +77,23 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(DebugMenuAction.NavigateBack)
         viewModel.eventFlow.test {
             assertEquals(DebugMenuEvent.NavigateBack, awaitItem())
+        }
+    }
+
+    @Test
+    fun `GenerateCrashClick should throw an IllegalStateException`() {
+        val viewModel = createViewModel()
+        assertCoroutineThrows<IllegalStateException> {
+            viewModel.trySendAction(DebugMenuAction.GenerateCrashClick)
+        }
+    }
+
+    @Test
+    fun `GenerateErrorReportClick should log an IllegalStateException`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(DebugMenuAction.GenerateErrorReportClick)
+        verify(exactly = 1) {
+            logsManager.trackNonFatalException(throwable = any())
         }
     }
 
@@ -116,6 +139,7 @@ class DebugMenuViewModelTest : BaseViewModelTest() {
         featureFlagManager = mockFeatureFlagManager,
         debugMenuRepository = mockDebugMenuRepository,
         authRepository = mockAuthRepository,
+        logsManager = logsManager,
     )
 }
 
