@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.FolderView
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import io.mockk.coEvery
 import io.mockk.coVerify

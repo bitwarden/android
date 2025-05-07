@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem

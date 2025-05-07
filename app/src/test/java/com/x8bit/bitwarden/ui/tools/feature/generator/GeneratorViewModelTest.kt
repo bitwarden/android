@@ -9,6 +9,7 @@ import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -31,7 +32,6 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode

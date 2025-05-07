@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.about
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import io.mockk.coVerify
 import io.mockk.every

@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.data.repository.model.Environment
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -27,7 +28,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk

@@ -10,6 +10,7 @@ import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.network.model.TwoFactorDataModel
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -22,7 +23,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import io.mockk.coEvery
 import io.mockk.coVerify

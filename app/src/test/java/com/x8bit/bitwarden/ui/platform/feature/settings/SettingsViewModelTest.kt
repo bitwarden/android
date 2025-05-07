@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

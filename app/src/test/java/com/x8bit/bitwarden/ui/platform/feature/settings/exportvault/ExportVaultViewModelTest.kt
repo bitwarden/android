@@ -7,6 +7,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockPolicy
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
@@ -23,7 +24,6 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import io.mockk.coEvery
 import io.mockk.coVerify

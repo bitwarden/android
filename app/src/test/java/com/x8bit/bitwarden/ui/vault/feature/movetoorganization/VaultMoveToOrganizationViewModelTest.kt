@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.OrganizationType
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.bitwarden.vault.CipherView
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.vault.feature.movetoorganization.util.createMockOrganizationList
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import io.mockk.coEvery

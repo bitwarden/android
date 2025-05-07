@@ -2,12 +2,12 @@ package com.x8bit.bitwarden.ui.auth.feature.setpassword
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl

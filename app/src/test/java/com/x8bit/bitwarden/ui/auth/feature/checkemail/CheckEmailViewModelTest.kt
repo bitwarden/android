@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic

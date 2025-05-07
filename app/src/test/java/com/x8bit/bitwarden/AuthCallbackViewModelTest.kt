@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -12,7 +13,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResultOrNull
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

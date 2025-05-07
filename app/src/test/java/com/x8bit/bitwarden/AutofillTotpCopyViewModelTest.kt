@@ -2,14 +2,14 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
-import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

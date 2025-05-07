@@ -16,6 +16,7 @@ import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
@@ -70,7 +71,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction

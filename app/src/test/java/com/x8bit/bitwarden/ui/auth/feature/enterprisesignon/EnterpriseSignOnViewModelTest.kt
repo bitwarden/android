@@ -7,6 +7,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.datasource.disk.model.EnvironmentUrlDataJson
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -26,7 +27,6 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.awaits
 import io.mockk.coEvery
 import io.mockk.coVerify
