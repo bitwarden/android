@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import kotlinx.serialization.Serializable
 
 /**
