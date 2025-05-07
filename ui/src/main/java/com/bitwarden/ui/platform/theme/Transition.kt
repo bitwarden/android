@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme
+package com.bitwarden.ui.platform.theme
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
@@ -294,8 +294,9 @@ object RootTransitionProviders {
         /**
          * There is no transition for the exiting screen.
          *
-         * Unlike the [stay] transition, this will immediately remove the outgoing screen even if
-         * there is an ongoing enter transition happening for the new screen.
+         * Unlike the [RootTransitionProviders.Exit.stay] transition, this will immediately remove
+         * the outgoing screen even if there is an ongoing enter transition happening for the new
+         * screen.
          */
         val none: NonNullExitTransitionProvider = {
             ExitTransition.None

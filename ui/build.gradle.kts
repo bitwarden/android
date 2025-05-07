@@ -36,8 +36,11 @@ android {
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization)
 }
 
 tasks {

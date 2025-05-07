@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.ui.platform.util
 
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.serializer

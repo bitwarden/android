@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.toRoute
+import com.bitwarden.ui.platform.util.toObjectKClassNavigationRoute
 
 /**
  * Determines if the [SavedStateHandle] contains a route for the specified object class.
