@@ -1,5 +1,3 @@
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.ui.platform.feature.settings.folders.addedit
 
 import androidx.lifecycle.SavedStateHandle
@@ -7,17 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
 import kotlinx.serialization.Serializable
-
-private const val ADD_TYPE: String = "add"
-private const val EDIT_TYPE: String = "edit"
-private const val EDIT_ITEM_ID: String = "folder_edit_id"
-private const val PARENT_FOLDER_NAME: String = "parent_folder_name"
-
-private const val ADD_EDIT_ITEM_TYPE: String = "folder_add_edit_type"
 
 /**
  * The type-safe route for the login approval screen.

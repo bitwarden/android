@@ -1,11 +1,8 @@
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import kotlinx.serialization.Serializable
