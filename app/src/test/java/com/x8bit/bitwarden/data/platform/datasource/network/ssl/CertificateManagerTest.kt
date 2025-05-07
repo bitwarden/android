@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import timber.log.Timber
 import java.io.IOException
 import java.security.KeyStore
 import java.security.KeyStoreException
@@ -58,7 +57,7 @@ class CertificateManagerTest {
     )
     @BeforeEach
     fun setUp() {
-        mockkStatic(KeyStore::class, KeyChain::class, Uri::class, Timber::class)
+        mockkStatic(KeyStore::class, KeyChain::class)
         mockkConstructor(MissingPropertyException::class)
         every {
             anyConstructed<MissingPropertyException>() == any<MissingPropertyException>()
@@ -72,7 +71,6 @@ class CertificateManagerTest {
             KeyChain::class,
             Uri::class,
             SSLContext::class,
-            Timber::class,
         )
         unmockkConstructor(MissingPropertyException::class)
     }
@@ -158,25 +156,18 @@ class CertificateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutualTlsCertificate should log KeyChainException and return null`() {
-        mockkStatic(Timber::class)
+    fun `mutualTlsCertificate should return null when KeyChain throws KeyChainException for private key`() {
         setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
         val keyChainException = KeyChainException("Alias not found")
         every {
             KeyChain.getPrivateKey(mockContext, "mockAlias")
         } throws keyChainException
         assertNull(certificateManager.mutualTlsCertificate)
-        verify {
-            Timber.e(
-                keyChainException,
-                "Requested alias not found in system KeyChain",
-            )
-        }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutualTlsCertificate should log exception and return null when KeyChain throws KeyChainException for certificate chain`() {
+    fun `mutualTlsCertificate should return null when KeyChain throws KeyChainException for certificate chain`() {
         setupMockUri(authority = MutualTlsKeyHost.KEY_CHAIN.name)
         val keyChainException = KeyChainException("Unable to access certificate chain")
         every {
@@ -186,12 +177,6 @@ class CertificateManagerTest {
             KeyChain.getCertificateChain(mockContext, "mockAlias")
         } throws keyChainException
         assertNull(certificateManager.mutualTlsCertificate)
-        verify {
-            Timber.e(
-                keyChainException,
-                "Unable to access certificate chain for provided alias",
-            )
-        }
     }
 
     @Test
@@ -242,7 +227,7 @@ class CertificateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws KeyStoreException`() {
+    fun `mutualTlsCertificate should return null when AndroidKeyStore throws KeyStoreException`() {
         setupMockUri()
         setupMockAndroidKeyStore()
         val keyStoreException = KeyStoreException()
@@ -254,7 +239,7 @@ class CertificateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws UnrecoverableKeyException`() {
+    fun `mutualTlsCertificate should return null when AndroidKeyStore throws UnrecoverableKeyException`() {
         setupMockUri()
         setupMockAndroidKeyStore()
         every {
@@ -265,7 +250,7 @@ class CertificateManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `mutualTlsCertificate should log exception and return null when AndroidKeyStore throws NoSuchAlgorithmException`() {
+    fun `mutualTlsCertificate should return null when AndroidKeyStore throws NoSuchAlgorithmException`() {
         setupMockUri()
         setupMockAndroidKeyStore()
         val noSuchAlgorithmException = NoSuchAlgorithmException()
@@ -273,12 +258,6 @@ class CertificateManagerTest {
             mockAndroidKeyStore.getKey("mockAlias", null)
         } throws noSuchAlgorithmException
         assertNull(certificateManager.mutualTlsCertificate)
-        verify {
-            Timber.e(
-                noSuchAlgorithmException,
-                "Key cannot be recovered. Password may be incorrect.",
-            )
-        }
     }
 
     @Test
@@ -635,7 +614,6 @@ class CertificateManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `removeMutualTlsKey should catch KeyStoreException when deleting key from AndroidKeyStore fails`() {
-        mockkStatic(Timber::class)
         setupMockAndroidKeyStore()
         val mockAlias = "mockAlias"
         val mockException = KeyStoreException()
@@ -649,7 +627,6 @@ class CertificateManagerTest {
 
         verify {
             mockAndroidKeyStore.deleteEntry(mockAlias)
-            Timber.e(mockException, "Failed to remove key from Android KeyStore")
         }
     }
 
