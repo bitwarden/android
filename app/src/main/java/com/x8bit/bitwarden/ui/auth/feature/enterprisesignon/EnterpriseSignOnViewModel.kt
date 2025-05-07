@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseIdentityUrl
+import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.utils.generateRandomString
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -154,6 +156,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         prevalidateSso()
     }
 
+    @Suppress("LongMethod")
     private fun handleOnLoginResult(action: EnterpriseSignOnAction.Internal.OnLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
@@ -194,6 +197,20 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         emailAddress = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
                         orgIdentifier = state.orgIdentifierInput,
                     ),
+                )
+            }
+
+            is LoginResult.EncryptionKeyMigrationRequired -> {
+                val vaultUrl =
+                    environmentRepository
+                        .environment
+                        .environmentUrlData
+                        .baseWebVaultUrlOrDefault
+
+                showError(
+                    message = R.string
+                        .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                        .asText(vaultUrl.toUriOrNull()?.host ?: vaultUrl),
                 )
             }
 

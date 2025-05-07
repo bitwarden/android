@@ -38,6 +38,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class LoginViewModelTest : BaseViewModelTest() {
 
     private val mutableCaptchaTokenResultFlow =
@@ -323,6 +324,146 @@ class LoginViewModelTest : BaseViewModelTest() {
                         dialogState = LoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns EncryptionKeyMigrationRequired should update errorDialogState with webVault url`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.EncryptionKeyMigrationRequired
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "",
+                    webVault = "vault.bitwarden.com",
+                ),
+            )
+            val viewModel = createViewModel()
+            val defaultSelfHostedState = DEFAULT_STATE.copy(environmentLabel = "")
+            viewModel.stateFlow.test {
+                assertEquals(defaultSelfHostedState, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        environmentLabel = "",
+                        dialogState = LoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        environmentLabel = "",
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("vault.bitwarden.com"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns EncryptionKeyMigrationRequired should update errorDialogState with base url`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.EncryptionKeyMigrationRequired
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "base.bitwarden.com",
+                    webVault = "",
+                ),
+            )
+            val viewModel = createViewModel()
+            val defaultSelfHostedState = DEFAULT_STATE.copy(environmentLabel = "")
+            viewModel.stateFlow.test {
+                assertEquals(defaultSelfHostedState, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        dialogState = LoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("base.bitwarden.com"),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify {
+                authRepository.login(email = EMAIL, password = "", captchaToken = null)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `LoginButtonClick login returns EncryptionKeyMigrationRequired should update errorDialogState with default url`() =
+        runTest {
+            coEvery {
+                authRepository.login(
+                    email = EMAIL,
+                    password = "",
+                    captchaToken = null,
+                )
+            } returns LoginResult.EncryptionKeyMigrationRequired
+            fakeEnvironmentRepository.environment = Environment.SelfHosted(
+                environmentUrlData = EnvironmentUrlDataJson(
+                    base = "",
+                    webVault = "",
+                ),
+            )
+            val viewModel = createViewModel()
+            val defaultSelfHostedState = DEFAULT_STATE.copy(environmentLabel = "")
+            viewModel.stateFlow.test {
+                assertEquals(defaultSelfHostedState, awaitItem())
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        dialogState = LoginState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    defaultSelfHostedState.copy(
+                        dialogState = LoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                                .asText("vault.bitwarden.com"),
                         ),
                     ),
                     awaitItem(),

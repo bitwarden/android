@@ -2393,6 +2393,47 @@ class AuthRepositoryTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `login get token returns invalid request should return EncryptionKeyMigrationRequired`() =
+        runTest {
+            coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns GetTokenResponseJson
+                .Invalid(
+                    errorModel = GetTokenResponseJson.Invalid.ErrorModel(
+                        errorMessage =
+                            "Encryption key migration is required. Please log in to the web vault at",
+                    ),
+                )
+                .asSuccess()
+
+            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
+            assertEquals(LoginResult.EncryptionKeyMigrationRequired, result)
+            assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
+            coVerify {
+                identityService.preLogin(email = EMAIL)
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            }
+        }
+
+    @Test
     fun `login with device get token fails should return Error with no message`() = runTest {
         val error = Throwable("Fail!")
         coEvery {

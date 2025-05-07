@@ -282,7 +282,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Handle the login result.
      */
-    @Suppress("MaxLineLength")
+    @Suppress("MaxLineLength", "LongMethod")
     private fun handleReceiveLoginResult(action: TwoFactorLoginAction.Internal.ReceiveLoginResult) {
         // Dismiss the loading overlay.
         mutableStateFlow.update { it.copy(dialogState = null) }
@@ -353,6 +353,7 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             // NO-OP: This result should not be possible here
             is LoginResult.ConfirmKeyConnectorDomain -> Unit
+            LoginResult.EncryptionKeyMigrationRequired -> Unit
         }
     }
 
