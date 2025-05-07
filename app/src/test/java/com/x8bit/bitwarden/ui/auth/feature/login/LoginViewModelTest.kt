@@ -457,7 +457,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                         dialogState = LoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
-                                .asText("bitwarden.com"),
+                                .asText("vault.bitwarden.com"),
                         ),
                     ),
                     awaitItem(),
