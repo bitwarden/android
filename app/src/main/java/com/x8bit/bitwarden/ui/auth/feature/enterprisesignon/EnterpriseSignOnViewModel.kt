@@ -207,8 +207,9 @@ class EnterpriseSignOnViewModel @Inject constructor(
                         .environmentUrlData
                         .baseWebVaultUrlOrDefault
 
-                showError(message = R.string
-                    .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
+                showError(
+                    message = R.string
+                        .this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden
                         .asText(vaultUrl.toUriOrNull()?.host ?: vaultUrl),
                 )
             }
