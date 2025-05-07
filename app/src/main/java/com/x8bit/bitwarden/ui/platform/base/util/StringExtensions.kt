@@ -5,7 +5,7 @@ package com.x8bit.bitwarden.ui.platform.base.util
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
@@ -103,7 +103,7 @@ fun String?.orNullIfBlank(): String? = this?.takeUnless { it.isBlank() }
  */
 @Composable
 fun String.lowercaseWithCurrentLocal(): String {
-    return lowercase(LocalContext.current.resources.configuration.locales[0])
+    return lowercase(LocalConfiguration.current.locales[0])
 }
 
 /**

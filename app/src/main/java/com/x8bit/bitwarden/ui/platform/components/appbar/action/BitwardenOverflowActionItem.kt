@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
@@ -41,7 +40,6 @@ import kotlinx.collections.immutable.persistentListOf
  * @param menuItemDataList The list of [OverflowMenuItemData] that will populate the overflow
  * dropdown menu.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenOverflowActionItem(
     menuItemDataList: ImmutableList<OverflowMenuItemData>,

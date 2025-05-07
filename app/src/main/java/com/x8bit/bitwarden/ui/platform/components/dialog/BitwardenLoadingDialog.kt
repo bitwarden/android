@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.platform.components.dialog
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -28,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  *
  * @param text The text to display in the dialog.
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenLoadingDialog(
     text: String,

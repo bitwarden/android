@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -40,7 +39,6 @@ import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
  * [BitwardenSelectionRow].
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
