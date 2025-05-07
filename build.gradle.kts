@@ -68,9 +68,11 @@ kover {
                     // Dagger modules
                     "dagger.Module",
                 )
-                classes(
+                files(
                     // Navigation helpers
-                    "*.*NavigationKt*",
+                    "*.*Navigation.kt",
+                )
+                classes(
                     // Composable singletons
                     "*.*ComposableSingletons*",
                     // Generated classes related to interfaces with default values

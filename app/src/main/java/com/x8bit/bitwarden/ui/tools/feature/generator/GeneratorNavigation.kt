@@ -1,5 +1,3 @@
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.ui.tools.feature.generator
 
 import androidx.lifecycle.SavedStateHandle
@@ -8,7 +6,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import kotlinx.serialization.Serializable
