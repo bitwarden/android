@@ -1,7 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.navbar
 
 import com.bitwarden.authenticator.data.auth.repository.AuthRepository
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

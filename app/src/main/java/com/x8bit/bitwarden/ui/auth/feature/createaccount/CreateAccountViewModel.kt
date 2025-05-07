@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -26,7 +27,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Pas
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PrivacyPolicyClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.SubmitClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

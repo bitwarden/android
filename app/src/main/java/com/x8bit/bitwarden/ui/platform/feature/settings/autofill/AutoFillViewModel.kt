@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
@@ -13,7 +14,6 @@ import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import dagger.hilt.android.lifecycle.HiltViewModel

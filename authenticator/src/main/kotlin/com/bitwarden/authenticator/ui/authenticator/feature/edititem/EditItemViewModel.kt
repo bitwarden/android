@@ -14,13 +14,13 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map

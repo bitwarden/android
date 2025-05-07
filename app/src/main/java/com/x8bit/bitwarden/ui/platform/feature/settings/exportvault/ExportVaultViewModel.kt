@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExportFormat
 import com.x8bit.bitwarden.ui.platform.util.fileExtension

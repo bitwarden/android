@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.platform.util.ciBuildInfo
 import com.x8bit.bitwarden.data.platform.util.deviceData
 import com.x8bit.bitwarden.data.platform.util.isFdroid
 import com.x8bit.bitwarden.data.platform.util.versionData
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.about.util.getStopsLoggingStringForActiveLog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

@@ -9,6 +9,7 @@ import com.bitwarden.generators.AppendType
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -33,7 +34,6 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandom
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.CatchAllEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias

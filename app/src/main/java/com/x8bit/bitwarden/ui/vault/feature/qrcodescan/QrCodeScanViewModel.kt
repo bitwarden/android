@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
 import android.net.Uri
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

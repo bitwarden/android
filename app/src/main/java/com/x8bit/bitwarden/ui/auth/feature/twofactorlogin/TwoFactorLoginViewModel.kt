@@ -13,6 +13,7 @@ import com.bitwarden.network.util.availableAuthMethods
 import com.bitwarden.network.util.preferredAuthMethod
 import com.bitwarden.network.util.twoFactorDisplayEmail
 import com.bitwarden.network.util.twoFactorDuoAuthUrl
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -31,7 +32,6 @@ import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

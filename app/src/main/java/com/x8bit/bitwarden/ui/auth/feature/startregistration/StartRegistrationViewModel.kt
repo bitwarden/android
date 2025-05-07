@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.model.Environment.Type
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -28,7 +29,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAc
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ServerGeologyHelpClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
