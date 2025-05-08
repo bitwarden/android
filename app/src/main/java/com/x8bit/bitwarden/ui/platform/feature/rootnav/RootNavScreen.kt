@@ -1,6 +1,3 @@
-// TODO: Add tests for this (PM-21252)
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.activity.compose.LocalActivity
@@ -16,7 +13,6 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
 import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
 import com.bitwarden.ui.platform.theme.RootTransitionProviders

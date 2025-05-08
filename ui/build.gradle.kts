@@ -52,6 +52,7 @@ dependencies {
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
     testFixturesImplementation(libs.square.turbine)
+    testFixturesImplementation(libs.mockk.mockk)
 }
 
 tasks {
