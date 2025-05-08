@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
  * Creates a side effect to observe lifecycle events.
  */
 @Composable
-fun LivecycleEventEffect(
+fun LifecycleEventEffect(
     onEvent: (owner: LifecycleOwner, event: Lifecycle.Event) -> Unit,
 ) {
     val eventHandler = rememberUpdatedState(onEvent)

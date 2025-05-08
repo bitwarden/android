@@ -5,8 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.Lifecycle
+import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
-import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 
 /**
@@ -64,7 +64,7 @@ fun RegisterScreenDataOnLifecycleEffect(
     appResumeStateManager: AppResumeStateManager = LocalAppResumeStateManager.current,
     appResumeStateProvider: () -> AppResumeScreenData,
 ) {
-    LivecycleEventEffect { _, event ->
+    LifecycleEventEffect { _, event ->
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
                 appResumeStateManager.updateScreenData(data = appResumeStateProvider())
