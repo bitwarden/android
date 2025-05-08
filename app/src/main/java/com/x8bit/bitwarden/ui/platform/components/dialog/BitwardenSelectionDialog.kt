@@ -54,7 +54,7 @@ fun BitwardenSelectionDialog(
         val scrollState = rememberScrollState()
         var canScrollForward by remember { mutableStateOf(value = false) }
         var canScrollBackward by remember { mutableStateOf(value = false) }
-        LaunchedEffect(scrollState.canScrollForward, scrollState.canScrollForward) {
+        LaunchedEffect(scrollState.canScrollBackward, scrollState.canScrollForward) {
             canScrollForward = scrollState.canScrollForward
             canScrollBackward = scrollState.canScrollBackward
         }
