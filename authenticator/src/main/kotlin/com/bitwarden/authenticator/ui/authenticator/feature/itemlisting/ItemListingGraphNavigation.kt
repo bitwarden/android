@@ -11,8 +11,13 @@ import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateT
 import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.qrCodeScanDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.search.itemSearchDestination
 import com.bitwarden.authenticator.ui.platform.feature.settings.settingsGraph
+import kotlinx.serialization.Serializable
 
-const val ITEM_LISTING_GRAPH_ROUTE = "item_listing_graph"
+/**
+ * The type-safe route for the item listing graph.
+ */
+@Serializable
+data object ItemListingGraphRoute
 
 /**
  * Add the item listing graph to the nav graph.
@@ -29,9 +34,8 @@ fun NavGraphBuilder.itemListingGraph(
     navigateToImport: () -> Unit,
     navigateToTutorial: () -> Unit,
 ) {
-    navigation(
-        route = ITEM_LISTING_GRAPH_ROUTE,
-        startDestination = ITEM_LIST_ROUTE,
+    navigation<ItemListingGraphRoute>(
+        startDestination = ItemListingRoute,
     ) {
         itemListingDestination(
             onNavigateBack = navigateBack,
@@ -76,7 +80,7 @@ fun NavController.navigateToItemListGraph(
     navOptions: NavOptions? = null,
 ) {
     navigate(
-        route = ITEM_LISTING_GRAPH_ROUTE,
+        route = ItemListingGraphRoute,
         navOptions = navOptions,
     )
 }
