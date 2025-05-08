@@ -1,6 +1,4 @@
-@file:OmitFromCoverage
-
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.runtime.Composable
@@ -9,7 +7,6 @@ import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.theme.TransitionProviders
 import kotlin.reflect.KType
 
@@ -28,6 +25,7 @@ inline fun <reified T : Any> NavGraphBuilder.composableWithSlideTransitions(
         exitTransition = TransitionProviders.Exit.stay,
         popEnterTransition = TransitionProviders.Enter.stay,
         popExitTransition = TransitionProviders.Exit.slideDown,
+        sizeTransform = null,
         content = content,
     )
 }

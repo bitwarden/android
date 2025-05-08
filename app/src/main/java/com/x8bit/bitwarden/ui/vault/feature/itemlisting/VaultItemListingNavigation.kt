@@ -5,8 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
+import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
+import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
