@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -84,11 +86,14 @@ fun SendEmpty(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        // This button is hidden from accessibility to avoid duplicate voice over with the FAB
         BitwardenFilledButton(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
-            modifier = Modifier.standardHorizontalMargin(),
             icon = rememberVectorPainter(R.drawable.ic_plus_small),
+            modifier = Modifier
+                .semantics { hideFromAccessibility() }
+                .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.weight(1F))
         Spacer(modifier = Modifier.navigationBarsPadding())
