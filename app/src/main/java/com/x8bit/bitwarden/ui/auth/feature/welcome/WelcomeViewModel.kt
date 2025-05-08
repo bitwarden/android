@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
 import android.os.Parcelable
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize

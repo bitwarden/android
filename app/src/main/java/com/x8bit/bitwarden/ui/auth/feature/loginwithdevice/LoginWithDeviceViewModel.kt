@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.toBaseWebVaultImportUrl
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay

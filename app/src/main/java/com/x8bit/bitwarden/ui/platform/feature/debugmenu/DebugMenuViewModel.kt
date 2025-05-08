@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.DebugMenuRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf

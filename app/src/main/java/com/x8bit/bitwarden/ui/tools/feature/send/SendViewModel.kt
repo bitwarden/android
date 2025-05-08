@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -19,7 +20,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen

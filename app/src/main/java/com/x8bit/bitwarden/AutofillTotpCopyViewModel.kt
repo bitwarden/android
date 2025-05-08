@@ -2,6 +2,7 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.getTotpCopyIntentOrNull
@@ -9,7 +10,6 @@ import com.x8bit.bitwarden.data.platform.util.launchWithTimeout
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull

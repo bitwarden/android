@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.attachments.util.toViewState
 import dagger.hilt.android.lifecycle.HiltViewModel

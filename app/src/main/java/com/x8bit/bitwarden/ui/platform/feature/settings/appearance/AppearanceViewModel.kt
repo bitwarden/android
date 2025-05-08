@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel

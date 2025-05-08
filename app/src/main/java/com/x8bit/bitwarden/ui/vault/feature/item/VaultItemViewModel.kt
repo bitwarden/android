@@ -8,6 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.combineDataStates
 import com.bitwarden.core.data.repository.util.mapNullable
 import com.bitwarden.data.repository.util.baseIconUrl
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
@@ -29,7 +30,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData

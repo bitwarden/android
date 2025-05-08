@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.util.baseWebVaultUrlOrDefault
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -26,7 +27,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn

@@ -5,6 +5,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.generators.PassphraseGeneratorRequest
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -12,9 +15,6 @@ import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

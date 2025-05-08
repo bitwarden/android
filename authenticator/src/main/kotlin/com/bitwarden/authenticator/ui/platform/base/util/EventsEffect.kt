@@ -2,7 +2,7 @@ package com.bitwarden.authenticator.ui.platform.base.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.BaseViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

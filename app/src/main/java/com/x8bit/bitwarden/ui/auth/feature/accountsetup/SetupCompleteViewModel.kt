@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

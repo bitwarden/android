@@ -5,12 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.util.fileExtension
 import com.bitwarden.authenticator.ui.platform.util.toFormattedPattern
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

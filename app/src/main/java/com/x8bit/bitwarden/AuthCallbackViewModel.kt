@@ -1,13 +1,13 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import com.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResultOrNull
 import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

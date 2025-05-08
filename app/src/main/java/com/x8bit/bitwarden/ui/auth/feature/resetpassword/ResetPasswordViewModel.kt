@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.resetpassword
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
@@ -13,9 +16,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
-import com.bitwarden.ui.util.Text
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.generator.util.toStrictestPolicy
 import dagger.hilt.android.lifecycle.HiltViewModel
