@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base
 
 /**
  * Almost all the events in the app involve navigation or toasts. To prevent accidentally
