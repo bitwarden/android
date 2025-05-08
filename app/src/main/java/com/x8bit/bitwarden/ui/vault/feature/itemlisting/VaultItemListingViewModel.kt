@@ -1690,8 +1690,8 @@ class VaultItemListingViewModel @Inject constructor(
         request: GetCredentialsRequest,
     ) {
         val beginGetCredentialOption = request
-            .beginGetPublicKeyCredentialOption
-            ?: run {
+            .beginGetPublicKeyCredentialOptions
+            .ifEmpty {
                 showCredentialManagerErrorDialog(
                     R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
                 )
@@ -1714,15 +1714,14 @@ class VaultItemListingViewModel @Inject constructor(
                     sendEvent(
                         VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
                             GetCredentialsResult.Success(
-                                userId = request.userId,
-                                option = beginGetCredentialOption,
                                 credentialEntries = bitwardenCredentialManager
-                                    .getPublicKeyCredentialEntries(
+                                    .getCredentialEntries(
                                         userId = request.userId,
-                                        option = beginGetCredentialOption,
+                                        options = beginGetCredentialOption,
                                     )
                                     .getOrNull()
                                     .orEmpty(),
+                                userId = request.userId,
                             ),
                         ),
                     )

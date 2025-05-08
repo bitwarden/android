@@ -10,6 +10,7 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.BeginGetCredentialOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CallingAppInfo
@@ -32,7 +33,6 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.bumptech.glide.Glide
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
@@ -118,10 +118,6 @@ class BitwardenCredentialManagerImpl(
         requestJson: String,
     ): PasskeyAttestationOptions? = json.decodeFromStringOrNull(requestJson)
 
-    override fun getPasskeyAssertionOptionsOrNull(
-        requestJson: String,
-    ): PasskeyAssertionOptions? = json.decodeFromStringOrNull(requestJson)
-
     @Suppress("LongMethod")
     override suspend fun authenticateFido2Credential(
         userId: String,
@@ -197,50 +193,87 @@ class BitwardenCredentialManagerImpl(
         ?.userVerification
         ?: fallbackRequirement
 
-    override suspend fun getPublicKeyCredentialEntries(
+    override suspend fun getCredentialEntries(
         userId: String,
-        option: BeginGetPublicKeyCredentialOption,
+        options: List<BeginGetCredentialOption>,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
-        val options = getPasskeyAssertionOptionsOrNull(option.requestJson)
-            ?: return@withContext GetCredentialUnknownException("Invalid data.").asFailure()
-        val relyingPartyId = options.relyingPartyId
-            ?: return@withContext GetCredentialUnknownException("Invalid data.").asFailure()
-
         val cipherViews = vaultRepository
             .ciphersStateFlow
             .takeUntilLoaded()
-            .fold(initial = emptyList<CipherView>()) { initial, dataState ->
+            .fold(initial = emptyList<CipherView>()) { _, dataState ->
                 when (dataState) {
                     is DataState.Loaded -> {
-                        dataState.data.filter { it.isActiveWithFido2Credentials }
+                        dataState.data
                     }
 
                     else -> emptyList()
                 }
             }
+            .ifEmpty {
+                return@withContext emptyList<CredentialEntry>().asSuccess()
+            }
 
-        if (cipherViews.isEmpty()) {
-            return@withContext emptyList<CredentialEntry>().asSuccess()
-        }
+        val publicKeyCredentialOptions = options
+            .filterIsInstance<BeginGetPublicKeyCredentialOption>()
+            .ifEmpty { return@withContext emptyList<CredentialEntry>().asSuccess() }
 
-        val decryptResult = vaultRepository
-            .getDecryptedFido2CredentialAutofillViews(cipherViews)
-        when (decryptResult) {
+        when (
+            val decryptResult =
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(cipherViews)
+        ) {
             is DecryptFido2CredentialAutofillViewResult.Error -> {
-                GetCredentialUnknownException("Error decrypting credentials.")
+                GetCredentialUnknownException(
+                    "Error decrypting user's FIDO 2 credentials.",
+                )
                     .asFailure()
             }
 
             is DecryptFido2CredentialAutofillViewResult.Success -> {
-                val baseIconUrl = environmentRepository
-                    .environment
-                    .environmentUrlData
-                    .baseIconUrl
-                val autofillViews = decryptResult.fido2CredentialAutofillViews
+                publicKeyCredentialOptions.toPublicKeyCredentialEntries(
+                    userId = userId,
+                    cipherViews = cipherViews,
+                    fido2CredentialAutofillViews = decryptResult.fido2CredentialAutofillViews,
+                )
+            }
+        }
+    }
+
+    private fun getPasskeyAssertionOptionsOrNull(
+        requestJson: String,
+    ): PasskeyAssertionOptions? = json.decodeFromStringOrNull(requestJson)
+
+    private suspend fun List<BeginGetPublicKeyCredentialOption>.toPublicKeyCredentialEntries(
+        userId: String,
+        cipherViews: List<CipherView>,
+        fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>,
+    ): Result<List<PublicKeyCredentialEntry>> {
+        val baseIconUrl = environmentRepository
+            .environment
+            .environmentUrlData
+            .baseIconUrl
+
+        var options: PasskeyAssertionOptions
+        var relyingPartyId: String
+        return this
+            .flatMap { option ->
+                options = getPasskeyAssertionOptionsOrNull(option.requestJson)
+                    ?: return GetCredentialUnknownException(
+                        "Invalid passkey request. Could not deserialize request options.",
+                    )
+                        .asFailure()
+
+                relyingPartyId = options.relyingPartyId
+                    ?: return GetCredentialUnknownException(
+                        "Invalid passkey request. Relying party ID is required.",
+                    )
+                        .asFailure()
+
+                val autofillViews = fido2CredentialAutofillViews
                     .filter { it.rpId == relyingPartyId }
-                if (autofillViews.isEmpty()) {
-                    return@withContext emptyList<CredentialEntry>().asSuccess()
-                }
+                    .ifEmpty {
+                        return emptyList<PublicKeyCredentialEntry>().asSuccess()
+                    }
+
                 val cipherIdsToMatch = autofillViews
                     .map { it.cipherId }
                     .toSet()
@@ -248,6 +281,8 @@ class BitwardenCredentialManagerImpl(
                 cipherViews
                     .filter { cipherView -> cipherView.id in cipherIdsToMatch }
                     .associateWith { cipherView ->
+                        // We can safely call first() here because we know the cipherId exists in
+                        // the collection of autofill views.
                         autofillViews.first { it.cipherId == cipherView.id }
                     }
                     .toPublicKeyCredentialEntryList(
@@ -255,9 +290,8 @@ class BitwardenCredentialManagerImpl(
                         userId = userId,
                         option = option,
                     )
-                    .asSuccess()
             }
-        }
+            .asSuccess()
     }
 
     private suspend fun Map<CipherView, Fido2CredentialAutofillView>.toPublicKeyCredentialEntryList(
