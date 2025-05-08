@@ -9,10 +9,10 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.SharedVerificationCodesState
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
-import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
 import com.bitwarden.authenticatorbridge.manager.AuthenticatorBridgeManager
+import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

@@ -32,6 +32,10 @@ android {
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
+    @Suppress("UnstableApiUsage")
+    testFixtures {
+        enable = true
+    }
 }
 
 dependencies {
@@ -41,6 +45,13 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
+
+    testFixturesImplementation(libs.androidx.navigation.compose)
+    testFixturesImplementation(platform(libs.junit.bom))
+    testFixturesImplementation(libs.junit.junit5)
+    testFixturesImplementation(libs.junit.vintage)
+    testFixturesImplementation(libs.kotlinx.coroutines.test)
+    testFixturesImplementation(libs.square.turbine)
 }
 
 tasks {
@@ -48,6 +59,7 @@ tasks {
         useJUnitPlatform()
         maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
+        @Suppress("UselessCallOnNotNull")
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
     }
 }

@@ -1,11 +1,11 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.tutorial
 
 import app.cash.turbine.test
-import com.bitwarden.authenticator.ui.platform.base.BaseViewModelTest
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialAction
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialEvent
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialState
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialViewModel
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

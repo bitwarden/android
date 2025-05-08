@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.createaccount
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
@@ -22,7 +23,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Ema
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

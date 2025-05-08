@@ -1,9 +1,8 @@
-package com.bitwarden.authenticator.ui.platform.base
+package com.bitwarden.ui.platform.base
 
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.TurbineContext
 import app.cash.turbine.turbineScope
-import com.bitwarden.ui.platform.base.BaseViewModel
 import kotlinx.coroutines.CoroutineScope
 import org.junit.jupiter.api.extension.RegisterExtension
 

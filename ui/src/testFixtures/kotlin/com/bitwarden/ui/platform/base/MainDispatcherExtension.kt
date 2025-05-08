@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base
+package com.bitwarden.ui.platform.base
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

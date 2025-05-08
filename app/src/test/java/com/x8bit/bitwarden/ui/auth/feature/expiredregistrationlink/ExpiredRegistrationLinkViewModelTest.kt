@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.expiredregistrationlink
 
 import app.cash.turbine.test
+import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
