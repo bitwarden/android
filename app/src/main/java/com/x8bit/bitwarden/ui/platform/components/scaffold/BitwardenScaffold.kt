@@ -39,7 +39,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.x8bit.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.ScaffoldNavigationData
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
