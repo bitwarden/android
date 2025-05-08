@@ -1,6 +1,3 @@
-// TODO: Add tests for this (PM-21252)
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,7 +19,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
-import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
