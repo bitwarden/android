@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme.color
+package com.bitwarden.ui.platform.theme.color
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
