@@ -13,22 +13,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.bitwarden.authenticator.ui.auth.unlock.UNLOCK_ROUTE
+import com.bitwarden.authenticator.ui.auth.unlock.UnlockRoute
 import com.bitwarden.authenticator.ui.auth.unlock.navigateToUnlock
 import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
-import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AUTHENTICATOR_GRAPH_ROUTE
+import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AuthenticatorGraphRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.setupDebugMenuDestination
-import com.bitwarden.authenticator.ui.platform.feature.splash.SPLASH_ROUTE
+import com.bitwarden.authenticator.ui.platform.feature.splash.SplashRoute
 import com.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
-import com.bitwarden.authenticator.ui.platform.feature.tutorial.TUTORIAL_ROUTE
+import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialRoute
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
-import com.bitwarden.authenticator.ui.platform.theme.NonNullEnterTransitionProvider
-import com.bitwarden.authenticator.ui.platform.theme.NonNullExitTransitionProvider
-import com.bitwarden.authenticator.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.theme.NonNullEnterTransitionProvider
+import com.bitwarden.ui.platform.theme.NonNullExitTransitionProvider
+import com.bitwarden.ui.platform.theme.RootTransitionProviders
+import com.bitwarden.ui.platform.util.toObjectNavigationRoute
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -64,7 +65,7 @@ fun RootNavScreen(
 
     NavHost(
         navController = navController,
-        startDestination = SPLASH_ROUTE,
+        startDestination = SplashRoute,
         enterTransition = { toEnterTransition()(this) },
         exitTransition = { toExitTransition()(this) },
         popEnterTransition = { toEnterTransition()(this) },
@@ -93,10 +94,10 @@ fun RootNavScreen(
     }
 
     val targetRoute = when (state.navState) {
-        RootNavState.NavState.Splash -> SPLASH_ROUTE
-        RootNavState.NavState.Locked -> UNLOCK_ROUTE
-        RootNavState.NavState.Tutorial -> TUTORIAL_ROUTE
-        RootNavState.NavState.Unlocked -> AUTHENTICATOR_GRAPH_ROUTE
+        RootNavState.NavState.Splash -> SplashRoute
+        RootNavState.NavState.Locked -> UnlockRoute
+        RootNavState.NavState.Tutorial -> TutorialRoute
+        RootNavState.NavState.Unlocked -> AuthenticatorGraphRoute
     }
 
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -104,7 +105,9 @@ fun RootNavScreen(
     // death. In this case, the NavHost already restores state, so we don't have to navigate.
     // However, if the route is correct but the underlying state is different, we should still
     // proceed in order to get a fresh version of that route.
-    if (currentRoute == targetRoute && previousStateReference.get() == state) {
+    if (currentRoute == targetRoute.toObjectNavigationRoute() &&
+        previousStateReference.get() == state
+    ) {
         previousStateReference.set(state)
         return
     }
@@ -167,7 +170,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
     when (targetState.destination.rootLevelRoute()) {
         else -> when (initialState.destination.rootLevelRoute()) {
             // Disable transitions when coming from the splash screen
-            SPLASH_ROUTE -> RootTransitionProviders.Enter.none
+            SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Enter.none
             else -> RootTransitionProviders.Enter.fadeIn
         }
     }
@@ -179,7 +182,7 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition(): NonNullExitTransitionProvider =
     when (initialState.destination.rootLevelRoute()) {
         // Disable transitions when coming from the splash screen
-        SPLASH_ROUTE -> RootTransitionProviders.Exit.none
+        SplashRoute.toObjectNavigationRoute() -> RootTransitionProviders.Exit.none
         else -> when (targetState.destination.rootLevelRoute()) {
             else -> RootTransitionProviders.Exit.fadeOut
         }

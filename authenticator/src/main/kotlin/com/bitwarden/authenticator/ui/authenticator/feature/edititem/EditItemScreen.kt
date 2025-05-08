@@ -64,8 +64,8 @@ import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
-import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
-import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
+import com.bitwarden.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
+import com.bitwarden.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
 import kotlinx.collections.immutable.toImmutableList
 
 /**

@@ -4,8 +4,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import kotlinx.serialization.Serializable
 
-const val UNLOCK_ROUTE: String = "unlock"
+/**
+ * The type-safe route for the unlock screen.
+ */
+@Serializable
+data object UnlockRoute
 
 /**
  * Navigate to the unlock screen.
@@ -13,7 +18,7 @@ const val UNLOCK_ROUTE: String = "unlock"
 fun NavController.navigateToUnlock(
     navOptions: NavOptions? = null,
 ) {
-    navigate(route = UNLOCK_ROUTE, navOptions = navOptions)
+    navigate(route = UnlockRoute, navOptions = navOptions)
 }
 
 /**
@@ -22,7 +27,7 @@ fun NavController.navigateToUnlock(
 fun NavGraphBuilder.unlockDestination(
     onUnlocked: () -> Unit,
 ) {
-    composable(route = UNLOCK_ROUTE) {
+    composable<UnlockRoute> {
         UnlockScreen(onUnlocked = onUnlocked)
     }
 }

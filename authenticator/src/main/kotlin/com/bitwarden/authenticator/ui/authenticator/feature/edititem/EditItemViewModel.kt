@@ -42,7 +42,7 @@ class EditItemViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EditItemState, EditItemEvent, EditItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: EditItemState(
-        itemId = EditItemArgs(savedStateHandle).itemId,
+        itemId = savedStateHandle.toEditItemArgs().itemId,
         viewState = EditItemState.ViewState.Loading,
         dialog = null,
     ),
