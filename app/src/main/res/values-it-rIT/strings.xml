@@ -620,9 +620,9 @@ La scansione è automatica.</string>
     <string name="deletion_date_info">Il Send sarà eliminato definitivamente nella data e all\'ora specificate.</string>
     <string name="pending_delete">In attesa di eliminazione</string>
     <string name="expired">Scaduto</string>
-    <string name="expires_at">Expires at %s</string>
-    <string name="expires_tomorrow">Expires tomorrow</string>
-    <string name="expires_on">Expires on %s</string>
+    <string name="expires_at">Scade alle %s</string>
+    <string name="expires_tomorrow">Scade domani</string>
+    <string name="expires_on">Scade il %s</string>
     <string name="stops_logging_on">Stops logging on %1$s at %2$s</string>
     <string name="maximum_access_count">Numero massimo di accessi</string>
     <string name="maximum_access_count_info">Il numero di accessi complessivi consentiti al Send.</string>
@@ -779,7 +779,7 @@ usa \'Aggiungi TOTP\' per salvarla in modo sicuro.</string>
     <string name="email_required_parenthesis">Indirizzo email (necessario)</string>
     <string name="domain_name">domain name</string>
     <string name="domain_name_required_parenthesis">Nome dominio (necessario)</string>
-    <string name="api_key">API key</string>
+    <string name="api_key">Chiave API</string>
     <string name="api_key_required_parenthesis">Chiave API (necessaria)</string>
     <string name="service">Servizio</string>
     <string name="addy_io">addy.io</string>
@@ -788,7 +788,7 @@ usa \'Aggiungi TOTP\' per salvarla in modo sicuro.</string>
     <string name="duck_duck_go">DuckDuckGo</string>
     <string name="fastmail">Fastmail</string>
     <string name="forward_email">ForwardEmail</string>
-    <string name="api_access_token_required_parenthesis">API access token (required)</string>
+    <string name="api_access_token_required_parenthesis">Token di accesso API (obbligatorio)</string>
     <string name="api_access_token">Token API (necessario)</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vuoi davvero sovrascrivere il nome utente attuale?</string>
     <string name="generate_username">Genera nome utente</string>
@@ -1232,7 +1232,7 @@ Vuoi passare a questo account?</string>
     <string name="experiencing_an_issue">Experiencing an issue?</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">Enable temporary logging to collect and inspect logs locally. When enabled, application states and network calls may be logged—never sensitive vault information.</string>
     <string name="to_get_started_set_a_logging_duration">To get started, set a logging duration. Logging  will automatically turn off after this period, giving you time to capture activity while reproducing  any issues.</string>
-    <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
+    <string name="logs_will_be_automatically_deleted_after_30_days">I file di log verranno automaticamente eliminati dopo 30 giorni. Bitwarden può accedere ai dati dei log solo quando li condividi.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
     <string name="flight_recorder_one_hour">1 hour</string>
@@ -1263,4 +1263,9 @@ Vuoi passare a questo account?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
+    <string name="cannot_delete_your_account">Cannot delete your account</string>
+    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

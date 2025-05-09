@@ -1263,4 +1263,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Certyfikat z aliasem \"%s\" już istnieje. Czy chcesz go zastąpić?\nZastąpienie certyfikatu może mieć wpływ na połączenie ze środowiskami aktualnie używanymi.</string>
     <string name="replace_certificate">Zastąp certyfikat</string>
     <string name="unable_to_read_certificate">Nie można odczytać certyfikatu.</string>
+    <string name="cannot_delete_your_account">Nie można usunąć Twojego konta</string>
+    <string name="cannot_delete_your_account_explanation">Tej akcji nie można zakończyć, ponieważ Twoje konto jest zarządzane przez organizację. Skontaktuj się z administratorem organizacji, aby uzyskać dodatkowe informacje.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">To konto zostanie wkrótce usunięte. Zaloguj się do %1$s, aby kontynuować korzystanie z Bitwarden.</string>
+    <string name="view_file_send">Zobacz wysłany plik</string>
+    <string name="view_text_send">Zobacz wysyłany tekst </string>
 </resources>

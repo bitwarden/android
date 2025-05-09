@@ -1263,4 +1263,9 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
+    <string name="cannot_delete_your_account">Cannot delete your account</string>
+    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

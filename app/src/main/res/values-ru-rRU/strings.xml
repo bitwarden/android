@@ -41,7 +41,7 @@
     <string name="invalid_pin">Неверный PIN. Попробуйте снова.</string>
     <string name="launch">Перейти</string>
     <string name="log_in_verb">Войти</string>
-    <string name="log_in_noun">Вход</string>
+    <string name="log_in_noun">Логин</string>
     <string name="log_out">Выход</string>
     <string name="logout_confirmation">Вы действительно хотите выйти?</string>
     <string name="remove_account">Удалить аккаунт</string>
@@ -1250,14 +1250,14 @@
     <string name="do_you_really_want_to_delete_this_log">Вы действительно хотите удалить этот лог?</string>
     <string name="delete_logs">Удалить логи</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">Вы действительно хотите удалить все записанные логи?</string>
-    <string name="confirm_key_connector_domain">Confirm Key Connector domain</string>
-    <string name="key_connector_domain">Key Connector domain:</string>
+    <string name="confirm_key_connector_domain">Подтвердите домен соединителя ключей</string>
+    <string name="key_connector_domain">Домен соединителя ключей:</string>
     <string name="key_connector_organization">Организация:</string>
-    <string name="password_no_longer_required_confirm_domain">A master password is no longer required for members of the following organization. Please confirm the domain below with your organization administrator.</string>
-    <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
-    <string name="flight_recorder_banner_title">Flight recorder on</string>
-    <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
-    <string name="go_to_settings">Go to settings</string>
+    <string name="password_no_longer_required_confirm_domain">Мастер-пароль больше не требуется для членов следующей организации. Пожалуйста, подтвердите указанный ниже домен у администратора вашей организации.</string>
+    <string name="please_confirm_domain_with_admin">Пожалуйста, подтвердите указанный ниже домен у администратора вашей организации.\n\nДомен соединителя ключей:\n%1$s</string>
+    <string name="flight_recorder_banner_title">Бортовой самописец включен</string>
+    <string name="flight_recorder_banner_message">Бортовой самописец будет активен до %1$s %2$s. Вернитесь к настройкам, чтобы отключить его сейчас.</string>
+    <string name="go_to_settings">Перейдите к настройкам</string>
     <string name="all_logs_deleted">Все логи удалены</string>
     <string name="log_deleted">Лог удален</string>
     <string name="app_settings">Настройки приложения</string>
@@ -1265,4 +1265,9 @@
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Сертификат с названием \"%s\" уже существует. Вы хотите заменить его?\nЗамена сертификата может повлиять на подключение к окружениям, использующим его в данный момент.</string>
     <string name="replace_certificate">Заменить сертификат</string>
     <string name="unable_to_read_certificate">Не удается прочитать сертификат.</string>
+    <string name="cannot_delete_your_account">Невозможно удалить ваш аккаунт</string>
+    <string name="cannot_delete_your_account_explanation">Это действие не может быть выполнено, поскольку ваш аккаунт принадлежит организации. Обратитесь к администратору организации за дополнительными сведениями.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Скоро этот аккаунт будет удален. Войдите в %1$s, чтобы продолжить использование Bitwarden.</string>
+    <string name="view_file_send">Просмотр файловой Send</string>
+    <string name="view_text_send">Просмотр тестовой Send</string>
 </resources>

@@ -49,13 +49,13 @@
     <string name="account_already_added">Kontoen er allerede lagt til</string>
     <string name="switch_to_already_added_account_confirmation">Ønsker du å bytte til den nå?</string>
     <string name="master_password">Hovedpassord</string>
-    <string name="master_password_required">Master password (required)</string>
+    <string name="master_password_required">Hovedpassord (påkrevd)</string>
     <string name="new_master_password_required">New master password (required)</string>
     <string name="more">Mer</string>
     <string name="my_vault">Mitt hvelv</string>
     <string name="authenticator">Authenticator</string>
     <string name="name">Navn</string>
-    <string name="item_name_required">Item name (required)</string>
+    <string name="item_name_required">Gjenstandens navn (påkrevd)</string>
     <string name="send_name_required">"Send name (required)"</string>
     <string name="no">Nei</string>
     <string name="notes">Notater</string>
@@ -109,10 +109,10 @@
     <string name="create_an_account">Opprett en konto</string>
     <string name="creating_account">Oppretter konto...</string>
     <string name="edit_item">Rediger elementet</string>
-    <string name="edit_login">Edit login</string>
-    <string name="edit_card">Edit card</string>
-    <string name="edit_identity">Edit identity</string>
-    <string name="edit_note">Edit note</string>
+    <string name="edit_login">Rediger innlogging</string>
+    <string name="edit_card">Rediger kort</string>
+    <string name="edit_identity">Rediger identitet</string>
+    <string name="edit_note">Rediger notat</string>
     <string name="edit_passkey">Edit passkey</string>
     <string name="enable_automatic_syncing">Aktiver automatisk synkronisering</string>
     <string name="enter_email_for_hint">Skriv inn kontoens e-postadresse for å motta hint om hovedpassordet ditt.</string>
@@ -168,10 +168,10 @@
     <string name="no_identities">There are no identities in your vault.</string>
     <string name="new_identity">Ny identitet</string>
     <string name="no_notes">There are no notes in your vault.</string>
-    <string name="new_note">New note</string>
+    <string name="new_note">Nytt notat</string>
     <string name="new_passkey">New passkey</string>
     <string name="new_item">Nytt objekt</string>
-    <string name="new_ssh_key">New SSH key</string>
+    <string name="new_ssh_key">Ny SSH-nøkkel</string>
     <string name="no_text_sends">There are no text Sends in your vault.</string>
     <string name="no_file_sends">There are no file Sends in your vault.</string>
     <string name="no_ssh_keys">There are no SSH keys in your vault.</string>
@@ -201,7 +201,7 @@
     <string name="set_pin">Velg PIN</string>
     <string name="set_pin_direction">Skriv inn en 4-sifret PIN-kode til å låse opp appen med.</string>
     <string name="item_information">Elementinformasjon</string>
-    <string name="item_details">Item details</string>
+    <string name="item_details">Gjenstandens detaljer</string>
     <string name="item_updated">Element oppdatert.</string>
     <string name="submitting">Sender inn...</string>
     <string name="syncing">Synkroniserer...</string>
@@ -215,10 +215,10 @@
     <string name="validating">Validerer</string>
     <string name="verification_code">Verifiseringskode</string>
     <string name="view_item">Vis element</string>
-    <string name="view_login">View login</string>
-    <string name="view_card">View card</string>
-    <string name="view_identity">View identity</string>
-    <string name="view_note">View note</string>
+    <string name="view_login">Vis innlogging</string>
+    <string name="view_card">Vis kort</string>
+    <string name="view_identity">Vis identitet</string>
+    <string name="view_note">Vis notat</string>
     <string name="view_passkey">View passkey</string>
     <string name="web_vault">Bitwarden Netthvelv</string>
     <string name="lost_2fa_app">Har du mistet din autentiseringsapp?</string>
@@ -427,16 +427,16 @@ Skanning skjer automatisk.</string>
     <string name="invalid_email">Ugyldig e-postadresse.</string>
     <string name="cards">Kort</string>
     <string name="identities">Identiteter</string>
-    <string name="identification">Identification</string>
+    <string name="identification">Identifikasjon</string>
     <string name="logins">Innlogginger</string>
     <string name="secure_notes">Sikre notater</string>
-    <string name="personal_details">Personal Details</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="personal_details">Personlige detaljer</string>
+    <string name="contact_info">Kontaktinfo</string>
     <string name="all_items">Alle elementer</string>
     <string name="ur_is">URI-er</string>
     <string name="checking_password">Sjekker passord ...</string>
     <string name="check_password">Sjekk om passordet har blitt eksponert.</string>
-    <string name="check_password_for_data_breaches">Check password for data breaches</string>
+    <string name="check_password_for_data_breaches">Sjekk passord for datainnbrudd</string>
     <string name="password_exposed">Dette passordet har blitt eksponert %1$s gang(er) i datalekkasjer. Du bør endre det.</string>
     <string name="password_safe">Dette passordet ble ikke funnet i noen kjente datalekkasjer. Det bør være trygt å bruke.</string>
     <string name="identity_name">Identitetsnavn</string>
@@ -455,7 +455,7 @@ Skanning skjer automatisk.</string>
     <string name="move_up">Flytt opp</string>
     <string name="miscellaneous">Diverse</string>
     <string name="ownership">Eierskap</string>
-    <string name="owner">Owner</string>
+    <string name="owner">Eier</string>
     <string name="no_collections_to_list">Det er ingen samlinger å vise.</string>
     <string name="moved_item_to_org">%1$s flyttet til %2$s.</string>
     <string name="item_shared">Elementet har blitt delt.</string>
@@ -741,7 +741,7 @@ Skanning skjer automatisk.</string>
     <string name="enter_key_manually">Skriv inn nøkkel manuelt</string>
     <string name="add_totp">Legg til TOTP</string>
     <string name="setup_totp">Sett opp TOTP</string>
-    <string name="set_up_authenticator_key">Set up authenticator key</string>
+    <string name="set_up_authenticator_key">Sett opp autentiseringsnøkkel</string>
     <string name="once_the_key_is_successfully_entered">Når nøkkelen er tastet inn,
 velg Legg til TOTP for å lagre nøkkelen sikkert</string>
     <string name="never_lock_warning">Å sette dine låsalternativer til \"Aldri\" holder hvelvet ditt tilgjengelig for alle med tilgang til din enhet. Dersom du bruker dette alternativet bør du forsikre deg om at enheten er godt beskyttet.</string>
@@ -897,7 +897,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
     <string name="log_in_with_device">Logg inn med enhet</string>
     <string name="logging_in_on">Logger inn på</string>
-    <string name="logging_in_on_with_colon">Logging in on:</string>
+    <string name="logging_in_on_with_colon">Logger inn på:</string>
     <string name="vault">Hvelv</string>
     <string name="appearance">Utseende</string>
     <string name="account_security">Kontosikkerhet</string>
@@ -907,8 +907,8 @@ Vil du bytte til denne kontoen?</string>
     <string name="sync_now">Synkroniser nå</string>
     <string name="unlock_options">Opplåsingsalternativer</string>
     <string name="session_timeout">Tidsavbrudd for økten</string>
-    <string name="session_timeout_action">Session timeout action</string>
-    <string name="account_fingerprint_phrase">Account fingerprint phrase</string>
+    <string name="session_timeout_action">Handling ved tidsavbrudd</string>
+    <string name="account_fingerprint_phrase">Kontoens fingeravtrykksfrase</string>
     <string name="one_hour_and_one_minute">One hour and one minute</string>
     <string name="one_hour_and_x_minute">One hour and %1$s minutes</string>
     <string name="x_hours_and_one_minute">%1$s hours and one minute</string>
@@ -941,14 +941,14 @@ Vil du bytte til denne kontoen?</string>
     <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Your organization permissions were updated, requiring you to set a master password.</string>
     <string name="your_organization_requires_you_to_set_a_master_password">Your organization requires you to set a master password.</string>
     <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
-    <string name="choose_a_login_to_save_this_passkey_to">Choose a login to save this passkey to</string>
+    <string name="choose_a_login_to_save_this_passkey_to">Velg en pålogging å lagre denne passnøkkelen til</string>
     <string name="save_passkey_as_new_login">Lagre passnøkkelen som en ny pålogging</string>
     <string name="save_passkey">Lagre passnøkkel</string>
     <string name="passkeys_for_x">Passkeys for %1$s</string>
     <string name="passwords_for_x">Passwords for %1$s</string>
-    <string name="overwrite_passkey">Overwrite passkey?</string>
+    <string name="overwrite_passkey">Vil du overskrive passnøkkelen?</string>
     <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a passkey. Are you sure you want to overwrite the current passkey?</string>
-    <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
+    <string name="duo_two_step_login_is_required_for_your_account">Duo-totrinnspålogging er påkrevd for kontoen din.</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
     <string name="launch_duo">Start Duo</string>
     <string name="verification_required_by_x">Verification required by %1$s</string>
@@ -994,7 +994,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="we_sent_an_email_to">We sent an email to <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="set_password">Set password</string>
+    <string name="set_password">Bestem passord</string>
     <string name="unsubscribe">Avabonner</string>
     <string name="check_your_email">Sjekk E-postinnboksen din</string>
     <string name="open_email_app">Open email app</string>
@@ -1004,16 +1004,16 @@ Vil du bytte til denne kontoen?</string>
     <string name="or_log_in_you_may_already_have_an_account">Or <annotation link="logIn">log in</annotation>, you may already have an account.</string>
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. <annotation link="unsubscribe">Unsubscribe</annotation> at any time.</string>
     <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Get advice, announcements, and research opportunities from Bitwarden in your inbox. Unsubscribe at any time.</string>
-    <string name="security_prioritized">Security, prioritized</string>
+    <string name="security_prioritized">Sikkerhet, prioritert</string>
     <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
     <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
-    <string name="quick_and_easy_login">Quick and easy login</string>
+    <string name="quick_and_easy_login">Rask og enkel pålogging</string>
     <string name="level_up_your_logins">Level up your logins</string>
     <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
-    <string name="your_data_when_and_where_you_need_it">Your data, when and where you need it</string>
+    <string name="your_data_when_and_where_you_need_it">Dine data, når og hvor du trenger dem</string>
     <string name="welcome_message_4">Save unlimited passwords across unlimited devices with Bitwarden mobile, browser, and desktop apps.</string>
     <string name="remove_passkey">Fjern passordnøkkel</string>
-    <string name="passkey_removed">Passkey removed</string>
+    <string name="passkey_removed">Passnøkkelen ble fjernet</string>
     <string name="what_makes_a_password_strong">What makes a password strong?</string>
     <string name="a_secure_memorable_password">A secure, memorable password</string>
     <string name="the_longer_your_password_the_more_difficult_to_hack">The longer your password, the more difficult it is to hack. The minimum for account creation is 12 characters but if you do 14 characters, the time to crack your password would be centuries!</string>
@@ -1023,9 +1023,9 @@ Vil du bytte til denne kontoen?</string>
     <string name="totally_different_from_your_other_passwords">Totally different from your other passwords</string>
     <string name="use_the_generator_to_create_a_strong_unique_password">Use the generator to create a strong, unique password</string>
     <string name="try_it_out">Prøv det ut</string>
-    <string name="account_setup">Account setup</string>
+    <string name="account_setup">Kontooppsett</string>
     <string name="set_up_unlock">Set up unlock</string>
-    <string name="set_up_later">Set up later</string>
+    <string name="set_up_later">Sett opp senere</string>
     <string name="set_up_unlock_later">Set up unlock later?</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
     <string name="confirm">Bekreft</string>
@@ -1059,7 +1059,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="authenticator_sync">Authenticator Sync</string>
     <string name="allow_bitwarden_authenticator_syncing">Allow authenticator syncing</string>
     <string name="there_was_an_issue_validating_the_registration_token">There was an issue validating the registration token.</string>
-    <string name="turn_on_autofill">Turn on autofill</string>
+    <string name="turn_on_autofill">Skru på auto-utfylling</string>
     <string name="use_autofill_to_log_into_your_accounts">Use autofill to log into your accounts with a single tap.</string>
     <string name="turn_on_later">Turn on later</string>
     <string name="turn_on_autofill_later">Turn on autofill later?</string>
@@ -1069,14 +1069,14 @@ Vil du bytte til denne kontoen?</string>
     <string name="error_connecting_with_the_duo_service_use_a_different_two_step_login_method_or_contact_duo_for_assistance">Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance.</string>
     <string name="master_password_hint_not_specified">Få et hint om hovedpassordet</string>
     <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
-    <string name="new_master_password_hint">New master password hint</string>
+    <string name="new_master_password_hint">Nytt hint til hovedpassordet</string>
     <string name="get_started">Kom i gang</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">Ny innlogging</string>
     <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
     <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
-    <string name="import_saved_logins">Import saved logins</string>
+    <string name="import_saved_logins">Importer lagrede pålogginger</string>
     <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
     <string name="import_logins_later">Import logins later</string>
@@ -1086,8 +1086,8 @@ Vil du bytte til denne kontoen?</string>
     <string name="import_logins">Import Logins</string>
     <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
     <string name="give_your_vault_a_head_start">Give your vault a head start</string>
-    <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
-    <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
+    <string name="class_3_biometrics_description">Opplåsing med biometri krever sterk biometrisk autentisering og er kanskje ikke kompatibel med alle biometriske alternativer på denne enheten.</string>
+    <string name="class_2_biometrics_description">Opplåsing med biometri krever sterk biometrisk autentisering og er ikke kompatibel med de biometriske alternativene som er tilgjengelige på denne enheten.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">Export your passwords.</annotation> This option is usually found in your settings.</string>
     <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">Select Import data</annotation> in the web app, then Done below to finish syncing.</string>
@@ -1139,7 +1139,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="copy_ssn">Copy social security number</string>
     <string name="copy_passport_number">Kopiér passnummer</string>
     <string name="copy_license_number">Kopiér lisensnummer</string>
-    <string name="copy_email">Copy email</string>
+    <string name="copy_email">Kopier e-postadresse</string>
     <string name="copy_phone">Copy phone number</string>
     <string name="copy_address">Kopiér adresse</string>
     <string name="biometrics_no_longer_supported_title">Biometrics are no longer supported on this device</string>
@@ -1159,8 +1159,8 @@ Vil du bytte til denne kontoen?</string>
     <string name="we_couldnt_verify_the_servers_certificate">We couldn’t verify the server’s certificate. The certificate chain or proxy settings on your device or your Bitwarden server may not be set up correctly.</string>
     <string name="review_flow_launched">Review flow launched!</string>
     <string name="copy_private_key">Kopiér privat nøkkel</string>
-    <string name="login_credentials">Login Credentials</string>
-    <string name="autofill_options">Autofill Options</string>
+    <string name="login_credentials">Påloggingsdetaljer</string>
+    <string name="autofill_options">Autoutfyllings-innstillinger</string>
     <string name="use_this_button_to_generate_a_new_unique_password">Use this button to generate a new unique password.</string>
     <string name="coachmark_1_of_3">1 OF 3</string>
     <string name="coachmark_2_of_3">2 OF 3</string>
@@ -1188,7 +1188,7 @@ Vil du bytte til denne kontoen?</string>
     <string name="coachmark_6_of_6">6 OF 6</string>
     <string name="use_these_options_to_adjust_your_password_to_your_account_requirements">Use these options to adjust your password to meet your account website\'s requirements.</string>
     <string name="after_you_save_your_new_password_to_bitwarden_don_t_forget_to_update_it_on_your_account_website">"After you save your new password to Bitwarden, don’t forget to update it on your account website. "</string>
-    <string name="verify_your_identity">Verify your identity</string>
+    <string name="verify_your_identity">Bekreft identiteten din</string>
     <string name="error_loading_certificate">Error loading certificate</string>
     <string name="certificate_alias">Certificate alias</string>
     <string name="import_certificate">Import certificate</string>
@@ -1217,10 +1217,10 @@ Vil du bytte til denne kontoen?</string>
     <string name="use_chrome_autofill_integration">Use Chrome autofill integration</string>
     <string name="use_chrome_beta_autofill_integration">Use Chrome autofill integration (Beta)</string>
     <string name="improves_login_filling_for_supported_websites_on_chrome">Improves login filling for supported websites on Chrome. Once enabled, you’ll be directed to Chrome settings to enable third-party autofill.</string>
-    <string name="show_more">Show more</string>
-    <string name="no_folder">No folder</string>
-    <string name="show_less">Show less</string>
-    <string name="add_field">Add field</string>
+    <string name="show_more">Vis mer</string>
+    <string name="no_folder">Ingen mappe</string>
+    <string name="show_less">Vis mindre</string>
+    <string name="add_field">Legg til felt</string>
     <string name="x_ellipses">%s...</string>
     <string name="share_error_details">Share error details</string>
     <string name="flight_recorder">Flight recorder</string>
@@ -1235,13 +1235,13 @@ Vil du bytte til denne kontoen?</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">Logs will be automatically deleted after 30 days. Bitwarden is only able to access your log data when you share it.</string>
     <string name="for_details_on_what_is_and_isnt_logged">For details on what is and isn’t logged, visit the\n<annotation link="helpCenter">Bitwarden help center.</annotation></string>
     <string name="logging_duration">Logging duration</string>
-    <string name="flight_recorder_one_hour">1 hour</string>
-    <string name="flight_recorder_eight_hours">8 hours</string>
-    <string name="flight_recorder_twenty_four_hours">24 hours</string>
-    <string name="flight_recorder_one_week">1 week</string>
+    <string name="flight_recorder_one_hour">1 time</string>
+    <string name="flight_recorder_eight_hours">8 timer</string>
+    <string name="flight_recorder_twenty_four_hours">24 timer</string>
+    <string name="flight_recorder_one_week">1 uke</string>
     <string name="delete_all">Delete all</string>
     <string name="share_all">Share all</string>
-    <string name="unable_to_share">Unable to share</string>
+    <string name="unable_to_share">Klarte ikke å dele</string>
     <string name="please_try_again_or_select_a_different_log">Please try again or select a different log.</string>
     <string name="the_log_file_you_are_trying_to_share_has_been_removed">The log file you are trying to share has been removed.</string>
     <string name="delete_log">Delete log</string>
@@ -1255,12 +1255,17 @@ Vil du bytte til denne kontoen?</string>
     <string name="please_confirm_domain_with_admin">Please confirm the domain below with your organization administrator.\n\nKey Connector domain:\n%1$s</string>
     <string name="flight_recorder_banner_title">Flight recorder on</string>
     <string name="flight_recorder_banner_message">Flight recorder will be active until %1$s at %2$s. Return to settings to deactivate now.</string>
-    <string name="go_to_settings">Go to settings</string>
+    <string name="go_to_settings">Gå til innstillingene</string>
     <string name="all_logs_deleted">All logs deleted</string>
     <string name="log_deleted">Log deleted</string>
-    <string name="app_settings">App settings</string>
+    <string name="app_settings">App-innstillinger</string>
     <string name="replace_existing_certificate">Replace existing certificate?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
+    <string name="cannot_delete_your_account">Cannot delete your account</string>
+    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

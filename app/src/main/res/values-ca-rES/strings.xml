@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyEllipsis,TypographyDashes">
     <string name="about">Quant a</string>
     <string name="add">Afegeix</string>
-    <string name="add_folder">Afegeix carpeta</string>
+    <string name="add_folder">Afig carpeta</string>
     <string name="add_item">Afegeix element</string>
     <string name="an_error_has_occurred">S\'ha produït un error.</string>
     <string name="back">Arrere</string>
@@ -50,12 +50,12 @@
     <string name="switch_to_already_added_account_confirmation">T\'agradaria canviar-lo ara?</string>
     <string name="master_password">Contrasenya mestra</string>
     <string name="master_password_required">Contrasenya mestra (obligatòria)</string>
-    <string name="new_master_password_required">New master password (required)</string>
+    <string name="new_master_password_required">Nova contrasenya mestra (obligatòria)</string>
     <string name="more">Més</string>
     <string name="my_vault">Caixa forta</string>
     <string name="authenticator">Autenticador</string>
     <string name="name">Nom</string>
-    <string name="item_name_required">Item name (required)</string>
+    <string name="item_name_required">Nom de l\'element (obligatori)</string>
     <string name="send_name_required">"Nom del Send (obligatori)"</string>
     <string name="no">No</string>
     <string name="notes">Notes</string>
@@ -73,7 +73,7 @@
     <string name="thank_you">Gràcies</string>
     <string name="tools">Eines</string>
     <string name="uri">URI</string>
-    <string name="website_uri">Website (URI)</string>
+    <string name="website_uri">Lloc web (URI)</string>
     <string name="use_fingerprint_to_unlock">Utilitzeu l\'empremta digital per desbloquejar</string>
     <string name="username">Nom d\'usuari</string>
     <string name="validation_field_required">El camp %1$s és obligatori.</string>
@@ -109,10 +109,10 @@
     <string name="create_an_account">Crea un compte</string>
     <string name="creating_account">S\'està creant el compte...</string>
     <string name="edit_item">Edita l\'element</string>
-    <string name="edit_login">Edit login</string>
-    <string name="edit_card">Edit card</string>
-    <string name="edit_identity">Edit identity</string>
-    <string name="edit_note">Edit note</string>
+    <string name="edit_login">Edita inici de sessió</string>
+    <string name="edit_card">Edita la targeta</string>
+    <string name="edit_identity">Edita la identitat</string>
+    <string name="edit_note">Edita la nota</string>
     <string name="edit_passkey">Edit passkey</string>
     <string name="enable_automatic_syncing">Habilita la sincronització automàtica</string>
     <string name="enter_email_for_hint">Introduïu l\'adreça electrònica del vostre compte per rebre la contrasenya mestra.</string>
@@ -259,7 +259,7 @@
     <string name="recovery_code_title">Codi de recuperació</string>
     <string name="remember">Recorda-ho</string>
     <string name="remember_email">Recorda el correu electronic</string>
-    <string name="send_verification_code_again">Envia el codi de verificació altra vegada</string>
+    <string name="send_verification_code_again">Reenvia el codi</string>
     <string name="two_step_login_options">Opcions d\'inici de sessió en dues passes</string>
     <string name="use_another_two_step_method">Utilitzeu un altre mètode d\'inici de sessió en dues passes</string>
     <string name="verification_email_not_sent">No s\'ha pogut enviar el correu electrònic de verificació. Torneu-ho a provar.</string>
@@ -594,7 +594,7 @@ L\'escaneig es farà automàticament.</string>
     <string name="accessibility_description2">Utilitzeu el servei d’accessibilitat Bitwarden per omplir els vostres inicis de sessió automàticament a través d’aplicacions i del web. (Cal que també estiga habilitat el Dibuixa-sobre)</string>
     <string name="accessibility_description3">Utilitzeu el servei d’accessibilitat Bitwarden per utilitzar el mosaic d’acció ràpida d’emplenament automàtic o mostrar una finestra emergent mitjançant Dibuixa-sobre (si està activat).</string>
     <string name="accessibility_description4">Cal utilitzar el mosaic d’acció ràpida d’emplenament automàtic o augmentar el servei d’emplenament automàtic mitjançant Dibuixa-sobre (si està activat).</string>
-    <string name="accessibility_description5">Required to use the Autofill Quick-Action Tile.</string>
+    <string name="accessibility_description5">Necessari per utilitzar la fitxa d\'acció ràpida d\'emplenament automàtic.</string>
     <string name="draw_over">Use Dibuixa-sobre</string>
     <string name="draw_over_description">Quan està habilitat, permet al servei d\'accessibilitat Bitwarden mostrar una finestra emergent quan se seleccionen els camps d\'inici de sessió.</string>
     <string name="draw_over_description2">Si està habilitat, el servei d’accessibilitat Bitwarden mostrarà una finestra emergent quan se seleccionen els camps d’inici de sessió per ajudar-vos a omplir automàticament els vostres inicis de sessió.</string>
@@ -1070,22 +1070,22 @@ Voleu canviar a aquest compte?</string>
     <string name="master_password_hint_not_specified">Master password hint</string>
     <string name="master_password_important_hint">Important: Your master password cannot be recovered if you forget it! 12 characters minimum.</string>
     <string name="new_master_password_hint">New master password hint</string>
-    <string name="get_started">Get started</string>
+    <string name="get_started">Comencem</string>
     <string name="save_and_protect_your_data">Save and protect your data</string>
     <string name="the_vault_protects_more_than_just_passwords">The vault protects more than just passwords. Store secure logins, IDs, cards and notes securely here.</string>
     <string name="new_login">New login</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Share files and data securely with anyone, on any platform. Your information will remain end-to-end encrypted while limiting exposure.</string>
-    <string name="send_sensitive_information_safely">Send sensitive information, safely</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Comparteix fitxers i dades de manera segura amb qualsevol persona, en qualsevol plataforma. La teua informació romandrà xifrada de principi a fi i alhora limitarà l\'exposició.</string>
+    <string name="send_sensitive_information_safely">Envieu informació confidencial, de manera segura</string>
     <string name="import_saved_logins">Import saved logins</string>
     <string name="use_a_computer_to_import_logins">Use a computer to import logins from an existing password manager</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_settings">You can return to complete this step anytime in Vault Settings.</string>
-    <string name="import_logins_later">Import logins later</string>
-    <string name="import_logins_later_dialog_title">Import logins later?</string>
+    <string name="import_logins_later">Importa els inicis de sessió més tard</string>
+    <string name="import_logins_later_dialog_title">Importe els inicis de sessió més tard?</string>
     <string name="do_you_have_a_computer_available">Do you have a computer available?</string>
     <string name="the_following_instructions_will_guide_you_through_importing_logins">The following instructions will guide you through importing logins from your desktop or laptop computer</string>
     <string name="import_logins">Import Logins</string>
-    <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">From your computer, follow these instructions to export saved passwords from your browser or other password manager. Then, safely import them to Bitwarden.</string>
-    <string name="give_your_vault_a_head_start">Give your vault a head start</string>
+    <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">Des de l\'ordinador, seguiu aquestes instruccions per exportar les contrasenyes guardades del navegador o d\'un altre gestor de contrasenyes. A continuació, importeu-les de manera segura a Bitwarden.</string>
+    <string name="give_your_vault_a_head_start">Dona-li un impuls a la teua caixa forta</string>
     <string name="class_3_biometrics_description">Unlock with biometrics requires strong biometric authentication and may not be compatible with all biometric options on this device.</string>
     <string name="class_2_biometrics_description">Unlock with biometrics requires strong biometric authentication and is not compatible with the biometrics options available on this device.</string>
     <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">On your computer, <annotation emphasis="bold">log in to your current browser or password manager.</annotation></string>
@@ -1263,4 +1263,9 @@ Voleu canviar a aquest compte?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
+    <string name="cannot_delete_your_account">Cannot delete your account</string>
+    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

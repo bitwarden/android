@@ -1264,4 +1264,9 @@ při opakování problémů.</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Certifikát s tímto aliasem \"%s\" již existuje. Chcete jej nahradit?\nNahrazení certifikátu může ovlivnit Vaše připojení, které nyní využíváte.</string>
     <string name="replace_certificate">Nahradit certifikát</string>
     <string name="unable_to_read_certificate">Nelze přečíst certifikát.</string>
+    <string name="cannot_delete_your_account">Nelze smazat Váš účet</string>
+    <string name="cannot_delete_your_account_explanation">Tuto akci nelze dokončit, protože Váš účet vlastní organizace. Další informace získáte od správce organizace.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Tento účet bude brzy smazán. Chcete-li pokračovat v používání Bitwardenu, přihlaste se na %1$s.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>
