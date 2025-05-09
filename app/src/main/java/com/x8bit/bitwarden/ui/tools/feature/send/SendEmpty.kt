@@ -17,13 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -32,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 /**
  * Content for the empty state of the [SendScreen].
  */
+@Suppress("LongMethod")
 @Composable
 fun SendEmpty(
     policyDisablesSend: Boolean,
@@ -87,12 +90,16 @@ fun SendEmpty(
         Spacer(modifier = Modifier.height(24.dp))
 
         // This button is hidden from accessibility to avoid duplicate voice over with the FAB
+        val newSendLabel = stringResource(id = R.string.add_a_send)
         BitwardenFilledButton(
             onClick = onAddItemClick,
             label = stringResource(id = R.string.add_a_send),
             icon = rememberVectorPainter(R.drawable.ic_plus_small),
             modifier = Modifier
-                .semantics { hideFromAccessibility() }
+                .clearAndSetSemantics {
+                    text = newSendLabel.toAnnotatedString()
+                    hideFromAccessibility()
+                }
                 .standardHorizontalMargin(),
         )
         Spacer(modifier = Modifier.weight(1F))
