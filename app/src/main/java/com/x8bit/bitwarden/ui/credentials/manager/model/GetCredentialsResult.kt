@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.credentials.manager.model
 
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CredentialEntry
 import com.bitwarden.ui.util.Text
 
@@ -15,7 +14,6 @@ sealed class GetCredentialsResult {
      */
     data class Success(
         val credentialEntries: List<CredentialEntry>,
-        val option: BeginGetPublicKeyCredentialOption,
         val userId: String,
     ) : GetCredentialsResult()
 

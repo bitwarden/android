@@ -45,7 +45,6 @@ import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.model.createMockCreateCredentialRequest
@@ -81,7 +80,6 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
@@ -2964,18 +2962,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 number = 1,
                 fido2Credentials = mockFido2CredentialsList,
             )
-            val mockPasskeyAssertionOptions = mockk<PasskeyAssertionOptions>(relaxed = true)
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderGetCredentials(
                     mockGetCredentialsRequest,
                 )
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockPasskeyAssertionOptions
             coEvery {
-                bitwardenCredentialManager.getPublicKeyCredentialEntries(
+                bitwardenCredentialManager.getCredentialEntries(
                     userId = "mockUserId-1",
-                    option = mockBeginGetPublicKeyCredentialOption,
+                    options = listOf(mockBeginGetPublicKeyCredentialOption),
                 )
             } returns emptyList<PublicKeyCredentialEntry>().asSuccess()
             coEvery {
@@ -3004,9 +2998,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
                         result = GetCredentialsResult.Success(
-                            userId = "mockUserId-1",
-                            option = mockBeginGetPublicKeyCredentialOption,
                             credentialEntries = emptyList(),
+                            userId = "mockUserId-1",
                         ),
                     ),
                     awaitItem(),
@@ -3035,9 +3028,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     .value
                     .data
             } returns listOf(mockCipherView)
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockk(relaxed = true)
             every {
                 mockBeginGetCredentialRequest.beginGetCredentialOptions
             } returns emptyList()
@@ -3087,9 +3077,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     .data
             } returns listOf(mockCipherView)
             every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockk(relaxed = true)
-            every {
                 mockBeginGetCredentialRequest.callingAppInfo
             } returns null
 
@@ -3130,9 +3117,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 SpecialCircumstance.ProviderGetCredentials(
                     mockGetCredentialsRequest,
                 )
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockk(relaxed = true)
             coEvery {
                 originManager.validateOrigin(callingAppInfo = any())
             } returns ValidateOriginResult.Error.Unknown
@@ -3298,12 +3282,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             } returns UserVerificationRequirement.DISCOURAGED
             every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
-            )
-            every {
                 vaultRepository
                     .ciphersStateFlow
                     .value
@@ -3353,10 +3331,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             setupMockUri()
             val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
                 .copy(cipherId = "mockId-1")
-            val mockAssertionOptions = createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
-            )
             val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
             val mockCipherView = createMockCipherView(
                 number = 1,
@@ -3372,9 +3346,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     .value
                     .data
             } returns listOf(mockCipherView)
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns mockAssertionOptions
             coEvery {
                 originManager.validateOrigin(any())
             } returns ValidateOriginResult.Error.Unknown
@@ -3499,12 +3470,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 any<ProviderGetCredentialRequest>(),
             )
         } returns UserVerificationRequirement.PREFERRED
-        every {
-            bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
         coEvery {
             bitwardenCredentialManager.authenticateFido2Credential(
                 userId = "activeUserId",
@@ -3561,20 +3526,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         every { bitwardenCredentialManager.isUserVerified } returns true
         every {
-            bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull("mockRequestJson")
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
-        every {
             vaultRepository
                 .ciphersStateFlow
                 .value
                 .data
         } returns listOf(mockCipherView)
-        every {
-            bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull("mockRequestJson")
-        } returns createMockPasskeyAssertionOptions(number = 1)
         every { authRepository.activeUserId } returns null
 
         val dataState = DataState.Loaded(
@@ -3625,20 +3581,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         every { bitwardenCredentialManager.isUserVerified } returns true
         every {
-            bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull("mockRequestJson")
-        } returns createMockPasskeyAssertionOptions(
-            number = 1,
-            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
-        )
-        every {
             vaultRepository
                 .ciphersStateFlow
                 .value
                 .data
         } returns listOf(mockCipherView)
-        every {
-            bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull("mockRequestJson")
-        } returns createMockPasskeyAssertionOptions(number = 1)
         every { authRepository.activeUserId } returns null
 
         val dataState = DataState.Loaded(
@@ -3698,9 +3645,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     .value
                     .data
             } returns listOf(mockCipherView)
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns createMockPasskeyAssertionOptions(number = 1)
             coEvery {
                 bitwardenCredentialManager.authenticateFido2Credential(
                     DEFAULT_USER_STATE.activeUserId,
@@ -3986,12 +3930,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     number = 1,
                     fido2Credentials = mockFido2CredentialList,
                 ),
-            )
-            every {
-                bitwardenCredentialManager.getPasskeyAssertionOptionsOrNull(any())
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = UserVerificationRequirement.PREFERRED,
             )
             coEvery {
                 bitwardenCredentialManager.authenticateFido2Credential(

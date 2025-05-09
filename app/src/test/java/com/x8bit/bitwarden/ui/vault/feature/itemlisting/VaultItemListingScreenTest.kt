@@ -1933,9 +1933,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `CompleteProviderGetCredentialsRequest event should call CredentialProviderCompletionManager with result`() {
         val result = GetCredentialsResult.Success(
-            userId = "mockUserId",
             credentialEntries = listOf(mockk()),
-            option = mockk(),
+            userId = "mockUserId",
         )
         mutableEventFlow.tryEmit(
             VaultItemListingEvent.CompleteProviderGetCredentialsRequest(result),

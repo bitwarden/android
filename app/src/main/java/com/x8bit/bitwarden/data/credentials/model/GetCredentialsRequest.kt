@@ -29,16 +29,15 @@ data class GetCredentialsRequest(
     }
 
     /**
-     * The first [BeginGetPublicKeyCredentialOption] of the [providerRequest], or null if the
-     * [providerRequest] is not a [BeginGetCredentialRequest] or does not contain a
-     * [BeginGetPublicKeyCredentialOption].
+     * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
+     * public key credentials are present.
      */
     @IgnoredOnParcel
-    val beginGetPublicKeyCredentialOption: BeginGetPublicKeyCredentialOption? by lazy {
+    val beginGetPublicKeyCredentialOptions: List<BeginGetPublicKeyCredentialOption> by lazy {
         providerRequest
             ?.beginGetCredentialOptions
             ?.filterIsInstance<BeginGetPublicKeyCredentialOption>()
-            ?.firstOrNull()
+            .orEmpty()
     }
 
     /**
@@ -47,16 +46,4 @@ data class GetCredentialsRequest(
      */
     @IgnoredOnParcel
     val callingAppInfo: CallingAppInfo? by lazy { providerRequest?.callingAppInfo }
-
-    /**
-     * The first [BeginGetPublicKeyCredentialOption] of the [providerRequest], or null if the
-     * [providerRequest] does not contain a [BeginGetPublicKeyCredentialOption].
-     */
-    @IgnoredOnParcel
-    val option: BeginGetPublicKeyCredentialOption? by lazy {
-        providerRequest?.beginGetCredentialOptions
-            ?.firstNotNullOfOrNull {
-                it as? BeginGetPublicKeyCredentialOption
-            }
-    }
 }

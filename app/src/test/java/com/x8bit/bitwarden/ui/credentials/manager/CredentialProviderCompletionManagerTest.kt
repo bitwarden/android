@@ -200,9 +200,8 @@ class CredentialProviderCompletionManagerTest {
             credentialProviderCompletionManager
                 .completeProviderGetCredentialsRequest(
                     GetCredentialsResult.Success(
-                        userId = "mockUserId",
                         credentialEntries = emptyList(),
-                        option = mockk(),
+                        userId = "mockUserId",
                     ),
                 )
 
@@ -235,9 +234,8 @@ class CredentialProviderCompletionManagerTest {
             credentialProviderCompletionManager
                 .completeProviderGetCredentialsRequest(
                     GetCredentialsResult.Success(
-                        userId = "mockUserId",
                         credentialEntries = listOf(mockCredentialEntry),
-                        option = mockk(),
+                        userId = "mockUserId",
                     ),
                 )
 

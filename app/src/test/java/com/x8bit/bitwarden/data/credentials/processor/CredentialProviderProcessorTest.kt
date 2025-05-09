@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -68,12 +67,10 @@ class CredentialProviderProcessorTest {
         every { activeUserId } returns "mockActiveUserId"
         every { userStateFlow } returns mutableUserStateFlow
     }
-    private val passkeyAssertionOptions = createMockPasskeyAssertionOptions(number = 1)
     private val credentialEntries = listOf(mockk<CredentialEntry>(relaxed = true))
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
-        every { getPasskeyAssertionOptionsOrNull(any()) } returns passkeyAssertionOptions
         coEvery {
-            getPublicKeyCredentialEntries(any(), any())
+            getCredentialEntries(any(), any())
         } returns credentialEntries.asSuccess()
     }
     private val intentManager: IntentManager = mockk()
@@ -462,9 +459,9 @@ class CredentialProviderProcessorTest {
             every { cancellationSignal.setOnCancelListener(any()) } just runs
             every { callback.onError(capture(captureSlot)) } just runs
             coEvery {
-                bitwardenCredentialManager.getPublicKeyCredentialEntries(
+                bitwardenCredentialManager.getCredentialEntries(
                     userId = DEFAULT_USER_STATE.activeUserId,
-                    option = mockOption,
+                    options = listOf(mockOption),
                 )
             } returns Result.failure(Exception("Error decrypting credentials."))
 

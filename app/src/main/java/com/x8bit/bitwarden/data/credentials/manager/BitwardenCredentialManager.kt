@@ -2,14 +2,13 @@ package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
+import androidx.credentials.provider.BeginGetCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
-import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
@@ -35,13 +34,6 @@ interface BitwardenCredentialManager {
     fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
     ): PasskeyAttestationOptions?
-
-    /**
-     * Attempt to extract FIDO 2 passkey assertion options from the system [requestJson], or null.
-     */
-    fun getPasskeyAssertionOptionsOrNull(
-        requestJson: String,
-    ): PasskeyAssertionOptions?
 
     /**
      * Register a new FIDO 2 credential to a users vault.
@@ -99,10 +91,10 @@ interface BitwardenCredentialManager {
 
     /**
      * Retrieve a list of [CredentialEntry] objects representing vault items matching the given
-     * request [option].
+     * request [options].
      */
-    suspend fun getPublicKeyCredentialEntries(
+    suspend fun getCredentialEntries(
         userId: String,
-        option: BeginGetPublicKeyCredentialOption,
+        options: List<BeginGetCredentialOption>,
     ): Result<List<CredentialEntry>>
 }

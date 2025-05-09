@@ -16,7 +16,6 @@ import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
-import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
@@ -28,7 +27,6 @@ import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
-import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -219,17 +217,13 @@ class CredentialProviderProcessorImpl(
         userId: String,
         request: BeginGetCredentialRequest,
     ): Result<List<CredentialEntry>> =
-        request
-            .beginGetCredentialOptions
-            .firstNotNullOfOrNull { it as? BeginGetPublicKeyCredentialOption }
-            ?.let {
-                bitwardenCredentialManager
-                    .getPublicKeyCredentialEntries(
-                        userId = userId,
-                        option = it,
-                    )
-            }
-            ?: GetCredentialUnsupportedException("Unsupported option.").asFailure()
+        bitwardenCredentialManager
+            .getCredentialEntries(
+                userId = userId,
+                options = request
+                    .beginGetCredentialOptions
+                    .filterIsInstance<BeginGetPublicKeyCredentialOption>(),
+            )
 
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
