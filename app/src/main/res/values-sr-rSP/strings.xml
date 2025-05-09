@@ -1263,4 +1263,9 @@
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Сертификат са тим алиасом \"%s\" веш постији. Да се промени?\nЗаменити сертификат може утицати на вашу везу са било којим срединама које тренутно користе.</string>
     <string name="replace_certificate">Преписати сертификат</string>
     <string name="unable_to_read_certificate">Није могуће прочитати сертификат.</string>
+    <string name="cannot_delete_your_account">Није могуће избрисати Ваш налог</string>
+    <string name="cannot_delete_your_account_explanation">Ова радња се не може довршити јер је ваш налог у власништву организације. Обратите се администратору своје организације за додатне детаље.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

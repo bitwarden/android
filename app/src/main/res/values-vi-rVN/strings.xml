@@ -1265,4 +1265,9 @@ bất kỳ sự cố nào.</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Một chứng chỉ tên \"%s\" đã tồn tại. Bạn có muốn thay thế?\nViệc thay thế chứng chỉ có thể ảnh hưởng đến kết nối của bạn với bất kỳ môi trường nào hiện đang sử dụng chứng chỉ đó.</string>
     <string name="replace_certificate">Thay thế chứng chỉ</string>
     <string name="unable_to_read_certificate">Không thể đọc chứng chỉ.</string>
+    <string name="cannot_delete_your_account">Không thể xóa tài khoản</string>
+    <string name="cannot_delete_your_account_explanation">Không thể thực hiện hành động này vì tài khoản của bạn thuộc sở hữu của một tổ chức. Liên hệ với quản trị viên tổ chức của bạn để biết thêm thông tin chi tiết.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>

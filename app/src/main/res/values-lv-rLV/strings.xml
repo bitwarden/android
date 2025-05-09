@@ -1263,4 +1263,9 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Jau pastāv sertifikāts ar aizstājvārdu \"%s\". Vai aizstāt to?\nSertifikata aizstāšana var ietekmēt savienojumu ar ikvienu vidi, kas to pašlaik izmanto.</string>
     <string name="replace_certificate">Aizstāt sertifikātu</string>
     <string name="unable_to_read_certificate">Nav iespējams nolasīt sertifikātu.</string>
+    <string name="cannot_delete_your_account">Nevar izdzēst Tavu kontu</string>
+    <string name="cannot_delete_your_account_explanation">Šo darbību nevar pabeigt, jo konts pieder apvienībai. Jāsazinās ar savas apvienības pārvaldītāju, lai noskaidrotu vairāk.</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Šis konts drīzumā tiks izdzēsts. Jāpiesakās %1$s, lai turpinātu izmantot Bitwarden.</string>
+    <string name="view_file_send">View file Send</string>
+    <string name="view_text_send">View text Send</string>
 </resources>
