@@ -19,8 +19,6 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
-import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
-import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BiometricPromptData
@@ -141,15 +139,7 @@ class CredentialProviderProcessorImpl(
     private fun processCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
-        return when (request) {
-            is BeginCreatePublicKeyCredentialRequest,
-            is BeginCreatePasswordCredentialRequest,
-                -> {
-                handleCreateCredentialQuery(request)
-            }
-
-            else -> null
-        }
+        return handleCreateCredentialQuery(request)
     }
 
     private fun handleCreateCredentialQuery(
@@ -198,6 +188,16 @@ class CredentialProviderProcessorImpl(
         }
         return entryBuilder.build()
     }
+
+    private suspend fun getMatchingFido2CredentialEntries(
+        userId: String,
+        request: BeginGetCredentialRequest,
+    ): Result<List<CredentialEntry>> =
+        bitwardenCredentialManager
+            .getCredentialEntries(
+                userId = userId,
+                options = request.beginGetCredentialOptions,
+            )
 
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
