@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
+import com.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
-import com.x8bit.bitwarden.ui.platform.components.field.interceptor.IncognitoInput
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.x8bit.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
