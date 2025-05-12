@@ -95,11 +95,13 @@ fun createMockCipherView(
 /**
  * Create a mock [LoginView] with a given [number].
  */
+@Suppress("LongParameterList")
 fun createMockLoginView(
     number: Int,
     totp: String? = "mockTotp-$number",
     clock: Clock = FIXED_CLOCK,
     hasUris: Boolean = true,
+    uris: List<LoginUriView>? = listOf(createMockUriView(number = number)),
     fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
 ): LoginView =
     LoginView(
@@ -107,7 +109,7 @@ fun createMockLoginView(
         password = "mockPassword-$number",
         passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
-        uris = listOf(createMockUriView(number = number)).takeIf { hasUris },
+        uris = uris.takeIf { hasUris },
         totp = totp,
         fido2Credentials = fido2Credentials,
     )
@@ -162,9 +164,9 @@ fun createMockFido2CredentialAutofillView(
 /**
  * Create a mock [LoginUriView] with a given [number].
  */
-fun createMockUriView(number: Int): LoginUriView =
+fun createMockUriView(number: Int, uri: String = "www.mockuri$number.com"): LoginUriView =
     LoginUriView(
-        uri = "www.mockuri$number.com",
+        uri = uri,
         match = UriMatchType.HOST,
         uriChecksum = "mockUriChecksum-$number",
     )

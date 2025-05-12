@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
-import androidx.credentials.provider.BeginGetCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
@@ -91,10 +91,9 @@ interface BitwardenCredentialManager {
 
     /**
      * Retrieve a list of [CredentialEntry] objects representing vault items matching the given
-     * request [options].
+     * [getCredentialsRequest].
      */
     suspend fun getCredentialEntries(
-        userId: String,
-        options: List<BeginGetCredentialOption>,
+        getCredentialsRequest: GetCredentialsRequest,
     ): Result<List<CredentialEntry>>
 }

@@ -7,6 +7,8 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
+import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilderImpl
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
@@ -16,7 +18,6 @@ import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcesso
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -63,28 +64,20 @@ object CredentialProviderModule {
     @Provides
     @Singleton
     fun provideBitwardenCredentialManager(
-        @ApplicationContext context: Context,
-        intentManager: IntentManager,
-        featureFlagManager: FeatureFlagManager,
-        biometricsEncryptionManager: BiometricsEncryptionManager,
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
         json: Json,
-        environmentRepository: EnvironmentRepository,
         vaultRepository: VaultRepository,
         dispatcherManager: DispatcherManager,
+        credentialEntryBuilder: CredentialEntryBuilder,
     ): BitwardenCredentialManager =
         BitwardenCredentialManagerImpl(
-            context = context,
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
-            intentManager = intentManager,
-            featureFlagManager = featureFlagManager,
-            biometricsEncryptionManager = biometricsEncryptionManager,
             json = json,
-            environmentRepository = environmentRepository,
             vaultRepository = vaultRepository,
             dispatcherManager = dispatcherManager,
+            credentialEntryBuilder = credentialEntryBuilder,
         )
 
     @Provides
@@ -97,4 +90,18 @@ object CredentialProviderModule {
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
         )
+
+    @Provides
+    @Singleton
+    fun provideCredentialEntryBuilder(
+        @ApplicationContext context: Context,
+        intentManager: IntentManager,
+        featureFlagManager: FeatureFlagManager,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
+    ): CredentialEntryBuilder = CredentialEntryBuilderImpl(
+        context = context,
+        intentManager = intentManager,
+        featureFlagManager = featureFlagManager,
+        biometricsEncryptionManager = biometricsEncryptionManager,
+    )
 }

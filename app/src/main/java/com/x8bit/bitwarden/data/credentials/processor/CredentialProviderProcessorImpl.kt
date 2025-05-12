@@ -22,16 +22,15 @@ import androidx.credentials.provider.BeginCreateCredentialResponse
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
-import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.BiometricPromptData
 import androidx.credentials.provider.CreateEntry
-import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderClearCredentialStateRequest
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
+import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
@@ -124,15 +123,14 @@ class CredentialProviderProcessorImpl(
 
         // Otherwise, find all matching credentials from the current vault.
         val getCredentialJob = ioScope.launch {
-            getMatchingFido2CredentialEntries(
-                userId = userState.activeUserId,
-                request = request,
-            )
-                .onSuccess {
-                    callback.onResult(
-                        BeginGetCredentialResponse(credentialEntries = it),
-                    )
-                }
+            bitwardenCredentialManager
+                .getCredentialEntries(
+                    getCredentialsRequest = GetCredentialsRequest(
+                        userId = userState.activeUserId,
+                        BeginGetCredentialRequest.asBundle(request),
+                    ),
+                )
+                .onSuccess { callback.onResult(BeginGetCredentialResponse(credentialEntries = it)) }
                 .onFailure { callback.onError(GetCredentialUnknownException(it.message)) }
         }
         cancellationSignal.setOnCancelListener {
@@ -212,18 +210,6 @@ class CredentialProviderProcessorImpl(
         }
         return entryBuilder.build()
     }
-
-    private suspend fun getMatchingFido2CredentialEntries(
-        userId: String,
-        request: BeginGetCredentialRequest,
-    ): Result<List<CredentialEntry>> =
-        bitwardenCredentialManager
-            .getCredentialEntries(
-                userId = userId,
-                options = request
-                    .beginGetCredentialOptions
-                    .filterIsInstance<BeginGetPublicKeyCredentialOption>(),
-            )
 
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
