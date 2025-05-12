@@ -19,6 +19,7 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
+import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
@@ -97,7 +98,7 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(BitwardenString.unlock),
-                pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
+                pendingIntent = pendingIntentManager.createCredentialProviderUnlockPendingIntent(
                     userId = userState.activeUserId,
                 ),
             )
@@ -151,8 +152,8 @@ class CredentialProviderProcessorImpl(
         }
     }
 
-    private fun handleCreatePasskeyQuery(
-        request: BeginCreatePublicKeyCredentialRequest,
+    private fun handleCreateCredentialQuery(
+        request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
         val requestJson = request
             .candidateQueryData
@@ -175,7 +176,7 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
+                pendingIntent = pendingIntentManager.createCredentialProviderCreationPendingIntent(
                     userId = userId,
                 ),
             )

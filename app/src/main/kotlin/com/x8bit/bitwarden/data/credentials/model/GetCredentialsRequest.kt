@@ -31,14 +31,13 @@ data class GetCredentialsRequest(
     }
 
     /**
-     * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
+     * The [BeginGetCredentialOption]s of the [providerRequest], or an empty list if no
      * public key options are present.
      */
     @IgnoredOnParcel
-    val beginGetPublicKeyCredentialOptions: List<BeginGetPublicKeyCredentialOption> by lazy {
+    val beginGetCredentialOptions: List<BeginGetCredentialOption> by lazy {
         providerRequest
             ?.beginGetCredentialOptions
-            ?.filterIsInstance<BeginGetPublicKeyCredentialOption>()
             .orEmpty()
     }
 

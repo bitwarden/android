@@ -11,6 +11,7 @@ import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.credentials.processor.GET_CREDENTIAL_INTENT
 import com.x8bit.bitwarden.data.credentials.manager.CredentialManagerPendingIntentManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
@@ -272,7 +273,8 @@ class CredentialProviderCompletionManagerTest {
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
 
             every {
-                mockPendingIntentManager.createFido2GetCredentialPendingIntent(
+                mockIntentManager.createCredentialProviderGetCredentialPendingIntent(
+                    action = GET_CREDENTIAL_INTENT,
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,
