@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.credentials.model
 
 import android.os.Bundle
 import android.os.Parcelable
+import androidx.credentials.provider.BeginGetCredentialOption
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
@@ -10,7 +11,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
- * Models a FIDO 2 request to retrieve FIDO credentials parsed from the launching intent.
+ * Models a Credential request to retrieve Passkey or Password credentials parsed from the launching intent.
  *
  * @param userId The ID of the user's vault to search.
  * @param requestData Provider request data in the form of a [Bundle].
@@ -30,14 +31,13 @@ data class GetCredentialsRequest(
     }
 
     /**
-     * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
+     * The [BeginGetCredentialOption]s of the [providerRequest], or an empty list if no
      * public key options are present.
      */
     @IgnoredOnParcel
-    val beginGetPublicKeyCredentialOptions: List<BeginGetPublicKeyCredentialOption> by lazy {
+    val beginGetCredentialOptions: List<BeginGetCredentialOption> by lazy {
         providerRequest
             ?.beginGetCredentialOptions
-            ?.filterIsInstance<BeginGetPublicKeyCredentialOption>()
             .orEmpty()
     }
 

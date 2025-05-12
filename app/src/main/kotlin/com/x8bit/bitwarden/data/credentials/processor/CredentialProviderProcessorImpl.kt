@@ -19,6 +19,7 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
+import androidx.credentials.provider.BeginCreatePasswordCredentialRequest
 import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
@@ -42,8 +43,8 @@ import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 import javax.crypto.Cipher
 
-private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY"
-const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY"
+private const val CREATE_CREDENTIAL_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_CREDENTIAL"
+const val GET_CREDENTIAL_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_CREDENTIAL"
 const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT"
 
 /**
@@ -106,7 +107,7 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createFido2UnlockPendingIntent(
+                pendingIntent = intentManager.createCredentialProviderUnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
                     userId = userState.activeUserId,
                     requestCode = requestCode.getAndIncrement(),
@@ -162,8 +163,8 @@ class CredentialProviderProcessorImpl(
         }
     }
 
-    private fun handleCreatePasskeyQuery(
-        request: BeginCreatePublicKeyCredentialRequest,
+    private fun handleCreateCredentialQuery(
+        request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
         val requestJson = request
             .candidateQueryData
@@ -186,8 +187,8 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = intentManager.createFido2CreationPendingIntent(
-                    CREATE_PASSKEY_INTENT,
+                pendingIntent = intentManager.createCredentialProviderCreationPendingIntent(
+                    CREATE_CREDENTIAL_INTENT,
                     userId,
                     requestCode.getAndIncrement(),
                 ),

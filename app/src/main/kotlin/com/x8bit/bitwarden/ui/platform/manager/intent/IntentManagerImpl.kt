@@ -52,28 +52,28 @@ private const val TEMP_CAMERA_IMAGE_NAME: String = "temp_camera_image.jpg"
 private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 
 /**
- * Key for the user id included in FIDO 2 provider "create entries".
+ * Key for the user id included in Credential provider "create entries".
  *
- * @see IntentManager.createFido2CreationPendingIntent
+ * @see IntentManager.createCredentialProviderCreationPendingIntent
  */
 const val EXTRA_KEY_USER_ID: String = "user_id"
 
 /**
- * Key for the credential id included in FIDO 2 provider "get entries".
+ * Key for the credential id included in Credential provider "get entries".
  *
- * @see IntentManager.createFido2GetCredentialPendingIntent
+ * @see IntentManager.createCredentialProviderGetCredentialPendingIntent
  */
 const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 
 /**
- * Key for the cipher id included in FIDO 2 provider "get entries".
+ * Key for the cipher id included in Credential provider "get entries".
  *
- * @see IntentManager.createFido2GetCredentialPendingIntent
+ * @see IntentManager.createCredentialProviderGetCredentialPendingIntent
  */
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
- * Key for the user verification performed during vault unlock while processing a FIDO 2 request.
+ * Key for the user verification performed during vault unlock while processing a Credential request.
  */
 const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
 
@@ -293,7 +293,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createFido2CreationPendingIntent(
+    override fun createCredentialProviderCreationPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,
@@ -310,7 +310,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createFido2GetCredentialPendingIntent(
+    override fun createCredentialProviderGetCredentialPendingIntent(
         action: String,
         userId: String,
         credentialId: String,
@@ -333,7 +333,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createFido2UnlockPendingIntent(
+    override fun createCredentialProviderUnlockPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,
