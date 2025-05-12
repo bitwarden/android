@@ -94,6 +94,8 @@ interface BitwardenCredentialManager {
      * [getCredentialsRequest].
      */
     suspend fun getCredentialEntries(
-        getCredentialsRequest: GetCredentialsRequest,
+        userId: String,
+        callingAppInfo: CallingAppInfo?,
+        options: List<BeginGetCredentialOption>,
     ): Result<List<CredentialEntry>>
 }

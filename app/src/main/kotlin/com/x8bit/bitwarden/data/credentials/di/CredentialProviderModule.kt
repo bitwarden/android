@@ -70,6 +70,7 @@ object CredentialProviderModule {
     fun provideBitwardenCredentialManager(
         vaultSdkSource: VaultSdkSource,
         fido2CredentialStore: Fido2CredentialStore,
+        autofillCipherProvider: AutofillCipherProvider,
         json: Json,
         vaultRepository: VaultRepository,
         dispatcherManager: DispatcherManager,

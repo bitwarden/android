@@ -8,6 +8,7 @@ import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
+import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.core.data.repository.util.takeUntilLoaded
@@ -56,6 +57,7 @@ import timber.log.Timber
 class BitwardenCredentialManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
+    private val autofillCipherProvider: AutofillCipherProvider,
     private val credentialEntryBuilder: CredentialEntryBuilder,
     private val json: Json,
     private val vaultRepository: VaultRepository,
@@ -173,7 +175,9 @@ class BitwardenCredentialManagerImpl(
         ?: fallbackRequirement
 
     override suspend fun getCredentialEntries(
-        getCredentialsRequest: GetCredentialsRequest,
+        userId: String,
+        callingAppInfo: CallingAppInfo?,
+        options: List<BeginGetCredentialOption>,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
@@ -289,7 +293,184 @@ class BitwardenCredentialManagerImpl(
                     Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING,
                 ) in allowedCredentialIds
         }
+
+        val pkEntryBuilder = PublicKeyCredentialEntry
+            .Builder(
+                context = context,
+                username = autofillView.userNameForUi
+                    ?: context.getString(R.string.no_username),
+                pendingIntent = intentManager
+                    .createFido2GetCredentialPendingIntent(
+                        action = GET_CREDENTIAL_INTENT,
+                        userId = userId,
+                        credentialId = autofillView.credentialId.toString(),
+                        cipherId = autofillView.cipherId,
+                        isUserVerified = isUserVerified,
+                        requestCode = Random.nextInt(),
+                    ),
+                beginGetPublicKeyCredentialOption = option,
+            )
+            .setIcon(iconCompat.toIcon(context))
+
+        if (featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasskeyAuthentication) &&
+            !isUserVerified
+        ) {
+            biometricsEncryptionManager
+                .getOrCreateCipher(userId)
+                ?.let { cipher ->
+                    pkEntryBuilder
+                        .setBiometricPromptDataIfSupported(cipher = cipher)
+                }
+        }
+
+        pkEntryBuilder.build()
     }
+
+    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+        cipherViews: List<CipherView>,
+        userId: String,
+        callingAppInfo: CallingAppInfo?,
+    ): List<PasswordCredentialEntry> {
+        if (callingAppInfo == null || cipherViews.isEmpty()) {
+            return emptyList()
+        }
+
+        val baseIconUrl = environmentRepository
+            .environment
+            .environmentUrlData
+            .baseIconUrl
+
+        return this
+            .flatMap { option ->
+                val autofillViews = autofillCipherProvider.getLoginAutofillCiphers(
+                    uri = callingAppInfo.packageName.toAndroidAppUriString()
+                )
+
+                val cipherIdsToMatch = autofillViews
+                    .map { it.cipherId }
+                    .toSet()
+
+                cipherViews
+                    .filter { cipherView -> cipherView.id in cipherIdsToMatch }
+                    .associateWith { cipherView ->
+                    // We can safely call first() here because we know the cipherId exists in
+                    // the collection of autofill views.
+                    autofillViews.first { it.cipherId == cipherView.id }
+                }.toPasswordCredentialEntryList(
+                    baseIconUrl = baseIconUrl,
+                    userId = userId,
+                    option = option,
+                )
+            }
+    }
+
+    private suspend fun Map<CipherView, AutofillCipher.Login>.toPasswordCredentialEntryList(
+        baseIconUrl: String,
+        userId: String,
+        option: BeginGetPasswordOption,
+    ): List<PasswordCredentialEntry> = this.map { (cipherView, autofillView) ->
+        val loginIconData = cipherView.login
+            ?.uris
+            .toLoginIconData(
+                // TODO: [PM-20176] Enable web icons in password credential entries
+                // Leave web icons disabled until CredentialManager TransactionTooLargeExceptions
+                // are addressed. See https://issuetracker.google.com/issues/355141766 for details.
+                isIconLoadingDisabled = true,
+                baseIconUrl = baseIconUrl,
+                usePasskeyDefaultIcon = true,
+            )
+        val iconCompat = when (loginIconData) {
+            is IconData.Local -> {
+                IconCompat.createWithResource(context, loginIconData.iconRes)
+            }
+
+            is IconData.Network -> {
+                loginIconData.toIconCompat()
+            }
+        }
+
+        val passwordEntryBuilder = PasswordCredentialEntry
+            .Builder(
+                context = context,
+                username = autofillView.username.ifEmpty { context.getString(R.string.no_username) },
+                pendingIntent = intentManager
+                    .createPasswordGetCredentialPendingIntent(
+                        action = GET_CREDENTIAL_INTENT,
+                        userId = userId,
+                        cipherId = autofillView.cipherId,
+                        requestCode = Random.nextInt(),
+                    ),
+                beginGetPasswordOption = option,
+            )
+            .setIcon(iconCompat.toIcon(context))
+
+        if (featureFlagManager.getFeatureFlag(FlagKey.SingleTapPasswordAuthentication) &&
+            !isUserVerified
+        ) {
+            biometricsEncryptionManager
+                .getOrCreateCipher(userId)
+                ?.let { cipher ->
+                    passwordEntryBuilder.setBiometricPromptDataIfSupported(cipher = cipher)
+                }
+        }
+
+        passwordEntryBuilder.build()
+    }
+
+    private fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
+        cipher: Cipher,
+    ): PublicKeyCredentialEntry.Builder =
+        if (isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+            this
+        } else {
+            setBiometricPromptData(
+                biometricPromptData = buildPromptDataWithCipher(cipher),
+            )
+        }
+
+    private fun PasswordCredentialEntry.Builder.setBiometricPromptDataIfSupported(
+        cipher: Cipher,
+    ): PasswordCredentialEntry.Builder =
+        if (isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM)) {
+            this
+        } else {
+            setBiometricPromptData(
+                biometricPromptData = buildPromptDataWithCipher(cipher),
+            )
+        }
+
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+    private fun buildPromptDataWithCipher(
+        cipher: Cipher,
+    ): BiometricPromptData = BiometricPromptData.Builder()
+        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+        .setCryptoObject(BiometricPrompt.CryptoObject(cipher))
+        .build()
+
+    /**
+     * Converts a network icon to an [IconCompat]. Performs a blocking network request to fetch the
+     * icon, so only call this method from a background thread or coroutine.
+     */
+    @OmitFromCoverage
+    @WorkerThread
+    private suspend fun IconData.Network.toIconCompat(): IconCompat = try {
+        val futureTargetBitmap = Glide
+            .with(context)
+            .asBitmap()
+            .load(this.uri)
+            .placeholder(R.drawable.ic_bw_passkey)
+            .submit()
+
+        IconCompat.createWithBitmap(futureTargetBitmap.get())
+    } catch (_: ExecutionException) {
+        null
+    } catch (_: InterruptedException) {
+        null
+    }
+        ?: IconCompat.createWithResource(
+            context,
+            this.fallbackIconRes,
+        )
 
     private suspend fun registerFido2CredentialForUnprivilegedApp(
         userId: String,
