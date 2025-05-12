@@ -116,7 +116,7 @@ interface IntentManager {
 
     /**
      * Creates a pending intent to use when providing [androidx.credentials.provider.CreateEntry]
-     * instances for FIDO 2 credential creation.
+     * instances for FIDO 2 or Password credential creation.
      */
     fun createCredentialProviderCreationPendingIntent(
         action: String,
@@ -129,7 +129,7 @@ interface IntentManager {
      * [androidx.credentials.provider.CredentialEntry] instances for FIDO 2 credential filling.
      */
     @Suppress("LongParameterList")
-    fun createCredentialProviderGetCredentialPendingIntent(
+    fun createFido2GetCredentialPendingIntent(
         action: String,
         userId: String,
         credentialId: String,
@@ -142,9 +142,30 @@ interface IntentManager {
      * Creates a pending intent to use when providing
      * [androidx.credentials.provider.AuthenticationAction] instances for FIDO 2 credential filling.
      */
-    fun createCredentialProviderUnlockPendingIntent(
+    fun createCredentialUnlockPendingIntent(
         action: String,
         userId: String,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
+     * Creates a pending intent to use when providing
+     * [androidx.credentials.provider.CredentialEntry] instances for Password credential filling.
+     */
+    fun createPasswordCreationPendingIntent(
+        action: String,
+        userId: String,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
+     * Creates a pending intent to use when providing
+     * [androidx.credentials.provider.CredentialEntry] instances for Password credential filling.
+     */
+    fun createPasswordGetCredentialPendingIntent(
+        action: String,
+        userId: String,
+        cipherId: String?,
         requestCode: Int,
     ): PendingIntent
 

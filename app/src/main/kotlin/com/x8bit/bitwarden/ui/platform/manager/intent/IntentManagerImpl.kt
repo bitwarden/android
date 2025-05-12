@@ -59,16 +59,16 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 const val EXTRA_KEY_USER_ID: String = "user_id"
 
 /**
- * Key for the credential id included in Credential provider "get entries".
+ * Key for the credential id included in FIDO 2 provider "get entries".
  *
- * @see IntentManager.createCredentialProviderGetCredentialPendingIntent
+ * @see IntentManager.createFido2GetCredentialPendingIntent
  */
 const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 
 /**
- * Key for the cipher id included in Credential provider "get entries".
+ * Key for the cipher id included in FIDO 2 provider "get entries".
  *
- * @see IntentManager.createCredentialProviderGetCredentialPendingIntent
+ * @see IntentManager.createFido2GetCredentialPendingIntent
  */
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
@@ -310,7 +310,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createCredentialProviderGetCredentialPendingIntent(
+    override fun createFido2GetCredentialPendingIntent(
         action: String,
         userId: String,
         credentialId: String,
@@ -333,7 +333,45 @@ class IntentManagerImpl(
         )
     }
 
-    override fun createCredentialProviderUnlockPendingIntent(
+
+
+    override fun createPasswordCreationPendingIntent(
+        action: String,
+        userId: String,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
+
+    override fun createPasswordGetCredentialPendingIntent(
+        action: String,
+        userId: String,
+        cipherId: String?,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
+            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
+
+    override fun createCredentialUnlockPendingIntent(
         action: String,
         userId: String,
         requestCode: Int,
