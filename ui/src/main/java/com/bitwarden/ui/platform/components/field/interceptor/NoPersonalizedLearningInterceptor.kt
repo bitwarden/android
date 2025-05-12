@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.field.interceptor
+package com.bitwarden.ui.platform.components.field.interceptor
 
 import android.view.inputmethod.EditorInfo
 import androidx.compose.runtime.Composable
@@ -7,12 +7,10 @@ import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.platform.PlatformTextInputMethodRequest
 import androidx.compose.ui.platform.PlatformTextInputSession
-import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * Interceptor that disables the [EditorInfo.IME_FLAG_NO_PERSONALIZED_LEARNING] flag on text inputs.
  */
-@OmitFromCoverage
 @OptIn(ExperimentalComposeUiApi::class)
 object NoPersonalizedLearningInterceptor : PlatformTextInputInterceptor {
     override suspend fun interceptStartInputMethod(
