@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
@@ -43,6 +42,7 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.Exp
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
+import com.bitwarden.ui.platform.base.util.EventsEffect
 import kotlinx.collections.immutable.toImmutableList
 
 /**

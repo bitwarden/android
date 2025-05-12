@@ -48,7 +48,6 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
@@ -64,6 +63,7 @@ import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
+import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
 import com.bitwarden.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
 import kotlinx.collections.immutable.toImmutableList

@@ -32,6 +32,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -52,8 +53,6 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.It
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.action.BitwardenSearchActionItem
@@ -77,6 +76,9 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsMa
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.Typography
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.util.asText
+import kotlinx.coroutines.launch
 
 /**
  * Displays the item listing screen.
@@ -105,6 +107,7 @@ fun ItemListingScreen(
         }
     }
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -142,7 +145,9 @@ fun ItemListingScreen(
 
             is ItemListingEvent.ShowFirstTimeSyncSnackbar -> {
                 // Message property is overridden by FirstTimeSyncSnackbarHost:
-                snackbarHostState.showSnackbar("")
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar("")
+                }
             }
         }
     }

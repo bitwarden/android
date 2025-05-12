@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
@@ -49,7 +50,6 @@ import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.Sub
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.TermsClick
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent.NavigateToTerms
-import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
