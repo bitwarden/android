@@ -19,14 +19,16 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
@@ -65,6 +67,7 @@ class SearchScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToEditSendId: String? = null
+    private var onNavigateToViewSendRoute: ViewSendRoute? = null
     private var onNavigateToEditCipherArgs: VaultAddEditArgs? = null
     private var onNavigateToViewCipherArgs: VaultItemArgs? = null
 
@@ -78,6 +81,7 @@ class SearchScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToViewSend = { onNavigateToViewSendRoute = it },
                 onNavigateToEditCipher = { onNavigateToEditCipherArgs = it },
                 onNavigateToViewCipher = { onNavigateToViewCipherArgs = it },
             )
@@ -95,6 +99,19 @@ class SearchScreenTest : BaseComposeTest() {
         val sendId = "sendId"
         mutableEventFlow.tryEmit(SearchEvent.NavigateToEditSend(sendId))
         assertEquals(sendId, onNavigateToEditSendId)
+    }
+
+    @Test
+    fun `NavigateToViewSend should call onNavigateToViewSend`() {
+        val sendId = "sendId1234"
+        val sendType = SendItemType.TEXT
+        mutableEventFlow.tryEmit(
+            SearchEvent.NavigateToViewSend(sendId = sendId, sendType = sendType),
+        )
+        assertEquals(
+            ViewSendRoute(sendId = sendId, sendType = sendType),
+            onNavigateToViewSendRoute,
+        )
     }
 
     @Test

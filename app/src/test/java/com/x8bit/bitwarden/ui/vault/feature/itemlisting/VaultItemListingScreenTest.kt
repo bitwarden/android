@@ -36,6 +36,8 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
@@ -85,6 +87,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToVaultAddItemScreenCalled = false
     private var onNavigateToAddSendScreenCalled = false
     private var onNavigateToEditSendItemId: String? = null
+    private var onNavigateToViewSendScreenRoute: ViewSendRoute? = null
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
     private var onNavigateToVaultEditItemScreenArgs: VaultAddEditArgs? = null
     private var onNavigateToSearchType: SearchType? = null
@@ -128,6 +131,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
                 onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
+                onNavigateToViewSendItem = { onNavigateToViewSendScreenRoute = it },
                 onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
                 onNavigateToSearch = { onNavigateToSearchType = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenArgs = it },
@@ -480,6 +484,19 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToViewSendItem should call onNavigateToViewSendScreen`() {
+        val sendId = "id"
+        val sendType = SendItemType.TEXT
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.NavigateToViewSendItem(id = sendId, sendType = sendType),
+        )
+        assertEquals(
+            ViewSendRoute(sendId = sendId, sendType = sendType),
+            onNavigateToViewSendScreenRoute,
+        )
+    }
+
+    @Test
     fun `NavigateToVaultSearchScreen should call onNavigateToSearch`() {
         val searchType = SearchType.Vault.SecureNotes
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToSearchScreen(searchType))
@@ -503,9 +520,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToSendItem event should call onNavigateToEditSendItemId`() {
+    fun `NavigateToEditSendItem event should call onNavigateToEditSendItemId`() {
         val sendId = "sendId"
-        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToSendItem(sendId))
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToEditSendItem(id = sendId))
         assertEquals(sendId, onNavigateToEditSendItemId)
     }
 

@@ -301,6 +301,20 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `EditClick should emit NavigateToEditSend`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+        }
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.EditClick(sendItem = sendItem))
+            assertEquals(SendEvent.NavigateToEditSend(sendId = sendId), awaitItem())
+        }
+    }
+
+    @Test
     fun `ShareClick should emit ShowShareSheet`() = runTest {
         val viewModel = createViewModel()
         val testUrl = "www.test.com"

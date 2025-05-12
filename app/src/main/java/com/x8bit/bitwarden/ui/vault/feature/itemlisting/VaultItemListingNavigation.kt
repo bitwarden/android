@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -121,6 +122,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     internalVaultItemListingDestination<VaultItemListingRoute.CipherItemListing>(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = { },
+        onNavigateToViewSendItem = { },
         onNavigateToEditSendItem = { },
         onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
         onNavigateToVaultItemListing = onNavigateToVaultItemListing,
@@ -153,6 +155,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
             onNavigateToAddFolder = onNavigateToAddFolderScreen,
             onNavigateToVaultItemListing = {},
             onNavigateToAddSendItem = {},
+            onNavigateToViewSendItem = {},
             onNavigateToEditSendItem = {},
         )
     }
@@ -164,12 +167,14 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
 fun NavGraphBuilder.sendItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
+    onNavigateToViewSendItem: (route: ViewSendRoute) -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
 ) {
     internalVaultItemListingDestination<VaultItemListingRoute.SendItemListing>(
         onNavigateBack = onNavigateBack,
         onNavigateToAddSendItem = onNavigateToAddSendItem,
+        onNavigateToViewSendItem = onNavigateToViewSendItem,
         onNavigateToEditSendItem = onNavigateToEditSendItem,
         onNavigateToVaultAddItemScreen = { },
         onNavigateToAddFolderScreen = { _ -> },
@@ -192,6 +197,7 @@ private inline fun <reified T : VaultItemListingRoute> NavGraphBuilder.internalV
     noinline onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     noinline onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
     noinline onNavigateToAddSendItem: () -> Unit,
+    noinline onNavigateToViewSendItem: (route: ViewSendRoute) -> Unit,
     noinline onNavigateToEditSendItem: (sendId: String) -> Unit,
     noinline onNavigateToSearch: (searchType: SearchType) -> Unit,
 ) {
@@ -202,6 +208,7 @@ private inline fun <reified T : VaultItemListingRoute> NavGraphBuilder.internalV
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToAddSendItem = onNavigateToAddSendItem,
+            onNavigateToViewSendItem = onNavigateToViewSendItem,
             onNavigateToEditSendItem = onNavigateToEditSendItem,
             onNavigateToVaultItemListing = onNavigateToVaultItemListing,
             onNavigateToSearch = onNavigateToSearch,

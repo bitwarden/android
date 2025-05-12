@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.ui.platform.base.util.composableWithRootPushTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.serialization.Serializable
 
 /**
@@ -16,9 +17,11 @@ data object SendRoute
 /**
  * Add send destination to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.sendDestination(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -27,6 +30,7 @@ fun NavGraphBuilder.sendDestination(
         SendScreen(
             onNavigateToAddSend = onNavigateToAddSend,
             onNavigateToEditSend = onNavigateToEditSend,
+            onNavigateToViewSend = onNavigateToViewSend,
             onNavigateToSendFilesList = onNavigateToSendFilesList,
             onNavigateToSendTextList = onNavigateToSendTextList,
             onNavigateToSearchSend = onNavigateToSearchSend,
