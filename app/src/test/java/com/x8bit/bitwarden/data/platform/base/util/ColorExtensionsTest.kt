@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.base.util
 
 import androidx.compose.ui.graphics.Color
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.isLightOverlayRequired
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

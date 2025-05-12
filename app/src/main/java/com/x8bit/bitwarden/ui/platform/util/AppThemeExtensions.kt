@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.util
 
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 
 /**
  * Returns a human-readable display label for the given [AppTheme].
