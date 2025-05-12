@@ -320,6 +320,7 @@ class InlinePresentationSpecExtensionsTest {
         every {
             ContextCompat.getString(testContext, R.string.type_login)
         } returns LOGIN
+        @Suppress("DEPRECATION")
         val slice: Slice = mockk()
         every {
             UiVersions.getVersions(testStyle)
@@ -377,6 +378,7 @@ class InlinePresentationSpecExtensionsTest {
         icon: Icon,
         pendingIntent: PendingIntent,
     ) {
+        @Suppress("DEPRECATION")
         val slice: Slice = mockk()
         every {
             UiVersions.getVersions(testStyle)

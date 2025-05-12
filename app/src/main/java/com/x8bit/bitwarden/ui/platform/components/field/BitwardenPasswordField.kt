@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
@@ -123,7 +123,7 @@ fun BitwardenPasswordField(
             value = textFieldValue,
             onValueChange = onValueChange,
             defaultTextToolbar = LocalTextToolbar.current,
-            clipboardManager = LocalClipboardManager.current.nativeClipboard,
+            clipboardManager = LocalClipboard.current.nativeClipboard,
             focusManager = LocalFocusManager.current,
         )
 

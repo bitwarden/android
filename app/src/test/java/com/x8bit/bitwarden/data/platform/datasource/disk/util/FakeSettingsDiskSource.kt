@@ -378,9 +378,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override fun getVaultRegisteredForExport(userId: String): Boolean =
         vaultRegisteredForExport[userId] ?: false
 
-    override fun storeVaultRegisteredForExport(userId: String, registered: Boolean?) {
-        vaultRegisteredForExport[userId] = registered
-        getMutableVaultRegisteredForExportFlow(userId = userId).tryEmit(registered)
+    override fun storeVaultRegisteredForExport(userId: String, isRegistered: Boolean?) {
+        vaultRegisteredForExport[userId] = isRegistered
+        getMutableVaultRegisteredForExportFlow(userId = userId).tryEmit(isRegistered)
     }
 
     override fun getVaultRegisteredForExportFlow(userId: String): Flow<Boolean?> =

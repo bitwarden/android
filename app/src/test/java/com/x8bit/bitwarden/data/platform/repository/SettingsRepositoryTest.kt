@@ -1213,7 +1213,7 @@ class SettingsRepositoryTest {
     @Test
     fun `isVaultRegisteredForExport should return true if it exists`() {
         val userId = "userId"
-        fakeSettingsDiskSource.storeVaultRegisteredForExport(userId = userId, registered = true)
+        fakeSettingsDiskSource.storeVaultRegisteredForExport(userId = userId, isRegistered = true)
         assertTrue(settingsRepository.isVaultRegisteredForExport(userId = userId))
     }
 
@@ -1234,12 +1234,12 @@ class SettingsRepositoryTest {
                     assertFalse(awaitItem())
                     fakeSettingsDiskSource.storeVaultRegisteredForExport(
                         userId = USER_ID,
-                        registered = true,
+                        isRegistered = true,
                     )
                     assertTrue(awaitItem())
                     fakeSettingsDiskSource.storeVaultRegisteredForExport(
                         userId = USER_ID,
-                        registered = false,
+                        isRegistered = false,
                     )
                     assertFalse(awaitItem())
                 }

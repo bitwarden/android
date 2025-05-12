@@ -36,7 +36,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.platform.TextToolbar
@@ -254,7 +254,7 @@ fun BitwardenTextField(
             value = textFieldValue,
             onValueChange = onValueChange,
             defaultTextToolbar = LocalTextToolbar.current,
-            clipboardManager = LocalClipboardManager.current.nativeClipboard,
+            clipboardManager = LocalClipboard.current.nativeClipboard,
             focusManager = LocalFocusManager.current,
         )
 
