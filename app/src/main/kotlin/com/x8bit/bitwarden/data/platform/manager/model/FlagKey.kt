@@ -149,6 +149,15 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
+     * Data object holding the feature flag key to enable single tap passkey authentication.
+     */
+    data object SingleTapPasswordAuthentication : FlagKey<Boolean>() {
+        override val keyName: String = "single-tap-password-authentication"
+        override val defaultValue: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
+    }
+
+    /**
      * Data object holding the feature flag key to enable AnonAddy (addy.io) self host alias
      * generation.
      */
