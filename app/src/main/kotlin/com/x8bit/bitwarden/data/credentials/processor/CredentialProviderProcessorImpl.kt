@@ -106,7 +106,7 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createCredentialProviderUnlockPendingIntent(
+                pendingIntent = intentManager.createCredentialUnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
                     userId = userState.activeUserId,
                     requestCode = requestCode.getAndIncrement(),
@@ -212,6 +212,7 @@ class CredentialProviderProcessorImpl(
         bitwardenCredentialManager
             .getCredentialEntries(
                 userId = userId,
+                callingAppInfo = request.callingAppInfo,
                 options = request.beginGetCredentialOptions,
             )
 

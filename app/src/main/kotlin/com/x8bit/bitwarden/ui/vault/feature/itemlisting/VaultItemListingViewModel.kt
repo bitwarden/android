@@ -1735,11 +1735,18 @@ class VaultItemListingViewModel @Inject constructor(
             )
             when (validateOriginResult) {
                 is ValidateOriginResult.Success -> {
-                    sendAction(
-                        VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
-                            userId = request.userId,
-                            result = bitwardenCredentialManager.getCredentialEntries(
-                                getCredentialsRequest = request,
+                    sendEvent(
+                        VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
+                            GetCredentialsResult.Success(
+                                credentialEntries = bitwardenCredentialManager
+                                    .getCredentialEntries(
+                                        userId = request.userId,
+                                        callingAppInfo = request.callingAppInfo,
+                                        options = beginGetCredentialOption,
+                                    )
+                                    .getOrNull()
+                                    .orEmpty(),
+                                userId = request.userId,
                             ),
                         ),
                     )
