@@ -141,8 +141,10 @@ class CredentialProviderProcessorImpl(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
         return when (request) {
-            is BeginCreatePublicKeyCredentialRequest -> {
-                handleCreatePasskeyQuery(request)
+            is BeginCreatePublicKeyCredentialRequest,
+            is BeginCreatePasswordCredentialRequest,
+                -> {
+                handleCreateCredentialQuery(request)
             }
 
             else -> null
