@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.base.util
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.CardStyle
 
 /**
  * Returns null if all entries in a given list are equal to a provided [value], otherwise
