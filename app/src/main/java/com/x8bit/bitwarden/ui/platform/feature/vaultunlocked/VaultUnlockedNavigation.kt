@@ -39,6 +39,8 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHi
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.navigateToViewSend
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.viewSendDestination
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.addedit.vaultAddEditDestination
 import com.x8bit.bitwarden.ui.vault.feature.attachments.attachmentDestination
@@ -102,6 +104,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
             onNavigateToAddSend = { navController.navigateToAddSend(AddSendType.AddItem) },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
+            onNavigateToViewSend = { navController.navigateToViewSend(route = it) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
             onNavigateToPendingRequests = { navController.navigateToPendingRequests() },
             onNavigateToPasswordHistory = {
@@ -199,6 +202,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
 
         addSendDestination(onNavigateBack = { navController.popBackStack() })
+        viewSendDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToEditSend = {
+                navController.navigateToAddSend(sendAddType = AddSendType.EditItem(sendItemId = it))
+            },
+        )
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         exportVaultDestination(onNavigateBack = { navController.popBackStack() })
         foldersDestination(
@@ -218,6 +227,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEditSend = { navController.navigateToAddSend(AddSendType.EditItem(it)) },
+            onNavigateToViewSend = { navController.navigateToViewSend(it) },
             onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },
         )

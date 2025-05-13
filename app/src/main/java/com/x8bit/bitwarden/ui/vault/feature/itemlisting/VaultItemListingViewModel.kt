@@ -71,6 +71,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.components.util.toVaultItemCipherTypeOrNull
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -676,7 +677,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleEditSendClick(action: ListingItemOverflowAction.SendAction.EditClick) {
-        sendEvent(VaultItemListingEvent.NavigateToSendItem(id = action.sendId))
+        sendEvent(VaultItemListingEvent.NavigateToEditSendItem(id = action.sendId))
     }
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
@@ -720,7 +721,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingState.ItemListingType.Send -> {
-                VaultItemListingEvent.NavigateToSendItem(id = action.id)
+                VaultItemListingEvent.NavigateToEditSendItem(id = action.id)
             }
         }
         sendEvent(event)
@@ -2508,7 +2509,15 @@ sealed class VaultItemListingEvent {
      *
      * @property id the id of the send to navigate to.
      */
-    data class NavigateToSendItem(val id: String) : VaultItemListingEvent()
+    data class NavigateToEditSendItem(val id: String) : VaultItemListingEvent()
+
+    /**
+     * Navigates to the ViewSendScreen.
+     */
+    data class NavigateToViewSendItem(
+        val id: String,
+        val sendType: SendItemType,
+    ) : VaultItemListingEvent()
 
     /**
      * Navigates to the VaultItemScreen.

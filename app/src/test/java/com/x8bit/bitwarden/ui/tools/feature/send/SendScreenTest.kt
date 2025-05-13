@@ -23,10 +23,12 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -51,6 +53,7 @@ class SendScreenTest : BaseComposeTest() {
     private var onNavigateToSendTextListCalled = false
     private var onNavigateToSendSearchCalled = false
     private var onNavigateToEditSendId: String? = null
+    private var onNavigateToViewSendRoute: ViewSendRoute? = null
 
     private val intentManager = mockk<IntentManager> {
         every { launchUri(any()) } just runs
@@ -74,6 +77,7 @@ class SendScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateToAddSend = { onNavigateToNewSendCalled = true },
                 onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToViewSend = { onNavigateToViewSendRoute = it },
                 onNavigateToSendFilesList = { onNavigateToSendFilesListCalled = true },
                 onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
                 onNavigateToSearchSend = { onNavigateToSendSearchCalled = true },
@@ -92,6 +96,14 @@ class SendScreenTest : BaseComposeTest() {
         val sendId = "sendId1234"
         mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId))
         assertEquals(sendId, onNavigateToEditSendId)
+    }
+
+    @Test
+    fun `on NavigateToViewSend should call onNavigateToViewSend`() {
+        val sendId = "sendId1234"
+        val sendType = SendItemType.TEXT
+        mutableEventFlow.tryEmit(SendEvent.NavigateToViewSend(sendId = sendId, sendType = sendType))
+        assertEquals(ViewSendRoute(sendId = sendId, sendType = sendType), onNavigateToViewSendRoute)
     }
 
     @Test
@@ -472,7 +484,7 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on send item overflow dialog edit click should send SendClick`() {
+    fun `on send item overflow dialog edit click should send EditClick`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = SendState.ViewState.Content(
@@ -501,7 +513,7 @@ class SendScreenTest : BaseComposeTest() {
             .performClick()
 
         verify {
-            viewModel.trySendAction(SendAction.SendClick(DEFAULT_SEND_ITEM))
+            viewModel.trySendAction(SendAction.EditClick(DEFAULT_SEND_ITEM))
         }
 
         composeTestRule.assertNoDialogExists()

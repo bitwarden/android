@@ -36,6 +36,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultGraphRoute
@@ -60,6 +61,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
@@ -122,6 +124,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToSearchVault = onNavigateToSearchVault,
         navigateToAddSend = onNavigateToAddSend,
         onNavigateToEditSend = onNavigateToEditSend,
+        onNavigateToViewSend = onNavigateToViewSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
         navigateToExportVault = onNavigateToExportVault,
         navigateToFolders = onNavigateToFolders,
@@ -167,6 +170,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
     navigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToViewSend: (ViewSendRoute) -> Unit,
     navigateToDeleteAccount: () -> Unit,
     navigateToExportVault: () -> Unit,
     navigateToFolders: () -> Unit,
@@ -240,6 +244,7 @@ private fun VaultUnlockedNavBarScaffold(
                 navController = navController,
                 onNavigateToAddSend = navigateToAddSend,
                 onNavigateToEditSend = onNavigateToEditSend,
+                onNavigateToViewSend = onNavigateToViewSend,
                 onNavigateToSearchSend = onNavigateToSearchSend,
             )
             generatorGraph(

@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
 
 /**
@@ -52,6 +53,7 @@ import kotlinx.collections.immutable.persistentListOf
 fun SendScreen(
     onNavigateToAddSend: () -> Unit,
     onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -82,6 +84,12 @@ fun SendScreen(
             is SendEvent.NavigateNewSend -> onNavigateToAddSend()
 
             is SendEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
+
+            is SendEvent.NavigateToViewSend -> {
+                onNavigateToViewSend(
+                    ViewSendRoute(sendId = event.sendId, sendType = event.sendType),
+                )
+            }
 
             is SendEvent.NavigateToAboutSend -> {
                 intentManager.launchUri("https://bitwarden.com/products/send".toUri())

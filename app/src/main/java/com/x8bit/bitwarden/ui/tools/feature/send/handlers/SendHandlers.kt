@@ -30,7 +30,7 @@ data class SendHandlers(
                 onTextTypeClick = { viewModel.trySendAction(SendAction.TextTypeClick) },
                 onFileTypeClick = { viewModel.trySendAction(SendAction.FileTypeClick) },
                 onSendClick = { viewModel.trySendAction(SendAction.SendClick(it)) },
-                onEditSendClick = { viewModel.trySendAction(SendAction.SendClick(it)) },
+                onEditSendClick = { viewModel.trySendAction(SendAction.EditClick(it)) },
                 onCopySendClick = { viewModel.trySendAction(SendAction.CopyClick(it)) },
                 onShareSendClick = { viewModel.trySendAction(SendAction.ShareClick(it)) },
                 onDeleteSendClick = { viewModel.trySendAction(SendAction.DeleteSendClick(it)) },

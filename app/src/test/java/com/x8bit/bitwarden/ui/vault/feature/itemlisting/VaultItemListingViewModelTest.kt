@@ -281,7 +281,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createCredentialRequest,
-            )
+                )
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
             } returns mockk(relaxed = true) {
@@ -595,7 +595,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(
                 createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-        )
+            )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
                 cipherViewList = listOf(),
@@ -634,7 +634,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-            )
+                )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),
@@ -691,7 +691,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-            )
+                )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),
@@ -760,7 +760,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = mockFido2CredentialRequest,
-            )
+                )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),
@@ -823,7 +823,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(
                 createCredentialRequest = mockFido2CredentialRequest,
-        )
+            )
         mutableVaultDataStateFlow.value = DataState.Loaded(
             data = VaultData(
                 cipherViewList = listOf(cipherView),
@@ -892,7 +892,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick for send item should emit NavigateToSendItem`() = runTest {
+    fun `ItemClick for send item should emit NavigateToEditSendItem`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
         )
@@ -900,7 +900,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(id = "mock", cipherType = null),
             )
-            assertEquals(VaultItemListingEvent.NavigateToSendItem(id = "mock"), awaitItem())
+            assertEquals(VaultItemListingEvent.NavigateToEditSendItem(id = "mock"), awaitItem())
         }
     }
 
@@ -1293,7 +1293,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Send EditClick should emit NavigateToSendItem`() = runTest {
+    fun `OverflowOptionClick Send EditClick should emit NavigateToEditSendItem`() = runTest {
         val sendId = "sendId"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
@@ -1302,7 +1302,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
                 ),
             )
-            assertEquals(VaultItemListingEvent.NavigateToSendItem(sendId), awaitItem())
+            assertEquals(VaultItemListingEvent.NavigateToEditSendItem(id = sendId), awaitItem())
         }
     }
 
@@ -2663,7 +2663,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = providerCreateCredentialRequest,
-            )
+                )
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -2703,7 +2703,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = providerCreateCredentialRequest,
-            )
+                )
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -2743,7 +2743,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = providerCreateCredentialRequest,
-            )
+                )
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -2783,7 +2783,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = providerCreateCredentialRequest,
-            )
+                )
 
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
@@ -2878,8 +2878,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
-                createMockCreateCredentialRequest(number = 1),
-            )
+                    createMockCreateCredentialRequest(number = 1),
+                )
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
@@ -3699,8 +3699,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
-                createMockCreateCredentialRequest(number = 1),
-            )
+                    createMockCreateCredentialRequest(number = 1),
+                )
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
 
@@ -3863,7 +3863,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = mockRequest,
-            )
+                )
             every {
                 ProviderCreateCredentialRequest.fromBundle(any())
             } returns mockk(relaxed = true) {
@@ -4573,7 +4573,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = createMockCreateCredentialRequest(number = 1),
-            )
+                )
             mutableVaultDataStateFlow.value = DataState.Loaded(
                 data = VaultData(
                     cipherViewList = listOf(cipherView),

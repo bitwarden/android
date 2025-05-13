@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -1188,6 +1189,14 @@ sealed class SearchEvent {
      */
     data class NavigateToEditSend(
         val sendId: String,
+    ) : SearchEvent()
+
+    /**
+     * Navigates to view a send.
+     */
+    data class NavigateToViewSend(
+        val sendId: String,
+        val sendType: SendItemType,
     ) : SearchEvent()
 
     /**

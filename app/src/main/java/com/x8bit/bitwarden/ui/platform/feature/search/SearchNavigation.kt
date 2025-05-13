@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import kotlinx.serialization.Serializable
@@ -85,6 +86,7 @@ fun SavedStateHandle.toSearchArgs(): SearchArgs {
 fun NavGraphBuilder.searchDestination(
     onNavigateBack: () -> Unit,
     onNavigateToEditSend: (sendId: String) -> Unit,
+    onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
 ) {
@@ -92,6 +94,7 @@ fun NavGraphBuilder.searchDestination(
         SearchScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToEditSend = onNavigateToEditSend,
+            onNavigateToViewSend = onNavigateToViewSend,
             onNavigateToEditCipher = onNavigateToEditCipher,
             onNavigateToViewCipher = onNavigateToViewCipher,
         )

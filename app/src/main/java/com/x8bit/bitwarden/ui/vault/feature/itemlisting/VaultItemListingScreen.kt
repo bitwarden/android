@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInput
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
@@ -77,6 +78,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultAddItemScreen: (args: VaultAddEditArgs) -> Unit,
     onNavigateToAddFolder: (selectedFolderId: String?) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
+    onNavigateToViewSendItem: (route: ViewSendRoute) -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -127,6 +129,12 @@ fun VaultItemListingScreen(
                 )
             }
 
+            is VaultItemListingEvent.NavigateToViewSendItem -> {
+                onNavigateToViewSendItem(
+                    ViewSendRoute(sendId = event.id, sendType = event.sendType),
+                )
+            }
+
             is VaultItemListingEvent.NavigateToEditCipher -> {
                 onNavigateToVaultEditItemScreen(
                     VaultAddEditArgs(
@@ -144,7 +152,7 @@ fun VaultItemListingScreen(
                 onNavigateToAddSendItem()
             }
 
-            is VaultItemListingEvent.NavigateToSendItem -> {
+            is VaultItemListingEvent.NavigateToEditSendItem -> {
                 onNavigateToEditSendItem(event.id)
             }
 
