@@ -4,6 +4,7 @@
 
 - [Compatibility](#compatibility)
 - [Setup](#setup)
+- [Theme](#theme)
 - [Dependencies](#dependencies)
 
 ## Compatibility
@@ -14,7 +15,6 @@
 - **Orientations Supported**: Portrait and Landscape
 
 ## Setup
-
 
 1. Clone the repository:
 
@@ -51,6 +51,25 @@
     This can then be mapped to a set of keys by navigating to `Android Studio > Preferences` and editing the macro under `Keymap` (ex : shift + command + s).
 
     Please avoid mixing formatting and logical changes in the same commit/PR. When possible, fix any large formatting issues in a separate PR before opening one to make logical changes to the same code. This helps others focus on the meaningful code changes when reviewing the code.
+
+## Theme
+
+### Icons & Illustrations
+
+The app supports light mode, dark mode and dynamic colors. Most icons in the app will display correctly using tinting but multi-tonal icons and illustrations require extra processing in order to be displayed properly with dynamic colors.
+
+All illustrations and multi-tonal icons require the svg paths to be tagged with the `name` attribute in order for each individual path to be tinted the appropriate color. Any untagged path will not be tinted and the resulting image will be incorrect.
+
+The supported tags are as follows:
+
+* outline
+* primary
+* secondary
+* tertiary
+* accent
+* logo
+* navigation
+* navigationActiveAccent
 
 ## Dependencies
 
