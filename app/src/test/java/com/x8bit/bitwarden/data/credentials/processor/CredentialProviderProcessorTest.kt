@@ -69,9 +69,7 @@ class CredentialProviderProcessorTest {
     }
     private val credentialEntries = listOf(mockk<CredentialEntry>(relaxed = true))
     private val bitwardenCredentialManager: BitwardenCredentialManager = mockk {
-        coEvery {
-            getCredentialEntries(any(), any())
-        } returns credentialEntries.asSuccess()
+        coEvery { getCredentialEntries(any()) } returns credentialEntries.asSuccess()
     }
     private val intentManager: IntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
@@ -459,10 +457,7 @@ class CredentialProviderProcessorTest {
             every { cancellationSignal.setOnCancelListener(any()) } just runs
             every { callback.onError(capture(captureSlot)) } just runs
             coEvery {
-                bitwardenCredentialManager.getCredentialEntries(
-                    userId = DEFAULT_USER_STATE.activeUserId,
-                    options = listOf(mockOption),
-                )
+                bitwardenCredentialManager.getCredentialEntries(any())
             } returns Result.failure(Exception("Error decrypting credentials."))
 
             credentialProviderProcessor.processGetCredentialRequest(

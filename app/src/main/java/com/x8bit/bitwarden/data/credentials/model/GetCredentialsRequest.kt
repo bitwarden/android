@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.credentials.model
 import android.os.Bundle
 import android.os.Parcelable
 import androidx.credentials.provider.BeginGetCredentialRequest
+import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import kotlinx.parcelize.IgnoredOnParcel
@@ -30,13 +31,25 @@ data class GetCredentialsRequest(
 
     /**
      * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
-     * public key credentials are present.
+     * public key options are present.
      */
     @IgnoredOnParcel
     val beginGetPublicKeyCredentialOptions: List<BeginGetPublicKeyCredentialOption> by lazy {
         providerRequest
             ?.beginGetCredentialOptions
             ?.filterIsInstance<BeginGetPublicKeyCredentialOption>()
+            .orEmpty()
+    }
+
+    /**
+     * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no password
+     * options are present.
+     */
+    @IgnoredOnParcel
+    val beginGetPasswordOptions: List<BeginGetPasswordOption> by lazy {
+        providerRequest
+            ?.beginGetCredentialOptions
+            ?.filterIsInstance<BeginGetPasswordOption>()
             .orEmpty()
     }
 

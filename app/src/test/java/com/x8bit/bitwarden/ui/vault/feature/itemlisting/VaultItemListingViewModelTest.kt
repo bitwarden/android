@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.core.os.bundleOf
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.ProviderCreateCredentialRequest
@@ -12,6 +13,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.asFailure
 import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
@@ -2967,10 +2969,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     mockGetCredentialsRequest,
                 )
             coEvery {
-                bitwardenCredentialManager.getCredentialEntries(
-                    userId = "mockUserId-1",
-                    options = listOf(mockBeginGetPublicKeyCredentialOption),
-                )
+                bitwardenCredentialManager.getCredentialEntries(any())
             } returns emptyList<PublicKeyCredentialEntry>().asSuccess()
             coEvery {
                 originManager.validateOrigin(callingAppInfo = any())
@@ -3007,8 +3006,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `GetCredentialsRequest should display error dialog when getCredentialEntries is failure`() =
+    fun `GetCredentialsRequest should emit GetCredentialEntriesResultReceive when result is received`() =
         runTest {
             setupMockUri()
             val mockGetCredentialsRequest = createMockGetCredentialsRequest(number = 1)
@@ -3031,6 +3031,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             every {
                 mockBeginGetCredentialRequest.beginGetCredentialOptions
             } returns emptyList()
+            coEvery {
+                bitwardenCredentialManager.getCredentialEntries(any())
+            } returns GetCredentialUnknownException("Internal error").asFailure()
 
             val dataState = DataState.Loaded(
                 data = VaultData(
@@ -3047,8 +3050,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 VaultItemListingState.DialogState.CredentialManagerOperationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message =
-                        R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
+                    message = R.string.generic_error_message.asText(),
                 ),
                 viewModel.stateFlow.value.dialogState,
             )

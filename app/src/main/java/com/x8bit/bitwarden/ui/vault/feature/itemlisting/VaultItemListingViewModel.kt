@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
 import androidx.lifecycle.SavedStateHandle
@@ -1253,6 +1254,10 @@ class VaultItemListingViewModel @Inject constructor(
             VaultItemListingsAction.Internal.InternetConnectionErrorReceived -> {
                 handleInternetConnectionErrorReceived()
             }
+
+            is VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive -> {
+                handleGetCredentialEntriesResultReceive(action)
+            }
         }
     }
 
@@ -1690,14 +1695,6 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleProviderGetCredentialsRequest(
         request: GetCredentialsRequest,
     ) {
-        val beginGetCredentialOption = request
-            .beginGetPublicKeyCredentialOptions
-            .ifEmpty {
-                showCredentialManagerErrorDialog(
-                    R.string.passkey_operation_failed_because_the_request_is_invalid.asText(),
-                )
-                return
-            }
         val callingAppInfo = request.callingAppInfo
             ?: run {
                 showCredentialManagerErrorDialog(
@@ -1712,17 +1709,11 @@ class VaultItemListingViewModel @Inject constructor(
             )
             when (validateOriginResult) {
                 is ValidateOriginResult.Success -> {
-                    sendEvent(
-                        VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
-                            GetCredentialsResult.Success(
-                                credentialEntries = bitwardenCredentialManager
-                                    .getCredentialEntries(
-                                        userId = request.userId,
-                                        options = beginGetCredentialOption,
-                                    )
-                                    .getOrNull()
-                                    .orEmpty(),
-                                userId = request.userId,
+                    sendAction(
+                        VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
+                            userId = request.userId,
+                            result = bitwardenCredentialManager.getCredentialEntries(
+                                getCredentialsRequest = request,
                             ),
                         ),
                     )
@@ -1859,6 +1850,27 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleGetCredentialEntriesResultReceive(
+        action: VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive,
+    ) {
+        action.result
+            .onFailure {
+                showCredentialManagerErrorDialog(
+                    message = R.string.generic_error_message.asText(),
+                )
+            }
+            .onSuccess { credentialEntries ->
+                sendEvent(
+                    VaultItemListingEvent.CompleteProviderGetCredentialsRequest(
+                        GetCredentialsResult.Success(
+                            credentialEntries = credentialEntries,
+                            userId = action.userId,
+                        ),
+                    ),
+                )
+            }
     }
 
     private fun updateStateWithVaultData(vaultData: VaultData, clearDialogState: Boolean) {
@@ -2916,6 +2928,14 @@ sealed class VaultItemListingsAction {
          * Indicates that the there is not internet connection.
          */
         data object InternetConnectionErrorReceived : Internal()
+
+        /**
+         * Indicates that a result for building credential entries has been received.
+         */
+        data class GetCredentialEntriesResultReceive(
+            val userId: String,
+            val result: Result<List<CredentialEntry>>,
+        ) : Internal()
     }
 }
 
