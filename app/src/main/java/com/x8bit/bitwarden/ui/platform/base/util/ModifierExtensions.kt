@@ -364,10 +364,10 @@ fun Modifier.cardStyle(
         cardStyle = cardStyle,
         onClick = onClick,
         clickEnabled = clickEnabled,
-        paddingStart = paddingHorizontal,
-        paddingTop = paddingVertical,
-        paddingEnd = paddingHorizontal,
-        paddingBottom = paddingVertical,
+        padding = PaddingValues(
+            horizontal = paddingHorizontal,
+            vertical = paddingVertical,
+        ),
         containerColor = containerColor,
         indicationColor = indicationColor,
     )
@@ -389,6 +389,34 @@ fun Modifier.cardStyle(
     containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
     indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
 ): Modifier =
+    this.cardStyle(
+        cardStyle = cardStyle,
+        onClick = onClick,
+        clickEnabled = clickEnabled,
+        padding = PaddingValues(
+            start = paddingStart,
+            top = paddingTop,
+            end = paddingEnd,
+            bottom = paddingBottom,
+        ),
+        containerColor = containerColor,
+        indicationColor = indicationColor,
+    )
+
+/**
+ * This is a [Modifier] extension that applies a card style to the content.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.cardStyle(
+    cardStyle: CardStyle?,
+    onClick: (() -> Unit)? = null,
+    clickEnabled: Boolean = true,
+    padding: PaddingValues = PaddingValues(horizontal = 0.dp, vertical = 12.dp),
+    containerColor: Color = BitwardenTheme.colorScheme.background.secondary,
+    indicationColor: Color = BitwardenTheme.colorScheme.background.pressed,
+): Modifier =
     this
         .cardBackground(
             cardStyle = cardStyle,
@@ -401,12 +429,7 @@ fun Modifier.cardStyle(
         )
         .cardPadding(
             cardStyle = cardStyle,
-            paddingValues = PaddingValues(
-                start = paddingStart,
-                top = paddingTop,
-                end = paddingEnd,
-                bottom = paddingBottom,
-            ),
+            paddingValues = padding,
         )
 
 /**

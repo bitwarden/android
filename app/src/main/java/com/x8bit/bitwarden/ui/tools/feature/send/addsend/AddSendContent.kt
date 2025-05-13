@@ -34,7 +34,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.asText
-import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -378,10 +377,7 @@ private fun AddSendOptions(
                     state.common.currentAccessCount.takeUnless { isAddMode }?.let {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = R.string.current_access_count
-                                .asText()
-                                .concat(": ".asText(), it.toString().asText())
-                                .invoke(),
+                            text = R.string.current_access_count.asText(it).invoke(),
                             style = BitwardenTheme.typography.bodySmall,
                             color = BitwardenTheme.colorScheme.text.secondary,
                             modifier = Modifier.fillMaxWidth(),

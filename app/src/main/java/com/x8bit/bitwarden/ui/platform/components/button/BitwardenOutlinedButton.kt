@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenOutlinedButtonColors
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -30,6 +32,10 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param modifier The [Modifier] to be applied to the button.
  * @param icon The icon for the button.
  * @param isEnabled Whether or not the button is enabled.
+ * @param cardStyle The optional card style to surround the button.
+ * `null`.
+ * @param cardInsets The internal insets for the card, only applied when the [cardStyle] is not
+ * `null`.
  */
 @Composable
 fun BitwardenOutlinedButton(
@@ -39,9 +45,13 @@ fun BitwardenOutlinedButton(
     icon: Painter? = null,
     isEnabled: Boolean = true,
     colors: BitwardenOutlinedButtonColors = bitwardenOutlinedButtonColors(),
+    cardStyle: CardStyle? = null,
+    cardInsets: PaddingValues = PaddingValues(horizontal = 16.dp, vertical = 6.dp),
 ) {
     OutlinedButton(
-        modifier = modifier.semantics(mergeDescendants = true) { },
+        modifier = modifier
+            .semantics(mergeDescendants = true) { }
+            .cardStyle(cardStyle = cardStyle, padding = cardInsets),
         onClick = onClick,
         enabled = isEnabled,
         contentPadding = PaddingValues(
