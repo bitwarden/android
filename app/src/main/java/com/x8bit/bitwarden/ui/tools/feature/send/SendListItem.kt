@@ -29,6 +29,7 @@ import kotlinx.collections.immutable.toPersistentList
  * @param startIcon The [Painter] object used to draw the icon at the start of the item.
  * @param showMoreOptions Whether to show the button for the overflow options.
  * @param onClick The lambda to be invoked when the item is clicked.
+ * @param onViewClick The lambda to be invoked when the view option is clicked from the menu.
  * @param onEditClick The lambda to be invoked when the edit option is clicked from the menu.
  * @param onCopyClick The lambda to be invoked when the copy option is clicked from the menu.
  * @param onShareClick The lambda to be invoked when the share option is clicked from the menu.
@@ -48,6 +49,7 @@ fun SendListItem(
     trailingLabelIcons: ImmutableList<IconData>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
+    onViewClick: () -> Unit,
     onEditClick: () -> Unit,
     onCopyClick: () -> Unit,
     onShareClick: () -> Unit,
@@ -64,6 +66,10 @@ fun SendListItem(
         trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
         selectionDataList = persistentListOfNotNull(
+            SelectionItemData(
+                text = stringResource(id = R.string.view),
+                onClick = onViewClick,
+            ),
             SelectionItemData(
                 text = stringResource(id = R.string.edit),
                 onClick = onEditClick,
@@ -122,6 +128,7 @@ private fun SendListItem_preview() {
             showMoreOptions = true,
             onClick = {},
             onCopyClick = {},
+            onViewClick = {},
             onEditClick = {},
             onShareClick = {},
             onDeleteClick = {},

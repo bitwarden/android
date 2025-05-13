@@ -67,6 +67,7 @@ fun VaultItemListingContent(
 
         is ListingItemOverflowAction.SendAction.CopyUrlClick,
         is ListingItemOverflowAction.SendAction.EditClick,
+        is ListingItemOverflowAction.SendAction.ViewClick,
         is ListingItemOverflowAction.SendAction.RemovePasswordClick,
         is ListingItemOverflowAction.SendAction.ShareUrlClick,
         is ListingItemOverflowAction.VaultAction.CopyNoteClick,

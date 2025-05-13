@@ -483,6 +483,42 @@ class SendScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on send item overflow dialog view click should send SendClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = SendState.ViewState.Content(
+                    textTypeCount = 0,
+                    fileTypeCount = 1,
+                    sendItems = listOf(
+                        DEFAULT_SEND_ITEM,
+                        DEFAULT_SEND_ITEM.copy(id = "mockId-2"),
+                    ),
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
+
+        // We scroll to the last item but click the first one to avoid clicking the FAB by mistake
+        composeTestRule
+            .onAllNodesWithContentDescription("Options")
+            .apply { onLast().performScrollTo() }
+            .onFirst()
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(SendAction.ViewClick(DEFAULT_SEND_ITEM))
+        }
+
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
     fun `on send item overflow dialog edit click should send EditClick`() {
         mutableStateFlow.update {
             it.copy(

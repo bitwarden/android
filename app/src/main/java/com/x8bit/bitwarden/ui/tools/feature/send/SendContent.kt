@@ -114,6 +114,7 @@ fun SendContent(
                 trailingLabelIcons = it.iconList,
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
+                onViewClick = { sendHandlers.onViewSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },
                 onEditClick = { sendHandlers.onEditSendClick(it) },
                 onShareClick = { sendHandlers.onShareSendClick(it) },

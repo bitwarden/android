@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -179,7 +180,10 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchState.DisplayItem.ItemType.Sends -> {
-                SearchEvent.NavigateToEditSend(sendId = action.itemId)
+                SearchEvent.NavigateToViewSend(
+                    sendId = action.itemId,
+                    sendType = itemType.type.toSendItemType(),
+                )
             }
         }
         sendEvent(event)
@@ -266,6 +270,7 @@ class SearchViewModel @Inject constructor(
                 handleDeleteClick(overflowAction)
             }
 
+            is ListingItemOverflowAction.SendAction.ViewClick -> handleViewClick(overflowAction)
             is ListingItemOverflowAction.SendAction.EditClick -> handleEditClick(overflowAction)
             is ListingItemOverflowAction.SendAction.RemovePasswordClick -> {
                 handleRemovePasswordClick(overflowAction)
@@ -328,6 +333,15 @@ class SearchViewModel @Inject constructor(
             val result = vaultRepo.deleteSend(action.sendId)
             sendAction(SearchAction.Internal.DeleteSendResultReceive(result))
         }
+    }
+
+    private fun handleViewClick(action: ListingItemOverflowAction.SendAction.ViewClick) {
+        sendEvent(
+            SearchEvent.NavigateToViewSend(
+                sendId = action.sendId,
+                sendType = action.sendType.toSendItemType(),
+            ),
+        )
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.SendAction.EditClick) {

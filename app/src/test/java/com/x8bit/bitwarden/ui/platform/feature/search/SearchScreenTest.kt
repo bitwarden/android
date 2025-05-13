@@ -18,6 +18,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -818,6 +819,25 @@ class SearchScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
+
+        composeTestRule
+            .onNodeWithContentDescription(label = "Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    overflowAction = ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-1",
+                        sendType = SendType.FILE,
+                    ),
+                ),
+            )
+        }
 
         composeTestRule
             .onNodeWithContentDescription("Options")

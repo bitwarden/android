@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
@@ -241,7 +242,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick for send item should emit NavigateToEditSend`() = runTest {
+    fun `ItemClick for send item should emit NavigateToViewSend`() = runTest {
         val viewModel = createViewModel(DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All))
         viewModel.eventFlow.test {
             viewModel.trySendAction(
@@ -250,7 +251,10 @@ class SearchViewModelTest : BaseViewModelTest() {
                     itemType = SearchState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
                 ),
             )
-            assertEquals(SearchEvent.NavigateToEditSend(sendId = "mock"), awaitItem())
+            assertEquals(
+                SearchEvent.NavigateToViewSend(sendId = "mock", sendType = SendItemType.TEXT),
+                awaitItem(),
+            )
         }
     }
 
@@ -695,6 +699,26 @@ class SearchViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `OverflowOptionClick Send ViewClick should emit NavigateToViewSend`() = runTest {
+        val sendId = "sendId"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                SearchAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = sendId,
+                        sendType = SendType.TEXT,
+                    ),
+                ),
+            )
+            assertEquals(
+                SearchEvent.NavigateToViewSend(sendId = sendId, sendType = SendItemType.TEXT),
+                awaitItem(),
+            )
+        }
+    }
 
     @Test
     fun `OverflowOptionClick Send EditClick should emit NavigateToEditSend`() = runTest {

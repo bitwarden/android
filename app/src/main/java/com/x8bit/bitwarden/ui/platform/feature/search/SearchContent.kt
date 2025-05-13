@@ -64,6 +64,7 @@ fun SearchContent(
         is ListingItemOverflowAction.SendAction.EditClick,
         is ListingItemOverflowAction.SendAction.RemovePasswordClick,
         is ListingItemOverflowAction.SendAction.ShareUrlClick,
+        is ListingItemOverflowAction.SendAction.ViewClick,
         is ListingItemOverflowAction.VaultAction.CopyNoteClick,
         is ListingItemOverflowAction.VaultAction.CopyNumberClick,
         is ListingItemOverflowAction.VaultAction.CopyPasswordClick,

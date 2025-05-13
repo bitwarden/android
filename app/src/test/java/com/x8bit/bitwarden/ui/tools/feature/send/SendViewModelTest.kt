@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import io.mockk.coEvery
 import io.mockk.every
@@ -287,16 +288,20 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `SendClick should emit NavigateToEditSend`() = runTest {
+    fun `SendClick should emit NavigateToViewSend`() = runTest {
         val sendId = "sendId1234"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
+            every { type } returns SendState.ViewState.Content.SendItem.Type.FILE
         }
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.SendClick(sendItem))
-            assertEquals(SendEvent.NavigateToEditSend(sendId), awaitItem())
+            assertEquals(
+                SendEvent.NavigateToViewSend(sendId = sendId, sendType = SendItemType.FILE),
+                awaitItem(),
+            )
         }
     }
 
@@ -311,6 +316,24 @@ class SendViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.EditClick(sendItem = sendItem))
             assertEquals(SendEvent.NavigateToEditSend(sendId = sendId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ViewClick should emit NavigateToViewSend`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+            every { type } returns SendState.ViewState.Content.SendItem.Type.TEXT
+        }
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.ViewClick(sendItem))
+            assertEquals(
+                SendEvent.NavigateToViewSend(sendId = sendId, sendType = SendItemType.TEXT),
+                awaitItem(),
+            )
         }
     }
 

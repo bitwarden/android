@@ -1472,6 +1472,25 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule.assertNoDialogExists()
 
         composeTestRule
+            .onNodeWithContentDescription(label = "Options")
+            .assertIsDisplayed()
+            .performClick()
+        composeTestRule
+            .onNodeWithText(text = "View")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    action = ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = SendType.FILE,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
             .onNodeWithContentDescription("Options")
             .assertIsDisplayed()
             .performClick()
@@ -2325,6 +2344,10 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ),
         ),
         overflowOptions = listOf(
+            ListingItemOverflowAction.SendAction.ViewClick(
+                sendId = "mockId-$number",
+                sendType = SendType.FILE,
+            ),
             ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),

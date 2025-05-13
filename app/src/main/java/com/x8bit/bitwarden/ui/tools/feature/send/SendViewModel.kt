@@ -93,6 +93,7 @@ class SendViewModel @Inject constructor(
         SendAction.FileTypeClick -> handleFileTypeClick()
         is SendAction.SendClick -> handleSendClick(action)
         is SendAction.EditClick -> handleEditSendClick(action)
+        is SendAction.ViewClick -> handleViewSendClick(action)
         is SendAction.ShareClick -> handleShareClick(action)
         SendAction.TextTypeClick -> handleTextTypeClick()
         is SendAction.DeleteSendClick -> handleDeleteSendClick(action)
@@ -302,11 +303,31 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleSendClick(action: SendAction.SendClick) {
-        sendEvent(SendEvent.NavigateToEditSend(action.sendItem.id))
+        sendEvent(
+            event = SendEvent.NavigateToViewSend(
+                sendId = action.sendItem.id,
+                sendType = when (action.sendItem.type) {
+                    SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
+                    SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
+                },
+            ),
+        )
     }
 
     private fun handleEditSendClick(action: SendAction.EditClick) {
         sendEvent(SendEvent.NavigateToEditSend(sendId = action.sendItem.id))
+    }
+
+    private fun handleViewSendClick(action: SendAction.ViewClick) {
+        sendEvent(
+            event = SendEvent.NavigateToViewSend(
+                sendId = action.sendItem.id,
+                sendType = when (action.sendItem.type) {
+                    SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
+                    SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
+                },
+            ),
+        )
     }
 
     private fun handleShareClick(action: SendAction.ShareClick) {
@@ -540,6 +561,13 @@ sealed class SendAction {
      * User clicked the edit item row.
      */
     data class EditClick(
+        val sendItem: SendState.ViewState.Content.SendItem,
+    ) : SendAction()
+
+    /**
+     * User clicked the view item row.
+     */
+    data class ViewClick(
         val sendItem: SendState.ViewState.Content.SendItem,
     ) : SendAction()
 
