@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.handlers
 
-import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.ui.platform.feature.search.MasterPasswordRepromptData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchAction
+import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchViewModel
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 data class SearchHandlers(
     val onBackClick: () -> Unit,
     val onDismissRequest: () -> Unit,
-    val onItemClick: (cipherId: String, cipherType: CipherType?) -> Unit,
+    val onItemClick: (id: String, type: SearchState.DisplayItem.ItemType) -> Unit,
     val onAutofillItemClick: (String) -> Unit,
     val onAutofillAndSaveItemClick: (String) -> Unit,
     val onMasterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
@@ -31,13 +31,8 @@ data class SearchHandlers(
             SearchHandlers(
                 onBackClick = { viewModel.trySendAction(SearchAction.BackClick) },
                 onDismissRequest = { viewModel.trySendAction(SearchAction.DismissDialogClick) },
-                onItemClick = { cipherId, cipherType ->
-                    viewModel.trySendAction(
-                        SearchAction.ItemClick(
-                            itemId = cipherId,
-                            cipherType = cipherType,
-                        ),
-                    )
+                onItemClick = { id, type ->
+                    viewModel.trySendAction(SearchAction.ItemClick(itemId = id, itemType = type))
                 },
                 onAutofillItemClick = {
                     viewModel.trySendAction(SearchAction.AutofillItemClick(it))

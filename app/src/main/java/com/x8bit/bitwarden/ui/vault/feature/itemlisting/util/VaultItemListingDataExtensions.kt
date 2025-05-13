@@ -410,7 +410,7 @@ private fun CipherView.toDisplayItem(
         isTotp = isTotp,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
-        type = this.type,
+        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = this.type),
     )
 
 private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
@@ -482,7 +482,7 @@ private fun SendView.toDisplayItem(
         shouldShowMasterPasswordReprompt = false,
         isCredentialCreation = false,
         isTotp = false,
-        type = null,
+        itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = this.type),
     )
 
 @get:DrawableRes

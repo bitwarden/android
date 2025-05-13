@@ -14,6 +14,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
@@ -701,7 +702,7 @@ class VaultItemListingViewModel @Inject constructor(
             sendEvent(
                 event = VaultItemListingEvent.NavigateToEditCipher(
                     cipherId = action.id,
-                    cipherType = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                    cipherType = VaultItemCipherType.LOGIN,
                 ),
             )
             return
@@ -713,15 +714,15 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
 
-        val event = when (state.itemListingType) {
-            is VaultItemListingState.ItemListingType.Vault -> {
+        val event = when (val itemType = action.type) {
+            is VaultItemListingState.DisplayItem.ItemType.Vault -> {
                 VaultItemListingEvent.NavigateToVaultItem(
                     id = action.id,
-                    type = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                    type = itemType.type.toVaultItemCipherType(),
                 )
             }
 
-            is VaultItemListingState.ItemListingType.Send -> {
+            is VaultItemListingState.DisplayItem.ItemType.Sends -> {
                 VaultItemListingEvent.NavigateToEditSendItem(id = action.id)
             }
         }
@@ -2297,7 +2298,7 @@ data class VaultItemListingState(
      * creation flow.
      * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
      * required for various secure actions.
-     * @property type Indicates the type of cipher this is or null if it is not a cipher.
+     * @property itemType Indicates the type of item this is.
      */
     data class DisplayItem(
         val id: String,
@@ -2316,8 +2317,23 @@ data class VaultItemListingState(
         val isCredentialCreation: Boolean,
         val isTotp: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
-        val type: CipherType?,
-    )
+        val itemType: ItemType,
+    ) {
+        /**
+         * Indicates the item type as a send or vault item.
+         */
+        sealed class ItemType {
+            /**
+             * Indicates the item type is a send.
+             */
+            data class Sends(val type: SendType) : ItemType()
+
+            /**
+             * Indicates the item type is a vault item.
+             */
+            data class Vault(val type: CipherType) : ItemType()
+        }
+    }
 
     /**
      * The folder that is displayed to the user on the ItemListingScreen.
@@ -2745,7 +2761,7 @@ sealed class VaultItemListingsAction {
      */
     data class ItemClick(
         val id: String,
-        val cipherType: CipherType?,
+        val type: VaultItemListingState.DisplayItem.ItemType,
     ) : VaultItemListingsAction()
 
     /**

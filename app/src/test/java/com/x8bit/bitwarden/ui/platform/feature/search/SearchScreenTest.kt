@@ -237,7 +237,12 @@ class SearchScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
         verify {
-            viewModel.trySendAction(SearchAction.ItemClick("mockId-1", CipherType.LOGIN))
+            viewModel.trySendAction(
+                SearchAction.ItemClick(
+                    itemId = "mockId-1",
+                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                ),
+            )
         }
     }
 
@@ -381,7 +386,7 @@ class SearchScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mockId-1",
-                    cipherType = CipherType.LOGIN,
+                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
                 ),
             )
         }

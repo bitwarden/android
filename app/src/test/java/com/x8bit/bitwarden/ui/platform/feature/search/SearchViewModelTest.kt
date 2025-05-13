@@ -9,6 +9,7 @@ import com.bitwarden.data.datasource.disk.base.FakeDispatcherManager
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -204,7 +205,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 SearchAction.ItemClick(
                     itemId = "mock",
-                    cipherType = CipherType.LOGIN,
+                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
                 ),
             )
             assertEquals(
@@ -224,7 +225,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                SearchAction.ItemClick(itemId = "mock", cipherType = CipherType.LOGIN),
+                SearchAction.ItemClick(
+                    itemId = "mock",
+                    itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                ),
             )
             assertEquals(
                 SearchEvent.NavigateToEditCipher(
@@ -240,7 +244,12 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `ItemClick for send item should emit NavigateToEditSend`() = runTest {
         val viewModel = createViewModel(DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All))
         viewModel.eventFlow.test {
-            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock", cipherType = null))
+            viewModel.trySendAction(
+                SearchAction.ItemClick(
+                    itemId = "mock",
+                    itemType = SearchState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
+                ),
+            )
             assertEquals(SearchEvent.NavigateToEditSend(sendId = "mock"), awaitItem())
         }
     }

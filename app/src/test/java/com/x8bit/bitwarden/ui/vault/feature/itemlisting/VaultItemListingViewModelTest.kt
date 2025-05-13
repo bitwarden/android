@@ -20,6 +20,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -527,7 +528,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultItemListingsAction.ItemClick(
                         id = "mockId-1",
-                        cipherType = CipherType.LOGIN,
+                        type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                            type = CipherType.LOGIN,
+                        ),
                     ),
                 )
                 assertEquals(cipherView, awaitItem())
@@ -575,7 +578,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultItemListingsAction.ItemClick(
                         id = "mockId-1",
-                        cipherType = CipherType.LOGIN,
+                        type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                            type = CipherType.LOGIN,
+                        ),
                     ),
                 )
                 assertEquals(
@@ -610,7 +615,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(
             VaultItemListingsAction.ItemClick(
                 id = cipherView.id.orEmpty(),
-                cipherType = CipherType.LOGIN,
+                type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                    type = CipherType.LOGIN,
+                ),
             ),
         )
 
@@ -660,10 +667,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             coEvery {
                 bitwardenCredentialManager.registerFido2Credential(
-                    any(),
-                    any(),
-                    any(),
-                    any(),
+                    userId = any(),
+                    callingAppInfo = any(),
+                    createPublicKeyCredentialRequest = any(),
+                    selectedCipherView = any(),
                 )
             } returns Fido2RegisterCredentialResult.Success("mockResponse")
 
@@ -671,7 +678,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
-                    cipherType = CipherType.LOGIN,
+                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
 
@@ -722,10 +731,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             coEvery {
                 bitwardenCredentialManager.registerFido2Credential(
-                    any(),
-                    any(),
-                    any(),
-                    any(),
+                    userId = any(),
+                    callingAppInfo = any(),
+                    createPublicKeyCredentialRequest = any(),
+                    selectedCipherView = any(),
                 )
             } returns Fido2RegisterCredentialResult.Success("mockResponse")
 
@@ -733,7 +742,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
-                    cipherType = CipherType.LOGIN,
+                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
 
@@ -802,7 +813,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
                     id = cipherView.id.orEmpty(),
-                    cipherType = CipherType.LOGIN,
+                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
                 ),
             )
 
@@ -861,7 +874,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(
             VaultItemListingsAction.ItemClick(
                 id = cipherView.id.orEmpty(),
-                cipherType = CipherType.LOGIN,
+                type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                    type = CipherType.LOGIN,
+                ),
             ),
         )
 
@@ -881,7 +896,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemClick(id = "mock", cipherType = CipherType.LOGIN),
+                VaultItemListingsAction.ItemClick(
+                    id = "mock",
+                    type = VaultItemListingState.DisplayItem.ItemType.Vault(
+                        type = CipherType.LOGIN,
+                    ),
+                ),
             )
             assertEquals(
                 VaultItemListingEvent.NavigateToVaultItem(
@@ -900,7 +920,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                VaultItemListingsAction.ItemClick(id = "mock", cipherType = null),
+                VaultItemListingsAction.ItemClick(
+                    id = "mock",
+                    type = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.FILE),
+                ),
             )
             assertEquals(VaultItemListingEvent.NavigateToEditSendItem(id = "mock"), awaitItem())
         }

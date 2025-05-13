@@ -19,6 +19,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
@@ -1043,7 +1044,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemClick(
                     id = "mockId-1",
-                    cipherType = null,
+                    type = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
                 ),
             )
         }
@@ -2337,7 +2338,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
         isTotp = false,
-        type = null,
+        itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
 private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
@@ -2364,5 +2365,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
         isTotp = true,
-        type = CipherType.LOGIN,
+        itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
     )

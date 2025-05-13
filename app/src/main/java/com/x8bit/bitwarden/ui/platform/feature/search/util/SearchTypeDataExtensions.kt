@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
@@ -14,7 +15,6 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
@@ -233,7 +233,7 @@ private fun CipherView.toDisplayItem(
             },
         isTotp = isTotp,
         shouldDisplayMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
-        cipherType = this.type,
+        itemType = SearchState.DisplayItem.ItemType.Vault(type = this.type),
     )
 
 private fun CipherView.toIconData(
@@ -375,7 +375,7 @@ private fun SendView.toDisplayItem(
         autofillSelectionOptions = emptyList(),
         isTotp = false,
         shouldDisplayMasterPasswordReprompt = false,
-        cipherType = null,
+        itemType = SearchState.DisplayItem.ItemType.Sends(type = this.type),
     )
 
 /**
