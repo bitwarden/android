@@ -32,6 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
@@ -44,7 +45,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager

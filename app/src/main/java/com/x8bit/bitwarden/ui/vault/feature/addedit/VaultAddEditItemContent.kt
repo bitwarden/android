@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
@@ -25,7 +26,6 @@ import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers

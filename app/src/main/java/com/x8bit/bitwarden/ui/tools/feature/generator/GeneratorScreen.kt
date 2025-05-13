@@ -39,6 +39,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.LifecycleEventEffect
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
@@ -63,7 +64,6 @@ import com.x8bit.bitwarden.ui.platform.components.coachmark.rememberLazyListCoac
 import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle

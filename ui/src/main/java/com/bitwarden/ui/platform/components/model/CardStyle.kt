@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.model
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp

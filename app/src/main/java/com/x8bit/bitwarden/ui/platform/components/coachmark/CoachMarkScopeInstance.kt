@@ -24,10 +24,10 @@ import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTip
 import com.x8bit.bitwarden.ui.platform.components.tooltip.BitwardenToolTipState
 import com.x8bit.bitwarden.ui.platform.components.tooltip.rememberBitwardenToolTipState

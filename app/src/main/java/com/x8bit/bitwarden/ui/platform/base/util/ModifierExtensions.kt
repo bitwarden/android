@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 import com.bitwarden.core.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.model.WindowSize
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.getWindowSize

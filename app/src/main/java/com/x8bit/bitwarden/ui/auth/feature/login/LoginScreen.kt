@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -45,7 +46,6 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter

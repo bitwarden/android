@@ -29,12 +29,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldButtonColors
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme

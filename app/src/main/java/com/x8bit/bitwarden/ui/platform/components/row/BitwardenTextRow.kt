@@ -13,10 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
