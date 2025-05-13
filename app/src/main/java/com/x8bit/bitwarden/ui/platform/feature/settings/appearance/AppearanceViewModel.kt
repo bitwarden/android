@@ -41,6 +41,12 @@ class AppearanceViewModel @Inject constructor(
             .map { AppearanceAction.Internal.AppLanguageStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
@@ -49,15 +55,16 @@ class AppearanceViewModel @Inject constructor(
         is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
         is AppearanceAction.ThemeChange -> handleThemeChanged(action)
         is AppearanceAction.DynamicColorsToggle -> handleDynamicColorsToggled(action)
+        AppearanceAction.DismissDialog -> handleDismissDialog()
         AppearanceAction.ConfirmEnableDynamicColorsClick -> {
             handleConfirmEnableDynamicColorsClicked()
         }
 
-        AppearanceAction.DismissDialog -> {
-            handleDismissDialog()
-        }
         is AppearanceAction.Internal.AppLanguageStateUpdateReceive -> {
             handleLanguageStateChange(action)
+        }
+        is AppearanceAction.Internal.DynamicColorsStateUpdateReceive -> {
+            handleDynamicColorsStateChange(action)
         }
     }
 
@@ -66,6 +73,14 @@ class AppearanceViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(language = action.language)
+        }
+    }
+
+    private fun handleDynamicColorsStateChange(
+        action: AppearanceAction.Internal.DynamicColorsStateUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled)
         }
     }
 
@@ -98,7 +113,6 @@ class AppearanceViewModel @Inject constructor(
             }
         } else {
             settingsRepository.isDynamicColorsEnabled = false
-            mutableStateFlow.update { it.copy(isDynamicColorsEnabled = false) }
         }
     }
 
@@ -191,6 +205,11 @@ sealed class AppearanceAction {
          * The AppLanguageState value has updated.
          */
         data class AppLanguageStateUpdateReceive(val language: AppLanguage) : Internal()
+
+        /**
+         * The DynamicColorsState value has updated.
+         */
+        data class DynamicColorsStateUpdateReceive(val isDynamicColorsEnabled: Boolean) : Internal()
     }
 
     /**

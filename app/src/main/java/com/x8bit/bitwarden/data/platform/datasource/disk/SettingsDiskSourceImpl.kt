@@ -164,7 +164,7 @@ class SettingsDiskSourceImpl(
             .onSubscription { emit(appTheme) }
 
     override var isDynamicColorsEnabled: Boolean?
-        get() = getBoolean(key = IS_DYNAMIC_COLORS_ENABLED) ?: false
+        get() = getBoolean(key = IS_DYNAMIC_COLORS_ENABLED)
         set(value) {
             putBoolean(
                 key = IS_DYNAMIC_COLORS_ENABLED,

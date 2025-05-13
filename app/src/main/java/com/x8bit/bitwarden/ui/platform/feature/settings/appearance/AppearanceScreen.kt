@@ -55,29 +55,15 @@ fun AppearanceScreen(
         }
     }
 
-    when (state.dialogState) {
-        AppearanceState.DialogState.EnableDynamicColors -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.dynamic_colors),
-                message = stringResource(
-                    id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
-                ),
-                confirmButtonText = stringResource(R.string.ok),
-                dismissButtonText = stringResource(R.string.cancel),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
-                },
-                onDismissClick = remember(viewModel) {
-                    { viewModel.trySendAction(AppearanceAction.DismissDialog) }
-                },
-                onDismissRequest = remember {
-                    { viewModel.trySendAction(AppearanceAction.DismissDialog) }
-                },
-            )
-        }
-
-        else -> Unit
-    }
+    AppearanceDialogs(
+        dialogState = state.dialogState,
+        onConfirmEnableDynamicColorsClick = remember(viewModel) {
+            { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
+        },
+        onDismissDialog = remember(viewModel) {
+            { viewModel.trySendAction(AppearanceAction.DismissDialog) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -154,6 +140,31 @@ fun AppearanceScreen(
             Spacer(modifier = Modifier.height(height = 16.dp))
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
+    }
+}
+
+@Composable
+private fun AppearanceDialogs(
+    dialogState: AppearanceState.DialogState?,
+    onConfirmEnableDynamicColorsClick: () -> Unit,
+    onDismissDialog: () -> Unit,
+) {
+    when (dialogState) {
+        AppearanceState.DialogState.EnableDynamicColors -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.dynamic_colors),
+                message = stringResource(
+                    id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
+                ),
+                confirmButtonText = stringResource(R.string.ok),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = onConfirmEnableDynamicColorsClick,
+                onDismissClick = onDismissDialog,
+                onDismissRequest = onDismissDialog,
+            )
+        }
+
+        else -> Unit
     }
 }
 

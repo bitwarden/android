@@ -100,7 +100,7 @@ class SettingsRepositoryImpl(
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource.isDynamicColorsEnabled ?: false,
+                initialValue = isDynamicColorsEnabled,
             )
 
     override var initialAutofillDialogShown: Boolean

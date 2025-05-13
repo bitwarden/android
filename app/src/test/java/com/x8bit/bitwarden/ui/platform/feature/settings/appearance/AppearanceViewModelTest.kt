@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test
 
 class AppearanceViewModelTest : BaseViewModelTest() {
     private val mutableAppLanguageStateFlow = MutableStateFlow(AppLanguage.DEFAULT)
+    private val mutableIsDynamicColorsEnabledFlow = MutableStateFlow(false)
     private val mockSettingsRepository = mockk<SettingsRepository> {
         every { appLanguage } returns AppLanguage.DEFAULT
         every { appTheme } returns AppTheme.DEFAULT
@@ -28,6 +29,8 @@ class AppearanceViewModelTest : BaseViewModelTest() {
         every { appTheme = AppTheme.DARK } just runs
         every { appLanguageStateFlow } returns mutableAppLanguageStateFlow
         every { isDynamicColorsEnabled } returns false
+        every { isDynamicColorsEnabled = any() } just runs
+        every { isDynamicColorsEnabledFlow } returns mutableIsDynamicColorsEnabledFlow
     }
 
     @Test
@@ -122,6 +125,74 @@ class AppearanceViewModelTest : BaseViewModelTest() {
             mockSettingsRepository.appTheme
             mockSettingsRepository.appTheme = AppTheme.DARK
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on DynamicColorsStateFlow value updated, view model isDynamicColorsEnabled state should change`() =
+        runTest {
+            val viewModel = createViewModel(settingsRepository = mockSettingsRepository)
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+                mutableIsDynamicColorsEnabledFlow.update { true }
+                assertEquals(
+                    DEFAULT_STATE.copy(isDynamicColorsEnabled = true),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DynamicColorsToggle should update state and set isDynamicColorsEnabled in SettingsRepository when disabled`() =
+        runTest {
+            val viewModel = createViewModel()
+                .also { it.trySendAction(AppearanceAction.DynamicColorsToggle(false)) }
+            assertEquals(
+                DEFAULT_STATE.copy(isDynamicColorsEnabled = false),
+                viewModel.stateFlow.value,
+            )
+            verify { mockSettingsRepository.isDynamicColorsEnabled = false }
+        }
+
+    @Test
+    fun `DynamicColorsToggle should update state to show dialog when enabled`() = runTest {
+        val viewModel = createViewModel()
+            .also { it.trySendAction(AppearanceAction.DynamicColorsToggle(true)) }
+        assertEquals(
+            DEFAULT_STATE.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 0) { mockSettingsRepository.isDynamicColorsEnabled = any() }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmEnableDynamicColorsClick should update state and set isDynamicColorsEnabled in SettingsRepository`() =
+        runTest {
+            val viewModel = createViewModel(
+                DEFAULT_STATE.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors),
+            )
+                .also { it.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
+            assertEquals(
+                DEFAULT_STATE.copy(isDynamicColorsEnabled = true),
+                viewModel.stateFlow.value,
+            )
+            verify { mockSettingsRepository.isDynamicColorsEnabled = true }
+        }
+
+    @Test
+    fun `DismissDialog should update state to hide dialog`() = runTest {
+        val viewModel = createViewModel(
+            DEFAULT_STATE.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors),
+        )
+            .also { it.trySendAction(AppearanceAction.DismissDialog) }
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        // Verify that isDynamicColorsEnabled was not changed
+        verify(exactly = 0) { mockSettingsRepository.isDynamicColorsEnabled = any() }
     }
 
     private fun createViewModel(
