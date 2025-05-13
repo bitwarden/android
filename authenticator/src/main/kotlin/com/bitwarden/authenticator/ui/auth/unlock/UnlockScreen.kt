@@ -28,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
@@ -38,6 +36,8 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogSt
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.util.asText
 
 /**
  * Top level composable for the unlock screen.

@@ -21,11 +21,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.authenticator.feature.search.handlers.SearchHandlers
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.bottomDivider
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenSearchTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.ui.platform.base.util.EventsEffect
 
 /**
  * The search screen for authenticator items.

@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.coroutines.core)
 
     testFixturesImplementation(libs.androidx.navigation.compose)
     testFixturesImplementation(platform(libs.junit.bom))

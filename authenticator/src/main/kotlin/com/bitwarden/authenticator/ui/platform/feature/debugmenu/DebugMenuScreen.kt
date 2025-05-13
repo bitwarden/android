@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.NavigationIcon
@@ -33,6 +32,7 @@ import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaf
 import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.base.util.EventsEffect
 
 /**
  * Top level screen for the debug menu.

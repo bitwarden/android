@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -42,13 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
+import com.bitwarden.ui.platform.base.util.EventsEffect
+import kotlinx.coroutines.launch
 
 /**
  * The custom horizontal margin that is specific to this screen.
@@ -65,6 +67,7 @@ fun TutorialScreen(
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val pagerState = rememberPagerState(pageCount = { state.pages.size })
+    val coroutineScope = rememberCoroutineScope()
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -73,7 +76,9 @@ fun TutorialScreen(
             }
 
             is TutorialEvent.UpdatePager -> {
-                pagerState.animateScrollToPage(event.index)
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(event.index)
+                }
             }
         }
     }
