@@ -414,6 +414,36 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `isDynamicColorsEnabled should pull from and update SettingsDiskSource`() {
+        assertFalse(settingsRepository.isDynamicColorsEnabled)
+
+        // Updates to the disk source change the repository value
+        fakeSettingsDiskSource.isDynamicColorsEnabled = true
+        assertTrue(settingsRepository.isDynamicColorsEnabled)
+
+        // Updates to the repository value change the disk source
+        settingsRepository.isDynamicColorsEnabled = false
+        assertFalse(fakeSettingsDiskSource.isDynamicColorsEnabled!!)
+    }
+
+    @Test
+    fun `isDynamicColorsEnabled should react to changes in SettingsDiskSource`() = runTest {
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .test {
+                assertFalse(awaitItem())
+                fakeSettingsDiskSource.isDynamicColorsEnabled = true
+                assertTrue(awaitItem())
+            }
+    }
+
+    @Test
+    fun `isDynamicColorsEnabled should properly update SettingsDiskSource`() {
+        settingsRepository.isDynamicColorsEnabled = true
+        assertTrue(fakeSettingsDiskSource.isDynamicColorsEnabled!!)
+    }
+
+    @Test
     fun `vaultTimeout should pull from and update SettingsDiskSource for the current user`() {
         fakeAuthDiskSource.userState = null
         assertEquals(

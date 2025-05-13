@@ -40,6 +40,16 @@ interface SettingsRepository : FlightRecorderManager {
     val appThemeStateFlow: StateFlow<AppTheme>
 
     /**
+     * The current setting for enabling dynamic colors.
+     */
+    var isDynamicColorsEnabled: Boolean
+
+    /**
+     * Tracks changes to the [isDynamicColorsEnabled] value.
+     */
+    val isDynamicColorsEnabledFlow: StateFlow<Boolean>
+
+    /**
      * Has the initial autofill dialog been shown to the user.
      */
     var initialAutofillDialogShown: Boolean

@@ -51,6 +51,16 @@ interface SettingsDiskSource {
     val appThemeFlow: Flow<AppTheme>
 
     /**
+     * The currently persisted dynamic colors setting (or `null` if not set).
+     */
+    var isDynamicColorsEnabled: Boolean?
+
+    /**
+     * Emits updates that track [isDynamicColorsEnabled].
+     */
+    val isDynamicColorsEnabledFlow: Flow<Boolean?>
+
+    /**
      * The currently persisted biometric integrity source for the system.
      */
     var systemBiometricIntegritySource: String?

@@ -30,6 +30,8 @@ class AppearanceViewModel @Inject constructor(
             language = settingsRepository.appLanguage,
             showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             theme = settingsRepository.appTheme,
+            isDynamicColorsEnabled = settingsRepository.isDynamicColorsEnabled,
+            dialogState = null,
         ),
 ) {
 
@@ -39,6 +41,12 @@ class AppearanceViewModel @Inject constructor(
             .map { AppearanceAction.Internal.AppLanguageStateUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        settingsRepository
+            .isDynamicColorsEnabledFlow
+            .map { AppearanceAction.Internal.DynamicColorsStateUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AppearanceAction): Unit = when (action) {
@@ -46,8 +54,17 @@ class AppearanceViewModel @Inject constructor(
         is AppearanceAction.LanguageChange -> handleLanguageChanged(action)
         is AppearanceAction.ShowWebsiteIconsToggle -> handleShowWebsiteIconsToggled(action)
         is AppearanceAction.ThemeChange -> handleThemeChanged(action)
+        is AppearanceAction.DynamicColorsToggle -> handleDynamicColorsToggled(action)
+        AppearanceAction.DismissDialog -> handleDismissDialog()
+        AppearanceAction.ConfirmEnableDynamicColorsClick -> {
+            handleConfirmEnableDynamicColorsClicked()
+        }
+
         is AppearanceAction.Internal.AppLanguageStateUpdateReceive -> {
             handleLanguageStateChange(action)
+        }
+        is AppearanceAction.Internal.DynamicColorsStateUpdateReceive -> {
+            handleDynamicColorsStateChange(action)
         }
     }
 
@@ -56,6 +73,14 @@ class AppearanceViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(language = action.language)
+        }
+    }
+
+    private fun handleDynamicColorsStateChange(
+        action: AppearanceAction.Internal.DynamicColorsStateUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(isDynamicColorsEnabled = action.isDynamicColorsEnabled)
         }
     }
 
@@ -80,6 +105,30 @@ class AppearanceViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(theme = action.theme) }
         settingsRepository.appTheme = action.theme
     }
+
+    private fun handleDynamicColorsToggled(action: AppearanceAction.DynamicColorsToggle) {
+        if (action.isEnabled) {
+            mutableStateFlow.update {
+                it.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors)
+            }
+        } else {
+            settingsRepository.isDynamicColorsEnabled = false
+        }
+    }
+
+    private fun handleConfirmEnableDynamicColorsClicked() {
+        settingsRepository.isDynamicColorsEnabled = true
+        mutableStateFlow.update {
+            it.copy(
+                isDynamicColorsEnabled = true,
+                dialogState = null,
+            )
+        }
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+    }
 }
 
 /**
@@ -90,7 +139,22 @@ data class AppearanceState(
     val language: AppLanguage,
     val showWebsiteIcons: Boolean,
     val theme: AppTheme,
-) : Parcelable
+    val isDynamicColorsEnabled: Boolean,
+    val dialogState: DialogState?,
+) : Parcelable {
+
+    /**
+     * Models dialogs that can be shown on the Appearance screen.
+     */
+    sealed class DialogState : Parcelable {
+
+        /**
+         * Dialog to confirm enabling Dynamic Colors.
+         */
+        @Parcelize
+        data object EnableDynamicColors : DialogState()
+    }
+}
 
 /**
  * Models events for the appearance screen.
@@ -141,5 +205,27 @@ sealed class AppearanceAction {
          * The AppLanguageState value has updated.
          */
         data class AppLanguageStateUpdateReceive(val language: AppLanguage) : Internal()
+
+        /**
+         * The DynamicColorsState value has updated.
+         */
+        data class DynamicColorsStateUpdateReceive(val isDynamicColorsEnabled: Boolean) : Internal()
     }
+
+    /**
+     * Indicates that the user toggled the Dynamic Colors switch to [isEnabled].
+     */
+    data class DynamicColorsToggle(
+        val isEnabled: Boolean,
+    ) : AppearanceAction()
+
+    /**
+     * Indicates that the user confirmed enabling Dynamic Colors.
+     */
+    data object ConfirmEnableDynamicColorsClick : AppearanceAction()
+
+    /**
+     * Indicates the user dismissed the dialog.
+     */
+    data object DismissDialog : AppearanceAction()
 }

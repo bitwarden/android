@@ -8,10 +8,8 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
@@ -21,6 +19,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -104,7 +103,6 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on theme row click should display theme selection dialog`() {
-        composeTestRule.onRoot().printToLog("Brian")
         composeTestRule
             .onNodeWithContentDescription(
                 label = "Default (System). Theme. Change the application's color theme",
@@ -157,7 +155,9 @@ class AppearanceScreenTest : BaseComposeTest() {
 
     @Test
     fun `on show website icons row click should send ShowWebsiteIconsToggled`() {
-        composeTestRule.onNodeWithText("Show website icons").performClick()
+        composeTestRule.onNodeWithText("Show website icons")
+            .performScrollTo()
+            .performClick()
         verify { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(true)) }
     }
 
@@ -166,10 +166,42 @@ class AppearanceScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(AppearanceEvent.NavigateBack)
         assertTrue(haveCalledNavigateBack)
     }
+
+    @Test
+    fun `on DynamicColorsToggle should send DynamicColorsToggle`() {
+        composeTestRule.onNodeWithText("Dynamic colors")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(AppearanceAction.DynamicColorsToggle(true)) }
+    }
+
+    @Test
+    fun `on ConfirmEnableDynamicColorsClick should send ConfirmEnableDynamicColorsClick`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors)
+        }
+        composeTestRule.onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }
+    }
+
+    @Test
+    fun `on DismissDialog should send DismissDialog`() {
+        mutableStateFlow.update {
+            it.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors)
+        }
+        composeTestRule.onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify { viewModel.trySendAction(AppearanceAction.DismissDialog) }
+    }
 }
 
 private val DEFAULT_STATE = AppearanceState(
     language = AppLanguage.DEFAULT,
     showWebsiteIcons = false,
     theme = AppTheme.DEFAULT,
+    isDynamicColorsEnabled = false,
+    dialogState = null,
 )
