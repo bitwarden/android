@@ -23,6 +23,7 @@ data class AddSendHandlers(
     val onHideEmailToggle: (Boolean) -> Unit,
     val onDeactivateSendToggle: (Boolean) -> Unit,
     val onDeletionDateChange: (ZonedDateTime) -> Unit,
+    val onDeleteClick: () -> Unit,
 ) {
     @Suppress("UndocumentedPublicClass")
     companion object {
@@ -57,6 +58,7 @@ data class AddSendHandlers(
                 onDeletionDateChange = {
                     viewModel.trySendAction(AddSendAction.DeletionDateChange(it))
                 },
+                onDeleteClick = { viewModel.trySendAction(AddSendAction.DeleteClick) },
             )
     }
 }

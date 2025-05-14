@@ -162,14 +162,10 @@ class AddSendScreenTest : BaseComposeTest() {
             .onNodeWithText("Share link")
             .assert(hasAnyAncestor(isPopup()))
             .isDisplayed()
-        composeTestRule
-            .onNodeWithText("Delete")
-            .assert(hasAnyAncestor(isPopup()))
-            .isDisplayed()
     }
 
     @Test
-    fun `on overflow button click should only display delete when policy disables send`() {
+    fun `on overflow button should not be present when policy disables send`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = "sendId"),
             policyDisablesSend = true,
@@ -177,21 +173,7 @@ class AddSendScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescription("More")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Remove password")
             .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText("Copy link")
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText("Share link")
-            .assertDoesNotExist()
-        composeTestRule
-            .onNodeWithText("Delete")
-            .assert(hasAnyAncestor(isPopup()))
-            .isDisplayed()
     }
 
     @Test
@@ -251,50 +233,6 @@ class AddSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on overflow Delete button click should Display delete confirmation dialog`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
-        )
-
-        composeTestRule
-            .onNodeWithContentDescription("More")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Delete")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Are you sure you want to delete this Send?")
-            .assert(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `on delete confirmation dialog yes click should send DeleteClick`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
-        )
-
-        composeTestRule
-            .onNodeWithContentDescription("More")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Delete")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithText("Yes")
-            .assert(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.DeleteClick)
-        }
-    }
-
-    @Test
     fun `on overflow remove Copy link button click should send CopyLinkClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             addSendType = AddSendType.EditItem(sendItemId = "sendId"),
@@ -310,6 +248,44 @@ class AddSendScreenTest : BaseComposeTest() {
 
         verify(exactly = 1) {
             viewModel.trySendAction(AddSendAction.CopyLinkClick)
+        }
+    }
+
+    @Test
+    fun `on Delete button click should Display delete confirmation dialog`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Delete send")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Are you sure you want to delete this Send?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on delete confirmation dialog yes click should send DeleteClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+        )
+
+        composeTestRule
+            .onNodeWithText(text = "Delete send")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(AddSendAction.DeleteClick)
         }
     }
 
