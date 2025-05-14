@@ -39,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.runtime)

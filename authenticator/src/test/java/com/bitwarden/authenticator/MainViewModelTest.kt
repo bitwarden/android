@@ -3,8 +3,8 @@ package com.bitwarden.authenticator
 import app.cash.turbine.test
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.util.FakeServerConfigRepository
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

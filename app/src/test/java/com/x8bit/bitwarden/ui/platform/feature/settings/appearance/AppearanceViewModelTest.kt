@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.appearance
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.ui.platform.base.BaseViewModelTest
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk

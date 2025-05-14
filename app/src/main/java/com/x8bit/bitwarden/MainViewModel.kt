@@ -5,6 +5,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherView
@@ -35,7 +36,6 @@ import com.x8bit.bitwarden.data.platform.util.isAddTotpLoginItemFromAuthenticato
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import com.x8bit.bitwarden.ui.platform.util.isAccountSecurityShortcut

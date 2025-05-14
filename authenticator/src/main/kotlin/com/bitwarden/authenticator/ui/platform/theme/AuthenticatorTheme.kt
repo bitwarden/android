@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
@@ -29,6 +28,7 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
+import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 
 /**
  * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
