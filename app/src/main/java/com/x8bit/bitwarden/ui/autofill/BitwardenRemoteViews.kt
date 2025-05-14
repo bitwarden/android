@@ -6,13 +6,13 @@ import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
+import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
+import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.ui.autofill.util.getAutofillSuggestionContentDescription
 import com.x8bit.bitwarden.ui.autofill.util.isSystemDarkMode
-import com.x8bit.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
-import com.x8bit.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 
 /**
  * Build [RemoteViews] for representing an autofill suggestion.
