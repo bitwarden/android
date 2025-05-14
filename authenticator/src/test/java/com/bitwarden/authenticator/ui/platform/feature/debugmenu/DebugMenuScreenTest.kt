@@ -2,10 +2,8 @@ package com.bitwarden.authenticator.ui.platform.feature.debugmenu
 
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -44,9 +42,6 @@ class DebugMenuScreenTest : BaseComposeTest() {
 
     @Test
     fun `onNavigateBack should send action to viewModel`() {
-        composeTestRule
-            .onRoot()
-            .printToLog("djf")
         composeTestRule
             .onNodeWithContentDescription("Back")
             .performClick()

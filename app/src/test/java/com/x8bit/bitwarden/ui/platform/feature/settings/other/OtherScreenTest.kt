@@ -9,10 +9,8 @@ import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -171,7 +169,6 @@ class OtherScreenTest : BaseComposeTest() {
     @Test
     fun `should display correct items according to state`() {
         mutableStateFlow.update { it.copy(isPreAuth = false) }
-        composeTestRule.onRoot().printToLog(tag = "BRIAN")
         composeTestRule
             .onNodeWithText(text = "Allow sync on refresh")
             .assertExists()

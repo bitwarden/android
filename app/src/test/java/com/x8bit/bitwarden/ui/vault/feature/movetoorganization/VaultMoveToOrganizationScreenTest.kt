@@ -12,10 +12,8 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.printToLog
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
@@ -123,7 +121,6 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
 
     @Test
     fun `the organization option field description should update according to state`() {
-        composeTestRule.onRoot().printToLog("Brian")
         composeTestRule
             .onNodeWithContentDescription(label = "Choose an organization that", substring = true)
             .assertIsDisplayed()
@@ -172,7 +169,6 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
 
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
-        composeTestRule.onRoot().printToLog("Brian")
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
                 label = "mockOrganizationName-1. Organization. " +
