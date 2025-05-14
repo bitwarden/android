@@ -41,6 +41,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.time.ZonedDateTime
@@ -49,6 +50,7 @@ import java.time.ZonedDateTime
 class AddSendScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateUpToRootCalled = false
 
     private val exitManager: ExitManager = mockk(relaxed = true) {
         every { exitApplication() } just runs
@@ -74,6 +76,7 @@ class AddSendScreenTest : BaseComposeTest() {
             AddSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateUpToRoot = { onNavigateUpToRootCalled = true },
             )
         }
     }
@@ -81,7 +84,13 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(AddSendEvent.NavigateBack)
-        assert(onNavigateBackCalled)
+        assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToRoot should call onNavigateUpToRoot`() {
+        mutableEventFlow.tryEmit(AddSendEvent.NavigateToRoot)
+        assertTrue(onNavigateUpToRootCalled)
     }
 
     @Test

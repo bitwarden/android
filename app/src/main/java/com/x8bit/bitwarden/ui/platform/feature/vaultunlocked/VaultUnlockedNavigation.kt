@@ -201,7 +201,10 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
 
-        addSendDestination(onNavigateBack = { navController.popBackStack() })
+        addSendDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateUpToRoot = { navController.navigateToVaultUnlockedRoot() },
+        )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToEditSend = {
@@ -248,4 +251,8 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
     }
+}
+
+private fun NavController.navigateToVaultUnlockedRoot() {
+    this.popBackStack(route = VaultUnlockedNavbarRoute, inclusive = false)
 }

@@ -667,7 +667,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(AddSendAction.DeleteClick)
-            assertEquals(AddSendEvent.NavigateBack, awaitItem())
+            assertEquals(AddSendEvent.NavigateToRoot, awaitItem())
             assertEquals(AddSendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
         }
     }
