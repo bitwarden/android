@@ -24,13 +24,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isEditableText
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
@@ -842,7 +842,7 @@ class AddSendScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -852,7 +852,7 @@ class AddSendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test

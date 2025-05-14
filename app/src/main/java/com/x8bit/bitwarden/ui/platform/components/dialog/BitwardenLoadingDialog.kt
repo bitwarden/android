@@ -8,8 +8,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
@@ -31,12 +31,14 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenLoadingDialog(
     text: String,
 ) {
-    Popup(
-        properties = PopupProperties(
+    Dialog(
+        properties = DialogProperties(
             dismissOnBackPress = false,
             dismissOnClickOutside = false,
-            clippingEnabled = false,
+            usePlatformDefaultWidth = false,
+            decorFitsSystemWindows = false,
         ),
+        onDismissRequest = {},
     ) {
         BitwardenLoadingContent(
             text = text,

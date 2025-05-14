@@ -7,7 +7,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -307,7 +306,7 @@ class ViewSendScreenTest : BaseComposeTest() {
         }
         composeTestRule
             .onNodeWithText(text = loadingMessage)
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }

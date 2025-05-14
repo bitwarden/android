@@ -11,7 +11,6 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.isToggleable
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -21,16 +20,15 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
@@ -1450,7 +1448,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "Loading"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -1460,7 +1458,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Loading")
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test

@@ -12,10 +12,10 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderAddEditType
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -204,7 +204,7 @@ class FolderAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `loading dialog should display according to state`() {
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
 
         mutableStateFlow.update {
             it.copy(
@@ -216,10 +216,10 @@ class FolderAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithText("Loading")
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
-        composeTestRule.onNode(isPopup()).assertIsDisplayed()
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
     }
 
     @Test

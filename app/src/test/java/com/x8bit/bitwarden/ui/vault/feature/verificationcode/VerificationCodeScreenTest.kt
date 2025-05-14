@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
@@ -18,7 +19,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
+import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -357,7 +358,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -371,7 +372,7 @@ class VerificationCodeScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 }
 

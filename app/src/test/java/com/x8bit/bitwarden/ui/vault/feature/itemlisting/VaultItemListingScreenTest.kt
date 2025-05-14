@@ -43,7 +43,6 @@ import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
@@ -1613,7 +1612,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -1627,7 +1626,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Suppress("MaxLineLength")

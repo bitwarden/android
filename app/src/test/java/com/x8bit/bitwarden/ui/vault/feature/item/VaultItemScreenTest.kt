@@ -35,7 +35,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.util.onFirstNodeWithTextAfterScroll
@@ -210,7 +209,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `loading dialog should be displayed according to state`() {
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText("Loading").assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -220,7 +219,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Loading")
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test

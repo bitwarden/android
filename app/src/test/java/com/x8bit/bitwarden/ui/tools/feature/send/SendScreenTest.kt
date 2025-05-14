@@ -30,7 +30,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
 import io.mockk.every
 import io.mockk.just
@@ -767,7 +766,7 @@ class SendScreenTest : BaseComposeTest() {
     @Test
     fun `loading dialog should be displayed according to state`() {
         val loadingMessage = "syncing"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -777,7 +776,7 @@ class SendScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 }
 

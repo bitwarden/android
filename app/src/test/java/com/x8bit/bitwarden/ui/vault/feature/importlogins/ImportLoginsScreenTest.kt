@@ -8,7 +8,6 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasAnySibling
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -18,14 +17,13 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -352,14 +350,14 @@ class ImportLoginsScreenTest : BaseComposeTest() {
 
     @Test
     fun `Loading content is displayed when dialog state is syncing`() {
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
         mutableImportLoginsStateFlow.update {
             it.copy(dialogState = ImportLoginsState.DialogState.Syncing)
         }
         composeTestRule
             .onNodeWithText(text = "Syncing logins...")
             .assertIsDisplayed()
-            .assert(hasAnyAncestor(isPopup()))
+            .assert(hasAnyAncestor(isDialog()))
     }
 
     @Test
