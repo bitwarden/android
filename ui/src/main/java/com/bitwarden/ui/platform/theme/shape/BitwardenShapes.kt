@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme.shape
+package com.bitwarden.ui.platform.theme.shape
 
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.runtime.Immutable

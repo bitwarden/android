@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme.shape
+package com.bitwarden.ui.platform.theme.shape
 
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape

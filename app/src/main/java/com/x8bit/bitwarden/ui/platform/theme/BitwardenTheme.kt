@@ -25,8 +25,8 @@ import com.bitwarden.ui.platform.theme.color.darkBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.dynamicBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.toMaterialColorScheme
-import com.x8bit.bitwarden.ui.platform.theme.shape.BitwardenShapes
-import com.x8bit.bitwarden.ui.platform.theme.shape.bitwardenShapes
+import com.bitwarden.ui.platform.theme.shape.BitwardenShapes
+import com.bitwarden.ui.platform.theme.shape.bitwardenShapes
 import com.x8bit.bitwarden.ui.platform.theme.type.BitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.bitwardenTypography
 import com.x8bit.bitwarden.ui.platform.theme.type.toMaterialTypography
