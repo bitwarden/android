@@ -201,7 +201,7 @@ sealed class FlagKey<out T : Any> {
     data object RestrictCipherItemDeletion : FlagKey<Boolean>() {
         override val keyName: String = "pm-15493-restrict-item-deletion-to-can-manage-permission"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
+        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
