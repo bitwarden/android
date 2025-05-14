@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import java.util.UUID

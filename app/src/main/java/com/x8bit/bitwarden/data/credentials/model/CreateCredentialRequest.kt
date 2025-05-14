@@ -5,7 +5,7 @@ import android.os.Parcelable
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.ProviderCreateCredentialRequest
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
+import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 

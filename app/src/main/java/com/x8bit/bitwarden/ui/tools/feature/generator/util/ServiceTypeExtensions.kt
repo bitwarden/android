@@ -2,11 +2,11 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 
 /**

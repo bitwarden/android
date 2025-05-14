@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.isValidEmail
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -15,7 +16,6 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel

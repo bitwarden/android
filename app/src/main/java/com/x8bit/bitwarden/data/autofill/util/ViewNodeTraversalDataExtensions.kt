@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 
 /**
  * The android app URI scheme. Example: androidapp://com.x8bit.bitwarden

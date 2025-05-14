@@ -4,7 +4,7 @@ import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 import java.time.Clock
 

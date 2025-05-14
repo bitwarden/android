@@ -9,8 +9,8 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.core.content.getSystemService
 import androidx.core.os.persistableBundleOf
 import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.util.Text
-import com.bitwarden.authenticator.ui.platform.base.util.toAnnotatedString
 
 /**
  * Default implementation of the [BitwardenClipboardManager] interface.

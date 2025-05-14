@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledIconButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors

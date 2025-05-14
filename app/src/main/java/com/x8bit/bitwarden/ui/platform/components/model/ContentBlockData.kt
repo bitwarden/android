@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.components.model
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenContentBlock
 
 /**

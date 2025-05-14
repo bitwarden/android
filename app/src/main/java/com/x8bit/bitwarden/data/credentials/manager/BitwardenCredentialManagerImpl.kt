@@ -17,6 +17,7 @@ import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
@@ -36,7 +37,6 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationRe
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
-import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.fold
 import kotlinx.coroutines.withContext

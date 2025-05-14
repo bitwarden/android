@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.base.util.removeDiacritics
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -15,7 +16,6 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
-import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData

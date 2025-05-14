@@ -18,9 +18,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.bitwarden.authenticator.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.ui.platform.base.util.toPx
+import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 
 /**
  * Component that allows the user to input text. This composable will manage the state of

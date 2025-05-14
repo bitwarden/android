@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.app.assist.AssistStructure
 import android.view.View
 import android.widget.EditText
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 
 /**
  * The default web URI scheme.

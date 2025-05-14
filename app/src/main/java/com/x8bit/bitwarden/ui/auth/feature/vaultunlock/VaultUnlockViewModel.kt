@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
+import com.bitwarden.ui.platform.base.util.hexToColor
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -31,7 +32,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
-import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries

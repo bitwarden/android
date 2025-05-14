@@ -49,9 +49,9 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
