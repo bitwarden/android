@@ -13,7 +13,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -30,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconBu
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -57,11 +61,11 @@ fun PrivilegedAppsListScreen(
     }
 
     when (val dialogState = state.dialogState) {
-        is Fido2TrustState.DialogState.Loading -> {
+        is PrivilegedAppsListState.DialogState.Loading -> {
             BitwardenLoadingDialog(stringResource(R.string.loading))
         }
 
-        is Fido2TrustState.DialogState.ConfirmDeleteTrustedApp -> {
+        is PrivilegedAppsListState.DialogState.ConfirmDeleteTrustedApp -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(R.string.delete),
                 message = stringResource(
@@ -88,7 +92,7 @@ fun PrivilegedAppsListScreen(
             )
         }
 
-        is Fido2TrustState.DialogState.General -> {
+        is PrivilegedAppsListState.DialogState.General -> {
             BitwardenBasicDialog(
                 title = stringResource(R.string.an_error_has_occurred),
                 message = dialogState.message.invoke(),
@@ -122,7 +126,9 @@ fun PrivilegedAppsListScreen(
             onDeleteClick = remember(viewModel) {
                 { viewModel.trySendAction(PrivilegedAppsListAction.UserTrustedAppDeleteClick(it)) }
             },
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .standardHorizontalMargin(),
         )
     }
 }
@@ -130,126 +136,210 @@ fun PrivilegedAppsListScreen(
 @Suppress("LongMethod")
 @Composable
 private fun PrivilegedAppsListContent(
-    state: Fido2TrustState,
+    state: PrivilegedAppsListState,
     onDeleteClick: (PrivilegedAppListItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showAllTrustedApps by rememberSaveable { mutableStateOf(false) }
     LazyColumn(
         modifier = modifier,
     ) {
-        if (state.userTrustedApps.isNotEmpty()) {
-            item(key = "trusted_by_you") {
-                Spacer(modifier = Modifier.height(12.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(R.string.trusted_by_you),
-                    supportingLabel = state.userTrustedApps.size.toString(),
+        if (state.installedApps.isNotEmpty()) {
+            item(key = "installed_apps") {
+                Spacer(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
+                        .height(12.dp)
                         .animateItem(),
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenListHeaderText(
+                    label = stringResource(R.string.installed_apps),
+                    supportingLabel = state.installedApps.size.toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp)
+                        .animateItem(),
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                        .animateItem(),
+                )
             }
 
             itemsIndexed(
-                key = { _, item -> "userTrust_${item.packageName}_${item.signature}" },
-                items = state.userTrustedApps,
+                key = { _, item ->
+                    "installedApp_${item.packageName}_${item.signature}_${item.trustAuthority}"
+                },
+                items = state.installedApps,
             ) { index, item ->
                 BitwardenTextRow(
-                    text = item.packageName,
+                    text = "${item.appName} (${item.packageName})",
+                    description = stringResource(
+                        R.string.trusted_by_x,
+                        stringResource(item.trustAuthority.displayName),
+                    ),
                     onClick = {},
-                    cardStyle = state.userTrustedApps
+                    cardStyle = state.installedApps
                         .toListItemCardStyle(index),
-                    description = item.signature,
                     modifier = Modifier
-                        .padding(start = 16.dp)
+                        .fillMaxWidth()
                         .animateItem(),
                 ) {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_delete,
-                        contentDescription = "",
-                        onClick = remember(item) {
-                            { onDeleteClick(item) }
-                        },
-                    )
+                    if (item.canRevokeTrust) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_delete,
+                            contentDescription = "",
+                            onClick = remember(item) {
+                                { onDeleteClick(item) }
+                            },
+                        )
+                    }
                 }
             }
         }
-
-        if (state.communityTrustedApps.isNotEmpty()) {
-            item(key = "trusted_by_community") {
-                Spacer(
-                    modifier = Modifier
-                        .height(if (state.userTrustedApps.isEmpty()) 12.dp else 16.dp)
-                        .animateItem(),
-                )
-                BitwardenListHeaderText(
-                    label = stringResource(R.string.trusted_by_the_community),
-                    supportingLabel = state.communityTrustedApps.size.toString(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .animateItem(),
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
-                        .animateItem(),
-                )
+        val userTrustedApps = state.notInstalledApps
+            .filter {
+                it.trustAuthority == PrivilegedAppListItem.PrivilegedAppTrustAuthority.USER
+            }
+        val communityTrustedApps = state.notInstalledApps
+            .filter {
+                it.trustAuthority == PrivilegedAppListItem.PrivilegedAppTrustAuthority.COMMUNITY
+            }
+        val googleTrustedApps = state.notInstalledApps
+            .filter {
+                it.trustAuthority == PrivilegedAppListItem.PrivilegedAppTrustAuthority.GOOGLE
             }
 
-            itemsIndexed(
-                key = { _, item -> "communityTrust_${item.packageName}_${item.signature}" },
-                items = state.communityTrustedApps,
-            ) { index, item ->
-                BitwardenTextRow(
-                    text = item.packageName,
-                    onClick = {},
-                    cardStyle = state.communityTrustedApps
-                        .toListItemCardStyle(index),
-                    description = item.signature,
+        if (state.notInstalledApps.isNotEmpty()) {
+            item {
+                BitwardenExpandingHeader(
+                    collapsedText = stringResource(R.string.all_trusted_apps),
+                    isExpanded = showAllTrustedApps,
+                    onClick = remember(state) {
+                        { showAllTrustedApps = !showAllTrustedApps }
+                    },
                     modifier = Modifier
-                        .padding(start = 16.dp)
+                        .fillMaxWidth()
                         .animateItem(),
                 )
             }
         }
 
-        if (state.googleTrustedApps.isNotEmpty()) {
-            item(key = "trusted_by_google") {
-                Spacer(modifier = Modifier.height(16.dp))
-                BitwardenListHeaderText(
-                    label = stringResource(R.string.trusted_by_google),
-                    supportingLabel = state.googleTrustedApps.size.toString(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .padding(horizontal = 16.dp)
-                        .animateItem(),
-                )
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
-                        .animateItem(),
-                )
+        if (showAllTrustedApps) {
+            if (userTrustedApps.isNotEmpty()) {
+                item(key = "trusted_by_you") {
+                    Spacer(
+                        modifier = Modifier
+                            .height(12.dp)
+                            .animateItem(),
+                    )
+                    BitwardenListHeaderText(
+                        label = stringResource(R.string.trusted_by_you),
+                        supportingLabel = userTrustedApps.size.toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp)
+                            .animateItem(),
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .animateItem(),
+                    )
+                }
+
+                itemsIndexed(
+                    key = { _, item -> "userTrust_${item.packageName}_${item.signature}" },
+                    items = userTrustedApps,
+                ) { index, item ->
+                    BitwardenTextRow(
+                        text = item.packageName,
+                        onClick = {},
+                        cardStyle = userTrustedApps
+                            .toListItemCardStyle(index),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .animateItem(),
+                    ) {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_delete,
+                            contentDescription = "",
+                            onClick = remember(item) {
+                                { onDeleteClick(item) }
+                            },
+                        )
+                    }
+                }
             }
 
-            itemsIndexed(
-                key = { _, item -> "googleTrust_${item.packageName}_${item.signature}" },
-                items = state.googleTrustedApps,
-            ) { index, item ->
-                BitwardenTextRow(
-                    text = item.packageName,
-                    onClick = {},
-                    cardStyle = state.googleTrustedApps
-                        .toListItemCardStyle(index),
-                    description = item.signature,
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .animateItem(),
-                )
+            if (communityTrustedApps.isNotEmpty()) {
+                item(key = "trusted_by_community") {
+                    Spacer(
+                        modifier = Modifier
+                            .height(if (userTrustedApps.isEmpty()) 12.dp else 16.dp)
+                            .animateItem(),
+                    )
+                    BitwardenListHeaderText(
+                        label = stringResource(R.string.trusted_by_the_community),
+                        supportingLabel = communityTrustedApps.size.toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .animateItem(),
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .animateItem(),
+                    )
+                }
+
+                itemsIndexed(
+                    key = { _, item -> "communityTrust_${item.packageName}_${item.signature}" },
+                    items = communityTrustedApps,
+                ) { index, item ->
+                    BitwardenTextRow(
+                        text = item.packageName,
+                        onClick = {},
+                        cardStyle = communityTrustedApps
+                            .toListItemCardStyle(index),
+                        modifier = Modifier
+                            .animateItem(),
+                    )
+                }
+            }
+
+            if (googleTrustedApps.isNotEmpty()) {
+                item(key = "trusted_by_google") {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    BitwardenListHeaderText(
+                        label = stringResource(R.string.trusted_by_google),
+                        supportingLabel = googleTrustedApps.size.toString(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .animateItem(),
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .height(8.dp)
+                            .animateItem(),
+                    )
+                }
+
+                itemsIndexed(
+                    key = { _, item -> "googleTrust_${item.packageName}_${item.signature}" },
+                    items = googleTrustedApps,
+                ) { index, item ->
+                    BitwardenTextRow(
+                        text = item.packageName,
+                        onClick = {},
+                        cardStyle = googleTrustedApps
+                            .toListItemCardStyle(index),
+                        modifier = Modifier
+                            .animateItem(),
+                    )
+                }
             }
         }
 
@@ -265,49 +355,46 @@ private fun PrivilegedAppsListContent(
 @Composable
 private fun PrivilegedAppsListScreen_Preview() {
     PrivilegedAppsListContent(
-        state = Fido2TrustState(
-            googleTrustedApps = listOf<PrivilegedAppListItem>(
+        state = PrivilegedAppsListState(
+            installedApps = listOf<PrivilegedAppListItem>(
                 PrivilegedAppListItem(
                     packageName = "com.x8bit.bitwarden.google",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.USER,
+                    appName = "Bitwarden",
                 ),
                 PrivilegedAppListItem(
                     packageName = "com.bitwarden.authenticator.google",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.COMMUNITY,
+                    appName = "Bitwarden",
                 ),
                 PrivilegedAppListItem(
                     packageName = "com.google.android.apps.walletnfcrel.google",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.GOOGLE,
+                    appName = "Bitwarden",
                 ),
             )
                 .toImmutableList(),
-            communityTrustedApps = listOf<PrivilegedAppListItem>(
+            notInstalledApps = listOf<PrivilegedAppListItem>(
                 PrivilegedAppListItem(
                     packageName = "com.x8bit.bitwarden.community",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.USER,
+                    appName = "Bitwarden",
                 ),
                 PrivilegedAppListItem(
                     packageName = "com.bitwarden.authenticator.community",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.COMMUNITY,
+                    appName = "Bitwarden",
                 ),
                 PrivilegedAppListItem(
                     packageName = "com.google.android.apps.walletnfcrel.community",
                     signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
-                ),
-            )
-                .toImmutableList(),
-            userTrustedApps = listOf<PrivilegedAppListItem>(
-                PrivilegedAppListItem(
-                    packageName = "com.x8bit.bitwarden.you",
-                    signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
-                ),
-                PrivilegedAppListItem(
-                    packageName = "com.bitwarden.authenticator.you",
-                    signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
-                ),
-                PrivilegedAppListItem(
-                    packageName = "com.google.android.apps.walletnfcrel.you",
-                    signature = "XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX:XX",
+                    trustAuthority = PrivilegedAppListItem.PrivilegedAppTrustAuthority.GOOGLE,
+                    appName = "Bitwarden",
                 ),
             )
                 .toImmutableList(),

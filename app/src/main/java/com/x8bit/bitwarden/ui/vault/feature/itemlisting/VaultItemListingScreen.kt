@@ -421,7 +421,7 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Fido2TrustPrivilegedAppPrompt -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(R.string.an_error_has_occurred),
+                title = stringResource(R.string.unrecognized_application),
                 message = dialogState.message.invoke(),
                 confirmButtonText = stringResource(R.string.trust),
                 dismissButtonText = stringResource(R.string.cancel),

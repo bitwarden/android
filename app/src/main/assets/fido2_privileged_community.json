@@ -15,18 +15,6 @@
     {
       "type": "android",
       "info": {
-        "package_name": "net.quetta.browser",
-        "signatures": [
-          {
-            "build": "release",
-            "cert_fingerprint_sha256": "BE:FE:E7:31:12:6A:A5:6E:7E:FD:AE:AF:5E:F3:FA:EA:44:1C:19:CC:E0:CA:EC:42:6B:65:BB:F8:2C:59:46:80"
-          }
-        ]
-      }
-    },
-    {
-      "type": "android",
-      "info": {
         "package_name": "org.chromium.chrome",
         "signatures": [
           {
