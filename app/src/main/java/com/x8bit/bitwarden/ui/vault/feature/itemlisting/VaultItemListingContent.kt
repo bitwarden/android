@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.base.util.toListItemCardStyle
@@ -42,7 +41,7 @@ fun VaultItemListingContent(
     showAddTotpBanner: Boolean,
     collectionClick: (id: String) -> Unit,
     folderClick: (id: String) -> Unit,
-    vaultItemClick: (id: String, cipherType: CipherType?) -> Unit,
+    vaultItemClick: (id: String, type: VaultItemListingState.DisplayItem.ItemType) -> Unit,
     masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
     modifier: Modifier = Modifier,
@@ -222,7 +221,7 @@ fun VaultItemListingContent(
                                 cipherId = it.id,
                             )
                         } else {
-                            vaultItemClick(it.id, it.type)
+                            vaultItemClick(it.id, it.itemType)
                         }
                     },
                     trailingLabelIcons = it.extraIconList,

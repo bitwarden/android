@@ -8,6 +8,7 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -162,22 +163,22 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleItemClick(action: SearchAction.ItemClick) {
-        val event = when (state.searchType) {
-            is SearchTypeData.Vault -> {
+        val event = when (val itemType = action.itemType) {
+            is SearchState.DisplayItem.ItemType.Vault -> {
                 if (state.isTotp) {
                     SearchEvent.NavigateToEditCipher(
                         cipherId = action.itemId,
-                        cipherType = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                        cipherType = itemType.type.toVaultItemCipherType(),
                     )
                 } else {
                     SearchEvent.NavigateToViewCipher(
                         cipherId = action.itemId,
-                        cipherType = requireNotNull(action.cipherType).toVaultItemCipherType(),
+                        cipherType = itemType.type.toVaultItemCipherType(),
                     )
                 }
             }
 
-            is SearchTypeData.Sends -> {
+            is SearchState.DisplayItem.ItemType.Sends -> {
                 SearchEvent.NavigateToEditSend(sendId = action.itemId)
             }
         }
@@ -627,7 +628,7 @@ class SearchViewModel @Inject constructor(
                 trySendAction(
                     action = SearchAction.ItemClick(
                         itemId = data.cipherId,
-                        cipherType = CipherType.LOGIN,
+                        itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
                     ),
                 )
             }
@@ -891,8 +892,25 @@ data class SearchState(
         val autofillSelectionOptions: List<AutofillSelectionOption>,
         val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
-        val cipherType: CipherType?,
-    ) : Parcelable
+        val itemType: ItemType,
+    ) : Parcelable {
+        /**
+         * Indicates the item type as a send or vault item.
+         */
+        sealed class ItemType : Parcelable {
+            /**
+             * Indicates the item type is a send.
+             */
+            @Parcelize
+            data class Sends(val type: SendType) : ItemType()
+
+            /**
+             * Indicates the item type is a vault item.
+             */
+            @Parcelize
+            data class Vault(val type: CipherType) : ItemType()
+        }
+    }
 }
 
 /**
@@ -1071,7 +1089,7 @@ sealed class SearchAction {
      */
     data class ItemClick(
         val itemId: String,
-        val cipherType: CipherType?,
+        val itemType: SearchState.DisplayItem.ItemType,
     ) : SearchAction()
 
     /**

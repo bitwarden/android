@@ -73,7 +73,7 @@ fun createMockDisplayItemForCipher(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = isTotp,
-                cipherType = CipherType.LOGIN,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -116,7 +116,7 @@ fun createMockDisplayItemForCipher(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = CipherType.SECURE_NOTE,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -165,7 +165,7 @@ fun createMockDisplayItemForCipher(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = CipherType.CARD,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -205,7 +205,7 @@ fun createMockDisplayItemForCipher(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = CipherType.IDENTITY,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -240,7 +240,7 @@ fun createMockDisplayItemForCipher(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = CipherType.SSH_KEY,
+                itemType = SearchState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
     }
@@ -290,7 +290,7 @@ fun createMockDisplayItemForSend(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = null,
+                itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
 
@@ -330,7 +330,7 @@ fun createMockDisplayItemForSend(
                 autofillSelectionOptions = emptyList(),
                 shouldDisplayMasterPasswordReprompt = false,
                 isTotp = false,
-                cipherType = null,
+                itemType = SearchState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
     }

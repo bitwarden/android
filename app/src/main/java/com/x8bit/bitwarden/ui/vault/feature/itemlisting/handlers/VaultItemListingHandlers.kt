@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers
 
-import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.MasterPasswordRepromptData
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingViewModel
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingsAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -18,7 +18,7 @@ data class VaultItemListingHandlers(
     val backClick: () -> Unit,
     val searchIconClick: () -> Unit,
     val addVaultItemClick: () -> Unit,
-    val itemClick: (id: String, cipherType: CipherType?) -> Unit,
+    val itemClick: (id: String, type: VaultItemListingState.DisplayItem.ItemType) -> Unit,
     val folderClick: (id: String) -> Unit,
     val collectionClick: (id: String) -> Unit,
     val masterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
@@ -56,9 +56,9 @@ data class VaultItemListingHandlers(
                 collectionClick = {
                     viewModel.trySendAction(VaultItemListingsAction.CollectionClick(it))
                 },
-                itemClick = { cipherId, cipherType ->
+                itemClick = { id, type ->
                     viewModel.trySendAction(
-                        VaultItemListingsAction.ItemClick(id = cipherId, cipherType = cipherType),
+                        VaultItemListingsAction.ItemClick(id = id, type = type),
                     )
                 },
                 folderClick = { viewModel.trySendAction(VaultItemListingsAction.FolderClick(it)) },

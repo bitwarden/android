@@ -78,7 +78,7 @@ fun createMockDisplayItemForCipher(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
                 isTotp = isTotp,
-                type = cipherType,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -124,7 +124,7 @@ fun createMockDisplayItemForCipher(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
                 isTotp = false,
-                type = cipherType,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -176,7 +176,7 @@ fun createMockDisplayItemForCipher(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
                 isTotp = false,
-                type = cipherType,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -219,7 +219,7 @@ fun createMockDisplayItemForCipher(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
                 isTotp = false,
-                type = cipherType,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
 
@@ -262,7 +262,7 @@ fun createMockDisplayItemForCipher(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SshKeyCipherIcon",
                 isTotp = false,
-                type = cipherType,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
     }
@@ -315,7 +315,7 @@ fun createMockDisplayItemForSend(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
                 isTotp = false,
-                type = null,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
 
@@ -358,7 +358,7 @@ fun createMockDisplayItemForSend(
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
                 isTotp = false,
-                type = null,
+                itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
     }
