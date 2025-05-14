@@ -125,6 +125,7 @@ class FlagKeyTest {
                 FlagKey.SimpleLoginSelfHostAlias,
                 FlagKey.ChromeAutofill,
                 FlagKey.MobileErrorReporting,
+                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 it.isRemotelyConfigured
             },
@@ -134,7 +135,6 @@ class FlagKeyTest {
             listOf(
                 FlagKey.FlightRecorder,
                 FlagKey.PreAuthSettings,
-                FlagKey.RestrictCipherItemDeletion,
             ).all {
                 !it.isRemotelyConfigured
             },
