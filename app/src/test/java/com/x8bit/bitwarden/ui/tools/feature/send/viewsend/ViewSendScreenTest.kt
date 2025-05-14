@@ -125,11 +125,30 @@ class ViewSendScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on delete click should send DeleteClick`() {
+    fun `on Delete button click should Display delete confirmation dialog`() {
         composeTestRule
             .onNodeWithText(text = "Delete send")
             .performScrollTo()
             .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Are you sure you want to delete this Send?")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `oon delete confirmation dialog yes click should send DeleteClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Delete send")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText(text = "Yes")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
         verify(exactly = 1) {
             viewModel.trySendAction(ViewSendAction.DeleteClick)
         }

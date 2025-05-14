@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
 import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -38,7 +38,9 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
@@ -46,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeade
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
@@ -185,9 +188,47 @@ fun AddSendContent(
             isAddMode = isAddMode,
             addSendHandlers = addSendHandlers,
         )
+
+        if (!isAddMode) {
+            DeleteButton(
+                onDeleteClick = addSendHandlers.onDeleteClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin(),
+            )
+        }
+
         Spacer(modifier = Modifier.height(height = 12.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
+}
+
+@Composable
+private fun DeleteButton(
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
+    if (shouldShowDeleteConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                onDeleteClick()
+                shouldShowDeleteConfirmationDialog = false
+            },
+            onDismissClick = { shouldShowDeleteConfirmationDialog = false },
+            onDismissRequest = { shouldShowDeleteConfirmationDialog = false },
+        )
+    }
+    BitwardenOutlinedErrorButton(
+        label = stringResource(id = R.string.delete_send),
+        onClick = { shouldShowDeleteConfirmationDialog = true },
+        icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -357,11 +398,10 @@ private fun AddSendOptions(
             .standardHorizontalMargin()
             .fillMaxWidth(),
     )
-    // Hide all content if not expanded:
     AnimatedVisibility(
         visible = isExpanded,
-        enter = fadeIn() + slideInVertically(),
-        exit = fadeOut() + slideOutVertically(),
+        enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+        exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
         modifier = Modifier.clipToBounds(),
     ) {
         Column {
@@ -434,6 +474,7 @@ private fun AddSendOptions(
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
             )
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
     }
 }

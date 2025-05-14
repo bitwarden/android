@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
@@ -306,10 +307,8 @@ private fun ViewStateContent(
 
         AdditionalOptions(state = state)
 
-        BitwardenOutlinedErrorButton(
-            label = stringResource(id = R.string.delete_send),
-            onClick = onDeleteClick,
-            icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        DeleteButton(
+            onDeleteClick = onDeleteClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -317,6 +316,34 @@ private fun ViewStateContent(
         Spacer(modifier = Modifier.height(height = 88.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
+}
+
+@Composable
+private fun DeleteButton(
+    onDeleteClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var shouldShowDeleteConfirmationDialog by rememberSaveable { mutableStateOf(value = false) }
+    if (shouldShowDeleteConfirmationDialog) {
+        BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.delete),
+            message = stringResource(id = R.string.are_you_sure_delete_send),
+            confirmButtonText = stringResource(id = R.string.yes),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = {
+                onDeleteClick()
+                shouldShowDeleteConfirmationDialog = false
+            },
+            onDismissClick = { shouldShowDeleteConfirmationDialog = false },
+            onDismissRequest = { shouldShowDeleteConfirmationDialog = false },
+        )
+    }
+    BitwardenOutlinedErrorButton(
+        label = stringResource(id = R.string.delete_send),
+        onClick = { shouldShowDeleteConfirmationDialog = true },
+        icon = rememberVectorPainter(id = R.drawable.ic_trash_small),
+        modifier = modifier,
+    )
 }
 
 /**
