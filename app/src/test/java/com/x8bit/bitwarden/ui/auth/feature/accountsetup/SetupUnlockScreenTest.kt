@@ -8,7 +8,6 @@ import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -22,7 +21,6 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
-import com.x8bit.bitwarden.ui.util.assertNoPopupExists
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -573,14 +571,14 @@ class SetupUnlockScreenTest : BaseComposeTest() {
     @Test
     fun `Loading Dialog should be displayed according to state`() {
         val title = "title"
-        composeTestRule.assertNoPopupExists()
+        composeTestRule.assertNoDialogExists()
 
         mutableStateFlow.update {
             it.copy(dialogState = SetupUnlockState.DialogState.Loading(title = title.asText()))
         }
         composeTestRule
             .onAllNodesWithText(text = title)
-            .filterToOne(hasAnyAncestor(isPopup()))
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(dialogState = null) }

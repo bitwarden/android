@@ -3,15 +3,14 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deletea
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
-import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -51,7 +50,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
     fun `loading dialog presence should update with dialog state`() {
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isPopup()))
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertDoesNotExist()
 
         mutableStateFlow.update {
@@ -62,7 +61,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onAllNodesWithText("Loading")
-            .filterToOne(hasAnyAncestor(isPopup()))
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertExists()
     }
 
@@ -99,7 +98,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
                 dialog =
-                DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
+                    DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
             )
         }
 
@@ -114,7 +113,7 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             DEFAULT_STATE.copy(
                 dialog =
-                DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
+                    DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess(),
             )
         }
 
