@@ -1,12 +1,12 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.ui.graphics.Color
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalMaterial3Api::class)
 class TopAppBarScrollBehaviorExtensionsTest {
