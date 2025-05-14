@@ -1,8 +1,7 @@
-package com.x8bit.bitwarden.ui.platform.theme.color
+package com.bitwarden.ui.platform.theme.color
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
-import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
 
 /**
  * The default [BitwardenColorScheme] for dark mode.
