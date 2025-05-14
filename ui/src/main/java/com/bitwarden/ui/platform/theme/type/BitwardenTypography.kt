@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme.type
+package com.bitwarden.ui.platform.theme.type
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
