@@ -81,7 +81,7 @@ class FeatureFlagOverrideDiskSourceTest {
 
     @Test
     fun `call to save feature flag should update SharedPreferences for ints`() {
-        val key = FlagKey.DummyInt()
+        val key = FlagKey.DummyInt
         assertEquals(
             fakeSharedPreferences.getInt(
                 "$BASE_STORAGE_PREFIX${key.keyName}",
@@ -102,7 +102,7 @@ class FeatureFlagOverrideDiskSourceTest {
 
     @Test
     fun `call to get feature flag should return correct value for ints`() {
-        val key = FlagKey.DummyInt()
+        val key = FlagKey.DummyInt
         assertNull(featureFlagOverrideDiskSource.getFeatureFlag(key))
         val expectedValue = 1
         fakeSharedPreferences.edit {
