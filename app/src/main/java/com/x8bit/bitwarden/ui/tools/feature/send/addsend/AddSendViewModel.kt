@@ -259,7 +259,7 @@ class AddSendViewModel @Inject constructor(
 
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                navigateBack()
+                navigateBack(isDeleted = true)
                 sendEvent(AddSendEvent.ShowToast(message = R.string.send_deleted.asText()))
             }
         }
@@ -628,11 +628,15 @@ class AddSendViewModel @Inject constructor(
         }
     }
 
-    private fun navigateBack() {
+    private fun navigateBack(isDeleted: Boolean = false) {
         specialCircumstanceManager.specialCircumstance = null
         sendEvent(
             event = if (state.shouldFinishOnComplete) {
                 AddSendEvent.ExitApp
+            } else if (isDeleted) {
+                // We need to make sure we don't land on the View Send screen
+                // since it has now been deleted.
+                AddSendEvent.NavigateToRoot
             } else {
                 AddSendEvent.NavigateBack
             },
@@ -866,6 +870,11 @@ sealed class AddSendEvent {
      * Navigate back.
      */
     data object NavigateBack : AddSendEvent()
+
+    /**
+     * Navigate up to the root.
+     */
+    data object NavigateToRoot : AddSendEvent()
 
     /**
      * Show file chooser sheet.

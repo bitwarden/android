@@ -60,9 +60,13 @@ private fun SavedStateHandle.toAddSendType(): AddSendType {
  */
 fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
+    onNavigateUpToRoot: () -> Unit,
 ) {
     composableWithSlideTransitions<AddSendRoute> {
-        AddSendScreen(onNavigateBack = onNavigateBack)
+        AddSendScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateUpToRoot = onNavigateUpToRoot,
+        )
     }
 }
 

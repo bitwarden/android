@@ -60,6 +60,7 @@ fun AddSendScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
+    onNavigateUpToRoot: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) }
@@ -83,6 +84,8 @@ fun AddSendScreen(
             AddSendEvent.ExitApp -> exitManager.exitApplication()
 
             is AddSendEvent.NavigateBack -> onNavigateBack()
+
+            is AddSendEvent.NavigateToRoot -> onNavigateUpToRoot()
 
             is AddSendEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
