@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
