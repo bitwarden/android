@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPre
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.messageResourceId
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSearchType
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
@@ -673,7 +674,9 @@ class VaultItemListingViewModel @Inject constructor(
 
             is VaultItemListingState.ItemListingType.Send -> {
                 sendEvent(
-                    VaultItemListingEvent.NavigateToAddSendItem,
+                    VaultItemListingEvent.NavigateToAddSendItem(
+                        sendType = itemListingType.toSendItemType(),
+                    ),
                 )
             }
         }
@@ -689,7 +692,12 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleEditSendClick(action: ListingItemOverflowAction.SendAction.EditClick) {
-        sendEvent(VaultItemListingEvent.NavigateToEditSendItem(id = action.sendId))
+        sendEvent(
+            event = VaultItemListingEvent.NavigateToEditSendItem(
+                id = action.sendId,
+                sendType = action.sendType.toSendItemType(),
+            ),
+        )
     }
 
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
@@ -2547,14 +2555,19 @@ sealed class VaultItemListingEvent {
     /**
      * Navigates to the AddSendItemScreen.
      */
-    data object NavigateToAddSendItem : VaultItemListingEvent()
+    data class NavigateToAddSendItem(
+        val sendType: SendItemType,
+    ) : VaultItemListingEvent()
 
     /**
      * Navigates to the AddSendScreen.
      *
      * @property id the id of the send to navigate to.
      */
-    data class NavigateToEditSendItem(val id: String) : VaultItemListingEvent()
+    data class NavigateToEditSendItem(
+        val sendType: SendItemType,
+        val id: String,
+    ) : VaultItemListingEvent()
 
     /**
      * Navigates to the ViewSendScreen.

@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.feature.splash.SplashRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditMode
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditRoute
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.ItemListingType
@@ -214,13 +215,27 @@ class RootNavScreenTest : BitwardenComposeTest() {
         }
 
         // Make sure navigating to vault unlocked for new sends works as expected:
-        rootNavStateFlow.value = RootNavState.VaultUnlockedForNewSend
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForNewSend(sendType = SendItemType.FILE)
         composeTestRule.runOnIdle {
             verify {
                 mockNavHostController.navigate(
                     route = AddSendRoute(
-                        type = ModeType.ADD,
-                        editSendId = null,
+                        modeType = ModeType.ADD,
+                        sendType = SendItemType.FILE,
+                        sendId = null,
+                    ),
+                    navOptions = expectedNavOptions,
+                )
+            }
+        }
+        rootNavStateFlow.value = RootNavState.VaultUnlockedForNewSend(sendType = SendItemType.TEXT)
+        composeTestRule.runOnIdle {
+            verify {
+                mockNavHostController.navigate(
+                    route = AddSendRoute(
+                        modeType = ModeType.ADD,
+                        sendType = SendItemType.TEXT,
+                        sendId = null,
                     ),
                     navOptions = expectedNavOptions,
                 )

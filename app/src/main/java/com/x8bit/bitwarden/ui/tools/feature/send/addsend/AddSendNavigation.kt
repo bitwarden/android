@@ -7,6 +7,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import kotlinx.serialization.Serializable
 
 /**
@@ -14,8 +15,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class AddSendRoute(
-    val type: ModeType,
-    val editSendId: String?,
+    val sendType: SendItemType,
+    val modeType: ModeType,
+    val sendId: String? = null,
 )
 
 /**
@@ -31,6 +33,7 @@ enum class ModeType {
  * Class to retrieve send add & edit arguments from the [SavedStateHandle].
  */
 data class AddSendArgs(
+    val sendType: SendItemType,
     val sendAddType: AddSendType,
 )
 
@@ -40,19 +43,12 @@ data class AddSendArgs(
 fun SavedStateHandle.toAddSendArgs(): AddSendArgs {
     val route = this.toRoute<AddSendRoute>()
     return AddSendArgs(
-        sendAddType = when (route.type) {
+        sendType = route.sendType,
+        sendAddType = when (route.modeType) {
             ModeType.ADD -> AddSendType.AddItem
-            ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
+            ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.sendId))
         },
     )
-}
-
-private fun SavedStateHandle.toAddSendType(): AddSendType {
-    val route = this.toRoute<AddSendRoute>()
-    return when (route.type) {
-        ModeType.ADD -> AddSendType.AddItem
-        ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
-    }
 }
 
 /**
@@ -74,17 +70,8 @@ fun NavGraphBuilder.addSendDestination(
  * Navigate to the new send screen.
  */
 fun NavController.navigateToAddSend(
-    sendAddType: AddSendType,
+    route: AddSendRoute,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = AddSendRoute(
-            type = when (sendAddType) {
-                AddSendType.AddItem -> ModeType.ADD
-                is AddSendType.EditItem -> ModeType.EDIT
-            },
-            editSendId = (sendAddType as? AddSendType.EditItem)?.sendItemId,
-        ),
-        navOptions = navOptions,
-    )
+    this.navigate(route = route, navOptions = navOptions)
 }

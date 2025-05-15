@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 
-import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -21,7 +20,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
@@ -30,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isEditableText
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -130,6 +129,33 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithContentDescription("Close").assertIsDisplayed()
         mutableStateFlow.update { it.copy(isShared = true) }
         composeTestRule.onNodeWithContentDescription("Close").assertDoesNotExist()
+    }
+
+    @Test
+    fun `screen title should update according to state`() {
+        mutableStateFlow.update {
+            it.copy(sendType = SendItemType.TEXT, addSendType = AddSendType.AddItem)
+        }
+        composeTestRule.onNodeWithText(text = "New text Send").assertIsDisplayed()
+        mutableStateFlow.update {
+            it.copy(
+                sendType = SendItemType.TEXT,
+                addSendType = AddSendType.EditItem(sendItemId = "send_id"),
+            )
+        }
+        composeTestRule.onNodeWithText(text = "Edit text Send").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(sendType = SendItemType.FILE, addSendType = AddSendType.AddItem)
+        }
+        composeTestRule.onNodeWithText(text = "New file Send").assertIsDisplayed()
+        mutableStateFlow.update {
+            it.copy(
+                sendType = SendItemType.FILE,
+                addSendType = AddSendType.EditItem(sendItemId = "send_id"),
+            )
+        }
+        composeTestRule.onNodeWithText(text = "Edit file Send").assertIsDisplayed()
     }
 
     @Test
@@ -332,68 +358,6 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Send name (required)")
             .assertTextEquals("Send name (required)", "input")
-    }
-
-    @Test
-    fun `segmented buttons should appear based on state`() {
-        mutableStateFlow.update { it.copy(isShared = true) }
-        composeTestRule
-            .onAllNodesWithText("File")
-            .filterToOne(!isEditableText)
-            .assertDoesNotExist()
-        composeTestRule
-            .onAllNodesWithText("Text")
-            .filterToOne(!isEditableText)
-            .assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(
-                isShared = false,
-                addSendType = AddSendType.AddItem,
-            )
-        }
-        composeTestRule
-            .onAllNodesWithText("File")
-            .filterToOne(!isEditableText)
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Text")
-            .filterToOne(!isEditableText)
-            .assertIsDisplayed()
-
-        mutableStateFlow.update {
-            it.copy(addSendType = AddSendType.EditItem(sendItemId = "sendId"))
-        }
-
-        composeTestRule
-            .onAllNodesWithText("File")
-            .filterToOne(!isEditableText)
-            .assertIsNotDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Text")
-            .filterToOne(!isEditableText)
-            .assertIsNotDisplayed()
-    }
-
-    @Test
-    fun `File segmented button click should send FileTypeClick`() {
-        composeTestRule
-            .onNodeWithText("File")
-            // A bug prevents performClick from working here so we
-            // have to perform the semantic action instead.
-            .performSemanticsAction(SemanticsActions.OnClick)
-        verify { viewModel.trySendAction(AddSendAction.FileTypeClick) }
-    }
-
-    @Test
-    fun `Text segmented button click should send TextTypeClick`() {
-        composeTestRule
-            .onAllNodesWithText("Text")
-            .filterToOne(!isEditableText)
-            // A bug prevents performClick from working here so we
-            // have to perform the semantic action instead.
-            .performSemanticsAction(SemanticsActions.OnClick)
-        verify { viewModel.trySendAction(AddSendAction.TextTypeClick) }
     }
 
     @Test
@@ -870,42 +834,40 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text)
             .assertIsDisplayed()
     }
-
-    companion object {
-        private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
-            name = "",
-            currentAccessCount = null,
-            maxAccessCount = null,
-            passwordInput = "",
-            noteInput = "",
-            isHideEmailChecked = false,
-            isDeactivateChecked = false,
-            deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-            expirationDate = null,
-            sendUrl = null,
-            hasPassword = true,
-            isHideEmailAddressEnabled = true,
-        )
-
-        private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
-            input = "",
-            isHideByDefaultChecked = false,
-        )
-
-        private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
-            common = DEFAULT_COMMON_STATE,
-            selectedType = DEFAULT_SELECTED_TYPE_STATE,
-        )
-
-        private val DEFAULT_STATE = AddSendState(
-            addSendType = AddSendType.AddItem,
-            viewState = DEFAULT_VIEW_STATE,
-            dialogState = null,
-            shouldFinishOnComplete = false,
-            isShared = false,
-            isPremiumUser = false,
-            baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
-            policyDisablesSend = false,
-        )
-    }
 }
+
+private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+    name = "",
+    currentAccessCount = null,
+    maxAccessCount = null,
+    passwordInput = "",
+    noteInput = "",
+    isHideEmailChecked = false,
+    isDeactivateChecked = false,
+    deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    expirationDate = null,
+    sendUrl = null,
+    hasPassword = true,
+    isHideEmailAddressEnabled = true,
+)
+
+private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+    input = "",
+    isHideByDefaultChecked = false,
+)
+
+private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+    common = DEFAULT_COMMON_STATE,
+    selectedType = DEFAULT_SELECTED_TYPE_STATE,
+)
+
+private val DEFAULT_STATE = AddSendState(
+    addSendType = AddSendType.AddItem,
+    viewState = DEFAULT_VIEW_STATE,
+    dialogState = null,
+    shouldFinishOnComplete = false,
+    isShared = false,
+    baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
+    policyDisablesSend = false,
+    sendType = SendItemType.TEXT,
+)

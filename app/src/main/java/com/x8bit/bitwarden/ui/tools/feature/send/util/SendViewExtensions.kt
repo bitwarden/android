@@ -41,7 +41,7 @@ fun SendView.toOverflowActions(
         ?.let { sendId ->
             listOfNotNull(
                 ListingItemOverflowAction.SendAction.ViewClick(sendId = sendId, sendType = type),
-                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
+                ListingItemOverflowAction.SendAction.EditClick(sendId = sendId, sendType = type),
                 ListingItemOverflowAction.SendAction.CopyUrlClick(
                     sendUrl = toSendUrl(baseWebSendUrl = baseWebSendUrl),
                 ),

@@ -11,8 +11,6 @@ import java.time.ZonedDateTime
  */
 data class AddSendHandlers(
     val onNameChange: (String) -> Unit,
-    val onFileTypeSelect: () -> Unit,
-    val onTextTypeSelect: () -> Unit,
     val onChooseFileClick: (hasPermission: Boolean) -> Unit,
     val onFileChoose: (IntentManager.FileData) -> Unit,
     val onTextChange: (String) -> Unit,
@@ -36,8 +34,6 @@ data class AddSendHandlers(
         ): AddSendHandlers =
             AddSendHandlers(
                 onNameChange = { viewModel.trySendAction(AddSendAction.NameChange(it)) },
-                onFileTypeSelect = { viewModel.trySendAction(AddSendAction.FileTypeClick) },
-                onTextTypeSelect = { viewModel.trySendAction(AddSendAction.TextTypeClick) },
                 onChooseFileClick = { viewModel.trySendAction(AddSendAction.ChooseFileClick(it)) },
                 onFileChoose = { viewModel.trySendAction(AddSendAction.FileChoose(it)) },
                 onTextChange = { viewModel.trySendAction(AddSendAction.TextChange(it)) },

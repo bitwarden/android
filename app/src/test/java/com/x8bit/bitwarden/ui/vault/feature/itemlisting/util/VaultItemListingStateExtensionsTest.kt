@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -154,5 +155,23 @@ class VaultItemListingStateExtensionsTest {
         assertThrows<IllegalStateException> {
             VaultItemListingState.ItemListingType.Vault.Trash.toVaultItemCipherType()
         }
+    }
+
+    @Test
+    fun `toSendItemType should return the correct response`() {
+        val itemListingTypes = listOf(
+            VaultItemListingState.ItemListingType.Send.SendFile,
+            VaultItemListingState.ItemListingType.Send.SendText,
+        )
+
+        val result = itemListingTypes.map { it.toSendItemType() }
+
+        assertEquals(
+            listOf(
+                SendItemType.FILE,
+                SendItemType.TEXT,
+            ),
+            result,
+        )
     }
 }

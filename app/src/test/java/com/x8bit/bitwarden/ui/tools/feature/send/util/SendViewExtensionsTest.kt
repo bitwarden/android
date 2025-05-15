@@ -155,7 +155,10 @@ private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
             sendId = "mockId-1",
             sendType = SendType.FILE,
         ),
-        ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-1"),
+        ListingItemOverflowAction.SendAction.EditClick(
+            sendId = "mockId-1",
+            sendType = SendType.FILE,
+        ),
         ListingItemOverflowAction.SendAction.CopyUrlClick(
             sendUrl = "www.test.commockAccessId-1/mockKey-1",
         ),
