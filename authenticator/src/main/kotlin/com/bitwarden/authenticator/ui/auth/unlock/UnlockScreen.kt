@@ -34,8 +34,8 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicD
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.util.asText
 

@@ -44,10 +44,10 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogSt
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
+import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
-import com.bitwarden.authenticator.ui.platform.theme.LocalPermissionsManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
 
 /**
