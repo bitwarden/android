@@ -50,6 +50,12 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
 
+    testImplementation(platform(libs.junit.bom))
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testImplementation(libs.junit.junit5)
+    testImplementation(libs.junit.vintage)
+    testImplementation(libs.mockk.mockk)
+
     testFixturesImplementation(libs.androidx.navigation.compose)
     testFixturesImplementation(platform(libs.junit.bom))
     testFixturesImplementation(libs.junit.junit5)

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.material3.ExperimentalMaterial3Api
