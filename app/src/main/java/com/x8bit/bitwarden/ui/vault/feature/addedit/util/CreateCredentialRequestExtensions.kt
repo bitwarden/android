@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
-import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import java.util.UUID

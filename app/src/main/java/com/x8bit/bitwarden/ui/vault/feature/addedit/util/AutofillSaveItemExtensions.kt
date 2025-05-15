@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth

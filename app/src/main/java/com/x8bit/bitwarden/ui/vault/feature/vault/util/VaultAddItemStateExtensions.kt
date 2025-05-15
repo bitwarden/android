@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import com.bitwarden.core.DateTime
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -16,7 +17,6 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.SshKeyView
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand

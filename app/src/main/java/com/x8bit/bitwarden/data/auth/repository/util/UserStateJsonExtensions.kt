@@ -4,6 +4,7 @@ import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UserDecryptionOptionsJson
+import com.bitwarden.ui.platform.base.util.toHexColorRepresentation
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
-import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
 
 /**
  * Updates the given [UserStateJson] with the data to indicate that the password has been removed.

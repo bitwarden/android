@@ -1,6 +1,6 @@
 @file:Suppress("TooManyFunctions")
 
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -229,3 +229,11 @@ fun String.prefixHttpsIfNecessaryOrNull(): String? =
  */
 fun String.prefixHttpsIfNecessary(): String =
     prefixHttpsIfNecessaryOrNull() ?: this
+
+/**
+ * Checks if a string is using base32 digits.
+ */
+fun String.isBase32(): Boolean {
+    val regex = ("^[A-Z2-7]+=*$").toRegex()
+    return regex.matches(this)
+}

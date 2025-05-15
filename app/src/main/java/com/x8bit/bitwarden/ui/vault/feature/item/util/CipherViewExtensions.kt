@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.ui.platform.base.util.capitalize
+import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
@@ -14,10 +17,7 @@ import com.bitwarden.vault.IdentityView
 import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.capitalize
 import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
-import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState

@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
+import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
-import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons

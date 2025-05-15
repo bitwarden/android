@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.components.model
 
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
-import com.x8bit.bitwarden.ui.platform.base.util.hexToColor
+import com.bitwarden.ui.platform.base.util.hexToColor
 import kotlinx.parcelize.Parcelize
 
 /**

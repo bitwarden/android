@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
+import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
-import com.x8bit.bitwarden.ui.platform.base.util.prefixHttpsIfNecessary
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.AddyIo
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo

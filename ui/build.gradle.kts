@@ -51,8 +51,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(platform(libs.junit.bom))
-    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.junit5)
+    testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
 

@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
@@ -49,6 +48,7 @@ import com.bitwarden.authenticator.ui.platform.composition.LocalPermissionsManag
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 
 /**
  * The screen to manually add a totp code.
