@@ -47,12 +47,12 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemList
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingRoute
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.navigateToItemListGraph
-import com.bitwarden.authenticator.ui.platform.base.util.max
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.bitwarden.authenticator.ui.platform.feature.settings.SettingsGraphRoute
 import com.bitwarden.authenticator.ui.platform.feature.settings.navigateToSettingsGraph
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.max
 import com.bitwarden.ui.platform.base.util.toDp
 import com.bitwarden.ui.platform.theme.RootTransitionProviders
 import com.bitwarden.ui.platform.util.toObjectNavigationRoute
