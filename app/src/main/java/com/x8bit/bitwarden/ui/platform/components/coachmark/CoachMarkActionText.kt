@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.platform.components.coachmark
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Clickable text used for the standard action UI for a Coach Mark which applies

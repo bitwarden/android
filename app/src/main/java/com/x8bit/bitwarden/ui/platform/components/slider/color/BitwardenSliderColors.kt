@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.components.slider.color
 import androidx.compose.material3.SliderColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Provides a default set of Bitwarden-styled colors for sliders.

@@ -12,8 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularProgressIndicator
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A Bitwarden-themed, re-usable loading state.

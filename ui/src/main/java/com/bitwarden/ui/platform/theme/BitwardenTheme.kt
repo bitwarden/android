@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.theme
+package com.bitwarden.ui.platform.theme
 
 import android.app.Activity
 import android.os.Build

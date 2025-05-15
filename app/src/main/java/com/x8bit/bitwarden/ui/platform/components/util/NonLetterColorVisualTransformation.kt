@@ -9,7 +9,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Returns the [VisualTransformation] that alters the output of the text in an input field by

@@ -50,8 +50,8 @@ import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.toScrolledContainerColor
 import com.bitwarden.ui.platform.base.util.toScrolledContainerDividerAlpha
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.model.WindowSize
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.getWindowSize
 
 /**

@@ -9,8 +9,8 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.theme.color.BitwardenColorScheme
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Returns a [VectorPainter] built from the given [id] to circumvent issues with painter resources

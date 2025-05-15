@@ -15,7 +15,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.core.text.getSpans
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.spanStyleOf
 
 /**

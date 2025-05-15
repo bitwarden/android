@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A fractional luminance value beyond which we will consider the associated color to be light
