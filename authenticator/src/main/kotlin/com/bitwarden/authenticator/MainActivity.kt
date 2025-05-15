@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.bitwarden.authenticator.data.platform.util.isSuspicious
+import com.bitwarden.authenticator.ui.platform.composition.LocalManagerProvider
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.manager.DebugMenuLaunchManager
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.navigateToDebugMenuScreen
 import com.bitwarden.authenticator.ui.platform.feature.rootnav.RootNavScreen
@@ -53,14 +54,16 @@ class MainActivity : AppCompatActivity() {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberNavController()
             observeViewModelEvents(navController)
-            AuthenticatorTheme(
-                theme = state.theme,
-            ) {
-                RootNavScreen(
-                    navController = navController,
-                    onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                    onExitApplication = { finishAffinity() },
-                )
+            LocalManagerProvider {
+                AuthenticatorTheme(
+                    theme = state.theme,
+                ) {
+                    RootNavScreen(
+                        navController = navController,
+                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                        onExitApplication = { finishAffinity() },
+                    )
+                }
             }
         }
     }
