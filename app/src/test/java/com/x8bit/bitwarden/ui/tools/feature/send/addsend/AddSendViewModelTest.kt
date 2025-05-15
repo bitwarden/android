@@ -7,20 +7,15 @@ import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.SyncResponseJson
-import com.bitwarden.network.model.createMockPolicy
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
@@ -33,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -66,10 +62,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
     )
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>(), toastDescriptorOverride = any<Text>()) } just runs
-    }
-    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
-    private val authRepository: AuthRepository = mockk {
-        every { userStateFlow } returns mutableUserStateFlow
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -786,72 +778,6 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `FileTypeClick and TextTypeClick should toggle sendType when user is premium`() = runTest {
-        val viewModel = createViewModel()
-        val premiumUserState = DEFAULT_STATE.copy(isPremiumUser = true)
-        val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            selectedType = AddSendState.ViewState.Content.SendType.File(
-                name = null,
-                displaySize = null,
-                sizeBytes = null,
-                uri = null,
-            ),
-        )
-        // Make sure we are a premium user
-        mutableUserStateFlow.tryEmit(
-            DEFAULT_USER_STATE.copy(
-                accounts = listOf(DEFAULT_USER_ACCOUNT_STATE.copy(isPremium = true)),
-            ),
-        )
-
-        viewModel.stateFlow.test {
-            assertEquals(premiumUserState, awaitItem())
-            viewModel.trySendAction(AddSendAction.FileTypeClick)
-            assertEquals(premiumUserState.copy(viewState = expectedViewState), awaitItem())
-            viewModel.trySendAction(AddSendAction.TextTypeClick)
-            assertEquals(premiumUserState, awaitItem())
-        }
-    }
-
-    @Test
-    fun `FileTypeClick should display error dialog when account is not premium`() {
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(AddSendAction.FileTypeClick)
-
-        assertEquals(
-            DEFAULT_STATE.copy(
-                dialogState = AddSendState.DialogState.Error(
-                    title = R.string.send.asText(),
-                    message = R.string.send_file_premium_required.asText(),
-                ),
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
-    fun `FileTypeClick should display error dialog when policy disables send`() {
-        every {
-            policyManager.getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
-        } returns listOf(createMockPolicy())
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(AddSendAction.FileTypeClick)
-
-        assertEquals(
-            DEFAULT_STATE.copy(
-                dialogState = AddSendState.DialogState.Error(
-                    title = null,
-                    message = R.string.send_disabled_warning.asText(),
-                ),
-                policyDisablesSend = true,
-            ),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Test
     fun `NameChange should update name input`() = runTest {
         val viewModel = createViewModel()
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
@@ -1014,14 +940,16 @@ class AddSendViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: AddSendState? = null,
         addSendType: AddSendType = AddSendType.AddItem,
+        sendType: SendItemType = SendItemType.TEXT,
         activityToken: String? = null,
     ): AddSendViewModel = AddSendViewModel(
         savedStateHandle = SavedStateHandle().apply {
             set("state", state?.copy(addSendType = addSendType))
             set("activityToken", activityToken)
-            every { toAddSendArgs() } returns AddSendArgs(sendAddType = addSendType)
+            every {
+                toAddSendArgs()
+            } returns AddSendArgs(sendType = sendType, sendAddType = addSendType)
         },
-        authRepo = authRepository,
         environmentRepo = environmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         clock = clock,
@@ -1030,69 +958,42 @@ class AddSendViewModelTest : BaseViewModelTest() {
         policyManager = policyManager,
         networkConnectionManager = networkConnectionManager,
     )
-
-    companion object {
-        private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
-            name = "",
-            currentAccessCount = null,
-            maxAccessCount = null,
-            passwordInput = "",
-            noteInput = "",
-            isHideEmailChecked = false,
-            isDeactivateChecked = false,
-            deletionDate = ZonedDateTime.parse("2023-11-03T00:00Z"),
-            expirationDate = null,
-            sendUrl = null,
-            hasPassword = false,
-            isHideEmailAddressEnabled = true,
-        )
-
-        private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
-            input = "",
-            isHideByDefaultChecked = false,
-        )
-
-        private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
-            common = DEFAULT_COMMON_STATE,
-            selectedType = DEFAULT_SELECTED_TYPE_STATE,
-        )
-
-        private const val DEFAULT_ENVIRONMENT_URL = "https://send.bitwarden.com/#"
-
-        private val DEFAULT_STATE = AddSendState(
-            addSendType = AddSendType.AddItem,
-            viewState = DEFAULT_VIEW_STATE,
-            dialogState = null,
-            shouldFinishOnComplete = false,
-            isShared = false,
-            isPremiumUser = false,
-            baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
-            policyDisablesSend = false,
-        )
-
-        private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
-            userId = "user_id_1",
-            name = "Bit",
-            email = "bitwarden@gmail.com",
-            avatarColorHex = "#ff00ff",
-            environment = Environment.Us,
-            isPremium = false,
-            isLoggedIn = true,
-            isVaultUnlocked = true,
-            needsPasswordReset = false,
-            isBiometricsEnabled = false,
-            organizations = emptyList(),
-            needsMasterPassword = false,
-            trustedDevice = null,
-            hasMasterPassword = true,
-            isUsingKeyConnector = false,
-            onboardingStatus = OnboardingStatus.COMPLETE,
-            firstTimeState = FirstTimeState(showImportLoginsCard = true),
-        )
-
-        private val DEFAULT_USER_STATE = UserState(
-            activeUserId = "user_id_1",
-            accounts = listOf(DEFAULT_USER_ACCOUNT_STATE),
-        )
-    }
 }
+
+private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+    name = "",
+    currentAccessCount = null,
+    maxAccessCount = null,
+    passwordInput = "",
+    noteInput = "",
+    isHideEmailChecked = false,
+    isDeactivateChecked = false,
+    deletionDate = ZonedDateTime.parse("2023-11-03T00:00Z"),
+    expirationDate = null,
+    sendUrl = null,
+    hasPassword = false,
+    isHideEmailAddressEnabled = true,
+)
+
+private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+    input = "",
+    isHideByDefaultChecked = false,
+)
+
+private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+    common = DEFAULT_COMMON_STATE,
+    selectedType = DEFAULT_SELECTED_TYPE_STATE,
+)
+
+private const val DEFAULT_ENVIRONMENT_URL = "https://send.bitwarden.com/#"
+
+private val DEFAULT_STATE = AddSendState(
+    addSendType = AddSendType.AddItem,
+    viewState = DEFAULT_VIEW_STATE,
+    dialogState = null,
+    shouldFinishOnComplete = false,
+    isShared = false,
+    baseWebSendUrl = DEFAULT_ENVIRONMENT_URL,
+    policyDisablesSend = false,
+    sendType = SendItemType.TEXT,
+)

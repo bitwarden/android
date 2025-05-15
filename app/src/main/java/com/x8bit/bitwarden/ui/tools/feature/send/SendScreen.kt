@@ -32,6 +32,8 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -40,7 +42,11 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
+import com.x8bit.bitwarden.ui.tools.feature.send.util.selectionText
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import kotlinx.collections.immutable.persistentListOf
 
@@ -51,8 +57,7 @@ import kotlinx.collections.immutable.persistentListOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SendScreen(
-    onNavigateToAddSend: () -> Unit,
-    onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToAddEditSend: (AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToSendFilesList: () -> Unit,
     onNavigateToSendTextList: () -> Unit,
@@ -81,9 +86,21 @@ fun SendScreen(
         when (event) {
             is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
 
-            is SendEvent.NavigateNewSend -> onNavigateToAddSend()
+            is SendEvent.NavigateNewSend -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(modeType = ModeType.ADD, sendType = event.sendType),
+                )
+            }
 
-            is SendEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
+            is SendEvent.NavigateToEditSend -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        modeType = ModeType.EDIT,
+                        sendType = event.sendType,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
 
             is SendEvent.NavigateToViewSend -> {
                 onNavigateToViewSend(
@@ -112,6 +129,9 @@ fun SendScreen(
 
     SendDialogs(
         dialogState = state.dialogState,
+        onAddSendSelected = remember(viewModel) {
+            { viewModel.trySendAction(SendAction.AddSendSelected(it)) }
+        },
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(SendAction.DismissDialog) }
         },
@@ -211,6 +231,7 @@ fun SendScreen(
 @Composable
 private fun SendDialogs(
     dialogState: SendState.DialogState?,
+    onAddSendSelected: (SendItemType) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
@@ -224,6 +245,18 @@ private fun SendDialogs(
         is SendState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialogState.message(),
         )
+
+        SendState.DialogState.SelectSendAddType -> BitwardenSelectionDialog(
+            title = stringResource(id = R.string.type),
+            onDismissRequest = onDismissRequest,
+        ) {
+            SendItemType.entries.forEach {
+                BitwardenBasicDialogRow(
+                    text = it.selectionText(),
+                    onClick = { onAddSendSelected(it) },
+                )
+            }
+        }
 
         null -> Unit
     }
