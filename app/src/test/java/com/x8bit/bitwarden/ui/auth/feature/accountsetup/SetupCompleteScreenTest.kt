@@ -3,13 +3,13 @@ package com.x8bit.bitwarden.ui.auth.feature.accountsetup
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 
-class SetupCompleteScreenTest : BaseComposeTest() {
+class SetupCompleteScreenTest : BitwardenComposeTest() {
 
     private val viewModel = mockk<SetupCompleteViewModel>(relaxed = true)
 

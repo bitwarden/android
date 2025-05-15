@@ -25,7 +25,7 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -38,7 +38,7 @@ import org.junit.Before
 import org.junit.Test
 import org.robolectric.annotation.Config
 
-class CompleteRegistrationScreenTest : BaseComposeTest() {
+class CompleteRegistrationScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToPreventAccountLockoutCalled = false

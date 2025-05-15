@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -31,7 +31,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AttachmentsScreenTest : BaseComposeTest() {
+class AttachmentsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

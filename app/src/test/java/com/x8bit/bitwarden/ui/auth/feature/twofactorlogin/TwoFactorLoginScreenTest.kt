@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.network.model.TwoFactorAuthMethod
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import io.mockk.every
@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
-class TwoFactorLoginScreenTest : BaseComposeTest() {
+class TwoFactorLoginScreenTest : BitwardenComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { launchUri(any()) } just runs
     }

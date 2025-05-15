@@ -18,7 +18,7 @@ import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsAction
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsEvent
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsScreen
@@ -39,7 +39,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class RecordedLogsScreenTest : BaseComposeTest() {
+class RecordedLogsScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<RecordedLogsEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

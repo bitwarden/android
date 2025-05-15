@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
@@ -29,7 +29,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 
-class EnterpriseSignOnScreenTest : BaseComposeTest() {
+class EnterpriseSignOnScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToSetPasswordCalled = false
     private var onNavigateToTwoFactorLoginEmailAndOrgIdentifier: Pair<String, String>? = null

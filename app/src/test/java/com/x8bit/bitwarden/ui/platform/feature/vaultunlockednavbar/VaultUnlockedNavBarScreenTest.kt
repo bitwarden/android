@@ -6,7 +6,7 @@ import androidx.navigation.navOptions
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.createMockNavHostController
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.SettingsGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.SendGraphRoute
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
-class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
+class VaultUnlockedNavBarScreenTest : BitwardenComposeTest() {
     private val mockNavHostController = createMockNavHostController()
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultUnlockedNavBarEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

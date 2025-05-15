@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
+import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialAction
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialEvent
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.TutorialScreen
@@ -20,7 +20,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
-class TutorialScreenTest : BaseComposeTest() {
+class TutorialScreenTest : AuthenticatorComposeTest() {
     private var onTutorialFinishedCalled = false
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<TutorialEvent>()
@@ -31,7 +31,7 @@ class TutorialScreenTest : BaseComposeTest() {
 
     @Before
     fun setUp() {
-        composeTestRule.setContent {
+        setContent {
             TutorialScreen(
                 viewModel = viewModel,
                 onTutorialFinished = { onTutorialFinishedCalled = true },

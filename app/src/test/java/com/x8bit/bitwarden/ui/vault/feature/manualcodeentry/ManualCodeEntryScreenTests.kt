@@ -16,9 +16,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.core.app.ApplicationProvider
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
-class ManualCodeEntryScreenTests : BaseComposeTest() {
+class ManualCodeEntryScreenTests : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToScanQrCodeCalled = false

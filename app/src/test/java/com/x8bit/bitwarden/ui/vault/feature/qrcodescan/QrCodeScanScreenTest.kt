@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.test.onNodeWithText
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
@@ -15,7 +15,7 @@ import org.junit.Before
 import org.junit.Test
 import org.robolectric.annotation.Config
 
-class QrCodeScanScreenTest : BaseComposeTest() {
+class QrCodeScanScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToManualCodeEntryScreenCalled = false

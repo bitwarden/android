@@ -6,7 +6,7 @@ import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
+import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import io.mockk.every
 import io.mockk.just
@@ -19,7 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
-class QrCodeScanScreenTest : BaseComposeTest() {
+class QrCodeScanScreenTest : AuthenticatorComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToManualCodeEntryScreenCalled = false
@@ -36,7 +36,7 @@ class QrCodeScanScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             QrCodeScanScreen(
                 viewModel = viewModel,
                 qrCodeAnalyzer = qrCodeAnalyzer,

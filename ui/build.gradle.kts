@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -60,13 +61,17 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
 
+    testFixturesImplementation(libs.androidx.activity.compose)
+    testFixturesImplementation(libs.androidx.compose.ui.test)
     testFixturesImplementation(libs.androidx.navigation.compose)
+    testFixturesImplementation(libs.google.hilt.android.testing)
     testFixturesImplementation(platform(libs.junit.bom))
     testFixturesImplementation(libs.junit.junit5)
     testFixturesImplementation(libs.junit.vintage)
     testFixturesImplementation(libs.kotlinx.coroutines.test)
-    testFixturesImplementation(libs.square.turbine)
     testFixturesImplementation(libs.mockk.mockk)
+    testFixturesImplementation(libs.robolectric.robolectric)
+    testFixturesImplementation(libs.square.turbine)
 }
 
 tasks {

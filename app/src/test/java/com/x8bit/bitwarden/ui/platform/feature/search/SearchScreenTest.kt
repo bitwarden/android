@@ -21,7 +21,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
@@ -49,7 +49,7 @@ import org.junit.Before
 import org.junit.Test
 
 @Suppress("LargeClass")
-class SearchScreenTest : BaseComposeTest() {
+class SearchScreenTest : BitwardenComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<SearchEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<SearchViewModel>(relaxed = true) {

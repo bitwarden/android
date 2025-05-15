@@ -20,7 +20,7 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -35,7 +35,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class ImportLoginsScreenTest : BaseComposeTest() {
+class ImportLoginsScreenTest : BitwardenComposeTest() {
     private var navigateBackCalled = false
 
     private val mutableImportLoginsStateFlow = MutableStateFlow(DEFAULT_STATE)

@@ -8,7 +8,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -18,7 +18,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class DebugMenuScreenTest : BaseComposeTest() {
+class DebugMenuScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<DebugMenuEvent>()
     private val mutableStateFlow = MutableStateFlow(

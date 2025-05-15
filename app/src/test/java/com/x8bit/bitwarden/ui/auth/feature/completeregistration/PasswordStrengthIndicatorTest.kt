@@ -2,10 +2,10 @@ package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import org.junit.Test
 
-class PasswordStrengthIndicatorTest : BaseComposeTest() {
+class PasswordStrengthIndicatorTest : BitwardenComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test

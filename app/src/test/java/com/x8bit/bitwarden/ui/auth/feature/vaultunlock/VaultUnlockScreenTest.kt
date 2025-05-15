@@ -26,7 +26,7 @@ import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -56,7 +56,7 @@ import org.junit.Before
 import org.junit.Test
 import javax.crypto.Cipher
 
-class VaultUnlockScreenTest : BaseComposeTest() {
+class VaultUnlockScreenTest : BitwardenComposeTest() {
 
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultUnlockEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

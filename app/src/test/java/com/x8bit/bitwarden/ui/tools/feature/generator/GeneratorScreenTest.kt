@@ -31,9 +31,9 @@ import androidx.compose.ui.test.swipeRight
 import androidx.compose.ui.text.AnnotatedString
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
 import com.x8bit.bitwarden.ui.util.isCoachMarkToolTip
@@ -48,7 +48,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
 @Suppress("LargeClass")
-class GeneratorScreenTest : BaseComposeTest() {
+class GeneratorScreenTest : BitwardenComposeTest() {
     private var onNavigateToPasswordHistoryScreenCalled = false
     private var onDimNavBarRequest: Boolean? = null
 

@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.chrome.model.ChromeAutofillSettingsOption
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -33,7 +33,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AutoFillScreenTest : BaseComposeTest() {
+class AutoFillScreenTest : BitwardenComposeTest() {
 
     private var isSystemSettingsRequestSuccess = false
     private var onNavigateBackCalled = false

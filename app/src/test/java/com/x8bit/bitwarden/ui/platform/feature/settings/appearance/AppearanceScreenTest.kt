@@ -12,7 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
@@ -24,7 +24,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class AppearanceScreenTest : BaseComposeTest() {
+class AppearanceScreenTest : BitwardenComposeTest() {
 
     private var haveCalledNavigateBack = false
     private val mutableEventFlow = bufferedMutableSharedFlow<AppearanceEvent>()

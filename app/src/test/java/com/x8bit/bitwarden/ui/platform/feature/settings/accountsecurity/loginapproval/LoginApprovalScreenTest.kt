@@ -10,8 +10,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import io.mockk.every
 import io.mockk.just
@@ -24,7 +24,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 
-class LoginApprovalScreenTest : BaseComposeTest() {
+class LoginApprovalScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
 

@@ -17,7 +17,7 @@ import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
@@ -31,7 +31,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class StartRegistrationScreenTest : BaseComposeTest() {
+class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToCompleteRegistrationCalled = false

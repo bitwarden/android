@@ -20,7 +20,7 @@ import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordEvent
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordScreen
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordState
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.ResetPasswordViewModel
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import io.mockk.every
@@ -32,7 +32,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class ResetPasswordScreenTest : BaseComposeTest() {
+class ResetPasswordScreenTest : BitwardenComposeTest() {
     private var onNavigateToLearnToPreventLockoutCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<ResetPasswordEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

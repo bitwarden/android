@@ -15,7 +15,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
-class LoginScreenTest : BaseComposeTest() {
+class LoginScreenTest : BitwardenComposeTest() {
     private val keyboardController: SoftwareKeyboardController = mockk {
         every { hide() } just runs
     }
