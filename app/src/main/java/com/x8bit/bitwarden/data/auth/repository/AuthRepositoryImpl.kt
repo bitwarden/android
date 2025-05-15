@@ -11,6 +11,7 @@ import com.bitwarden.crypto.Kdf
 import com.bitwarden.data.datasource.disk.ConfigDiskSource
 import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.util.toEnvironmentUrls
+import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.DeleteAccountResponseJson
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
@@ -822,14 +823,25 @@ class AuthRepositoryImpl(
     override fun switchAccount(userId: String): SwitchAccountResult {
         val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
         val previousActiveUserId = currentUserState.activeUserId
+        val updateEnvironment: () -> Unit = {
+            environmentRepository.environment = currentUserState
+                .activeAccount
+                .settings
+                .environmentUrlData
+                .toEnvironmentUrlsOrDefault()
+        }
 
         if (userId == previousActiveUserId) {
+            // We need to make sure that the environment is set back to the correct spot.
+            updateEnvironment()
             // No switching to do but clear any pending account additions
             hasPendingAccountAddition = false
             return SwitchAccountResult.NoChange
         }
 
         if (userId !in currentUserState.accounts.keys) {
+            // We need to make sure that the environment is set back to the correct spot.
+            updateEnvironment()
             // The requested user is not currently stored
             return SwitchAccountResult.NoChange
         }
