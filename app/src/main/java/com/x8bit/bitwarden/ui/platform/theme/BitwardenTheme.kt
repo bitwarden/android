@@ -27,9 +27,9 @@ import com.bitwarden.ui.platform.theme.color.lightBitwardenColorScheme
 import com.bitwarden.ui.platform.theme.color.toMaterialColorScheme
 import com.bitwarden.ui.platform.theme.shape.BitwardenShapes
 import com.bitwarden.ui.platform.theme.shape.bitwardenShapes
-import com.x8bit.bitwarden.ui.platform.theme.type.BitwardenTypography
-import com.x8bit.bitwarden.ui.platform.theme.type.bitwardenTypography
-import com.x8bit.bitwarden.ui.platform.theme.type.toMaterialTypography
+import com.bitwarden.ui.platform.theme.type.BitwardenTypography
+import com.bitwarden.ui.platform.theme.type.bitwardenTypography
+import com.bitwarden.ui.platform.theme.type.toMaterialTypography
 
 /**
  * Static wrapper to make accessing the theme components easier.

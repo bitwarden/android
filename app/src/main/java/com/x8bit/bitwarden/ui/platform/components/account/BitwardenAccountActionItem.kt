@@ -53,7 +53,7 @@ fun BitwardenAccountActionItem(
             style = TextStyle(
                 fontSize = 11.dp.toUnscaledTextUnit(),
                 lineHeight = 13.dp.toUnscaledTextUnit(),
-                fontFamily = FontFamily(Font(R.font.dm_sans_bold)),
+                fontFamily = FontFamily(Font(com.bitwarden.ui.R.font.dm_sans_bold)),
                 fontWeight = FontWeight.W600,
             ),
             color = color.toSafeOverlayColor(),
