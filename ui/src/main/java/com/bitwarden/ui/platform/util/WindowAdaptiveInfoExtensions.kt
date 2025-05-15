@@ -1,11 +1,11 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.ui.platform.util
 
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.window.core.layout.WindowWidthSizeClass
-import com.x8bit.bitwarden.ui.platform.model.WindowSize
+import com.bitwarden.ui.platform.model.WindowSize
 
 /**
  * Remembers the [WindowSize] class for the window corresponding to the current window metrics.
