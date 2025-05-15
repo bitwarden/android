@@ -5920,6 +5920,7 @@ class AuthRepositoryTest {
             firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeEnvironmentRepository.environment = Environment.Eu
         assertEquals(
             originalUserState,
             repository.userStateFlow.value,
@@ -5936,6 +5937,7 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
         assertFalse(repository.hasPendingAccountAddition)
+        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -5955,6 +5957,7 @@ class AuthRepositoryTest {
             firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeEnvironmentRepository.environment = Environment.Eu
         assertEquals(
             originalUserState,
             repository.userStateFlow.value,
@@ -5969,6 +5972,7 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
+        assertEquals(Environment.Us, fakeEnvironmentRepository.environment)
     }
 
     @Suppress("MaxLineLength")
@@ -5988,6 +5992,7 @@ class AuthRepositoryTest {
             firstTimeState = FIRST_TIME_STATE,
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
+        fakeEnvironmentRepository.environment = Environment.Eu
         assertEquals(
             originalUserState,
             repository.userStateFlow.value,
@@ -6004,6 +6009,7 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
         assertFalse(repository.hasPendingAccountAddition)
+        assertEquals(Environment.Eu, fakeEnvironmentRepository.environment)
     }
 
     @Test
@@ -7078,7 +7084,7 @@ class AuthRepositoryTest {
         private val ACCOUNT_1 = AccountJson(
             profile = PROFILE_1,
             settings = AccountJson.Settings(
-                environmentUrlData = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             ),
         )
         private val ACCOUNT_2 = AccountJson(
@@ -7101,7 +7107,7 @@ class AuthRepositoryTest {
                 creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
             ),
             settings = AccountJson.Settings(
-                environmentUrlData = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
             ),
         )
         private val SINGLE_USER_STATE_1 = UserStateJson(
