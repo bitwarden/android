@@ -11,8 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A simple clickable row for use within a [BitwardenSelectionDialog] as an alternative to a

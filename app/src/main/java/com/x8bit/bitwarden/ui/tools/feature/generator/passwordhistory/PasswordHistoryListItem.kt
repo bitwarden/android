@@ -20,11 +20,11 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A composable function for displaying a password history list item.

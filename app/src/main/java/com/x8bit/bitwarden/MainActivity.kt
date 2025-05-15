@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import com.bitwarden.core.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
@@ -32,7 +33,6 @@ import com.x8bit.bitwarden.ui.platform.feature.debugmenu.navigateToDebugMenuScre
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.ROOT_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

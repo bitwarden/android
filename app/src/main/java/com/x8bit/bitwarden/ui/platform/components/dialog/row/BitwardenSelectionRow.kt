@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.ui.platform.components.radio.BitwardenRadioButton
-import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * A clickable item that displays a radio button and text.
