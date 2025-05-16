@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.Cipher

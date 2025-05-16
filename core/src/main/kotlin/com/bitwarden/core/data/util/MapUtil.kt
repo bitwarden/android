@@ -2,7 +2,7 @@
 
 package com.bitwarden.core.data.util
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import java.util.concurrent.ConcurrentHashMap
 
 /**

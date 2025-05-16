@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.accessibility.util
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.EditText
 import androidx.core.os.bundleOf
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.accessibility.model.KnownUsernameField
 
 private const val PACKAGE_NAME_BITWARDEN_PREFIX: String = "com.x8bit.bitwarden"

@@ -1,4 +1,4 @@
-package com.bitwarden.core.annotation
+package com.bitwarden.annotation
 
 /**
  * Used to omit the annotated class from test coverage reporting. This should be used sparingly and

@@ -1,6 +1,6 @@
 package com.bitwarden.authenticator.data.platform.provider
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseApiUrl
 import com.bitwarden.data.repository.util.baseEventsUrl

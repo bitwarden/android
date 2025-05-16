@@ -3,7 +3,7 @@
 package com.x8bit.bitwarden.data.platform.util
 
 import android.os.Build
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * Returns true if the current OS build version is below the provided [version].

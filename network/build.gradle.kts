@@ -44,6 +44,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":annotation"))
     implementation(project(":core"))
 
     implementation(libs.androidx.core.ktx)

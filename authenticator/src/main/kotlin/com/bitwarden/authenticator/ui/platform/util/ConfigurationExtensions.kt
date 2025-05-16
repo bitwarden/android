@@ -3,7 +3,7 @@
 package com.bitwarden.authenticator.ui.platform.util
 
 import android.content.res.Configuration
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * A helper method to indicate if the current UI configuration is portrait or not.

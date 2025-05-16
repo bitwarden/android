@@ -14,8 +14,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
-import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * This is a [Modifier] extension for drawing a divider at the bottom of the composable.

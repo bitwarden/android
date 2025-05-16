@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
 import androidx.core.os.BundleCompat
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * A means of retrieving a [Parcelable] from an [Intent] using the given [name] in a manner that

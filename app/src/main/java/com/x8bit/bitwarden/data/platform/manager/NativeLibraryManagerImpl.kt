@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import timber.log.Timber
 
 /**
