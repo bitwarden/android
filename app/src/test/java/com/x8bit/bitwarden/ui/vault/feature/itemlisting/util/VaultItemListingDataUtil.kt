@@ -299,6 +299,10 @@ fun createMockDisplayItemForSend(
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
                         sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",
@@ -342,6 +346,10 @@ fun createMockDisplayItemForSend(
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
                         sendUrl = "https://send.bitwarden.com/#mockAccessId-$number/mockKey-$number",

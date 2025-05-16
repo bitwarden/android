@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
+import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
@@ -21,7 +22,8 @@ class SendViewExtensionsTest {
 
     @Test
     fun `toLabelIcons should return all of the icons when all checks have passed`() {
-        val sendView = createMockSendView(number = 1).copy(
+        val sendView = createMockSendView(
+            number = 1,
             // Show the password icon when true
             hasPassword = true,
             // Show the disabled icon when true
@@ -43,7 +45,8 @@ class SendViewExtensionsTest {
 
     @Test
     fun `toLabelIcons should return none of the icons when none of the checks have passed`() {
-        val sendView = createMockSendView(number = 1).copy(
+        val sendView = createMockSendView(
+            number = 1,
             // Hide the password icon when false
             hasPassword = false,
             // Hide the disabled icon when false
@@ -67,7 +70,8 @@ class SendViewExtensionsTest {
     @Test
     fun `toOverflowActions should return overflow options with remove password when there is a password`() {
         val baseWebSendUrl = "www.test.com"
-        val sendView = createMockSendView(number = 1).copy(
+        val sendView = createMockSendView(
+            number = 1,
             // Make sure there is a password for the remove password action
             hasPassword = true,
         )
@@ -81,7 +85,8 @@ class SendViewExtensionsTest {
     @Test
     fun `toOverflowActions should return overflow options without Remove Password when there is no password`() {
         val baseWebSendUrl = "www.test.com"
-        val sendView = createMockSendView(number = 1).copy(
+        val sendView = createMockSendView(
+            number = 1,
             // Make sure there is no password for the remove password action
             hasPassword = false,
         )
@@ -99,7 +104,7 @@ class SendViewExtensionsTest {
     @Test
     fun `toOverflowActions should return no overflow options when the id is null`() {
         val baseWebSendUrl = "www.test.com"
-        val sendView = createMockSendView(number = 1).copy(id = null)
+        val sendView = createMockSendView(number = 1, id = null)
 
         val result = sendView.toOverflowActions(baseWebSendUrl = baseWebSendUrl)
 
@@ -146,6 +151,10 @@ private val ALL_SEND_STATUS_ICONS: ImmutableList<IconData> = persistentListOf(
 
 private val ALL_SEND_OVERFLOW_OPTIONS: List<ListingItemOverflowAction> =
     listOf(
+        ListingItemOverflowAction.SendAction.ViewClick(
+            sendId = "mockId-1",
+            sendType = SendType.FILE,
+        ),
         ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-1"),
         ListingItemOverflowAction.SendAction.CopyUrlClick(
             sendUrl = "www.test.commockAccessId-1/mockKey-1",

@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -275,6 +275,10 @@ fun createMockDisplayItemForSend(
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
                         sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",
@@ -315,6 +319,10 @@ fun createMockDisplayItemForSend(
                     ),
                 ),
                 overflowOptions = listOf(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = "mockId-$number",
+                        sendType = sendType,
+                    ),
                     ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.CopyUrlClick(
                         sendUrl = "https://vault.bitwarden.com/#/send/mockAccessId-$number/mockKey-$number",

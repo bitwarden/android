@@ -1,10 +1,11 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.model
 
 import android.os.Parcelable
-import com.bitwarden.vault.CipherType
-import com.x8bit.bitwarden.R
+import com.bitwarden.send.SendType
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
+import com.bitwarden.vault.CipherType
+import com.x8bit.bitwarden.R
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -21,6 +22,17 @@ sealed class ListingItemOverflowAction : Parcelable {
      * Represents the send actions.
      */
     sealed class SendAction : ListingItemOverflowAction() {
+        /**
+         * Click on the view send overflow option.
+         */
+        @Parcelize
+        data class ViewClick(
+            val sendId: String,
+            val sendType: SendType,
+        ) : SendAction() {
+            override val title: Text get() = R.string.view.asText()
+        }
+
         /**
          * Click on the edit send overflow option.
          */

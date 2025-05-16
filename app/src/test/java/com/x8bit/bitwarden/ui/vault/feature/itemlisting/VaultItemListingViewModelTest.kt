@@ -82,6 +82,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialR
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -914,7 +915,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ItemClick for send item should emit NavigateToEditSendItem`() = runTest {
+    fun `ItemClick for send item should emit NavigateToViewSendItem`() = runTest {
         val viewModel = createVaultItemListingViewModel(
             createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
         )
@@ -925,7 +926,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     type = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.FILE),
                 ),
             )
-            assertEquals(VaultItemListingEvent.NavigateToEditSendItem(id = "mock"), awaitItem())
+            assertEquals(
+                VaultItemListingEvent.NavigateToViewSendItem(
+                    id = "mock",
+                    sendType = SendItemType.FILE,
+                ),
+                awaitItem(),
+            )
         }
     }
 
@@ -1315,6 +1322,29 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.RefreshClick)
         verify { vaultRepository.sync(forced = true) }
+    }
+
+    @Test
+    fun `OverflowOptionClick Send ViewClick should emit NavigateToViewSendItem`() = runTest {
+        val sendId = "sendId"
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(
+                VaultItemListingsAction.OverflowOptionClick(
+                    ListingItemOverflowAction.SendAction.ViewClick(
+                        sendId = sendId,
+                        sendType = SendType.TEXT,
+                    ),
+                ),
+            )
+            assertEquals(
+                VaultItemListingEvent.NavigateToViewSendItem(
+                    id = sendId,
+                    sendType = SendItemType.TEXT,
+                ),
+                awaitItem(),
+            )
+        }
     }
 
     @Test
