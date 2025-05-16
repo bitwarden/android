@@ -1,7 +1,7 @@
 package com.bitwarden.network.util
 
 import android.os.Build
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * Provides device model string. Useful for mocking static [Build.MODEL] call tests.

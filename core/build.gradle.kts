@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":annotation"))
+
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)

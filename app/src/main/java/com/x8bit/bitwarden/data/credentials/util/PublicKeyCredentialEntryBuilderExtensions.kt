@@ -4,7 +4,7 @@ package com.x8bit.bitwarden.data.credentials.util
 
 import android.os.Build
 import androidx.credentials.provider.PublicKeyCredentialEntry
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import javax.crypto.Cipher
 

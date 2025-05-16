@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import com.bitwarden.ui.platform.base.util.topDivider
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.base.util.topDivider
 import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import kotlinx.collections.immutable.ImmutableList
 

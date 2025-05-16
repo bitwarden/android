@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.TextToolbarStatus
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.getSelectedText
 import androidx.core.os.persistableBundleOf
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * A custom [TextToolbar] that is obfuscates the copied or cut text.

@@ -11,7 +11,7 @@ import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
 import androidx.core.os.bundleOf
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo

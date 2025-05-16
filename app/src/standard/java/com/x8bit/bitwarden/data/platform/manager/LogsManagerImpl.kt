@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.repository.model.Environment
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase

@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.util
 import android.app.PendingIntent
 import android.os.Build
 import android.text.InputType
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * Whether this [Int] is a password [InputType].
