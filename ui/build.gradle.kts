@@ -30,6 +30,11 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
+    testOptions {
+        // Required for Robolectric
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+    }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
@@ -57,11 +62,16 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
 
+    // For now we are restricted to running Compose tests for debug builds only
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.junit5)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
+    testImplementation(libs.robolectric.robolectric)
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.compose.ui.test)
