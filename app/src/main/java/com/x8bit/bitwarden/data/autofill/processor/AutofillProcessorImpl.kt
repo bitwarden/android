@@ -54,7 +54,10 @@ class AutofillProcessorImpl(
         request: FillRequest,
     ) {
         // Set the listener so that any long running work is cancelled when it is no longer needed.
-        cancellationSignal.setOnCancelListener { job.cancel() }
+        cancellationSignal.setOnCancelListener {
+            Timber.d("Cancellation signal received. Cancelling autofill request.")
+            job.cancel()
+        }
         // Process the OS data and handle invoking the callback with the result.
         job.cancel()
         job = scope.launch {
@@ -115,6 +118,7 @@ class AutofillProcessorImpl(
         fillCallback: FillCallback,
         fillRequest: FillRequest,
     ) {
+        Timber.d("Autofill request processing has started.")
         // Parse the OS data into an [AutofillRequest] for easier processing.
         val autofillRequest = parser.parse(
             autofillAppInfo = autofillAppInfo,
@@ -122,6 +126,7 @@ class AutofillProcessorImpl(
         )
         when (autofillRequest) {
             is AutofillRequest.Fillable -> {
+                Timber.d("Autofill request is fillable. Proceeding with fulfillment.")
                 // Fulfill the [autofillRequest].
                 val filledData = filledDataBuilder.build(
                     autofillRequest = autofillRequest,
@@ -138,9 +143,12 @@ class AutofillProcessorImpl(
                     filledData = filledData,
                     saveInfo = saveInfo,
                 )
-
                 @Suppress("TooGenericExceptionCaught")
                 try {
+                    @Suppress("MaxLineLength")
+                    Timber.d(
+                        "Done processing autofill request with ${filledData.filledPartitions.size} partitions.",
+                    )
                     fillCallback.onSuccess(response)
                 } catch (e: RuntimeException) {
                     // This is to catch any TransactionTooLargeExceptions that could occur here.
@@ -153,6 +161,7 @@ class AutofillProcessorImpl(
                 // If we are unable to fulfill the request, we should invoke the callback
                 // with null. This effectively disables autofill for this view set and
                 // allows the [AutofillService] to be unbound.
+                Timber.w("Unable to fulfill autofill request. Disabling autofill for this view.")
                 fillCallback.onSuccess(null)
             }
         }
