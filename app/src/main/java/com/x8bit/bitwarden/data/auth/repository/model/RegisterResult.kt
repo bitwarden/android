@@ -9,7 +9,7 @@ sealed class RegisterResult {
      *
      * @param captchaToken the captcha bypass token to bypass future captcha verifications.
      */
-    data class Success(val captchaToken: String) : RegisterResult()
+    data class Success(val captchaToken: String?) : RegisterResult()
 
     /**
      * Captcha verification is required.

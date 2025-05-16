@@ -75,7 +75,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 @Composable
 fun CreateAccountScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
+    onNavigateToLogin: (emailAddress: String, captchaToken: String?) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: CreateAccountViewModel = hiltViewModel(),
 ) {

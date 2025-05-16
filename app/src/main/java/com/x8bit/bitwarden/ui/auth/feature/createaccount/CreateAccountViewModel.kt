@@ -494,7 +494,7 @@ sealed class CreateAccountEvent {
      */
     data class NavigateToLogin(
         val email: String,
-        val captchaToken: String,
+        val captchaToken: String?,
     ) : CreateAccountEvent()
 
     /**

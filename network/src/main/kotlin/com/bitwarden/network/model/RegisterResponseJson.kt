@@ -19,7 +19,7 @@ sealed class RegisterResponseJson {
     @Serializable
     data class Success(
         @SerialName("captchaBypassToken")
-        val captchaBypassToken: String,
+        val captchaBypassToken: String?,
     ) : RegisterResponseJson()
 
     /**
