@@ -627,7 +627,7 @@ Scanning will happen automatically.</string>
     <string name="maximum_access_count">Maximum access count</string>
     <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
     <string name="maximum_access_count_reached">Max access count reached</string>
-    <string name="current_access_count">Current access count</string>
+    <string name="current_access_count">Current access count: %s</string>
     <string name="new_password">รหัสผ่านใหม่</string>
     <string name="password_info">Require this password to view the Send.</string>
     <string name="remove_password">Remove password</string>
@@ -1268,4 +1268,9 @@ Do you want to switch to this account?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
+    <string name="delete_send">Delete send</string>
+    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
 </resources>

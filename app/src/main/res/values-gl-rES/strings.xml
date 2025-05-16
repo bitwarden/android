@@ -1268,4 +1268,9 @@ Queres comprobalo dende esa conta?</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
     <string name="view_file_send">View file Send</string>
     <string name="view_text_send">View text Send</string>
+    <string name="delete_send">Delete send</string>
+    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
 </resources>

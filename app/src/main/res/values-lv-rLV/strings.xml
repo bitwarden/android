@@ -213,7 +213,7 @@
     <string name="unlock_with">Atslēgt ar %1$s</string>
     <string name="unlock_with_pin">Atslēgt ar PIN kodu</string>
     <string name="validating">Pārbauda</string>
-    <string name="verification_code">Apstiprinājuma kods</string>
+    <string name="verification_code">Apliecinājuma kods</string>
     <string name="view_item">Skatīt vienumu</string>
     <string name="view_login">Apskatīt pieteikšanās vienumu</string>
     <string name="view_card">Apskatīt karti</string>
@@ -251,19 +251,19 @@
     <string name="learn_org">Uzzināt par apvienībām</string>
     <string name="cannot_open_app">Nevar atvērt lietotni \"%1$s\".</string>
     <string name="authenticator_app_title">Autentificētāja lietotne</string>
-    <string name="enter_verification_code_app">Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes.</string>
-    <string name="enter_verification_code_email">Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz %1$s.</string>
-    <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecināšanas kods, kas tika nosūtīts %1$s.</string>
+    <string name="enter_verification_code_app">Jāievada 6 ciparu apliecinājuma kods no autentificētāja lietotnes.</string>
+    <string name="enter_verification_code_email">Jāievada 6 ciparu apliecinājuma kods, kas tika nosūtīts uz %1$s.</string>
+    <string name="enter_verification_code_new_device">Mēs neatpazīstam šo ierīci. Jāievada 8 ciparu apliecinājuma kods, kas tika nosūtīts %1$s.</string>
     <string name="login_unavailable">Pieteikšanās nav pieejama</string>
     <string name="no_two_step_available">Šim kontam ir iestatīta divpakāpju pieteikšanās, bet šajā ierīcē netiek nodrošināts neviens no uzstādītajiem divpakāpju pārbaudes nodrošinātājiem. Lūgums izmantot atbalstītu ierīci un/vai pievienot papildu nodrošinātājus, kas tiek labāk atbalstīti dažādās ierīcēs (piemēram, autentificētāja lietotni).</string>
     <string name="recovery_code_title">Atgūšanas kods</string>
     <string name="remember">Atcerēties</string>
     <string name="remember_email">Atcerēties e-pasta adresi</string>
-    <string name="send_verification_code_again">Sūtīt apstiprinājuma koda e-pastu vēlreiz</string>
+    <string name="send_verification_code_again">Atkārtoti nosūtīt kodu</string>
     <string name="two_step_login_options">Divpakāpju pieteikšanās iespējas</string>
     <string name="use_another_two_step_method">Izmantot citu divpakāpju pieteikšanās veidu</string>
-    <string name="verification_email_not_sent">Apstiprinājumu nevarēja nosūtīt e-pastā. Mēģināt vēlreiz.</string>
-    <string name="verification_email_sent">Apstiprināšanas e-pasta ziņojums ir nosūtīts.</string>
+    <string name="verification_email_not_sent">Nevarēja nosūtīt apliecinājuma e-pasta ziņojumu. Jāmēģina vēlreiz.</string>
+    <string name="verification_email_sent">Apliecināšanas e-pasta ziņojums ir nosūtīts</string>
     <string name="yubi_key_instruction">Lai turpinātu, YubiKey NEO jātur pie ierīces aizmugures vai jāiesprauž USB ligzdā un tad jāpieskaras YubiKey pogai.</string>
     <string name="yubi_key_title">YubiKey drošības atslēga</string>
     <string name="add_new_attachment">Pievienot jaunu pielikumu</string>
@@ -273,7 +273,7 @@
     <string name="downloading">Lejupielādē...</string>
     <string name="attachment_large_warning">Šī pielikuma lielums ir %1$s. Vai tiešām to lejupielādēt šajā ierīcē?</string>
     <string name="authenticator_key">Autentificētāja atslēga (TOTP)</string>
-    <string name="verification_code_totp">Apstiprinājuma kods (TOTP)</string>
+    <string name="verification_code_totp">Apliecinājuma kods (TOTP)</string>
     <string name="authenticator_key_added">Autentificētāja atslēga ir pievienota.</string>
     <string name="authenticator_key_read_error">Nevar nolasīt autentificētāja atslēgu.</string>
     <string name="point_your_camera_at_the_qr_code">Kamera jāpavērš pret kvadrātkodu.
@@ -282,7 +282,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="camera">Kamera</string>
     <string name="photos">Attēli</string>
     <string name="copy_totp">Ievietot TOTP starpliktuvē</string>
-    <string name="copy_totp_automatically_description">Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apstiprinājuma kods tiks automātiski ievietots starpliktuvē, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</string>
+    <string name="copy_totp_automatically_description">Ja pieteikšanās vienumam ir pievienota autentificētāja atslēga, TOTP apliecinājuma kods tiks automātiski ievietots starpliktuvē, kad vien tiks automātiski aizpildīta pieteikšanās veidne.</string>
     <string name="copy_totp_automatically">Automātiski ievietot TOTP starpliktuvē</string>
     <string name="premium_required">Ir nepieciešama Premium dalība, lai izmantotu šo iespēju.</string>
     <string name="attachement_added">Pielikums pievienots</string>
@@ -520,7 +520,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="shared">Kopīgots</string>
     <string name="toggle_visibility">Pārslēgt redzamību</string>
     <string name="login_expired">Pieteikšanās sesija ir beigusies.</string>
-    <string name="biometrics_direction">Apstiprināšana ar biometriju</string>
+    <string name="biometrics_direction">Apliecināšana ar biometriju</string>
     <string name="biometrics">Biometrija</string>
     <string name="biometrics_failed">Biometrija neizdevās</string>
     <string name="biometrics_decoding_failure">Jāpiesakās ar savu galveno paroli vai PIN, tad iestatījumos atkārtoti jāiespējo pieteikšanās ar biometriju.</string>
@@ -534,7 +534,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="granted">Nodrošināts</string>
     <string name="file_format">Datnes veids</string>
     <string name="export_vault_master_password_description">Ievadīt galveno paroli, lai izgūtu glabātavas saturu.</string>
-    <string name="send_verification_code_to_email">Sūtīt apstiprinājuma kodu uz e-pastu</string>
+    <string name="send_verification_code_to_email">Nosūtīt apliecinājuma kodu e-pastā</string>
     <string name="code_sent">Kods nosūtīts</string>
     <string name="confirm_your_identity">Jāapstiprina identitāte, lai turpinātu.</string>
     <string name="export_vault_warning">Šī izguve satur glabātavas datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas.</string>
@@ -560,8 +560,8 @@ Nolasīšana notiks automātiski.</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Vai tiešām neatgriezeniski izdzēst? To nevar atsaukt.</string>
     <string name="do_you_really_want_to_restore_cipher">Vai tiešām vēlaties atjaunot šo vienumu?</string>
     <string name="do_you_really_want_to_soft_delete_cipher">Vai tiešām pārvietot uz atkritni?</string>
-    <string name="account_biometric_invalidated">Šī konta atslēgšana ar biometriju ir atspējota, tiek gaidīts galvenās paroles apstiprinājums.</string>
-    <string name="account_biometric_invalidated_extension">Automātiskās aizpildes atslēgšana ar biometriju ir atspējota, tiek gaidīts galvenās paroles apstiprinājums.</string>
+    <string name="account_biometric_invalidated">Šī konta atslēgšana ar biometriju ir atspējota, tiek gaidīts galvenās paroles apliecinājums.</string>
+    <string name="account_biometric_invalidated_extension">Automātiskās aizpildes atslēgšana ar biometriju ir atspējota, tiek gaidīts galvenās paroles apliecinājums.</string>
     <string name="enable_sync_on_refresh">Iespējot sinhronizēšanu atsvaidzinot</string>
     <string name="enable_sync_on_refresh_description">Sinhronizēt glabātavu ar uz leju pavelkošu kustību.</string>
     <string name="log_in_sso">Uzņēmuma vienotā pieteikšanās</string>
@@ -660,7 +660,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="hide_email">Slēpt e-pasta adresi no saņēmējiem.</string>
     <string name="send_options_policy_in_effect">Viens vai vairāki apvienības nosacījumi ietekmē Send iespējas.</string>
     <string name="send_file_premium_required">Ar bezmaksas kontu ir iespējams kopīgot tikai tekstu. Ir nepieciešama Premium dalība, lai Send izmantotu datnes.</string>
-    <string name="send_file_email_verification_required">Ir jāapstiprina e-pasta adrese, lai izmantotu datnes ar Send. E-pasta edresi var apstiprināt tīmekļa glabātavā.</string>
+    <string name="send_file_email_verification_required">Ir jāapliecina sava e-pasta adrese, lai izmantotu datnes ar Send. E-pasta edresi var apliecināt tīmekļa glabātavā.</string>
     <string name="password_prompt">Galvenās paroles pārvaicāšana</string>
     <string name="password_confirmation">Galvenās paroles apstiprināšana</string>
     <string name="password_confirmation_desc">Šī darbība ir aizsargāta, lai turpinātu, ir jāievada galvenā parole, lai apstiprinātu identitāti.</string>
@@ -702,7 +702,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="delete_account_explanation">Konts un visi ar to saistītie dati tiks izdzēsti un nebūs atkopjami. Vai tiešām turpināt?</string>
     <string name="deleting_your_account">Dzēš kontu</string>
     <string name="your_account_has_been_permanently_deleted">Jūsu konts ir neatgriezeniski izdzēsts</string>
-    <string name="invalid_verification_code">Nederīgs apstiprinājuma kods.</string>
+    <string name="invalid_verification_code">Nederīgs apliecinājuma kods</string>
     <string name="request_otp">Pieprasīt vienreiz izmantojamo paroli</string>
     <string name="send_code">Nosūtīt kodu</string>
     <string name="sending">Sūta</string>
@@ -710,7 +710,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="sending_code">Sūta kodu</string>
     <string name="verifying">Pārbauda</string>
     <string name="resend_code">Atkārtoti nosūtīt kodu</string>
-    <string name="a_verification_code_was_sent_to_your_email">Pārbaudes kods tika nosūtīts e-pastā</string>
+    <string name="a_verification_code_was_sent_to_your_email">Apliecinājuma kods tika nosūtīts e-pastā</string>
     <string name="an_error_occurred_while_sending_a_verification_code_to_your_email_please_try_again">Atgadījās kļūda, kad apliecinājuma kods tika sūtīts uz e-pastu. Lūgums mēģināt vēlreiz</string>
     <string name="enter_the_verification_code_that_was_sent_to_your_email">Jāievada apliecinājuma kods, kas tika nosūtīts e-pastā</string>
     <string name="submit_crash_logs">Iesniegt avāriju ierakstus</string>
@@ -730,7 +730,7 @@ Nolasīšana notiks automātiski.</string>
     <string name="vault_filter_description">Glabātava: %1$s</string>
     <string name="all">Visi</string>
     <string name="totp">TOTP</string>
-    <string name="verification_codes">Apstiprinājuma kodi</string>
+    <string name="verification_codes">Apliecinājuma kodi</string>
     <string name="premium_subscription_required">Nepieciešams Premium abonements</string>
     <string name="cannot_add_authenticator_key">Nevar pievienot autentificētāja atslēgu?</string>
     <string name="cannot_add_authenticator_key_scan_qr_code">Nevar pievienot autentificētāja atslēgu? <annotation link="scanQrCode">Nolasīt kvadrātkodu</annotation></string>
@@ -1266,6 +1266,11 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="cannot_delete_your_account">Nevar izdzēst Tavu kontu</string>
     <string name="cannot_delete_your_account_explanation">Šo darbību nevar pabeigt, jo konts pieder apvienībai. Jāsazinās ar savas apvienības pārvaldītāju, lai noskaidrotu vairāk.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Šis konts drīzumā tiks izdzēsts. Jāpiesakās %1$s, lai turpinātu izmantot Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">Apskatīt datnes Send</string>
+    <string name="view_text_send">Apskatīt teksta Send</string>
+    <string name="delete_send">Izdzēst Send</string>
+    <string name="missing_send_resync_your_vault">Trūkst Send, atkārtoti jāsinhronizē sava glabātava</string>
+    <string name="dynamic_colors">Pielāgojošas krāsas</string>
+    <string name="dynamic_colors_description">Pielietot krāsas, kas pielāgojas ekrāntapetei</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Pielāgojošās krāsas izmanto sistēmas krāsas un var neatbilst piekļūstamības vadlīnijām.</string>
 </resources>
