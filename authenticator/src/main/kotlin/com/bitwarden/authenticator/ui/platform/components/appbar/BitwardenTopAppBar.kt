@@ -20,8 +20,8 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:

@@ -32,12 +32,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
-import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard

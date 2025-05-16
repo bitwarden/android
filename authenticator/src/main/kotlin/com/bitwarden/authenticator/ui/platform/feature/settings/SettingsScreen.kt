@@ -48,7 +48,6 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
@@ -66,6 +65,7 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
