@@ -147,7 +147,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt(),
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -168,7 +168,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt(),
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -240,22 +240,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt(),
-            forceRefresh = false,
-        )
-
-        assertEquals(
-            Int.MIN_VALUE,
-            flagValue,
-        )
-    }
-
-    @Test
-    fun `getFeatureFlag Int should return default value when not remotely controlled`() = runTest {
-        fakeServerConfigRepository.serverConfigValue = null
-
-        val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt(isRemotelyConfigured = false),
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -288,7 +273,7 @@ class FeatureFlagManagerTest {
             ),
         )
 
-        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyInt())
+        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyInt)
 
         assertEquals(Int.MIN_VALUE, flagValue)
     }

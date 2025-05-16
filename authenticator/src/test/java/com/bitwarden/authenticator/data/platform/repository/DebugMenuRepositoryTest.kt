@@ -5,14 +5,12 @@ import com.bitwarden.authenticator.data.platform.datasource.disk.FeatureFlagOver
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.data.datasource.disk.model.ServerConfig
 import com.bitwarden.data.repository.ServerConfigRepository
-import com.bitwarden.network.model.ConfigResponseJson
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
@@ -21,7 +19,7 @@ class DebugMenuRepositoryTest {
         mockk<FeatureFlagOverrideDiskSource> {
             every { getFeatureFlag(FlagKey.DummyBoolean) } returns true
             every { getFeatureFlag(FlagKey.DummyString) } returns TEST_STRING_VALUE
-            every { getFeatureFlag(FlagKey.DummyInt()) } returns TEST_INT_VALUE
+            every { getFeatureFlag(FlagKey.DummyInt) } returns TEST_INT_VALUE
             every { saveFeatureFlag(any(), any()) } just io.mockk.runs
         }
     private val mutableServerConfigStateFlow =
@@ -76,7 +74,7 @@ class DebugMenuRepositoryTest {
     fun `getFeatureFlag should return the feature flag string value from disk`() {
         Assertions.assertEquals(
             TEST_STRING_VALUE,
-            debugMenuRepository.getFeatureFlag(FlagKey.DummyString)!!,
+            debugMenuRepository.getFeatureFlag(FlagKey.DummyString),
         )
     }
 
@@ -84,7 +82,7 @@ class DebugMenuRepositoryTest {
     fun `getFeatureFlag should return the feature flag int value from disk`() {
         Assertions.assertEquals(
             TEST_INT_VALUE,
-            debugMenuRepository.getFeatureFlag(FlagKey.DummyInt())!!,
+            debugMenuRepository.getFeatureFlag(FlagKey.DummyInt),
         )
     }
 
@@ -113,53 +111,6 @@ class DebugMenuRepositoryTest {
                 awaitItem() // initial value on subscription
                 awaitItem()
                 expectNoEvents()
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `resetFeatureFlagOverrides should save all feature flags to values from the server config if remote configured is on`() =
-        runTest {
-            val mockServerData =
-                mockk<ConfigResponseJson>(
-                    relaxed = true,
-                ) {
-                    every { featureStates } returns mapOf(
-                        FlagKey.PasswordManagerSync.keyName to JsonPrimitive(
-                            true,
-                        ),
-                        FlagKey.BitwardenAuthenticationEnabled.keyName to JsonPrimitive(
-                            false,
-                        ),
-                    )
-                }
-            val mockServerConfig =
-                mockk<ServerConfig>(
-                    relaxed = true,
-                ) {
-                    every { serverData } returns mockServerData
-                }
-            mutableServerConfigStateFlow.value = mockServerConfig
-
-            debugMenuRepository.resetFeatureFlagOverrides()
-
-            Assertions.assertTrue(FlagKey.PasswordManagerSync.isRemotelyConfigured)
-            Assertions.assertFalse(FlagKey.BitwardenAuthenticationEnabled.isRemotelyConfigured)
-            verify(exactly = 1) {
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.PasswordManagerSync,
-                    true,
-                )
-                mockFeatureFlagOverrideDiskSource.saveFeatureFlag(
-                    FlagKey.BitwardenAuthenticationEnabled,
-                    false,
-                )
-            }
-
-            debugMenuRepository.featureFlagOverridesUpdatedFlow.test {
-                awaitItem() // initial value on subscription
-                awaitItem()
-                cancel()
             }
         }
 }

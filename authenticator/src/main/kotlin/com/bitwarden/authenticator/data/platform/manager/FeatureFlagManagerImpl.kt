@@ -41,7 +41,6 @@ class FeatureFlagManagerImpl(
  */
 fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
     val defaultValue = key.defaultValue
-    if (!key.isRemotelyConfigured) return key.defaultValue
     return this
         ?.serverData
         ?.featureStates
@@ -56,9 +55,9 @@ fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
                     Int::class -> it.content.toInt() as T
                     else -> defaultValue
                 }
-            } catch (ex: ClassCastException) {
+            } catch (_: ClassCastException) {
                 defaultValue
-            } catch (ex: NumberFormatException) {
+            } catch (_: NumberFormatException) {
                 defaultValue
             }
         }
