@@ -35,7 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHandler
 import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
@@ -53,8 +55,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricSupportStatus
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.model.WindowSize
-import com.x8bit.bitwarden.ui.platform.util.rememberWindowSize
 
 /**
  * Top level composable for the setup unlock screen.
