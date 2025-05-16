@@ -172,7 +172,17 @@ class IntentManagerImpl(
             }
         } else {
             val newUri = if (uri.scheme == null) {
-                uri.buildUpon().scheme("https").build()
+                // Host can be mistaken as path if scheme is not set and URI does not start with "//".
+                if (uri.authority == null && uri.path != null) {
+                    uri
+                        .buildUpon()
+                        .scheme("https")
+                        .authority(uri.pathSegments[0])
+                        .path(uri.path!!.removePrefix(uri.pathSegments[0]))
+                        .build()
+                } else {
+                    uri.buildUpon().scheme("https").build()
+                }
             } else {
                 uri.normalizeScheme()
             }
