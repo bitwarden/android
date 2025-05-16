@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -527,7 +529,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when the active user has an unlocked vault but the is a ShareNewSend special circumstance the nav state should be VaultUnlockedForNewSend`() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ShareNewSend(
-                data = mockk(),
+                data = mockk<IntentManager.ShareData.TextSend>(),
                 shouldFinishWhenComplete = true,
             )
         mutableUserStateFlow.tryEmit(
@@ -560,7 +562,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.VaultUnlockedForNewSend,
+            RootNavState.VaultUnlockedForNewSend(sendType = SendItemType.TEXT),
             viewModel.stateFlow.value,
         )
     }

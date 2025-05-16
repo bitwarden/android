@@ -345,7 +345,12 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun handleEditClick(action: ListingItemOverflowAction.SendAction.EditClick) {
-        sendEvent(SearchEvent.NavigateToEditSend(action.sendId))
+        sendEvent(
+            event = SearchEvent.NavigateToEditSend(
+                sendId = action.sendId,
+                sendType = action.sendType.toSendItemType(),
+            ),
+        )
     }
 
     private fun handleCopyTotpClick(
@@ -1221,6 +1226,7 @@ sealed class SearchEvent {
      */
     data class NavigateToEditSend(
         val sendId: String,
+        val sendType: SendItemType,
     ) : SearchEvent()
 
     /**

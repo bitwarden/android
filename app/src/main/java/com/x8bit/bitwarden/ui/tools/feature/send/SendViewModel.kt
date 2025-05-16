@@ -11,6 +11,8 @@ import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
@@ -44,11 +46,12 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    authRepo: AuthRepository,
+    settingsRepo: SettingsRepository,
+    policyManager: PolicyManager,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
-    settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
-    policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
@@ -61,6 +64,7 @@ class SendViewModel @Inject constructor(
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
             isRefreshing = false,
+            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
         ),
 ) {
 
@@ -80,11 +84,17 @@ class SendViewModel @Inject constructor(
             .map { SendAction.Internal.SendDataReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        authRepo
+            .userStateFlow
+            .map { SendAction.Internal.UserStateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: SendAction): Unit = when (action) {
         SendAction.AboutSendClick -> handleAboutSendClick()
         SendAction.AddSendClick -> handleAddSendClick()
+        is SendAction.AddSendSelected -> handleAddSendSelected(action)
         SendAction.LockClick -> handleLockClick()
         SendAction.RefreshClick -> handleRefreshClick()
         SendAction.SearchClick -> handleSearchClick()
@@ -120,6 +130,8 @@ class SendViewModel @Inject constructor(
         SendAction.Internal.InternetConnectionErrorReceived -> {
             handleInternetConnectionErrorReceived()
         }
+
+        is SendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
     }
 
     private fun handleInternetConnectionErrorReceived() {
@@ -131,6 +143,12 @@ class SendViewModel @Inject constructor(
                     R.string.internet_connection_required_message.asText(),
                 ),
             )
+        }
+    }
+
+    private fun handleUserStateReceive(action: SendAction.Internal.UserStateReceive) {
+        mutableStateFlow.update {
+            it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
     }
 
@@ -257,7 +275,38 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleAddSendClick() {
-        sendEvent(SendEvent.NavigateNewSend)
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.SelectSendAddType)
+        }
+    }
+
+    private fun handleAddSendSelected(action: SendAction.AddSendSelected) {
+        if (action.sendType == SendItemType.FILE) {
+            if (state.policyDisablesSend) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = null,
+                            message = R.string.send_disabled_warning.asText(),
+                        ),
+                    )
+                }
+                return
+            }
+            if (!state.isPremiumUser) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SendState.DialogState.Error(
+                            title = R.string.send.asText(),
+                            message = R.string.send_file_premium_required.asText(),
+                        ),
+                    )
+                }
+                return
+            }
+        }
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        sendEvent(SendEvent.NavigateNewSend(sendType = action.sendType))
     }
 
     private fun handleLockClick() {
@@ -315,7 +364,15 @@ class SendViewModel @Inject constructor(
     }
 
     private fun handleEditSendClick(action: SendAction.EditClick) {
-        sendEvent(SendEvent.NavigateToEditSend(sendId = action.sendItem.id))
+        sendEvent(
+            event = SendEvent.NavigateToEditSend(
+                sendId = action.sendItem.id,
+                sendType = when (action.sendItem.type) {
+                    SendState.ViewState.Content.SendItem.Type.FILE -> SendItemType.FILE
+                    SendState.ViewState.Content.SendItem.Type.TEXT -> SendItemType.TEXT
+                },
+            ),
+        )
     }
 
     private fun handleViewSendClick(action: SendAction.ViewClick) {
@@ -394,6 +451,7 @@ data class SendState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val policyDisablesSend: Boolean,
     val isRefreshing: Boolean,
+    val isPremiumUser: Boolean,
 ) : Parcelable {
 
     /**
@@ -503,6 +561,12 @@ data class SendState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Represents a dialog for selecting a send item type to add.
+         */
+        @Parcelize
+        data object SelectSendAddType : DialogState()
     }
 }
 
@@ -519,6 +583,13 @@ sealed class SendAction {
      * User clicked add a send.
      */
     data object AddSendClick : SendAction()
+
+    /**
+     * User has selected a new kind of send to create.
+     */
+    data class AddSendSelected(
+        val sendType: SendItemType,
+    ) : SendAction()
 
     /**
      * User clicked the lock button.
@@ -631,6 +702,13 @@ sealed class SendAction {
         ) : Internal()
 
         /**
+         * Indicates what the current [userState] is.
+         */
+        data class UserStateReceive(
+            val userState: UserState?,
+        ) : Internal()
+
+        /**
          * Indicates that the send data has been received.
          */
         data class SendDataReceive(
@@ -658,12 +736,17 @@ sealed class SendEvent {
     /**
      * Navigate to the new send screen.
      */
-    data object NavigateNewSend : SendEvent()
+    data class NavigateNewSend(
+        val sendType: SendItemType,
+    ) : SendEvent()
 
     /**
      * Navigate to the edit send screen.
      */
-    data class NavigateToEditSend(val sendId: String) : SendEvent()
+    data class NavigateToEditSend(
+        val sendId: String,
+        val sendType: SendItemType,
+    ) : SendEvent()
 
     /**
      * Navigate to the view send screen.
