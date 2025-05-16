@@ -84,7 +84,7 @@
     <string name="version">Version</string>
     <string name="view">Ansicht</string>
     <string name="visit_our_website">Besuche unsere Website</string>
-    <string name="website">Webseite</string>
+    <string name="website">Website</string>
     <string name="yes">Ja</string>
     <string name="account">Benutzerkonto</string>
     <string name="account_created">Dein neues Konto wurde erstellt! Du kannst dich jetzt anmelden.</string>
@@ -161,7 +161,7 @@
     <string name="new_item_created">Eintrag erstellt</string>
     <string name="no_favorites">Es befinden sich keine Favoriten in deinem Tresor.</string>
     <string name="no_items">Keine Einträge in deinem Tresor.</string>
-    <string name="no_items_tap">Es befinden sich keine Zugangsdaten für diese Webseite in deinem Tresor. Zum Hinzufügen tippen.</string>
+    <string name="no_items_tap">Es befinden sich keine Zugangsdaten für diese Website in deinem Tresor. Zum Hinzufügen tippen.</string>
     <string name="no_cards">Du hast keine Karten in deinem Tresor.</string>
     <string name="new_card">Neue Karte</string>
     <string name="no_logins">Du hast keine Zugangsdaten in deinem Tresor.</string>
@@ -397,7 +397,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="base_domain">Basis-Domäne</string>
     <string name="default_text">Standard</string>
     <string name="exact">Exakt</string>
-    <string name="host">Server</string>
+    <string name="host">Host</string>
     <string name="reg_ex">Regulärer Ausdruck</string>
     <string name="starts_with">Beginnt mit</string>
     <string name="uri_match_detection">URI-Übereinstimmungserkennung</string>
@@ -413,7 +413,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="date_updated">Aktualisiert</string>
     <string name="autofill_activated">Auto-Ausfüllen aktiviert!</string>
     <string name="must_log_in_main_app_autofill">Du musst dich in der Bitwarden App anmelden, bevor du AutoFill nutzen kannst.</string>
-    <string name="autofill_setup">Du kannst nun direkt von der Tastatur auf deine Zugangsdaten zugreifen, wenn du dich auf Webseiten oder in Apps anmeldest.</string>
+    <string name="autofill_setup">Du kannst nun direkt von der Tastatur auf deine Zugangsdaten zugreifen, wenn du dich auf Websites oder in Apps anmeldest.</string>
     <string name="autofill_setup2">Wir empfehlen alle anderen Auto Ausfüllen Apps in den Einstellungen zu deaktivieren wenn du sie nicht nutzt.</string>
     <string name="bitwarden_autofill_description">Greife auf deinen Tressor direkt von deiner Tastatur aus zu um Passwörter schnell und automatisch auszufüllen.</string>
     <string name="autofill_turn_on">Um das automatische Ausfüllen von Passwörtern auf deinem Gerät einzurichten, befolge bitte diese Anweisungen:</string>
@@ -495,7 +495,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="clear_clipboard">Zwischenablage leeren</string>
     <string name="clear_clipboard_description">Kopierte Einträge automatisch aus der Zwischenablage löschen.</string>
     <string name="default_uri_match_detection">Standard URI-Übereinstimmungserkennung</string>
-    <string name="default_uri_match_detection_description">Wähle die Standardmethode, mit der die URI-Match-Erkennung für Anmeldungen bei Aktionen wie dem automatischen Ausfüllen behandelt wird.</string>
+    <string name="default_uri_match_detection_description">Wähle die Standardmethode, mit der die URI-Übereinstimmungserkennung für Anmeldungen bei Aktionen wie dem automatischen Ausfüllen behandelt wird.</string>
     <string name="theme">Design</string>
     <string name="theme_description">Ändere das Farbschema der Anwendung.</string>
     <string name="theme_default">Standard (System)</string>
@@ -792,7 +792,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="are_you_sure_you_want_to_overwrite_the_current_username">Bist Du sicher, dass Du den aktuellen Benutzernamen überschreiben möchtest?</string>
     <string name="generate_username">Benutzername generieren</string>
     <string name="email_type">E-Mail-Typ</string>
-    <string name="website_required">Webseite (erforderlich)</string>
+    <string name="website_required">Website (erforderlich)</string>
     <string name="unknown_x_error_message">Unbekannter %1$s Fehler aufgetreten.</string>
     <string name="plus_addressed_email_description">Verwende die Unteradressierungsmöglichkeiten Deines E-Mail-Providers</string>
     <string name="catch_all_email_description">Verwende den konfigurierten Catch-All-Posteingang deiner Domain.</string>
@@ -1165,7 +1165,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="coachmark_2_of_3">2 von 3</string>
     <string name="you_ll_only_need_to_set_up_authenticator_key">Du musst den Authentifizierungsschlüssel nur für Zugangsdaten einrichten, die eine zwei-Faktor-Authentifizierung mit einem Code erfordern. Der Schlüssel generiert kontinuierlich sechsstellige Codes, mit denen du dich anmelden kannst.</string>
     <string name="coachmark_3_of_3">3 von 3</string>
-    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Webseiten-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
+    <string name="you_must_add_a_web_address_to_use_autofill_to_access_this_account">Du musst eine Website-Adresse hinzufügen, um automatisches Ausfüllen für den Zugriff auf dieses Konto benutzen zu können.</string>
     <string name="mutual_tls">Mutual TLS</string>
     <string name="single_tap_passkey_creation">Passkey-Erstellung mit einem Tap</string>
     <string name="single_tap_passkey_authentication">Passkey-Anmeldung mit einen Tap</string>
@@ -1265,6 +1265,11 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="cannot_delete_your_account">Dein Konto kann nicht gelöscht werden</string>
     <string name="cannot_delete_your_account_explanation">Diese Aktion kann nicht abgeschlossen werden, da dein Konto im Besitz einer Organisation ist. Kontaktiere deinen Organisationsadministrator für weitere Details.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Dieses Konto wird bald gelöscht. Melde dich bei %1$s an, um Bitwarden weiter zu verwenden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">Datei-Send anzeigen</string>
+    <string name="view_text_send">Text-Send anzeigen</string>
+    <string name="delete_send">Send löschen</string>
+    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="dynamic_colors">Dynamische Farben</string>
+    <string name="dynamic_colors_description">Dynamische Farben auf Basis deines Hintergrunds anwenden</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamische Farben verwenden die Systemfarben und erfüllen möglicherweise nicht alle Richtlinien zur Barrierefreiheit.</string>
 </resources>

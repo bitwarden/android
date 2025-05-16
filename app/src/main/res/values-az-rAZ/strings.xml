@@ -1266,7 +1266,12 @@ fəaliyyəti yaxalamaq üçün sizə vaxt verəcək.</string>
     <string name="unable_to_read_certificate">Sertifikat oxuna bilmir.</string>
     <string name="cannot_delete_your_account">Hesabınız silinə bilmir</string>
     <string name="cannot_delete_your_account_explanation">Hesabınız bir təşkilata aid olduğu üçün bu əməliyyat icra edilə bilməz. Əlavə məlumat üçün təşkilatınızın inzibatçısı ilə əlaqə saxlayın.</string>
-    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Bu hesab tezliklə silinəcək. Bitwarden-i istifadə etməyə davam etmək üçün %1$s üzərindən giriş edin.</string>
+    <string name="view_file_send">Send faylına bax</string>
+    <string name="view_text_send">Send mətninə bax</string>
+    <string name="delete_send">\"Send\"i sil</string>
+    <string name="missing_send_resync_your_vault">Send əskikdir, seyfinizi təkrar sinxronlaşdırın</string>
+    <string name="dynamic_colors">Dinamik rənglər</string>
+    <string name="dynamic_colors_description">Divar kağızınıza görə dinamik rənglər tətbiq edin</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dinamik rənglər, sistem rənglərini istifadə edir və bütün əlçatımlılıq göstərişlərinə cavab verməyə bilər.</string>
 </resources>

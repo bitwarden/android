@@ -1267,6 +1267,11 @@ při opakování problémů.</string>
     <string name="cannot_delete_your_account">Nelze smazat Váš účet</string>
     <string name="cannot_delete_your_account_explanation">Tuto akci nelze dokončit, protože Váš účet vlastní organizace. Další informace získáte od správce organizace.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Tento účet bude brzy smazán. Chcete-li pokračovat v používání Bitwardenu, přihlaste se na %1$s.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">Zobrazit soubor ze Send</string>
+    <string name="view_text_send">Zobrazit text ze Send</string>
+    <string name="delete_send">Smazat Send</string>
+    <string name="missing_send_resync_your_vault">Chybějící Send - znovu synchronizujte trezor</string>
+    <string name="dynamic_colors">Dynamické barvy</string>
+    <string name="dynamic_colors_description">Použít dynamické barvy na základě Vaší tapety</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické barvy používají barvy systému a nemusí splňovat všechny pokyny pro přístupnost.</string>
 </resources>

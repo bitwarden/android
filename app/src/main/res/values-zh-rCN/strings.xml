@@ -627,7 +627,7 @@
     <string name="maximum_access_count">最大访问次数</string>
     <string name="maximum_access_count_info">设置后，当达到最大访问次数时用户将不再能够访问此 Send。</string>
     <string name="maximum_access_count_reached">已达最大访问次数</string>
-    <string name="current_access_count">当前访问次数</string>
+    <string name="current_access_count">当前访问次数：%s</string>
     <string name="new_password">新密码</string>
     <string name="password_info">需要这个密码才能查看此 Send。</string>
     <string name="remove_password">移除密码</string>
@@ -1266,6 +1266,11 @@
     <string name="cannot_delete_your_account">无法删除您的账户</string>
     <string name="cannot_delete_your_account_explanation">此操作无法完成，因为您的账户归组织所有。请联系您的组织管理员获取详细信息。</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户将很快被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">查看文件 Send</string>
+    <string name="view_text_send">查看文本 Send</string>
+    <string name="delete_send">删除 Send</string>
+    <string name="missing_send_resync_your_vault">丢失 Send，请重新同步您的密码库</string>
+    <string name="dynamic_colors">动态颜色</string>
+    <string name="dynamic_colors_description">基于您的壁纸应用动态颜色</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">动态颜色使用系统颜色，可能无法满足所有无障碍指南要求。</string>
 </resources>

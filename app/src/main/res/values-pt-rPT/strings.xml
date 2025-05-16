@@ -627,7 +627,7 @@ A leitura será efetuada automaticamente.</string>
     <string name="maximum_access_count">Número máximo de acessos</string>
     <string name="maximum_access_count_info">Se definido, os utilizadores deixarão de poder aceder a este Send quando a contagem máxima de acessos for atingida.</string>
     <string name="maximum_access_count_reached">Número máximo de acessos atingido</string>
-    <string name="current_access_count">Número de acessos atual</string>
+    <string name="current_access_count">Número de acessos atual: %s</string>
     <string name="new_password">Nova palavra-passe</string>
     <string name="password_info">Esta palavra-passe é necessária para visualizar o Send.</string>
     <string name="remove_password">Remover palavra-passe</string>
@@ -1266,6 +1266,11 @@ Pretende mudar para esta conta?</string>
     <string name="cannot_delete_your_account">Não é possível eliminar a sua conta</string>
     <string name="cannot_delete_your_account_explanation">Esta ação não pode ser concluída porque a sua conta é propriedade de uma organização. Contacte o administrador da sua organização para obter mais informações.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Esta conta será eliminada em breve. Inicie sessão em %1$s para continuar a utilizar o Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">Ver Send de ficheiro</string>
+    <string name="view_text_send">Ver Send de texto</string>
+    <string name="delete_send">Eliminar Send</string>
+    <string name="missing_send_resync_your_vault">Send em falta, sincronize novamente o seu cofre</string>
+    <string name="dynamic_colors">Cores dinâmicas</string>
+    <string name="dynamic_colors_description">Aplique cores dinâmicas com base no seu papel de parede</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas utilizam as cores do sistema e podem não cumprir todas as diretrizes de acessibilidade.</string>
 </resources>

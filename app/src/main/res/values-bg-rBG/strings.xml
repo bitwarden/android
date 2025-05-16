@@ -1268,6 +1268,11 @@
     <string name="cannot_delete_your_account">Акаунтът Ви не може да бъде изтрит</string>
     <string name="cannot_delete_your_account_explanation">Това действие не може да бъде завършено, тъй като акаунтът Ви се управлява от организация. Свържете се с администратора на организацията си за повече подробности.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Този акаунт скоро ще бъде изтрит. Впишете се на %1$s, за да продължите да използвате Битуорден.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
+    <string name="view_file_send">Преглед на файловото Изпращане</string>
+    <string name="view_text_send">Преглед на текстовото Изпращане</string>
+    <string name="delete_send">Изтриване на изпращането</string>
+    <string name="missing_send_resync_your_vault">Изпращането липсва, сихронизирайте трезора си</string>
+    <string name="dynamic_colors">Динамични цветове</string>
+    <string name="dynamic_colors_description">Прилагане на динамични цветове според фона</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамичните цветове използват системните цветове и може да не отговарят на всички норми за улеснено ползване.</string>
 </resources>
