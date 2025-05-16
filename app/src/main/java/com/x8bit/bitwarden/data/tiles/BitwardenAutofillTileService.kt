@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.Keep
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.AccessibilityActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityAutofillManager

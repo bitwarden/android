@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.flightrecorder
 
 import android.os.Build
 import android.util.Log
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet

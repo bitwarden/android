@@ -2,7 +2,7 @@
 
 package com.bitwarden.network
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.network.model.BitwardenServiceClientConfig
 import com.bitwarden.network.provider.RefreshTokenProvider
 import com.bitwarden.network.service.AccountsService

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.Keep
 import androidx.core.app.AppComponentFactory
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.autofill.accessibility.BitwardenAccessibilityService
 import com.x8bit.bitwarden.data.credentials.BitwardenCredentialProviderService

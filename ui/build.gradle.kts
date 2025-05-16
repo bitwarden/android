@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":annotation"))
+
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)

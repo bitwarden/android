@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.autofill.manager.chrome
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
 

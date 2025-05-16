@@ -7,7 +7,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
 import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.auth.manager.AddTotpItemFromAuthenticatorManager
 
