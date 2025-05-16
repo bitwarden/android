@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.ui.auth.feature.setpassword.SetPasswordRoute
 import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.TrustedDeviceGraphRoute
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VaultUnlockRoute
 import com.x8bit.bitwarden.ui.auth.feature.welcome.WelcomeRoute
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.feature.splash.SplashRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraphRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendRoute
@@ -38,7 +38,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
-class RootNavScreenTest : BaseComposeTest() {
+class RootNavScreenTest : BitwardenComposeTest() {
     private val mockNavHostController = createMockNavHostController()
     private val rootNavStateFlow = MutableStateFlow<RootNavState>(RootNavState.Splash)
     private val viewModel = mockk<RootNavViewModel> {

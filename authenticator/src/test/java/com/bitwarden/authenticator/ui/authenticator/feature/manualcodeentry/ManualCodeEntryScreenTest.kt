@@ -3,7 +3,7 @@ package com.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import com.bitwarden.authenticator.ui.platform.base.BaseComposeTest
+import com.bitwarden.authenticator.ui.platform.base.AuthenticatorComposeTest
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissionManager
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
 
-class ManualCodeEntryScreenTest : BaseComposeTest() {
+class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<ManualCodeEntryEvent>()
@@ -33,7 +33,7 @@ class ManualCodeEntryScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        composeTestRule.setContent {
+        setContent {
             ManualCodeEntryScreen(
                 onNavigateBack = {},
                 onNavigateToQrCodeScreen = {},

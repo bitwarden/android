@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.base.util
 import androidx.compose.ui.graphics.Color
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.isLightOverlayRequired
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import org.junit.Assert.assertEquals
@@ -11,7 +11,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class ColorExtensionsTest : BaseComposeTest() {
+class ColorExtensionsTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `isLightOverlayRequired for a color with luminance below the light threshold should return true`() {

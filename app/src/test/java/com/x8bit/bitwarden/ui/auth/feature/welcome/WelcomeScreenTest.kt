@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -15,7 +15,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.robolectric.annotation.Config
 
-class WelcomeScreenTest : BaseComposeTest() {
+class WelcomeScreenTest : BitwardenComposeTest() {
     private var onNavigateToStartRegistrationCalled = false
     private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false

@@ -1,10 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.base
 
-import androidx.activity.OnBackPressedDispatcher
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.junit4.createComposeRule
+import com.bitwarden.ui.platform.base.BaseComposeTest
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
@@ -19,27 +16,8 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import org.junit.Rule
 
-/**
- * A base class that can be used for performing Compose-layer testing using Robolectric, Compose
- * Testing, and JUnit 4.
- */
-abstract class BaseComposeTest : BaseRobolectricTest() {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    protected val dispatcher = UnconfinedTestDispatcher()
-
-    @OptIn(ExperimentalTestApi::class)
-    @get:Rule
-    val composeTestRule = createComposeRule(effectContext = dispatcher)
-
-    /**
-     * instance of [OnBackPressedDispatcher] made available if testing using [setContent].
-     */
-    var backDispatcher: OnBackPressedDispatcher? = null
-        private set
+abstract class BitwardenComposeTest : BaseComposeTest() {
 
     /**
      * Helper for testing a basic Composable function that only requires a [Composable]. The
@@ -62,8 +40,7 @@ abstract class BaseComposeTest : BaseRobolectricTest() {
         permissionsManager: PermissionsManager = mockk(),
         test: @Composable () -> Unit,
     ) {
-        composeTestRule.setContent {
-            backDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+        setTestContent {
             LocalManagerProvider(
                 featureFlagsState = featureFlagsState,
                 appResumeStateManager = appResumeStateManager,

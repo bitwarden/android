@@ -6,12 +6,12 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.util.assertLinkAnnotationIsAppliedAndInvokeClickAction
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class StringRestExtensionsTest : BaseComposeTest() {
+class StringRestExtensionsTest : BitwardenComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `toAnnotatedString should add Clickable LinkAnnotation to highlighted string`() {

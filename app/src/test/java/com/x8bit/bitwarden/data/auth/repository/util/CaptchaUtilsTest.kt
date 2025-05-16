@@ -2,13 +2,13 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import android.content.Intent
 import android.net.Uri
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class CaptchaUtilsTest : BaseComposeTest() {
+class CaptchaUtilsTest : BitwardenComposeTest() {
 
     @Test
     fun `generateIntentForCaptcha should return valid Uri`() {

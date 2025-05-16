@@ -15,7 +15,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.just
@@ -33,7 +33,7 @@ import java.time.Instant
 import java.time.Year
 import java.time.ZoneOffset
 
-class AboutScreenTest : BaseComposeTest() {
+class AboutScreenTest : BitwardenComposeTest() {
     private var haveCalledNavigateBack = false
     private var haveCalledNavigateToFlightRecorder = false
     private var haveCalledNavigateToRecordedLogs = false

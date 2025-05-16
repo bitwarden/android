@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.ui.platform.base
+package com.bitwarden.ui.platform.base
 
 import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.runner.RunWith

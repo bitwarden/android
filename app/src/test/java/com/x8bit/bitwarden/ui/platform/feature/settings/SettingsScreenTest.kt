@@ -5,7 +5,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class SettingsScreenTest : BaseComposeTest() {
+class SettingsScreenTest : BitwardenComposeTest() {
     private var haveCalledNavigateToAbout = false
     private var haveCalledNavigateToAccountSecurity = false
     private var haveCalledNavigateToAppearance = false
