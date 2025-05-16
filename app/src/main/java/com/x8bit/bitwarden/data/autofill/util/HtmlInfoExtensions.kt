@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.view.ViewStructure.HtmlInfo
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * Whether this [HtmlInfo] represents a password field.

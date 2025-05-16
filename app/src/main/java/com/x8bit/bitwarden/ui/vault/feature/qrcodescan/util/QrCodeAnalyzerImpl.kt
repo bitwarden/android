@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util
 
 import androidx.camera.core.ImageProxy
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.BinaryBitmap
 import com.google.zxing.DecodeHintType

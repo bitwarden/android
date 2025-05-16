@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.manager.review
 
 import android.app.Activity
 import android.widget.Toast
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R

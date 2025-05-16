@@ -4,7 +4,7 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.Activity
 import android.os.Build
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 
 /**
