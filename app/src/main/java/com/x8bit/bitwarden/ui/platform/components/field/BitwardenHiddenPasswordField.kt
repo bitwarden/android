@@ -11,10 +11,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
-import com.x8bit.bitwarden.ui.platform.base.util.nullableTestTag
 import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 

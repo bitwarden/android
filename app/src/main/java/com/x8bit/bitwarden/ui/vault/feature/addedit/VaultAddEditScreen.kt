@@ -38,14 +38,14 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.cardStyle
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.base.util.cardStyle
-import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
