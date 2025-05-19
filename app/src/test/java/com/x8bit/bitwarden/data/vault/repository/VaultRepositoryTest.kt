@@ -2307,10 +2307,7 @@ class VaultRepositoryTest {
                 every { length() } returns 1
             }
             val sendFileResponse = CreateFileSendResponse.Success(
-                createMockFileSendResponseJson(
-                    number = 1,
-                    type = SendTypeJson.FILE,
-                ),
+                createMockFileSendResponseJson(number = 1),
             )
             val error = Throwable()
             coEvery {

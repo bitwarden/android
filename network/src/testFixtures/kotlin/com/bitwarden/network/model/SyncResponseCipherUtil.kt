@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList")
+
 package com.bitwarden.network.model
 
 import java.time.ZonedDateTime
@@ -12,102 +14,162 @@ private val MOCK_ZONED_DATE_TIME = ZonedDateTime.parse("2023-10-27T12:00:00Z")
  */
 fun createMockCipher(
     number: Int,
-    hasNullUri: Boolean = false,
-    fido2Credentials: List<SyncResponseJson.Cipher.Fido2Credential> = listOf(
-        createMockFido2Credential(number),
+    id: String = "mockId-$number",
+    organizationId: String? = "mockOrganizationId-$number",
+    folderId: String? = "mockFolderId-$number",
+    collectionIds: List<String>? = listOf("mockCollectionId-$number"),
+    name: String? = "mockName-$number",
+    notes: String? = "mockNotes-$number",
+    creationDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+    revisionDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+    deletedDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
+    attachments: List<SyncResponseJson.Cipher.Attachment>? = listOf(
+        createMockAttachment(number = number),
     ),
-    isDeleted: Boolean = true,
+    type: CipherTypeJson = CipherTypeJson.LOGIN,
+    login: SyncResponseJson.Cipher.Login? = createMockLogin(number = number),
+    card: SyncResponseJson.Cipher.Card? = createMockCard(number = number),
+    identity: SyncResponseJson.Cipher.Identity? = createMockIdentity(number = number),
+    sshKey: SyncResponseJson.Cipher.SshKey? = createMockSshKey(number = number),
+    secureNote: SyncResponseJson.Cipher.SecureNote? = createMockSecureNote(),
+    fields: List<SyncResponseJson.Cipher.Field>? = listOf(createMockField(number = number)),
+    isFavorite: Boolean = false,
+    passwordHistory: List<SyncResponseJson.Cipher.PasswordHistory>? = listOf(
+        createMockPasswordHistory(number = number),
+    ),
+    permissions: SyncResponseJson.Cipher.CipherPermissions? = createMockCipherPermissions(),
+    reprompt: CipherRepromptTypeJson = CipherRepromptTypeJson.NONE,
+    shouldEdit: Boolean = false,
+    shouldOrganizationUseTotp: Boolean = false,
+    shouldViewPassword: Boolean = false,
+    key: String? = "mockKey-$number",
 ): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
-        id = "mockId-$number",
-        organizationId = "mockOrganizationId-$number",
-        folderId = "mockFolderId-$number",
-        collectionIds = listOf("mockCollectionId-$number"),
-        name = "mockName-$number",
-        notes = "mockNotes-$number",
-        type = CipherTypeJson.LOGIN,
-        login = createMockLogin(
-            number = number,
-            hasNullUri = hasNullUri,
-            fido2Credentials = fido2Credentials,
-        ),
-        creationDate = MOCK_ZONED_DATE_TIME,
-        deletedDate = if (isDeleted) MOCK_ZONED_DATE_TIME else null,
-        revisionDate = MOCK_ZONED_DATE_TIME,
-        attachments = listOf(createMockAttachment(number = number)),
-        card = createMockCard(number = number),
-        fields = listOf(createMockField(number = number)),
-        identity = createMockIdentity(number = number),
-        sshKey = createMockSshKey(number = number),
-        isFavorite = false,
-        passwordHistory = listOf(createMockPasswordHistory(number = number)),
-        permissions = createMockCipherPermissions(),
-        reprompt = CipherRepromptTypeJson.NONE,
-        secureNote = createMockSecureNote(),
-        shouldEdit = false,
-        shouldOrganizationUseTotp = false,
-        shouldViewPassword = false,
-        key = "mockKey-$number",
+        id = id,
+        organizationId = organizationId,
+        folderId = folderId,
+        collectionIds = collectionIds,
+        name = name,
+        notes = notes,
+        type = type,
+        login = login,
+        card = card,
+        identity = identity,
+        secureNote = secureNote,
+        sshKey = sshKey,
+        creationDate = creationDate,
+        revisionDate = revisionDate,
+        deletedDate = deletedDate,
+        attachments = attachments,
+        fields = fields,
+        isFavorite = isFavorite,
+        passwordHistory = passwordHistory,
+        permissions = permissions,
+        reprompt = reprompt,
+        shouldEdit = shouldEdit,
+        shouldOrganizationUseTotp = shouldOrganizationUseTotp,
+        shouldViewPassword = shouldViewPassword,
+        key = key,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Identity] with a given [number].
  */
-fun createMockIdentity(number: Int): SyncResponseJson.Cipher.Identity =
+fun createMockIdentity(
+    number: Int,
+    firstName: String? = "mockFirstName-$number",
+    middleName: String? = "mockMiddleName-$number",
+    lastName: String? = "mockLastName-$number",
+    passportNumber: String? = "mockPassportNumber-$number",
+    country: String? = "mockCountry-$number",
+    address1: String? = "mockAddress1-$number",
+    address2: String? = "mockAddress2-$number",
+    address3: String? = "mockAddress3-$number",
+    city: String? = "mockCity-$number",
+    postalCode: String? = "mockPostalCode-$number",
+    title: String? = "mockTitle-$number",
+    ssn: String? = "mockSsn-$number",
+    phone: String? = "mockPhone-$number",
+    company: String? = "mockCompany-$number",
+    licenseNumber: String? = "mockLicenseNumber-$number",
+    state: String? = "mockState-$number",
+    email: String? = "mockEmail-$number",
+    username: String? = "mockUsername-$number",
+): SyncResponseJson.Cipher.Identity =
     SyncResponseJson.Cipher.Identity(
-        firstName = "mockFirstName-$number",
-        middleName = "mockMiddleName-$number",
-        lastName = "mockLastName-$number",
-        passportNumber = "mockPassportNumber-$number",
-        country = "mockCountry-$number",
-        address1 = "mockAddress1-$number",
-        address2 = "mockAddress2-$number",
-        address3 = "mockAddress3-$number",
-        city = "mockCity-$number",
-        postalCode = "mockPostalCode-$number",
-        title = "mockTitle-$number",
-        ssn = "mockSsn-$number",
-        phone = "mockPhone-$number",
-        company = "mockCompany-$number",
-        licenseNumber = "mockLicenseNumber-$number",
-        state = "mockState-$number",
-        email = "mockEmail-$number",
-        username = "mockUsername-$number",
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName,
+        passportNumber = passportNumber,
+        country = country,
+        address1 = address1,
+        address2 = address2,
+        address3 = address3,
+        city = city,
+        postalCode = postalCode,
+        title = title,
+        ssn = ssn,
+        phone = phone,
+        company = company,
+        licenseNumber = licenseNumber,
+        state = state,
+        email = email,
+        username = username,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Attachment] with a given [number].
  */
-fun createMockAttachment(number: Int): SyncResponseJson.Cipher.Attachment =
+fun createMockAttachment(
+    number: Int,
+    fileName: String? = "mockFileName-$number",
+    size: Int = 1,
+    sizeName: String? = "mockSizeName-$number",
+    id: String? = "mockId-$number",
+    url: String? = "mockUrl-$number",
+    key: String? = "mockKey-$number",
+): SyncResponseJson.Cipher.Attachment =
     SyncResponseJson.Cipher.Attachment(
-        fileName = "mockFileName-$number",
-        size = 1,
-        sizeName = "mockSizeName-$number",
-        id = "mockId-$number",
-        url = "mockUrl-$number",
-        key = "mockKey-$number",
+        fileName = fileName,
+        size = size,
+        sizeName = sizeName,
+        id = id,
+        url = url,
+        key = key,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Card] with a given [number].
  */
-fun createMockCard(number: Int): SyncResponseJson.Cipher.Card =
+fun createMockCard(
+    number: Int,
+    cardNumber: String? = "mockNumber-$number",
+    expMonth: String? = "mockExpMonth-$number",
+    code: String? = "mockCode-$number",
+    expirationYear: String? = "mockExpirationYear-$number",
+    cardholderName: String? = "mockCardholderName-$number",
+    brand: String? = "mockBrand-$number",
+): SyncResponseJson.Cipher.Card =
     SyncResponseJson.Cipher.Card(
-        number = "mockNumber-$number",
-        expMonth = "mockExpMonth-$number",
-        code = "mockCode-$number",
-        expirationYear = "mockExpirationYear-$number",
-        cardholderName = "mockCardholderName-$number",
-        brand = "mockBrand-$number",
+        number = cardNumber,
+        expMonth = expMonth,
+        code = code,
+        expirationYear = expirationYear,
+        cardholderName = cardholderName,
+        brand = brand,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.PasswordHistory] with a given [number].
  */
-fun createMockPasswordHistory(number: Int): SyncResponseJson.Cipher.PasswordHistory =
+fun createMockPasswordHistory(
+    number: Int,
+    password: String = "mockPassword-$number",
+    lastUsedDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+): SyncResponseJson.Cipher.PasswordHistory =
     SyncResponseJson.Cipher.PasswordHistory(
-        password = "mockPassword-$number",
-        lastUsedDate = MOCK_ZONED_DATE_TIME,
+        password = password,
+        lastUsedDate = lastUsedDate,
     )
 
 /**
@@ -125,20 +187,28 @@ fun createMockCipherPermissions(
 /**
  * Create a mock [SyncResponseJson.Cipher.SecureNote].
  */
-fun createMockSecureNote(): SyncResponseJson.Cipher.SecureNote =
+fun createMockSecureNote(
+    type: SecureNoteTypeJson = SecureNoteTypeJson.GENERIC,
+): SyncResponseJson.Cipher.SecureNote =
     SyncResponseJson.Cipher.SecureNote(
-        type = SecureNoteTypeJson.GENERIC,
+        type = type,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Field] with a given [number].
  */
-fun createMockField(number: Int): SyncResponseJson.Cipher.Field =
+fun createMockField(
+    number: Int,
+    linkedIdType: LinkedIdTypeJson? = LinkedIdTypeJson.LOGIN_USERNAME,
+    name: String? = "mockName-$number",
+    type: FieldTypeJson = FieldTypeJson.HIDDEN,
+    value: String? = "mockValue-$number",
+): SyncResponseJson.Cipher.Field =
     SyncResponseJson.Cipher.Field(
-        linkedIdType = LinkedIdTypeJson.LOGIN_USERNAME,
-        name = "mockName-$number",
-        type = FieldTypeJson.HIDDEN,
-        value = "mockValue-$number",
+        linkedIdType = linkedIdType,
+        name = name,
+        type = type,
+        value = value,
     )
 
 /**
@@ -146,56 +216,89 @@ fun createMockField(number: Int): SyncResponseJson.Cipher.Field =
  */
 fun createMockLogin(
     number: Int,
-    hasNullUri: Boolean = false,
+    username: String? = "mockUsername-$number",
+    password: String? = "mockPassword-$number",
+    passwordRevisionDate: ZonedDateTime? = MOCK_ZONED_DATE_TIME,
+    shouldAutofillOnPageLoad: Boolean? = false,
+    uri: String? = "mockUri-$number",
+    uris: List<SyncResponseJson.Cipher.Login.Uri> = listOf(createMockUri(number = number)),
+    totp: String? = "mockTotp-$number",
     fido2Credentials: List<SyncResponseJson.Cipher.Fido2Credential> = listOf(
-        createMockFido2Credential(number),
+        createMockFido2Credential(number = number),
     ),
 ): SyncResponseJson.Cipher.Login =
     SyncResponseJson.Cipher.Login(
-        username = "mockUsername-$number",
-        password = "mockPassword-$number",
-        passwordRevisionDate = MOCK_ZONED_DATE_TIME,
-        shouldAutofillOnPageLoad = false,
-        uri = if (hasNullUri) null else "mockUri-$number",
-        uris = listOf(createMockUri(number = number)),
-        totp = "mockTotp-$number",
+        username = username,
+        password = password,
+        passwordRevisionDate = passwordRevisionDate,
+        shouldAutofillOnPageLoad = shouldAutofillOnPageLoad,
+        uri = uri,
+        uris = uris,
+        totp = totp,
         fido2Credentials = fido2Credentials,
     )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.SshKey] with a given [number].
  */
-fun createMockSshKey(number: Int) = SyncResponseJson.Cipher.SshKey(
-    publicKey = "mockPublicKey-$number",
-    privateKey = "mockPrivateKey-$number",
-    keyFingerprint = "mockKeyFingerprint-$number",
-)
+fun createMockSshKey(
+    number: Int,
+    publicKey: String = "mockPublicKey-$number",
+    privateKey: String = "mockPrivateKey-$number",
+    keyFingerprint: String = "mockKeyFingerprint-$number",
+): SyncResponseJson.Cipher.SshKey =
+    SyncResponseJson.Cipher.SshKey(
+        publicKey = publicKey,
+        privateKey = privateKey,
+        keyFingerprint = keyFingerprint,
+    )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Fido2Credential] with a given [number].
  */
-fun createMockFido2Credential(number: Int) = SyncResponseJson.Cipher.Fido2Credential(
-    credentialId = "mockCredentialId-$number",
-    keyType = "mockKeyType-$number",
-    keyAlgorithm = "mockKeyAlgorithm-$number",
-    keyCurve = "mockKeyCurve-$number",
-    keyValue = "mockKeyValue-$number",
-    rpId = "mockRpId-$number",
-    rpName = "mockRpName-$number",
-    userHandle = "mockUserHandle-$number",
-    userName = "mockUserName-$number",
-    userDisplayName = "mockUserDisplayName-$number",
-    counter = "mockCounter-$number",
-    discoverable = "mockDiscoverable-$number",
-    creationDate = MOCK_ZONED_DATE_TIME,
-)
+fun createMockFido2Credential(
+    number: Int,
+    credentialId: String = "mockCredentialId-$number",
+    keyType: String = "mockKeyType-$number",
+    keyAlgorithm: String = "mockKeyAlgorithm-$number",
+    keyCurve: String = "mockKeyCurve-$number",
+    keyValue: String = "mockKeyValue-$number",
+    rpId: String = "mockRpId-$number",
+    rpName: String? = "mockRpName-$number",
+    userHandle: String? = "mockUserHandle-$number",
+    userName: String? = "mockUserName-$number",
+    userDisplayName: String? = "mockUserDisplayName-$number",
+    counter: String = "mockCounter-$number",
+    discoverable: String = "mockDiscoverable-$number",
+    creationDate: ZonedDateTime = MOCK_ZONED_DATE_TIME,
+): SyncResponseJson.Cipher.Fido2Credential =
+    SyncResponseJson.Cipher.Fido2Credential(
+        credentialId = credentialId,
+        keyType = keyType,
+        keyAlgorithm = keyAlgorithm,
+        keyCurve = keyCurve,
+        keyValue = keyValue,
+        rpId = rpId,
+        rpName = rpName,
+        userHandle = userHandle,
+        userName = userName,
+        userDisplayName = userDisplayName,
+        counter = counter,
+        discoverable = discoverable,
+        creationDate = creationDate,
+    )
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Login.Uri] with a given [number].
  */
-fun createMockUri(number: Int): SyncResponseJson.Cipher.Login.Uri =
+fun createMockUri(
+    number: Int,
+    uri: String? = "mockUri-$number",
+    uriMatchType: UriMatchTypeJson? = UriMatchTypeJson.HOST,
+    uriChecksum: String? = "mockUriChecksum-$number",
+): SyncResponseJson.Cipher.Login.Uri =
     SyncResponseJson.Cipher.Login.Uri(
-        uri = "mockUri-$number",
-        uriMatchType = UriMatchTypeJson.HOST,
-        uriChecksum = "mockUriChecksum-$number",
+        uri = uri,
+        uriMatchType = uriMatchType,
+        uriChecksum = uriChecksum,
     )
