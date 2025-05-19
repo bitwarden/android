@@ -1,9 +1,9 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -11,7 +11,7 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
-class AddSendStateExtensionsTest {
+class AddEditSendStateExtensionsTest {
 
     @Test
     fun `toSendView should create an appropriate SendView with file type`() {
@@ -31,7 +31,7 @@ class AddSendStateExtensionsTest {
 
         val result = DEFAULT_VIEW_STATE
             .copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     name = "mockFileName-1",
                     displaySize = "mockSizeName-1",
                     sizeBytes = 1,
@@ -90,7 +90,7 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
     ZoneOffset.UTC,
 )
 
-private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     name = "mockName-1",
     currentAccessCount = 1,
     maxAccessCount = 1,
@@ -105,12 +105,12 @@ private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     isHideEmailAddressEnabled = true,
 )
 
-private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(
     input = "mockText-1",
     isHideByDefaultChecked = false,
 )
 
-private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+private val DEFAULT_VIEW_STATE = AddEditSendState.ViewState.Content(
     common = DEFAULT_COMMON_STATE,
     selectedType = DEFAULT_SELECTED_TYPE_STATE,
 )

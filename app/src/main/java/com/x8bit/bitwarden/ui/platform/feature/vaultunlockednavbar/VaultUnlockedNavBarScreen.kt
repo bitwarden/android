@@ -34,7 +34,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUn
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute

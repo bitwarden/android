@@ -1,9 +1,9 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import android.net.Uri
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -16,7 +16,7 @@ class SpecialCircumstanceExtensionsTest {
     @Test
     fun `toSendType with TextSend should return Text SendType with correct text`() {
         val text = "Share Text"
-        val expected = AddSendState.ViewState.Content.SendType.Text(
+        val expected = AddEditSendState.ViewState.Content.SendType.Text(
             input = text,
             isHideByDefaultChecked = false,
         )
@@ -38,7 +38,7 @@ class SpecialCircumstanceExtensionsTest {
         val uri = mockk<Uri>()
         val fileName = "Share Name"
         val sizeBytes = 100L
-        val expected = AddSendState.ViewState.Content.SendType.File(
+        val expected = AddEditSendState.ViewState.Content.SendType.File(
             uri = uri,
             name = fileName,
             sizeBytes = sizeBytes,

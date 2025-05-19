@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
@@ -25,9 +25,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import io.mockk.coEvery
@@ -54,7 +54,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
-class AddSendViewModelTest : BaseViewModelTest() {
+class AddEditSendViewModelTest : BaseViewModelTest() {
 
     private val clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
@@ -85,8 +85,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @BeforeEach
     fun setup() {
         mockkStatic(
-            SavedStateHandle::toAddSendArgs,
-            AddSendState.ViewState.Content::toSendView,
+            SavedStateHandle::toAddEditSendArgs,
+            AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
         )
@@ -95,8 +95,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @AfterEach
     fun tearDown() {
         unmockkStatic(
-            SavedStateHandle::toAddSendArgs,
-            AddSendState.ViewState.Content::toSendView,
+            SavedStateHandle::toAddEditSendArgs,
+            AddEditSendState.ViewState.Content::toSendView,
             SendView::toSendUrl,
             SendView::toViewState,
         )
@@ -135,7 +135,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should read from saved state when present`() {
         val savedState = DEFAULT_STATE.copy(
-            dialogState = AddSendState.DialogState.Loading("Loading".asText()),
+            dialogState = AddEditSendState.DialogState.Loading("Loading".asText()),
         )
         val viewModel = createViewModel(savedState)
         assertEquals(savedState, viewModel.stateFlow.value)
@@ -145,8 +145,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.CloseClick)
-            assertEquals(AddSendEvent.NavigateBack, awaitItem())
+            viewModel.trySendAction(AddEditSendAction.CloseClick)
+            assertEquals(AddEditSendEvent.NavigateBack, awaitItem())
         }
     }
 
@@ -174,10 +174,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialState)
 
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.SaveClick)
-                assertEquals(AddSendEvent.NavigateBack, awaitItem())
+                viewModel.trySendAction(AddEditSendAction.SaveClick)
+                assertEquals(AddEditSendEvent.NavigateBack, awaitItem())
                 assertEquals(
-                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    AddEditSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
                     awaitItem(),
                 )
             }
@@ -212,10 +212,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(initialState)
 
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.SaveClick)
-                assertEquals(AddSendEvent.ExitApp, awaitItem())
+                viewModel.trySendAction(AddEditSendAction.SaveClick)
+                assertEquals(AddEditSendEvent.ExitApp, awaitItem())
                 assertEquals(
-                    AddSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
+                    AddEditSendEvent.ShowShareSheet(message = "www.test.com/send/test"),
                     awaitItem(),
                 )
             }
@@ -241,10 +241,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddSendAction.SaveClick)
+            viewModel.trySendAction(AddEditSendAction.SaveClick)
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Loading(
+                    dialogState = AddEditSendState.DialogState.Loading(
                         message = R.string.saving.asText(),
                     ),
                 ),
@@ -252,7 +252,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Error(
+                    dialogState = AddEditSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "Fail".asText(),
                     ),
@@ -273,7 +273,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 common = DEFAULT_COMMON_STATE.copy(name = "input"),
             )
             val initialState = DEFAULT_STATE.copy(
-                addSendType = AddSendType.EditItem(sendId),
+                addEditSendType = AddEditSendType.EditItem(sendId),
                 viewState = viewState,
             )
             val mockSendView = createMockSendView(number = 1)
@@ -294,12 +294,12 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 vaultRepository.updateSend(sendId = sendId, sendView = mockSendView)
             } returns UpdateSendResult.Success(sendView = resultSendView)
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
-            val viewModel = createViewModel(initialState, AddSendType.EditItem(sendId))
+            val viewModel = createViewModel(initialState, AddEditSendType.EditItem(sendId))
 
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.SaveClick)
-                assertEquals(AddSendEvent.NavigateBack, awaitItem())
-                assertEquals(AddSendEvent.ShowShareSheet(sendUrl), awaitItem())
+                viewModel.trySendAction(AddEditSendAction.SaveClick)
+                assertEquals(AddEditSendEvent.NavigateBack, awaitItem())
+                assertEquals(AddEditSendEvent.ShowShareSheet(sendUrl), awaitItem())
             }
             assertEquals(initialState, viewModel.stateFlow.value)
             coVerify(exactly = 1) {
@@ -314,7 +314,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             common = DEFAULT_COMMON_STATE.copy(name = "input"),
         )
         val initialState = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendId),
+            addEditSendType = AddEditSendType.EditItem(sendId),
             viewState = viewState,
         )
         val mockSendView = mockk<SendView> {
@@ -333,14 +333,14 @@ class AddSendViewModelTest : BaseViewModelTest() {
             vaultRepository.updateSend(sendId = sendId, sendView = mockSendView)
         } returns UpdateSendResult.Error(errorMessage = errorMessage, error = null)
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
-        val viewModel = createViewModel(initialState, AddSendType.EditItem(sendId))
+        val viewModel = createViewModel(initialState, AddEditSendType.EditItem(sendId))
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddSendAction.SaveClick)
+            viewModel.trySendAction(AddEditSendAction.SaveClick)
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Loading(
+                    dialogState = AddEditSendState.DialogState.Loading(
                         message = R.string.saving.asText(),
                     ),
                 ),
@@ -348,7 +348,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Error(
+                    dialogState = AddEditSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = errorMessage.asText(),
                     ),
@@ -365,11 +365,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `SaveClick with blank name should show error dialog`() {
         val viewModel = createViewModel(DEFAULT_STATE)
 
-        viewModel.trySendAction(AddSendAction.SaveClick)
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
 
         assertEquals(
             DEFAULT_STATE.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.validation_field_required.asText(
                         R.string.name.asText(),
@@ -385,7 +385,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(name = "test"),
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     uri = null,
                     name = null,
                     displaySize = null,
@@ -395,11 +395,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(initialState)
 
-        viewModel.trySendAction(AddSendAction.SaveClick)
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
 
         assertEquals(
             initialState.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.validation_field_required.asText(R.string.file.asText()),
                 ),
@@ -413,7 +413,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(name = "test"),
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     uri = mockk(),
                     name = "test.png",
                     displaySize = null,
@@ -424,11 +424,11 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(initialState)
 
-        viewModel.trySendAction(AddSendAction.SaveClick)
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
 
         assertEquals(
             initialState.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.max_file_size.asText(),
                 ),
@@ -454,13 +454,13 @@ class AddSendViewModelTest : BaseViewModelTest() {
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
             state = DEFAULT_STATE.copy(
-                addSendType = AddSendType.EditItem("sendId"),
+                addEditSendType = AddEditSendType.EditItem("sendId"),
                 viewState = viewState,
             ),
-            addSendType = AddSendType.EditItem("sendId"),
+            addEditSendType = AddEditSendType.EditItem("sendId"),
         )
 
-        viewModel.trySendAction(AddSendAction.CopyLinkClick)
+        viewModel.trySendAction(AddEditSendAction.CopyLinkClick)
 
         verify(exactly = 1) {
             clipboardManager.setText(
@@ -475,7 +475,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+            viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
             expectNoEvents()
         }
     }
@@ -489,7 +489,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 vaultRepository.removePasswordSend(sendId)
             } returns RemovePasswordSendResult.Error(errorMessage = null, error = null)
             val initialState = DEFAULT_STATE.copy(
-                addSendType = AddSendType.EditItem(sendItemId = sendId),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
             )
             val mockSendView = createMockSendView(number = 1)
             every {
@@ -502,15 +502,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
             val viewModel = createViewModel(
                 state = initialState,
-                addSendType = AddSendType.EditItem(sendItemId = sendId),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
             )
 
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
-                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
                     initialState.copy(
-                        dialogState = AddSendState.DialogState.Loading(
+                        dialogState = AddEditSendState.DialogState.Loading(
                             message = R.string.removing_send_password.asText(),
                         ),
                     ),
@@ -518,7 +518,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     initialState.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
                         ),
@@ -547,19 +547,19 @@ class AddSendViewModelTest : BaseViewModelTest() {
             } returns DEFAULT_VIEW_STATE
             mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
             val initialState = DEFAULT_STATE.copy(
-                addSendType = AddSendType.EditItem(sendItemId = sendId),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
             )
             val viewModel = createViewModel(
                 state = initialState,
-                addSendType = AddSendType.EditItem(sendItemId = sendId),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
             )
 
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
-                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
                     initialState.copy(
-                        dialogState = AddSendState.DialogState.Loading(
+                        dialogState = AddEditSendState.DialogState.Loading(
                             message = R.string.removing_send_password.asText(),
                         ),
                     ),
@@ -567,7 +567,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(
                     initialState.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = errorMessage.asText(),
                         ),
@@ -587,14 +587,14 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 vaultRepository.removePasswordSend(sendId)
             } returns RemovePasswordSendResult.Success(mockSendView)
             val viewModel = createViewModel(
-                state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem(sendItemId = sendId)),
-                addSendType = AddSendType.EditItem(sendItemId = sendId),
+                state = DEFAULT_STATE.copy(addEditSendType = AddEditSendType.EditItem(sendItemId = sendId)),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
             )
 
             viewModel.eventFlow.test {
-                viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+                viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
                 assertEquals(
-                    AddSendEvent.ShowToast(R.string.send_password_removed.asText()),
+                    AddEditSendEvent.ShowToast(R.string.send_password_removed.asText()),
                     awaitItem(),
                 )
             }
@@ -608,7 +608,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             error = error,
         )
         val initialState = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = sendId),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
         )
         val mockSendView = createMockSendView(number = 1)
         every {
@@ -621,15 +621,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
             state = initialState,
-            addSendType = AddSendType.EditItem(sendItemId = sendId),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
         )
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddSendAction.DeleteClick)
+            viewModel.trySendAction(AddEditSendAction.DeleteClick)
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Loading(
+                    dialogState = AddEditSendState.DialogState.Loading(
                         message = R.string.deleting.asText(),
                     ),
                 ),
@@ -637,7 +637,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 initialState.copy(
-                    dialogState = AddSendState.DialogState.Error(
+                    dialogState = AddEditSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
                         throwable = error,
@@ -653,14 +653,16 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val sendId = "mockId-1"
         coEvery { vaultRepository.deleteSend(sendId) } returns DeleteSendResult.Success
         val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(addSendType = AddSendType.EditItem(sendItemId = sendId)),
-            addSendType = AddSendType.EditItem(sendItemId = sendId),
+            state = DEFAULT_STATE.copy(
+                addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
+            ),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = sendId),
         )
 
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.DeleteClick)
-            assertEquals(AddSendEvent.NavigateToRoot, awaitItem())
-            assertEquals(AddSendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
+            viewModel.trySendAction(AddEditSendAction.DeleteClick)
+            assertEquals(AddEditSendEvent.NavigateToRoot, awaitItem())
+            assertEquals(AddEditSendEvent.ShowToast(R.string.send_deleted.asText()), awaitItem())
         }
     }
 
@@ -681,15 +683,15 @@ class AddSendViewModelTest : BaseViewModelTest() {
         mutableSendDataStateFlow.value = DataState.Loaded(mockSendView)
         val viewModel = createViewModel(
             state = DEFAULT_STATE.copy(
-                addSendType = AddSendType.EditItem("sendId"),
+                addEditSendType = AddEditSendType.EditItem("sendId"),
                 viewState = viewState,
             ),
-            addSendType = AddSendType.EditItem("sendId"),
+            addEditSendType = AddEditSendType.EditItem("sendId"),
         )
 
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.ShareLinkClick)
-            assertEquals(AddSendEvent.ShowShareSheet(sendUrl), awaitItem())
+            viewModel.trySendAction(AddEditSendAction.ShareLinkClick)
+            assertEquals(AddEditSendEvent.ShowShareSheet(sendUrl), awaitItem())
         }
     }
 
@@ -697,13 +699,13 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `DismissDialogClick should clear the dialog state`() {
         val viewModel = createViewModel(
             DEFAULT_STATE.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = "Fail Title".asText(),
                     message = "Fail Message".asText(),
                 ),
             ),
         )
-        viewModel.trySendAction(AddSendAction.DismissDialogClick)
+        viewModel.trySendAction(AddEditSendAction.DismissDialogClick)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
@@ -714,7 +716,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         // DEFAULT deletion date is "2023-11-03T00:00Z"
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
 
-        viewModel.trySendAction(AddSendAction.DeletionDateChange(newDeletionDate))
+        viewModel.trySendAction(AddEditSendAction.DeletionDateChange(newDeletionDate))
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -732,7 +734,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `FileChose should emit ShowToast`() = runTest {
         val initialState = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     uri = null,
                     name = null,
                     displaySize = null,
@@ -750,12 +752,12 @@ class AddSendViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(initialState)
 
-        viewModel.trySendAction(AddSendAction.FileChoose(fileData = fileData))
+        viewModel.trySendAction(AddEditSendAction.FileChoose(fileData = fileData))
 
         assertEquals(
             initialState.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    selectedType = AddSendState.ViewState.Content.SendType.File(
+                    selectedType = AddEditSendState.ViewState.Content.SendType.File(
                         uri = uri,
                         name = fileName,
                         displaySize = null,
@@ -772,8 +774,8 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val arePermissionsGranted = true
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(AddSendAction.ChooseFileClick(arePermissionsGranted))
-            assertEquals(AddSendEvent.ShowChooserSheet(arePermissionsGranted), awaitItem())
+            viewModel.trySendAction(AddEditSendAction.ChooseFileClick(arePermissionsGranted))
+            assertEquals(AddEditSendEvent.ShowChooserSheet(arePermissionsGranted), awaitItem())
         }
     }
 
@@ -786,7 +788,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.NameChange("input"))
+            viewModel.trySendAction(AddEditSendAction.NameChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -800,7 +802,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.MaxAccessCountChange(5))
+            viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(5))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -819,7 +821,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.trySendAction(AddSendAction.MaxAccessCountChange(0))
+            viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(0))
             assertEquals(initialState.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -828,7 +830,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     fun `TextChange should update text input`() = runTest {
         val viewModel = createViewModel()
         val expectedViewState = DEFAULT_VIEW_STATE.copy(
-            selectedType = AddSendState.ViewState.Content.SendType.Text(
+            selectedType = AddEditSendState.ViewState.Content.SendType.Text(
                 input = "input",
                 isHideByDefaultChecked = false,
             ),
@@ -836,7 +838,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.TextChange("input"))
+            viewModel.trySendAction(AddEditSendAction.TextChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -850,7 +852,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.NoteChange("input"))
+            viewModel.trySendAction(AddEditSendAction.NoteChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -864,7 +866,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.PasswordChange("input"))
+            viewModel.trySendAction(AddEditSendAction.PasswordChange("input"))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -878,7 +880,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.DeactivateThisSendToggle(true))
+            viewModel.trySendAction(AddEditSendAction.DeactivateThisSendToggle(true))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -892,7 +894,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(AddSendAction.HideMyEmailToggle(isChecked = true))
+            viewModel.trySendAction(AddEditSendAction.HideMyEmailToggle(isChecked = true))
             assertEquals(DEFAULT_STATE.copy(viewState = expectedViewState), awaitItem())
         }
     }
@@ -919,10 +921,10 @@ class AddSendViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(initialState)
         every { networkConnectionManager.isNetworkConnected } returns false
 
-        viewModel.trySendAction(AddSendAction.SaveClick)
+        viewModel.trySendAction(AddEditSendAction.SaveClick)
         assertEquals(
             initialState.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.internet_connection_required_title.asText(),
                     message = R.string.internet_connection_required_message.asText(),
                 ),
@@ -938,17 +940,17 @@ class AddSendViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        state: AddSendState? = null,
-        addSendType: AddSendType = AddSendType.AddItem,
+        state: AddEditSendState? = null,
+        addEditSendType: AddEditSendType = AddEditSendType.AddItem,
         sendType: SendItemType = SendItemType.TEXT,
         activityToken: String? = null,
-    ): AddSendViewModel = AddSendViewModel(
+    ): AddEditSendViewModel = AddEditSendViewModel(
         savedStateHandle = SavedStateHandle().apply {
-            set("state", state?.copy(addSendType = addSendType))
+            set("state", state?.copy(addEditSendType = addEditSendType))
             set("activityToken", activityToken)
             every {
-                toAddSendArgs()
-            } returns AddSendArgs(sendType = sendType, sendAddType = addSendType)
+                toAddEditSendArgs()
+            } returns AddEditSendArgs(sendType = sendType, addEditSendType = addEditSendType)
         },
         environmentRepo = environmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
@@ -960,7 +962,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
     )
 }
 
-private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     name = "",
     currentAccessCount = null,
     maxAccessCount = null,
@@ -975,20 +977,20 @@ private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     isHideEmailAddressEnabled = true,
 )
 
-private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(
     input = "",
     isHideByDefaultChecked = false,
 )
 
-private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+private val DEFAULT_VIEW_STATE = AddEditSendState.ViewState.Content(
     common = DEFAULT_COMMON_STATE,
     selectedType = DEFAULT_SELECTED_TYPE_STATE,
 )
 
 private const val DEFAULT_ENVIRONMENT_URL = "https://send.bitwarden.com/#"
 
-private val DEFAULT_STATE = AddSendState(
-    addSendType = AddSendType.AddItem,
+private val DEFAULT_STATE = AddEditSendState(
+    addEditSendType = AddEditSendType.AddItem,
     viewState = DEFAULT_VIEW_STATE,
     dialogState = null,
     shouldFinishOnComplete = false,

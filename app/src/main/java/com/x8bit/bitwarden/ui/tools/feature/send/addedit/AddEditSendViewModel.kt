@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import android.net.Uri
 import android.os.Parcelable
@@ -28,12 +28,12 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.shouldFinishOnComplete
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendName
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendType
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendView
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,11 +57,11 @@ private const val KEY_STATE = "state"
 private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 
 /**
- * View model for the new send screen.
+ * View model for the add/edit send screen.
  */
 @Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
-class AddSendViewModel @Inject constructor(
+class AddEditSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
@@ -70,23 +70,23 @@ class AddSendViewModel @Inject constructor(
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
-) : BaseViewModel<AddSendState, AddSendEvent, AddSendAction>(
+) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         // Check to see if we are navigating here from an external source
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val shareSendType = specialCircumstance.toSendType()
-        val args = savedStateHandle.toAddSendArgs()
+        val args = savedStateHandle.toAddEditSendArgs()
         val sendType = args.sendType
-        val sendAddType = args.sendAddType
-        AddSendState(
+        val addEditSendType = args.addEditSendType
+        AddEditSendState(
             sendType = sendType,
             shouldFinishOnComplete = specialCircumstance.shouldFinishOnComplete(),
             isShared = shareSendType != null,
-            addSendType = sendAddType,
-            viewState = when (sendAddType) {
-                AddSendType.AddItem -> AddSendState.ViewState.Content(
-                    common = AddSendState.ViewState.Content.Common(
+            addEditSendType = addEditSendType,
+            viewState = when (addEditSendType) {
+                AddEditSendType.AddItem -> AddEditSendState.ViewState.Content(
+                    common = AddEditSendState.ViewState.Content.Common(
                         name = specialCircumstance.toSendName().orEmpty(),
                         currentAccessCount = null,
                         maxAccessCount = null,
@@ -109,7 +109,7 @@ class AddSendViewModel @Inject constructor(
                     ),
                     selectedType = shareSendType ?: when (sendType) {
                         SendItemType.FILE -> {
-                            AddSendState.ViewState.Content.SendType.File(
+                            AddEditSendState.ViewState.Content.SendType.File(
                                 uri = null,
                                 name = null,
                                 displaySize = null,
@@ -118,7 +118,7 @@ class AddSendViewModel @Inject constructor(
                         }
 
                         SendItemType.TEXT -> {
-                            AddSendState.ViewState.Content.SendType.Text(
+                            AddEditSendState.ViewState.Content.SendType.Text(
                                 input = "",
                                 isHideByDefaultChecked = false,
                             )
@@ -126,7 +126,7 @@ class AddSendViewModel @Inject constructor(
                     },
                 )
 
-                is AddSendType.EditItem -> AddSendState.ViewState.Loading
+                is AddEditSendType.EditItem -> AddEditSendState.ViewState.Loading
             },
             dialogState = null,
             baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
@@ -138,61 +138,70 @@ class AddSendViewModel @Inject constructor(
 ) {
 
     init {
-        when (val addSendType = state.addSendType) {
-            AddSendType.AddItem -> Unit
-            is AddSendType.EditItem -> {
+        when (val addSendType = state.addEditSendType) {
+            AddEditSendType.AddItem -> Unit
+            is AddEditSendType.EditItem -> {
                 vaultRepo
                     .getSendStateFlow(addSendType.sendItemId)
                     // We'll stop getting updates as soon as we get some loaded data.
                     .takeUntilLoaded()
-                    .map { AddSendAction.Internal.SendDataReceive(it) }
+                    .map { AddEditSendAction.Internal.SendDataReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
         }
     }
 
-    override fun handleAction(action: AddSendAction): Unit = when (action) {
-        AddSendAction.CopyLinkClick -> handleCopyLinkClick()
-        AddSendAction.DeleteClick -> handleDeleteClick()
-        is AddSendAction.FileChoose -> handeFileChose(action)
-        AddSendAction.RemovePasswordClick -> handleRemovePasswordClick()
-        AddSendAction.ShareLinkClick -> handleShareLinkClick()
-        is AddSendAction.CloseClick -> handleCloseClick()
-        is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
-        AddSendAction.DismissDialogClick -> handleDismissDialogClick()
-        is AddSendAction.SaveClick -> handleSaveClick()
-        is AddSendAction.ChooseFileClick -> handleChooseFileClick(action)
-        is AddSendAction.NameChange -> handleNameChange(action)
-        is AddSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
-        is AddSendAction.TextChange -> handleTextChange(action)
-        is AddSendAction.NoteChange -> handleNoteChange(action)
-        is AddSendAction.PasswordChange -> handlePasswordChange(action)
-        is AddSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
-        is AddSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
-        is AddSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
-        is AddSendAction.Internal -> handleInternalAction(action)
+    override fun handleAction(action: AddEditSendAction): Unit = when (action) {
+        AddEditSendAction.CopyLinkClick -> handleCopyLinkClick()
+        AddEditSendAction.DeleteClick -> handleDeleteClick()
+        is AddEditSendAction.FileChoose -> handeFileChose(action)
+        AddEditSendAction.RemovePasswordClick -> handleRemovePasswordClick()
+        AddEditSendAction.ShareLinkClick -> handleShareLinkClick()
+        is AddEditSendAction.CloseClick -> handleCloseClick()
+        is AddEditSendAction.DeletionDateChange -> handleDeletionDateChange(action)
+        AddEditSendAction.DismissDialogClick -> handleDismissDialogClick()
+        is AddEditSendAction.SaveClick -> handleSaveClick()
+        is AddEditSendAction.ChooseFileClick -> handleChooseFileClick(action)
+        is AddEditSendAction.NameChange -> handleNameChange(action)
+        is AddEditSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
+        is AddEditSendAction.TextChange -> handleTextChange(action)
+        is AddEditSendAction.NoteChange -> handleNoteChange(action)
+        is AddEditSendAction.PasswordChange -> handlePasswordChange(action)
+        is AddEditSendAction.HideByDefaultToggle -> handleHideByDefaultToggle(action)
+        is AddEditSendAction.DeactivateThisSendToggle -> handleDeactivateThisSendToggle(action)
+        is AddEditSendAction.HideMyEmailToggle -> handleHideMyEmailToggle(action)
+        is AddEditSendAction.Internal -> handleInternalAction(action)
     }
 
-    private fun handleInternalAction(action: AddSendAction.Internal): Unit = when (action) {
-        is AddSendAction.Internal.CreateSendResultReceive -> handleCreateSendResultReceive(action)
-        is AddSendAction.Internal.UpdateSendResultReceive -> handleUpdateSendResultReceive(action)
-        is AddSendAction.Internal.DeleteSendResultReceive -> handleDeleteSendResultReceive(action)
-        is AddSendAction.Internal.RemovePasswordResultReceive -> handleRemovePasswordResultReceive(
-            action,
-        )
+    private fun handleInternalAction(action: AddEditSendAction.Internal): Unit = when (action) {
+        is AddEditSendAction.Internal.CreateSendResultReceive -> {
+            handleCreateSendResultReceive(action)
+        }
 
-        is AddSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
+        is AddEditSendAction.Internal.UpdateSendResultReceive -> {
+            handleUpdateSendResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.DeleteSendResultReceive -> {
+            handleDeleteSendResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.RemovePasswordResultReceive -> {
+            handleRemovePasswordResultReceive(action)
+        }
+
+        is AddEditSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
     }
 
     private fun handleCreateSendResultReceive(
-        action: AddSendAction.Internal.CreateSendResultReceive,
+        action: AddEditSendAction.Internal.CreateSendResultReceive,
     ) {
         when (val result = action.result) {
             is CreateSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result.message?.asText()
                                 ?: R.string.generic_error_message.asText(),
@@ -206,7 +215,7 @@ class AddSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 navigateBack()
                 sendEvent(
-                    AddSendEvent.ShowShareSheet(
+                    AddEditSendEvent.ShowShareSheet(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
                     ),
                 )
@@ -215,13 +224,13 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleUpdateSendResultReceive(
-        action: AddSendAction.Internal.UpdateSendResultReceive,
+        action: AddEditSendAction.Internal.UpdateSendResultReceive,
     ) {
         when (val result = action.result) {
             is UpdateSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
@@ -237,7 +246,7 @@ class AddSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 navigateBack()
                 sendEvent(
-                    AddSendEvent.ShowShareSheet(
+                    AddEditSendEvent.ShowShareSheet(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
                     ),
                 )
@@ -246,13 +255,13 @@ class AddSendViewModel @Inject constructor(
     }
 
     private fun handleDeleteSendResultReceive(
-        action: AddSendAction.Internal.DeleteSendResultReceive,
+        action: AddEditSendAction.Internal.DeleteSendResultReceive,
     ) {
         when (val result = action.result) {
             is DeleteSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
                             throwable = result.error,
@@ -264,19 +273,19 @@ class AddSendViewModel @Inject constructor(
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 navigateBack(isDeleted = true)
-                sendEvent(AddSendEvent.ShowToast(message = R.string.send_deleted.asText()))
+                sendEvent(AddEditSendEvent.ShowToast(message = R.string.send_deleted.asText()))
             }
         }
     }
 
     private fun handleRemovePasswordResultReceive(
-        action: AddSendAction.Internal.RemovePasswordResultReceive,
+        action: AddEditSendAction.Internal.RemovePasswordResultReceive,
     ) {
         when (val result = action.result) {
             is RemovePasswordSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = result
                                 .errorMessage
@@ -291,18 +300,20 @@ class AddSendViewModel @Inject constructor(
             is RemovePasswordSendResult.Success -> {
                 updateCommonContent { it.copy(hasPassword = false) }
                 mutableStateFlow.update { it.copy(dialogState = null) }
-                sendEvent(AddSendEvent.ShowToast(message = R.string.send_password_removed.asText()))
+                sendEvent(
+                    AddEditSendEvent.ShowToast(message = R.string.send_password_removed.asText()),
+                )
             }
         }
     }
 
     @Suppress("LongMethod")
-    private fun handleSendDataReceive(action: AddSendAction.Internal.SendDataReceive) {
+    private fun handleSendDataReceive(action: AddEditSendAction.Internal.SendDataReceive) {
         when (val sendDataState = action.sendDataState) {
             is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = AddSendState.ViewState.Error(
+                        viewState = AddEditSendState.ViewState.Error(
                             message = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -322,7 +333,7 @@ class AddSendViewModel @Inject constructor(
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
-                            ?: AddSendState.ViewState.Error(
+                            ?: AddEditSendState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
                     )
@@ -331,14 +342,14 @@ class AddSendViewModel @Inject constructor(
 
             DataState.Loading -> {
                 mutableStateFlow.update {
-                    it.copy(viewState = AddSendState.ViewState.Loading)
+                    it.copy(viewState = AddEditSendState.ViewState.Loading)
                 }
             }
 
             is DataState.NoNetwork -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = AddSendState.ViewState.Error(
+                        viewState = AddEditSendState.ViewState.Error(
                             message = R.string.internet_connection_required_title
                                 .asText()
                                 .concat(
@@ -363,7 +374,7 @@ class AddSendViewModel @Inject constructor(
                                     .baseWebSendUrl,
                                 isHideEmailAddressEnabled = isHideEmailAddressEnabled,
                             )
-                            ?: AddSendState.ViewState.Error(
+                            ?: AddEditSendState.ViewState.Error(
                                 message = R.string.generic_error_message.asText(),
                             ),
                     )
@@ -386,16 +397,18 @@ class AddSendViewModel @Inject constructor(
     private fun handleDeleteClick() {
         onEdit {
             mutableStateFlow.update {
-                it.copy(dialogState = AddSendState.DialogState.Loading(R.string.deleting.asText()))
+                it.copy(
+                    dialogState = AddEditSendState.DialogState.Loading(R.string.deleting.asText()),
+                )
             }
             viewModelScope.launch {
                 val result = vaultRepo.deleteSend(it.sendItemId)
-                sendAction(AddSendAction.Internal.DeleteSendResultReceive(result))
+                sendAction(AddEditSendAction.Internal.DeleteSendResultReceive(result))
             }
         }
     }
 
-    private fun handeFileChose(action: AddSendAction.FileChoose) {
+    private fun handeFileChose(action: AddEditSendAction.FileChoose) {
         updateFileContent {
             it.copy(
                 uri = action.fileData.uri,
@@ -409,14 +422,14 @@ class AddSendViewModel @Inject constructor(
         onEdit {
             mutableStateFlow.update {
                 it.copy(
-                    dialogState = AddSendState.DialogState.Loading(
+                    dialogState = AddEditSendState.DialogState.Loading(
                         message = R.string.removing_send_password.asText(),
                     ),
                 )
             }
             viewModelScope.launch {
                 val result = vaultRepo.removePasswordSend(it.sendItemId)
-                sendAction(AddSendAction.Internal.RemovePasswordResultReceive(result))
+                sendAction(AddEditSendAction.Internal.RemovePasswordResultReceive(result))
             }
         }
     }
@@ -424,30 +437,30 @@ class AddSendViewModel @Inject constructor(
     private fun handleShareLinkClick() {
         onContent {
             it.common.sendUrl?.let { sendUrl ->
-                sendEvent(AddSendEvent.ShowShareSheet(sendUrl))
+                sendEvent(AddEditSendEvent.ShowShareSheet(sendUrl))
             }
         }
     }
 
-    private fun handlePasswordChange(action: AddSendAction.PasswordChange) {
+    private fun handlePasswordChange(action: AddEditSendAction.PasswordChange) {
         updateCommonContent {
             it.copy(passwordInput = action.input)
         }
     }
 
-    private fun handleNoteChange(action: AddSendAction.NoteChange) {
+    private fun handleNoteChange(action: AddEditSendAction.NoteChange) {
         updateCommonContent {
             it.copy(noteInput = action.input)
         }
     }
 
-    private fun handleHideMyEmailToggle(action: AddSendAction.HideMyEmailToggle) {
+    private fun handleHideMyEmailToggle(action: AddEditSendAction.HideMyEmailToggle) {
         updateCommonContent {
             it.copy(isHideEmailChecked = action.isChecked)
         }
     }
 
-    private fun handleDeactivateThisSendToggle(action: AddSendAction.DeactivateThisSendToggle) {
+    private fun handleDeactivateThisSendToggle(action: AddEditSendAction.DeactivateThisSendToggle) {
         updateCommonContent {
             it.copy(isDeactivateChecked = action.isChecked)
         }
@@ -455,7 +468,7 @@ class AddSendViewModel @Inject constructor(
 
     private fun handleCloseClick() = navigateBack()
 
-    private fun handleDeletionDateChange(action: AddSendAction.DeletionDateChange) {
+    private fun handleDeletionDateChange(action: AddEditSendAction.DeletionDateChange) {
         updateCommonContent {
             it.copy(deletionDate = action.deletionDate)
         }
@@ -467,7 +480,7 @@ class AddSendViewModel @Inject constructor(
             if (content.common.name.isBlank()) {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
                             message = R.string.validation_field_required.asText(
                                 R.string.name.asText(),
@@ -477,37 +490,38 @@ class AddSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
-            (content.selectedType as? AddSendState.ViewState.Content.SendType.File)?.let { file ->
-                if (file.name.isNullOrBlank()) {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = AddSendState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.validation_field_required.asText(
-                                    R.string.file.asText(),
+            (content.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
+                ?.let { fileType ->
+                    if (fileType.name.isNullOrBlank()) {
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = R.string.an_error_has_occurred.asText(),
+                                    message = R.string.validation_field_required.asText(
+                                        R.string.file.asText(),
+                                    ),
                                 ),
-                            ),
-                        )
+                            )
+                        }
+                        return@onContent
                     }
-                    return@onContent
-                }
-                if ((file.sizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
-                    // Must be under 100 MB
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = AddSendState.DialogState.Error(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.max_file_size.asText(),
-                            ),
-                        )
+                    if ((fileType.sizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
+                        // Must be under 100 MB
+                        mutableStateFlow.update {
+                            it.copy(
+                                dialogState = AddEditSendState.DialogState.Error(
+                                    title = R.string.an_error_has_occurred.asText(),
+                                    message = R.string.max_file_size.asText(),
+                                ),
+                            )
+                        }
+                        return@onContent
                     }
-                    return@onContent
                 }
-            }
             if (!networkConnectionManager.isNetworkConnected) {
                 mutableStateFlow.update {
                     it.copy(
-                        dialogState = AddSendState.DialogState.Error(
+                        dialogState = AddEditSendState.DialogState.Error(
                             title = R.string.internet_connection_required_title.asText(),
                             message = R.string.internet_connection_required_message.asText(),
                         ),
@@ -517,30 +531,29 @@ class AddSendViewModel @Inject constructor(
             }
             mutableStateFlow.update {
                 it.copy(
-                    dialogState = AddSendState.DialogState.Loading(
+                    dialogState = AddEditSendState.DialogState.Loading(
                         message = R.string.saving.asText(),
                     ),
                 )
             }
             viewModelScope.launch {
-                when (val addSendType = state.addSendType) {
-                    AddSendType.AddItem -> {
+                when (val addSendType = state.addEditSendType) {
+                    AddEditSendType.AddItem -> {
                         val fileType = content
-                            .selectedType
-                            as? AddSendState.ViewState.Content.SendType.File
+                            .selectedType as? AddEditSendState.ViewState.Content.SendType.File
                         val result = vaultRepo.createSend(
                             sendView = content.toSendView(clock),
                             fileUri = fileType?.uri,
                         )
-                        sendAction(AddSendAction.Internal.CreateSendResultReceive(result))
+                        sendAction(AddEditSendAction.Internal.CreateSendResultReceive(result))
                     }
 
-                    is AddSendType.EditItem -> {
+                    is AddEditSendType.EditItem -> {
                         val result = vaultRepo.updateSend(
                             sendId = addSendType.sendItemId,
                             sendView = content.toSendView(clock),
                         )
-                        sendAction(AddSendAction.Internal.UpdateSendResultReceive(result))
+                        sendAction(AddEditSendAction.Internal.UpdateSendResultReceive(result))
                     }
                 }
             }
@@ -551,29 +564,29 @@ class AddSendViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
-    private fun handleNameChange(action: AddSendAction.NameChange) {
+    private fun handleNameChange(action: AddEditSendAction.NameChange) {
         updateCommonContent {
             it.copy(name = action.input)
         }
     }
 
-    private fun handleTextChange(action: AddSendAction.TextChange) {
+    private fun handleTextChange(action: AddEditSendAction.TextChange) {
         updateTextContent {
             it.copy(input = action.input)
         }
     }
 
-    private fun handleHideByDefaultToggle(action: AddSendAction.HideByDefaultToggle) {
+    private fun handleHideByDefaultToggle(action: AddEditSendAction.HideByDefaultToggle) {
         updateTextContent {
             it.copy(isHideByDefaultChecked = action.isChecked)
         }
     }
 
-    private fun handleChooseFileClick(action: AddSendAction.ChooseFileClick) {
-        sendEvent(AddSendEvent.ShowChooserSheet(action.isCameraPermissionGranted))
+    private fun handleChooseFileClick(action: AddEditSendAction.ChooseFileClick) {
+        sendEvent(AddEditSendEvent.ShowChooserSheet(action.isCameraPermissionGranted))
     }
 
-    private fun handleMaxAccessCountChange(action: AddSendAction.MaxAccessCountChange) {
+    private fun handleMaxAccessCountChange(action: AddEditSendAction.MaxAccessCountChange) {
         updateCommonContent { common ->
             common.copy(maxAccessCount = action.value.takeUnless { it == 0 })
         }
@@ -583,13 +596,13 @@ class AddSendViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance = null
         sendEvent(
             event = if (state.shouldFinishOnComplete) {
-                AddSendEvent.ExitApp
+                AddEditSendEvent.ExitApp
             } else if (isDeleted) {
                 // We need to make sure we don't land on the View Send screen
                 // since it has now been deleted.
-                AddSendEvent.NavigateToRoot
+                AddEditSendEvent.NavigateToRoot
             } else {
-                AddSendEvent.NavigateBack
+                AddEditSendEvent.NavigateBack
             },
         )
     }
@@ -600,24 +613,24 @@ class AddSendViewModel @Inject constructor(
             .any { it.shouldDisableHideEmail ?: false }
 
     private inline fun onContent(
-        crossinline block: (AddSendState.ViewState.Content) -> Unit,
+        crossinline block: (AddEditSendState.ViewState.Content) -> Unit,
     ) {
-        (state.viewState as? AddSendState.ViewState.Content)?.let(block)
+        (state.viewState as? AddEditSendState.ViewState.Content)?.let(block)
     }
 
     private inline fun onEdit(
-        crossinline block: (AddSendType.EditItem) -> Unit,
+        crossinline block: (AddEditSendType.EditItem) -> Unit,
     ) {
-        (state.addSendType as? AddSendType.EditItem)?.let(block)
+        (state.addEditSendType as? AddEditSendType.EditItem)?.let(block)
     }
 
     private inline fun updateContent(
         crossinline block: (
-            AddSendState.ViewState.Content,
-        ) -> AddSendState.ViewState.Content?,
+            AddEditSendState.ViewState.Content,
+        ) -> AddEditSendState.ViewState.Content?,
     ) {
         val currentViewState = state.viewState
-        val updatedContent = (currentViewState as? AddSendState.ViewState.Content)
+        val updatedContent = (currentViewState as? AddEditSendState.ViewState.Content)
             ?.let(block)
             ?: return
         mutableStateFlow.update { it.copy(viewState = updatedContent) }
@@ -625,42 +638,42 @@ class AddSendViewModel @Inject constructor(
 
     private inline fun updateCommonContent(
         crossinline block: (
-            AddSendState.ViewState.Content.Common,
-        ) -> AddSendState.ViewState.Content.Common,
+            AddEditSendState.ViewState.Content.Common,
+        ) -> AddEditSendState.ViewState.Content.Common,
     ) {
         updateContent { it.copy(common = block(it.common)) }
     }
 
     private inline fun updateFileContent(
         crossinline block: (
-            AddSendState.ViewState.Content.SendType.File,
-        ) -> AddSendState.ViewState.Content.SendType.File,
+            AddEditSendState.ViewState.Content.SendType.File,
+        ) -> AddEditSendState.ViewState.Content.SendType.File,
     ) {
         updateContent { currentContent ->
-            (currentContent.selectedType as? AddSendState.ViewState.Content.SendType.File)
+            (currentContent.selectedType as? AddEditSendState.ViewState.Content.SendType.File)
                 ?.let { currentContent.copy(selectedType = block(it)) }
         }
     }
 
     private inline fun updateTextContent(
         crossinline block: (
-            AddSendState.ViewState.Content.SendType.Text,
-        ) -> AddSendState.ViewState.Content.SendType.Text,
+            AddEditSendState.ViewState.Content.SendType.Text,
+        ) -> AddEditSendState.ViewState.Content.SendType.Text,
     ) {
         updateContent { currentContent ->
-            (currentContent.selectedType as? AddSendState.ViewState.Content.SendType.Text)
+            (currentContent.selectedType as? AddEditSendState.ViewState.Content.SendType.Text)
                 ?.let { currentContent.copy(selectedType = block(it)) }
         }
     }
 }
 
 /**
- * Models state for the new send screen.
+ * Models state for the add/edit send screen.
  */
 @Parcelize
-data class AddSendState(
+data class AddEditSendState(
     val sendType: SendItemType,
-    val addSendType: AddSendType,
+    val addEditSendType: AddEditSendType,
     val dialogState: DialogState?,
     val viewState: ViewState,
     val shouldFinishOnComplete: Boolean,
@@ -673,13 +686,13 @@ data class AddSendState(
      * Helper to determine the screen display name.
      */
     val screenDisplayName: Text
-        get() = when (addSendType) {
-            AddSendType.AddItem -> when (sendType) {
+        get() = when (addEditSendType) {
+            AddEditSendType.AddItem -> when (sendType) {
                 SendItemType.FILE -> R.string.add_file_send.asText()
                 SendItemType.TEXT -> R.string.add_text_send.asText()
             }
 
-            is AddSendType.EditItem -> when (sendType) {
+            is AddEditSendType.EditItem -> when (sendType) {
                 SendItemType.FILE -> R.string.edit_file_send.asText()
                 SendItemType.TEXT -> R.string.edit_text_send.asText()
             }
@@ -695,7 +708,7 @@ data class AddSendState(
     /**
      * Helper to determine if the UI should display the content in add send mode.
      */
-    val isAddMode: Boolean get() = addSendType is AddSendType.AddItem
+    val isAddMode: Boolean get() = addEditSendType is AddEditSendType.AddItem
 
     /**
      * Helper to determine if the currently displayed send has a password already set.
@@ -704,23 +717,24 @@ data class AddSendState(
         get() = (viewState as? ViewState.Content)?.common?.hasPassword == true
 
     /**
-     * Represents the specific view states for the [AddSendScreen].
+     * Represents the specific view states for the [AddEditSendScreen].
      */
     sealed class ViewState : Parcelable {
         /**
-         * Represents an error state for the [AddSendScreen].
+         * Represents an error state for the [AddEditSendScreen].
          */
         @Parcelize
         data class Error(val message: Text) : ViewState()
 
         /**
-         * Loading state for the [AddSendScreen], signifying that the content is being processed.
+         * Loading state for the [AddEditSendScreen], signifying that the content is being
+         * processed.
          */
         @Parcelize
         data object Loading : ViewState()
 
         /**
-         * Represents a loaded content state for the [AddSendScreen].
+         * Represents a loaded content state for the [AddEditSendScreen].
          */
         @Parcelize
         data class Content(
@@ -805,143 +819,143 @@ data class AddSendState(
 }
 
 /**
- * Models events for the new send screen.
+ * Models events for the add/edit send screen.
  */
-sealed class AddSendEvent {
+sealed class AddEditSendEvent {
     /**
      * Closes the app.
      */
-    data object ExitApp : AddSendEvent()
+    data object ExitApp : AddEditSendEvent()
 
     /**
      * Navigate back.
      */
-    data object NavigateBack : AddSendEvent()
+    data object NavigateBack : AddEditSendEvent()
 
     /**
      * Navigate up to the root.
      */
-    data object NavigateToRoot : AddSendEvent()
+    data object NavigateToRoot : AddEditSendEvent()
 
     /**
      * Show file chooser sheet.
      */
-    data class ShowChooserSheet(val withCameraOption: Boolean) : AddSendEvent()
+    data class ShowChooserSheet(val withCameraOption: Boolean) : AddEditSendEvent()
 
     /**
      * Show share sheet.
      */
     data class ShowShareSheet(
         val message: String,
-    ) : BackgroundEvent, AddSendEvent()
+    ) : BackgroundEvent, AddEditSendEvent()
 
     /**
      * Show Toast.
      */
-    data class ShowToast(val message: Text) : AddSendEvent()
+    data class ShowToast(val message: Text) : AddEditSendEvent()
 }
 
 /**
- * Models actions for the new send screen.
+ * Models actions for the add/edit send screen.
  */
-sealed class AddSendAction {
+sealed class AddEditSendAction {
 
     /**
      * User has chosen a file to be part of the send.
      */
-    data class FileChoose(val fileData: IntentManager.FileData) : AddSendAction()
+    data class FileChoose(val fileData: IntentManager.FileData) : AddEditSendAction()
 
     /**
      * User clicked the remove password button.
      */
-    data object RemovePasswordClick : AddSendAction()
+    data object RemovePasswordClick : AddEditSendAction()
 
     /**
      * User clicked the copy link button.
      */
-    data object CopyLinkClick : AddSendAction()
+    data object CopyLinkClick : AddEditSendAction()
 
     /**
      * User clicked the share link button.
      */
-    data object ShareLinkClick : AddSendAction()
+    data object ShareLinkClick : AddEditSendAction()
 
     /**
      * User clicked the delete button.
      */
-    data object DeleteClick : AddSendAction()
+    data object DeleteClick : AddEditSendAction()
 
     /**
      * User clicked the close button.
      */
-    data object CloseClick : AddSendAction()
+    data object CloseClick : AddEditSendAction()
 
     /**
      * User clicked to dismiss the current dialog.
      */
-    data object DismissDialogClick : AddSendAction()
+    data object DismissDialogClick : AddEditSendAction()
 
     /**
      * User clicked the save button.
      */
-    data object SaveClick : AddSendAction()
+    data object SaveClick : AddEditSendAction()
 
     /**
      * Value of the name field was updated.
      */
-    data class NameChange(val input: String) : AddSendAction()
+    data class NameChange(val input: String) : AddEditSendAction()
 
     /**
      * Value of the send text field updated.
      */
-    data class TextChange(val input: String) : AddSendAction()
+    data class TextChange(val input: String) : AddEditSendAction()
 
     /**
      * Value of the password field updated.
      */
-    data class PasswordChange(val input: String) : AddSendAction()
+    data class PasswordChange(val input: String) : AddEditSendAction()
 
     /**
      * Value of the note text field updated.
      */
-    data class NoteChange(val input: String) : AddSendAction()
+    data class NoteChange(val input: String) : AddEditSendAction()
 
     /**
      * User clicked the choose file button.
      */
     data class ChooseFileClick(
         val isCameraPermissionGranted: Boolean,
-    ) : AddSendAction()
+    ) : AddEditSendAction()
 
     /**
      * User toggled the "hide text by default" toggle.
      */
-    data class HideByDefaultToggle(val isChecked: Boolean) : AddSendAction()
+    data class HideByDefaultToggle(val isChecked: Boolean) : AddEditSendAction()
 
     /**
      * User incremented the max access count.
      */
-    data class MaxAccessCountChange(val value: Int) : AddSendAction()
+    data class MaxAccessCountChange(val value: Int) : AddEditSendAction()
 
     /**
      * User toggled the "hide my email" toggle.
      */
-    data class HideMyEmailToggle(val isChecked: Boolean) : AddSendAction()
+    data class HideMyEmailToggle(val isChecked: Boolean) : AddEditSendAction()
 
     /**
      * User toggled the "deactivate this send" toggle.
      */
-    data class DeactivateThisSendToggle(val isChecked: Boolean) : AddSendAction()
+    data class DeactivateThisSendToggle(val isChecked: Boolean) : AddEditSendAction()
 
     /**
      * The user changed the deletion date.
      */
-    data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddSendAction()
+    data class DeletionDateChange(val deletionDate: ZonedDateTime) : AddEditSendAction()
 
     /**
-     * Models actions that the [AddSendViewModel] itself might send.
+     * Models actions that the [AddEditSendViewModel] itself might send.
      */
-    sealed class Internal : AddSendAction() {
+    sealed class Internal : AddEditSendAction() {
         /**
          * Indicates a result for creating a send has been received.
          */

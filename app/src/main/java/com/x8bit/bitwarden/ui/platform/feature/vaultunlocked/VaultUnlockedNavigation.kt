@@ -36,8 +36,8 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHis
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorModal
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.navigateToPasswordHistory
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.passwordHistoryDestination
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.addSendDestination
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.addEditSendDestination
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.navigateToAddEditSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.navigateToViewSend
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.viewSendDestination
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
@@ -101,7 +101,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToVaultEditItem = { navController.navigateToVaultAddEdit(it) },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
             onNavigateToSearchSend = { navController.navigateToSearch(searchType = it) },
-            onNavigateToAddEditSend = { navController.navigateToAddSend(it) },
+            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
             onNavigateToViewSend = { navController.navigateToViewSend(route = it) },
             onNavigateToDeleteAccount = { navController.navigateToDeleteAccount() },
             onNavigateToPendingRequests = { navController.navigateToPendingRequests() },
@@ -199,13 +199,13 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
         )
 
-        addSendDestination(
+        addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateUpToRoot = { navController.navigateToVaultUnlockedRoot() },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddEditSend = { navController.navigateToAddSend(it) },
+            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
         )
         passwordHistoryDestination(onNavigateBack = { navController.popBackStack() })
         exportVaultDestination(onNavigateBack = { navController.popBackStack() })
@@ -225,7 +225,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         generatorModalDestination(onNavigateBack = { navController.popBackStack() })
         searchDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddEditSend = { navController.navigateToAddSend(it) },
+            onNavigateToAddEditSend = { navController.navigateToAddEditSend(it) },
             onNavigateToViewSend = { navController.navigateToViewSend(it) },
             onNavigateToEditCipher = { navController.navigateToVaultAddEdit(it) },
             onNavigateToViewCipher = { navController.navigateToVaultItem(it) },

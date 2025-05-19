@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -37,7 +37,7 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
 
 /**
  * Displays new send UX.
@@ -45,8 +45,8 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddSendScreen(
-    viewModel: AddSendViewModel = hiltViewModel(),
+fun AddEditSendScreen(
+    viewModel: AddEditSendViewModel = hiltViewModel(),
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
@@ -54,7 +54,7 @@ fun AddSendScreen(
     onNavigateUpToRoot: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val addSendHandlers = remember(viewModel) { AddSendHandlers.create(viewModel) }
+    val addSendHandlers = remember(viewModel) { AddEditSendHandlers.create(viewModel) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val context = LocalContext.current
     val resources = context.resources
@@ -67,37 +67,37 @@ fun AddSendScreen(
 
     BackHandler(
         onBack = remember(viewModel) {
-            { viewModel.trySendAction(AddSendAction.CloseClick) }
+            { viewModel.trySendAction(AddEditSendAction.CloseClick) }
         },
     )
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            AddSendEvent.ExitApp -> exitManager.exitApplication()
+            AddEditSendEvent.ExitApp -> exitManager.exitApplication()
 
-            is AddSendEvent.NavigateBack -> onNavigateBack()
+            is AddEditSendEvent.NavigateBack -> onNavigateBack()
 
-            is AddSendEvent.NavigateToRoot -> onNavigateUpToRoot()
+            is AddEditSendEvent.NavigateToRoot -> onNavigateUpToRoot()
 
-            is AddSendEvent.ShowChooserSheet -> {
+            is AddEditSendEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
                     intentManager.createFileChooserIntent(event.withCameraOption),
                 )
             }
 
-            is AddSendEvent.ShowShareSheet -> {
+            is AddEditSendEvent.ShowShareSheet -> {
                 intentManager.shareText(event.message)
             }
 
-            is AddSendEvent.ShowToast -> {
+            is AddEditSendEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    AddSendDialogs(
+    AddEditSendDialogs(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
-            { viewModel.trySendAction(AddSendAction.DismissDialogClick) }
+            { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
         },
     )
     BitwardenScaffold(
@@ -111,7 +111,7 @@ fun AddSendScreen(
                     navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                     navigationIconContentDescription = stringResource(id = R.string.close),
                     onNavigationIconClick = remember(viewModel) {
-                        { viewModel.trySendAction(AddSendAction.CloseClick) }
+                        { viewModel.trySendAction(AddEditSendAction.CloseClick) }
                     },
                 )
                     .takeUnless { state.isShared },
@@ -122,7 +122,7 @@ fun AddSendScreen(
                         label = stringResource(id = R.string.save),
                         isEnabled = !state.policyDisablesSend,
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(AddSendAction.SaveClick) }
+                            { viewModel.trySendAction(AddEditSendAction.SaveClick) }
                         },
                         modifier = Modifier.testTag("SaveButton"),
                     )
@@ -134,7 +134,7 @@ fun AddSendScreen(
                                     onClick = remember(viewModel) {
                                         {
                                             viewModel.trySendAction(
-                                                AddSendAction.RemovePasswordClick,
+                                                AddEditSendAction.RemovePasswordClick,
                                             )
                                         }
                                     },
@@ -143,14 +143,18 @@ fun AddSendScreen(
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.copy_link),
                                     onClick = remember(viewModel) {
-                                        { viewModel.trySendAction(AddSendAction.CopyLinkClick) }
+                                        { viewModel.trySendAction(AddEditSendAction.CopyLinkClick) }
                                     },
                                 )
                                     .takeIf { !state.policyDisablesSend },
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.share_link),
                                     onClick = remember(viewModel) {
-                                        { viewModel.trySendAction(AddSendAction.ShareLinkClick) }
+                                        {
+                                            viewModel.trySendAction(
+                                                AddEditSendAction.ShareLinkClick,
+                                            )
+                                        }
                                     },
                                 )
                                     .takeIf { !state.policyDisablesSend },
@@ -165,7 +169,7 @@ fun AddSendScreen(
             .fillMaxSize()
 
         when (val viewState = state.viewState) {
-            is AddSendState.ViewState.Content -> AddSendContent(
+            is AddEditSendState.ViewState.Content -> AddEditSendContent(
                 state = viewState,
                 policyDisablesSend = state.policyDisablesSend,
                 policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
@@ -176,12 +180,12 @@ fun AddSendScreen(
                 modifier = modifier,
             )
 
-            is AddSendState.ViewState.Error -> BitwardenErrorContent(
+            is AddEditSendState.ViewState.Error -> BitwardenErrorContent(
                 message = viewState.message(),
                 modifier = modifier,
             )
 
-            AddSendState.ViewState.Loading -> BitwardenLoadingContent(
+            AddEditSendState.ViewState.Loading -> BitwardenLoadingContent(
                 modifier = modifier,
             )
         }
@@ -189,19 +193,19 @@ fun AddSendScreen(
 }
 
 @Composable
-private fun AddSendDialogs(
-    dialogState: AddSendState.DialogState?,
+private fun AddEditSendDialogs(
+    dialogState: AddEditSendState.DialogState?,
     onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is AddSendState.DialogState.Error -> BitwardenBasicDialog(
+        is AddEditSendState.DialogState.Error -> BitwardenBasicDialog(
             title = dialogState.title?.invoke(),
             message = dialogState.message(),
             onDismissRequest = onDismissRequest,
             throwable = dialogState.throwable,
         )
 
-        is AddSendState.DialogState.Loading -> BitwardenLoadingDialog(
+        is AddEditSendState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialogState.message(),
         )
 

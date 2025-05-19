@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
@@ -27,7 +27,7 @@ import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isEditableText
@@ -46,7 +46,7 @@ import org.junit.Test
 import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
-class AddSendScreenTest : BitwardenComposeTest() {
+class AddEditSendScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateUpToRootCalled = false
@@ -58,9 +58,9 @@ class AddSendScreenTest : BitwardenComposeTest() {
     private val intentManager: IntentManager = mockk(relaxed = true) {
         every { shareText(any()) } just runs
     }
-    private val mutableEventFlow = bufferedMutableSharedFlow<AddSendEvent>()
+    private val mutableEventFlow = bufferedMutableSharedFlow<AddEditSendEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-    private val viewModel = mockk<AddSendViewModel>(relaxed = true) {
+    private val viewModel = mockk<AddEditSendViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
@@ -72,7 +72,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             intentManager = intentManager,
             permissionsManager = permissionsManager,
         ) {
-            AddSendScreen(
+            AddEditSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateUpToRoot = { onNavigateUpToRootCalled = true },
@@ -82,19 +82,19 @@ class AddSendScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on NavigateBack should call onNavigateBack`() {
-        mutableEventFlow.tryEmit(AddSendEvent.NavigateBack)
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
     }
 
     @Test
     fun `on NavigateToRoot should call onNavigateUpToRoot`() {
-        mutableEventFlow.tryEmit(AddSendEvent.NavigateToRoot)
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToRoot)
         assertTrue(onNavigateUpToRootCalled)
     }
 
     @Test
     fun `ExitApp should call exitApplication on ExitManager`() {
-        mutableEventFlow.tryEmit(AddSendEvent.ExitApp)
+        mutableEventFlow.tryEmit(AddEditSendEvent.ExitApp)
         verify {
             exitManager.exitApplication()
         }
@@ -103,7 +103,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on ShowShareSheet should call shareText on IntentManager`() {
         val text = "sharable stuff"
-        mutableEventFlow.tryEmit(AddSendEvent.ShowShareSheet(text))
+        mutableEventFlow.tryEmit(AddEditSendEvent.ShowShareSheet(text))
         verify {
             intentManager.shareText(text)
         }
@@ -114,13 +114,13 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Close")
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.CloseClick) }
+        verify { viewModel.trySendAction(AddEditSendAction.CloseClick) }
     }
 
     @Test
     fun `on system back should send CloseClick`() {
         backDispatcher?.onBackPressed()
-        verify { viewModel.trySendAction(AddSendAction.CloseClick) }
+        verify { viewModel.trySendAction(AddEditSendAction.CloseClick) }
     }
 
     @Test
@@ -134,25 +134,25 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `screen title should update according to state`() {
         mutableStateFlow.update {
-            it.copy(sendType = SendItemType.TEXT, addSendType = AddSendType.AddItem)
+            it.copy(sendType = SendItemType.TEXT, addEditSendType = AddEditSendType.AddItem)
         }
         composeTestRule.onNodeWithText(text = "New text Send").assertIsDisplayed()
         mutableStateFlow.update {
             it.copy(
                 sendType = SendItemType.TEXT,
-                addSendType = AddSendType.EditItem(sendItemId = "send_id"),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "send_id"),
             )
         }
         composeTestRule.onNodeWithText(text = "Edit text Send").assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(sendType = SendItemType.FILE, addSendType = AddSendType.AddItem)
+            it.copy(sendType = SendItemType.FILE, addEditSendType = AddEditSendType.AddItem)
         }
         composeTestRule.onNodeWithText(text = "New file Send").assertIsDisplayed()
         mutableStateFlow.update {
             it.copy(
                 sendType = SendItemType.FILE,
-                addSendType = AddSendType.EditItem(sendItemId = "send_id"),
+                addEditSendType = AddEditSendType.EditItem(sendItemId = "send_id"),
             )
         }
         composeTestRule.onNodeWithText(text = "Edit file Send").assertIsDisplayed()
@@ -163,13 +163,13 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Save")
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.SaveClick) }
+        verify { viewModel.trySendAction(AddEditSendAction.SaveClick) }
     }
 
     @Test
     fun `on overflow button click should display overflow menu`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -193,7 +193,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow button should not be present when policy disables send`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
             policyDisablesSend = true,
         )
 
@@ -205,7 +205,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `overflow remove password button should be hidden when hasPassword is false`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
             viewState = DEFAULT_VIEW_STATE.copy(
                 common = DEFAULT_COMMON_STATE.copy(hasPassword = false),
             ),
@@ -223,7 +223,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on overflow remove password button click should send RemovePasswordClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -235,14 +235,14 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.RemovePasswordClick)
+            viewModel.trySendAction(AddEditSendAction.RemovePasswordClick)
         }
     }
 
     @Test
     fun `on overflow remove Share link button click should send ShareLinkClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -254,14 +254,14 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.ShareLinkClick)
+            viewModel.trySendAction(AddEditSendAction.ShareLinkClick)
         }
     }
 
     @Test
     fun `on overflow remove Copy link button click should send CopyLinkClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -273,14 +273,14 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.CopyLinkClick)
+            viewModel.trySendAction(AddEditSendAction.CopyLinkClick)
         }
     }
 
     @Test
     fun `on Delete button click should Display delete confirmation dialog`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -297,7 +297,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on delete confirmation dialog yes click should send DeleteClick`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
-            addSendType = AddSendType.EditItem(sendItemId = "sendId"),
+            addEditSendType = AddEditSendType.EditItem(sendItemId = "sendId"),
         )
 
         composeTestRule
@@ -311,7 +311,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.DeleteClick)
+            viewModel.trySendAction(AddEditSendAction.DeleteClick)
         }
     }
 
@@ -339,7 +339,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Send name (required)")
             .performTextInput("input")
-        verify { viewModel.trySendAction(AddSendAction.NameChange("input")) }
+        verify { viewModel.trySendAction(AddEditSendAction.NameChange("input")) }
     }
 
     @Test
@@ -365,7 +365,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         permissionsManager.checkPermissionResult = true
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     name = null,
                     displaySize = null,
                     sizeBytes = null,
@@ -379,7 +379,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                AddSendAction.ChooseFileClick(isCameraPermissionGranted = true),
+                AddEditSendAction.ChooseFileClick(isCameraPermissionGranted = true),
             )
         }
     }
@@ -391,7 +391,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         permissionsManager.getPermissionsResult = false
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = DEFAULT_VIEW_STATE.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File(
+                selectedType = AddEditSendState.ViewState.Content.SendType.File(
                     name = null,
                     displaySize = null,
                     sizeBytes = null,
@@ -405,7 +405,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                AddSendAction.ChooseFileClick(isCameraPermissionGranted = false),
+                AddEditSendAction.ChooseFileClick(isCameraPermissionGranted = false),
             )
         }
     }
@@ -418,7 +418,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .performScrollTo()
             .performTextInput("input")
         verify(exactly = 1) {
-            viewModel.trySendAction(AddSendAction.TextChange("input"))
+            viewModel.trySendAction(AddEditSendAction.TextChange("input"))
         }
     }
 
@@ -432,7 +432,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                    selectedType = AddEditSendState.ViewState.Content.SendType.Text(
                         input = "input",
                         isHideByDefaultChecked = false,
                     ),
@@ -450,7 +450,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText(text = "When accessing the Send", substring = true)
             .performClick()
-        viewModel.trySendAction(AddSendAction.HideByDefaultToggle(true))
+        viewModel.trySendAction(AddEditSendAction.HideByDefaultToggle(true))
     }
 
     @Test
@@ -462,7 +462,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_VIEW_STATE.copy(
-                    selectedType = AddSendState.ViewState.Content.SendType.Text(
+                    selectedType = AddEditSendState.ViewState.Content.SendType.Text(
                         input = "",
                         isHideByDefaultChecked = true,
                     ),
@@ -542,7 +542,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .onNodeWithContentDescription("\u2212")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.MaxAccessCountChange(2)) }
+        verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(2)) }
     }
 
     @Test
@@ -557,7 +557,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .onNodeWithContentDescription("+")
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.MaxAccessCountChange(1)) }
+        verify { viewModel.trySendAction(AddEditSendAction.MaxAccessCountChange(1)) }
     }
 
     @Test
@@ -571,7 +571,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("New password")
             .performTextInput("input")
-        verify { viewModel.trySendAction(AddSendAction.PasswordChange("input")) }
+        verify { viewModel.trySendAction(AddEditSendAction.PasswordChange("input")) }
     }
 
     @Test
@@ -608,7 +608,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Private notes")
             .performTextInput("input")
-        verify { viewModel.trySendAction(AddSendAction.NoteChange("input")) }
+        verify { viewModel.trySendAction(AddEditSendAction.NoteChange("input")) }
     }
 
     @Test
@@ -646,7 +646,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Hide my email address", substring = true)
             .performScrollTo()
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.HideMyEmailToggle(true)) }
+        verify { viewModel.trySendAction(AddEditSendAction.HideMyEmailToggle(true)) }
     }
 
     @Test
@@ -718,13 +718,13 @@ class AddSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `progressbar should be displayed according to state`() {
         mutableStateFlow.update {
-            it.copy(viewState = AddSendState.ViewState.Loading)
+            it.copy(viewState = AddEditSendState.ViewState.Loading)
         }
         // There are 2 because of the pull-to-refresh
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(2)
 
         mutableStateFlow.update {
-            it.copy(viewState = AddSendState.ViewState.Error("Fail".asText()))
+            it.copy(viewState = AddEditSendState.ViewState.Error("Fail".asText()))
         }
         // Only pull-to-refresh remains
         composeTestRule.onAllNodes(isProgressBar).assertCountEquals(1)
@@ -740,12 +740,12 @@ class AddSendScreenTest : BitwardenComposeTest() {
     fun `error should be displayed according to state`() {
         val errorMessage = "Fail"
         mutableStateFlow.update {
-            it.copy(viewState = AddSendState.ViewState.Error(errorMessage.asText()))
+            it.copy(viewState = AddEditSendState.ViewState.Error(errorMessage.asText()))
         }
         composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
 
         mutableStateFlow.update {
-            it.copy(viewState = AddSendState.ViewState.Loading)
+            it.copy(viewState = AddEditSendState.ViewState.Loading)
         }
         composeTestRule.onNodeWithText(errorMessage).assertDoesNotExist()
     }
@@ -759,7 +759,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = errorTitle.asText(),
                     message = errorMessage.asText(),
                 ),
@@ -776,7 +776,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     fun `error dialog Ok click should send DismissDialogClick`() {
         mutableStateFlow.update {
             it.copy(
-                dialogState = AddSendState.DialogState.Error(
+                dialogState = AddEditSendState.DialogState.Error(
                     title = "Fail Title".asText(),
                     message = "Fail Message".asText(),
                 ),
@@ -785,7 +785,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule
             .onNodeWithText("Ok")
             .performClick()
-        verify { viewModel.trySendAction(AddSendAction.DismissDialogClick) }
+        verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
     }
 
     @Test
@@ -795,7 +795,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
         composeTestRule.onNodeWithText(loadingMessage).assertDoesNotExist()
 
         mutableStateFlow.update {
-            it.copy(dialogState = AddSendState.DialogState.Loading(loadingMessage.asText()))
+            it.copy(dialogState = AddEditSendState.DialogState.Loading(loadingMessage.asText()))
         }
 
         composeTestRule
@@ -836,7 +836,7 @@ class AddSendScreenTest : BitwardenComposeTest() {
     }
 }
 
-private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
+private val DEFAULT_COMMON_STATE = AddEditSendState.ViewState.Content.Common(
     name = "",
     currentAccessCount = null,
     maxAccessCount = null,
@@ -851,18 +851,18 @@ private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
     isHideEmailAddressEnabled = true,
 )
 
-private val DEFAULT_SELECTED_TYPE_STATE = AddSendState.ViewState.Content.SendType.Text(
+private val DEFAULT_SELECTED_TYPE_STATE = AddEditSendState.ViewState.Content.SendType.Text(
     input = "",
     isHideByDefaultChecked = false,
 )
 
-private val DEFAULT_VIEW_STATE = AddSendState.ViewState.Content(
+private val DEFAULT_VIEW_STATE = AddEditSendState.ViewState.Content(
     common = DEFAULT_COMMON_STATE,
     selectedType = DEFAULT_SELECTED_TYPE_STATE,
 )
 
-private val DEFAULT_STATE = AddSendState(
-    addSendType = AddSendType.AddItem,
+private val DEFAULT_STATE = AddEditSendState(
+    addEditSendType = AddEditSendType.AddItem,
     viewState = DEFAULT_VIEW_STATE,
     dialogState = null,
     shouldFinishOnComplete = false,

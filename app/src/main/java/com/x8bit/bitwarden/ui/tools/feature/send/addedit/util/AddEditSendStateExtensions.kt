@@ -1,17 +1,17 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import java.time.Clock
 
 /**
- * Transforms [AddSendState] into [SendView].
+ * Transforms [AddEditSendState] into [SendView].
  */
-fun AddSendState.ViewState.Content.toSendView(
+fun AddEditSendState.ViewState.Content.toSendView(
     clock: Clock,
 ): SendView =
     SendView(
@@ -38,14 +38,14 @@ fun AddSendState.ViewState.Content.toSendView(
         },
     )
 
-private fun AddSendState.ViewState.Content.SendType.toSendType(): SendType =
+private fun AddEditSendState.ViewState.Content.SendType.toSendType(): SendType =
     when (this) {
-        is AddSendState.ViewState.Content.SendType.File -> SendType.FILE
-        is AddSendState.ViewState.Content.SendType.Text -> SendType.TEXT
+        is AddEditSendState.ViewState.Content.SendType.File -> SendType.FILE
+        is AddEditSendState.ViewState.Content.SendType.Text -> SendType.TEXT
     }
 
-private fun AddSendState.ViewState.Content.toSendFileView(): SendFileView? =
-    (this.selectedType as? AddSendState.ViewState.Content.SendType.File)?.let {
+private fun AddEditSendState.ViewState.Content.toSendFileView(): SendFileView? =
+    (this.selectedType as? AddEditSendState.ViewState.Content.SendType.File)?.let {
         SendFileView(
             id = null,
             fileName = it.name.orEmpty(),
@@ -54,8 +54,8 @@ private fun AddSendState.ViewState.Content.toSendFileView(): SendFileView? =
         )
     }
 
-private fun AddSendState.ViewState.Content.toSendTextView(): SendTextView? =
-    (this.selectedType as? AddSendState.ViewState.Content.SendType.Text)?.let {
+private fun AddEditSendState.ViewState.Content.toSendTextView(): SendTextView? =
+    (this.selectedType as? AddEditSendState.ViewState.Content.SendType.Text)?.let {
         SendTextView(
             text = it.input,
             hidden = it.isHideByDefaultChecked,

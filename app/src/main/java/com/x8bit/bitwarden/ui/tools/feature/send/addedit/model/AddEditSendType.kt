@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.model
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -6,12 +6,12 @@ import kotlinx.parcelize.Parcelize
 /**
  * Represents the difference between create a completely new send and editing an existing one.
  */
-sealed class AddSendType : Parcelable {
+sealed class AddEditSendType : Parcelable {
     /**
      * Indicates that we want to create a completely new send item.
      */
     @Parcelize
-    data object AddItem : AddSendType()
+    data object AddItem : AddEditSendType()
 
     /**
      * Indicates that we want to edit an existing send item.
@@ -19,5 +19,5 @@ sealed class AddSendType : Parcelable {
      * @param sendItemId The ID of the send item to edit.
      */
     @Parcelize
-    data class EditItem(val sendItemId: String) : AddSendType()
+    data class EditItem(val sendItemId: String) : AddEditSendType()
 }
