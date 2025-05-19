@@ -9,7 +9,7 @@ on:
   pull_request:
     types: [opened, synchronize]
   merge_group:
-    type: [checks_requested]
+    types: [checks_requested]
   workflow_dispatch:
 
 env:
@@ -116,8 +116,8 @@ jobs:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             RUN_ACTOR: ${{ github.triggering_actor }}
         run: |
-          echo "> [!WARNING]" >> $GITHUB_STEP_SUMMARY
-          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> $GITHUB_STEP_SUMMARY
+          echo "> [!WARNING]" >> "$GITHUB_STEP_SUMMARY"
+          echo "> Uploading code coverage report failed. Please check the \"Upload to codecov.io\" step of \"Process Test Reports\" job for more details." >> "$GITHUB_STEP_SUMMARY"
 
           if [ ! -z "$PR_NUMBER" ]; then
             message=$'> [!WARNING]\n> @'$RUN_ACTOR' Uploading code coverage report failed. Please check the "Upload to codecov.io" step of [Process Test Reports job]('$_GITHUB_ACTION_RUN_URL') for more details.'
