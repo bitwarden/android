@@ -181,7 +181,7 @@ class ItemListingScreenTest : BaseComposeTest() {
             ),
         )
         composeTestRule
-            .onNodeWithText("Sync with Bitwarden app")
+            .onNodeWithText("Sync with the Bitwarden app")
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
     }
@@ -198,7 +198,7 @@ class ItemListingScreenTest : BaseComposeTest() {
             ),
         )
         composeTestRule
-            .onNodeWithText("Sync with Bitwarden app")
+            .onNodeWithText("Sync with the Bitwarden app")
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
     }
