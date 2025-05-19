@@ -25,7 +25,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:

@@ -1,6 +1,6 @@
 @file:Suppress("TooManyFunctions")
 
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import android.os.Build
 import androidx.compose.foundation.background
@@ -47,8 +47,6 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.offset
 import com.bitwarden.annotation.OmitFromCoverage
-import com.bitwarden.ui.platform.base.util.toScrolledContainerColor
-import com.bitwarden.ui.platform.base.util.toScrolledContainerDividerAlpha
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.theme.BitwardenTheme
