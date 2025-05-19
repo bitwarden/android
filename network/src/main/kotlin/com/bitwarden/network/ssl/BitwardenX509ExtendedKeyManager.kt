@@ -1,6 +1,6 @@
 package com.bitwarden.network.ssl
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import java.net.Socket
 import java.security.Principal
 import java.security.PrivateKey

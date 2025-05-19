@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 
 /**
  * A worker to clear the clipboard manager.

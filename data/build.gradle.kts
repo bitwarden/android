@@ -45,6 +45,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":annotation"))
     implementation(project(":core"))
     implementation(project(":network"))
 

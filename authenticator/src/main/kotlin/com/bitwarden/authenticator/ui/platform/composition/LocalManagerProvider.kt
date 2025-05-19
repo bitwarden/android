@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.exit.ExitManager
@@ -17,7 +18,6 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManagerImpl
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManagerImpl
-import com.bitwarden.core.annotation.OmitFromCoverage
 
 /**
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].

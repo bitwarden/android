@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.accessibility.util
 
 import android.net.Uri
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import java.net.URISyntaxException
 
 /**

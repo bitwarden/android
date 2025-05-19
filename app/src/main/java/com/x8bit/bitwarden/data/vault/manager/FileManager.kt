@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.ZipFileResult
 import java.io.File

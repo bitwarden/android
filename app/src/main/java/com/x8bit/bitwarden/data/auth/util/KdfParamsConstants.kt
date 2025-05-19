@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.util
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.crypto.Kdf
 
 /**
