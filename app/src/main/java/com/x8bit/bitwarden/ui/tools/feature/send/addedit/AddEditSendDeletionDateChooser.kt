@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -36,7 +36,7 @@ import kotlin.time.Duration.Companion.hours
  */
 @Suppress("LongMethod")
 @Composable
-fun SendDeletionDateChooser(
+fun AddEditSendDeletionDateChooser(
     currentZonedDateTime: ZonedDateTime,
     dateFormatPattern: String,
     timeFormatPattern: String,
@@ -72,7 +72,7 @@ fun SendDeletionDateChooser(
         AnimatedVisibility(visible = selectedOption == DeletionOptions.CUSTOM) {
             Column {
                 BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-                AddSendCustomDateChooser(
+                AddEditSendCustomDateChooser(
                     dateLabel = stringResource(id = R.string.deletion_date),
                     timeLabel = stringResource(id = R.string.deletion_time),
                     currentZonedDateTime = currentZonedDateTime,

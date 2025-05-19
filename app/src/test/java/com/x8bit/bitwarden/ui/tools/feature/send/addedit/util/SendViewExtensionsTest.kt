@@ -1,8 +1,8 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -55,8 +55,8 @@ private val FIXED_CLOCK: Clock = Clock.fixed(
     ZoneOffset.UTC,
 )
 
-private val DEFAULT_COMMON: AddSendState.ViewState.Content.Common =
-    AddSendState.ViewState.Content.Common(
+private val DEFAULT_COMMON: AddEditSendState.ViewState.Content.Common =
+    AddEditSendState.ViewState.Content.Common(
         name = "mockName-1",
         currentAccessCount = 1,
         maxAccessCount = 1,
@@ -77,22 +77,22 @@ private val DEFAULT_COMMON: AddSendState.ViewState.Content.Common =
         isHideEmailAddressEnabled = true,
     )
 
-private val DEFAULT_TEXT_TYPE: AddSendState.ViewState.Content.SendType.Text =
-    AddSendState.ViewState.Content.SendType.Text(
+private val DEFAULT_TEXT_TYPE: AddEditSendState.ViewState.Content.SendType.Text =
+    AddEditSendState.ViewState.Content.SendType.Text(
         input = "mockText-1",
         isHideByDefaultChecked = false,
     )
 
-private val DEFAULT_FILE_TYPE: AddSendState.ViewState.Content.SendType.File =
-    AddSendState.ViewState.Content.SendType.File(
+private val DEFAULT_FILE_TYPE: AddEditSendState.ViewState.Content.SendType.File =
+    AddEditSendState.ViewState.Content.SendType.File(
         name = "mockFileName-1",
         displaySize = "mockSizeName-1",
         sizeBytes = null,
         uri = null,
     )
 
-private val DEFAULT_STATE: AddSendState.ViewState.Content =
-    AddSendState.ViewState.Content(
+private val DEFAULT_STATE: AddEditSendState.ViewState.Content =
+    AddEditSendState.ViewState.Content(
         common = DEFAULT_COMMON,
         selectedType = DEFAULT_FILE_TYPE,
     )

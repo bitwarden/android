@@ -1,22 +1,22 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import java.time.Clock
 import java.time.ZonedDateTime
 
 /**
- * Transforms [SendView] into [AddSendState.ViewState.Content].
+ * Transforms [SendView] into [AddEditSendState.ViewState.Content].
  */
 fun SendView.toViewState(
     clock: Clock,
     baseWebSendUrl: String,
     isHideEmailAddressEnabled: Boolean,
-): AddSendState.ViewState.Content =
-    AddSendState.ViewState.Content(
-        common = AddSendState.ViewState.Content.Common(
+): AddEditSendState.ViewState.Content =
+    AddEditSendState.ViewState.Content(
+        common = AddEditSendState.ViewState.Content.Common(
             originalSendView = this,
             name = this.name,
             currentAccessCount = this.accessCount.toInt(),
@@ -35,7 +35,7 @@ fun SendView.toViewState(
         ),
         selectedType = when (type) {
             SendType.TEXT -> {
-                AddSendState.ViewState.Content.SendType.Text(
+                AddEditSendState.ViewState.Content.SendType.Text(
                     input = this.text?.text.orEmpty(),
                     isHideByDefaultChecked = this.text?.hidden == true,
                 )
@@ -43,7 +43,7 @@ fun SendView.toViewState(
 
             SendType.FILE -> {
                 val fileView = requireNotNull(this.file)
-                AddSendState.ViewState.Content.SendType.File(
+                AddEditSendState.ViewState.Content.SendType.File(
                     uri = null,
                     name = fileView.fileName,
                     displaySize = fileView.sizeName,

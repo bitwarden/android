@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
@@ -31,7 +31,7 @@ import kotlin.time.Duration.Companion.minutes
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  */
 @Composable
-fun AddSendCustomDateChooser(
+fun AddEditSendCustomDateChooser(
     dateLabel: String,
     timeLabel: String,
     currentZonedDateTime: ZonedDateTime?,

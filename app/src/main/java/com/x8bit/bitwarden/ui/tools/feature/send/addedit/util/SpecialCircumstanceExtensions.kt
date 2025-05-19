@@ -1,28 +1,32 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit.util
 
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendState
 
 /**
- * Determines the initial [AddSendState.ViewState.Content.SendType] based on the data in the
+ * Determines the initial [AddEditSendState.ViewState.Content.SendType] based on the data in the
  * [SpecialCircumstance].
  */
-fun SpecialCircumstance?.toSendType(): AddSendState.ViewState.Content.SendType? =
+fun SpecialCircumstance?.toSendType(): AddEditSendState.ViewState.Content.SendType? =
     when (this) {
         is SpecialCircumstance.ShareNewSend -> {
             when (data) {
-                is IntentManager.ShareData.FileSend -> AddSendState.ViewState.Content.SendType.File(
-                    uri = data.fileData.uri,
-                    name = data.fileData.fileName,
-                    sizeBytes = data.fileData.sizeBytes,
-                    displaySize = null,
-                )
+                is IntentManager.ShareData.FileSend -> {
+                    AddEditSendState.ViewState.Content.SendType.File(
+                        uri = data.fileData.uri,
+                        name = data.fileData.fileName,
+                        sizeBytes = data.fileData.sizeBytes,
+                        displaySize = null,
+                    )
+                }
 
-                is IntentManager.ShareData.TextSend -> AddSendState.ViewState.Content.SendType.Text(
-                    input = data.text,
-                    isHideByDefaultChecked = false,
-                )
+                is IntentManager.ShareData.TextSend -> {
+                    AddEditSendState.ViewState.Content.SendType.Text(
+                        input = data.text,
+                        isHideByDefaultChecked = false,
+                    )
+                }
             }
         }
 

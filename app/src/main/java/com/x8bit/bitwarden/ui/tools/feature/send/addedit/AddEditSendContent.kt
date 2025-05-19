@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.tools.feature.send.addsend
+package com.x8bit.bitwarden.ui.tools.feature.send.addedit
 
 import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
@@ -51,20 +51,20 @@ import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
 
 /**
- * Content view for the [AddSendScreen].
+ * Content view for the [AddEditSendScreen].
  */
 @Suppress("LongMethod")
 @Composable
-fun AddSendContent(
-    state: AddSendState.ViewState.Content,
+fun AddEditSendContent(
+    state: AddEditSendState.ViewState.Content,
     policyDisablesSend: Boolean,
     policySendOptionsInEffect: Boolean,
     isAddMode: Boolean,
     isShared: Boolean,
-    addSendHandlers: AddSendHandlers,
+    addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
     modifier: Modifier = Modifier,
 ) {
@@ -115,7 +115,7 @@ fun AddSendContent(
         )
 
         when (val type = state.selectedType) {
-            is AddSendState.ViewState.Content.SendType.File -> {
+            is AddEditSendState.ViewState.Content.SendType.File -> {
                 FileTypeContent(
                     fileType = type,
                     addSendHandlers = addSendHandlers,
@@ -125,7 +125,7 @@ fun AddSendContent(
                 )
             }
 
-            is AddSendState.ViewState.Content.SendType.Text -> {
+            is AddEditSendState.ViewState.Content.SendType.Text -> {
                 TextTypeContent(
                     textType = type,
                     addSendHandlers = addSendHandlers,
@@ -137,7 +137,7 @@ fun AddSendContent(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         if (isAddMode) {
-            SendDeletionDateChooser(
+            AddEditSendDeletionDateChooser(
                 modifier = Modifier
                     .testTag("SendDeletionOptionsPicker")
                     .fillMaxWidth()
@@ -156,7 +156,7 @@ fun AddSendContent(
                     .defaultMinSize(minHeight = 60.dp)
                     .cardStyle(cardStyle = CardStyle.Full, paddingVertical = 0.dp),
             ) {
-                AddSendCustomDateChooser(
+                AddEditSendCustomDateChooser(
                     modifier = Modifier
                         .testTag("SendCustomDeletionDatePicker")
                         .fillMaxWidth(),
@@ -182,7 +182,7 @@ fun AddSendContent(
             }
         }
 
-        AddSendOptions(
+        AddEditSendOptions(
             state = state,
             sendRestrictionPolicy = policyDisablesSend,
             isAddMode = isAddMode,
@@ -233,8 +233,8 @@ private fun DeleteButton(
 
 @Composable
 private fun ColumnScope.TextTypeContent(
-    textType: AddSendState.ViewState.Content.SendType.Text,
-    addSendHandlers: AddSendHandlers,
+    textType: AddEditSendState.ViewState.Content.SendType.Text,
+    addSendHandlers: AddEditSendHandlers,
     policyDisablesSend: Boolean,
 ) {
     Spacer(modifier = Modifier.height(height = 8.dp))
@@ -267,8 +267,8 @@ private fun ColumnScope.TextTypeContent(
 @Suppress("LongMethod")
 @Composable
 private fun ColumnScope.FileTypeContent(
-    fileType: AddSendState.ViewState.Content.SendType.File,
-    addSendHandlers: AddSendHandlers,
+    fileType: AddEditSendState.ViewState.Content.SendType.File,
+    addSendHandlers: AddEditSendHandlers,
     permissionsManager: PermissionsManager,
     isAddMode: Boolean,
     isShared: Boolean,
@@ -383,11 +383,11 @@ private fun ColumnScope.FileTypeContent(
  */
 @Suppress("LongMethod")
 @Composable
-private fun AddSendOptions(
-    state: AddSendState.ViewState.Content,
+private fun AddEditSendOptions(
+    state: AddEditSendState.ViewState.Content,
     sendRestrictionPolicy: Boolean,
     isAddMode: Boolean,
-    addSendHandlers: AddSendHandlers,
+    addSendHandlers: AddEditSendHandlers,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     BitwardenExpandingHeader(
