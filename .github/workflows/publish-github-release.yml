@@ -1,0 +1,92 @@
+name: Publish GitHub Release as newest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1-5'
+
+jobs:
+  publish-release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Get latest pre-release name
+        id: get_latest_prerelease
+        run: |
+          latest_release=$(jq -r 'first' <<< $(curl --silent https://api.github.com/repos/bitwarden/android/releases))
+          is_latest_prerelease=$(jq -r '.prerelease' <<< $latest_release)
+          echo "is_latest_prerelease=$is_latest_prerelease" >> $GITHUB_OUTPUT
+
+          if [ "$is_latest_prerelease" != "true" ]; then
+              echo "No pre-release found"
+              exit 0
+          fi
+
+          latest_prerelease_version=$(jq -r '.tag_name' <<< $latest_release)
+          echo "latest_prerelease_version=$latest_prerelease_version" >> $GITHUB_OUTPUT
+
+          latest_prerelease_id=$(jq -r '.id' <<< $latest_release)
+          echo "latest_prerelease_id=$latest_prerelease_id" >> $GITHUB_OUTPUT
+
+      - name: Log in to Azure
+        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Download Play Store credentials
+        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+
+      - name: Check released version
+        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        id: appstore_version
+        run: |
+          appstore_version=$(bundle exec fastlane run getLatestVersion \
+          json_key:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }})
+
+          echo "Latest version on Google Play Store: $appstore_version"
+          echo "appstore_version=$appstore_version" >> $GITHUB_OUTPUT
+
+      - name: Check if version is already released
+        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        id: check_version
+        run: |
+          latest_prerelease_version=${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          appstore_version=${{ steps.appstore_version.outputs.appstore_version }}
+
+          if [ "$latest_prerelease_version" == "$appstore_version" ]; then
+              echo "Version $latest_prerelease_version is already released on Google Play Store"
+              echo "version_released=true" >> $GITHUB_OUTPUT
+          else
+              echo "Version $latest_prerelease_version is not released on Google Play Store"
+              echo "version_released=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Make GitHub release latest and non-pre-release
+        if: steps.check_version.outputs.version_released == 'true'
+        id: make_release
+        run: |
+          latest_prerelease_version=${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          echo "Making release $latest_prerelease_version latest and non-pre-release"
+          curl -X PATCH \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/bitwarden/android/releases/$latest_prerelease_id \
+            -d '{"prerelease": false, "draft": false, "make_latest": true}'
