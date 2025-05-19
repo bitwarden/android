@@ -58,7 +58,7 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(
             createMockCipher(
                 number = 1,
-                hasNullUri = true,
+                login = createMockLogin(number = 1, uri = null),
             ),
             result,
         )
@@ -71,7 +71,7 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(
             createMockCipherJsonRequest(
                 number = 1,
-                hasNullUri = true,
+                login = createMockLogin(number = 1, uri = null),
             ),
             syncCipher,
         )

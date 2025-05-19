@@ -15,7 +15,6 @@ import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
 import com.bitwarden.network.model.createMockAttachmentInfo
 import com.bitwarden.network.model.createMockAttachmentJsonRequest
-import com.bitwarden.network.model.createMockAttachmentJsonResponse
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
@@ -96,7 +95,7 @@ class CiphersServiceTest : BaseServiceTest() {
             body = createMockAttachmentJsonRequest(number = 1),
         )
         assertEquals(
-            createMockAttachmentJsonResponse(number = 1),
+            createMockAttachmentResponse(number = 1),
             result.getOrThrow(),
         )
     }

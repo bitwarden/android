@@ -11,10 +11,10 @@ import com.bitwarden.network.model.SyncResponseJson
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
 import com.bitwarden.network.model.createMockAttachment
-import com.bitwarden.network.model.createMockAttachmentJsonResponse
 import com.bitwarden.network.model.createMockAttachmentResponse
 import com.bitwarden.network.model.createMockCipher
 import com.bitwarden.network.model.createMockCipherJsonRequest
+import com.bitwarden.network.model.createMockLogin
 import com.bitwarden.network.service.CiphersService
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
@@ -159,7 +159,10 @@ class CipherManagerTest {
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.createCipher(
-                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
                 )
             } returns error.asFailure()
 
@@ -184,7 +187,10 @@ class CipherManagerTest {
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipher(
-                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
                 )
             } returns mockCipher.asSuccess()
             coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
@@ -248,7 +254,10 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.createCipherInOrganization(
                     body = CreateCipherInOrganizationJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -279,7 +288,10 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.createCipherInOrganization(
                     body = CreateCipherInOrganizationJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -356,7 +368,10 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
                 )
             } returns error.asFailure()
 
@@ -385,7 +400,10 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
                 )
             } returns UpdateCipherResponseJson
                 .Invalid(
@@ -426,7 +444,10 @@ class CipherManagerTest {
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                    body = createMockCipherJsonRequest(
+                        number = 1,
+                        login = createMockLogin(number = 1, uri = null),
+                    ),
                 )
             } returns UpdateCipherResponseJson
                 .Success(cipher = mockCipher)
@@ -804,7 +825,10 @@ class CipherManagerTest {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
                     body = ShareCipherJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -844,7 +868,7 @@ class CipherManagerTest {
             val encryptedFile = File("path/to/encrypted/file")
             val decryptedFile = File("path/to/encrypted/file_decrypted")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
             val mockNetworkCipher = createMockCipher(number = 1)
 
             // Handle mocks for migration
@@ -949,7 +973,10 @@ class CipherManagerTest {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
                     body = ShareCipherJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -994,7 +1021,10 @@ class CipherManagerTest {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
                     body = ShareCipherJsonRequest(
-                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        cipher = createMockCipherJsonRequest(
+                            number = 1,
+                            login = createMockLogin(number = 1, uri = null),
+                        ),
                         collectionIds = listOf("mockId-1"),
                     ),
                 )
@@ -1367,7 +1397,7 @@ class CipherManagerTest {
             )
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
-            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
@@ -1432,7 +1462,7 @@ class CipherManagerTest {
             )
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
-            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
             val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
                 collectionIds = listOf("mockId-1"),
@@ -1510,7 +1540,7 @@ class CipherManagerTest {
             )
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockAttachment = createMockSdkAttachment(number = 1)
-            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
             val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
                 collectionIds = listOf("mockId-1"),
@@ -1585,7 +1615,7 @@ class CipherManagerTest {
         )
         val mockFile = File.createTempFile("mockFile", "temp")
         val mockAttachment = createMockSdkAttachment(number = 1)
-        val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+        val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
         val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
         val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
             collectionIds = listOf("mockId-1"),
@@ -1662,7 +1692,7 @@ class CipherManagerTest {
         )
         val mockFile = File.createTempFile("mockFile", "temp")
         val mockAttachment = createMockSdkAttachment(number = 1)
-        val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+        val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
         coEvery {
             vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
         } returns mockCipher.asSuccess()

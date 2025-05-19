@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.network.model.createMockOrganization
+import com.bitwarden.network.model.createMockPermissions
 import com.bitwarden.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -54,11 +55,12 @@ class SyncResponseJsonExtensionsTest {
                 ),
             ),
             listOf(
-                createMockOrganization(number = 1).copy(
-                    shouldUseKeyConnector = true,
+                createMockOrganization(number = 1, shouldUseKeyConnector = true),
+                createMockOrganization(
+                    number = 2,
+                    type = OrganizationType.USER,
+                    permissions = createMockPermissions(shouldManageResetPassword = true),
                 ),
-                createMockOrganization(number = 2, shouldManageResetPassword = true)
-                    .copy(type = OrganizationType.USER),
             )
                 .toOrganizations(),
         )

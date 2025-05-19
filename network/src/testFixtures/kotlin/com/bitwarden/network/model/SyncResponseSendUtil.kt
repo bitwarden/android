@@ -2,46 +2,89 @@ package com.bitwarden.network.model
 
 import java.time.ZonedDateTime
 
-fun createMockFileSendResponseJson(number: Int, type: SendTypeJson = SendTypeJson.FILE) =
+/**
+ * Create a mock [CreateFileSendResponseJson] with a given data.
+ */
+fun createMockFileSendResponseJson(
+    number: Int,
+    url: String = "www.test.com",
+    fileUploadType: FileUploadType = FileUploadType.AZURE,
+    sendResponse: SyncResponseJson.Send = createMockSend(number = number, type = SendTypeJson.FILE),
+): CreateFileSendResponseJson =
     CreateFileSendResponseJson(
-        url = "www.test.com",
-        fileUploadType = FileUploadType.AZURE,
-        sendResponse = createMockSend(number = number, type = type),
+        url = url,
+        fileUploadType = fileUploadType,
+        sendResponse = sendResponse,
     )
 
+/**
+ * Create a mock [SyncResponseJson.Send] with a given [number].
+ */
+@Suppress("LongParameterList")
 fun createMockSend(
     number: Int,
+    accessCount: Int = 1,
+    maxAccessCount: Int? = 1,
+    notes: String? = "mockNotes-$number",
+    revisionDate: ZonedDateTime = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    shouldHideEmail: Boolean = false,
     type: SendTypeJson = SendTypeJson.FILE,
+    accessId: String? = "mockAccessId-$number",
+    password: String? = "mockPassword-$number",
+    file: SyncResponseJson.Send.File? = createMockFile(number = number),
+    deletionDate: ZonedDateTime = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+    name: String? = "mockName-$number",
+    isDisabled: Boolean = false,
+    id: String = "mockId-$number",
+    text: SyncResponseJson.Send.Text? = createMockText(number = number),
+    key: String? = "mockKey-$number",
+    expirationDate: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
 ): SyncResponseJson.Send =
     SyncResponseJson.Send(
-        accessCount = 1,
-        notes = "mockNotes-$number",
-        revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-        maxAccessCount = 1,
-        shouldHideEmail = false,
+        accessCount = accessCount,
+        notes = notes,
+        revisionDate = revisionDate,
+        maxAccessCount = maxAccessCount,
+        shouldHideEmail = shouldHideEmail,
         type = type,
-        accessId = "mockAccessId-$number",
-        password = "mockPassword-$number",
-        file = createMockFile(number = number),
-        deletionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-        name = "mockName-$number",
-        isDisabled = false,
-        id = "mockId-$number",
-        text = createMockText(number = number),
-        key = "mockKey-$number",
-        expirationDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+        accessId = accessId,
+        password = password,
+        file = file,
+        deletionDate = deletionDate,
+        name = name,
+        isDisabled = isDisabled,
+        id = id,
+        text = text,
+        key = key,
+        expirationDate = expirationDate,
     )
 
-fun createMockFile(number: Int): SyncResponseJson.Send.File =
+/**
+ * Create a mock [SyncResponseJson.Send.File] with a given [number].
+ */
+fun createMockFile(
+    number: Int,
+    fileName: String? = "mockFileName-$number",
+    size: Int? = 1,
+    sizeName: String? = "mockSizeName-$number",
+    id: String? = "mockId-$number",
+): SyncResponseJson.Send.File =
     SyncResponseJson.Send.File(
-        fileName = "mockFileName-$number",
-        size = 1,
-        sizeName = "mockSizeName-$number",
-        id = "mockId-$number",
+        fileName = fileName,
+        size = size,
+        sizeName = sizeName,
+        id = id,
     )
 
-fun createMockText(number: Int): SyncResponseJson.Send.Text =
+/**
+ * Create a mock [SyncResponseJson.Send.Text] with a given [number].
+ */
+fun createMockText(
+    number: Int,
+    isHidden: Boolean = false,
+    text: String? = "mockText-$number",
+): SyncResponseJson.Send.Text =
     SyncResponseJson.Send.Text(
-        isHidden = false,
-        text = "mockText-$number",
+        isHidden = isHidden,
+        text = text,
     )
