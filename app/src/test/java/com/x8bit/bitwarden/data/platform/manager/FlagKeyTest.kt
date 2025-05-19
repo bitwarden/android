@@ -105,39 +105,4 @@ class FlagKeyTest {
             },
         )
     }
-
-    @Test
-    fun `All feature flags are correctly set to be remotely configured`() {
-        assertTrue(
-            listOf(
-                FlagKey.AuthenticatorSync,
-                FlagKey.EmailVerification,
-                FlagKey.OnboardingFlow,
-                FlagKey.ImportLoginsFlow,
-                FlagKey.VerifiedSsoDomainEndpoint,
-                FlagKey.CredentialExchangeProtocolImport,
-                FlagKey.CredentialExchangeProtocolExport,
-                FlagKey.CipherKeyEncryption,
-                FlagKey.SingleTapPasskeyCreation,
-                FlagKey.SingleTapPasskeyAuthentication,
-                FlagKey.MutualTls,
-                FlagKey.AnonAddySelfHostAlias,
-                FlagKey.SimpleLoginSelfHostAlias,
-                FlagKey.ChromeAutofill,
-                FlagKey.MobileErrorReporting,
-                FlagKey.RestrictCipherItemDeletion,
-            ).all {
-                it.isRemotelyConfigured
-            },
-        )
-
-        assertTrue(
-            listOf(
-                FlagKey.FlightRecorder,
-                FlagKey.PreAuthSettings,
-            ).all {
-                !it.isRemotelyConfigured
-            },
-        )
-    }
 }

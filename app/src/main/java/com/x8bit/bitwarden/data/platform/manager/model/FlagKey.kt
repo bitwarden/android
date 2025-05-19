@@ -14,11 +14,6 @@ sealed class FlagKey<out T : Any> {
      */
     abstract val defaultValue: T
 
-    /**
-     * Indicates if the flag should respect the network value or not.
-     */
-    abstract val isRemotelyConfigured: Boolean
-
     @Suppress("UndocumentedPublicClass")
     companion object {
         /**
@@ -53,7 +48,6 @@ sealed class FlagKey<out T : Any> {
     data object AuthenticatorSync : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-bwa-sync"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -62,7 +56,6 @@ sealed class FlagKey<out T : Any> {
     data object EmailVerification : FlagKey<Boolean>() {
         override val keyName: String = "email-verification"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -71,7 +64,6 @@ sealed class FlagKey<out T : Any> {
     data object MobileErrorReporting : FlagKey<Boolean>() {
         override val keyName: String = "mobile-error-reporting"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -80,7 +72,6 @@ sealed class FlagKey<out T : Any> {
     data object FlightRecorder : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-flight-recorder"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
     }
 
     /**
@@ -89,7 +80,6 @@ sealed class FlagKey<out T : Any> {
     data object OnboardingFlow : FlagKey<Boolean>() {
         override val keyName: String = "native-create-account-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -98,7 +88,6 @@ sealed class FlagKey<out T : Any> {
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -107,7 +96,6 @@ sealed class FlagKey<out T : Any> {
     data object VerifiedSsoDomainEndpoint : FlagKey<Boolean>() {
         override val keyName: String = "pm-12337-refactor-sso-details-endpoint"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -117,7 +105,6 @@ sealed class FlagKey<out T : Any> {
     data object CredentialExchangeProtocolImport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-import-mobile"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -127,7 +114,6 @@ sealed class FlagKey<out T : Any> {
     data object CredentialExchangeProtocolExport : FlagKey<Boolean>() {
         override val keyName: String = "cxp-export-mobile"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -136,7 +122,6 @@ sealed class FlagKey<out T : Any> {
     data object CipherKeyEncryption : FlagKey<Boolean>() {
         override val keyName: String = "cipher-key-encryption"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -145,7 +130,6 @@ sealed class FlagKey<out T : Any> {
     data object MutualTls : FlagKey<Boolean>() {
         override val keyName: String = "mutual-tls"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -154,7 +138,6 @@ sealed class FlagKey<out T : Any> {
     data object SingleTapPasskeyCreation : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-passkey-creation"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -163,7 +146,6 @@ sealed class FlagKey<out T : Any> {
     data object SingleTapPasskeyAuthentication : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-passkey-authentication"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -173,7 +155,6 @@ sealed class FlagKey<out T : Any> {
     data object AnonAddySelfHostAlias : FlagKey<Boolean>() {
         override val keyName: String = "anon-addy-self-host-alias"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -182,7 +163,6 @@ sealed class FlagKey<out T : Any> {
     data object SimpleLoginSelfHostAlias : FlagKey<Boolean>() {
         override val keyName: String = "simple-login-self-host-alias"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -192,7 +172,6 @@ sealed class FlagKey<out T : Any> {
     data object ChromeAutofill : FlagKey<Boolean>() {
         override val keyName: String = "android-chrome-autofill"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -201,7 +180,6 @@ sealed class FlagKey<out T : Any> {
     data object RestrictCipherItemDeletion : FlagKey<Boolean>() {
         override val keyName: String = "pm-15493-restrict-item-deletion-to-can-manage-permission"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
@@ -210,7 +188,6 @@ sealed class FlagKey<out T : Any> {
     data object PreAuthSettings : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-prelogin-settings"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = false
     }
 
     //region Dummy keys for testing
@@ -220,15 +197,12 @@ sealed class FlagKey<out T : Any> {
     data object DummyBoolean : FlagKey<Boolean>() {
         override val keyName: String = "dummy-boolean"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**
      * Data object holding the key for an [Int] flag to be used in tests.
      */
-    data class DummyInt(
-        override val isRemotelyConfigured: Boolean = true,
-    ) : FlagKey<Int>() {
+    data object DummyInt : FlagKey<Int>() {
         override val keyName: String = "dummy-int"
         override val defaultValue: Int = Int.MIN_VALUE
     }
@@ -239,7 +213,6 @@ sealed class FlagKey<out T : Any> {
     data object DummyString : FlagKey<String>() {
         override val keyName: String = "dummy-string"
         override val defaultValue: String = "defaultValue"
-        override val isRemotelyConfigured: Boolean = true
     }
     //endregion Dummy keys for testing
 }
