@@ -1246,7 +1246,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
-            assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddSendItem(sendType = SendItemType.TEXT),
+                awaitItem(),
+            )
         }
     }
 
@@ -1354,10 +1357,19 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
+                    ListingItemOverflowAction.SendAction.EditClick(
+                        sendId = sendId,
+                        sendType = SendType.FILE,
+                    ),
                 ),
             )
-            assertEquals(VaultItemListingEvent.NavigateToEditSendItem(id = sendId), awaitItem())
+            assertEquals(
+                VaultItemListingEvent.NavigateToEditSendItem(
+                    id = sendId,
+                    sendType = SendItemType.FILE,
+                ),
+                awaitItem(),
+            )
         }
     }
 

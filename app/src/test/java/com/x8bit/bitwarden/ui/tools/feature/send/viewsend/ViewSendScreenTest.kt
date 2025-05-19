@@ -15,6 +15,8 @@ import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.isProgressBar
@@ -35,7 +37,7 @@ import org.junit.Test
 
 class ViewSendScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled: Boolean = false
-    private var onNavigateToEditData: String? = null
+    private var onNavigateToAddEditRoute: AddEditSendRoute? = null
     private val mutableEventFlow = bufferedMutableSharedFlow<ViewSendEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<ViewSendViewModel> {
@@ -57,7 +59,7 @@ class ViewSendScreenTest : BitwardenComposeTest() {
             ViewSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToEditSend = { onNavigateToEditData = it },
+                onNavigateToAddEditSend = { onNavigateToAddEditRoute = it },
             )
         }
     }
@@ -78,7 +80,10 @@ class ViewSendScreenTest : BitwardenComposeTest() {
         val sendType = SendItemType.TEXT
         val sendId = "send_id"
         mutableEventFlow.tryEmit(ViewSendEvent.NavigateToEdit(sendType = sendType, sendId = sendId))
-        assertEquals(sendId, onNavigateToEditData)
+        assertEquals(
+            AddEditSendRoute(sendId = sendId, sendType = sendType, modeType = ModeType.EDIT),
+            onNavigateToAddEditRoute,
+        )
     }
 
     @Test

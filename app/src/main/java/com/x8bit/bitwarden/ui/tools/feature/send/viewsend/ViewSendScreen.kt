@@ -69,6 +69,8 @@ import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 
 /**
  * Displays view send screen.
@@ -79,7 +81,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 fun ViewSendScreen(
     viewModel: ViewSendViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToEditSend: (sendId: String) -> Unit,
+    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -88,7 +90,16 @@ fun ViewSendScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is ViewSendEvent.NavigateBack -> onNavigateBack()
-            is ViewSendEvent.NavigateToEdit -> onNavigateToEditSend(event.sendId)
+            is ViewSendEvent.NavigateToEdit -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        sendType = event.sendType,
+                        modeType = ModeType.EDIT,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
+
             is ViewSendEvent.ShareText -> {
                 intentManager.shareText(text = event.text(resources).toString())
             }

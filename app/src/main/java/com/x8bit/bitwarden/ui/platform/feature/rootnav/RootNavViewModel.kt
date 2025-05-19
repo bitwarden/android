@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -124,7 +126,14 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
+                    is SpecialCircumstance.ShareNewSend -> {
+                        RootNavState.VaultUnlockedForNewSend(
+                            sendType = when (specialCircumstance.data) {
+                                is IntentManager.ShareData.FileSend -> SendItemType.FILE
+                                is IntentManager.ShareData.TextSend -> SendItemType.TEXT
+                            },
+                        )
+                    }
 
                     is SpecialCircumstance.PasswordlessRequest -> {
                         RootNavState.VaultUnlockedForAuthRequest
@@ -330,7 +339,9 @@ sealed class RootNavState : Parcelable {
      * App should show the new send screen for an unlocked user.
      */
     @Parcelize
-    data object VaultUnlockedForNewSend : RootNavState()
+    data class VaultUnlockedForNewSend(
+        val sendType: SendItemType,
+    ) : RootNavState()
 
     /**
      * App should show the screen to complete an ongoing registration process.

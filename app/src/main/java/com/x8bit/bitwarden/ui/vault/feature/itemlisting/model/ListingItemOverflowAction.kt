@@ -37,7 +37,10 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the edit send overflow option.
          */
         @Parcelize
-        data class EditClick(val sendId: String) : SendAction() {
+        data class EditClick(
+            val sendId: String,
+            val sendType: SendType,
+        ) : SendAction() {
             override val title: Text get() = R.string.edit.asText()
         }
 

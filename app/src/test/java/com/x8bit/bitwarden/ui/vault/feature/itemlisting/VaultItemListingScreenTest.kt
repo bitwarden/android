@@ -37,6 +37,8 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -85,8 +87,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
     private var onNavigateToVaultAddItemScreenCalled = false
-    private var onNavigateToAddSendScreenCalled = false
-    private var onNavigateToEditSendItemId: String? = null
+    private var onNavigateToAddEditSendScreenRoute: AddEditSendRoute? = null
     private var onNavigateToViewSendScreenRoute: ViewSendRoute? = null
     private var onNavigateToVaultItemArgs: VaultItemArgs? = null
     private var onNavigateToVaultEditItemScreenArgs: VaultAddEditArgs? = null
@@ -130,9 +131,8 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItemScreen = { onNavigateToVaultItemArgs = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
-                onNavigateToAddSendItem = { onNavigateToAddSendScreenCalled = true },
+                onNavigateToAddEditSendItem = { onNavigateToAddEditSendScreenRoute = it },
                 onNavigateToViewSendItem = { onNavigateToViewSendScreenRoute = it },
-                onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
                 onNavigateToSearch = { onNavigateToSearchType = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenArgs = it },
                 onNavigateToVaultItemListing = { this.onNavigateToVaultItemListingScreenType = it },
@@ -478,9 +478,13 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToAddSendItem should call onNavigateToAddSendScreen`() {
-        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem)
-        assertTrue(onNavigateToAddSendScreenCalled)
+    fun `NavigateToAddSendItem should call onNavigateToAddEditSendScreen`() {
+        val sendType = SendItemType.TEXT
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddSendItem(sendType = sendType))
+        assertEquals(
+            AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD),
+            onNavigateToAddEditSendScreenRoute,
+        )
     }
 
     @Test
@@ -520,10 +524,16 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToEditSendItem event should call onNavigateToEditSendItemId`() {
+    fun `NavigateToEditSendItem event should call onNavigateToAddEditSendScreen`() {
         val sendId = "sendId"
-        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToEditSendItem(id = sendId))
-        assertEquals(sendId, onNavigateToEditSendItemId)
+        val sendType = SendItemType.FILE
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.NavigateToEditSendItem(id = sendId, sendType = sendType),
+        )
+        assertEquals(
+            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            onNavigateToAddEditSendScreenRoute,
+        )
     }
 
     @Test
@@ -1503,6 +1513,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     action = ListingItemOverflowAction.SendAction.EditClick(
                         sendId = "mockId-$number",
+                        sendType = SendType.TEXT,
                     ),
                 ),
             )
@@ -2348,7 +2359,10 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
                 sendId = "mockId-$number",
                 sendType = SendType.FILE,
             ),
-            ListingItemOverflowAction.SendAction.EditClick(sendId = "mockId-$number"),
+            ListingItemOverflowAction.SendAction.EditClick(
+                sendId = "mockId-$number",
+                sendType = SendType.TEXT,
+            ),
             ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = "www.test.com"),
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),

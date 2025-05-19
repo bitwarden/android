@@ -7,15 +7,17 @@ import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import kotlinx.serialization.Serializable
 
 /**
  * The type-safe route for the add send screen.
  */
 @Serializable
-data class AddSendRoute(
-    val type: ModeType,
-    val editSendId: String?,
+data class AddEditSendRoute(
+    val sendType: SendItemType,
+    val modeType: ModeType,
+    val sendId: String? = null,
 )
 
 /**
@@ -31,6 +33,7 @@ enum class ModeType {
  * Class to retrieve send add & edit arguments from the [SavedStateHandle].
  */
 data class AddSendArgs(
+    val sendType: SendItemType,
     val sendAddType: AddSendType,
 )
 
@@ -38,21 +41,14 @@ data class AddSendArgs(
  * Constructs a [AddSendArgs] from the [SavedStateHandle] and internal route data.
  */
 fun SavedStateHandle.toAddSendArgs(): AddSendArgs {
-    val route = this.toRoute<AddSendRoute>()
+    val route = this.toRoute<AddEditSendRoute>()
     return AddSendArgs(
-        sendAddType = when (route.type) {
+        sendType = route.sendType,
+        sendAddType = when (route.modeType) {
             ModeType.ADD -> AddSendType.AddItem
-            ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
+            ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.sendId))
         },
     )
-}
-
-private fun SavedStateHandle.toAddSendType(): AddSendType {
-    val route = this.toRoute<AddSendRoute>()
-    return when (route.type) {
-        ModeType.ADD -> AddSendType.AddItem
-        ModeType.EDIT -> AddSendType.EditItem(sendItemId = requireNotNull(route.editSendId))
-    }
 }
 
 /**
@@ -62,7 +58,7 @@ fun NavGraphBuilder.addSendDestination(
     onNavigateBack: () -> Unit,
     onNavigateUpToRoot: () -> Unit,
 ) {
-    composableWithSlideTransitions<AddSendRoute> {
+    composableWithSlideTransitions<AddEditSendRoute> {
         AddSendScreen(
             onNavigateBack = onNavigateBack,
             onNavigateUpToRoot = onNavigateUpToRoot,
@@ -74,17 +70,8 @@ fun NavGraphBuilder.addSendDestination(
  * Navigate to the new send screen.
  */
 fun NavController.navigateToAddSend(
-    sendAddType: AddSendType,
+    route: AddEditSendRoute,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate(
-        route = AddSendRoute(
-            type = when (sendAddType) {
-                AddSendType.AddItem -> ModeType.ADD
-                is AddSendType.EditItem -> ModeType.EDIT
-            },
-            editSendId = (sendAddType as? AddSendType.EditItem)?.sendItemId,
-        ),
-        navOptions = navOptions,
-    )
+    this.navigate(route = route, navOptions = navOptions)
 }

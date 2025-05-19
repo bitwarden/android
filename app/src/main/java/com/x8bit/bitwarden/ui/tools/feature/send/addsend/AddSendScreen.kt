@@ -3,7 +3,6 @@ package com.x8bit.bitwarden.ui.tools.feature.send.addsend
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -19,7 +18,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
@@ -31,8 +29,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.segment.BitwardenSegmentedButton
-import com.x8bit.bitwarden.ui.platform.components.segment.SegmentedButtonState
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -42,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
-import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Displays new send UX.
@@ -164,33 +159,6 @@ fun AddSendScreen(
                     }
                 },
             )
-        },
-        utilityBar = {
-            val viewState = state.viewState
-            if (state.isAddMode &&
-                !state.isShared &&
-                viewState is AddSendState.ViewState.Content
-            ) {
-                BitwardenSegmentedButton(
-                    modifier = Modifier
-                        .scrolledContainerBottomDivider(topAppBarScrollBehavior = scrollBehavior)
-                        .fillMaxWidth(),
-                    options = persistentListOf(
-                        SegmentedButtonState(
-                            text = stringResource(id = R.string.file),
-                            onClick = addSendHandlers.onFileTypeSelect,
-                            isChecked = viewState.isFileType,
-                            testTag = "SendFileButton",
-                        ),
-                        SegmentedButtonState(
-                            text = stringResource(id = R.string.text),
-                            onClick = addSendHandlers.onTextTypeSelect,
-                            isChecked = viewState.isTextType,
-                            testTag = "SendTextButton",
-                        ),
-                    ),
-                )
-            }
         },
     ) {
         val modifier = Modifier

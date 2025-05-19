@@ -56,7 +56,8 @@ import com.x8bit.bitwarden.ui.platform.feature.splash.splashDestination
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.VaultUnlockedGraphRoute
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.navigateToVaultUnlockedGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlocked.vaultUnlockedGraph
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.model.AddSendType
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
@@ -199,10 +200,13 @@ fun RootNavScreen(
                 navOptions = rootNavOptions,
             )
 
-            RootNavState.VaultUnlockedForNewSend -> {
+            is RootNavState.VaultUnlockedForNewSend -> {
                 navController.navigateToVaultUnlock(rootNavOptions)
                 navController.navigateToAddSend(
-                    sendAddType = AddSendType.AddItem,
+                    route = AddEditSendRoute(
+                        sendType = currentState.sendType,
+                        modeType = ModeType.ADD,
+                    ),
                     navOptions = rootNavOptions,
                 )
             }

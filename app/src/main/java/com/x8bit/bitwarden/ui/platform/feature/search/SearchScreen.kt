@@ -35,6 +35,8 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
@@ -50,7 +52,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun SearchScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToEditSend: (sendId: String) -> Unit,
+    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (route: ViewSendRoute) -> Unit,
     onNavigateToEditCipher: (args: VaultAddEditArgs) -> Unit,
     onNavigateToViewCipher: (args: VaultItemArgs) -> Unit,
@@ -73,7 +75,16 @@ fun SearchScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SearchEvent.NavigateBack -> onNavigateBack()
-            is SearchEvent.NavigateToEditSend -> onNavigateToEditSend(event.sendId)
+            is SearchEvent.NavigateToEditSend -> {
+                onNavigateToAddEditSend(
+                    AddEditSendRoute(
+                        sendType = event.sendType,
+                        modeType = ModeType.EDIT,
+                        sendId = event.sendId,
+                    ),
+                )
+            }
+
             is SearchEvent.NavigateToViewSend -> {
                 onNavigateToViewSend(
                     ViewSendRoute(sendId = event.sendId, sendType = event.sendType),

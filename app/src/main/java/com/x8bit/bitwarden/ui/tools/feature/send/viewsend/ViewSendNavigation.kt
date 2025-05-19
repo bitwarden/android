@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.toRoute
 import com.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import kotlinx.serialization.Serializable
 
@@ -39,12 +40,12 @@ fun SavedStateHandle.toViewSendArgs(): ViewSendArgs {
  */
 fun NavGraphBuilder.viewSendDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToEditSend: (sendId: String) -> Unit,
+    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
 ) {
     composableWithSlideTransitions<ViewSendRoute> {
         ViewSendScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToEditSend = onNavigateToEditSend,
+            onNavigateToAddEditSend = onNavigateToAddEditSend,
         )
     }
 }

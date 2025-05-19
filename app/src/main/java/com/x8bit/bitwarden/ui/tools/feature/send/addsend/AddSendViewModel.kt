@@ -15,9 +15,7 @@ import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -36,6 +34,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendName
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.toViewState
+import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -64,7 +63,6 @@ private const val MAX_FILE_SIZE_BYTES: Long = 100 * 1024 * 1024
 @HiltViewModel
 class AddSendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val authRepo: AuthRepository,
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
@@ -78,8 +76,11 @@ class AddSendViewModel @Inject constructor(
         // Check to see if we are navigating here from an external source
         val specialCircumstance = specialCircumstanceManager.specialCircumstance
         val shareSendType = specialCircumstance.toSendType()
-        val sendAddType = savedStateHandle.toAddSendArgs().sendAddType
+        val args = savedStateHandle.toAddSendArgs()
+        val sendType = args.sendType
+        val sendAddType = args.sendAddType
         AddSendState(
+            sendType = sendType,
             shouldFinishOnComplete = specialCircumstance.shouldFinishOnComplete(),
             isShared = shareSendType != null,
             addSendType = sendAddType,
@@ -106,16 +107,28 @@ class AddSendViewModel @Inject constructor(
                         sendUrl = null,
                         hasPassword = false,
                     ),
-                    selectedType = shareSendType ?: AddSendState.ViewState.Content.SendType.Text(
-                        input = "",
-                        isHideByDefaultChecked = false,
-                    ),
+                    selectedType = shareSendType ?: when (sendType) {
+                        SendItemType.FILE -> {
+                            AddSendState.ViewState.Content.SendType.File(
+                                uri = null,
+                                name = null,
+                                displaySize = null,
+                                sizeBytes = null,
+                            )
+                        }
+
+                        SendItemType.TEXT -> {
+                            AddSendState.ViewState.Content.SendType.Text(
+                                input = "",
+                                isHideByDefaultChecked = false,
+                            )
+                        }
+                    },
                 )
 
                 is AddSendType.EditItem -> AddSendState.ViewState.Loading
             },
             dialogState = null,
-            isPremiumUser = authRepo.userStateFlow.value?.activeAccount?.isPremium == true,
             baseWebSendUrl = environmentRepo.environment.environmentUrlData.baseWebSendUrl,
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
@@ -137,12 +150,6 @@ class AddSendViewModel @Inject constructor(
                     .launchIn(viewModelScope)
             }
         }
-
-        authRepo
-            .userStateFlow
-            .map { AddSendAction.Internal.UserStateReceive(it) }
-            .onEach(::sendAction)
-            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AddSendAction): Unit = when (action) {
@@ -155,8 +162,6 @@ class AddSendViewModel @Inject constructor(
         is AddSendAction.DeletionDateChange -> handleDeletionDateChange(action)
         AddSendAction.DismissDialogClick -> handleDismissDialogClick()
         is AddSendAction.SaveClick -> handleSaveClick()
-        is AddSendAction.FileTypeClick -> handleFileTypeClick()
-        is AddSendAction.TextTypeClick -> handleTextTypeClick()
         is AddSendAction.ChooseFileClick -> handleChooseFileClick(action)
         is AddSendAction.NameChange -> handleNameChange(action)
         is AddSendAction.MaxAccessCountChange -> handleMaxAccessCountChange(action)
@@ -177,7 +182,6 @@ class AddSendViewModel @Inject constructor(
             action,
         )
 
-        is AddSendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
         is AddSendAction.Internal.SendDataReceive -> handleSendDataReceive(action)
     }
 
@@ -289,12 +293,6 @@ class AddSendViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(AddSendEvent.ShowToast(message = R.string.send_password_removed.asText()))
             }
-        }
-    }
-
-    private fun handleUserStateReceive(action: AddSendAction.Internal.UserStateReceive) {
-        mutableStateFlow.update {
-            it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
     }
 
@@ -479,9 +477,8 @@ class AddSendViewModel @Inject constructor(
                 }
                 return@onContent
             }
-            if (content.isFileType) {
-                val fileType = content.selectedType as AddSendState.ViewState.Content.SendType.File
-                if (fileType.name.isNullOrBlank()) {
+            (content.selectedType as? AddSendState.ViewState.Content.SendType.File)?.let { file ->
+                if (file.name.isNullOrBlank()) {
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = AddSendState.DialogState.Error(
@@ -494,7 +491,7 @@ class AddSendViewModel @Inject constructor(
                     }
                     return@onContent
                 }
-                if ((fileType.sizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
+                if ((file.sizeBytes ?: 0) > MAX_FILE_SIZE_BYTES) {
                     // Must be under 100 MB
                     mutableStateFlow.update {
                         it.copy(
@@ -557,52 +554,6 @@ class AddSendViewModel @Inject constructor(
     private fun handleNameChange(action: AddSendAction.NameChange) {
         updateCommonContent {
             it.copy(name = action.input)
-        }
-    }
-
-    private fun handleFileTypeClick() {
-        if (state.policyDisablesSend) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = AddSendState.DialogState.Error(
-                        title = null,
-                        message = R.string.send_disabled_warning.asText(),
-                    ),
-                )
-            }
-            return
-        }
-        if (!state.isPremiumUser) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = AddSendState.DialogState.Error(
-                        title = R.string.send.asText(),
-                        message = R.string.send_file_premium_required.asText(),
-                    ),
-                )
-            }
-            return
-        }
-        updateContent {
-            it.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.File(
-                    uri = null,
-                    name = null,
-                    displaySize = null,
-                    sizeBytes = null,
-                ),
-            )
-        }
-    }
-
-    private fun handleTextTypeClick() {
-        updateContent {
-            it.copy(
-                selectedType = AddSendState.ViewState.Content.SendType.Text(
-                    input = "",
-                    isHideByDefaultChecked = false,
-                ),
-            )
         }
     }
 
@@ -708,11 +659,11 @@ class AddSendViewModel @Inject constructor(
  */
 @Parcelize
 data class AddSendState(
+    val sendType: SendItemType,
     val addSendType: AddSendType,
     val dialogState: DialogState?,
     val viewState: ViewState,
     val shouldFinishOnComplete: Boolean,
-    val isPremiumUser: Boolean,
     val isShared: Boolean,
     val baseWebSendUrl: String,
     val policyDisablesSend: Boolean,
@@ -723,8 +674,15 @@ data class AddSendState(
      */
     val screenDisplayName: Text
         get() = when (addSendType) {
-            AddSendType.AddItem -> R.string.add_send.asText()
-            is AddSendType.EditItem -> R.string.edit_send.asText()
+            AddSendType.AddItem -> when (sendType) {
+                SendItemType.FILE -> R.string.add_file_send.asText()
+                SendItemType.TEXT -> R.string.add_text_send.asText()
+            }
+
+            is AddSendType.EditItem -> when (sendType) {
+                SendItemType.FILE -> R.string.edit_file_send.asText()
+                SendItemType.TEXT -> R.string.edit_text_send.asText()
+            }
         }
 
     /**
@@ -769,17 +727,6 @@ data class AddSendState(
             val common: Common,
             val selectedType: SendType,
         ) : ViewState() {
-
-            /**
-             * Helper method to indicate if the selected type is [SendType.File].
-             */
-            val isFileType: Boolean get() = selectedType is SendType.File
-
-            /**
-             * Helper method to indicate if the selected type is [SendType.Text].
-             */
-            val isTextType: Boolean get() = selectedType is SendType.Text
-
             /**
              * Content data that is common for all item types.
              */
@@ -945,16 +892,6 @@ sealed class AddSendAction {
     data class NameChange(val input: String) : AddSendAction()
 
     /**
-     * User clicked the file type segmented button.
-     */
-    data object FileTypeClick : AddSendAction()
-
-    /**
-     * User clicked the text type segmented button.
-     */
-    data object TextTypeClick : AddSendAction()
-
-    /**
      * Value of the send text field updated.
      */
     data class TextChange(val input: String) : AddSendAction()
@@ -1005,11 +942,6 @@ sealed class AddSendAction {
      * Models actions that the [AddSendViewModel] itself might send.
      */
     sealed class Internal : AddSendAction() {
-        /**
-         * Indicates what the current [userState] is.
-         */
-        data class UserStateReceive(val userState: UserState?) : Internal()
-
         /**
          * Indicates a result for creating a send has been received.
          */

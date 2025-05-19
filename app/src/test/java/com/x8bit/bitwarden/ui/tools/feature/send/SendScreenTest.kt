@@ -27,6 +27,8 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -47,11 +49,10 @@ import org.junit.Test
 @Suppress("LargeClass")
 class SendScreenTest : BitwardenComposeTest() {
 
-    private var onNavigateToNewSendCalled = false
+    private var onNavigateToAddEditSendRoute: AddEditSendRoute? = null
     private var onNavigateToSendFilesListCalled = false
     private var onNavigateToSendTextListCalled = false
     private var onNavigateToSendSearchCalled = false
-    private var onNavigateToEditSendId: String? = null
     private var onNavigateToViewSendRoute: ViewSendRoute? = null
 
     private val intentManager = mockk<IntentManager> {
@@ -74,8 +75,7 @@ class SendScreenTest : BitwardenComposeTest() {
         ) {
             SendScreen(
                 viewModel = viewModel,
-                onNavigateToAddSend = { onNavigateToNewSendCalled = true },
-                onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToAddEditSend = { onNavigateToAddEditSendRoute = it },
                 onNavigateToViewSend = { onNavigateToViewSendRoute = it },
                 onNavigateToSendFilesList = { onNavigateToSendFilesListCalled = true },
                 onNavigateToSendTextList = { onNavigateToSendTextListCalled = true },
@@ -85,16 +85,24 @@ class SendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on NavigateToNewSend should call onNavigateToNewSend`() {
-        mutableEventFlow.tryEmit(SendEvent.NavigateNewSend)
-        assertTrue(onNavigateToNewSendCalled)
+    fun `on NavigateToNewSend should call onNavigateToAddEditSend`() {
+        val sendType = SendItemType.TEXT
+        mutableEventFlow.tryEmit(SendEvent.NavigateNewSend(sendType = sendType))
+        assertEquals(
+            AddEditSendRoute(sendType = sendType, modeType = ModeType.ADD, sendId = null),
+            onNavigateToAddEditSendRoute,
+        )
     }
 
     @Test
-    fun `on NavigateToEditSend should call onNavigateToEditSend`() {
+    fun `on NavigateToEditSend should call onNavigateToAddEditSend`() {
         val sendId = "sendId1234"
-        mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId))
-        assertEquals(sendId, onNavigateToEditSendId)
+        val sendType = SendItemType.FILE
+        mutableEventFlow.tryEmit(SendEvent.NavigateToEditSend(sendId = sendId, sendType = sendType))
+        assertEquals(
+            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            onNavigateToAddEditSendRoute,
+        )
     }
 
     @Test
@@ -814,6 +822,64 @@ class SendScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `select send type dialog should be displayed according to state`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.SelectSendAddType)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Type")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "File")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Text")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `select file type from dialog should send appropriate AddSendSelected event`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.SelectSendAddType)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "File")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
+        }
+    }
+
+    @Test
+    fun `select text type from dialog should send appropriate AddSendSelected event`() {
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SendState.DialogState.SelectSendAddType)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Text")
+            .assert(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.TEXT))
+        }
+    }
 }
 
 private val DEFAULT_STATE: SendState = SendState(
@@ -822,6 +888,7 @@ private val DEFAULT_STATE: SendState = SendState(
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
     isRefreshing = false,
+    isPremiumUser = false,
 )
 
 private val DEFAULT_SEND_ITEM: SendState.ViewState.Content.SendItem =

@@ -727,10 +727,16 @@ class SearchViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
+                    ListingItemOverflowAction.SendAction.EditClick(
+                        sendId = sendId,
+                        sendType = SendType.FILE,
+                    ),
                 ),
             )
-            assertEquals(SearchEvent.NavigateToEditSend(sendId), awaitItem())
+            assertEquals(
+                SearchEvent.NavigateToEditSend(sendId = sendId, sendType = SendItemType.FILE),
+                awaitItem(),
+            )
         }
     }
 

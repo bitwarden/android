@@ -27,6 +27,8 @@ import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOpt
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.ModeType
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
@@ -65,7 +67,7 @@ class SearchScreenTest : BitwardenComposeTest() {
     private val appResumeStateManager: AppResumeStateManager = mockk(relaxed = true)
 
     private var onNavigateBackCalled = false
-    private var onNavigateToEditSendId: String? = null
+    private var onNavigateToAddEditSendRoute: AddEditSendRoute? = null
     private var onNavigateToViewSendRoute: ViewSendRoute? = null
     private var onNavigateToEditCipherArgs: VaultAddEditArgs? = null
     private var onNavigateToViewCipherArgs: VaultItemArgs? = null
@@ -79,7 +81,7 @@ class SearchScreenTest : BitwardenComposeTest() {
             SearchScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToEditSend = { onNavigateToEditSendId = it },
+                onNavigateToAddEditSend = { onNavigateToAddEditSendRoute = it },
                 onNavigateToViewSend = { onNavigateToViewSendRoute = it },
                 onNavigateToEditCipher = { onNavigateToEditCipherArgs = it },
                 onNavigateToViewCipher = { onNavigateToViewCipherArgs = it },
@@ -94,10 +96,16 @@ class SearchScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `NavigateToEditSend should call onNavigateToEditSend`() {
+    fun `NavigateToEditSend should call onNavigateToAddEditSend`() {
         val sendId = "sendId"
-        mutableEventFlow.tryEmit(SearchEvent.NavigateToEditSend(sendId))
-        assertEquals(sendId, onNavigateToEditSendId)
+        val sendType = SendItemType.FILE
+        mutableEventFlow.tryEmit(
+            SearchEvent.NavigateToEditSend(sendId = sendId, sendType = sendType),
+        )
+        assertEquals(
+            AddEditSendRoute(sendType = sendType, modeType = ModeType.EDIT, sendId = sendId),
+            onNavigateToAddEditSendRoute,
+        )
     }
 
     @Test
@@ -852,6 +860,7 @@ class SearchScreenTest : BitwardenComposeTest() {
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.SendAction.EditClick(
                         sendId = "mockId-1",
+                        sendType = SendType.FILE,
                     ),
                 ),
             )

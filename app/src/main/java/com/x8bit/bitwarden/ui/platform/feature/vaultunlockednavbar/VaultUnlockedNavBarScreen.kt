@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUn
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
+import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.navigateToSendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
@@ -59,8 +60,7 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
-    onNavigateToAddSend: () -> Unit,
-    onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
     onNavigateToDeleteAccount: () -> Unit,
     onNavigateToExportVault: () -> Unit,
@@ -122,8 +122,7 @@ fun VaultUnlockedNavBarScreen(
         navigateToVaultAddItem = onNavigateToVaultAddItem,
         onNavigateToSearchSend = onNavigateToSearchSend,
         onNavigateToSearchVault = onNavigateToSearchVault,
-        navigateToAddSend = onNavigateToAddSend,
-        onNavigateToEditSend = onNavigateToEditSend,
+        onNavigateToAddEditSend = onNavigateToAddEditSend,
         onNavigateToViewSend = onNavigateToViewSend,
         navigateToDeleteAccount = onNavigateToDeleteAccount,
         navigateToExportVault = onNavigateToExportVault,
@@ -168,8 +167,7 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToVaultEditItem: (args: VaultAddEditArgs) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
-    navigateToAddSend: () -> Unit,
-    onNavigateToEditSend: (sendItemId: String) -> Unit,
+    onNavigateToAddEditSend: (route: AddEditSendRoute) -> Unit,
     onNavigateToViewSend: (ViewSendRoute) -> Unit,
     navigateToDeleteAccount: () -> Unit,
     navigateToExportVault: () -> Unit,
@@ -242,8 +240,7 @@ private fun VaultUnlockedNavBarScaffold(
             )
             sendGraph(
                 navController = navController,
-                onNavigateToAddSend = navigateToAddSend,
-                onNavigateToEditSend = onNavigateToEditSend,
+                onNavigateToAddEditSend = onNavigateToAddEditSend,
                 onNavigateToViewSend = onNavigateToViewSend,
                 onNavigateToSearchSend = onNavigateToSearchSend,
             )

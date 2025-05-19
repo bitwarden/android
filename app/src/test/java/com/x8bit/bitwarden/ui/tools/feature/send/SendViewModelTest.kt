@@ -10,8 +10,12 @@ import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.OnboardingStatus
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -50,7 +54,10 @@ class SendViewModelTest : BaseViewModelTest() {
     private val environmentRepo: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
     }
-
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepo: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val settingsRepo: SettingsRepository = mockk {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
     }
@@ -92,11 +99,66 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `AddSendClick should emit NavigateNewSend`() = runTest {
+    fun `AddSendClick should display SelectSendAddType dialog`() {
         val viewModel = createViewModel()
+        viewModel.trySendAction(SendAction.AddSendClick)
+        assertEquals(
+            DEFAULT_STATE.copy(dialogState = SendState.DialogState.SelectSendAddType),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `AddSendSelected with text type should emit NavigateNewSend`() = runTest {
+        val viewModel = createViewModel()
+        val sendType = SendItemType.TEXT
         viewModel.eventFlow.test {
-            viewModel.trySendAction(SendAction.AddSendClick)
-            assertEquals(SendEvent.NavigateNewSend, awaitItem())
+            viewModel.trySendAction(SendAction.AddSendSelected(sendType = sendType))
+            assertEquals(SendEvent.NavigateNewSend(sendType = sendType), awaitItem())
+        }
+    }
+
+    @Test
+    fun `AddSendSelected with file type and disabled send policy should display warning dialog`() {
+        val state = DEFAULT_STATE.copy(policyDisablesSend = true)
+        val viewModel = createViewModel(state = state)
+        viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
+        assertEquals(
+            state.copy(
+                dialogState = SendState.DialogState.Error(
+                    title = null,
+                    message = R.string.send_disabled_warning.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `AddSendSelected with file type and non premium user should display dialog`() {
+        val state = DEFAULT_STATE.copy(isPremiumUser = false, policyDisablesSend = false)
+        val viewModel = createViewModel(state = state)
+        viewModel.trySendAction(SendAction.AddSendSelected(sendType = SendItemType.FILE))
+        assertEquals(
+            state.copy(
+                dialogState = SendState.DialogState.Error(
+                    title = R.string.send.asText(),
+                    message = R.string.send_file_premium_required.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `AddSendSelected with file type should emit NavigateNewSend`() = runTest {
+        val state = DEFAULT_STATE.copy(isPremiumUser = true, policyDisablesSend = false)
+        mutableUserStateFlow.value = PREMIUM_USER_STATE
+        val viewModel = createViewModel(state = state)
+        val sendType = SendItemType.FILE
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.AddSendSelected(sendType = sendType))
+            assertEquals(SendEvent.NavigateNewSend(sendType = sendType), awaitItem())
         }
     }
 
@@ -306,16 +368,38 @@ class SendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `EditClick should emit NavigateToEditSend`() = runTest {
+    fun `EditClick with file type should emit NavigateToAddEditSend`() = runTest {
         val sendId = "sendId1234"
         val sendItem = mockk<SendState.ViewState.Content.SendItem> {
             every { id } returns sendId
+            every { type } returns SendState.ViewState.Content.SendItem.Type.FILE
         }
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(SendAction.EditClick(sendItem = sendItem))
-            assertEquals(SendEvent.NavigateToEditSend(sendId = sendId), awaitItem())
+            assertEquals(
+                SendEvent.NavigateToEditSend(sendId = sendId, sendType = SendItemType.FILE),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `EditClick with text type should emit NavigateToAddEditSend`() = runTest {
+        val sendId = "sendId1234"
+        val sendItem = mockk<SendState.ViewState.Content.SendItem> {
+            every { id } returns sendId
+            every { type } returns SendState.ViewState.Content.SendItem.Type.TEXT
+        }
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SendAction.EditClick(sendItem = sendItem))
+            assertEquals(
+                SendEvent.NavigateToEditSend(sendId = sendId, sendType = SendItemType.TEXT),
+                awaitItem(),
+            )
         }
     }
 
@@ -533,10 +617,23 @@ class SendViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `UserStateReceive should update isPremiumUser`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(DEFAULT_STATE, awaitItem())
+            viewModel.trySendAction(SendAction.Internal.UserStateReceive(PREMIUM_USER_STATE))
+            assertEquals(DEFAULT_STATE.copy(isPremiumUser = true), awaitItem())
+            viewModel.trySendAction(SendAction.Internal.UserStateReceive(DEFAULT_USER_STATE))
+            assertEquals(DEFAULT_STATE.copy(isPremiumUser = false), awaitItem())
+        }
+    }
+
     @Suppress("LongParameterList")
     private fun createViewModel(
         state: SendState? = null,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
+        authRepository: AuthRepository = authRepo,
         environmentRepository: EnvironmentRepository = environmentRepo,
         settingsRepository: SettingsRepository = settingsRepo,
         vaultRepository: VaultRepository = vaultRepo,
@@ -546,6 +643,7 @@ class SendViewModelTest : BaseViewModelTest() {
             set("state", state)
         },
         clipboardManager = bitwardenClipboardManager,
+        authRepo = authRepository,
         environmentRepo = environmentRepository,
         settingsRepo = settingsRepository,
         vaultRepo = vaultRepository,
@@ -560,4 +658,35 @@ private val DEFAULT_STATE: SendState = SendState(
     isPullToRefreshSettingEnabled = false,
     policyDisablesSend = false,
     isRefreshing = false,
+    isPremiumUser = false,
+)
+
+private val DEFAULT_USER_ACCOUNT_STATE = UserState.Account(
+    userId = "user_id_1",
+    name = "Bit",
+    email = "bitwarden@gmail.com",
+    avatarColorHex = "#ff00ff",
+    environment = Environment.Us,
+    isPremium = false,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+    hasMasterPassword = true,
+    isUsingKeyConnector = false,
+    onboardingStatus = OnboardingStatus.COMPLETE,
+    firstTimeState = FirstTimeState(showImportLoginsCard = true),
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "user_id_1",
+    accounts = listOf(DEFAULT_USER_ACCOUNT_STATE),
+)
+
+private val PREMIUM_USER_STATE = UserState(
+    activeUserId = "user_id_1",
+    accounts = listOf(DEFAULT_USER_ACCOUNT_STATE.copy(isPremium = true)),
 )
