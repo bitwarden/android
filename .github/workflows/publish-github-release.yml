@@ -66,15 +66,15 @@ jobs:
       - name: Check if version is already released
         if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
         id: check_version
+        env:
+          LATEST_PRERELEASE_VERSION: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          APPSTORE_VERSION: ${{ steps.appstore_version.outputs.appstore_version }}
         run: |
-          latest_prerelease_version=${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
-          appstore_version=${{ steps.appstore_version.outputs.appstore_version }}
-
-          if [ "$latest_prerelease_version" == "$appstore_version" ]; then
-              echo "Version $latest_prerelease_version is already released on Google Play Store"
+          if [ "$LATEST_PRERELEASE_VERSION" == "$APPSTORE_VERSION" ]; then
+              echo "Version $LATEST_PRERELEASE_VERSION is already released on Google Play Store"
               echo "version_released=true" >> $GITHUB_OUTPUT
           else
-              echo "Version $latest_prerelease_version is not released on Google Play Store"
+              echo "Version $LATEST_PRERELEASE_VERSION is not released on Google Play Store"
               echo "version_released=false" >> $GITHUB_OUTPUT
           fi
 
