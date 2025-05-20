@@ -83,4 +83,4 @@ jobs:
         env:
           TAG: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
           GH_TOKEN: ${{ github.token }}
-        run: gh release edit $TAG --prerelease=false --latest
+        run: gh release edit $TAG --prerelease=false --latest --draft=false
