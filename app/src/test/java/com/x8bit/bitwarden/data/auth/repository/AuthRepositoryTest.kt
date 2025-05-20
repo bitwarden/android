@@ -795,6 +795,38 @@ class AuthRepositoryTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `delete account fails if deleteAccount fails because `() = runTest {
+        val masterPassword = "hello world"
+        val hashedMasterPassword = "dlrow olleh"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+        } returns hashedMasterPassword.asSuccess()
+        coEvery {
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
+        } returns DeleteAccountResponseJson.Invalid(
+            message = "Cannot delete accounts owned by an organization. Contact your organization administrator for additional details.",
+            validationErrors = null,
+        ).asSuccess()
+
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
+
+        assertEquals(DeleteAccountResult.CannotDeleteAccountOwnedByOrg, result)
+        coVerify {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
+        }
+    }
+
+    @Test
     fun `deleteAccountWithMasterPassword succeeds`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"

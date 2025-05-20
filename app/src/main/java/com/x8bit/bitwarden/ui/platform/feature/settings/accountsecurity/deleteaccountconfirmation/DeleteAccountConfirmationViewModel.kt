@@ -161,6 +161,12 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
                         )
                     }
 
+                    is DeleteAccountResult.CannotDeleteAccountOwnedByOrg -> {
+                        DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
+                            message = R.string.cannot_delete_accounts_owned_by_an_organization_contact_your_organization_administrator_for_additional_details.asText(),
+                        )
+                    }
+
                     DeleteAccountResult.Success -> {
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.DeleteSuccess()
                     }

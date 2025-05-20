@@ -157,6 +157,42 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `on DeleteAccountClick with DeleteAccountResult CannotDeleteAccountOwnedByOrg should set dialog to Error with message`() =
+        runTest {
+            coEvery {
+                authRepo.deleteAccountWithOneTimePassword("123456")
+            } returns DeleteAccountResult.CannotDeleteAccountOwnedByOrg
+            val initialState = DEFAULT_STATE.copy(
+                verificationCode = "123456",
+            )
+            val viewModel = createViewModel(
+                state = initialState,
+            )
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
+                viewModel.trySendAction(
+                    DeleteAccountConfirmationAction.DeleteAccountClick,
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Loading(),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    initialState.copy(
+                        dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
+                            message = R.string.cannot_delete_accounts_owned_by_an_organization_contact_your_organization_administrator_for_additional_details.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            coVerify { authRepo.deleteAccountWithOneTimePassword("123456") }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `on ResendCodeClick with requestOneTimePasscode Success should set dialog to null`() =
         runTest {
             coEvery {

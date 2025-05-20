@@ -10,6 +10,11 @@ sealed class DeleteAccountResult {
     data object Success : DeleteAccountResult()
 
     /**
+     * There was an error deleting the account owned by organization.
+     */
+    data object CannotDeleteAccountOwnedByOrg : DeleteAccountResult()
+
+    /**
      * There was an error deleting the account.
      */
     data class Error(

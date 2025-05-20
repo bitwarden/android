@@ -13,6 +13,7 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.data.repository.util.toEnvironmentUrls
 import com.bitwarden.data.repository.util.toEnvironmentUrlsOrDefault
 import com.bitwarden.network.model.DeleteAccountResponseJson
+import com.bitwarden.network.model.DeleteAccountResponseJson.Invalid.InvalidType
 import com.bitwarden.network.model.GetTokenResponseJson
 import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.OrganizationType
@@ -516,8 +517,17 @@ class AuthRepositoryImpl(
             onSuccess = { response ->
                 when (response) {
                     is DeleteAccountResponseJson.Invalid -> {
-                        clearPendingAccountDeletion()
-                        DeleteAccountResult.Error(message = response.message, error = null)
+                        when (response.invalidType) {
+                            is InvalidType.CannotDeleteAccountOwnedByOrg -> {
+                                clearPendingAccountDeletion()
+                                DeleteAccountResult.CannotDeleteAccountOwnedByOrg
+                            }
+
+                            else -> {
+                                clearPendingAccountDeletion()
+                                DeleteAccountResult.Error(message = response.message, error = null)
+                            }
+                        }
                     }
 
                     DeleteAccountResponseJson.Success -> {

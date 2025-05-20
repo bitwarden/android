@@ -157,6 +157,34 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `on DeleteAccountClick should update dialog state when deleteAccount fails with CannotDeleteAccountOwnedByOrg`() = runTest {
+        val viewModel = createViewModel()
+        val masterPassword = "ckasb kcs ja"
+        coEvery {
+            authRepo.validatePassword(any())
+        } returns ValidatePasswordResult.Success(isValid = true)
+        coEvery {
+            authRepo.deleteAccountWithMasterPassword(masterPassword)
+        } returns DeleteAccountResult.CannotDeleteAccountOwnedByOrg
+
+        viewModel.trySendAction(DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = DeleteAccountState.DeleteAccountDialog.Error(
+                    message = R.string.cannot_delete_accounts_owned_by_an_organization_contact_your_organization_administrator_for_additional_details.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        coVerify {
+            authRepo.deleteAccountWithMasterPassword(masterPassword)
+        }
+    }
+
+    @Test
     fun `on DeleteAccountClick should update dialog state when invalid master pass is invalid`() =
         runTest {
             val viewModel = createViewModel()
