@@ -24,6 +24,11 @@ on:
         required: false
         default: false
         type: boolean
+      test-device-farm:
+        description: "Branch to download artifact used for Device Farm testing"
+        required: true
+        default: "main"
+        type: string
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,7 +39,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-24.04
-
+    if: inputs.test-device-farm == ''
     steps:
       - name: Check out repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -95,16 +100,14 @@ jobs:
     name: Run Sanity e2e check on a real device
     env:
       _TEST_DIRECTORY: ./test/Bitwarden.Android.Tests
-    needs:
-      - build
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          token: ${{ env.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           repository: 'bitwarden/test'
-          path: '~/test'
+          path: 'test'
 
       - name: Set up .NET
         uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
@@ -129,8 +132,10 @@ jobs:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: com.x8bit.bitwarden.apk
           path: ${{ env._TEST_DIRECTORY }}/Artifacts/
+          artifact-ids: 3153893278
+          run-id: 15119459482
+          github-token: ${{ env.GITHUB_TOKEN }}
 
       - name: Retrieve test data
         uses: bitwarden/sm-action@14f92f1d294ae3c2b6a3845d389cd2c318b0dfd8 # v2.2.0
@@ -166,7 +171,7 @@ jobs:
     name: Publish Play Store artifacts
     needs:
       - run_sanity_e2e_test
-    if: always() && needs.run_sanity_e2e_test.result != 'failure'
+    if: always() && needs.run_sanity_e2e_test.result != 'failure' && inputs.test-device-farm == ''
     runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
@@ -471,7 +476,7 @@ jobs:
     name: Publish F-Droid artifacts
     needs:
       - run_sanity_e2e_test
-    if: always() && needs.run_sanity_e2e_test.result != 'failure'
+    if: always() && needs.run_sanity_e2e_test.result != 'failure' && inputs.test-device-farm == ''
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repo
