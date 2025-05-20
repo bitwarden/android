@@ -21,9 +21,11 @@ jobs:
 
       - name: Get latest pre-release name
         id: get_latest_prerelease
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          latest_release=$(jq -r 'first' <<< $(curl --silent https://api.github.com/repos/bitwarden/android/releases))
-          is_latest_prerelease=$(jq -r '.prerelease' <<< $latest_release)
+          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 1)
+          is_latest_prerelease=$(jq -r '.[0].isPrerelease' <<< $latest_release)
           echo "is_latest_prerelease=$is_latest_prerelease" >> $GITHUB_OUTPUT
 
           if [ "$is_latest_prerelease" != "true" ]; then
@@ -31,11 +33,8 @@ jobs:
               exit 0
           fi
 
-          latest_prerelease_version=$(jq -r '.tag_name' <<< $latest_release)
+          latest_prerelease_version=$(jq -r '.[0].tagName' <<< $latest_release)
           echo "latest_prerelease_version=$latest_prerelease_version" >> $GITHUB_OUTPUT
-
-          latest_prerelease_id=$(jq -r '.id' <<< $latest_release)
-          echo "latest_prerelease_id=$latest_prerelease_id" >> $GITHUB_OUTPUT
 
       - name: Log in to Azure
         if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
@@ -82,11 +81,7 @@ jobs:
       - name: Make GitHub release latest and non-pre-release
         if: steps.check_version.outputs.version_released == 'true'
         id: make_release
-        run: |
-          latest_prerelease_version=${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
-          echo "Making release $latest_prerelease_version latest and non-pre-release"
-          curl -X PATCH \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/bitwarden/android/releases/$latest_prerelease_id \
-            -d '{"prerelease": false, "draft": false, "make_latest": true}'
+        env:
+          TAG: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          GH_TOKEN: ${{ github.token }}
+        run: gh release edit $TAG --prerelease=false --latest
