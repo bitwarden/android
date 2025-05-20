@@ -266,7 +266,7 @@ platform :android do
   end
 
   desc "Get latest published version"
-  lane :getLatestVersion do
+  lane :getLatestVersion do |options|
       version_codes = google_play_track_version_codes(
         package_name: "com.x8bit.bitwarden",
         track: "production",
