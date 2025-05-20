@@ -80,7 +80,6 @@ jobs:
 
       - name: Make GitHub release latest and non-pre-release
         if: steps.check_version.outputs.version_released == 'true'
-        id: make_release
         env:
           TAG: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
           GH_TOKEN: ${{ github.token }}
