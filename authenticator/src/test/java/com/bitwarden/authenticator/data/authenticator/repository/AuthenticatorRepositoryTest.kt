@@ -45,8 +45,14 @@ class AuthenticatorRepositoryTest {
     private val mockFileManager = mockk<FileManager>()
     private val mockImportManager = mockk<ImportManager>()
     private val mockDispatcherManager = FakeDispatcherManager()
+    private val mutablePasswordSyncFlagStateFlow = MutableStateFlow(true)
     private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
-        every { getFeatureFlag(FlagKey.PasswordManagerSync) } returns true
+        every {
+            getFeatureFlagFlow(FlagKey.PasswordManagerSync)
+        } returns mutablePasswordSyncFlagStateFlow
+        every {
+            getFeatureFlag(FlagKey.PasswordManagerSync)
+        } returns mutablePasswordSyncFlagStateFlow.value
     }
     private val settingsRepository: SettingsRepository = mockk {
         every { previouslySyncedBitwardenAccountIds } returns emptySet()
@@ -84,25 +90,27 @@ class AuthenticatorRepositoryTest {
     }
 
     @Test
-    fun `sharedCodesStateFlow value should be FeatureNotEnabled when feature flag is off`() {
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
-        } returns false
-        val repository = AuthenticatorRepositoryImpl(
-            authenticatorDiskSource = fakeAuthenticatorDiskSource,
-            authenticatorBridgeManager = mockAuthenticatorBridgeManager,
-            featureFlagManager = mockFeatureFlagManager,
-            totpCodeManager = mockTotpCodeManager,
-            fileManager = mockFileManager,
-            importManager = mockImportManager,
-            dispatcherManager = mockDispatcherManager,
-            settingRepository = settingsRepository,
-        )
-        assertEquals(
-            SharedVerificationCodesState.FeatureNotEnabled,
-            repository.sharedCodesStateFlow.value,
-        )
-    }
+    fun `sharedCodesStateFlow value should be FeatureNotEnabled when feature flag is off`() =
+        runTest {
+            val repository = AuthenticatorRepositoryImpl(
+                authenticatorDiskSource = fakeAuthenticatorDiskSource,
+                authenticatorBridgeManager = mockAuthenticatorBridgeManager,
+                featureFlagManager = mockFeatureFlagManager,
+                totpCodeManager = mockTotpCodeManager,
+                fileManager = mockFileManager,
+                importManager = mockImportManager,
+                dispatcherManager = mockDispatcherManager,
+                settingRepository = settingsRepository,
+            )
+            mutablePasswordSyncFlagStateFlow.value = false
+            mutableAccountSyncStateFlow.value = AccountSyncState.Success(emptyList())
+            repository.sharedCodesStateFlow.test {
+                assertEquals(
+                    SharedVerificationCodesState.FeatureNotEnabled,
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `ciphersStateFlow should emit sorted authenticator items when disk source changes`() =
@@ -117,9 +125,6 @@ class AuthenticatorRepositoryTest {
 
     @Test
     fun `sharedCodesStateFlow should emit FeatureNotEnabled when feature flag is off`() = runTest {
-        every {
-            mockFeatureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)
-        } returns false
         val repository = AuthenticatorRepositoryImpl(
             authenticatorDiskSource = fakeAuthenticatorDiskSource,
             authenticatorBridgeManager = mockAuthenticatorBridgeManager,
@@ -130,6 +135,7 @@ class AuthenticatorRepositoryTest {
             dispatcherManager = mockDispatcherManager,
             settingRepository = settingsRepository,
         )
+        mutablePasswordSyncFlagStateFlow.value = false
         repository.sharedCodesStateFlow.test {
             assertEquals(
                 SharedVerificationCodesState.FeatureNotEnabled,
