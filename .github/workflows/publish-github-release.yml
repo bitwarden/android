@@ -9,6 +9,9 @@ jobs:
   publish-release:
     name: Publish GitHub Release
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      actions: read
 
     steps:
       - name: Check out repository
