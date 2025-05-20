@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
-      actions: read
+      #actions: read #TODO test this
 
     steps:
       - name: Check out repository
