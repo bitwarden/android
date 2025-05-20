@@ -42,6 +42,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LaunchTheme"
+        android:intentMatchingFlags="enforceIntentFilter"
         tools:replace="appComponentFactory"
         tools:targetApi="33">
         <activity

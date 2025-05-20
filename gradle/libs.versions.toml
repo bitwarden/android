@@ -2,8 +2,8 @@
 [versions]
 
 # SDK Versions
-compileSdk = "35"
-targetSdk = "35"
+compileSdk = "36"
+targetSdk = "36"
 minSdk = "29"
 minSdkBwa = "28"
 
