@@ -642,7 +642,10 @@ L\'escaneig es farà automàticament.</string>
     <string name="send_link">Enllaç Send</string>
     <string name="search_sends">Cerca Sends</string>
     <string name="edit_send">Edita Send</string>
-    <string name="add_send">Afig Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Esteu segur que voleu suprimir aquest Send?</string>
     <string name="send_deleted">S\'ha suprimit el Send.</string>
     <string name="send_updated">S\'ha guardat el Send</string>

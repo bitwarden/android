@@ -642,7 +642,10 @@ Skan prosesi avtomatik baş tutacaq.</string>
     <string name="send_link">\"Send\" bağlantısı</string>
     <string name="search_sends">\"Send\"ləri axtar</string>
     <string name="edit_send">\"Send\"ə düzəliş et</string>
-    <string name="add_send">\"Send\" əlavə et</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Bu \"Send\"i silmək istədiyinizə əminsiniz?</string>
     <string name="send_deleted">\"Send\" silindi.</string>
     <string name="send_updated">\"Send\" güncəlləndi.</string>

@@ -642,7 +642,10 @@ Skaneerimine toimub automaatselt.</string>
     <string name="send_link">Sendi link</string>
     <string name="search_sends">Otsi Sende</string>
     <string name="edit_send">Muuda Sendi</string>
-    <string name="add_send">Lisa Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Soovid tõesti selle Sendi kustutada?</string>
     <string name="send_deleted">Send on kustutatud.</string>
     <string name="send_updated">Send on uuendatud.</string>

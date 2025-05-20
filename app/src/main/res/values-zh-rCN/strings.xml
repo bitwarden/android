@@ -642,7 +642,10 @@
     <string name="send_link">Send 链接</string>
     <string name="search_sends">搜索 Send</string>
     <string name="edit_send">编辑 Send</string>
-    <string name="add_send">新增 Send</string>
+    <string name="edit_file_send">编辑文件 Send</string>
+    <string name="edit_text_send">编辑文本 Send</string>
+    <string name="add_file_send">新增文件 Send</string>
+    <string name="add_text_send">新增文本 Send</string>
     <string name="are_you_sure_delete_send">确定要删除此 Send 吗？</string>
     <string name="send_deleted">Send 已删除</string>
     <string name="send_updated">Send 已保存</string>
@@ -1265,7 +1268,7 @@
     <string name="unable_to_read_certificate">无法读取证书。</string>
     <string name="cannot_delete_your_account">无法删除您的账户</string>
     <string name="cannot_delete_your_account_explanation">此操作无法完成，因为您的账户归组织所有。请联系您的组织管理员获取详细信息。</string>
-    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户将很快被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户即将被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
     <string name="view_file_send">查看文件 Send</string>
     <string name="view_text_send">查看文本 Send</string>
     <string name="delete_send">删除 Send</string>

@@ -642,7 +642,10 @@
     <string name="send_link">Send 連結</string>
     <string name="search_sends">搜尋 Send</string>
     <string name="edit_send">編輯 Send</string>
-    <string name="add_send">建立新 Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">您確定要刪除此 Send 嗎？</string>
     <string name="send_deleted">已刪除 Send</string>
     <string name="send_updated">已更新 Send。</string>

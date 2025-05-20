@@ -642,7 +642,10 @@ Načtení proběhne automaticky.</string>
     <string name="send_link">Odkaz tohoto Send</string>
     <string name="search_sends">Prohledat Sends</string>
     <string name="edit_send">Upravit Send</string>
-    <string name="add_send">Nový Send</string>
+    <string name="edit_file_send">Upravit soubor ze Send</string>
+    <string name="edit_text_send">Upravit text ze Send</string>
+    <string name="add_file_send">Odeslat Send se soubory</string>
+    <string name="add_text_send">Odeslat textový Send</string>
     <string name="are_you_sure_delete_send">Opravdu chcete smazat tento Send?</string>
     <string name="send_deleted">Send byl smazán</string>
     <string name="send_updated">Send byl uložen</string>

@@ -641,7 +641,10 @@
     <string name="send_link">लिंक सेंड करें</string>
     <string name="search_sends">सेंड सर्च करें</string>
     <string name="edit_send">सेंड बदलें</string>
-    <string name="add_send">नया सेंड</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Are you sure you want to delete this Send?</string>
     <string name="send_deleted">सेंड हटाया गया</string>
     <string name="send_updated">सेंड सेव किया गया</string>

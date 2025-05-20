@@ -642,7 +642,10 @@ Quá trình quét sẽ diễn ra tự động.</string>
     <string name="send_link">Liên kết Gửi</string>
     <string name="search_sends">Tìm kiếm mục Gửi</string>
     <string name="edit_send">Sửa mục Gửi</string>
-    <string name="add_send">Mục Gửi mới</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Bạn có chắc muốn mục Gửi này?</string>
     <string name="send_deleted">Đã xóa mục Gửi</string>
     <string name="send_updated">Đã lưu mục Gửi</string>

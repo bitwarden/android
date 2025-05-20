@@ -627,7 +627,7 @@ Das Scannen erfolgt automatisch.</string>
     <string name="maximum_access_count">Maximale Zugriffsanzahl</string>
     <string name="maximum_access_count_info">Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</string>
     <string name="maximum_access_count_reached">Maximale Zugriffsanzahl erreicht</string>
-    <string name="current_access_count">Aktuelle Zugriffsanzahl</string>
+    <string name="current_access_count">Aktuelle Zugriffsanzahl: %s</string>
     <string name="new_password">Neues Passwort</string>
     <string name="password_info">Optional ein Passwort verlangen, damit Benutzer auf dieses Send zugreifen können.</string>
     <string name="remove_password">Passwort entfernen</string>
@@ -642,7 +642,10 @@ Das Scannen erfolgt automatisch.</string>
     <string name="send_link">Send-Link</string>
     <string name="search_sends">Sends suchen</string>
     <string name="edit_send">Send bearbeiten</string>
-    <string name="add_send">Neues Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Bist du sicher, dass du dieses Send löschen möchtest?</string>
     <string name="send_deleted">Send gelöscht</string>
     <string name="send_updated">Send gespeichert</string>
@@ -1268,7 +1271,7 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="view_file_send">Datei-Send anzeigen</string>
     <string name="view_text_send">Text-Send anzeigen</string>
     <string name="delete_send">Send löschen</string>
-    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="missing_send_resync_your_vault">Fehlendes Send. Synchronisiere deinen Tresor erneut</string>
     <string name="dynamic_colors">Dynamische Farben</string>
     <string name="dynamic_colors_description">Dynamische Farben auf Basis deines Hintergrunds anwenden</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamische Farben verwenden die Systemfarben und erfüllen möglicherweise nicht alle Richtlinien zur Barrierefreiheit.</string>

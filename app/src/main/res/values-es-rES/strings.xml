@@ -642,7 +642,10 @@ El escaneo se realizará automáticamente.</string>
     <string name="send_link">Enlace Send</string>
     <string name="search_sends">Buscar Sends</string>
     <string name="edit_send">Editar Send</string>
-    <string name="add_send">Nuevo Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">¿Seguro que quieres eliminar este Send?</string>
     <string name="send_deleted">Send eliminado</string>
     <string name="send_updated">Send guardado</string>
