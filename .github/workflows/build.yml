@@ -159,7 +159,7 @@ jobs:
           dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceSettings:Version "1[0123456]"
           dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceFarmSettings:SauceLabsUsername ${{ secrets.SAUCE_LABS_USERNAME }}
           dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceFarmSettings:SauceLabsAccessKey ${{ secrets.SAUCE_LABS_ACCESS_KEY }}
-          dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceFarmSettings:ProjectName "Bitwarden Sanity check - Android"
+          dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceFarmSettings:ProjectName "Bitwarden Sanity check | Android"
           dotnet json set Configurations/ConfigurationSettings.json MobileSettings:DeviceFarmSettings:BuildName "Branch: ${{ github.ref }} - Run ID: ${{ github.run_id }}"
 
       - name: Executing Sanity test...
