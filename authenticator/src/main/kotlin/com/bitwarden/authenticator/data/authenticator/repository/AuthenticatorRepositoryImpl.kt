@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -162,7 +161,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 if (isFeatureEnabled) {
                     authenticatorBridgeManager
                         .accountSyncStateFlow
-                        .flatMapConcat { it.toSharedVerificationCodesStateFlow() }
+                        .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
                 } else {
                     flowOf(SharedVerificationCodesState.FeatureNotEnabled)
                 }
