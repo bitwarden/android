@@ -156,6 +156,13 @@ internal class AuthenticatorBridgeManagerImpl(
 
         if (!isBound) {
             mutableSharedAccountsStateFlow.value = AccountSyncState.Error
+        } else if (mutableSharedAccountsStateFlow.value == AccountSyncState.AppNotInstalled) {
+            // This scenario occurs when the Authenticator is installed before Bitwarden, because
+            // `AppNotInstalled` is the initial state. Binding to the service simply means Bitwarden
+            // is installed, but does not indicate whether syncing is enabled. When/if syncing is
+            // toggled in Bitwarden, `onServiceConnected` will be invoked and the state
+            // will be updated.
+            mutableSharedAccountsStateFlow.value = AccountSyncState.SyncNotEnabled
         }
     }
 
