@@ -33,13 +33,14 @@ class ManualCodeEntryScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+            permissionsManager = permissionsManager,
+        ) {
             ManualCodeEntryScreen(
                 onNavigateBack = {},
                 onNavigateToQrCodeScreen = {},
                 viewModel = viewModel,
-                intentManager = intentManager,
-                permissionsManager = permissionsManager,
             )
         }
     }

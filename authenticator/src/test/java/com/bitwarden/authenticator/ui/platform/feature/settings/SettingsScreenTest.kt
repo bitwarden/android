@@ -56,11 +56,12 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            biometricsManager = biometricsManager,
+            intentManager = intentManager,
+        ) {
             SettingsScreen(
                 viewModel = viewModel,
-                biometricsManager = biometricsManager,
-                intentManager = intentManager,
                 onNavigateToTutorial = { onNavigateToTutorialCalled = true },
                 onNavigateToExport = { onNaviateToExportCalled = true },
                 onNavigateToImport = { onNavigateToImportCalled = true },

@@ -25,13 +25,17 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsMa
 @Composable
 fun LocalManagerProvider(
     activity: Activity = requireNotNull(LocalActivity.current),
+    permissionsManager: PermissionsManager = PermissionsManagerImpl(activity),
+    intentManager: IntentManager = IntentManagerImpl(activity),
+    exitManager: ExitManager = ExitManagerImpl(activity),
+    biometricsManager: BiometricsManager = BiometricsManagerImpl(activity),
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides IntentManagerImpl(activity),
-        LocalExitManager provides ExitManagerImpl(activity),
-        LocalBiometricsManager provides BiometricsManagerImpl(activity),
+        LocalPermissionsManager provides permissionsManager,
+        LocalIntentManager provides intentManager,
+        LocalExitManager provides exitManager,
+        LocalBiometricsManager provides biometricsManager,
         content = content,
     )
 }

@@ -49,11 +49,12 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
 
     @Before
     fun setup() {
-        setContent {
+        setContent(
+            intentManager = intentManager,
+            permissionsManager = permissionsManager,
+        ) {
             ItemListingScreen(
                 viewModel = viewModel,
-                intentManager = intentManager,
-                permissionsManager = permissionsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToSearch = { onNavigateToSearchCalled = true },
                 onNavigateToQrCodeScanner = { onNavigateToQrCodeScannerCalled = true },
