@@ -29,6 +29,10 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     name: Build Authenticator
