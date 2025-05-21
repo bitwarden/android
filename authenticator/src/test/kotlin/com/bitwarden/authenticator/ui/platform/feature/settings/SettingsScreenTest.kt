@@ -120,6 +120,15 @@ class SettingsScreenTest : AuthenticatorComposeTest() {
     }
 
     @Test
+    fun `on NavigateToSyncInformation receive launch sync totp uri`() {
+        every { intentManager.launchUri(uri = any()) } just runs
+        mutableEventFlow.tryEmit(SettingsEvent.NavigateToSyncInformation)
+        verify(exactly = 1) {
+            intentManager.launchUri("https://bitwarden.com/help/totp-sync".toUri())
+        }
+    }
+
+    @Test
     fun `Default Save Option row should be hidden when showDefaultSaveOptionRow is false`() {
         mutableStateFlow.value = DEFAULT_STATE
         composeTestRule.onNodeWithText("Default save option").assertExists()

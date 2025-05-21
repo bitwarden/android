@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
+import androidx.core.net.toUri
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
@@ -17,6 +18,8 @@ import com.bitwarden.authenticator.ui.platform.manager.permissions.FakePermissio
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
+import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -44,7 +47,9 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
         every { trySendAction(any()) } just runs
     }
 
-    private val intentManager: IntentManager = mockk()
+    private val intentManager: IntentManager = mockk {
+        every { launchUri(uri = any()) } just runs
+    }
     private val permissionsManager = FakePermissionManager()
 
     @Before
@@ -61,6 +66,14 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
                 onNavigateToManualKeyEntry = { onNavigateToManualKeyEntryCalled = true },
                 onNavigateToEditItemScreen = { onNavigateToEditItemScreenCalled = true },
             )
+        }
+    }
+
+    @Test
+    fun `on NavigateToSyncInformation should launch sync uri`() {
+        mutableEventFlow.tryEmit(ItemListingEvent.NavigateToSyncInformation)
+        verify(exactly = 1) {
+            intentManager.launchUri(uri = "https://bitwarden.com/help/totp-sync".toUri())
         }
     }
 
@@ -175,33 +188,72 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on sync with bitwarden action card click in empty state should send SyncWithBitwardenClick`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(
-            viewState = ItemListingState.ViewState.NoItems(
-                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
-            ),
-        )
+    fun `on sync with bitwarden app settings click in empty state should send SyncWithBitwardenClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = ItemListingState.ViewState.NoItems(
+                    actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+                ),
+            )
+        }
+
         composeTestRule
-            .onNodeWithText("Sync with the Bitwarden app")
+            .onNodeWithText(text = "Take me to the app settings")
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
     }
 
     @Test
-    @Suppress("MaxLineLength")
-    fun `on sync with bitwarden action card click in full state should send SyncWithBitwardenClick`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(
-            viewState = ItemListingState.ViewState.Content(
-                favoriteItems = emptyList(),
-                itemList = emptyList(),
-                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
-                actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
-            ),
-        )
+    fun `on sync with bitwarden learn more click in empty state should send SyncLearnMoreClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = ItemListingState.ViewState.NoItems(
+                    actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+                ),
+            )
+        }
+
         composeTestRule
-            .onNodeWithText("Sync with the Bitwarden app")
+            .onNodeWithText(text = "Learn more")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `on sync with bitwarden app settings click in full state should send SyncWithBitwardenClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = ItemListingState.ViewState.Content(
+                    favoriteItems = emptyList(),
+                    itemList = emptyList(),
+                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Take me to the app settings")
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenClick) }
+    }
+
+    @Test
+    fun `on sync with bitwarden learn more click in full state should send SyncLearnMoreClick`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = ItemListingState.ViewState.Content(
+                    favoriteItems = emptyList(),
+                    itemList = emptyList(),
+                    sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                    actionCard = ItemListingState.ActionCardState.SyncWithBitwarden,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Learn more")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick) }
     }
 
     @Test
@@ -233,6 +285,64 @@ class ItemListingScreenTest : AuthenticatorComposeTest() {
             .onNodeWithContentDescription("Close")
             .performClick()
         verify { viewModel.trySendAction(ItemListingAction.SyncWithBitwardenDismiss) }
+    }
+
+    @Test
+    fun `on download bitwarden click in empty state should send DownloadBitwardenClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
+            ),
+        )
+        composeTestRule
+            .onNodeWithText(text = "Download now")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick) }
+    }
+
+    @Test
+    fun `on download bitwarden click in full state should send DownloadBitwardenClick`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                favoriteItems = emptyList(),
+                itemList = emptyList(),
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
+            ),
+        )
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Download now")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.DownloadBitwardenClick) }
+    }
+
+    @Test
+    fun `on download bitwarden dismiss in empty state should send DownloadBitwardenDismiss`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.NoItems(
+                actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
+            ),
+        )
+        composeTestRule
+            .onNodeWithContentDescription(label = "Close")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss) }
+    }
+
+    @Test
+    fun `on download bitwarden dismiss in full state should send DownloadBitwardenDismiss`() {
+        mutableStateFlow.value = DEFAULT_STATE.copy(
+            viewState = ItemListingState.ViewState.Content(
+                favoriteItems = emptyList(),
+                itemList = emptyList(),
+                sharedItems = SharedCodesDisplayState.Codes(emptyList()),
+                actionCard = ItemListingState.ActionCardState.DownloadBitwardenApp,
+            ),
+        )
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Close")
+            .performClick()
+        verify { viewModel.trySendAction(ItemListingAction.DownloadBitwardenDismiss) }
     }
 
     @Test

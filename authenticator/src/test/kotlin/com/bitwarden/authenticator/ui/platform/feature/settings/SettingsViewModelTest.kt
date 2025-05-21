@@ -158,6 +158,15 @@ class SettingsViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    fun `on SyncLearnMoreClick should emit NavigateToSyncInformation`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick)
+            assertEquals(SettingsEvent.NavigateToSyncInformation, awaitItem())
+        }
+    }
+
+    @Test
     @Suppress("MaxLineLength")
     fun `Default save option row should only show when shared codes state shows syncing as enabled`() =
         runTest {
