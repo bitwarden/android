@@ -18,31 +18,34 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get latest pre-release name
-        id: get_latest_prerelease
+      - name: Get latest draft name
+        id: get_latest_draft
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 1)
-          is_latest_prerelease=$(jq -r '.[0].isPrerelease' <<< $latest_release)
-          echo "is_latest_prerelease=$is_latest_prerelease" >> $GITHUB_OUTPUT
+          is_latest_draft=$(jq -r '.[0].isDraft' <<< $latest_release)
+          echo "is_latest_draft=$is_latest_draft" >> $GITHUB_OUTPUT
 
-          if [ "$is_latest_prerelease" != "true" ]; then
+          if [ "$is_latest_draft" != "true" ]; then
               echo "No pre-release found"
               exit 0
           fi
 
-          latest_prerelease_version=$(jq -r '.[0].tagName' <<< $latest_release)
-          echo "latest_prerelease_version=$latest_prerelease_version" >> $GITHUB_OUTPUT
+          latest_draft_version=$(jq -r '.[0].tagName' <<< $latest_release)
+          echo "latest_draft_version=$latest_draft_version" >> $GITHUB_OUTPUT
+
+          latest_draft_name=$(jq -r '.[0].name' <<< $latest_release)
+          echo "latest_draft_name=$latest_draft_name" >> $GITHUB_OUTPUT
 
       - name: Log in to Azure
-        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Download Play Store credentials
-        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -53,7 +56,7 @@ jobs:
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
       - name: Check released version
-        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         id: appstore_version
         run: |
           appstore_version=$(bundle exec fastlane run getLatestVersion \
@@ -63,23 +66,46 @@ jobs:
           echo "appstore_version=$appstore_version" >> $GITHUB_OUTPUT
 
       - name: Check if version is already released
-        if: steps.get_latest_prerelease.outputs.is_latest_prerelease == 'true'
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         id: check_version
         env:
-          LATEST_PRERELEASE_VERSION: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          latest_draft_version: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
           APPSTORE_VERSION: ${{ steps.appstore_version.outputs.appstore_version }}
         run: |
-          if [ "$LATEST_PRERELEASE_VERSION" == "$APPSTORE_VERSION" ]; then
-              echo "Version $LATEST_PRERELEASE_VERSION is already released on Google Play Store"
+          if [ "$latest_draft_version" == "$APPSTORE_VERSION" ]; then
+              echo "Version $latest_draft_version is already released on Google Play Store"
               echo "version_released=true" >> $GITHUB_OUTPUT
           else
-              echo "Version $LATEST_PRERELEASE_VERSION is not released on Google Play Store"
+              echo "Version $latest_draft_version is not released on Google Play Store"
               echo "version_released=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Make GitHub release latest and non-pre-release
         if: steps.check_version.outputs.version_released == 'true'
         env:
-          TAG: ${{ steps.get_latest_prerelease.outputs.latest_prerelease_version }}
+          TAG: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
           GH_TOKEN: ${{ github.token }}
         run: gh release edit $TAG --prerelease=false --latest --draft=false
+
+      - name: Create changed release info JSON
+        if: steps.check_version.outputs.version_released == 'true'
+        run: |
+          json='{
+            "release_tag": "${{ steps.get_latest_draft.outputs.latest_draft_version }}",
+            "release_name": "${{ steps.get_latest_draft.outputs.latest_draft_name }}",
+            "initial_state": "draft",
+            "changed_to_state": "published",
+          }'
+          echo "$json" > release-info.json
+
+          echo "## release-info.json" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$json" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload release info artifact
+        if: steps.check_version.outputs.version_released == 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-info
+          path: release-info.json
