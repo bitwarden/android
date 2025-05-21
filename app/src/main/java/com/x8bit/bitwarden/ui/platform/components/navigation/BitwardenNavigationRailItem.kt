@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationRailItemColors
-import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * A custom Bitwarden-themed bottom app bar.
