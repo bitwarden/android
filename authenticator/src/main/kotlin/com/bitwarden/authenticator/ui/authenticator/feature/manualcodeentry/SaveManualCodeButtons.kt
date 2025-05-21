@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 
 /**
  * Displays save buttons for saving a manually entered code.
