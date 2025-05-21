@@ -138,8 +138,18 @@ class VaultItemViewModel @Inject constructor(
                         ) {
                             cipherView.permissions?.delete == true
                         } else {
+                            val needsManagePermission = cipherView
+                                ?.organizationId
+                                ?.let { orgId ->
+                                    userState
+                                        ?.activeAccount
+                                        ?.organizations
+                                        ?.firstOrNull { it.id == orgId }
+                                        ?.limitItemDeletion
+                                }
                             collectionsState.data.hasDeletePermissionInAtLeastOneCollection(
                                 collectionIds = cipherView?.collectionIds,
+                                needsManagePermission = needsManagePermission == true,
                             )
                         }
 

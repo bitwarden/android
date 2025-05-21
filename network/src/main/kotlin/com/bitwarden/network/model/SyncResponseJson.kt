@@ -347,6 +347,9 @@ data class SyncResponseJson(
 
             @SerialName("userIsClaimedByOrganization")
             val userIsClaimedByOrganization: Boolean = false,
+
+            @SerialName("limitItemDeletion")
+            val limitItemDeletion: Boolean = false,
         )
 
         /**
