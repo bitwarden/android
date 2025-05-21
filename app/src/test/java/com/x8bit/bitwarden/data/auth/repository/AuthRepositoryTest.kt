@@ -795,6 +795,37 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `delete account fails if deleteAccount fails with message`() = runTest {
+        val masterPassword = "hello world"
+        val hashedMasterPassword = "dlrow olleh"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        coEvery {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+        } returns hashedMasterPassword.asSuccess()
+        coEvery {
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
+        } returns DeleteAccountResponseJson.Invalid(
+            errorMessage = "Fail",
+            validationErrors = null,
+        ).asSuccess()
+
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
+
+        assertEquals(DeleteAccountResult.Error(message = "Fail", error = null), result)
+        coVerify {
+            authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
+        }
+    }
+
+    @Test
     fun `deleteAccountWithMasterPassword succeeds`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"
