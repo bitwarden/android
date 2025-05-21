@@ -17,11 +17,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.toSdkUriMatchType
 import kotlinx.coroutines.flow.mapNotNull
-import kotlin.text.RegexOption
-import kotlin.text.isNullOrBlank
-import kotlin.text.lowercase
-import kotlin.text.matches
-import kotlin.text.startsWith
 
 /**
  * The duration, in milliseconds, we should wait while retrieving domain data before we proceed.
