@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import android.text.Annotation
 import android.text.SpannableStringBuilder
@@ -14,9 +14,7 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.core.text.getSpans
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.util.spanStyleOf
 
 /**
  * Creates an [AnnotatedString] from a string resource allowing for optional arguments

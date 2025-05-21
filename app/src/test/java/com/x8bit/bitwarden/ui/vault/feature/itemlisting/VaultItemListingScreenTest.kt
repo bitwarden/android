@@ -22,6 +22,10 @@ import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.send.SendType
 import com.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.bitwarden.ui.util.asText
+import com.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
+import com.bitwarden.ui.util.assertNoDialogExists
+import com.bitwarden.ui.util.isProgressBar
+import com.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -43,13 +47,9 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendRoute
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
-import com.x8bit.bitwarden.ui.util.assertMasterPasswordDialogDisplayed
-import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
-import com.x8bit.bitwarden.ui.util.isProgressBar
-import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.performAccountClick
 import com.x8bit.bitwarden.ui.util.performAccountIconClick
 import com.x8bit.bitwarden.ui.util.performAccountLongClick

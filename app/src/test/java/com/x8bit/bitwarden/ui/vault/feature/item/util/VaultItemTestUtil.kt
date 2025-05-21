@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -13,9 +14,8 @@ import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SshKeyView
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
-import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipherPermissions
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData

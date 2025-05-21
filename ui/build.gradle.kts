@@ -72,6 +72,7 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
+    testImplementation(libs.androidx.compose.ui.test)
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.compose.ui.test)
@@ -93,5 +94,6 @@ tasks {
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         @Suppress("UselessCallOnNotNull")
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }

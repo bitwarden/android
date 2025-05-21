@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util
 
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
-import com.bitwarden.ui.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
