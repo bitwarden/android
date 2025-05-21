@@ -117,7 +117,6 @@ class DeleteAccountViewModel @Inject constructor(
         dismissDialog()
     }
 
-    @Suppress("MaxLineLength")
     private fun handleDeleteAccountComplete(
         action: DeleteAccountAction.Internal.DeleteAccountComplete,
     ) {
@@ -138,6 +137,7 @@ class DeleteAccountViewModel @Inject constructor(
 
             is DeleteAccountResult.CannotDeleteAccountOwnedByOrg -> {
                 updateDialogState(
+                    @Suppress("MaxLineLength")
                     DeleteAccountState.DeleteAccountDialog.Error(
                         message = R.string.cannot_delete_accounts_owned_by_an_organization_contact_your_organization_administrator_for_additional_details.asText(),
                     ),
