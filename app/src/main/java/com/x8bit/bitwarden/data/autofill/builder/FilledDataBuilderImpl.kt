@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledPartition
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
+import timber.log.Timber
 
 /**
  * The maximum amount of filled partitions the user will see. Viewing the rest will require opening
@@ -87,6 +88,11 @@ class FilledDataBuilderImpl(
                     ?: emptyList()
             }
         }
+
+        @Suppress("MaxLineLength")
+        Timber.d(
+            "Generated ${filledPartitions.size} filled partitions and added $inlineSuggestionsAdded inline suggestions.",
+        )
 
         // Use getOrLastOrNull so if the list has run dry take the last spec.
         val vaultItemInlinePresentationSpec = autofillRequest
