@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents the Bitwarden search action item.
