@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle

@@ -1,8 +1,8 @@
 package com.bitwarden.authenticator.ui.platform.util
 
 import com.bitwarden.authenticator.R
-import com.bitwarden.ui.util.asText
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
+import com.bitwarden.ui.util.asText
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

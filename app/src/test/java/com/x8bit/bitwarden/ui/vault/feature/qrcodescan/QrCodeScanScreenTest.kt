@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 import androidx.camera.core.ImageProxy
 import androidx.compose.ui.test.onNodeWithText
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
+import com.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.util.performCustomAccessibilityAction
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.FakeQrCodeAnalyzer
 import io.mockk.every
 import io.mockk.mockk

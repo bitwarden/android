@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.util
 
-import com.x8bit.bitwarden.R
 import com.bitwarden.ui.util.asText
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

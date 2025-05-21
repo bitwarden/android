@@ -1,26 +1,24 @@
-package com.x8bit.bitwarden.ui.platform.base.util
+package com.bitwarden.ui.platform.base.util
 
 import androidx.compose.material3.Text
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.util.assertLinkAnnotationIsAppliedAndInvokeClickAction
+import com.bitwarden.ui.R
+import com.bitwarden.ui.platform.base.BaseComposeTest
+import com.bitwarden.ui.util.assertLinkAnnotationIsAppliedAndInvokeClickAction
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class StringRestExtensionsTest : BitwardenComposeTest() {
-    @Suppress("MaxLineLength")
+class StringResExtensionsTest : BaseComposeTest() {
     @Test
     fun `toAnnotatedString should add Clickable LinkAnnotation to highlighted string`() {
         var textClickCalled = false
-        setContent {
-            val annotatedString =
-                R.string.test_for_single_link_annotation.toAnnotatedString {
-                    textClickCalled = true
-                }
+        setTestContent {
+            val annotatedString = R.string.test_for_single_link_annotation.toAnnotatedString {
+                textClickCalled = true
+            }
             Text(text = annotatedString)
         }
         composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
@@ -29,12 +27,10 @@ class StringRestExtensionsTest : BitwardenComposeTest() {
         assertTrue(textClickCalled)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toAnnotatedString should add multiple Clickable LinkAnnotations to highlighted string`() {
-        setContent {
-            val annotatedString =
-                R.string.test_for_multi_link_annotation.toAnnotatedString()
+        setTestContent {
+            val annotatedString = R.string.test_for_multi_link_annotation.toAnnotatedString()
             Text(text = annotatedString)
         }
         composeTestRule.assertLinkAnnotationIsAppliedAndInvokeClickAction(
@@ -45,7 +41,7 @@ class StringRestExtensionsTest : BitwardenComposeTest() {
 
     @Test
     fun `no link annotations should be applied to non annotated string resource`() {
-        setContent {
+        setTestContent {
             Text(text = R.string.test_for_string_with_no_annotations.toAnnotatedString())
         }
 
@@ -65,13 +61,13 @@ class StringRestExtensionsTest : BitwardenComposeTest() {
 
     @Test
     fun `string with args should only use the arguments available in the string`() {
-        setContent {
+        setTestContent {
             Text(
                 text =
-                R.string.test_for_string_with_annotation_and_arg_annotation
-                    .toAnnotatedString(
-                        args = arrayOf("vault.bitwarden.com", "i should not exist"),
-                    ),
+                    R.string.test_for_string_with_annotation_and_arg_annotation
+                        .toAnnotatedString(
+                            args = arrayOf("vault.bitwarden.com", "i should not exist"),
+                        ),
             )
         }
 
@@ -89,7 +85,7 @@ class StringRestExtensionsTest : BitwardenComposeTest() {
 
     @Test
     fun `string with arg annotations but no passed in args should just append empty string`() {
-        setContent {
+        setTestContent {
             Text(
                 text = R.string.test_for_string_with_annotation_and_arg_annotation
                     .toAnnotatedString(),
@@ -101,14 +97,12 @@ class StringRestExtensionsTest : BitwardenComposeTest() {
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `string with no annotations with args should just be handled as normal annotated string`() {
-        setContent {
+        setTestContent {
             Text(
-                text = R.string.test_for_string_with_no_annotations_with_format_arg.toAnnotatedString(
-                    args = arrayOf("this"),
-                ),
+                text = R.string.test_for_string_with_no_annotations_with_format_arg
+                    .toAnnotatedString(args = arrayOf("this")),
             )
         }
 

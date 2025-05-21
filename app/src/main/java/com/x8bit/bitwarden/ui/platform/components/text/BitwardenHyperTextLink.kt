@@ -10,9 +10,9 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.base.util.toAnnotatedString
-import com.x8bit.bitwarden.ui.platform.util.spanStyleOf
 
 /**
  * Uses an annotated string resource to create a string with clickable text.
