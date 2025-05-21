@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.button.color
+package com.bitwarden.ui.platform.components.button.color
 
 import androidx.compose.material3.IconButtonColors
 import androidx.compose.runtime.Composable
