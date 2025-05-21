@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenOutlinedButtonColors
 
 /**
@@ -55,7 +55,7 @@ private fun BBitwardenOutlinedErrorButton_preview() {
         BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = true,
         )
         BitwardenOutlinedErrorButton(
@@ -67,7 +67,7 @@ private fun BBitwardenOutlinedErrorButton_preview() {
         BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = false,
         )
     }
