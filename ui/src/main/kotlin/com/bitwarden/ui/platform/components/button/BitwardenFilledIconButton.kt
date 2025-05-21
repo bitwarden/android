@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.ui.R
 import com.bitwarden.ui.platform.components.button.color.bitwardenFilledIconButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -50,7 +50,7 @@ fun BitwardenFilledIconButton(
 private fun BitwardenFilledIconButton_preview() {
     BitwardenTheme {
         BitwardenFilledIconButton(
-            vectorIconRes = R.drawable.ic_question_circle,
+            vectorIconRes = BitwardenDrawable.ic_question_circle,
             contentDescription = "Sample Icon",
             onClick = {},
         )

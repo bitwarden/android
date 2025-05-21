@@ -40,6 +40,7 @@ import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.platform.util.rememberWindowSize
 import com.x8bit.bitwarden.R
@@ -211,7 +212,7 @@ private fun CompleteRegistrationContent(
             )
             Spacer(modifier = Modifier.height(24.dp))
             BitwardenActionCardSmall(
-                actionIcon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+                actionIcon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
                 actionText = stringResource(id = R.string.what_makes_a_password_strong),
                 callToActionText = stringResource(id = R.string.learn_more),
                 callToActionTextColor = BitwardenTheme.colorScheme.text.interaction,
