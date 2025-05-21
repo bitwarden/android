@@ -28,11 +28,11 @@ import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilled
 import com.bitwarden.authenticator.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Top level screen for the debug menu.

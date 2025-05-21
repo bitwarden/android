@@ -9,9 +9,9 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays a stepper that allows the user to increment and decrement an int value.
