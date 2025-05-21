@@ -149,7 +149,7 @@ kotlin {
 
 dependencies {
 
-    implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
+    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
 
     implementation(project(":annotation"))
     implementation(project(":core"))
