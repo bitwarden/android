@@ -153,6 +153,10 @@ class ItemListingViewModel @Inject constructor(
             ItemListingAction.SyncWithBitwardenDismiss -> {
                 handleSyncWithBitwardenDismiss()
             }
+
+            ItemListingAction.SyncLearnMoreClick -> {
+                handleSyncLearnMoreClick()
+            }
         }
     }
 
@@ -564,6 +568,10 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleSyncLearnMoreClick() {
+        sendEvent(ItemListingEvent.NavigateToSyncInformation)
+    }
+
     /**
      * Converts a [SharedVerificationCodesState] into an action card for display.
      */
@@ -795,6 +803,11 @@ sealed class ItemListingEvent {
     data object NavigateToAppSettings : ItemListingEvent()
 
     /**
+     * Navigate to the sync information web page.
+     */
+    data object NavigateToSyncInformation : ItemListingEvent()
+
+    /**
      * Navigate to Bitwarden play store listing.
      */
     data object NavigateToBitwardenListing : ItemListingEvent()
@@ -873,6 +886,11 @@ sealed class ItemListingAction {
     data object SyncWithBitwardenClick : ItemListingAction()
 
     /**
+     * The user tapped the learn more button on the sync action card.
+     */
+    data object SyncLearnMoreClick : ItemListingAction()
+
+    /**
      * The user dismissed sync Bitwarden action card.
      */
     data object SyncWithBitwardenDismiss : ItemListingAction()
@@ -886,7 +904,7 @@ sealed class ItemListingAction {
      * Represents an action triggered when the user clicks an item in the dropdown menu.
      *
      * @param menuAction The action selected from the dropdown menu.
-     * @param id The identifier of the item on which the action is being performed.
+     * @param item The item on which the action is being performed.
      */
     data class DropdownMenuClick(
         val menuAction: VaultDropdownMenuAction,

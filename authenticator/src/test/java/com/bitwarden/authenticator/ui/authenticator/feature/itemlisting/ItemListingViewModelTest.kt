@@ -369,6 +369,15 @@ class ItemListingViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on SyncLearnMoreClick should send NavigateToSyncInformation`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ItemListingAction.SyncLearnMoreClick)
+            assertEquals(ItemListingEvent.NavigateToSyncInformation, awaitItem())
+        }
+    }
+
+    @Test
     fun `on MoveToBitwardenClick receive should call startAddTotpLoginItemFlow`() {
         val expectedUriString = "expectedUriString"
         val entity: AuthenticatorItemEntity = mockk {
