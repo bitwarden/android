@@ -185,6 +185,23 @@ platform :android do
     )
   end
 
+  desc "Generate release notes"
+  lane :generateReleaseNotes do |options|
+    branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
+    releaseNotes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
+    )
+    locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fi-FI", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
+
+    locales.each do |locale|
+      dir = "fastlane/metadata/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", releaseNotes)
+    end
+    releaseNotes
+  end
+
   desc "Publish Release Play Store artifacts to Firebase App Distribution"
   lane :distributeReleasePlayStoreToFirebase do |options|
     releaseNotes = generateReleaseNotes(
@@ -253,16 +270,6 @@ platform :android do
       rollout: "1",
       aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden.aab",
     )
-  end
-
-  desc "Generate release notes"
-  lane :generateReleaseNotes do |options|
-    branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
-    releaseNotes = changelog_from_git_commits(
-      commits_count: 1,
-      pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
-    )
-    releaseNotes
   end
 
   # Authenticator
