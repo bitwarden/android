@@ -129,6 +129,24 @@ class CollectionViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `hasDeletePermissionInAtLeastOneCollection should return false if ids don't match any collection`() {
+        val collectionList: List<CollectionView> = listOf(
+            createEditCollectionView(number = 1),
+            createEditExceptPasswordsCollectionView(number = 2),
+            createViewCollectionView(number = 3),
+            createViewExceptPasswordsCollectionView(number = 4),
+        )
+        val collectionIds = listOf("notInCollectionId")
+        assertFalse(
+            collectionList.hasDeletePermissionInAtLeastOneCollection(
+                collectionIds = collectionIds,
+                needsManagePermission = false,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `hasDeletePermissionInAtLeastOneCollection should return true if the collectionView list is null`() {
         val collectionIds = listOf("mockId-1", "mockId-2")
         assertTrue(null.hasDeletePermissionInAtLeastOneCollection(collectionIds))
