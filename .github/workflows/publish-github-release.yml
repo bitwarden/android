@@ -38,6 +38,86 @@ jobs:
           latest_draft_name=$(jq -r '.name' <<< $latest_release)
           echo "latest_draft_name=$latest_draft_name" >> $GITHUB_OUTPUT
 
+      - name: Get previous run ID
+        id: get_previous_run
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          workflow_name="$(basename "$GITHUB_WORKFLOW")"
+
+          # Get the last successful scheduled run ID
+          previous_run_id=$(gh run list --workflow=$workflow_name --event=schedule --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+
+          if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
+            echo "Found previous successful scheduled run: $previous_run_id"
+            echo "previous_run_id=$previous_run_id" >> $GITHUB_OUTPUT
+            echo "has_previous_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "No previous successful scheduled run found"
+            echo "has_previous_run=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download previous run state
+        id: previous_state
+        if: steps.get_previous_run.outputs.has_previous_run == 'true'
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-info
+          path: previous-state
+          run-id: ${{ steps.get_previous_run.outputs.previous_run_id }}
+
+      - name: Parse previous state
+        id: parse_previous_state
+        if: steps.get_previous_run.outputs.has_previous_run == 'true'
+        run: |
+          if [ -f "previous-state/release-info.json" ]; then
+            previous_release_tag=$(jq -r '.release_tag // empty' previous-state/release-info.json)
+            previous_changed_to=$(jq -r '.changed_to_state // empty' previous-state/release-info.json)
+            previous_timestamp=$(jq -r '.timestamp // empty' previous-state/release-info.json)
+
+            echo "previous_release_tag=$previous_release_tag" >> $GITHUB_OUTPUT
+            echo "previous_changed_to=$previous_changed_to" >> $GITHUB_OUTPUT
+            echo "previous_timestamp=$previous_timestamp" >> $GITHUB_OUTPUT
+            echo "has_previous_state=true" >> $GITHUB_OUTPUT
+
+            echo "Previous run processed: $previous_release_tag (changed to: $previous_changed_to at $previous_timestamp)"
+          else
+            echo "No valid release-info.json found in previous artifact"
+            echo "has_previous_state=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if release was already processed
+        id: check_already_processed
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        env:
+          CURRENT_RELEASE: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
+          PREVIOUS_RELEASE: ${{ steps.parse_previous_state.outputs.previous_release_tag }}
+          PREVIOUS_ACTION: ${{ steps.parse_previous_state.outputs.previous_action }}
+          HAS_PREVIOUS: ${{ steps.parse_previous_state.outputs.has_previous_state }}
+        run: |
+          should_skip=false
+
+          if [ "$HAS_PREVIOUS" == "true" ] && [ "$CURRENT_RELEASE" == "$PREVIOUS_RELEASE" ]; then
+            if [ "$PREVIOUS_ACTION" == "published" ]; then
+              echo "⚠️ Release $CURRENT_RELEASE was already processed and published by this workflow"
+              echo "This suggests the release was manually reverted to draft after being published"
+              echo "Skipping to prevent duplicate processing"
+              should_skip=true
+            fi
+          fi
+
+          echo "should_skip=$should_skip" >> $GITHUB_OUTPUT
+
+          if [ "$should_skip" == "true" ]; then
+            echo "## ⚠️ Workflow Skipped" >> $GITHUB_STEP_SUMMARY
+            echo "Release \`$CURRENT_RELEASE\` was already processed by this workflow." >> $GITHUB_STEP_SUMMARY
+            echo "To force reprocessing, either:" >> $GITHUB_STEP_SUMMARY
+            echo "- Use manual workflow dispatch" >> $GITHUB_STEP_SUMMARY
+            echo "- Create a new release version" >> $GITHUB_STEP_SUMMARY
+          fi
+
       - name: Log in to Azure
         if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
@@ -87,24 +167,40 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh release edit $TAG --prerelease=false --latest --draft=false
 
-      - name: Create changed release info JSON
-        if: steps.check_version.outputs.version_released == 'true'
+      - name: Create workflow state artifact
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         run: |
-          json='{
-            "release_tag": "${{ steps.get_latest_draft.outputs.latest_draft_version }}",
-            "release_name": "${{ steps.get_latest_draft.outputs.latest_draft_name }}",
-            "initial_state": "draft",
-            "changed_to_state": "published",
-          }'
-          echo "$json" > release-info.json
+          if [ "${{ steps.check_already_processed.outputs.should_skip }}" == "true" ]; then
+            # Skipped run
+            json='{
+              "release_tag": "${{ steps.get_latest_draft.outputs.latest_draft_version }}",
+              "action_taken": "skipped"
+            }'
+            echo "## ⚠️ Processing Skipped" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.check_version.outputs.version_released }}" == "true" ]; then
+            # Successfully published
+            json='{
+              "release_tag": "${{ steps.get_latest_draft.outputs.latest_draft_version }}",
+              "action_taken": "published"
+            }'
+            echo "## 📦 Release Published" >> $GITHUB_STEP_SUMMARY
+          else
+            # No action taken (version not yet on Play Store)
+            json='{
+              "release_tag": "${{ steps.get_latest_draft.outputs.latest_draft_version }}",
+              "action_taken": "no_action"
+            }'
+            echo "## ⏳ No Action Taken" >> $GITHUB_STEP_SUMMARY
+            echo "Release not yet available on Google Play Store" >> $GITHUB_STEP_SUMMARY
+          fi
 
-          echo "## release-info.json" >> $GITHUB_STEP_SUMMARY
+          echo "$json" > release-info.json
           echo '```json' >> $GITHUB_STEP_SUMMARY
           echo "$json" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
-      - name: Upload release info artifact
-        if: steps.check_version.outputs.version_released == 'true'
+      - name: Upload workflow state artifact
+        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: release-info
