@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledErrorButtonColors
 
 /**
@@ -50,7 +50,7 @@ private fun BitwardenErrorButton_preview() {
         BitwardenFilledErrorButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = true,
         )
         BitwardenFilledErrorButton(
@@ -62,7 +62,7 @@ private fun BitwardenErrorButton_preview() {
         BitwardenFilledErrorButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = false,
         )
     }

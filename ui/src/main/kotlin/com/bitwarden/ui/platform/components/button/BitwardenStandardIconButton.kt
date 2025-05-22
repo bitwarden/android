@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.button
+package com.bitwarden.ui.platform.components.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material3.Icon
@@ -10,10 +10,10 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import com.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenStandardIconButtonColors
 
 /**
  * A standard icon button that displays an icon.
@@ -81,7 +81,7 @@ fun BitwardenStandardIconButton(
 private fun BitwardenStandardIconButton_preview() {
     BitwardenTheme {
         BitwardenStandardIconButton(
-            vectorIconRes = R.drawable.ic_question_circle,
+            vectorIconRes = BitwardenDrawable.ic_question_circle,
             contentDescription = "Sample Icon",
             onClick = {},
         )
