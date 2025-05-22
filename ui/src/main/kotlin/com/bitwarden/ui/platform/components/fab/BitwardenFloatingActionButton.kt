@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.fab
+package com.bitwarden.ui.platform.components.fab
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
