@@ -250,6 +250,7 @@ data class SyncResponseJson(
          * @property familySponsorshipValidUntil The family sponsorship valid until
          * of the organization (nullable).
          * @property status The status of the organization.
+         * @property limitItemDeletion If the organization limits item deletion.
          */
         @Serializable
         data class Organization(
