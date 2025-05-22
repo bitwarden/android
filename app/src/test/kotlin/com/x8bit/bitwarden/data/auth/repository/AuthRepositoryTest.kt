@@ -4752,6 +4752,7 @@ class AuthRepositoryTest {
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
                 every { userIsClaimedByOrganization } returns false
+                every { limitItemDeletion } returns false
             },
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4782,6 +4783,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4820,6 +4822,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4861,6 +4864,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4901,6 +4905,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
