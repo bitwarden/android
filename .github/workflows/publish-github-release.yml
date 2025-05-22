@@ -23,8 +23,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 1)
-          is_latest_draft=$(jq -r '.[0].isDraft' <<< $latest_release)
+          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 1 --jq '.[0]')
+          is_latest_draft=$(jq -r '.isDraft' <<< $latest_release)
           echo "is_latest_draft=$is_latest_draft" >> $GITHUB_OUTPUT
 
           if [ "$is_latest_draft" != "true" ]; then
@@ -32,10 +32,10 @@ jobs:
               exit 0
           fi
 
-          latest_draft_version=$(jq -r '.[0].tagName' <<< $latest_release)
+          latest_draft_version=$(jq -r '.tagName' <<< $latest_release)
           echo "latest_draft_version=$latest_draft_version" >> $GITHUB_OUTPUT
 
-          latest_draft_name=$(jq -r '.[0].name' <<< $latest_release)
+          latest_draft_name=$(jq -r '.name' <<< $latest_release)
           echo "latest_draft_name=$latest_draft_name" >> $GITHUB_OUTPUT
 
       - name: Log in to Azure
