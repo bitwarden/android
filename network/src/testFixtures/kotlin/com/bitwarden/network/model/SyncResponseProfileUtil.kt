@@ -93,6 +93,7 @@ fun createMockOrganization(
     familySponsorshipValidUntil: ZonedDateTime? = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
     status: OrganizationStatusType = OrganizationStatusType.ACCEPTED,
     userIsClaimedByOrganization: Boolean = false,
+    limitItemDeletion: Boolean = false,
 ): SyncResponseJson.Profile.Organization =
     SyncResponseJson.Profile.Organization(
         shouldUsePolicies = shouldUsePolicies,
@@ -126,6 +127,7 @@ fun createMockOrganization(
         familySponsorshipValidUntil = familySponsorshipValidUntil,
         status = status,
         userIsClaimedByOrganization = userIsClaimedByOrganization,
+        limitItemDeletion = limitItemDeletion,
     )
 
 /**

@@ -93,17 +93,32 @@ fun String.toCollectionDisplayName(list: List<CollectionView>): String {
 /**
  * Checks if the user has delete permission in at least one collection.
  *
- * Deletion is allowed when the item is in any collection that the user has "manage" permission for.
+ * Deletion is allowed when the item is in any collection that the user has "manage" permission for
+ * if [needsManagePermission] is true. Otherwise, deletion is allowed when the item is in any with
+ * manage or edit permission.
  */
 fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
     collectionIds: List<String>?,
+    needsManagePermission: Boolean = false,
 ): Boolean {
     if (this.isNullOrEmpty() || collectionIds.isNullOrEmpty()) return true
     return this
         .any { collectionView ->
             collectionIds
                 .contains(collectionView.id)
-                .let { isInCollection -> isInCollection && collectionView.manage }
+                .let { isInCollection ->
+                    if (!isInCollection) {
+                        return false
+                    }
+
+                    if (needsManagePermission) {
+                        return collectionView.manage
+                    }
+
+                    return collectionView.manage ||
+                        collectionView.permission == CollectionPermission.EDIT ||
+                        collectionView.permission == CollectionPermission.EDIT_EXCEPT_PASSWORD
+                }
         }
 }
 

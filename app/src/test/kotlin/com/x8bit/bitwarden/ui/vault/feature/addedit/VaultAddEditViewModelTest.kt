@@ -416,7 +416,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(
                 createCredentialRequest = createCredentialRequest,
-        )
+            )
         val fido2ContentState = createCredentialRequest.toDefaultAddTypeContent(
             attestationOptions = createMockPasskeyAttestationOptions(number = 1),
             isIndividualVaultDisabled = false,
@@ -1467,8 +1467,28 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode, canDelete should be false when cipher is in a collection the user cannot manage`() =
+    fun `in edit mode, canDelete should be false when cipher is in a collection the user cannot manage and org has limitItemDeletion`() =
         runTest {
+            val userState = createUserState().copy(
+                accounts = listOf(
+                    createUserState().accounts.first().copy(
+                        organizations = listOf(
+                            Organization(
+                                id = "mockOrganizationId-1",
+                                name = "Mock Organization Name 1",
+                                shouldManageResetPassword = false,
+                                shouldUseKeyConnector = false,
+                                role = OrganizationType.ADMIN,
+                                keyConnectorUrl = null,
+                                userIsClaimedByOrganization = false,
+                                limitItemDeletion = true,
+                            ),
+                        ),
+                    ),
+                ),
+            )
+            mutableUserStateFlow.value = userState
+
             val cipherView = createMockCipherView(1)
             val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
             val stateWithName = createVaultAddItemState(
@@ -2115,7 +2135,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = mockFido2CredentialRequest,
-            )
+                )
 
             setupFido2CreateRequest()
 
@@ -2174,7 +2194,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.ProviderCreateCredential(
                 createCredentialRequest = mockFidoRequest,
-        )
+            )
         setupFido2CreateRequest(
             mockCallingAppInfo = mockCallingAppInfo,
             mockCreatePublicKeyCredentialRequest = mockCreatePublicKeyCredentialRequest,
@@ -2254,7 +2274,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.ProviderCreateCredential(
                     createCredentialRequest = mockFidoRequest,
-            )
+                )
 
             setupFido2CreateRequest()
 
@@ -4501,7 +4521,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.ProviderCreateCredential(
                         createCredentialRequest = mockRequest,
-                )
+                    )
                 setupFido2CreateRequest()
                 every { authRepository.activeUserId } returns "activeUserId"
                 coEvery {
@@ -4529,7 +4549,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.ProviderCreateCredential(
                         createCredentialRequest = mockRequest,
-                )
+                    )
                 every { authRepository.activeUserId } returns "activeUserId"
                 coEvery {
                     bitwardenCredentialManager.registerFido2Credential(
@@ -4577,7 +4597,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.ProviderCreateCredential(
                         createCredentialRequest = mockRequest,
-                )
+                    )
                 setupFido2CreateRequest()
                 every { authRepository.activeUserId } returns "activeUserId"
                 coEvery {
@@ -4780,6 +4800,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                             role = OrganizationType.ADMIN,
                             keyConnectorUrl = null,
                             userIsClaimedByOrganization = false,
+                            limitItemDeletion = false,
                         ),
                     ),
                     isBiometricsEnabled = true,

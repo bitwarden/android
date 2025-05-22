@@ -1754,9 +1754,21 @@ class VaultAddEditViewModel @Inject constructor(
                     ) {
                         cipherView.permissions?.delete == true
                     } else {
+                        val needsManagePermission = cipherView
+                            ?.organizationId
+                            ?.let { orgId ->
+                                currentAccount
+                                    .organizations
+                                    .firstOrNull { it.id == orgId }
+                                    ?.limitItemDeletion
+                            }
+
                         internalVaultData
                             .collectionViewList
-                            .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
+                            .hasDeletePermissionInAtLeastOneCollection(
+                                collectionIds = cipherView?.collectionIds,
+                                needsManagePermission = needsManagePermission == true,
+                            )
                     }
 
                     val canAssignToCollections = internalVaultData
