@@ -77,7 +77,7 @@ class BitwardenAccessibilityProcessorTest {
     }
 
     @Test
-    fun `processAccessibilityEvent with null event source should return`() {
+    fun `processAccessibilityEvent with null event source and root node should return`() {
         val event = mockk<AccessibilityEvent> {
             every { source } returns null
         }
@@ -85,6 +85,41 @@ class BitwardenAccessibilityProcessorTest {
         bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { null }
 
         verify(exactly = 0) {
+            powerManager.isInteractive
+        }
+    }
+
+    @Test
+    fun `processAccessibilityEvent with null event source and invalid root node should return`() {
+        val event = mockk<AccessibilityEvent> {
+            every { source } returns null
+            every { packageName } returns "event_package"
+        }
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns "other_package"
+        }
+
+        bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
+
+        verify(exactly = 0) {
+            powerManager.isInteractive
+        }
+    }
+
+    @Test
+    fun `processAccessibilityEvent with null event source and valid root node should continue`() {
+        val event = mockk<AccessibilityEvent> {
+            every { source } returns null
+            every { packageName } returns "package"
+        }
+        val rootNode = mockk<AccessibilityNodeInfo> {
+            every { packageName } returns "package"
+        }
+        every { powerManager.isInteractive } returns false
+
+        bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
+
+        verify(exactly = 1) {
             powerManager.isInteractive
         }
     }
@@ -181,40 +216,6 @@ class BitwardenAccessibilityProcessorTest {
             powerManager.isInteractive
             event.source
             launcherPackageNameManager.launcherPackages
-        }
-    }
-
-    @Test
-    fun `processAccessibilityEvent with mismatched package name should return`() {
-        val testPackageName = "com.android.chrome"
-        val rootNode = mockk<AccessibilityNodeInfo> {
-            every { packageName } returns "other.package.name"
-        }
-        val node = mockk<AccessibilityNodeInfo> {
-            every { isSystemPackage } returns false
-            every { shouldSkipPackage } returns false
-            every { packageName } returns testPackageName
-        }
-        val event = mockk<AccessibilityEvent> {
-            every { source } returns node
-            every { packageName } returns testPackageName
-        }
-        every { powerManager.isInteractive } returns true
-        every { launcherPackageNameManager.launcherPackages } returns emptyList()
-        every {
-            accessibilityAutofillManager.accessibilityAction
-        } returns AccessibilityAction.AttemptParseUri
-        every { accessibilityAutofillManager.accessibilityAction = null } just runs
-        every { accessibilityParser.parseForUriOrPackageName(rootNode = node) } returns null
-
-        bitwardenAccessibilityProcessor.processAccessibilityEvent(event = event) { rootNode }
-
-        verify(exactly = 1) {
-            powerManager.isInteractive
-            node.isSystemPackage
-            node.shouldSkipPackage
-            launcherPackageNameManager.launcherPackages
-            accessibilityAutofillManager.accessibilityAction
         }
     }
 
