@@ -44,8 +44,8 @@ fun BitwardenActionCard(
         onClick = onCardClicked,
         shape = RoundedCornerShape(size = 16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+            containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
         ),
         modifier = modifier,
         elevation = CardDefaults.elevatedCardElevation(),
