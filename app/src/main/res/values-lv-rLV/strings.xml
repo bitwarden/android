@@ -642,7 +642,10 @@ Nolasīšana notiks automātiski.</string>
     <string name="send_link">Send saite</string>
     <string name="search_sends">Meklēt Send</string>
     <string name="edit_send">Labot Send</string>
-    <string name="add_send">Jauns Send</string>
+    <string name="edit_file_send">Labot datnes Send</string>
+    <string name="edit_text_send">Labot teksta Send</string>
+    <string name="add_file_send">Jauns datnes Send</string>
+    <string name="add_text_send">Jauns teksta Send</string>
     <string name="are_you_sure_delete_send">Vai tiešām izdzēst šo Send?</string>
     <string name="send_deleted">Send izdzēsts</string>
     <string name="send_updated">Send saglabāts</string>

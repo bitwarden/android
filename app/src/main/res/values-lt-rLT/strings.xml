@@ -642,7 +642,10 @@ Nuskaitymas vyks automatiškai.</string>
     <string name="send_link">Siųsti nuorodą</string>
     <string name="search_sends">Ieškoti Siuntinių</string>
     <string name="edit_send">Pakeisti Siuntinį</string>
-    <string name="add_send">Naujas Siuntinys</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Ar tikrai norite ištrinti šį Siuntinį?</string>
     <string name="send_deleted">Siuntinys ištrintas</string>
     <string name="send_updated">Siuntinys išsaugotas</string>

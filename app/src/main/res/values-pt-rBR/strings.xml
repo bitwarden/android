@@ -642,7 +642,10 @@ A leitura será feita automaticamente.</string>
     <string name="send_link">Link do Send</string>
     <string name="search_sends">Pesquisar Sends</string>
     <string name="edit_send">Editar Send</string>
-    <string name="add_send">Adicionar Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Você tem certeza que deseja excluir este Send?</string>
     <string name="send_deleted">Send excluído</string>
     <string name="send_updated">Send atualizado</string>
@@ -1266,11 +1269,11 @@ Você deseja mudar para esta conta?</string>
     <string name="cannot_delete_your_account">Não é possível excluir sua conta</string>
     <string name="cannot_delete_your_account_explanation">Esta ação não pode ser concluída porque sua conta pertence a uma organização. Entre em contato com o administrador da sua organização para obter mais detalhes.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Esta conta será excluída em breve. Inicie sessão em %1$s para continuar usando o Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete send</string>
+    <string name="view_file_send">Ver Envio de arquivo</string>
+    <string name="view_text_send">Ver Envio de texto</string>
+    <string name="delete_send">Excluir Envio</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="dynamic_colors">Cores dinâmicas</string>
+    <string name="dynamic_colors_description">Aplicar cores dinâmicas com base no seu papel de parede</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas usam as cores do sistema e podem não atender todas as diretrizes de acessibilidade.</string>
 </resources>

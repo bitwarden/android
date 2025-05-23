@@ -642,7 +642,10 @@ Awtomatikong itong magsa-scan.</string>
     <string name="send_link">Link ng Send</string>
     <string name="search_sends">Maghanap ng Mga Send</string>
     <string name="edit_send">Baguhin ang Send</string>
-    <string name="add_send">Bagong Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Sigurado ka bang gusto mong burahin ang Send na ito?</string>
     <string name="send_deleted">Nabura ang Send</string>
     <string name="send_updated">Na-save ang Send</string>
