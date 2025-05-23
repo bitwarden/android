@@ -642,7 +642,10 @@ Kod otomatik olarak taranacaktır.</string>
     <string name="send_link">Send bağlantısı</string>
     <string name="search_sends">Send\'lerde ara</string>
     <string name="edit_send">Send\'i düzenle</string>
-    <string name="add_send">Yeni Send</string>
+    <string name="edit_file_send">Send dosyasını düzenle</string>
+    <string name="edit_text_send">Send metnini düzenle</string>
+    <string name="add_file_send">Yeni Send dosyası</string>
+    <string name="add_text_send">Yeni Send metni</string>
     <string name="are_you_sure_delete_send">Bu Send\'i silmek istediğinizden emin misiniz?</string>
     <string name="send_deleted">Send silindi</string>
     <string name="send_updated">Send kaydedildi</string>

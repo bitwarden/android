@@ -642,7 +642,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="send_link">Link wysyłki</string>
     <string name="search_sends">Szukaj w wysyłkach</string>
     <string name="edit_send">Edytuj wysyłkę</string>
-    <string name="add_send">Nowa wysyłka</string>
+    <string name="edit_file_send">Edytuj wysłany plik</string>
+    <string name="edit_text_send">Edytuj wysłany tekst</string>
+    <string name="add_file_send">Nowa wysyłka pliku</string>
+    <string name="add_text_send">Nowa wysyłka tekstu</string>
     <string name="are_you_sure_delete_send">Czy na pewno chcesz usunąć tę wysyłkę?</string>
     <string name="send_deleted">Wysyłka została usunięta</string>
     <string name="send_updated">Wysyłka została zapisana</string>

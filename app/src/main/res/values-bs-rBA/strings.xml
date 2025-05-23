@@ -642,7 +642,10 @@ Skeniranje će biti izvršeno automatski.</string>
     <string name="send_link">Link od Send-a</string>
     <string name="search_sends">Pretraži Send-ove</string>
     <string name="edit_send">Uredi Send</string>
-    <string name="add_send">Dodaj Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Sigurno želiš izbrisati ovaj Send?</string>
     <string name="send_deleted">Send izbrisan.</string>
     <string name="send_updated">Send ažuriran.</string>

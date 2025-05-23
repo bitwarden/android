@@ -642,7 +642,10 @@ Skanning skjer automatisk.</string>
     <string name="send_link">Send lenke</string>
     <string name="search_sends">Søk i Send-ene</string>
     <string name="edit_send">Rediger Send</string>
-    <string name="add_send">Legg til Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Er du sikker på at du vil slette denne Send-en?</string>
     <string name="send_deleted">Send-en har blitt slettet.</string>
     <string name="send_updated">Send-en er oppdatert.</string>

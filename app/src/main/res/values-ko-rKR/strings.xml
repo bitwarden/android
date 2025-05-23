@@ -642,7 +642,10 @@
     <string name="send_link">Send 링크</string>
     <string name="search_sends">Send 검색</string>
     <string name="edit_send">Send 편집</string>
-    <string name="add_send">Send 추가</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">정말 이 Send를 삭제하시겠습니까?</string>
     <string name="send_deleted">Send가 삭제되었습니다.</string>
     <string name="send_updated">Send 업데이트됨.</string>
