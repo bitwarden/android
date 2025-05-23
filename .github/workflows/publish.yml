@@ -54,12 +54,17 @@ jobs:
         # - name: Check
         #   run: bundle exec fastlane check
 
-        - name: Upload test reports on failure
-          uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-          if: failure()
-          with:
-            name: test-reports
-            path: app/build/reports/tests/
+        # - name: Upload test reports on failure
+        #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        #   if: failure()
+        #   with:
+        #     name: test-reports
+        #     path: app/build/reports/tests/
+
+        - name: Test Directory STructure
+          run: |
+            pwd \
+            cat .ruby-version
 
         - name: Log in to Azure
           uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -72,7 +77,6 @@ jobs:
             CONTAINER_NAME: mobile
           run: |
             mkdir -p ${{ github.workspace }}/secrets
-            mkdir -p ${{ github.workspace }}/app/src/standardBeta
             mkdir -p ${{ github.workspace }}/app/src/standardRelease
 
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
@@ -91,7 +95,6 @@ jobs:
             --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
         - name: Promote Play Store version to production
-          if: ${{inputs.product == 'Password Manager'}}
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
             PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
