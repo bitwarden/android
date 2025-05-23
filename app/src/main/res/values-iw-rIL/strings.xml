@@ -642,7 +642,10 @@
     <string name="send_link">קישור סֵנְד</string>
     <string name="search_sends">חפש סֵנְדים</string>
     <string name="edit_send">ערוך סֵנְד</string>
-    <string name="add_send">סֵנְד חדש</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">האם אתה בטוח שברצונך למחוק סֵנְד זה?</string>
     <string name="send_deleted">הסֵנְד נמחק</string>
     <string name="send_updated">סֵנְד נשמר</string>

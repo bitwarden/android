@@ -642,7 +642,10 @@
     <string name="send_link">Посилання на відправлення</string>
     <string name="search_sends">Шукати відправлення</string>
     <string name="edit_send">Редагування</string>
-    <string name="add_send">Нове відправлення</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Ви дійсно хочете видалити це відправлення?</string>
     <string name="send_deleted">Відправлення видалено</string>
     <string name="send_updated">Відправлення збережено</string>

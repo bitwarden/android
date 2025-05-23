@@ -642,7 +642,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="send_link">Send-linkki</string>
     <string name="search_sends">Etsi Sendeistä</string>
     <string name="edit_send">Muokkaa Sendiä</string>
-    <string name="add_send">Uusi Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Haluatko varmasti poistaa Sendin?</string>
     <string name="send_deleted">Send poistettiin</string>
     <string name="send_updated">Send tallennettiin</string>
@@ -1266,11 +1269,11 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>
     <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete send</string>
+    <string name="view_file_send">Näytä tiedosto-Send</string>
+    <string name="view_text_send">Näytä teksti-Send</string>
+    <string name="delete_send">Poista Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="dynamic_colors">Dynaamiset värit</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
 </resources>

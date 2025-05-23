@@ -642,7 +642,10 @@ Scanning will happen automatically.</string>
     <string name="send_link">Povezava pošiljke</string>
     <string name="search_sends">Išči med pošiljkami</string>
     <string name="edit_send">Uredi pošiljko</string>
-    <string name="add_send">Nova pošiljka</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Ali želite izbrisati to pošiljko?</string>
     <string name="send_deleted">Pošiljka je bila izbrisana.</string>
     <string name="send_updated">Pošiljka shranjena.</string>

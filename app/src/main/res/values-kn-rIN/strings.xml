@@ -642,7 +642,10 @@ Scanning will happen automatically.</string>
     <string name="send_link">ಲಿಂಕ್ ಕಳುಹಿಸಿ</string>
     <string name="search_sends">ಹುಡುಕಾಟ ಕಳುಹಿಸುತ್ತದೆ</string>
     <string name="edit_send">ಕಳುಹಿಸು ಸಂಪಾದಿಸಿ</string>
-    <string name="add_send">ಕಳುಹಿಸು ಸೇರಿಸಿ</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</string>
     <string name="send_deleted">ಕಳುಹಿಸು ಅಳಿಸಲಾಗಿದೆ.</string>
     <string name="send_updated">ನವೀಕರಿಸಲಾಗಿದೆ ಕಳುಹಿಸಿ.</string>

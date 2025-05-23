@@ -642,7 +642,10 @@
     <string name="send_link">Send தொடுப்பு</string>
     <string name="search_sends">Sends தேடு</string>
     <string name="edit_send">Send திருத்து</string>
-    <string name="add_send">புதிய Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">இந்த Send ஐ அழிக்க உறுதியா?</string>
     <string name="send_deleted">Send அழிக்கப்பட்டது</string>
     <string name="send_updated">Send சேமிக்கப்பட்டது</string>
