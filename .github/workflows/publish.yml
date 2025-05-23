@@ -109,6 +109,8 @@ jobs:
               exit 1
             fi
 
+            bundle exec fastlane updateReleaseNotes
+
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
               rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
