@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.collections.immutable)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)

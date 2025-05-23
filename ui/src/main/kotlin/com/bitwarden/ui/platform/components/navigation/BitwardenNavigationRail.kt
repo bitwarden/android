@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.navigation
+package com.bitwarden.ui.platform.components.navigation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,8 +26,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.endDivider
 import com.bitwarden.ui.platform.base.util.toDp
+import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import kotlinx.collections.immutable.ImmutableList
 
 /**

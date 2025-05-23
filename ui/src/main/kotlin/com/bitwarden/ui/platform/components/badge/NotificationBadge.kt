@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.badge
+package com.bitwarden.ui.platform.components.badge
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

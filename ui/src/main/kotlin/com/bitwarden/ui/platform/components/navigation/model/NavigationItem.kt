@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
+package com.bitwarden.ui.platform.components.navigation.model
 
 /**
  * Represents a user-interactable item to navigate a user via the bottom app bar or navigation rail.
