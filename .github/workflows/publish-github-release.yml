@@ -40,7 +40,6 @@ jobs:
 
       - name: Get previous run ID
         id: get_previous_run
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -65,12 +64,11 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: release-info
-          path: previous-state
           run-id: ${{ steps.get_previous_run.outputs.previous_run_id }}
 
       - name: Parse previous state
         id: parse_previous_state
-        if: steps.get_previous_run.outputs.has_previous_run == 'true'
+        if: steps.get_previous_run.outputs.has_previous_run == 'true' && steps.get_latest_draft.outputs.is_latest_draft == 'true'
         run: |
           if [ -f "previous-state/release-info.json" ]; then
             previous_release_tag=$(jq -r '.release_tag // empty' previous-state/release-info.json)
@@ -170,6 +168,7 @@ jobs:
       - name: Create workflow state artifact
         if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         run: |
+          rm -f release-info.json
           if [ "${{ steps.check_already_processed.outputs.should_skip }}" == "true" ]; then
             # Skipped run
             json='{
@@ -200,7 +199,6 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload workflow state artifact
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: release-info
