@@ -126,7 +126,7 @@ jobs:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
       - name: Download Play Store credentials
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        if: steps.check_already_processed.outputs.should_skip == 'false'
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -137,7 +137,7 @@ jobs:
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
       - name: Check released version
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        if: steps.check_already_processed.outputs.should_skip == 'false'
         id: appstore_version
         run: |
           appstore_version=$(bundle exec fastlane run getLatestVersion \
@@ -147,7 +147,7 @@ jobs:
           echo "appstore_version=$appstore_version" >> $GITHUB_OUTPUT
 
       - name: Check if version is already released
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        if: steps.check_already_processed.outputs.should_skip == 'false'
         id: check_version
         env:
           latest_draft_version: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
