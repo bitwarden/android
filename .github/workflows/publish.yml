@@ -19,6 +19,9 @@ on:
         description: "Starting percentage of users who will receive this version update."
         required: true
         type: number
+      release-notes:
+        description: "Change notes to be included with this release."
+        type: string
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -87,6 +90,7 @@ jobs:
             VERSION_CODE: ${{ inputs.version-code }}
             ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
             PRODUCT: ${{ inputs.product }}
+            RELEASE_NOTES: ${{ inputs.release-notes }}
           run: |
             if [ "$PRODUCT" = "Password Manager" ]; then
               PACKAGE_NAME="com.x8bit.bitwarden"
@@ -103,4 +107,5 @@ jobs:
               storePassword:"$PLAY_KEYSTORE_PASSWORD" \
               keyAlias:upload \
               keyPassword:"$PLAY_KEY_PASSWORD" \
-              packageName:"$PACKAGE_NAME"
+              packageName:"$PACKAGE_NAME"\
+              releaseNotes: "$RELEASE_NOTES"
