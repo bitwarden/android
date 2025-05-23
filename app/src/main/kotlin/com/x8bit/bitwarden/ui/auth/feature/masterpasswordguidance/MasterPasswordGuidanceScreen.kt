@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -137,20 +138,24 @@ private fun MasterPasswordGuidanceContentBlocks(modifier: Modifier = Modifier) {
                 ContentBlockData(
                     headerText = stringResource(R.string.choose_three_or_four_random_words)
                         .toAnnotatedString(),
-                    subtitleText = R.string.pick_three_or_four_random_unrelated_words.toAnnotatedString(),
+                    subtitleText = annotatedStringResource(
+                        id = R.string.pick_three_or_four_random_unrelated_words,
+                    ),
                     iconVectorResource = R.drawable.ic_number1,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.combine_those_words_together)
                         .toAnnotatedString(),
-                    subtitleText = R.string.put_the_words_together_in_any_order_to_form_your_passphrase
-                        .toAnnotatedString(),
+                    subtitleText = annotatedStringResource(
+                        id = R.string.put_the_words_together_in_any_order_to_form_your_passphrase,
+                    ),
                     iconVectorResource = R.drawable.ic_number2,
                 ),
                 ContentBlockData(
                     headerText = stringResource(R.string.make_it_yours).toAnnotatedString(),
-                    subtitleText = R.string.add_a_number_or_symbol_to_make_it_even_stronger
-                        .toAnnotatedString(),
+                    subtitleText = annotatedStringResource(
+                        id = R.string.add_a_number_or_symbol_to_make_it_even_stronger,
+                    ),
                     iconVectorResource = R.drawable.ic_number3,
                 ),
             ),

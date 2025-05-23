@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
@@ -136,16 +136,16 @@ private fun CheckEmailContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
 
-        val descriptionAnnotatedString = R.string.we_sent_an_email_to.toAnnotatedString(
-            args = arrayOf(email),
-            emphasisHighlightStyle = SpanStyle(
-                color = BitwardenTheme.colorScheme.text.primary,
-                fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold,
-            ),
-        )
         Text(
-            text = descriptionAnnotatedString,
+            text = annotatedStringResource(
+                id = R.string.we_sent_an_email_to,
+                args = arrayOf(email),
+                emphasisHighlightStyle = SpanStyle(
+                    color = BitwardenTheme.colorScheme.text.primary,
+                    fontSize = BitwardenTheme.typography.bodyMedium.fontSize,
+                    fontWeight = FontWeight.Bold,
+                ),
+            ),
             textAlign = TextAlign.Center,
             style = BitwardenTheme.typography.bodyMedium,
             modifier = Modifier

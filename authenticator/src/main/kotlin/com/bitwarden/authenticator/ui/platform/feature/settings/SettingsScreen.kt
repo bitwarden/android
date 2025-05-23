@@ -64,9 +64,9 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.spanStyleOf
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
@@ -349,22 +349,22 @@ private fun VaultSettings(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = R.string.sync_with_bitwarden_app),
-            description = R.string
-                .this_feature_is_not_not_yet_available_for_self_hosted_users
-                .toAnnotatedString(
-                    style = spanStyleOf(
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textStyle = MaterialTheme.typography.bodyMedium,
-                    ),
-                    linkHighlightStyle = spanStyleOf(
-                        color = MaterialTheme.colorScheme.primary,
-                        textStyle = MaterialTheme.typography.labelLarge,
-                    ),
-                ) {
+            description = annotatedStringResource(
+                id = R.string.this_feature_is_not_not_yet_available_for_self_hosted_users,
+                style = spanStyleOf(
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                ),
+                linkHighlightStyle = spanStyleOf(
+                    color = MaterialTheme.colorScheme.primary,
+                    textStyle = MaterialTheme.typography.labelLarge,
+                ),
+                onAnnotationClick = {
                     when (it) {
                         "learnMore" -> onSyncLearnMoreClick()
                     }
                 },
+            ),
             onClick = onSyncWithBitwardenClick,
             modifier = modifier,
             withDivider = true,
