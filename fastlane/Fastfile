@@ -410,7 +410,6 @@ platform :android do
       skip_upload_metadata: true,
       release_status: "inProgress"
       rollout: options[:rolloutPercentage]
-      # skip_upload_changelogs: true
     )
   end
 end
