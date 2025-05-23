@@ -96,7 +96,7 @@ jobs:
               exit 1
             fi
 
-            bundle exec fastlane run promoteToProduction \
+            bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
               rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
               storePassword:"$PLAY_KEYSTORE_PASSWORD" \
