@@ -1,13 +1,14 @@
----
-  name: Publish
-  
-  on:
-    workflow_dispatch:
-  
-  jobs:
-    cut-rc:
-      name: Publish
+
+name: Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+    publish:
       runs-on: ubuntu-24.04
+      name: Promote build to Production in Play Store
+
       steps:
         - name: TEST STEP
           run: exit 0
