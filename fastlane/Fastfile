@@ -264,7 +264,7 @@ platform :android do
     )
     releaseNotes
   end
-  
+
   # Authenticator
   desc "Apply build version information"
   fastlane_require "time"
