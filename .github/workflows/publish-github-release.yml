@@ -93,7 +93,6 @@ jobs:
 
       - name: Check if release was already processed
         id: check_already_processed
-        if: steps.get_latest_draft.outputs.is_latest_draft == 'true'
         env:
           CURRENT_RELEASE: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
           PREVIOUS_RELEASE: ${{ steps.parse_previous_state.outputs.previous_release_tag }}
