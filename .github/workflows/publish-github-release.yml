@@ -68,7 +68,7 @@ jobs:
 
       - name: Parse previous state
         id: parse_previous_state
-        if: steps.get_previous_run.outputs.has_previous_run == 'true' && steps.get_latest_draft.outputs.is_latest_draft == 'true'
+        if: steps.get_previous_run.outputs.has_previous_run == 'true'
         run: |
           if [ -f "release-info.json" ]; then
             previous_release_tag=$(jq -r '.release_tag // empty' release-info.json)
