@@ -63,7 +63,7 @@
     <string name="dark">Escuro</string>
     <string name="light">Claro</string>
     <string name="language">Idioma</string>
-    <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a aplicação para ver as alterações</string>
+    <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a app para ver as alterações</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Proteja as suas contas com o Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Obtenha códigos de verificação para todas as suas contas que suportam a verificação de dois passos.</string>
     <string name="use_your_device_camera_to_scan_codes">Utilize a câmara do seu dispositivo para ler códigos</string>

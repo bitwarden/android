@@ -148,8 +148,8 @@
     <string name="add_code_locally">コードをローカルに追加</string>
     <string name="local_codes">ローカルのコード</string>
     <string name="required_information_missing">必須の情報がありません</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
-    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
-    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
-    <string name="get_help">Get Help</string>
+    <string name="required_information_missing_message">"必須の情報がありません（例：「サービス」または「シークレット」）。ファイルを確認して再度お試しください。サポートが必要な場合は bitwarden.com/help をご覧ください"</string>
+    <string name="file_could_not_be_processed">"ファイルを処理できませんでした"</string>
+    <string name="file_could_not_be_processed_message">"ファイルを処理できませんでした。有効な JSON であることを確認し、再度お試しください。ヘルプが必要な場合は bitwarden.com/help をご覧ください"</string>
+    <string name="get_help">ヘルプを参照する</string>
 </resources>
