@@ -4078,6 +4078,58 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `CollectionSelect should update selectedOwnerId when isIndividualVaultDisabled is true`() =
+            runTest {
+                every {
+                    policyManager.getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
+                } returns listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Org",
+                        id = "testId",
+                        type = PolicyTypeJson.PERSONAL_OWNERSHIP,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                )
+
+                val vaultAddEditType = VaultAddEditType.AddItem
+                val vaultItemCipherType = VaultItemCipherType.LOGIN
+                mutableVaultDataFlow.value = DataState.Loaded(
+                    data = createVaultData(),
+                )
+
+                val viewModel = createAddVaultItemViewModel(
+                    savedStateHandle = createSavedStateHandleWithState(
+                        state = null,
+                        vaultAddEditType = vaultAddEditType,
+                        vaultItemCipherType = vaultItemCipherType,
+                    ),
+                )
+
+                val action = collectionSelectAction()
+                viewModel.trySendAction(action)
+
+                val expectedState = vaultAddItemInitialState.copy(
+                    viewState = VaultAddEditState.ViewState.Content(
+                        common = createCommonContentViewState(
+                            availableOwners = listOf(
+                                VaultAddEditState.Owner(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                    collections = emptyList(),
+                                ),
+                            ),
+                            selectedOwnerId = "organizationId",
+                        ),
+                        isIndividualVaultDisabled = true,
+                        type = createLoginTypeContentViewState(),
+                    ),
+                )
+                assertEquals(expectedState, viewModel.stateFlow.value)
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `UserVerificationLockout should set isUserVerified to false and display Fido2ErrorDialog`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
 
