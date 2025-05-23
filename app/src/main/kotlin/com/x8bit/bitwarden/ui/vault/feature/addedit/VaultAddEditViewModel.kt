@@ -960,11 +960,12 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         updateCommonContent { currentCommonContentState ->
             currentCommonContentState.copy(
+                selectedOwnerId = currentCommonContentState.selectedOwner?.id,
                 availableOwners = currentCommonContentState
                     .availableOwners
                     .toUpdatedOwners(
                         selectedCollectionId = action.collection.id,
-                        selectedOwnerId = currentCommonContentState.selectedOwnerId,
+                        selectedOwnerId = currentCommonContentState.selectedOwner?.id,
                     ),
             )
         }
