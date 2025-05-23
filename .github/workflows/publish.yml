@@ -61,7 +61,7 @@ jobs:
         #     name: test-reports
         #     path: app/build/reports/tests/
 
-        - name: Test Directory STructure
+        - name: Test Directory Structure
           run: |
             pwd \
             cat .ruby-version
@@ -91,8 +91,6 @@ jobs:
             --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
-            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
         - name: Promote Play Store version to production
           env:
