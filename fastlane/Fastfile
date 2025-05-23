@@ -185,16 +185,6 @@ platform :android do
     )
   end
 
-  desc "Generate release notes"
-  lane :generateReleaseNotes do |options|
-    branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
-    releaseNotes = changelog_from_git_commits(
-      commits_count: 1,
-      pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
-    )
-    releaseNotes
-  end
-
   desc "Publish Release Play Store artifacts to Firebase App Distribution"
   lane :distributeReleasePlayStoreToFirebase do |options|
     releaseNotes = generateReleaseNotes(
@@ -265,6 +255,16 @@ platform :android do
     )
   end
 
+  desc "Generate release notes"
+  lane :generateReleaseNotes do |options|
+    branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
+    releaseNotes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "%s%n#{options[:repoName]}/#{branchName} @ %h %n %n#{options[:actionUrl]}"
+    )
+    releaseNotes
+  end
+  
   # Authenticator
   desc "Apply build version information"
   fastlane_require "time"
