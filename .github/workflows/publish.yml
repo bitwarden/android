@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       product:
-        description: "Which app are you updating"
+        description: "Which app is being released."
         type: choice
         options:
           - Password Manager
           - Authenticator
       version-code:
-        description: "Build number to promote. Overrides default of GitHub run number."
+        description: "Build number to promote to production."
         required: true
         type: number
       rollout-percentage:
@@ -78,30 +78,28 @@ jobs:
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
-        - name: Promote Password Manager Play Store version
+        - name: Promote Play Store version to production
           if: ${{inputs.product == 'Password Manager'}}
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
             PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+            VERSION_CODE: ${{ inputs.version-code }}
+            ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+            PRODUCT: ${{ inputs.product }}
           run: |
-            bundle exec fastlane run promoteToProduction \
-            versionCode: ${{ inputs.version-code }} \
-            rolloutPercentage: ${{ inputs.rollout-percentage }} \
-            storePassword:${{ env.PLAY_KEYSTORE_PASSWORD }} \
-            keyAlias:upload \
-            keyPassword:${{ env.PLAY_KEY_PASSWORD }} \
-            packageName: "com.x8bit.bitwarden"
+            if [ "$PRODUCT" = "Password Manager" ]; then
+              PACKAGE_NAME="com.x8bit.bitwarden"
+            elif [ "$PRODUCT" = "Authenticator" ]; then
+              PACKAGE_NAME="com.bitwarden.authenticator"
+            else
+              echo "Unsupported product: $PRODUCT"
+              exit 1
+            fi
 
-        - name: Promote Authenticator Play Store version
-          if: ${{inputs.product == 'Authenticator'}}
-          env:
-            PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
-            PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
-          run: |
-            bundle exec fastlane promoteAuthenticatorToProduction \
-            versionCode: ${{ inputs.version-code }} \
-            rolloutPercentage: ${{ inputs.rollout-percentage }} \
-            storePassword:${{ env.PLAY_KEYSTORE_PASSWORD }} \
-            keyAlias:upload \
-            keyPassword:${{ env.PLAY_KEY_PASSWORD }}
-            packageName: "com.bitwarden.authenticator"
+            bundle exec fastlane run promoteToProduction \
+              versionCode:"$VERSION_CODE" \
+              rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
+              storePassword:"$PLAY_KEYSTORE_PASSWORD" \
+              keyAlias:upload \
+              keyPassword:"$PLAY_KEY_PASSWORD" \
+              packageName:"$PACKAGE_NAME"
