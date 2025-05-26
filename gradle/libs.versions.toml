@@ -40,7 +40,7 @@ junit5 = "5.12.2"
 jvmTarget = "17"
 # kotlin and ksp **must** use compatible versions, do not update either without the other.
 kotlin = "2.1.21"
-kotlinxCollectionsImmutable = "0.3.8"
+kotlinxCollectionsImmutable = "0.4.0"
 kotlinxCoroutines = "1.10.2"
 kotlinxSerialization = "1.8.1"
 kotlinxKover = "0.9.1"
