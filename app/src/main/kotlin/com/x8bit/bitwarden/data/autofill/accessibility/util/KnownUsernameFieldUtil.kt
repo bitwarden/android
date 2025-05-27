@@ -188,6 +188,14 @@ private val LEGACY_KNOWN_USERNAME_FIELDS: List<KnownUsernameField> = listOf(
         accessOption = AccessOptions(matchValue = "/sso/url_slug", usernameViewId = "url_slug"),
     ),
     KnownUsernameField(
+        uriAuthority = "com.disney.disneyplus",
+        accessOption = AccessOptions(
+            matchValue = "",
+            matchingStrategy = AccessOptions.MatchingStrategy.CONTAINS_CASE_SENSITIVE,
+            usernameViewId = "editFieldEditText",
+        ),
+    ),
+    KnownUsernameField(
         uriAuthority = "signin.befr.ebay.be",
         accessOptions = listOf(
             AccessOptions(
