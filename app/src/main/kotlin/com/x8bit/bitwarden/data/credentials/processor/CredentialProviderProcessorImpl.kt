@@ -189,17 +189,6 @@ class CredentialProviderProcessorImpl(
         return entryBuilder.build()
     }
 
-    private suspend fun getMatchingFido2CredentialEntries(
-        userId: String,
-        request: BeginGetCredentialRequest,
-    ): Result<List<CredentialEntry>> =
-        bitwardenCredentialManager
-            .getCredentialEntries(
-                userId = userId,
-                callingAppInfo = request.callingAppInfo,
-                options = request.beginGetCredentialOptions,
-            )
-
     private fun CreateEntry.Builder.setBiometricPromptDataIfSupported(
         cipher: Cipher,
     ): CreateEntry.Builder {

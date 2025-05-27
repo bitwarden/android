@@ -379,7 +379,7 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
         every { context.getString(any()) } returns "mockTitle"
         every {
-            pendingIntentManager.createCredentialProviderUnlockPendingIntent(
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
             )
         } returns mockIntent
@@ -398,7 +398,7 @@ class CredentialProviderProcessorTest {
         verify(exactly = 0) { callback.onError(any()) }
         verify(exactly = 1) {
             callback.onResult(any())
-            pendingIntentManager.createCredentialProviderUnlockPendingIntent(
+            pendingIntentManager.createFido2UnlockPendingIntent(
                 userId = "mockUserId-1",
             )
         }

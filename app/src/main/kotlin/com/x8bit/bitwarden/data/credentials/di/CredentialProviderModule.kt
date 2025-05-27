@@ -7,6 +7,7 @@ import com.bitwarden.data.manager.DispatcherManager
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilderImpl
 import com.x8bit.bitwarden.data.credentials.datasource.disk.PrivilegedAppDiskSource
@@ -80,6 +81,7 @@ object CredentialProviderModule {
         BitwardenCredentialManagerImpl(
             vaultSdkSource = vaultSdkSource,
             fido2CredentialStore = fido2CredentialStore,
+            autofillCipherProvider = autofillCipherProvider,
             json = json,
             vaultRepository = vaultRepository,
             dispatcherManager = dispatcherManager,
