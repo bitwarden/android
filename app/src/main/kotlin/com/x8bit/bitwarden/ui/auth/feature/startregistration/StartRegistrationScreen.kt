@@ -32,7 +32,6 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,8 +42,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -293,13 +292,6 @@ private fun TermsAndPrivacyText(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val annotatedLinkString: AnnotatedString =
-        R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy.toAnnotatedString {
-            when (it) {
-                "termsOfService" -> onTermsClick()
-                "privacyPolicy" -> onPrivacyPolicyClick()
-            }
-        }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -327,7 +319,15 @@ private fun TermsAndPrivacyText(
             .fillMaxWidth(),
     ) {
         Text(
-            text = annotatedLinkString,
+            text = annotatedStringResource(
+                id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
+                onAnnotationClick = {
+                    when (it) {
+                        "termsOfService" -> onTermsClick()
+                        "privacyPolicy" -> onPrivacyPolicyClick()
+                    }
+                },
+            ),
             style = BitwardenTheme.typography.bodyMedium.copy(
                 textAlign = TextAlign.Center,
             ),
@@ -356,14 +356,14 @@ private fun ReceiveMarketingEmailsSwitch(
                         },
                     ),
                 )
-            },
-        label = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time
-            .toAnnotatedString {
-                onUnsubscribeClick()
-            },
+            }
+            .testTag(tag = "ReceiveMarketingEmailsToggle"),
+        label = annotatedStringResource(
+            id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time,
+            onAnnotationClick = { onUnsubscribeClick() },
+        ),
         isChecked = isChecked,
         onCheckedChange = onCheckedChange,
-        contentDescription = "ReceiveMarketingEmailsToggle",
         cardStyle = CardStyle.Full,
     )
 }

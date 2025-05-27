@@ -52,7 +52,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.bitwarden.ui.platform.base.util.EventsEffect
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.model.WindowSize
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -411,13 +411,15 @@ private fun EnterKeyManuallyText(
     modifier: Modifier = Modifier,
 ) {
     val enterKeyManuallyString = stringResource(R.string.enter_key_manually)
-    val annotatedLinkString = R.string.cannot_scan_qr_code_enter_key_manually.toAnnotatedString {
-        when (it) {
-            "enterKeyManually" -> onEnterKeyManuallyClick()
-        }
-    }
     Text(
-        text = annotatedLinkString,
+        text = annotatedStringResource(
+            id = R.string.cannot_scan_qr_code_enter_key_manually,
+            onAnnotationClick = {
+                when (it) {
+                    "enterKeyManually" -> onEnterKeyManuallyClick()
+                }
+            },
+        ),
         style = BitwardenTheme.typography.bodySmall,
         color = Color.White,
         textAlign = TextAlign.Center,

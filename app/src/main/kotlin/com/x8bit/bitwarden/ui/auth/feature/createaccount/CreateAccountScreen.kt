@@ -27,15 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -296,14 +295,6 @@ private fun TermsAndPrivacySwitch(
 ) {
     val strTerms = stringResource(id = R.string.terms_of_service)
     val strPrivacy = stringResource(id = R.string.privacy_policy)
-    val annotatedLinkString: AnnotatedString = R.string
-        .by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy
-        .toAnnotatedString {
-            when (it) {
-                "termsOfService" -> onTermsClick()
-                "privacyPolicy" -> onPrivacyPolicyClick()
-            }
-        }
     BitwardenSwitch(
         modifier = modifier.semantics(mergeDescendants = true) {
             customActions = listOf(
@@ -323,7 +314,16 @@ private fun TermsAndPrivacySwitch(
                 ),
             )
         },
-        label = annotatedLinkString,
+        label = annotatedStringResource(
+            id = R.string
+                .by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy,
+            onAnnotationClick = {
+                when (it) {
+                    "termsOfService" -> onTermsClick()
+                    "privacyPolicy" -> onPrivacyPolicyClick()
+                }
+            },
+        ),
         isChecked = isChecked,
         contentDescription = "AcceptPoliciesToggle",
         onCheckedChange = onCheckedChange,
