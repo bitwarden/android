@@ -88,7 +88,7 @@ jobs:
             --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
         - name: Format Release Notes
           run: |
-            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g'"
+            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
             echo "Formatted message with newlines:"
             echo "$FORMATTED_MESSAGE"
             echo "FORMATTED_MESSAGE<<EOF" >> $GITHUB_ENV
