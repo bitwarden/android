@@ -154,7 +154,6 @@ sealed class FlagKey<out T : Any> {
     data object SingleTapPasswordAuthentication : FlagKey<Boolean>() {
         override val keyName: String = "single-tap-password-authentication"
         override val defaultValue: Boolean = false
-        override val isRemotelyConfigured: Boolean = true
     }
 
     /**

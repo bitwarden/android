@@ -399,7 +399,7 @@ class CredentialProviderProcessorTest {
         every { callback.onResult(capture(captureSlot)) } just runs
         every { context.getString(any()) } returns "mockTitle"
         every {
-            intentManager.createCredentialProviderUnlockPendingIntent(
+            intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
                 userId = "mockUserId-1",
                 requestCode = any(),
@@ -420,7 +420,7 @@ class CredentialProviderProcessorTest {
         verify(exactly = 0) { callback.onError(any()) }
         verify(exactly = 1) {
             callback.onResult(any())
-            intentManager.createCredentialProviderUnlockPendingIntent(
+            intentManager.createFido2UnlockPendingIntent(
                 action = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT",
                 userId = "mockUserId-1",
                 requestCode = any(),

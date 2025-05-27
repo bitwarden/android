@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.credentials.model
 
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.credentials.provider.BeginGetCredentialOption
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption

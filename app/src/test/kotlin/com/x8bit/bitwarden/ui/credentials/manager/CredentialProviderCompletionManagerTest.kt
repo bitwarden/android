@@ -219,7 +219,7 @@ class CredentialProviderCompletionManagerTest {
             val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
 
             every {
-                mockIntentManager.createCredentialProviderGetCredentialPendingIntent(
+                mockIntentManager.createFido2GetCredentialPendingIntent(
                     action = GET_CREDENTIAL_INTENT,
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
