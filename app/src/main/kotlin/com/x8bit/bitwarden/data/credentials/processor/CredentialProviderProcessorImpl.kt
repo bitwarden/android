@@ -96,7 +96,7 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(BitwardenString.unlock),
-                pendingIntent = pendingIntentManager.createCredentialUnlockPendingIntent(
+                pendingIntent = pendingIntentManager.createFido2UnlockPendingIntent(
                     userId = userState.activeUserId,
                 ),
             )
@@ -166,7 +166,7 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = pendingIntentManager.createCredentialProviderCreationPendingIntent(
+                pendingIntent = pendingIntentManager.createFido2CreationPendingIntent(
                     userId = userId,
                 ),
             )
