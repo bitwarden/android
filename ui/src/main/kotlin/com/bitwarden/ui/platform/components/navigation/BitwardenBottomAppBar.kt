@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.navigation
+package com.bitwarden.ui.platform.components.navigation
 
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.BottomAppBar
@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import com.bitwarden.ui.platform.base.util.topDivider
+import com.bitwarden.ui.platform.components.navigation.model.NavigationItem
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.ui.platform.components.model.NavigationItem
 import kotlinx.collections.immutable.ImmutableList
 
 /**

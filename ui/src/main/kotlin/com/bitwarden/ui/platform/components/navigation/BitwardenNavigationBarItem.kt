@@ -1,20 +1,20 @@
-package com.x8bit.bitwarden.ui.platform.components.navigation
+package com.bitwarden.ui.platform.components.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationBarItemColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
-import com.x8bit.bitwarden.ui.platform.components.navigation.color.bitwardenNavigationRailItemColors
 
 /**
  * A custom Bitwarden-themed bottom app bar.
@@ -29,7 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.navigation.color.bitwardenNavi
  * @param notificationCount The notification count for the navigation item.
  */
 @Composable
-fun ColumnScope.BitwardenNavigationRailItem(
+fun RowScope.BitwardenNavigationBarItem(
     @StringRes labelRes: Int,
     @StringRes contentDescriptionRes: Int,
     @DrawableRes selectedIconRes: Int,
@@ -39,7 +39,7 @@ fun ColumnScope.BitwardenNavigationRailItem(
     modifier: Modifier = Modifier,
     notificationCount: Int = 0,
 ) {
-    NavigationRailItem(
+    NavigationBarItem(
         icon = {
             BadgedBox(
                 badge = {
@@ -67,7 +67,7 @@ fun ColumnScope.BitwardenNavigationRailItem(
         },
         selected = isSelected,
         onClick = onClick,
-        colors = bitwardenNavigationRailItemColors(),
+        colors = bitwardenNavigationBarItemColors(),
         modifier = modifier,
     )
 }
