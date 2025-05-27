@@ -32,7 +32,7 @@ data class GetCredentialsRequest(
 
     /**
      * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
-     * public key credentials are present.
+     * public key options are present.
      */
     @IgnoredOnParcel
     val beginGetPublicKeyCredentialOptions: List<BeginGetPublicKeyCredentialOption> by lazy {
@@ -43,11 +43,23 @@ data class GetCredentialsRequest(
     }
 
     /**
-     * The [BeginGetPublicKeyCredentialOption]s of the [providerRequest], or an empty list if no
+     * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no
      * public key options are present.
      */
     @IgnoredOnParcel
     val beginGetPasswordOption: List<BeginGetPasswordOption> by lazy {
+        providerRequest
+            ?.beginGetCredentialOptions
+            ?.filterIsInstance<BeginGetPasswordOption>()
+            .orEmpty()
+    }
+
+    /**
+     * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no password
+     * options are present.
+     */
+    @IgnoredOnParcel
+    val beginGetPasswordOptions: List<BeginGetPasswordOption> by lazy {
         providerRequest
             ?.beginGetCredentialOptions
             ?.filterIsInstance<BeginGetPasswordOption>()

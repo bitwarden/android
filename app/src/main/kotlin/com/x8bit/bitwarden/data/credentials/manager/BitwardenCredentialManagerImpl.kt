@@ -157,11 +157,8 @@ class BitwardenCredentialManagerImpl(
         request: GetPasswordOption,
         selectedCipherView: CipherView,
     ): PasswordCredentialAssertionResult {
-
-        //TODO verify that app is allowed to access web credentials
-
+        //TODO would it be necessary to verify app, as the list is loaded via autofill provider
         val login = selectedCipherView.login ?: return PasswordCredentialAssertionResult.Error
-
         return PasswordCredentialAssertionResult.Success(login)
 
     }
