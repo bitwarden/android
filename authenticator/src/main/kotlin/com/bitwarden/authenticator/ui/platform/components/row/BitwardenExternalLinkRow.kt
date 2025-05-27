@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents a row of text that can be clicked on and contains an external link.

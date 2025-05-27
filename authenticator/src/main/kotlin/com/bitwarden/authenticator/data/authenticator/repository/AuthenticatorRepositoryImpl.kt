@@ -155,44 +155,22 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override val sharedCodesStateFlow: StateFlow<SharedVerificationCodesState> by lazy {
-        if (!featureFlagManager.getFeatureFlag(FlagKey.PasswordManagerSync)) {
-            MutableStateFlow(SharedVerificationCodesState.FeatureNotEnabled)
-        } else {
-            authenticatorBridgeManager
-                .accountSyncStateFlow
-                .flatMapLatest { accountSyncState ->
-                    when (accountSyncState) {
-                        AccountSyncState.AppNotInstalled ->
-                            MutableStateFlow(SharedVerificationCodesState.AppNotInstalled)
-
-                        AccountSyncState.SyncNotEnabled ->
-                            MutableStateFlow(SharedVerificationCodesState.SyncNotEnabled)
-
-                        AccountSyncState.Error ->
-                            MutableStateFlow(SharedVerificationCodesState.Error)
-
-                        AccountSyncState.Loading ->
-                            MutableStateFlow(SharedVerificationCodesState.Loading)
-
-                        AccountSyncState.OsVersionNotSupported -> MutableStateFlow(
-                            SharedVerificationCodesState.OsVersionNotSupported,
-                        )
-
-                        is AccountSyncState.Success -> {
-                            val verificationCodesList =
-                                accountSyncState.accounts.toAuthenticatorItems()
-                            totpCodeManager
-                                .getTotpCodesFlow(verificationCodesList)
-                                .map { SharedVerificationCodesState.Success(it) }
-                        }
-                    }
+        featureFlagManager
+            .getFeatureFlagFlow(FlagKey.PasswordManagerSync)
+            .flatMapLatest { isFeatureEnabled ->
+                if (isFeatureEnabled) {
+                    authenticatorBridgeManager
+                        .accountSyncStateFlow
+                        .flatMapLatest { it.toSharedVerificationCodesStateFlow() }
+                } else {
+                    flowOf(SharedVerificationCodesState.FeatureNotEnabled)
                 }
-                .stateIn(
-                    scope = unconfinedScope,
-                    started = SharingStarted.WhileSubscribed(),
-                    initialValue = SharedVerificationCodesState.Loading,
-                )
-        }
+            }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
+                initialValue = SharedVerificationCodesState.Loading,
+            )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -297,6 +275,33 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     override val firstTimeAccountSyncFlow: Flow<Unit>
         get() = firstTimeAccountSyncChannel.receiveAsFlow()
+
+    @Suppress("MaxLineLength")
+    private fun AccountSyncState.toSharedVerificationCodesStateFlow(): Flow<SharedVerificationCodesState> =
+        when (this) {
+            AccountSyncState.AppNotInstalled ->
+                flowOf(SharedVerificationCodesState.AppNotInstalled)
+
+            AccountSyncState.SyncNotEnabled ->
+                flowOf(SharedVerificationCodesState.SyncNotEnabled)
+
+            AccountSyncState.Error ->
+                flowOf(SharedVerificationCodesState.Error)
+
+            AccountSyncState.Loading ->
+                flowOf(SharedVerificationCodesState.Loading)
+
+            AccountSyncState.OsVersionNotSupported -> flowOf(
+                SharedVerificationCodesState.OsVersionNotSupported,
+            )
+
+            is AccountSyncState.Success -> {
+                val verificationCodesList = accounts.toAuthenticatorItems()
+                totpCodeManager
+                    .getTotpCodesFlow(verificationCodesList)
+                    .map { SharedVerificationCodesState.Success(it) }
+            }
+        }
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
         val headerLine =

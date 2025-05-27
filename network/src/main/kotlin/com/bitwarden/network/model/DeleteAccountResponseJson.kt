@@ -16,12 +16,16 @@ sealed class DeleteAccountResponseJson {
     /**
      * Models the json body of a deletion error.
      *
+     * @param errorMessage a human readable error message.
      * @param validationErrors a map where each value is a list of error messages for each key.
      * The values in the array should be used for display to the user, since the keys tend to come
      * back as nonsense. (eg: empty string key)
      */
     @Serializable
     data class Invalid(
+        @SerialName("message")
+        private val errorMessage: String?,
+
         @SerialName("validationErrors")
         private val validationErrors: Map<String, List<String?>>?,
     ) : DeleteAccountResponseJson() {
@@ -33,5 +37,6 @@ sealed class DeleteAccountResponseJson {
                 ?.values
                 ?.firstOrNull()
                 ?.firstOrNull()
+                ?: errorMessage
     }
 }

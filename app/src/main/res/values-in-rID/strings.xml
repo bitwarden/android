@@ -642,7 +642,10 @@ Proses pindai akan terjadi secara otomatis.</string>
     <string name="send_link">Tautan Send</string>
     <string name="search_sends">Pencarian Send</string>
     <string name="edit_send">Edit Send</string>
-    <string name="add_send">Tambahkan Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Anda yakin ingin menghapus Send ini?</string>
     <string name="send_deleted">Send telah dihapus.</string>
     <string name="send_updated">Send diperbarui.</string>

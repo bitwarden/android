@@ -38,24 +38,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import kotlinx.coroutines.launch
-
-/**
- * The custom horizontal margin that is specific to this screen.
- */
-private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 48.dp
 
 /**
  * Top level composable for the tutorial screen.
@@ -144,7 +138,7 @@ private fun TutorialScreenContent(
                 TutorialScreenLandscape(
                     state = state.pages[index],
                     modifier = Modifier
-                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                        .standardHorizontalMargin()
                         .statusBarsPadding(),
                 )
             }
@@ -165,7 +159,7 @@ private fun TutorialScreenContent(
             label = state.actionButtonText,
             onClick = { continueClick(state.index) },
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin()
                 .fillMaxWidth(),
         )
 
@@ -174,7 +168,7 @@ private fun TutorialScreenContent(
             label = stringResource(id = R.string.skip),
             onClick = skipClick,
             modifier = Modifier
-                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
+                .standardHorizontalMargin()
                 .fillMaxWidth()
                 .alpha(if (state.isLastPage) 0f else 1f)
                 .padding(bottom = 12.dp),

@@ -642,7 +642,10 @@ Skenovanie prebehne automaticky.</string>
     <string name="send_link">Odkaz na Send</string>
     <string name="search_sends">Hľadať Sendy</string>
     <string name="edit_send">Upraviť Send</string>
-    <string name="add_send">Pridať Send</string>
+    <string name="edit_file_send">Upraviť súborový Send</string>
+    <string name="edit_text_send">Upraviť textový Send</string>
+    <string name="add_file_send">Nový súborový Send</string>
+    <string name="add_text_send">Nový textový Send</string>
     <string name="are_you_sure_delete_send">Naozaj chcete odstrániť tento Send?</string>
     <string name="send_deleted">Send bol odstránený.</string>
     <string name="send_updated">Send bol aktualizovaný.</string>

@@ -30,6 +30,11 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
+    testOptions {
+        // Required for Robolectric
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+    }
     kotlinOptions {
         jvmTarget = libs.versions.jvmTarget.get()
     }
@@ -40,6 +45,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":annotation"))
+
     implementation(libs.androidx.appcompat)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.animation)
@@ -55,11 +62,17 @@ dependencies {
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
 
+    // For now we are restricted to running Compose tests for debug builds only
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.junit5)
     testRuntimeOnly(libs.junit.platform.launcher)
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
+    testImplementation(libs.robolectric.robolectric)
+    testImplementation(libs.androidx.compose.ui.test)
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.compose.ui.test)
@@ -81,5 +94,6 @@ tasks {
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         @Suppress("UselessCallOnNotNull")
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }

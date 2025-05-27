@@ -642,7 +642,10 @@ A leitura será efetuada automaticamente.</string>
     <string name="send_link">Link do Send</string>
     <string name="search_sends">Procurar Sends</string>
     <string name="edit_send">Editar Send</string>
-    <string name="add_send">Novo Send</string>
+    <string name="edit_file_send">Editar Send de ficheiro</string>
+    <string name="edit_text_send">Editar Send de texto</string>
+    <string name="add_file_send">Novo Send de ficheiro</string>
+    <string name="add_text_send">Novo Send de texto</string>
     <string name="are_you_sure_delete_send">Tem a certeza de que pretende eliminar este Send?</string>
     <string name="send_deleted">Send eliminado</string>
     <string name="send_updated">Send guardado</string>

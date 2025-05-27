@@ -642,7 +642,10 @@
     <string name="send_link">Send リンク</string>
     <string name="search_sends">Send を検索</string>
     <string name="edit_send">Send を編集</string>
-    <string name="add_send">Send を追加</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">この Send を削除してもよろしいですか?</string>
     <string name="send_deleted">Send を削除しました。</string>
     <string name="send_updated">Send を更新しました。</string>

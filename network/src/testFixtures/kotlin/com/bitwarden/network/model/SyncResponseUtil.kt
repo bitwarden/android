@@ -1,12 +1,25 @@
 package com.bitwarden.network.model
 
-fun createMockSyncResponse(number: Int): SyncResponseJson =
+/**
+ * Create a mock [SyncResponseJson] with a given [number].
+ */
+@Suppress("LongParameterList")
+fun createMockSyncResponse(
+    number: Int,
+    folders: List<SyncResponseJson.Folder> = listOf(createMockFolder(number = number)),
+    collections: List<SyncResponseJson.Collection> = listOf(createMockCollection(number = number)),
+    profile: SyncResponseJson.Profile = createMockProfile(number = number),
+    ciphers: List<SyncResponseJson.Cipher> = listOf(createMockCipher(number = number)),
+    policies: List<SyncResponseJson.Policy> = listOf(createMockPolicy(number = number)),
+    domains: SyncResponseJson.Domains = createMockDomains(number = number),
+    sends: List<SyncResponseJson.Send> = listOf(createMockSend(number = number)),
+): SyncResponseJson =
     SyncResponseJson(
-        folders = listOf(createMockFolder(number = number)),
-        collections = listOf(createMockCollection(number = number)),
-        profile = createMockProfile(number = number),
-        ciphers = listOf(createMockCipher(number = number)),
-        policies = listOf(createMockPolicy(number = number)),
-        domains = createMockDomains(number = number),
-        sends = listOf(createMockSend(number = number)),
+        folders = folders,
+        collections = collections,
+        profile = profile,
+        ciphers = ciphers,
+        policies = policies,
+        domains = domains,
+        sends = sends,
     )

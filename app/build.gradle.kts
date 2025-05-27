@@ -211,8 +211,9 @@ dependencies {
         add("standardImplementation", dependencyNotation)
     }
 
-    implementation(files("libs/authenticatorbridge-1.0.0-release.aar"))
+    implementation(files("libs/authenticatorbridge-1.0.1-release.aar"))
 
+    implementation(project(":annotation"))
     implementation(project(":core"))
     implementation(project(":data"))
     implementation(project(":network"))

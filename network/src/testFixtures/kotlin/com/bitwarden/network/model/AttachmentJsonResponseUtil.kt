@@ -1,29 +1,18 @@
 package com.bitwarden.network.model
 
 /**
- * Create a mock [AttachmentJsonResponse] with a given [number].
- */
-fun createMockAttachmentJsonResponse(
-    number: Int,
-    fileUploadType: FileUploadType = FileUploadType.AZURE,
-): AttachmentJsonResponse =
-    AttachmentJsonResponse.Success(
-        attachmentId = "mockAttachmentId-$number",
-        url = "mockUrl-$number",
-        fileUploadType = fileUploadType,
-        cipherResponse = createMockCipher(number = number),
-    )
-
-/**
  * Create a mock [AttachmentJsonResponse.Success] with a given [number].
  */
 fun createMockAttachmentResponse(
     number: Int,
+    attachmentId: String = "mockAttachmentId-$number",
+    url: String = "mockUrl-$number",
     fileUploadType: FileUploadType = FileUploadType.AZURE,
+    cipherResponse: SyncResponseJson.Cipher = createMockCipher(number = number),
 ): AttachmentJsonResponse.Success =
     AttachmentJsonResponse.Success(
-        attachmentId = "mockAttachmentId-$number",
-        url = "mockUrl-$number",
+        attachmentId = attachmentId,
+        url = url,
         fileUploadType = fileUploadType,
-        cipherResponse = createMockCipher(number = number),
+        cipherResponse = cipherResponse,
     )

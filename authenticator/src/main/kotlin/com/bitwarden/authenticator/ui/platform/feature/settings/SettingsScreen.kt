@@ -48,7 +48,6 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
@@ -57,7 +56,6 @@ import com.bitwarden.authenticator.ui.platform.components.row.BitwardenExternalL
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.composition.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.composition.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.data.model.DefaultSaveOption
@@ -66,6 +64,10 @@ import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.base.util.toAnnotatedString
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -105,6 +107,10 @@ fun SettingsScreen(
 
             SettingsEvent.NavigateToPrivacyPolicy -> {
                 intentManager.launchUri("https://bitwarden.com/privacy".toUri())
+            }
+
+            SettingsEvent.NavigateToSyncInformation -> {
+                intentManager.launchUri("https://bitwarden.com/help/totp-sync".toUri())
             }
 
             SettingsEvent.NavigateToBitwardenApp -> {
@@ -176,6 +182,9 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.DataClick.SyncWithBitwardenClick)
                     }
+                },
+                onSyncLearnMoreClick = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.DataClick.SyncLearnMoreClick) }
                 },
                 onDefaultSaveOptionUpdated = remember(viewModel) {
                     {
@@ -280,6 +289,7 @@ private fun VaultSettings(
     onImportClick: () -> Unit,
     onBackupClick: () -> Unit,
     onSyncWithBitwardenClick: () -> Unit,
+    onSyncLearnMoreClick: () -> Unit,
     onDefaultSaveOptionUpdated: (DefaultSaveOption) -> Unit,
     shouldShowSyncWithBitwardenApp: Boolean,
     shouldShowDefaultSaveOptions: Boolean,
@@ -339,6 +349,22 @@ private fun VaultSettings(
         Spacer(modifier = Modifier.height(8.dp))
         BitwardenTextRow(
             text = stringResource(id = R.string.sync_with_bitwarden_app),
+            description = R.string
+                .this_feature_is_not_not_yet_available_for_self_hosted_users
+                .toAnnotatedString(
+                    style = spanStyleOf(
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textStyle = MaterialTheme.typography.bodyMedium,
+                    ),
+                    linkHighlightStyle = spanStyleOf(
+                        color = MaterialTheme.colorScheme.primary,
+                        textStyle = MaterialTheme.typography.labelLarge,
+                    ),
+                ) {
+                    when (it) {
+                        "learnMore" -> onSyncLearnMoreClick()
+                    }
+                },
             onClick = onSyncWithBitwardenClick,
             modifier = modifier,
             withDivider = true,

@@ -641,7 +641,10 @@
     <string name="send_link">Send esteka</string>
     <string name="search_sends">Send-ak bilatu</string>
     <string name="edit_send">Editatu Send-a</string>
-    <string name="add_send">Gehitu Send-a</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Ziur al zaude Send hau ezabatu nahi duzula?</string>
     <string name="send_deleted">Send-a ezabatu da.</string>
     <string name="send_updated">Send-a eguneratu da.</string>

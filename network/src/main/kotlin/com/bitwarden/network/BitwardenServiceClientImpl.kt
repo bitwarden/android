@@ -1,6 +1,6 @@
 package com.bitwarden.network
 
-import com.bitwarden.core.annotation.OmitFromCoverage
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.core.data.serializer.ZonedDateTimeSerializer
 import com.bitwarden.network.authenticator.RefreshAuthenticator
 import com.bitwarden.network.interceptor.AuthTokenInterceptor

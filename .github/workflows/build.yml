@@ -30,6 +30,10 @@ env:
   JAVA_VERSION: 17
   GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   build:
     name: Build
@@ -195,7 +199,7 @@ jobs:
 
       - name: Increment version
         run: |
-          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
           bundle exec fastlane setBuildVersionInfo \
           versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
           versionName:${{ inputs.version-name }}
@@ -481,7 +485,7 @@ jobs:
       # Start from 11000 to prevent collisions with mobile build version codes
       - name: Increment version
         run: |
-          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          DEFAULT_VERSION_CODE=$((11000+GITHUB_RUN_NUMBER))
           VERSION_CODE="${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }}"
           bundle exec fastlane setBuildVersionInfo \
           versionCode:$VERSION_CODE \

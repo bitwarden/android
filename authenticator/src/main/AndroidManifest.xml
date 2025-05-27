@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:taskAffinity=""
         android:theme="@style/LaunchTheme"
+        android:intentMatchingFlags="enforceIntentFilter"
         tools:targetApi="31">
         <activity
             android:name="com.bitwarden.authenticator.MainActivity"
