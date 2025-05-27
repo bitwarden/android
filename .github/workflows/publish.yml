@@ -111,7 +111,7 @@ jobs:
             fi
 
             bundle exec fastlane updateReleaseNotes \
-              releaseNotes: "$RELEASE_NOTES" \
+              releaseNotes:"$RELEASE_NOTES" \
               versionCode:"$VERSION_CODE"
 
             # bundle exec fastlane promoteToProduction \
