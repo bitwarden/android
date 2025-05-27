@@ -2,6 +2,9 @@ name: Publish GitHub Release as newest
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
   schedule:
     - cron: '0 3 * * 1-5'
 
@@ -11,6 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      actions: read
 
     steps:
       - name: Check out repository
@@ -38,15 +42,19 @@ jobs:
           latest_draft_name=$(jq -r '.name' <<< $latest_release)
           echo "latest_draft_name=$latest_draft_name" >> $GITHUB_OUTPUT
 
+      # Retrieve the previous run ID and run state to determine the status of the last workflow execution.
+      # This is done to prevent the workflow from publishing a release that was already published,
+      # but then deleted and reverted to draft for any reason.
+      # It ensures the workflow does not process the same release multiple times if it was reverted.
       - name: Get previous run ID
         id: get_previous_run
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          workflow_name="$(basename "$GITHUB_WORKFLOW")"
+          workflow_name="test.yml"
 
-          # Get the last successful scheduled run ID
-          previous_run_id=$(gh run list --workflow=$workflow_name --event=schedule --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          Get the last successful scheduled run ID
+          previous_run_id=$(gh run list --workflow=$workflow_name  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
 
           if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
             echo "Found previous successful scheduled run: $previous_run_id"
@@ -72,23 +80,27 @@ jobs:
         if: steps.get_previous_run.outputs.has_previous_run == 'true'
         run: |
           if [ -f "release-info.json" ]; then
+
+            fromJSON(...)
+
             previous_release_tag=$(jq -r '.release_tag // empty' release-info.json)
             previous_initial_state=$(jq -r '.initial_state // empty' release-info.json)
             previous_changed_to=$(jq -r '.changed_to_state // empty' release-info.json)
 
             if [ -z "$previous_release_tag" ] || [ -z "$previous_initial_state" ] || [ -z "$previous_changed_to" ]; then
-              echo "::error:: Invalid release-info.json format"
+              echo "⚠️ Invalid release-info.json format"
               exit 1
             fi
 
             echo "previous_release_tag=$previous_release_tag" >> $GITHUB_OUTPUT
+            echo "previous_initial_state=$previous_initial_state" >> $GITHUB_OUTPUT
             echo "previous_changed_to=$previous_changed_to" >> $GITHUB_OUTPUT
             echo "previous_timestamp=$previous_timestamp" >> $GITHUB_OUTPUT
             echo "has_previous_state=true" >> $GITHUB_OUTPUT
 
-            echo "Previous run processed: $previous_release_tag (changed to: $previous_changed_to at $previous_timestamp)"
+            echo "Previous run processed: $previous_release_tag (changed from: $previous_initial_state to: $previous_changed_to)"
           else
-            echo "::error:: No valid release-info.json found in previous artifact"
+            echo "⚠️ No valid release-info.json found in previous artifact"
             echo "has_previous_state=false" >> $GITHUB_OUTPUT
           fi
 
@@ -97,18 +109,19 @@ jobs:
         env:
           CURRENT_RELEASE: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
           PREVIOUS_RELEASE: ${{ steps.parse_previous_state.outputs.previous_release_tag }}
+          PREVIOUS_INITIAL_STATE: ${{ steps.parse_previous_state.outputs.previous_initial_state }}
           PREVIOUS_CHANGED_TO: ${{ steps.parse_previous_state.outputs.previous_changed_to }}
           HAS_PREVIOUS_STATE: ${{ steps.parse_previous_state.outputs.has_previous_state }}
         run: |
           should_skip=false
 
           if [ "$HAS_PREVIOUS_STATE" == "true" ] && [ "$CURRENT_RELEASE" == "$PREVIOUS_RELEASE" ]; then
-            if [ "$PREVIOUS_CHANGED_TO" == "published" ] || [ "$PREVIOUS_CHANGED_TO" == "none" ]; then
-              echo "::notice:: Release $CURRENT_RELEASE was already processed and published by this workflow"
+            if [ "$PREVIOUS_CHANGED_TO" == "published" ] || ([ "$PREVIOUS_INITIAL_STATE" == "published" ] && [ "$PREVIOUS_CHANGED_TO" == "none" ]); then
+              echo "⚠️ Release $CURRENT_RELEASE was already processed and published by this workflow"
               echo "This suggests the release was manually reverted to draft after being published"
               echo "Skipping to prevent duplicate processing"
 
-              echo "##::notice:: Workflow Skipped" >> $GITHUB_STEP_SUMMARY
+              echo "## ⚠️ Workflow Skipped" >> $GITHUB_STEP_SUMMARY
               echo "Release \`$CURRENT_RELEASE\` was already processed by this workflow." >> $GITHUB_STEP_SUMMARY
               echo "To force reprocessing, either:" >> $GITHUB_STEP_SUMMARY
               echo "- Use manual workflow dispatch" >> $GITHUB_STEP_SUMMARY
