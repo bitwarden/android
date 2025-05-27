@@ -106,7 +106,7 @@ class CredentialProviderProcessorImpl(
         if (!userState.activeAccount.isVaultUnlocked) {
             val authenticationAction = AuthenticationAction(
                 title = context.getString(R.string.unlock),
-                pendingIntent = intentManager.createCredentialUnlockPendingIntent(
+                pendingIntent = intentManager.createFido2UnlockPendingIntent(
                     action = UNLOCK_ACCOUNT_INTENT,
                     userId = userState.activeUserId,
                     requestCode = requestCode.getAndIncrement(),
@@ -178,7 +178,7 @@ class CredentialProviderProcessorImpl(
         val entryBuilder = CreateEntry
             .Builder(
                 accountName = accountName,
-                pendingIntent = intentManager.createCredentialProviderCreationPendingIntent(
+                pendingIntent = intentManager.createFido2CreationPendingIntent(
                     CREATE_CREDENTIAL_INTENT,
                     userId,
                     requestCode.getAndIncrement(),
