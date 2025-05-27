@@ -1178,6 +1178,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val cipherId = "cipherId-1234"
             val password = "password"
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.AddTotpLoginItem(
+                data = TotpData(
+                    uri = "uri",
+                    issuer = "issuer",
+                    accountName = "Name-1",
+                    secret = "secret",
+                    digits = 6,
+                    period = 30,
+                    algorithm = TotpData.CryptoHashAlgorithm.SHA_1,
+                ),
+            )
             val viewModel = createVaultItemListingViewModel()
             coEvery {
                 authRepository.validatePassword(password = password)
@@ -1187,8 +1198,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     VaultItemListingsAction.MasterPasswordRepromptSubmit(
                         password = password,
-                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
-                            cipherId = cipherId,
+                        masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
+                            id = cipherId,
+                            itemType = VaultItemListingState.DisplayItem.ItemType.Vault(
+                                type = CipherType.LOGIN,
+                            ),
                         ),
                     ),
                 )
@@ -1738,6 +1752,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = cipherId,
                         cipherType = CipherType.LOGIN,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -1903,7 +1918,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             createMockDisplayItemForCipher(
                                 number = 1,
                                 secondSubtitleTestTag = "PasskeySite",
-                                isTotp = true,
                             ),
                         ),
                         displayFolderList = emptyList(),

@@ -88,10 +88,7 @@ fun VaultItemListingContent(
         BitwardenMasterPasswordDialog(
             onConfirmClick = { password ->
                 masterPasswordRepromptData = null
-                masterPasswordRepromptSubmit(
-                    password,
-                    data,
-                )
+                masterPasswordRepromptSubmit(password, data)
             },
             onDismissRequest = {
                 masterPasswordRepromptData = null
@@ -213,13 +210,14 @@ fun VaultItemListingContent(
                     supportingLabelTestTag = it.subtitleTestTag,
                     optionsTestTag = it.optionsTestTag,
                     onClick = {
-                        if (it.isTotp && it.shouldShowMasterPasswordReprompt) {
-                            masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
-                                cipherId = it.id,
-                            )
-                        } else if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
+                        if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
                             masterPasswordRepromptData = MasterPasswordRepromptData.Autofill(
                                 cipherId = it.id,
+                            )
+                        } else if (it.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
+                                id = it.id,
+                                itemType = it.itemType,
                             )
                         } else {
                             vaultItemClick(it.id, it.itemType)

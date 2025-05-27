@@ -22,6 +22,7 @@ fun CipherView.toOverflowActions(
                 ListingItemOverflowAction.VaultAction.ViewClick(
                     cipherId = cipherId,
                     cipherType = this.type,
+                    requiresPasswordReprompt = hasMasterPassword,
                 ),
                 ListingItemOverflowAction.VaultAction.EditClick(
                     cipherId = cipherId,

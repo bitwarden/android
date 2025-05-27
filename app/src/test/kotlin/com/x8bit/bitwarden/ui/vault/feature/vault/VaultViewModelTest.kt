@@ -60,6 +60,7 @@ import io.mockk.mockkStatic
 import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -1683,24 +1684,143 @@ class VaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `OverflowOptionClick Vault ViewClick should emit NavigateToUrl`() = runTest {
-        val cipherId = "cipherId-9876"
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.ViewClick(
-                        cipherId = cipherId,
-                        cipherType = CipherType.LOGIN,
+    fun `OverflowOptionClick Vault ViewClick without reprompt should emit NavigateToUrl`() =
+        runTest {
+            val cipherId = "cipherId-9876"
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.OverflowOptionClick(
+                        ListingItemOverflowAction.VaultAction.ViewClick(
+                            cipherId = cipherId,
+                            cipherType = CipherType.LOGIN,
+                            requiresPasswordReprompt = false,
+                        ),
                     ),
+                )
+                assertEquals(
+                    VaultEvent.NavigateToVaultItem(
+                        itemId = cipherId,
+                        type = VaultItemCipherType.LOGIN,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
+        runTest {
+            val password = "password"
+            val error = Throwable("Fail!")
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Error(error = error)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.OverflowMasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                            requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                            error = error,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Success with an invalid password should show an invalid password dialog`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = false)
+
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(
+                    DEFAULT_STATE,
+                    awaitItem(),
+                )
+
+                viewModel.trySendAction(
+                    VaultAction.OverflowMasterPasswordRepromptSubmit(
+                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = password,
+                            requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
+                        ),
+                        password = password,
+                    ),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialog = VaultState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverflowMasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
+        runTest {
+            val password = "password"
+            val cipherId = "cipherId"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                VaultAction.OverflowMasterPasswordRepromptSubmit(
+                    overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                        requiresPasswordReprompt = true,
+                        cipherId = cipherId,
+                    ),
+                    password = password,
                 ),
             )
-            assertEquals(
-                VaultEvent.NavigateToVaultItem(itemId = cipherId, type = VaultItemCipherType.LOGIN),
-                awaitItem(),
-            )
+
+            verify(exactly = 1) {
+                clipboardManager.setText(
+                    text = password,
+                    toastDescriptorOverride = R.string.password.asText(),
+                )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                )
+            }
         }
-    }
 
     @Test
     fun `MasterPasswordRepromptSubmit for a request Error should show a generic error dialog`() =
@@ -1720,10 +1840,12 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAction.MasterPasswordRepromptSubmit(
-                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
-                            requiresPasswordReprompt = true,
-                            cipherId = "cipherId",
+                        item = VaultState.ViewState.VaultItem.Login(
+                            id = "cipherId",
+                            name = "name".asText(),
+                            shouldShowMasterPasswordReprompt = true,
+                            username = null,
+                            overflowOptions = persistentListOf(),
                         ),
                         password = password,
                     ),
@@ -1760,10 +1882,11 @@ class VaultViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAction.MasterPasswordRepromptSubmit(
-                        overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
-                            password = password,
-                            requiresPasswordReprompt = true,
-                            cipherId = "cipherId",
+                        item = VaultState.ViewState.VaultItem.Card(
+                            id = "cipherId",
+                            name = "name".asText(),
+                            shouldShowMasterPasswordReprompt = true,
+                            overflowOptions = persistentListOf(),
                         ),
                         password = password,
                     ),
@@ -1786,31 +1909,29 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
         runTest {
             val password = "password"
-            val cipherId = "cipherId"
+            val item = VaultState.ViewState.VaultItem.Identity(
+                id = "cipherId",
+                name = "name".asText(),
+                shouldShowMasterPasswordReprompt = true,
+                fullName = null,
+                overflowOptions = persistentListOf(),
+            )
             coEvery {
                 authRepository.validatePassword(password = password)
             } returns ValidatePasswordResult.Success(isValid = true)
 
             val viewModel = createViewModel()
 
-            viewModel.trySendAction(
-                VaultAction.MasterPasswordRepromptSubmit(
-                    overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    VaultAction.MasterPasswordRepromptSubmit(
+                        item = item,
                         password = password,
-                        requiresPasswordReprompt = true,
-                        cipherId = cipherId,
                     ),
-                    password = password,
-                ),
-            )
-
-            verify(exactly = 1) {
-                clipboardManager.setText(
-                    text = password,
-                    toastDescriptorOverride = R.string.password.asText(),
                 )
-                organizationEventManager.trackEvent(
-                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                assertEquals(
+                    VaultEvent.NavigateToVaultItem(itemId = item.id, type = item.type),
+                    awaitItem(),
                 )
             }
         }
