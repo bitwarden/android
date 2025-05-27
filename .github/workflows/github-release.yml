@@ -55,7 +55,9 @@ jobs:
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           BRANCH_PROTECTION_TYPE: ${{ inputs.branch-protection-type }}
         run: |
-          release_branch=$(gh run view $ARTIFACT_RUN_ID --json headBranch -q .headBranch)
+          workflow_data=$(gh run view $ARTIFACT_RUN_ID --json headBranch,workflowName)
+          release_branch=$(echo "$workflow_data" | jq -r .headBranch)
+          workflow_name=$(echo "$workflow_data" | jq -r .workflowName)
 
           case "$BRANCH_PROTECTION_TYPE" in
             "Branch Name")
@@ -78,6 +80,22 @@ jobs:
           esac
 
           echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
+          echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
+
+          case "$workflow_name" in
+            *"Password Manager"*)
+              echo "releasing_bwpm=true" >> $GITHUB_OUTPUT
+              echo "app_name=Password Manager" >> $GITHUB_OUTPUT
+              ;;
+            *"Authenticator"*)
+              echo "releasing_bwa=true" >> $GITHUB_OUTPUT
+              echo "app_name=Authenticator" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "::error::Unknown app in workflow name: $workflow_name" >> $GITHUB_STEP_SUMMARY
+              exit 1
+              ;;
+          esac
 
       - name: Download artifacts
         env:
@@ -94,17 +112,32 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
-        with:
-          tag_name: "v${{ inputs.version-name }}"
-          name: "${{ inputs.version-name }} (${{ inputs.version-number }})"
-          prerelease: ${{ inputs.prerelease }}
-          draft: ${{ inputs.draft }}
-          make_latest: ${{ inputs.make-latest }}
-          target_commitish: ${{ steps.get_release_branch.outputs.release_branch }}
-          generate_release_notes: true
-          files: |
-            artifacts/**/*
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _VERSION_NAME: ${{ inputs.version-name }}
+          _VERSION_NUMBER: ${{ inputs.version-number }}
+          _PRERELEASE: ${{ inputs.prerelease }}
+          _DRAFT: ${{ inputs.draft }}
+          _MAKE_LATEST: ${{ inputs.make-latest }}
+          _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
+          _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
+        run: |
+          echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
+          release_url=$(gh release create "v$_VERSION_NAME" \
+            --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
+            --target "$_TARGET_COMMIT" \
+            --generate-notes \
+            --draft \
+            $ARTIFACTS_PATH/*/*)
+
+          echo "✅ Release created: $release_url"
+
+          # Get release info for outputs
+          release_data=$(gh release view "v$_VERSION_NAME" --json id)
+          release_id=$(echo "$release_data" | jq -r .id)
+
+          echo "id=$release_id" >> $GITHUB_OUTPUT
+          echo "url=$release_url" >> $GITHUB_OUTPUT
 
       - name: Update Release Description
         env:
