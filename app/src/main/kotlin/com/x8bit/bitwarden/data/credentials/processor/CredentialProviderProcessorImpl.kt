@@ -130,6 +130,7 @@ class CredentialProviderProcessorImpl(
                         userId = userState.activeUserId,
                         BeginGetCredentialRequest.asBundle(request),
                     ),
+                    originValidated = true,
                 )
                 .onSuccess { callback.onResult(BeginGetCredentialResponse(credentialEntries = it)) }
                 .onFailure { callback.onError(GetCredentialUnknownException(it.message)) }

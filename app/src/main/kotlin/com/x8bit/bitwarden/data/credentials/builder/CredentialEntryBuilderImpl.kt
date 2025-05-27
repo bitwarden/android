@@ -10,6 +10,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.credentials.processor.GET_PASSWORD_INTENT
 import com.x8bit.bitwarden.data.credentials.util.setBiometricPromptDataIfSupported
@@ -46,7 +47,7 @@ class CredentialEntryBuilderImpl(
 
     override fun buildPasswordCredentialEntries(
         userId: String,
-        passwordCredentialAutofillViews: List<CipherView>,
+        passwordCredentialAutofillViews: List<AutofillCipher.Login>,
         beginGetPasswordCredentialOptions: List<BeginGetPasswordOption>,
         isUserVerified: Boolean,
     ): List<PasswordCredentialEntry> = beginGetPasswordCredentialOptions
@@ -99,7 +100,7 @@ class CredentialEntryBuilderImpl(
                 .build()
         }
 
-    private fun List<CipherView>.toPasswordCredentialEntryList(
+    private fun List<AutofillCipher.Login>.toPasswordCredentialEntryList(
         userId: String,
         option: BeginGetPasswordOption,
         isUserVerified: Boolean,
@@ -108,13 +109,12 @@ class CredentialEntryBuilderImpl(
             PasswordCredentialEntry
                 .Builder(
                     context = context,
-                    username = cipherView.login?.username
-                        ?: context.getString(R.string.no_username),
+                    username = cipherView.username,
                     pendingIntent = intentManager
                         .createPasswordGetCredentialPendingIntent(
                             action = GET_PASSWORD_INTENT,
                             userId = userId,
-                            cipherId = cipherView.id,
+                            cipherId = cipherView.cipherId,
                             isUserVerified = isUserVerified,
                             requestCode = Random.nextInt(),
                         ),
@@ -122,7 +122,7 @@ class CredentialEntryBuilderImpl(
                 )
                 .setIcon(
                     getCredentialEntryIcon(
-                        isPasskey = true,
+                        isPassword = true,
                     ),
                 )
                 .also { builder ->

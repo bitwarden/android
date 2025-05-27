@@ -7,6 +7,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginView
+import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 
 /**
  * Builder for credential entries.
@@ -28,7 +29,7 @@ interface CredentialEntryBuilder {
      */
     fun buildPasswordCredentialEntries(
         userId: String,
-        passwordCredentialAutofillViews: List<CipherView>,
+        passwordCredentialAutofillViews: List<AutofillCipher.Login>,
         beginGetPasswordCredentialOptions: List<BeginGetPasswordOption>,
         isUserVerified: Boolean,
     ): List<PasswordCredentialEntry>

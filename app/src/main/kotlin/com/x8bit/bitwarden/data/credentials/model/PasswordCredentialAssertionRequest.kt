@@ -10,11 +10,10 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
- * Models a credential authentication request parsed from the launching intent.
+ * Models a Password credential authentication request parsed from the launching intent.
  *
  * @property userId ID of the user requesting credential authentication.
  * @property cipherId ID of the cipher to be authenticated against.
- * @property credentialId ID of the credential to authenticate.
  * @property isUserPreVerified Whether the user has already been verified by the OS biometric
  * prompt.
  * @property requestData Provider request data in the form of a [Bundle].
@@ -23,7 +22,6 @@ import kotlinx.parcelize.Parcelize
 data class PasswordCredentialAssertionRequest(
     val userId: String,
     val cipherId: String,
-    val credentialId: String,
     val isUserPreVerified: Boolean,
     private val requestData: Bundle,
 ) : Parcelable {

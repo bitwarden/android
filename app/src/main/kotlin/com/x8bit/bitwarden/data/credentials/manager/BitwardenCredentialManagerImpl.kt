@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.GetPasswordOption
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetPasswordOption
@@ -19,16 +20,17 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
+import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
@@ -145,6 +147,21 @@ class BitwardenCredentialManagerImpl(
             )
     }
 
+    override suspend fun authenticatePasswordCredential(
+        userId: String,
+        callingAppInfo: CallingAppInfo,
+        request: GetPasswordOption,
+        selectedCipherView: CipherView,
+    ): PasswordCredentialAssertionResult {
+
+        //TODO verify that app is allowed to access web credentials
+
+        val login = selectedCipherView.login ?: return PasswordCredentialAssertionResult.Error
+
+        return PasswordCredentialAssertionResult.Success(login)
+
+    }
+
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
 
@@ -171,6 +188,7 @@ class BitwardenCredentialManagerImpl(
 
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
+        originValidated: Boolean,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherViews = vaultRepository
             .ciphersStateFlow
@@ -185,27 +203,29 @@ class BitwardenCredentialManagerImpl(
                 }
             }
 
-        val fido2CredentialResult = getCredentialsRequest
-            .beginGetPublicKeyCredentialOptions
-            .toPublicKeyCredentialEntries(
-                userId = getCredentialsRequest.userId,
-                cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
-            )
-            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+        val fido2CredentialResult = if (originValidated) {
+            getCredentialsRequest
+                .beginGetPublicKeyCredentialOptions
+                .toPublicKeyCredentialEntries(
+                    userId = getCredentialsRequest.userId,
+                    cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
+                )
+                .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+        } else null
 
         val passwordCredentialResult = getCredentialsRequest
             .beginGetPasswordOption
             .toPasswordCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherViewsWithPasswordCredentials = cipherViews.filter { it.isActiveWithPasswordCredentials },
+                callingAppInfo = getCredentialsRequest.callingAppInfo,
             )
             .onFailure { Timber.e(it, "Failed to get Password credential entries.") }
 
-        return@withContext if (fido2CredentialResult.isSuccess || passwordCredentialResult.isSuccess) {
-            ((fido2CredentialResult.getOrNull()
+        return@withContext if (fido2CredentialResult?.isSuccess == true || passwordCredentialResult.isSuccess) {
+            ((fido2CredentialResult?.getOrNull()
                 ?: emptyList()) + (passwordCredentialResult.getOrNull() ?: emptyList())).asSuccess()
         } else {
-            val exception = fido2CredentialResult.exceptionOrNull()
+            val exception = fido2CredentialResult?.exceptionOrNull()
                 ?: passwordCredentialResult.exceptionOrNull()
             exception?.asFailure() ?: Throwable("Failed to get credential entries.").asFailure()
         }
@@ -220,6 +240,8 @@ class BitwardenCredentialManagerImpl(
         userId: String,
         cipherViewsWithPublicKeyCredentials: List<CipherView>,
     ): Result<List<CredentialEntry>> {
+        if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
+
         val relyingPartyIds = this
             .mapNotNull { getPasskeyAssertionOptionsOrNull(it.requestJson)?.relyingPartyId }
             .distinct()
@@ -339,14 +361,23 @@ class BitwardenCredentialManagerImpl(
             },
         )
 
-    private fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
-        cipherViewsWithPasswordCredentials: List<CipherView>,
+        callingAppInfo: CallingAppInfo?,
     ): Result<List<CredentialEntry>> {
+        if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
+
+        //TODO info/text/logging
+        if(callingAppInfo == null) return Throwable().asFailure()
+
+        val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
+            callingAppInfo.packageName.toAndroidAppUriString()
+        )
+
         return credentialEntryBuilder
             .buildPasswordCredentialEntries(
                 userId = userId,
-                passwordCredentialAutofillViews = cipherViewsWithPasswordCredentials,
+                passwordCredentialAutofillViews = ciphers,
                 beginGetPasswordCredentialOptions = this,
                 isUserVerified = isUserVerified,
             )
