@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.GetPasswordOption
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -10,6 +11,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
 /**
@@ -57,6 +59,16 @@ interface BitwardenCredentialManager {
     ): Fido2CredentialAssertionResult
 
     /**
+     * Authenticate a Password credential against a cipher in the users vault.
+     */
+    suspend fun authenticatePasswordCredential(
+        userId: String,
+        callingAppInfo: CallingAppInfo,
+        request: GetPasswordOption,
+        selectedCipherView: CipherView,
+    ): PasswordCredentialAssertionResult
+
+    /**
      * Whether or not the user has authentication attempts remaining.
      */
     fun hasAuthenticationAttemptsRemaining(): Boolean
@@ -95,5 +107,6 @@ interface BitwardenCredentialManager {
      */
     suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
+        originValidated: Boolean,
     ): Result<List<CredentialEntry>>
 }

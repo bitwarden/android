@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.credentials.manager
 
 import android.util.Base64
 import androidx.credentials.CreatePublicKeyCredentialRequest
+import androidx.credentials.GetPasswordOption
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetPasswordOption
@@ -26,13 +27,13 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
@@ -150,6 +151,21 @@ class BitwardenCredentialManagerImpl(
             )
     }
 
+    override suspend fun authenticatePasswordCredential(
+        userId: String,
+        callingAppInfo: CallingAppInfo,
+        request: GetPasswordOption,
+        selectedCipherView: CipherView,
+    ): PasswordCredentialAssertionResult {
+
+        //TODO verify that app is allowed to access web credentials
+
+        val login = selectedCipherView.login ?: return PasswordCredentialAssertionResult.Error
+
+        return PasswordCredentialAssertionResult.Success(login)
+
+    }
+
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
 
@@ -176,6 +192,7 @@ class BitwardenCredentialManagerImpl(
 
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
+        originValidated: Boolean,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherListViews = vaultRepository
             .decryptCipherListResultStateFlow
@@ -205,12 +222,15 @@ class BitwardenCredentialManagerImpl(
             }
             .orEmpty()
 
-        val passkeyCredentialResult = getCredentialsRequest
-            .beginGetPublicKeyCredentialOptions
-            .toPublicKeyCredentialEntries(
-                userId = getCredentialsRequest.userId,
-            )
-            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+        val passkeyCredentialResult = if (originValidated) {
+            getCredentialsRequest
+                .beginGetPublicKeyCredentialOptions
+                .toPublicKeyCredentialEntries(
+                    userId = getCredentialsRequest.userId,
+
+                )
+                .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+        } else null
 
         if (passkeyCredentialResult.isFailure && passwordCredentialResult.isNotEmpty()) {
             Result.success(passwordCredentialResult)
@@ -227,6 +247,7 @@ class BitwardenCredentialManagerImpl(
         userId: String,
     ): Result<List<CredentialEntry>> {
         if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
+
         val assertionOptions = this
             .mapNotNull { getPasskeyAssertionOptionsOrNull(it.requestJson) }
             .ifEmpty {
@@ -382,7 +403,7 @@ class BitwardenCredentialManagerImpl(
             },
         )
 
-    private fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
         cipherListViews: List<CipherListView>,
     ): List<CredentialEntry> {
