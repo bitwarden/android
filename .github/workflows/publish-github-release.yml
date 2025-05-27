@@ -1,0 +1,11 @@
+name: Publish GitHub Release as newest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  stub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: stub
+        run: echo "This is a stub job to trigger the workflow."
