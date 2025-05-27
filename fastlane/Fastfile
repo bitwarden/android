@@ -267,12 +267,18 @@ platform :android do
 
   desc "Get latest published version"
   lane :getLatestVersion do |options|
+        # Suppress analytics and metadata
+        ENV["FASTLANE_SKIP_UPDATE_CHECK"] = "1"
+        ENV["FASTLANE_HIDE_CHANGELOG"] = "1"
+
       release_name = google_play_track_release_names(
         package_name: "com.x8bit.bitwarden",
         track: "production",
         json_key: options[:serviceCredentialsFile]
-      ).first
-      puts release_name
+      )
+
+      newest_version = release_name.first.to_s.strip
+      UI.message(newest_version)  # Direct output without metadata
   end
 
   # Authenticator
