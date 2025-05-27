@@ -110,7 +110,9 @@ jobs:
               exit 1
             fi
 
-            bundle exec fastlane updateReleaseNotes
+            bundle exec fastlane updateReleaseNotes \
+              releaseNotes: "$RELEASE_NOTES" \
+              versionCode:"$VERSION_CODE"
 
             # bundle exec fastlane promoteToProduction \
             #   versionCode:"$VERSION_CODE" \
