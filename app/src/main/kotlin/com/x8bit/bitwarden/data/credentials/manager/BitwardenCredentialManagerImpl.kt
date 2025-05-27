@@ -26,6 +26,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithCopyablePassword
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult

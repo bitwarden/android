@@ -121,6 +121,45 @@ class CredentialEntryBuilderImpl(
                 .build()
         }
 
+    private fun List<CipherView>.toPasswordCredentialEntryList(
+        userId: String,
+        option: BeginGetPasswordOption,
+        isUserVerified: Boolean,
+    ): List<PasswordCredentialEntry> = this
+        .map { cipherView ->
+            PasswordCredentialEntry
+                .Builder(
+                    context = context,
+                    username = cipherView.login?.username
+                        ?: context.getString(R.string.no_username),
+                    pendingIntent = intentManager
+                        .createPasswordGetCredentialPendingIntent(
+                            action = GET_PASSWORD_INTENT,
+                            userId = userId,
+                            cipherId = cipherView.id,
+                            isUserVerified = isUserVerified,
+                            requestCode = Random.nextInt(),
+                        ),
+                    beginGetPasswordOption = option,
+                )
+                .setIcon(
+                    getCredentialEntryIcon(
+                        isPasskey = true,
+                    ),
+                )
+                .also { builder ->
+                    if (!isUserVerified) {
+                        builder.setBiometricPromptDataIfSupported(
+                            cipher = biometricsEncryptionManager
+                                .getOrCreateCipher(userId),
+                            isSingleTapAuthEnabled = featureFlagManager
+                                .getFeatureFlag(FlagKey.SingleTapPasswordAuthentication),
+                        )
+                    }
+                }
+                .build()
+        }
+
     // TODO: [PM-20176] Enable web icons in credential entries
     // Leave web icons disabled until CredentialManager TransactionTooLargeExceptions
     // are addressed. See https://issuetracker.google.com/issues/355141766 for details.
