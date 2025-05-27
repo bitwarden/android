@@ -159,7 +159,7 @@ jobs:
         if: steps.check_already_processed.outputs.should_skip == 'false'
         id: appstore_version
         run: |
-          appstore_version=$(bundle exec fastlane run getLatestVersion \
+          appstore_version=$(bundle exec fastlane getLatestVersion \
             serviceCredentialFile:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }})
 
           echo "Latest version on Google Play Store: $appstore_version"
