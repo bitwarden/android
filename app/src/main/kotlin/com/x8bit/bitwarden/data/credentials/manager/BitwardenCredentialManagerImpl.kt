@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.credentials.manager
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -21,6 +22,7 @@ import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -182,18 +184,32 @@ class BitwardenCredentialManagerImpl(
                     else -> emptyList()
                 }
             }
-            .filter { it.isActiveWithFido2Credentials }
-            .ifEmpty {
-                return@withContext emptyList<CredentialEntry>().asSuccess()
-            }
 
-        getCredentialsRequest
+        val fido2CredentialResult = getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherViewsWithPublicKeyCredentials = cipherViews,
+                cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
             )
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+
+        val passwordCredentialResult = getCredentialsRequest
+            .beginGetPasswordOption
+            .toPasswordCredentialEntries(
+                userId = getCredentialsRequest.userId,
+                cipherViewsWithPasswordCredentials = cipherViews.filter { it.isActiveWithPasswordCredentials },
+            )
+            .onFailure { Timber.e(it, "Failed to get Password credential entries.") }
+
+        return@withContext if (fido2CredentialResult.isSuccess || passwordCredentialResult.isSuccess) {
+            ((fido2CredentialResult.getOrNull()
+                ?: emptyList()) + (passwordCredentialResult.getOrNull() ?: emptyList())).asSuccess()
+        } else {
+            val exception = fido2CredentialResult.exceptionOrNull()
+                ?: passwordCredentialResult.exceptionOrNull()
+            exception?.asFailure() ?: Throwable("Failed to get credential entries.").asFailure()
+        }
+
     }
 
     private fun getPasskeyAssertionOptionsOrNull(
@@ -322,6 +338,20 @@ class BitwardenCredentialManagerImpl(
                 Fido2RegisterCredentialResult.Error.InternalError
             },
         )
+
+    private fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+        userId: String,
+        cipherViewsWithPasswordCredentials: List<CipherView>,
+    ): Result<List<CredentialEntry>> {
+        return credentialEntryBuilder
+            .buildPasswordCredentialEntries(
+                userId = userId,
+                passwordCredentialAutofillViews = cipherViewsWithPasswordCredentials,
+                beginGetPasswordCredentialOptions = this,
+                isUserVerified = isUserVerified,
+            )
+            .asSuccess()
+    }
 
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
         getPasskeyAssertionOptionsOrNull(requestJson)

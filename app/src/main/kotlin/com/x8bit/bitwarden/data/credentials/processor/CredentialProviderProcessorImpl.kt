@@ -41,9 +41,10 @@ import java.time.Clock
 import java.util.concurrent.atomic.AtomicInteger
 import javax.crypto.Cipher
 
-private const val CREATE_CREDENTIAL_INTENT =
-    "com.x8bit.bitwarden.credentials.ACTION_CREATE_CREDENTIAL"
-const val GET_CREDENTIAL_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_CREDENTIAL"
+private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSKEY"
+const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSKEY"
+private const val CREATE_PASSWORD_INTENT = "com.x8bit.bitwarden.credentials.ACTION_CREATE_PASSWORD"
+const val GET_PASSWORD_INTENT = "com.x8bit.bitwarden.credentials.ACTION_GET_PASSWORD"
 const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.credentials.ACTION_UNLOCK_ACCOUNT"
 
 /**
@@ -179,7 +180,7 @@ class CredentialProviderProcessorImpl(
             .Builder(
                 accountName = accountName,
                 pendingIntent = intentManager.createFido2CreationPendingIntent(
-                    CREATE_CREDENTIAL_INTENT,
+                    CREATE_PASSKEY_INTENT,
                     userId,
                     requestCode.getAndIncrement(),
                 ),

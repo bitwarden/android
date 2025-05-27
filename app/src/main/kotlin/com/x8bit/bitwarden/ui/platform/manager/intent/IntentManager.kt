@@ -166,6 +166,7 @@ interface IntentManager {
         action: String,
         userId: String,
         cipherId: String?,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent
     /**

@@ -371,12 +371,14 @@ class IntentManagerImpl(
         action: String,
         userId: String,
         cipherId: String?,
+        isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent {
         val intent = Intent(action)
             .setPackage(context.packageName)
             .putExtra(EXTRA_KEY_USER_ID, userId)
             .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
+            .putExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, isUserVerified)
 
         return PendingIntent.getActivity(
             /* context = */ context,

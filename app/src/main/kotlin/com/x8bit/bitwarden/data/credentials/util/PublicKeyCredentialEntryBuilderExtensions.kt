@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.data.credentials.util
 
 import android.os.Build
+import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -15,6 +16,24 @@ fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
     cipher: Cipher?,
     isSingleTapAuthEnabled: Boolean,
 ): PublicKeyCredentialEntry.Builder =
+    if (!isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) &&
+        cipher != null &&
+        isSingleTapAuthEnabled
+    ) {
+        setBiometricPromptData(
+            biometricPromptData = buildPromptDataWithCipher(cipher),
+        )
+    } else {
+        this
+    }
+
+/**
+ * Sets the biometric prompt data on the [PasswordCredentialEntry.Builder] if supported.
+ */
+fun PasswordCredentialEntry.Builder.setBiometricPromptDataIfSupported(
+    cipher: Cipher?,
+    isSingleTapAuthEnabled: Boolean,
+): PasswordCredentialEntry.Builder =
     if (!isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) &&
         cipher != null &&
         isSingleTapAuthEnabled
