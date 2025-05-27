@@ -5,7 +5,8 @@ on:
 
 jobs:
   stub:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    name: Stub
     steps:
-      - name: stub
+      - name: Stub
         run: echo "This is a stub job to trigger the workflow."
