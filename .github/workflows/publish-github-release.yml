@@ -65,6 +65,7 @@ jobs:
         with:
           name: release-info
           run-id: ${{ steps.get_previous_run.outputs.previous_run_id }}
+          github-token: ${{ github.token }}
 
       - name: Parse previous state
         id: parse_previous_state
@@ -76,7 +77,7 @@ jobs:
             previous_changed_to=$(jq -r '.changed_to_state // empty' release-info.json)
 
             if [ -z "$previous_release_tag" ] || [ -z "$previous_initial_state" ] || [ -z "$previous_changed_to" ]; then
-              echo "⚠️ Invalid release-info.json format"
+              echo "::error:: Invalid release-info.json format"
               exit 1
             fi
 
@@ -87,7 +88,7 @@ jobs:
 
             echo "Previous run processed: $previous_release_tag (changed to: $previous_changed_to at $previous_timestamp)"
           else
-            echo "⚠️ No valid release-info.json found in previous artifact"
+            echo "::error:: No valid release-info.json found in previous artifact"
             echo "has_previous_state=false" >> $GITHUB_OUTPUT
           fi
 
@@ -103,11 +104,11 @@ jobs:
 
           if [ "$HAS_PREVIOUS_STATE" == "true" ] && [ "$CURRENT_RELEASE" == "$PREVIOUS_RELEASE" ]; then
             if [ "$PREVIOUS_CHANGED_TO" == "published" ] || [ "$PREVIOUS_CHANGED_TO" == "none" ]; then
-              echo "⚠️ Release $CURRENT_RELEASE was already processed and published by this workflow"
+              echo "::notice:: Release $CURRENT_RELEASE was already processed and published by this workflow"
               echo "This suggests the release was manually reverted to draft after being published"
               echo "Skipping to prevent duplicate processing"
 
-              echo "## ⚠️ Workflow Skipped" >> $GITHUB_STEP_SUMMARY
+              echo "##::notice:: Workflow Skipped" >> $GITHUB_STEP_SUMMARY
               echo "Release \`$CURRENT_RELEASE\` was already processed by this workflow." >> $GITHUB_STEP_SUMMARY
               echo "To force reprocessing, either:" >> $GITHUB_STEP_SUMMARY
               echo "- Use manual workflow dispatch" >> $GITHUB_STEP_SUMMARY
