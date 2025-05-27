@@ -148,7 +148,7 @@ jobs:
           mkdir -p ${{ github.workspace }}/secrets
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+            --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
       - name: Check released version
         if: steps.check_already_processed.outputs.should_skip == 'false'
