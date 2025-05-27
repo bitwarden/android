@@ -210,7 +210,7 @@ jobs:
             changed_to_state="none"
           fi
 
-            json=$(jq -n \
+          json=$(jq -n \
             --arg release_tag "$release_tag" \
             --arg initial_state "$initial_state" \
             --arg changed_to_state "$changed_to_state" \
