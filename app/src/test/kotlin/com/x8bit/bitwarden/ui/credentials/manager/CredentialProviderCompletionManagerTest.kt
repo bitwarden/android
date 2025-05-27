@@ -10,7 +10,7 @@ import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.ui.util.asText
-import com.x8bit.bitwarden.data.credentials.processor.GET_CREDENTIAL_INTENT
+import com.x8bit.bitwarden.data.credentials.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
@@ -220,7 +220,7 @@ class CredentialProviderCompletionManagerTest {
 
             every {
                 mockIntentManager.createFido2GetCredentialPendingIntent(
-                    action = GET_CREDENTIAL_INTENT,
+                    action = GET_PASSKEY_INTENT,
                     userId = "mockUserId",
                     credentialId = mockFido2AutofillView.credentialId.toString(),
                     cipherId = mockFido2AutofillView.cipherId,

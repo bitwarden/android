@@ -328,7 +328,7 @@ sealed class RootNavState : Parcelable {
     ) : RootNavState()
 
     /**
-     * App should perform FIDO 2 credential assertion for the user.
+     * App should perform Password credential assertion for the user.
      */
     @Parcelize
     data class VaultUnlockedForPasswordAssertion(

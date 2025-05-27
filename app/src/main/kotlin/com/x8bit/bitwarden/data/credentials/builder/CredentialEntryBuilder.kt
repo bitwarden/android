@@ -5,8 +5,6 @@ import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PasswordCredentialEntry
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.bitwarden.vault.CipherView
-import com.bitwarden.vault.LoginView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 
 /**
