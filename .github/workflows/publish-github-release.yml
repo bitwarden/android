@@ -153,14 +153,14 @@ jobs:
           mkdir -p ${{ github.workspace }}/secrets
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+            --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
 
       - name: Check released version
         if: steps.check_already_processed.outputs.should_skip == 'false'
         id: appstore_version
         run: |
           appstore_version=$(bundle exec fastlane android getLatestVersion \
-            serviceCredentialsFile:${{ github.workspace }}/secrets/authenticator_play_store-creds.json }})
+            serviceCredentialsFile:${{ github.workspace }}/secrets/play_creds.json }})
 
           echo "Latest version on Google Play Store: $appstore_version"
           echo "appstore_version=$appstore_version" >> $GITHUB_OUTPUT
