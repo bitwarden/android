@@ -50,7 +50,6 @@ jobs:
         run: |
           workflow_name="publish-github-release.yml"
 
-          Get the last successful scheduled run ID
           previous_run_id=$(gh run list --workflow=$workflow_name  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
 
           if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
