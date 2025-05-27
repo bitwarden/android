@@ -267,12 +267,12 @@ platform :android do
 
   desc "Get latest published version"
   lane :getLatestVersion do |options|
-      version_codes = google_play_track_version_codes(
+      release_names = google_play_track_release_names(
         package_name: "com.x8bit.bitwarden",
         track: "production",
         json_key: options[:serviceCredentialsFile]
       )
-      puts version_codes.max
+      puts release_names
   end
 
   # Authenticator
