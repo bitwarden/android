@@ -81,11 +81,6 @@ jobs:
             previous_initial_state=$(jq -r '.initial_state // empty' release-info.json)
             previous_changed_to=$(jq -r '.changed_to_state // empty' release-info.json)
 
-            if [ -z "$previous_release_tag" ] || [ -z "$previous_initial_state" ] || [ -z "$previous_changed_to" ]; then
-              echo "::error::Invalid release-info.json format"
-              exit 1
-            fi
-
             echo "previous_release_tag=$previous_release_tag" >> $GITHUB_OUTPUT
             echo "previous_initial_state=$previous_initial_state" >> $GITHUB_OUTPUT
             echo "previous_changed_to=$previous_changed_to" >> $GITHUB_OUTPUT
