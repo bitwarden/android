@@ -160,7 +160,7 @@ jobs:
         id: appstore_version
         run: |
           appstore_version=$(bundle exec fastlane android getLatestVersion \
-            serviceCredentialsFile:${{ github.workspace }}/secrets/play_creds.json }})
+            serviceCredentialsFile:${{ github.workspace }}/secrets/play_creds.json }} | tail -n 1)
 
           echo "Latest version on Google Play Store: $appstore_version"
           echo "appstore_version=$appstore_version" >> $GITHUB_OUTPUT
