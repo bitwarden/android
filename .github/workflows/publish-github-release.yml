@@ -134,6 +134,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
+      - name: Configure Ruby
+        if: steps.check_already_processed.outputs.should_skip == 'false'
+        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        if: steps.check_already_processed.outputs.should_skip == 'false'
+        run: |
+          gem install bundler:2.2.27
+
       - name: Download Play Store credentials
         if: steps.check_already_processed.outputs.should_skip == 'false'
         env:
