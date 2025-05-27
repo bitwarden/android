@@ -43,24 +43,24 @@ jobs:
       # This is done to prevent the workflow from publishing a release that was already published,
       # but then deleted and reverted to draft for any reason.
       # It ensures the workflow does not process the same release multiple times if it was reverted.
-      # - name: Get previous run ID
-      #   id: get_previous_run
-      #   env:
-      #     GH_TOKEN: ${{ github.token }}
-      #   run: |
-      #     workflow_name="publish-github-release.yml"
+      - name: Get previous run ID
+        id: get_previous_run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          workflow_name="publish-github-release.yml"
 
-      #     Get the last successful scheduled run ID
-      #     previous_run_id=$(gh run list --workflow=$workflow_name  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          Get the last successful scheduled run ID
+          previous_run_id=$(gh run list --workflow=$workflow_name  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
 
-      #     if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
-      #       echo "Found previous successful scheduled run: $previous_run_id"
-      #       echo "previous_run_id=$previous_run_id" >> $GITHUB_OUTPUT
-      #       echo "has_previous_run=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "No previous successful scheduled run found"
-      #       echo "has_previous_run=false" >> $GITHUB_OUTPUT
-      #     fi
+          if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
+            echo "Found previous successful scheduled run: $previous_run_id"
+            echo "previous_run_id=$previous_run_id" >> $GITHUB_OUTPUT
+            echo "has_previous_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "No previous successful scheduled run found"
+            echo "has_previous_run=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Download previous run state
         id: previous_state
