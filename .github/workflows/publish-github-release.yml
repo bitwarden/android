@@ -78,8 +78,6 @@ jobs:
         run: |
           if [ -f "release-info.json" ]; then
 
-            fromJSON(...)
-
             previous_release_tag=$(jq -r '.release_tag // empty' release-info.json)
             previous_initial_state=$(jq -r '.initial_state // empty' release-info.json)
             previous_changed_to=$(jq -r '.changed_to_state // empty' release-info.json)
