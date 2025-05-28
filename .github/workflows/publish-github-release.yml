@@ -155,20 +155,13 @@ jobs:
         run: |
           bundle exec fastlane android getLatestVersion \
             serviceCredentialsFile:${{ github.workspace }}/secrets/play_creds.json }}
-      - name: Save google play released version
-        if: steps.check_already_processed.outputs.should_skip == 'false'
-        id: google_play_version
-        run: |
-
-          echo "Latest version on Google Play Store: ${{ env.GOOGLE_PLAY_VERSION }}"
-          echo "google_play_version=${{ env.GOOGLE_PLAY_VERSION }}" >> $GITHUB_OUTPUT
 
       - name: Check if version is already released
         if: steps.check_already_processed.outputs.should_skip == 'false'
         id: check_version
         env:
           latest_draft_version: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
-          GOOGLE_PLAY_VERSION: ${{ steps.google_play_version.outputs.google_play_version }}
+          GOOGLE_PLAY_VERSION: ${{ env.GOOGLE_PLAY_VERSION }}
         run: |
           if [ "$latest_draft_version" == "$GOOGLE_PLAY_VERSION" ]; then
               echo "Version $latest_draft_version is already released on Google Play Store"
