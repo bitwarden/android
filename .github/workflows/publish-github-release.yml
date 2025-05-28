@@ -104,7 +104,7 @@ jobs:
         run: |
           should_skip=false
 
-          if [ "$HAS_PREVIOUS_STATE" == "true" ] && [ "$CURRENT_RELEASE" == "$PREVIOUS_RELEASE" ]; then
+          if [ "$HAS_PREVIOUS_STATE" == "true" ] && [ "$PREVIOUS_RELEASE" != "" ] && [ "$CURRENT_RELEASE" == "$PREVIOUS_RELEASE" ]; then
             if [ "$PREVIOUS_CHANGED_TO" == "published" ] || ([ "$PREVIOUS_INITIAL_STATE" == "published" ] && [ "$PREVIOUS_CHANGED_TO" == "none" ]); then
               echo "::error:: Release $CURRENT_RELEASE was already processed and published by this workflow"
               echo "This suggests the release was manually reverted to draft after being published"
