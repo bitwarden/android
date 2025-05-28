@@ -424,8 +424,9 @@ platform :android do
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: true,
-      release_status: "inProgress",
-      rollout: options[:rolloutPercentage],
+      # release_status: "inProgress",
+      release_status: "Completed",
+      # rollout: options[:rolloutPercentage],
     )
   end
 end
