@@ -86,14 +86,12 @@ jobs:
             --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+
         - name: Format Release Notes
           run: |
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
-            echo "Formatted message with newlines:"
-            echo "$FORMATTED_MESSAGE"
-            echo "FORMATTED_MESSAGE<<EOF" >> $GITHUB_ENV
-            echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+      
+        # - name: Confirm Release Details
 
         - name: Promote Play Store version to production
           env:
@@ -119,11 +117,11 @@ jobs:
               releaseNotes:"$RELEASE_NOTES" \
               versionCode:"$VERSION_CODE"
 
-            # bundle exec fastlane promoteToProduction \
-            #   versionCode:"$VERSION_CODE" \
-            #   rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
-            #   storePassword:"$PLAY_KEYSTORE_PASSWORD" \
-            #   keyAlias:upload \
-            #   keyPassword:"$PLAY_KEY_PASSWORD" \
-            #   packageName:"$PACKAGE_NAME"\
-            #   releaseNotes: "$RELEASE_NOTES"
+            bundle exec fastlane promoteToProduction \
+              versionCode:"$VERSION_CODE" \
+              rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
+              storePassword:"$PLAY_KEYSTORE_PASSWORD" \
+              keyAlias:upload \
+              keyPassword:"$PLAY_KEY_PASSWORD" \
+              packageName:"$PACKAGE_NAME"\
+              releaseNotes: "$RELEASE_NOTES"
