@@ -1,7 +1,6 @@
 
 name: Publish
 
-
 on:
   workflow_dispatch:
     inputs:
@@ -92,18 +91,18 @@ jobs:
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
 
         - name: Get Version Codes
-        run: |
-          if [ "$PRODUCT" = "Password Manager" ]; then
-            PACKAGE_NAME="com.x8bit.bitwarden"
-          elif [ "$PRODUCT" = "Authenticator" ]; then
-            PACKAGE_NAME="com.bitwarden.authenticator"
-          else
-            echo "Unsupported product: $PRODUCT"
-            exit 1
-          fi
+          run: |
+            if [ "$PRODUCT" = "Password Manager" ]; then
+              PACKAGE_NAME="com.x8bit.bitwarden"
+            elif [ "$PRODUCT" = "Authenticator" ]; then
+              PACKAGE_NAME="com.bitwarden.authenticator"
+            else
+              echo "Unsupported product: $PRODUCT"
+              exit 1
+            fi
 
-          bundle exec fastlane getVersionCodes \
-          packageName:"$PACKAGE_NAME"
+            bundle exec fastlane getVersionCodes \
+            packageName:"$PACKAGE_NAME"
         
         # - name: Confirm Release Details
 
