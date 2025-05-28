@@ -402,7 +402,7 @@ platform :android do
     supply(
       json_key: options[:serviceCredentialsFile],
       package_name: options[:packageName],
-      track: "internal",               # The current track
+      track: "internal-testing",               # The current track
       track_promote_to: "production",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
