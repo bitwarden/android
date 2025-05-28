@@ -7,7 +7,6 @@ import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CardView
-import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Fido2Credential
@@ -41,7 +40,6 @@ private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 fun CipherView.toViewState(
     previousState: VaultItemState.ViewState.Content?,
     isPremiumUser: Boolean,
-    hasMasterPassword: Boolean,
     totpCodeItemData: TotpCodeItemData?,
     clock: Clock = Clock.systemDefaultZone(),
     canDelete: Boolean,
@@ -56,8 +54,6 @@ fun CipherView.toViewState(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            requiresReprompt = (reprompt == CipherRepromptType.PASSWORD && hasMasterPassword) &&
-                previousState?.common?.requiresReprompt != false,
             customFields = fields.orEmpty().map { fieldView ->
                 fieldView.toCustomField(
                     previousState = previousState
