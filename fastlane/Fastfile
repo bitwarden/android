@@ -386,7 +386,7 @@ platform :android do
   end
 
   # desc "Get Version Codes"
-  lane :get_beta_version_codes do |options|
+  lane :getVersionCodes do |options|
     supply(
       package_name: "com.x8bit.bitwarden",
       track: "internal",
