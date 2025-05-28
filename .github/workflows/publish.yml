@@ -124,4 +124,4 @@ jobs:
               keyAlias:upload \
               keyPassword:"$PLAY_KEY_PASSWORD" \
               packageName:"$PACKAGE_NAME"\
-              releaseNotes: "$RELEASE_NOTES"
+              releaseNotes:"$RELEASE_NOTES"
