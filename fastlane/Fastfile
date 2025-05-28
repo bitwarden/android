@@ -275,8 +275,8 @@ platform :android do
       )
 
       newest_version = release_name.first.to_s.strip
-      ENV["GOOGLE_PLAY_VERSION"] = "#{newest_version}"
-      # sh("echo NEWEST_VERSION=#{newest_version} >> $GITHUB_ENV")
+      # ENV["GOOGLE_PLAY_VERSION"] = "#{newest_version}"
+      sh("echo GOOGLE_PLAY_VERSION=#{newest_version} >> $GITHUB_ENV")
   end
 
   # Authenticator
