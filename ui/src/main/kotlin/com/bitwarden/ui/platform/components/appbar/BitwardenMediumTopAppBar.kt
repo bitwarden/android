@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.appbar
+package com.bitwarden.ui.platform.components.appbar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,11 +21,11 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.bottomDivider
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.ui.platform.base.util.scrolledContainerBottomDivider
+import com.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
-import com.x8bit.bitwarden.ui.platform.components.model.TopAppBarDividerStyle
 
 /**
  * A custom Bitwarden-themed medium top app bar with support for actions.
@@ -115,7 +115,7 @@ private fun BitwardenMediumTopAppBar_preview() {
                 ),
             actions = {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_ellipsis_vertical,
+                    vectorIconRes = BitwardenDrawable.ic_ellipsis_vertical,
                     contentDescription = "",
                     onClick = { },
                 )

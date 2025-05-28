@@ -48,7 +48,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
@@ -138,7 +138,7 @@ fun SettingsScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
+            AuthenticatorMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
                 scrollBehavior = scrollBehavior,
             )

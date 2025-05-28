@@ -10,17 +10,17 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
- * Represents the Bitwarden search action item.
+ * Represents the Authenticator search action item.
  *
  * This is an [Icon] composable tailored specifically for the search functionality
- * in the Bitwarden app.
+ * in the Authenticator app.
  * It presents the search icon and offers an `onClick` callback for when the icon is tapped.
  *
  * @param contentDescription A description of the UI element, used for accessibility purposes.
  * @param onClick A callback to be invoked when this action item is clicked.
  */
 @Composable
-fun BitwardenSearchActionItem(
+fun AuthenticatorSearchActionItem(
     contentDescription: String,
     onClick: () -> Unit,
 ) {
@@ -37,8 +37,8 @@ fun BitwardenSearchActionItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun BitwardenSearchActionItem_preview() {
-    BitwardenSearchActionItem(
+private fun AuthenticatorSearchActionItem_preview() {
+    AuthenticatorSearchActionItem(
         contentDescription = "Search",
         onClick = {},
     )
