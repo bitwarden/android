@@ -414,9 +414,9 @@ platform :android do
       track_promote_to: "Staged for Production",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
-      skip_upload_metadata: true,
+      skip_upload_metadata: false,
       # track_promote_release_status: "inProgress",
-      track_promote_release_status: "completed",
+      track_promote_release_status: "draft",
       # rollout: options[:rolloutPercentage]
     )
   end
