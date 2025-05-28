@@ -272,6 +272,17 @@ private fun ViewStateContent(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenTextField(
+            label = stringResource(id = R.string.send_name_required),
+            value = state.sendName,
+            onValueChange = {},
+            readOnly = true,
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
         when (val sendType = state.sendType) {
             is ViewSendState.ViewState.Content.SendType.FileType -> {
                 FileSendContent(
@@ -291,18 +302,6 @@ private fun ViewStateContent(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(height = 8.dp))
-
-        BitwardenTextField(
-            label = stringResource(id = R.string.send_name_required),
-            value = state.sendName,
-            onValueChange = {},
-            readOnly = true,
-            cardStyle = CardStyle.Full,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenTextField(
