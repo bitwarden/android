@@ -385,17 +385,9 @@ platform :android do
     )
   end
 
-  # desc "Get Version Codes"
-  lane :getVersionCodes do |options|
-    supply(
-      package_name: "com.x8bit.bitwarden",
-      track: "internal",
-      skip_upload_apk: true,
-      skip_upload_aab: true,
-      skip_upload_metadata: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true
-    )
+  desc "Retrieve build from Github releases"
+    lane :retrieveBuildFromGithub do |options|
+
   
     version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
     UI.message("Version codes in beta track: #{version_codes}")
@@ -407,7 +399,7 @@ platform :android do
     version_code = options[:versionCode]
     locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fi-FI", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
     locales.each do |locale|
-      dir = "fastlane/metadata/#{locale}/changelogs"
+      dir = "metadata/#{locale}/changelogs"
       FileUtils.mkdir_p(dir)
       File.write("#{dir}/#{version_code}.txt", changelog)
     end
@@ -416,17 +408,16 @@ platform :android do
   desc "Promote to production."
   lane :promoteToProduction do |options|
     supply(
-      json_key: options[:serviceCredentialsFile],
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "internal",               # The current track
-      track_promote_to: "Amy",  # Target track
+      track: "Amy",               # The current track
+      track_promote_to: "Staged for Production",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: true,
-      release_status: "inProgress",
-      # release_status: "completed",
-      rollout: options[:rolloutPercentage]
+      # track_promote_release_status: "inProgress",
+      track_promote_release_status: "completed",
+      # rollout: options[:rolloutPercentage]
     )
   end
 end

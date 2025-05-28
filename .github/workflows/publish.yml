@@ -125,8 +125,5 @@ jobs:
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
               rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
-              storePassword:"$PLAY_KEYSTORE_PASSWORD" \
-              keyAlias:upload \
-              keyPassword:"$PLAY_KEY_PASSWORD" \
               packageName:"$PACKAGE_NAME"\
               releaseNotes:"$RELEASE_NOTES"
