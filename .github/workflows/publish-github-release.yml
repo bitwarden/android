@@ -167,7 +167,7 @@ jobs:
               echo "Version $latest_draft_version is already released on Google Play Store"
               echo "version_released=true" >> $GITHUB_OUTPUT
           else
-              echo "Version $latest_draft_version is not released on Google Play Store"
+              echo "Version $latest_draft_version is not released on Google Play Store. Latest version on Google Play Store is $GOOGLE_PLAY_VERSION"
               echo "version_released=false" >> $GITHUB_OUTPUT
           fi
 
