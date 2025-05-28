@@ -91,6 +91,8 @@ jobs:
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
 
         - name: Get Version Codes
+          env:
+            PRODUCT: ${{ inputs.product }}
           run: |
             if [ "$PRODUCT" = "Password Manager" ]; then
               PACKAGE_NAME="com.x8bit.bitwarden"
