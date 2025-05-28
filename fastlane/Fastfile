@@ -385,6 +385,23 @@ platform :android do
     )
   end
 
+  desc "Get Version Codes"
+  lane :getVersionCodes do |options|
+    supply(
+      track: 'internal',
+      json_key: options[:serviceCredentialsFile],
+      package_name: options[:packageName],
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  
+    version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
+    UI.message("Version codes on beta track: #{version_codes}")
+  end
+
   desc "Update release notes for all locales."
   lane :updateReleaseNotes do |options|
     changelog = options[:releaseNotes]
