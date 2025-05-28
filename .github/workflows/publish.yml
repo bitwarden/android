@@ -94,6 +94,8 @@ jobs:
           env:
             PRODUCT: ${{ inputs.product }}
           run: |
+            bundle exec fastlane supply init
+            
             if [ "$PRODUCT" = "Password Manager" ]; then
               PACKAGE_NAME="com.x8bit.bitwarden"
             elif [ "$PRODUCT" = "Authenticator" ]; then
