@@ -420,7 +420,7 @@ platform :android do
       package_name: options[:packageName],
       version_code: options[:versionCode],
       track: "internal",               # The current track
-      track_promote_to: "Closed testing - Amy",  # Target track
+      track_promote_to: "Amy",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: true,
