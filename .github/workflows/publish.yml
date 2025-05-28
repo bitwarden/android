@@ -3,24 +3,24 @@ name: Publish
 
 on:
   workflow_dispatch:
-    # inputs:
-    #   product:
-    #     description: "Which app is being released."
-    #     type: choice
-    #     options:
-    #       - Password Manager
-    #       - Authenticator
-    #   version-code:
-    #     description: "Build number to promote to production."
-    #     required: true
-    #     type: number
-    #   rollout-percentage:
-    #     description: "Starting percentage of users who will receive this version update."
-    #     required: true
-    #     type: number
-    #   release-notes:
-    #     description: "Change notes to be included with this release."
-    #     type: string
+    inputs:
+      product:
+        description: "Which app is being released."
+        type: choice
+        options:
+          - Password Manager
+          - Authenticator
+      version-code:
+        description: "Build number to promote to production."
+        required: true
+        type: number
+      rollout-percentage:
+        description: "Starting percentage of users who will receive this version update."
+        required: true
+        type: number
+      release-notes:
+        description: "Change notes to be included with this release."
+        type: string
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -90,41 +90,43 @@ jobs:
           run: |
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
 
-        - name: Get Version Codes
-          run: |
-            bundle exec fastlane getVersionCodes
+        # - name: Get Version Codes
+        #   env:
+        #     PRODUCT: ${{ inputs.product }}
+        #   run: |
+        #     bundle exec fastlane getVersionCodes
         
         # - name: Confirm Release Details
 
-        # - name: Promote Play Store version to production
-        #   env:
-        #     PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
-        #     PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
-        #     VERSION_CODE: ${{ inputs.version-code }}
-        #     ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
-        #     PRODUCT: ${{ inputs.product }}
-        #     RELEASE_NOTES: FORMATTED_MESSAGE
-        #   run: |
-        #     if [ "$PRODUCT" = "Password Manager" ]; then
-        #       PACKAGE_NAME="com.x8bit.bitwarden"
-        #     elif [ "$PRODUCT" = "Authenticator" ]; then
-        #       PACKAGE_NAME="com.bitwarden.authenticator"
-        #     else
-        #       echo "Unsupported product: $PRODUCT"
-        #       exit 1
-        #     fi
+        - name: Promote Play Store version to production
+          env:
+            PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
+            PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+            VERSION_CODE: ${{ inputs.version-code }}
+            ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+            PRODUCT: ${{ inputs.product }}
+            RELEASE_NOTES: FORMATTED_MESSAGE
+          run: |
+            if [ "$PRODUCT" = "Password Manager" ]; then
+              PACKAGE_NAME="com.x8bit.bitwarden"
+            elif [ "$PRODUCT" = "Authenticator" ]; then
+              PACKAGE_NAME="com.bitwarden.authenticator"
+            else
+              echo "Unsupported product: $PRODUCT"
+              exit 1
+            fi
 
-        #     Release_notes="$RELEASE_NOTES"
+            Release_notes="$RELEASE_NOTES"
 
-        #     bundle exec fastlane updateReleaseNotes \
-        #       releaseNotes:"$RELEASE_NOTES" \
-        #       versionCode:"$VERSION_CODE"
+            bundle exec fastlane updateReleaseNotes \
+              releaseNotes:"$RELEASE_NOTES" \
+              versionCode:"$VERSION_CODE"
 
-        #     bundle exec fastlane promoteToProduction \
-        #       versionCode:"$VERSION_CODE" \
-        #       rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
-        #       storePassword:"$PLAY_KEYSTORE_PASSWORD" \
-        #       keyAlias:upload \
-        #       keyPassword:"$PLAY_KEY_PASSWORD" \
-        #       packageName:"$PACKAGE_NAME"\
-        #       releaseNotes:"$RELEASE_NOTES"
+            bundle exec fastlane promoteToProduction \
+              versionCode:"$VERSION_CODE" \
+              rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
+              storePassword:"$PLAY_KEYSTORE_PASSWORD" \
+              keyAlias:upload \
+              keyPassword:"$PLAY_KEY_PASSWORD" \
+              packageName:"$PACKAGE_NAME"\
+              releaseNotes:"$RELEASE_NOTES"
