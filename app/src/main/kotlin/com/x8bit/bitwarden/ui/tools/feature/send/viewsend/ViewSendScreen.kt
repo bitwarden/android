@@ -375,7 +375,7 @@ private fun ShareLinkSection(
             ),
     ) {
         Text(
-            text = stringResource(id = R.string.share_link),
+            text = stringResource(id = R.string.send_link),
             style = BitwardenTheme.typography.titleSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             overflow = TextOverflow.Ellipsis,
