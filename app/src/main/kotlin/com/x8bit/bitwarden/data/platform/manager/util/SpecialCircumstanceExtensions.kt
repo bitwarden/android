@@ -50,7 +50,7 @@ fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertio
  */
 fun SpecialCircumstance.toPasswordGetRequestOrNull(): PasswordCredentialGetRequest? =
     when (this) {
-        is SpecialCircumstance.PasswordGet -> this.passwordGetRequest
+        is SpecialCircumstance.ProviderGetPasswordRequest -> this.passwordGetRequest
         else -> null
     }
 

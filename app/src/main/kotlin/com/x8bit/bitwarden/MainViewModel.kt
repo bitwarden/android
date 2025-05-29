@@ -425,7 +425,7 @@ class MainViewModel @Inject constructor(
                     providerGetPasswordRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PasswordGet(
+                    SpecialCircumstance.ProviderGetPasswordRequest(
                         passwordGetRequest = providerGetPasswordRequest,
                     )
             }

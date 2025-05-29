@@ -84,7 +84,7 @@ sealed class SpecialCircumstance : Parcelable {
      * credential saved to the user's vault.
      */
     @Parcelize
-    data class PasswordGet(
+    data class ProviderGetPasswordRequest(
         val passwordGetRequest: PasswordCredentialGetRequest,
     ) : SpecialCircumstance()
 
