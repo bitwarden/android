@@ -129,8 +129,6 @@ class CredentialEntryBuilderImpl(
                         builder.setBiometricPromptDataIfSupported(
                             cipher = biometricsEncryptionManager
                                 .getOrCreateCipher(userId),
-                            isSingleTapAuthEnabled = featureFlagManager
-                                .getFeatureFlag(FlagKey.SingleTapPasswordAuthentication),
                         )
                     }
                 }

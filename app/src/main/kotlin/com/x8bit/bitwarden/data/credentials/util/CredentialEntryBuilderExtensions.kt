@@ -32,12 +32,8 @@ fun PublicKeyCredentialEntry.Builder.setBiometricPromptDataIfSupported(
  */
 fun PasswordCredentialEntry.Builder.setBiometricPromptDataIfSupported(
     cipher: Cipher?,
-    isSingleTapAuthEnabled: Boolean,
 ): PasswordCredentialEntry.Builder =
-    if (!isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) &&
-        cipher != null &&
-        isSingleTapAuthEnabled
-    ) {
+    if (!isBuildVersionBelow(Build.VERSION_CODES.VANILLA_ICE_CREAM) && cipher != null) {
         setBiometricPromptData(
             biometricPromptData = buildPromptDataWithCipher(cipher),
         )

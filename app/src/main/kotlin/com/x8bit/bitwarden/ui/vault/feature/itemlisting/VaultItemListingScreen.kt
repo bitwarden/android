@@ -210,7 +210,7 @@ fun VaultItemListingScreen(
                     .completeProviderGetCredentialsRequest(event.result)
             }
 
-            is VaultItemListingEvent.CompletePasswordGet -> {
+            is VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest -> {
                 credentialProviderCompletionManager.completePasswordGet(event.result)
             }
 
