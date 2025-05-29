@@ -113,6 +113,6 @@ jobs:
 
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
-              rolloutPercentage:"$decimal" \
+              rolloutPercentage:$decimal \
               packageName:"$PACKAGE_NAME"\
               releaseNotes:"$RELEASE_NOTES"
