@@ -24,8 +24,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 1 --jq '.[0]')
-          is_latest_draft=$(jq -r '.isDraft' <<< $latest_release)
+          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 10 --jq 'first(.[] | select((.name | test("Password Manager"; "i")) and (.isDraft == true)))')
+
+          is_latest_draft="false"
+
+          if [ "$latest_release" != "null" ] && [ -n "$latest_release" ]; then
+            is_latest_draft=$(jq -r '.isDraft' <<< $latest_release)
+          fi
+
           echo "is_latest_draft=$is_latest_draft" >> $GITHUB_OUTPUT
 
           if [ "$is_latest_draft" != "true" ]; then
@@ -33,7 +39,7 @@ jobs:
               exit 0
           fi
 
-          latest_draft_version=$(jq -r '.tagName' <<< $latest_release)
+          latest_draft_version=$(echo "$latest_release" | jq -r '.name' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
           echo "latest_draft_version=$latest_draft_version" >> $GITHUB_OUTPUT
 
           latest_draft_name=$(jq -r '.name' <<< $latest_release)
