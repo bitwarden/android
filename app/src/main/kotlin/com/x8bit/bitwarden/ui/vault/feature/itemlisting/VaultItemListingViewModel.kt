@@ -981,7 +981,6 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
         viewModelScope.launch {
-            //TODO is origin validation necessary like for passkeys?
             sendAction(
                 VaultItemListingsAction.Internal.PasswordGetResultReceive(
                     result = bitwardenCredentialManager.authenticatePasswordCredential(
