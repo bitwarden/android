@@ -415,8 +415,10 @@ platform :android do
     supply_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "Staged for Production",
-      track_promote_to: "production",  # production is case sensitive
+      # track: "Internal"
+      track: "Fastlane Automation Testing Source",
+      # track_promote_to: "production",  # production is case sensitive
+      track_promote_to: "Fastlane Automation Testing Target"
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false
