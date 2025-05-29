@@ -206,7 +206,7 @@ class BitwardenCredentialManagerImpl(
 
         val passwordCredentialResult = getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
             getCredentialsRequest
-                .beginGetPasswordOption
+                .beginGetPasswordOptions
                 .toPasswordCredentialEntries(
                     userId = getCredentialsRequest.userId,
                     packageName = packageName,
