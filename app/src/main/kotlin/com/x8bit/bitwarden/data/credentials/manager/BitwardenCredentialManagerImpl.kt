@@ -148,18 +148,6 @@ class BitwardenCredentialManagerImpl(
             )
     }
 
-    override suspend fun authenticatePasswordCredential(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
-        request: GetPasswordOption,
-        selectedCipherView: CipherView,
-    ): ProviderGetPasswordCredentialResult {
-        //TODO would it be necessary to verify app, as the list is loaded via autofill provider
-        val login = selectedCipherView.login ?: return ProviderGetPasswordCredentialResult.Error
-        return ProviderGetPasswordCredentialResult.Success(login)
-
-    }
-
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
 
