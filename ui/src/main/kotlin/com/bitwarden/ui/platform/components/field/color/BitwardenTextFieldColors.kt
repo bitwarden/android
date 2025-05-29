@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.field.color
+package com.bitwarden.ui.platform.components.field.color
 
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.TextFieldColors

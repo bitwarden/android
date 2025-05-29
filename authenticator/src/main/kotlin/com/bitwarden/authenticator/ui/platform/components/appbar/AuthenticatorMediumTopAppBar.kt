@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * A custom Bitwarden-themed medium top app bar with support for actions.
@@ -35,7 +35,7 @@ import com.bitwarden.authenticator.R
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BitwardenMediumTopAppBar(
+fun AuthenticatorMediumTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
@@ -65,9 +65,9 @@ fun BitwardenMediumTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun BitwardenMediumTopAppBar_preview() {
+private fun AuthenticatorMediumTopAppBar_preview() {
     MaterialTheme {
-        BitwardenMediumTopAppBar(
+        AuthenticatorMediumTopAppBar(
             title = "Preview Title",
             scrollBehavior = TopAppBarDefaults
                 .exitUntilCollapsedScrollBehavior(
@@ -76,7 +76,7 @@ private fun BitwardenMediumTopAppBar_preview() {
             actions = {
                 IconButton(onClick = { }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_more),
+                        painter = painterResource(id = BitwardenDrawable.ic_ellipsis_vertical),
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSurface,
                     )
