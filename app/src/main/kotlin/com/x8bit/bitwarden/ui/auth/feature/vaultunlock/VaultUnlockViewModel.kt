@@ -578,10 +578,6 @@ sealed class VaultUnlockEvent {
      */
     data class PasswordGetCredentialsError(val message: Text) : VaultUnlockEvent()
 
-    /**
-     * Completes the Password credential assertion request with an error response.
-     */
-    data class PasswordCredentialAssertionError(val message: Text) : VaultUnlockEvent()
 }
 
 /**

@@ -142,12 +142,6 @@ fun VaultUnlockScreen(
                 )
             }
 
-            is VaultUnlockEvent.PasswordCredentialAssertionError -> {
-                credentialProviderCompletionManager.completePasswordGet(
-                    result = GetPasswordCredentialResult.Error(message = event.message),
-                )
-            }
-
             is VaultUnlockEvent.PasswordGetCredentialsError -> {
                 credentialProviderCompletionManager.completeProviderGetCredentialsRequest(
                     result = GetCredentialsResult.Error(message = event.message),
