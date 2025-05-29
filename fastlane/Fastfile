@@ -410,14 +410,14 @@ platform :android do
     supply(
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "Fastlane Automation Testing",               # The current track
-      track_promote_to: "Staged for Production",  # Target track
+      track: "Staged for Production",               # The current track
+      track_promote_to: "Production",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false,
-      # track_promote_release_status: "inProgress",
-      track_promote_release_status: "draft",
-      # rollout: options[:rolloutPercentage]
+      track_promote_release_status: "inProgress",
+      # track_promote_release_status: "draft",
+      rollout: options[:rolloutPercentage]
     )
   end
 end
