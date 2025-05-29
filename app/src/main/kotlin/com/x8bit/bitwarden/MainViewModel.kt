@@ -326,7 +326,7 @@ class MainViewModel @Inject constructor(
         val createCredentialRequest = intent.getCreateCredentialRequestOrNull()
         val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
-        val passwordGetCredentialRequest = intent.getPasswordGetRequestOrNull()
+        val providerGetPasswordRequest = intent.getPasswordGetRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -417,16 +417,16 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            passwordGetCredentialRequest != null -> {
+            providerGetPasswordRequest != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
                 bitwardenCredentialManager.isUserVerified =
-                    passwordGetCredentialRequest.isUserPreVerified
+                    providerGetPasswordRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.PasswordGet(
-                        passwordGetRequest = passwordGetCredentialRequest,
+                        passwordGetRequest = providerGetPasswordRequest,
                     )
             }
 
