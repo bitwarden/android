@@ -212,13 +212,15 @@ class BitwardenCredentialManagerImpl(
             )
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
-        val passwordCredentialResult = getCredentialsRequest
-            .beginGetPasswordOption
-            .toPasswordCredentialEntries(
-                userId = getCredentialsRequest.userId,
-                callingAppInfo = getCredentialsRequest.callingAppInfo,
-            )
-            .onFailure { Timber.e(it, "Failed to get Password credential entries.") }
+        val passwordCredentialResult = getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
+            getCredentialsRequest
+                .beginGetPasswordOption
+                .toPasswordCredentialEntries(
+                    userId = getCredentialsRequest.userId,
+                    packageName = packageName,
+                )
+                .onFailure { Timber.e(it, "Failed to get Password credential entries.") }
+        } ?: Throwable("Failed to get Password credential entries packageName null").asFailure()
 
         return@withContext if (fido2CredentialResult.isSuccess || passwordCredentialResult.isSuccess) {
             ((fido2CredentialResult.getOrNull()
@@ -362,13 +364,10 @@ class BitwardenCredentialManagerImpl(
 
     private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
-        callingAppInfo: CallingAppInfo?,
+        packageName: String,
     ): Result<List<CredentialEntry>> {
-        //TODO info/text/logging
-        if(callingAppInfo == null) return Throwable().asFailure()
-
         val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
-            callingAppInfo.packageName.toAndroidAppUriString()
+            packageName.toAndroidAppUriString()
         )
 
         return credentialEntryBuilder
