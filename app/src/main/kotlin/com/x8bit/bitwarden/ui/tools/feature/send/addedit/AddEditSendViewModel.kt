@@ -600,7 +600,7 @@ class AddEditSendViewModel @Inject constructor(
             } else if (isDeleted) {
                 // We need to make sure we don't land on the View Send screen
                 // since it has now been deleted.
-                AddEditSendEvent.NavigateToRoot
+                AddEditSendEvent.NavigateUpToSearchOrRoot
             } else {
                 AddEditSendEvent.NavigateBack
             },
@@ -833,9 +833,9 @@ sealed class AddEditSendEvent {
     data object NavigateBack : AddEditSendEvent()
 
     /**
-     * Navigate up to the root.
+     * Navigate up to the search screen or the root screen depending where you came from.
      */
-    data object NavigateToRoot : AddEditSendEvent()
+    data object NavigateUpToSearchOrRoot : AddEditSendEvent()
 
     /**
      * Show file chooser sheet.

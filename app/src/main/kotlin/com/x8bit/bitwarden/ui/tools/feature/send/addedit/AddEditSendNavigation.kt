@@ -56,12 +56,12 @@ fun SavedStateHandle.toAddEditSendArgs(): AddEditSendArgs {
  */
 fun NavGraphBuilder.addEditSendDestination(
     onNavigateBack: () -> Unit,
-    onNavigateUpToRoot: () -> Unit,
+    onNavigateUpToSearchOrRoot: () -> Unit,
 ) {
     composableWithSlideTransitions<AddEditSendRoute> {
         AddEditSendScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateUpToRoot = onNavigateUpToRoot,
+            onNavigateUpToSearchOrRoot = onNavigateUpToSearchOrRoot,
         )
     }
 }

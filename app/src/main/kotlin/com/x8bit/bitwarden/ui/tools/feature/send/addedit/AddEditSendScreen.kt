@@ -52,7 +52,7 @@ fun AddEditSendScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
-    onNavigateUpToRoot: () -> Unit,
+    onNavigateUpToSearchOrRoot: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val addSendHandlers = remember(viewModel) { AddEditSendHandlers.create(viewModel) }
@@ -77,7 +77,7 @@ fun AddEditSendScreen(
 
             is AddEditSendEvent.NavigateBack -> onNavigateBack()
 
-            is AddEditSendEvent.NavigateToRoot -> onNavigateUpToRoot()
+            is AddEditSendEvent.NavigateUpToSearchOrRoot -> onNavigateUpToSearchOrRoot()
 
             is AddEditSendEvent.ShowChooserSheet -> {
                 fileChooserLauncher.launch(
