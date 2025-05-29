@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetRequest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import kotlinx.parcelize.Parcelize
@@ -84,8 +84,8 @@ sealed class SpecialCircumstance : Parcelable {
      * credential saved to the user's vault.
      */
     @Parcelize
-    data class PasswordAssertion(
-        val passwordAssertionRequest: PasswordCredentialAssertionRequest,
+    data class PasswordGet(
+        val passwordGetRequest: PasswordCredentialGetRequest,
     ) : SpecialCircumstance()
 
     /**

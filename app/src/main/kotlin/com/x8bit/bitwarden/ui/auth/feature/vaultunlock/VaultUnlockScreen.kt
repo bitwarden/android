@@ -49,7 +49,7 @@ import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenTitle
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.AssertPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -143,8 +143,8 @@ fun VaultUnlockScreen(
             }
 
             is VaultUnlockEvent.PasswordCredentialAssertionError -> {
-                credentialProviderCompletionManager.completePasswordAssertion(
-                    result = AssertPasswordCredentialResult.Error(message = event.message),
+                credentialProviderCompletionManager.completePasswordGet(
+                    result = GetPasswordCredentialResult.Error(message = event.message),
                 )
             }
 

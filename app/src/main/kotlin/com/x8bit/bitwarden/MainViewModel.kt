@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.util.getCreateCredentialRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.credentials.util.getGetCredentialsRequestOrNull
-import com.x8bit.bitwarden.data.credentials.util.getPasswordAssertionRequestOrNull
+import com.x8bit.bitwarden.data.credentials.util.getPasswordGetRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.AppResumeManager
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -326,7 +326,7 @@ class MainViewModel @Inject constructor(
         val createCredentialRequest = intent.getCreateCredentialRequestOrNull()
         val getCredentialsRequest = intent.getGetCredentialsRequestOrNull()
         val fido2AssertCredentialRequest = intent.getFido2AssertionRequestOrNull()
-        val passwordAssertCredentialRequest = intent.getPasswordAssertionRequestOrNull()
+        val passwordGetCredentialRequest = intent.getPasswordGetRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 authRepository.activeUserId?.let {
@@ -417,16 +417,16 @@ class MainViewModel @Inject constructor(
                     )
             }
 
-            passwordAssertCredentialRequest != null -> {
+            passwordGetCredentialRequest != null -> {
                 // Set the user's verification status when a new FIDO 2 request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
                 bitwardenCredentialManager.isUserVerified =
-                    passwordAssertCredentialRequest.isUserPreVerified
+                    passwordGetCredentialRequest.isUserPreVerified
 
                 specialCircumstanceManager.specialCircumstance =
-                    SpecialCircumstance.PasswordAssertion(
-                        passwordAssertionRequest = passwordAssertCredentialRequest,
+                    SpecialCircumstance.PasswordGet(
+                        passwordGetRequest = passwordGetCredentialRequest,
                     )
             }
 

@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionRequest
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -156,11 +156,11 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
-                    is SpecialCircumstance.PasswordAssertion -> {
-                        RootNavState.VaultUnlockedForPasswordAssertion(
+                    is SpecialCircumstance.PasswordGet -> {
+                        RootNavState.VaultUnlockedForPasswordGet(
                             activeUserId = userState.activeUserId,
-                            passwordCredentialAssertionRequest =
-                                specialCircumstance.passwordAssertionRequest,
+                            passwordCredentialGetRequest =
+                                specialCircumstance.passwordGetRequest,
                         )
                     }
 
@@ -331,9 +331,9 @@ sealed class RootNavState : Parcelable {
      * App should perform Password credential assertion for the user.
      */
     @Parcelize
-    data class VaultUnlockedForPasswordAssertion(
+    data class VaultUnlockedForPasswordGet(
         val activeUserId: String,
-        val passwordCredentialAssertionRequest: PasswordCredentialAssertionRequest,
+        val passwordCredentialGetRequest: PasswordCredentialGetRequest,
     ) : RootNavState()
 
     /**

@@ -15,7 +15,7 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.ui.credentials.manager.model.AssertFido2CredentialResult
-import com.x8bit.bitwarden.ui.credentials.manager.model.AssertPasswordCredentialResult
+import com.x8bit.bitwarden.ui.credentials.manager.model.GetPasswordCredentialResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 
@@ -102,11 +102,11 @@ class CredentialProviderCompletionManagerImpl(
         }
     }
 
-    override fun completePasswordAssertion(result: AssertPasswordCredentialResult) {
+    override fun completePasswordGet(result: GetPasswordCredentialResult) {
         activity.also {
             val intent = Intent()
             when (result) {
-                is AssertPasswordCredentialResult.Error -> {
+                is GetPasswordCredentialResult.Error -> {
                     PendingIntentHandler
                         .setGetCredentialException(
                             intent = intent,
@@ -116,7 +116,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is AssertPasswordCredentialResult.Success -> {
+                is GetPasswordCredentialResult.Success -> {
                     PendingIntentHandler
                         .setGetCredentialResponse(
                             intent = intent,
@@ -129,7 +129,7 @@ class CredentialProviderCompletionManagerImpl(
                         )
                 }
 
-                is AssertPasswordCredentialResult.Cancelled -> {
+                is GetPasswordCredentialResult.Cancelled -> {
                     PendingIntentHandler
                         .setGetCredentialException(
                             intent = intent,

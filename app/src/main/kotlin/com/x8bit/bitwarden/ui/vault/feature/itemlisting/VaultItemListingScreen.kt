@@ -210,8 +210,8 @@ fun VaultItemListingScreen(
                     .completeProviderGetCredentialsRequest(event.result)
             }
 
-            is VaultItemListingEvent.CompletePasswordAssertion -> {
-                credentialProviderCompletionManager.completePasswordAssertion(event.result)
+            is VaultItemListingEvent.CompletePasswordGet -> {
+                credentialProviderCompletionManager.completePasswordGet(event.result)
             }
 
             VaultItemListingEvent.ExitApp -> exitManager.exitApplication()
