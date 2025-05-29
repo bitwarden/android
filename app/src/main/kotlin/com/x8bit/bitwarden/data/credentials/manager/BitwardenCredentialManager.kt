@@ -107,6 +107,5 @@ interface BitwardenCredentialManager {
      */
     suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
-        originValidated: Boolean,
     ): Result<List<CredentialEntry>>
 }

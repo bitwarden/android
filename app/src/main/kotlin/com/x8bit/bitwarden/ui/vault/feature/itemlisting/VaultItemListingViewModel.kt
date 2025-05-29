@@ -1803,25 +1803,23 @@ class VaultItemListingViewModel @Inject constructor(
             val validateOriginResult = originManager.validateOrigin(
                 callingAppInfo = callingAppInfo,
             )
+            when (validateOriginResult) {
+                is ValidateOriginResult.Success -> {
+                    sendAction(
+                        VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
+                            userId = request.userId,
+                            result = bitwardenCredentialManager.getCredentialEntries(
+                                getCredentialsRequest = request,
+                            ),
+                        ),
+                    )
+                }
 
-            if (validateOriginResult is ValidateOriginResult.Error) {
-                //origin only needs to be validated for fido2 not for passwords (doesn't work)
-                //TODO eventually fix originManager
-                if (request.beginGetPasswordOption.isEmpty()) {
+                is ValidateOriginResult.Error -> {
                     handleOriginValidationFail(validateOriginResult)
                     return@launch
                 }
             }
-
-            sendAction(
-                VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
-                    userId = request.userId,
-                    result = bitwardenCredentialManager.getCredentialEntries(
-                        getCredentialsRequest = request,
-                        originValidated = validateOriginResult is ValidateOriginResult.Success,
-                    ),
-                ),
-            )
         }
     }
 

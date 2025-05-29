@@ -185,7 +185,6 @@ class BitwardenCredentialManagerImpl(
 
     override suspend fun getCredentialEntries(
         getCredentialsRequest: GetCredentialsRequest,
-        originValidated: Boolean,
     ): Result<List<CredentialEntry>> = withContext(ioScope.coroutineContext) {
         val cipherViews = vaultRepository
             .ciphersStateFlow
@@ -200,15 +199,13 @@ class BitwardenCredentialManagerImpl(
                 }
             }
 
-        val fido2CredentialResult = if (originValidated) {
-            getCredentialsRequest
-                .beginGetPublicKeyCredentialOptions
-                .toPublicKeyCredentialEntries(
-                    userId = getCredentialsRequest.userId,
-                    cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
-                )
-                .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
-        } else null
+        val fido2CredentialResult = getCredentialsRequest
+            .beginGetPublicKeyCredentialOptions
+            .toPublicKeyCredentialEntries(
+                userId = getCredentialsRequest.userId,
+                cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
+            )
+            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
 
         val passwordCredentialResult = getCredentialsRequest
             .beginGetPasswordOption
