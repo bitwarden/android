@@ -43,18 +43,6 @@ data class GetCredentialsRequest(
     }
 
     /**
-     * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no
-     * public key options are present.
-     */
-    @IgnoredOnParcel
-    val beginGetPasswordOption: List<BeginGetPasswordOption> by lazy {
-        providerRequest
-            ?.beginGetCredentialOptions
-            ?.filterIsInstance<BeginGetPasswordOption>()
-            .orEmpty()
-    }
-
-    /**
      * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no password
      * options are present.
      */
