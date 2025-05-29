@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.credentials.manager
 
 import androidx.credentials.CreatePublicKeyCredentialRequest
-import androidx.credentials.GetPasswordOption
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -11,7 +10,6 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
 /**
