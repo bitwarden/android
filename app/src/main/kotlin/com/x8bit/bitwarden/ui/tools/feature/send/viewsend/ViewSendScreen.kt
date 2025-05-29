@@ -46,13 +46,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedErrorButton
@@ -61,7 +63,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
@@ -126,7 +127,7 @@ fun ViewSendScreen(
             BitwardenTopAppBar(
                 title = state.screenDisplayName(),
                 navigationIcon = NavigationIcon(
-                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                    navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     navigationIconContentDescription = stringResource(id = R.string.close),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(ViewSendAction.CloseClick) }
@@ -272,6 +273,17 @@ private fun ViewStateContent(
                 .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
+        BitwardenTextField(
+            label = stringResource(id = R.string.send_name_required),
+            value = state.sendName,
+            onValueChange = {},
+            readOnly = true,
+            cardStyle = CardStyle.Full,
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(height = 8.dp))
         when (val sendType = state.sendType) {
             is ViewSendState.ViewState.Content.SendType.FileType -> {
                 FileSendContent(
@@ -291,18 +303,6 @@ private fun ViewStateContent(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(height = 8.dp))
-
-        BitwardenTextField(
-            label = stringResource(id = R.string.send_name_required),
-            value = state.sendName,
-            onValueChange = {},
-            readOnly = true,
-            cardStyle = CardStyle.Full,
-            modifier = Modifier
-                .fillMaxWidth()
-                .standardHorizontalMargin(),
-        )
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         BitwardenTextField(
@@ -375,7 +375,7 @@ private fun ShareLinkSection(
             ),
     ) {
         Text(
-            text = stringResource(id = R.string.share_link),
+            text = stringResource(id = R.string.send_link),
             style = BitwardenTheme.typography.titleSmall,
             color = BitwardenTheme.colorScheme.text.primary,
             overflow = TextOverflow.Ellipsis,

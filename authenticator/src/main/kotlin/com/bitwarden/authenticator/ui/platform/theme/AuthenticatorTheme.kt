@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.ui.platform.theme
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,6 +17,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.WindowCompat
 import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -57,7 +57,7 @@ fun AuthenticatorTheme(
             val insetsController = WindowCompat.getInsetsController(window, view)
             insetsController.isAppearanceLightStatusBars = !darkTheme
             insetsController.isAppearanceLightNavigationBars = !darkTheme
-            window.setBackgroundDrawable(ColorDrawable(colorScheme.surface.value.toInt()))
+            window.setBackgroundDrawable(colorScheme.surface.value.toInt().toDrawable())
         }
     }
 

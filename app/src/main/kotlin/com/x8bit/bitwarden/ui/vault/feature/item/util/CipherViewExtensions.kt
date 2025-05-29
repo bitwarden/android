@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
 import java.time.Clock
+import java.util.Locale
 
 private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
 private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
@@ -332,7 +333,9 @@ private val IdentityView.identityName: String?
     get() = listOfNotNull(
         title
             ?.lowercase()
-            ?.capitalize(),
+            ?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+            },
         firstName,
         middleName,
         lastName,

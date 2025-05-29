@@ -8,7 +8,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionModeOverlay">true</item>
-        <item name="android:windowLayoutInDisplayCutoutMode">default</item>
+        <item name="android:windowLayoutInDisplayCutoutMode">always</item>
         <item name="android:backgroundDimAmount">@dimen/dialogDimBackgroundAmount</item>
     </style>
 
