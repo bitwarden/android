@@ -106,6 +106,8 @@ fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
     return this.filter { collectionView ->
         collectionView.id in collectionIds
     }.let { matchingCollections ->
+        if (matchingCollections.isEmpty()) return false
+
         matchingCollections.any {
             if (needsManagePermission) {
                 it.manage
