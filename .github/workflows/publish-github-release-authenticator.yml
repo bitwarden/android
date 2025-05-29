@@ -14,5 +14,4 @@ jobs:
       credentials_filename: "authenticator_play_store-creds.json"
       check_release_command: >
         bundle exec fastlane android getLatestAuthenticatorVersion serviceCredentialsFile:$CREDENTIALS_PATH
-    secrets:
-      AZURE_KV_CI_SERVICE_PRINCIPAL: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+    secrets: inherit
