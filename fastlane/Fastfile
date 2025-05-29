@@ -424,7 +424,7 @@ platform :android do
       skip_upload_metadata: false
     }
 
-    if options[:rolloutPercentage] < 1
+    if options[:rolloutPercentage].to_f < 1
       supply_options[:track_promote_release_status] = "inProgress"
       supply_options[:rollout] = options[:rolloutPercentage]
     else
