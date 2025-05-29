@@ -415,10 +415,8 @@ platform :android do
     supply_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      # track: "Internal"
-      track: "Fastlane Automation Testing Source",
-      # track_promote_to: "production",  # production is case sensitive
-      track_promote_to: "Fastlane Automation Testing Target",
+      track: "Internal"
+      track_promote_to: "production",  # production is case sensitive
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false
@@ -429,12 +427,6 @@ platform :android do
       supply_options[:rollout] = options[:rolloutPercentage]
     else
       supply_options[:track_promote_release_status] = "complete"
-    end
-
-    if options[:releaseNotes].nil?
-      supply_options[:skip_upload_metadata] = true
-    else
-      supply_options[:skip_upload_metadata] = false
     end
 
     supply(supply_options)
