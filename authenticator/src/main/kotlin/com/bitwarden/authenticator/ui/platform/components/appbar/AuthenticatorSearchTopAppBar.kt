@@ -1,15 +1,14 @@
-package com.x8bit.bitwarden.ui.platform.components.appbar
+package com.bitwarden.authenticator.ui.platform.components.appbar
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -19,17 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
-import com.bitwarden.ui.platform.base.util.bottomDivider
+import com.bitwarden.authenticator.R
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
-import com.bitwarden.ui.platform.base.util.tabNavigation
-import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
-import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.color.bitwardenTopAppBarColors
-import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -38,58 +36,64 @@ import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextField
  * - an editable [TextField] populated by a [searchTerm] in the middle.
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Suppress("LongMethod")
 @Composable
-fun BitwardenSearchTopAppBar(
+fun AuthenticatorSearchTopAppBar(
     searchTerm: String,
     placeholder: String,
     onSearchTermChange: (String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
     modifier: Modifier = Modifier,
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets
-        .union(WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)),
     autoFocus: Boolean = true,
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
-        modifier = modifier
-            .testTag(tag = "HeaderBarComponent")
-            .bottomDivider(),
-        windowInsets = windowInsets,
-        colors = bitwardenTopAppBarColors(),
+        modifier = modifier.semantics { testTag = "HeaderBarComponent" },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             navigationIcon?.let {
-                BitwardenStandardIconButton(
-                    painter = it.navigationIcon,
-                    contentDescription = it.navigationIconContentDescription,
+                IconButton(
                     onClick = it.onNavigationIconClick,
-                    modifier = Modifier
-                        .testTag(tag = "CloseButton")
-                        .mirrorIfRtl(),
-                )
+                    modifier = Modifier.semantics { testTag = "CloseButton" },
+                ) {
+                    Icon(
+                        modifier = Modifier.mirrorIfRtl(),
+                        painter = it.navigationIcon,
+                        contentDescription = it.navigationIconContentDescription,
+                    )
+                }
             }
         },
         title = {
             TextField(
-                colors = bitwardenTextFieldColors(),
-                textStyle = BitwardenTheme.typography.bodyLarge,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
                 placeholder = { Text(text = placeholder) },
                 value = searchTerm,
-                singleLine = true,
                 onValueChange = onSearchTermChange,
                 trailingIcon = {
-                    BitwardenStandardIconButton(
-                        vectorIconRes = R.drawable.ic_clear,
-                        contentDescription = stringResource(id = R.string.clear),
+                    IconButton(
                         onClick = { onSearchTermChange("") },
-                    )
+                    ) {
+                        Icon(
+                            painter = painterResource(id = BitwardenDrawable.ic_close),
+                            contentDescription = stringResource(id = R.string.clear),
+                        )
+                    }
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
-                    .tabNavigation()
-                    .testTag("SearchFieldEntry")
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),
             )

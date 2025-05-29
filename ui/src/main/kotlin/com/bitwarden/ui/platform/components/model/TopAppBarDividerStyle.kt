@@ -1,6 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.model
-
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+package com.bitwarden.ui.platform.components.model
 
 /**
  * Defines the possible display options for a bottom divider on a [BitwardenMediumTopAppBar].

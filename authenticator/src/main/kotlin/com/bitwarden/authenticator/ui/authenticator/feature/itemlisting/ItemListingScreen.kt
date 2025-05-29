@@ -58,9 +58,9 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.It
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.SharedCodesDisplayState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VaultDropdownMenuAction
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.action.BitwardenSearchActionItem
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.appbar.action.AuthenticatorSearchActionItem
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
@@ -84,6 +84,7 @@ import com.bitwarden.authenticator.ui.platform.theme.Typography
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import kotlinx.coroutines.launch
 
@@ -363,11 +364,11 @@ private fun ItemListingContent(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenMediumTopAppBar(
+            AuthenticatorMediumTopAppBar(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 actions = {
-                    BitwardenSearchActionItem(
+                    AuthenticatorSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_codes),
                         onClick = onNavigateToSearch,
                     )
@@ -590,7 +591,7 @@ fun EmptyItemListingContent(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
+            AuthenticatorTopAppBar(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
@@ -727,7 +728,7 @@ private fun DownloadBitwardenActionCard(
             onClick = onDismissClick,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_close),
+                painter = painterResource(id = BitwardenDrawable.ic_close),
                 contentDescription = stringResource(id = R.string.close),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
@@ -778,7 +779,7 @@ private fun SyncWithBitwardenActionCard(
             Spacer(Modifier.width(width = 16.dp))
             IconButton(onClick = onDismissClick) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_close),
+                    painter = painterResource(id = BitwardenDrawable.ic_close),
                     contentDescription = stringResource(id = R.string.close),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(size = 24.dp),

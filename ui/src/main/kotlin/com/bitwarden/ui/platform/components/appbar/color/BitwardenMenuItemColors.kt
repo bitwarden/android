@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components.appbar.color
+package com.bitwarden.ui.platform.components.appbar.color
 
 import androidx.compose.material3.MenuItemColors
 import androidx.compose.runtime.Composable

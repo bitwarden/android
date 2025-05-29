@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -35,7 +37,7 @@ import com.bitwarden.ui.platform.base.util.mirrorIfRtl
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BitwardenTopAppBar(
+fun AuthenticatorTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: Painter,
@@ -44,7 +46,7 @@ fun BitwardenTopAppBar(
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = { },
 ) {
-    BitwardenTopAppBar(
+    AuthenticatorTopAppBar(
         title = title,
         scrollBehavior = scrollBehavior,
         navigationIcon = NavigationIcon(
@@ -68,7 +70,7 @@ fun BitwardenTopAppBar(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BitwardenTopAppBar(
+fun AuthenticatorTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
@@ -116,32 +118,19 @@ fun BitwardenTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-private fun BitwardenTopAppBar_preview() {
+private fun AuthenticatorTopAppBar_preview() {
     AuthenticatorTheme {
-        BitwardenTopAppBar(
+        AuthenticatorTopAppBar(
             title = "Title",
             scrollBehavior = TopAppBarDefaults
                 .exitUntilCollapsedScrollBehavior(
                     rememberTopAppBarState(),
                 ),
             navigationIcon = NavigationIcon(
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = painterResource(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = { },
             ),
         )
     }
 }
-
-/**
- * Represents all data required to display a [navigationIcon].
- *
- * @property navigationIcon The [Painter] displayed as part of the icon.
- * @property navigationIconContentDescription The content description associated with the icon.
- * @property onNavigationIconClick The click action that is invoked when the icon is tapped.
- */
-data class NavigationIcon(
-    val navigationIcon: Painter,
-    val navigationIconContentDescription: String,
-    val onNavigationIconClick: () -> Unit,
-)

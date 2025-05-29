@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 
 /**
  * Show a snackbar that says "Account synced from Bitwarden app" with a close action.
@@ -56,7 +57,7 @@ fun FirstTimeSyncSnackbarHost(
                     onClick = { state.currentSnackbarData?.dismiss() },
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_close),
+                        painter = painterResource(id = BitwardenDrawable.ic_close),
                         contentDescription = stringResource(id = R.string.close),
                         tint = MaterialTheme.colorScheme.inverseOnSurface,
                         modifier = Modifier
