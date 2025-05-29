@@ -1789,7 +1789,6 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleProviderGetCredentialsRequest(
         request: GetCredentialsRequest,
     ) {
-
         val callingAppInfo = request.callingAppInfo
             ?: run {
                 showCredentialManagerErrorDialog(
