@@ -33,7 +33,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
@@ -156,10 +156,10 @@ class BitwardenCredentialManagerImpl(
         callingAppInfo: CallingAppInfo,
         request: GetPasswordOption,
         selectedCipherView: CipherView,
-    ): PasswordCredentialAssertionResult {
+    ): PasswordCredentialGetResult {
         //TODO would it be necessary to verify app, as the list is loaded via autofill provider
-        val login = selectedCipherView.login ?: return PasswordCredentialAssertionResult.Error
-        return PasswordCredentialAssertionResult.Success(login)
+        val login = selectedCipherView.login ?: return PasswordCredentialGetResult.Error
+        return PasswordCredentialGetResult.Success(login)
 
     }
 

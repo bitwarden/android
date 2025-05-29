@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.PasskeyAttestationOptions
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialAssertionResult
+import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 
 /**
@@ -66,7 +66,7 @@ interface BitwardenCredentialManager {
         callingAppInfo: CallingAppInfo,
         request: GetPasswordOption,
         selectedCipherView: CipherView,
-    ): PasswordCredentialAssertionResult
+    ): PasswordCredentialGetResult
 
     /**
      * Whether or not the user has authentication attempts remaining.

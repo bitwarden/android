@@ -19,7 +19,7 @@ import kotlinx.parcelize.Parcelize
  * @property requestData Provider request data in the form of a [Bundle].
  */
 @Parcelize
-data class PasswordCredentialAssertionRequest(
+data class PasswordCredentialGetRequest(
     val userId: String,
     val cipherId: String,
     val isUserPreVerified: Boolean,
