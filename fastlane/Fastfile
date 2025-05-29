@@ -395,23 +395,19 @@ platform :android do
 
   desc "Update release notes for all locales."
   lane :updateReleaseNotes do |options|
-    release_notes = options[:releaseNotes]
+    changelog = options[:releaseNotes]
     version_code = options[:versionCode]
     locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fi-FI", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
-
-    changelog = {}
     locales.each do |locale|
-      changelog[locale] = release_notes
+      dir = "metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", changelog)
     end
-
-    Actions.lane_context[:RELEASE_NOTES_CHANGELOG] = changelog
-
   end
 
   desc "Promote to production."
   lane :promoteToProduction do |options|
     supply(
-      changelog: Actions.lane_context[:RELEASE_NOTES_CHANGELOG],
       package_name: options[:packageName],
       version_code: options[:versionCode],
       track: "Fastlane Automation Testing",               # The current track
