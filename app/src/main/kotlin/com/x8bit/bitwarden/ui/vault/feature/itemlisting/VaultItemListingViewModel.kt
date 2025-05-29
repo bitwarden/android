@@ -1322,7 +1322,7 @@ class VaultItemListingViewModel @Inject constructor(
             }
 
             is VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive -> {
-                handlePasswordGetDataReceive(action)
+                handleProviderGetPasswordCredentialRequestReceive(action)
             }
 
             is VaultItemListingsAction.Internal.ProviderGetPasswordCredentialResultReceive -> {
@@ -1876,7 +1876,7 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun handlePasswordGetDataReceive(
+    private fun handleProviderGetPasswordCredentialRequestReceive(
         action: VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive,
     ) {
         mutableStateFlow.update {
