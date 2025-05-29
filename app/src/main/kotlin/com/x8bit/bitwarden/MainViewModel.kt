@@ -418,7 +418,7 @@ class MainViewModel @Inject constructor(
             }
 
             providerGetPasswordRequest != null -> {
-                // Set the user's verification status when a new FIDO 2 request is received to force
+                // Set the user's verification status when a new GetPassword request is received to force
                 // explicit verification if the user's vault is unlocked when the request is
                 // received.
                 bitwardenCredentialManager.isUserVerified =
