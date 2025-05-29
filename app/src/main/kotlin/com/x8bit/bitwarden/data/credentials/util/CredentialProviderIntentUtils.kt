@@ -82,7 +82,7 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
 
 /**
  * Checks if this [Intent] contains a [ProviderGetPasswordCredentialRequest] related to an ongoing password
- * credential get process.
+ * credential GetPassword process.
  */
 fun Intent.getProviderGetPasswordRequestOrNull(): ProviderGetPasswordCredentialRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null

@@ -80,7 +80,7 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
-     * The app was launched via the [CredentialManager] framework in order to authenticate a Password
+     * The app was launched via the [CredentialManager] framework in order to retrieve a Password
      * credential saved to the user's vault.
      */
     @Parcelize
