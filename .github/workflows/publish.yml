@@ -26,6 +26,7 @@ on:
       release-notes:
         description: "Change notes to be included with this release."
         type: string
+        required: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
