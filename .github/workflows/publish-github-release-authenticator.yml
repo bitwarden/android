@@ -10,6 +10,7 @@ permissions:
   actions: read
 jobs:
   publish-release-authenticator:
+    name: Publish Authenticator Release
     uses: ./.github/workflows/_publish-github-release.yml
     with:
       release_name: "Authenticator"
