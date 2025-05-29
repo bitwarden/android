@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/_publish-github-release.yml
     with:
       release_name: "Password Manager"
-      workflow_name: "publish-github-release.yml"
+      workflow_name: "publish-github-release-passowrd-manager.yml"
       credentials_filename: "play_creds.json"
       check_release_command: >
         bundle exec fastlane android getLatestVersion serviceCredentialsFile:$CREDENTIALS_PATH
