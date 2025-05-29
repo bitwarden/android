@@ -1,13 +1,33 @@
-name: Publish GitHub Release as newest
+name: _publish-github-release
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * 1-5'
+  workflow_call:
+    inputs:
+      release_name:
+        description: 'Name prefix of the release to publish (e.g. "Password Manager")'
+        type: string
+        default: ""
+      workflow_name:
+        description: 'Name of the workflow to check for previous runs (e.g. publish-github-release.yml)'
+        type: string
+        required: true
+      credentials_filename:
+        description: 'Name of the credentials file to download from Azure Blob Storage (e.g. "google-play-credentials.json")'
+        type: string
+        required: true
+      check_release_command:
+        description: >
+          Shell command to check if a release is already published.
+          Use $CREDENTIALS_PATH for the path to credentials file.
+          Example: 'bundle exec fastlane android getLatestVersion serviceCredentialsFile:$CREDENTIALS_PATH'
+        type: string
+        required: true
+
+
 
 jobs:
   publish-release:
-    name: Publish GitHub Release
+    name: Publish GitHub Release ${{ inputs.release_name }}
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -24,7 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 10 --jq 'first(.[] | select((.name | test("Password Manager"; "i")) and (.isDraft == true)))')
+          latest_release=$(gh release list --json name,tagName,isDraft,isPrerelease -L 10 --jq 'first(.[] | select((.name | test("${{ inputs.release_name }}"; "i")) and (.isDraft == true)))')
 
           is_latest_draft="false"
 
@@ -53,10 +73,9 @@ jobs:
         id: get_previous_run
         env:
           GH_TOKEN: ${{ github.token }}
+          WORKFLOW_NAME: ${{ inputs.workflow_name }}
         run: |
-          workflow_name="publish-github-release.yml"
-
-          previous_run_id=$(gh run list --workflow=$workflow_name  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          previous_run_id=$(gh run list --workflow=$WORKFLOW_NAME  --status=success --limit 1 --json databaseId --jq '.[0].databaseId // empty')
 
           if [ -n "$previous_run_id" ] && [ "$previous_run_id" != "null" ]; then
             echo "Found previous successful scheduled run: $previous_run_id"
@@ -150,30 +169,35 @@ jobs:
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
+          CREDENTIALS_FILE_NAME: ${{ inputs.credentials_filename }}
         run: |
           mkdir -p ${{ github.workspace }}/secrets
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-            --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+            --name $CREDENTIALS_FILE_NAME --file ${{ github.workspace }}/secrets/$CREDENTIALS_FILE_NAME --output none
 
       - name: Check released version
-        if: steps.check_already_processed.outputs.should_skip == 'false'
+        if: steps.check_already_processed.outputs.should_skip == 'false' && inputs.check_release_command != ''
+        env:
+          CREDENTIALS_PATH: ${{ github.workspace }}/secrets/${{ inputs.credentials_filename }}
         run: |
-          bundle exec fastlane android getLatestVersion \
-            serviceCredentialsFile:${{ github.workspace }}/secrets/play_creds.json }}
+          echo "Running custom release check command..."
+          echo "Command: ${{ inputs.check_release_command }}"
+          eval "${{ inputs.check_release_command }}"
+
 
       - name: Check if version is already released
         if: steps.check_already_processed.outputs.should_skip == 'false'
         id: check_version
         env:
           latest_draft_version: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
-          GOOGLE_PLAY_VERSION: ${{ env.GOOGLE_PLAY_VERSION }}
+          STORE_VERSION: ${{ env.STORE_VERSION }}
         run: |
-          if [ "$latest_draft_version" == "$GOOGLE_PLAY_VERSION" ]; then
+          if [ "$latest_draft_version" == "$STORE_VERSION" ]; then
               echo "Version $latest_draft_version is already released on Google Play Store"
               echo "version_released=true" >> $GITHUB_OUTPUT
           else
-              echo "Version $latest_draft_version is not released on Google Play Store. Latest version on Google Play Store is $GOOGLE_PLAY_VERSION"
+              echo "Version $latest_draft_version is not released on Google Play Store. Latest version on Google Play Store is $STORE_VERSION"
               echo "version_released=false" >> $GITHUB_OUTPUT
           fi
 
