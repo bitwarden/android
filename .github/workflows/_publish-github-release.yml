@@ -164,7 +164,7 @@ jobs:
         run: |
           gem install bundler:2.2.27
 
-      - name: Download Play Store credentials
+      - name: Download Store credentials
         if: steps.check_already_processed.outputs.should_skip == 'false'
         env:
           ACCOUNT_NAME: bitwardenci
