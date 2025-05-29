@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillS
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupUnlockDestination
+import com.x8bit.bitwarden.ui.platform.feature.search.SearchRoute
 import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
@@ -201,7 +202,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
 
         addEditSendDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateUpToRoot = { navController.navigateToVaultUnlockedRoot() },
+            onNavigateUpToSearchOrRoot = { navController.navigateUpToSearchOrVaultUnlockedRoot() },
         )
         viewSendDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -249,6 +250,12 @@ fun NavGraphBuilder.vaultUnlockedGraph(
     }
 }
 
-private fun NavController.navigateToVaultUnlockedRoot() {
-    this.popBackStack(route = VaultUnlockedNavbarRoute, inclusive = false)
+private fun NavController.navigateUpToSearchOrVaultUnlockedRoot() {
+    if (!this.popBackStack<SearchRoute>(inclusive = false)) {
+        this.navigateUpToVaultUnlockedRoot()
+    }
+}
+
+private fun NavController.navigateUpToVaultUnlockedRoot() {
+    this.popBackStack<VaultUnlockedNavbarRoute>(inclusive = false)
 }
