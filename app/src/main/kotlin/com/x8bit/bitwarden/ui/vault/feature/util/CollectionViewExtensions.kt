@@ -103,19 +103,16 @@ fun List<CollectionView>?.hasDeletePermissionInAtLeastOneCollection(
 ): Boolean {
     if (this.isNullOrEmpty() || collectionIds.isNullOrEmpty()) return true
 
-    return this.filter { collectionView ->
-        collectionView.id in collectionIds
-    }.let { matchingCollections ->
-        if (matchingCollections.isEmpty()) return false
-
-        matchingCollections.any {
-            if (needsManagePermission) {
-                it.manage
-            } else {
-                it.manage ||
-                    it.permission == CollectionPermission.EDIT ||
-                    it.permission == CollectionPermission.EDIT_EXCEPT_PASSWORD
-            }
+    val collectionViews = this.filter { it.id in collectionIds }
+    return if (collectionViews.isEmpty()) {
+        false
+    } else if (needsManagePermission) {
+        collectionViews.any { it.manage }
+    } else {
+        collectionViews.any {
+            it.manage ||
+                it.permission == CollectionPermission.EDIT ||
+                it.permission == CollectionPermission.EDIT_EXCEPT_PASSWORD
         }
     }
 }
