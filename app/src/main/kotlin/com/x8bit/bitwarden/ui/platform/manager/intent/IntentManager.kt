@@ -159,15 +159,6 @@ interface IntentManager {
         isUserVerified: Boolean,
         requestCode: Int,
     ): PendingIntent
-    /**
-     * Creates a pending intent to use when providing
-     * [androidx.credentials.provider.AuthenticationAction] instances for Passwordcredential filling.
-     */
-    fun createPasswordUnlockPendingIntent(
-        action: String,
-        userId: String,
-        requestCode: Int,
-    ): PendingIntent
 
     /**
      * Open the default email app on device.
