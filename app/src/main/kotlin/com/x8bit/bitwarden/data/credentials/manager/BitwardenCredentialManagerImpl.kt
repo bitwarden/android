@@ -364,8 +364,6 @@ class BitwardenCredentialManagerImpl(
         userId: String,
         callingAppInfo: CallingAppInfo?,
     ): Result<List<CredentialEntry>> {
-        if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
-
         //TODO info/text/logging
         if(callingAppInfo == null) return Throwable().asFailure()
 
