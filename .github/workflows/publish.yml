@@ -88,12 +88,6 @@ jobs:
             echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
 
-        - name: Convert input percentage
-          run: |
-            PERCENTAGE=${{ inputs.rollout-percentage }}
-            DECIMAL=$(awk "BEGIN {print $PERCENTAGE/100}")
-            echo "ROLL_OUT=$DECIMAL" >> $GITHUB_ENV
-
         - name: Promote Play Store version to production
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
@@ -111,12 +105,14 @@ jobs:
               exit 1
             fi
 
+            decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
+
             bundle exec fastlane updateReleaseNotes \
               releaseNotes:"$RELEASE_NOTES" \
               versionCode:"$VERSION_CODE"
 
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
-              rolloutPercentage:"$ROLL_OUT" \
+              rolloutPercentage:"$decimal" \
               packageName:"$PACKAGE_NAME"\
               releaseNotes:"$RELEASE_NOTES"
