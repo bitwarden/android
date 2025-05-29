@@ -431,6 +431,12 @@ platform :android do
       supply_options[:track_promote_release_status] = "complete"
     end
 
+    if options[:releaseNotes].nil?
+      supply_options[:skip_upload_metadata] = true
+    else
+      supply_options[:skip_upload_metadata] = false
+    end
+
     supply(supply_options)
   end
 end
