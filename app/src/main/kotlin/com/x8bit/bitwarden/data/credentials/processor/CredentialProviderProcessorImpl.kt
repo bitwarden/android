@@ -19,6 +19,7 @@ import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
+import androidx.credentials.provider.BeginCreatePublicKeyCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialRequest
 import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.BiometricPromptData
@@ -151,11 +152,17 @@ class CredentialProviderProcessorImpl(
     private fun processCreateCredentialRequest(
         request: BeginCreateCredentialRequest,
     ): BeginCreateCredentialResponse? {
-        return handleCreateCredentialQuery(request)
+        return when (request) {
+            is BeginCreatePublicKeyCredentialRequest -> {
+                handleCreatePasskeyQuery(request)
+            }
+
+            else -> null
+        }
     }
 
-    private fun handleCreateCredentialQuery(
-        request: BeginCreateCredentialRequest,
+    private fun handleCreatePasskeyQuery(
+        request: BeginCreatePublicKeyCredentialRequest,
     ): BeginCreateCredentialResponse? {
         val requestJson = request
             .candidateQueryData
