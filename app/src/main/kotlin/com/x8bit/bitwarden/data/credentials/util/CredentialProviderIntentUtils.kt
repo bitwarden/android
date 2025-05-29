@@ -10,7 +10,7 @@ import androidx.credentials.provider.ProviderGetCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
@@ -81,10 +81,10 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
 }
 
 /**
- * Checks if this [Intent] contains a [PasswordCredentialGetRequest] related to an ongoing password
+ * Checks if this [Intent] contains a [ProviderGetPasswordCredentialRequest] related to an ongoing password
  * credential get process.
  */
-fun Intent.getPasswordGetRequestOrNull(): PasswordCredentialGetRequest? {
+fun Intent.getPasswordGetRequestOrNull(): ProviderGetPasswordCredentialRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
 
     val systemRequest = PendingIntentHandler
@@ -104,7 +104,7 @@ fun Intent.getPasswordGetRequestOrNull(): PasswordCredentialGetRequest? {
         ?.isSuccessful
         ?: getBooleanExtra(EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK, false)
 
-    return PasswordCredentialGetRequest(
+    return ProviderGetPasswordCredentialRequest(
         userId = userId,
         cipherId = cipherId,
         isUserPreVerified = isUserPreVerified,

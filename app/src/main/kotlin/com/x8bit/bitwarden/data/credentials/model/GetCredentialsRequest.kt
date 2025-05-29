@@ -10,7 +10,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
- * Models a Credential request to retrieve Passkey or Password credentials parsed from the launching intent.
+ * Models a [CredentialManager] request to retrieve credentials parsed from the launching intent.
  *
  * @param userId The ID of the user's vault to search.
  * @param requestData Provider request data in the form of a [Bundle].
@@ -38,18 +38,6 @@ data class GetCredentialsRequest(
         providerRequest
             ?.beginGetCredentialOptions
             ?.filterIsInstance<BeginGetPublicKeyCredentialOption>()
-            .orEmpty()
-    }
-
-    /**
-     * The [BeginGetPasswordOption]s of the [providerRequest], or an empty list if no
-     * public key options are present.
-     */
-    @IgnoredOnParcel
-    val beginGetPasswordOption: List<BeginGetPasswordOption> by lazy {
-        providerRequest
-            ?.beginGetCredentialOptions
-            ?.filterIsInstance<BeginGetPasswordOption>()
             .orEmpty()
     }
 

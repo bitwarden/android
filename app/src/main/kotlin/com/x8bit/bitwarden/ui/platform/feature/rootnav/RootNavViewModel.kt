@@ -14,7 +14,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -159,7 +159,7 @@ class RootNavViewModel @Inject constructor(
                     is SpecialCircumstance.ProviderGetPasswordRequest -> {
                         RootNavState.VaultUnlockedForPasswordGet(
                             activeUserId = userState.activeUserId,
-                            passwordCredentialGetRequest =
+                            providerGetPasswordCredentialRequest =
                                 specialCircumstance.passwordGetRequest,
                         )
                     }
@@ -333,7 +333,7 @@ sealed class RootNavState : Parcelable {
     @Parcelize
     data class VaultUnlockedForPasswordGet(
         val activeUserId: String,
-        val passwordCredentialGetRequest: PasswordCredentialGetRequest,
+        val providerGetPasswordCredentialRequest: ProviderGetPasswordCredentialRequest,
     ) : RootNavState()
 
     /**

@@ -43,7 +43,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionReques
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
-import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetRequest
+import com.x8bit.bitwarden.data.credentials.model.ProviderGetPasswordCredentialRequest
 import com.x8bit.bitwarden.data.credentials.model.PasswordCredentialGetResult
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
@@ -167,7 +167,7 @@ class VaultItemListingViewModel @Inject constructor(
             totpData = specialCircumstance?.toTotpDataOrNull(),
             createCredentialRequest = providerCreateCredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertCredentialRequest,
-            passwordCredentialGetRequest = passwordGetCredentialRequest,
+            providerGetPasswordCredentialRequest = passwordGetCredentialRequest,
             getCredentialsRequest = providerGetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
             isRefreshing = false,
@@ -1636,7 +1636,7 @@ class VaultItemListingViewModel @Inject constructor(
                         cipherView = cipherView,
                     )
                 }
-            ?: state.passwordCredentialGetRequest
+            ?: state.providerGetPasswordCredentialRequest
                 ?.providerRequest
                 ?.let { request ->
                     authenticatePasswordCredential(
@@ -1682,7 +1682,7 @@ class VaultItemListingViewModel @Inject constructor(
                         ),
                     )
                 }
-            ?: state.passwordCredentialGetRequest
+            ?: state.providerGetPasswordCredentialRequest
                 ?.let { request ->
                     trySendAction(
                         VaultItemListingsAction.Internal.PasswordGetDataReceive(
@@ -2252,7 +2252,7 @@ data class VaultItemListingState(
     val autofillSelectionData: AutofillSelectionData? = null,
     val createCredentialRequest: CreateCredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
-    val passwordCredentialGetRequest: PasswordCredentialGetRequest? = null,
+    val providerGetPasswordCredentialRequest: ProviderGetPasswordCredentialRequest? = null,
     val getCredentialsRequest: GetCredentialsRequest? = null,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
@@ -3163,7 +3163,7 @@ sealed class VaultItemListingsAction {
          * Indicates that Password assertion request data has been received.
          */
         data class PasswordGetDataReceive(
-            val data: PasswordCredentialGetRequest,
+            val data: ProviderGetPasswordCredentialRequest,
         ) : Internal()
 
         /**
