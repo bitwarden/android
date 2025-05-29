@@ -59,16 +59,6 @@ interface BitwardenCredentialManager {
     ): Fido2CredentialAssertionResult
 
     /**
-     * Authenticate a Password credential against a cipher in the users vault.
-     */
-    suspend fun authenticatePasswordCredential(
-        userId: String,
-        callingAppInfo: CallingAppInfo,
-        request: GetPasswordOption,
-        selectedCipherView: CipherView,
-    ): ProviderGetPasswordCredentialResult
-
-    /**
      * Whether or not the user has authentication attempts remaining.
      */
     fun hasAuthenticationAttemptsRemaining(): Boolean
