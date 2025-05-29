@@ -118,7 +118,6 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -254,8 +253,6 @@ class AuthRepositoryTest {
         } returns mutableActivePolicyFlow
     }
 
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true)
-
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
         every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
@@ -284,7 +281,6 @@ class AuthRepositoryTest {
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
         policyManager = policyManager,
-        featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
         logsManager = logsManager,
     )
@@ -6797,7 +6793,6 @@ class AuthRepositoryTest {
             assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on successful login does not set onboarding status if user has previously logged in`() =
         runTest {
