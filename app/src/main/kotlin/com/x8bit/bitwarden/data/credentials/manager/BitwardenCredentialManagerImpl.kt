@@ -204,14 +204,6 @@ class BitwardenCredentialManagerImpl(
                 return@withContext emptyList<CredentialEntry>().asSuccess()
             }
 
-        val fido2CredentialResult = getCredentialsRequest
-            .beginGetPublicKeyCredentialOptions
-            .toPublicKeyCredentialEntries(
-                userId = getCredentialsRequest.userId,
-                cipherViewsWithPublicKeyCredentials = cipherViews.filter { it.isActiveWithFido2Credentials },
-            )
-            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
-
         val passwordCredentialResult = getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
             getCredentialsRequest
                 .beginGetPasswordOption
@@ -219,18 +211,17 @@ class BitwardenCredentialManagerImpl(
                     userId = getCredentialsRequest.userId,
                     packageName = packageName,
                 )
-                .onFailure { Timber.e(it, "Failed to get Password credential entries.") }
-        } ?: Throwable("Failed to get Password credential entries packageName null").asFailure()
+        } ?: emptyList()
 
-        return@withContext if (fido2CredentialResult.isSuccess || passwordCredentialResult.isSuccess) {
-            ((fido2CredentialResult.getOrNull()
-                ?: emptyList()) + (passwordCredentialResult.getOrNull() ?: emptyList())).asSuccess()
-        } else {
-            val exception = fido2CredentialResult.exceptionOrNull()
-                ?: passwordCredentialResult.exceptionOrNull()
-            exception?.asFailure() ?: Throwable("Failed to get credential entries.").asFailure()
-        }
-
+        return@withContext getCredentialsRequest
+            .beginGetPublicKeyCredentialOptions
+            .toPublicKeyCredentialEntries(
+                userId = getCredentialsRequest.userId,
+                cipherViewsWithPublicKeyCredentials = cipherViews
+                    .filter { it.isActiveWithFido2Credentials },
+            )
+            .map { it + passwordCredentialResult }
+            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
     }
 
     private fun getPasskeyAssertionOptionsOrNull(
@@ -365,7 +356,7 @@ class BitwardenCredentialManagerImpl(
     private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
         userId: String,
         packageName: String,
-    ): Result<List<CredentialEntry>> {
+    ): List<CredentialEntry> {
         val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
             packageName.toAndroidAppUriString()
         )
@@ -377,7 +368,6 @@ class BitwardenCredentialManagerImpl(
                 beginGetPasswordCredentialOptions = this,
                 isUserVerified = isUserVerified,
             )
-            .asSuccess()
     }
 
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
