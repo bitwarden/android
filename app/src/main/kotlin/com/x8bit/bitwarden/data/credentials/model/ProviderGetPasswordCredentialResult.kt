@@ -5,16 +5,16 @@ import com.bitwarden.vault.LoginView
 /**
  * Represents possible outcomes of a Password credential assertion request.
  */
-sealed class PasswordCredentialGetResult {
+sealed class ProviderGetPasswordCredentialResult {
 
     /**
      * Indicates the assertion request completed and [LoginView] was successfully retrieved.
      */
-    data class Success(val credential: LoginView) : PasswordCredentialGetResult()
+    data class Success(val credential: LoginView) : ProviderGetPasswordCredentialResult()
 
     /**
      * Indicates there was an error and the assertion was not successful.
      */
-    data object Error : PasswordCredentialGetResult()
+    data object Error : ProviderGetPasswordCredentialResult()
 
 }
