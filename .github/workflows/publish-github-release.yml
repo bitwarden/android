@@ -182,7 +182,7 @@ jobs:
         env:
           TAG: ${{ steps.get_latest_draft.outputs.latest_draft_version }}
           GH_TOKEN: ${{ github.token }}
-        run: echo "Publish" # gh release edit $TAG --prerelease=false --latest --draft=false
+        run: gh release edit $TAG --prerelease=false --latest --draft=false
 
       - name: Create workflow state artifact
         run: |
