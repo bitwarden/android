@@ -18,10 +18,6 @@ class FlagKeyTest {
             "email-verification",
         )
         assertEquals(
-            FlagKey.OnboardingFlow.keyName,
-            "native-create-account-flow",
-        )
-        assertEquals(
             FlagKey.ImportLoginsFlow.keyName,
             "import-logins-flow",
         )
@@ -85,7 +81,6 @@ class FlagKeyTest {
             listOf(
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
-                FlagKey.OnboardingFlow,
                 FlagKey.ImportLoginsFlow,
                 FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,

@@ -14,9 +14,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
@@ -50,7 +48,6 @@ private const val MIN_PASSWORD_LENGTH = 12
 @HiltViewModel
 class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    featureFlagManager: FeatureFlagManager,
     generatorRepository: GeneratorRepository,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
@@ -68,7 +65,6 @@ class CompleteRegistrationViewModel @Inject constructor(
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onboardingEnabled = featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow),
             minimumPasswordLength = MIN_PASSWORD_LENGTH,
         )
     },
@@ -85,14 +81,6 @@ class CompleteRegistrationViewModel @Inject constructor(
         // As state updates, write to saved state handle:
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-
-        featureFlagManager
-            .getFeatureFlagFlow(FlagKey.OnboardingFlow)
-            .map {
-                Internal.UpdateOnboardingFeatureState(newValue = it)
-            }
-            .onEach(::sendAction)
             .launchIn(viewModelScope)
 
         generatorRepository
@@ -132,7 +120,6 @@ class CompleteRegistrationViewModel @Inject constructor(
             is Internal.GeneratedPasswordResult -> handleGeneratedPasswordResult(action)
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
             is Internal.ReceiveRegisterResult -> handleReceiveRegisterAccountResult(action)
-            is Internal.UpdateOnboardingFeatureState -> handleUpdateOnboardingFeatureState(action)
             is Internal.ReceiveLoginResult -> handleLoginResult(action)
         }
     }
@@ -161,12 +148,6 @@ class CompleteRegistrationViewModel @Inject constructor(
                     message = R.string.email_verified.asText(),
                 ),
             )
-        }
-    }
-
-    private fun handleUpdateOnboardingFeatureState(action: Internal.UpdateOnboardingFeatureState) {
-        mutableStateFlow.update {
-            it.copy(onboardingEnabled = action.newValue)
         }
     }
 
@@ -458,20 +439,8 @@ data class CompleteRegistrationState(
     val isCheckDataBreachesToggled: Boolean,
     val dialog: CompleteRegistrationDialog?,
     val passwordStrengthState: PasswordStrengthState,
-    val onboardingEnabled: Boolean,
     val minimumPasswordLength: Int,
 ) : Parcelable {
-
-    /**
-     * The text to display on the call to action button.
-     */
-    val callToActionText: Text
-        get() = if (onboardingEnabled) {
-            R.string.next.asText()
-        } else {
-            R.string.create_account.asText()
-        }
-
     /**
      * Whether or not the provided master password is considered strong.
      */
@@ -638,11 +607,6 @@ sealed class CompleteRegistrationAction {
         data class ReceivePasswordStrengthResult(
             val result: PasswordStrengthResult,
         ) : Internal()
-
-        /**
-         * Indicate on boarding feature state has been updated.
-         */
-        data class UpdateOnboardingFeatureState(val newValue: Boolean) : Internal()
 
         /**
          * Indicates a generated password has been received.

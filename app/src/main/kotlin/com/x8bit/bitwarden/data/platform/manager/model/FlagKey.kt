@@ -23,7 +23,6 @@ sealed class FlagKey<out T : Any> {
             listOf(
                 AuthenticatorSync,
                 EmailVerification,
-                OnboardingFlow,
                 ImportLoginsFlow,
                 VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
@@ -71,14 +70,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object FlightRecorder : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-flight-recorder"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the new onboarding feature.
-     */
-    data object OnboardingFlow : FlagKey<Boolean>() {
-        override val keyName: String = "native-create-account-flow"
         override val defaultValue: Boolean = false
     }
 
