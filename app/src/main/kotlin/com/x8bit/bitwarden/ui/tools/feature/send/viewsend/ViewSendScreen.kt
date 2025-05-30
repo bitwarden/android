@@ -293,8 +293,7 @@ private fun ViewStateContent(
                     fileType = sendType,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin()
-                        .testTag("ViewSendFileNameText"),
+                        .standardHorizontalMargin(),
                 )
             }
 
@@ -373,7 +372,8 @@ private fun ShareLinkSection(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.cardStyle(
+        modifier = modifier
+            .cardStyle(
                 cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 paddingHorizontal = 16.dp,
                 paddingVertical = 12.dp,
@@ -480,7 +480,8 @@ private fun ColumnScope.AdditionalOptions(
                 BitwardenStepper(
                     label = stringResource(id = R.string.maximum_access_count),
                     value = it,
-                    supportingText = R.string.current_access_count.asText(state.currentAccessCount)
+                    supportingText = R.string.current_access_count
+                        .asText(state.currentAccessCount)
                         .invoke(),
                     onValueChange = {},
                     isDecrementEnabled = false,
