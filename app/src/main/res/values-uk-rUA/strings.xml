@@ -627,7 +627,7 @@
     <string name="maximum_access_count">Максимальна кількість доступів</string>
     <string name="maximum_access_count_info">Якщо встановлено, користувачі більше не зможуть отримати доступ до цього відправлення після досягнення максимальної кількості доступів.</string>
     <string name="maximum_access_count_reached">Досягнуто максимальної кількості доступів</string>
-    <string name="current_access_count">Поточна кількість доступів</string>
+    <string name="current_access_count">Поточна кількість доступів: %s</string>
     <string name="new_password">Новий пароль</string>
     <string name="password_info">Вимагати цей пароль для перегляду відправлення.</string>
     <string name="remove_password">Вилучити пароль</string>
@@ -642,7 +642,10 @@
     <string name="send_link">Посилання на відправлення</string>
     <string name="search_sends">Шукати відправлення</string>
     <string name="edit_send">Редагування</string>
-    <string name="add_send">Нове відправлення</string>
+    <string name="edit_file_send">Редагувати файлове відправлення</string>
+    <string name="edit_text_send">Редагувати текстове відправлення</string>
+    <string name="add_file_send">Нове файлове відправлення</string>
+    <string name="add_text_send">Нове текстове відправлення</string>
     <string name="are_you_sure_delete_send">Ви дійсно хочете видалити це відправлення?</string>
     <string name="send_deleted">Відправлення видалено</string>
     <string name="send_updated">Відправлення збережено</string>
@@ -990,11 +993,9 @@
     <string name="user_verification_direction">Перевірка користувача</string>
     <string name="create_account_on">Створити обліковий запис на</string>
     <string name="create_account_on_with_colon">Створити обліковий запис на:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Дотримуйтесь інструкцій у повідомленні, надісланому на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, щоб продовжити створення облікового запису.</string>
     <string name="we_sent_an_email_to">Ми надіслали електронний лист на <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продовжуючи, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активуючи цей перемикач, ви погоджуєтеся з <annotation link="termsOfService">Умовами користування</annotation> і <annotation link="privacyPolicy">Політикою приватності</annotation></string>
-    <string name="set_password">Встановіть пароль</string>
     <string name="unsubscribe">Відписатися</string>
     <string name="check_your_email">Перевірте свою електронну пошту</string>
     <string name="open_email_app">Відкрийте програму електронної пошти</string>
@@ -1270,9 +1271,9 @@
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Цей обліковий запис незабаром буде видалено. Виконайте вхід на %1$s, щоб продовжити використання Bitwarden.</string>
     <string name="view_file_send">Переглянути файлове відправлення</string>
     <string name="view_text_send">Переглянути текстове відправлення</string>
-    <string name="delete_send">Delete send</string>
-    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
-    <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
-    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="delete_send">Видалити відправлення</string>
+    <string name="missing_send_resync_your_vault">Немає відправлення. Повторно синхронізуйте сховище.</string>
+    <string name="dynamic_colors">Динамічні кольори</string>
+    <string name="dynamic_colors_description">Застосувати динамічні кольори на основі ваших шпалер</string>
+    <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Для динамічних кольорів використовуються системні кольори, які можуть не відповідати всім рекомендаціям щодо доступності.</string>
 </resources>

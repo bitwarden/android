@@ -28,7 +28,6 @@ import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
@@ -87,7 +86,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -118,13 +116,11 @@ import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.error.MissingPropertyException
 import com.x8bit.bitwarden.data.platform.error.NoActiveUserException
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.LogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -255,10 +251,6 @@ class AuthRepositoryTest {
         } returns mutableActivePolicyFlow
     }
 
-    private val featureFlagManager: FeatureFlagManager = mockk(relaxed = true) {
-        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-    }
-
     private val firstTimeActionManager = mockk<FirstTimeActionManager> {
         every { currentOrDefaultUserFirstTimeState } returns FIRST_TIME_STATE
         every { firstTimeStateFlow } returns MutableStateFlow(FIRST_TIME_STATE)
@@ -287,7 +279,6 @@ class AuthRepositoryTest {
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
         policyManager = policyManager,
-        featureFlagManager = featureFlagManager,
         firstTimeActionManager = firstTimeActionManager,
         logsManager = logsManager,
     )
@@ -4752,6 +4743,7 @@ class AuthRepositoryTest {
                 every { type } returns OrganizationType.USER
                 every { keyConnectorUrl } returns null
                 every { userIsClaimedByOrganization } returns false
+                every { limitItemDeletion } returns false
             },
         )
         fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4782,6 +4774,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4820,6 +4813,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4861,6 +4855,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -4901,6 +4896,7 @@ class AuthRepositoryTest {
                     every { type } returns OrganizationType.USER
                     every { keyConnectorUrl } returns url
                     every { userIsClaimedByOrganization } returns false
+                    every { limitItemDeletion } returns false
                 },
             )
             fakeAuthDiskSource.storeOrganizations(userId = USER_ID_1, organizations = organizations)
@@ -5660,39 +5656,6 @@ class AuthRepositoryTest {
 
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
         assertFalse(repository.showWelcomeCarousel)
-    }
-
-    @Test
-    fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
-        val email = "test@gmail.com"
-        val throwable = Throwable("Fail!")
-        coEvery {
-            organizationService.getOrganizationDomainSsoDetails(email)
-        } returns throwable.asFailure()
-        val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(OrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
-    }
-
-    @Test
-    fun `getOrganizationDomainSsoDetails Success should return Success`() = runTest {
-        val email = "test@gmail.com"
-        coEvery {
-            organizationService.getOrganizationDomainSsoDetails(email)
-        } returns OrganizationDomainSsoDetailsResponseJson(
-            isSsoAvailable = true,
-            organizationIdentifier = "Test Org",
-            verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-        )
-            .asSuccess()
-        val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(
-            OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = true,
-                organizationIdentifier = "Test Org",
-                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-            ),
-            result,
-        )
     }
 
     @Test
@@ -6737,13 +6700,12 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on successful login a new user should have onboarding status set if feature flag is on and has not previously logged in`() =
+    fun `on successful login a new user should have onboarding status set if has not previously logged in`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
-            every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow) } returns true
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -6797,73 +6759,12 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `on successful login does not set onboarding status if feature flag is off`() =
+    fun `on successful login does not set onboarding status if user has previously logged in`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
                 identityService.preLogin(email = EMAIL)
             } returns PRE_LOGIN_SUCCESS.asSuccess()
-            every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-            coEvery {
-                identityService.getToken(
-                    email = EMAIL,
-                    authModel = IdentityTokenAuthModel.MasterPassword(
-                        username = EMAIL,
-                        password = PASSWORD_HASH,
-                    ),
-                    captchaToken = null,
-                    uniqueAppId = UNIQUE_APP_ID,
-                )
-            } returns successResponse.asSuccess()
-            coEvery {
-                vaultRepository.unlockVault(
-                    userId = USER_ID_1,
-                    email = EMAIL,
-                    kdf = ACCOUNT_1.profile.toSdkParams(),
-                    initUserCryptoMethod = InitUserCryptoMethod.Password(
-                        password = PASSWORD,
-                        userKey = successResponse.key!!,
-                    ),
-                    privateKey = successResponse.privateKey!!,
-                    organizationKeys = null,
-                )
-            } returns VaultUnlockResult.Success
-            coEvery { vaultRepository.syncIfNecessary() } just runs
-            every {
-                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
-                    previousUserState = null,
-                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
-                )
-            } returns SINGLE_USER_STATE_1
-            val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
-            assertEquals(LoginResult.Success, result)
-            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
-            coVerify { identityService.preLogin(email = EMAIL) }
-            fakeAuthDiskSource.assertPrivateKey(
-                userId = USER_ID_1,
-                privateKey = "privateKey",
-            )
-            fakeAuthDiskSource.assertUserKey(
-                userId = USER_ID_1,
-                userKey = "key",
-            )
-            fakeAuthDiskSource.assertMasterPasswordHash(
-                userId = USER_ID_1,
-                passwordHash = PASSWORD_HASH,
-            )
-            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
-            assertNull(fakeAuthDiskSource.getOnboardingStatus(USER_ID_1))
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on successful login does not set onboarding status if feature flag is on but user has previously logged in`() =
-        runTest {
-            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
-            coEvery {
-                identityService.preLogin(email = EMAIL)
-            } returns PRE_LOGIN_SUCCESS.asSuccess()
-            every { featureFlagManager.getFeatureFlag(FlagKey.OnboardingFlow) } returns true
             coEvery {
                 identityService.getToken(
                     email = EMAIL,

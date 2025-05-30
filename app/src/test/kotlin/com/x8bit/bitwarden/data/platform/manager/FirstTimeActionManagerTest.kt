@@ -40,7 +40,6 @@ class FirstTimeActionManagerTest {
     private val mutableOnboardingFeatureFlow = MutableStateFlow(false)
     private val featureFlagManager = mockk<FeatureFlagManager> {
         every { getFeatureFlagFlow(FlagKey.ImportLoginsFlow) } returns mutableImportLoginsFlow
-        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableOnboardingFeatureFlow
     }
 
     private val mutableAutofillEnabledFlow = MutableStateFlow(false)
@@ -313,17 +312,6 @@ class FirstTimeActionManagerTest {
         }
     }
 
-    @Test
-    fun `shouldShowAddLoginCoachMarkFlow updates when feature flag for onboarding updates`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            firstTimeActionManager.shouldShowAddLoginCoachMarkFlow.test {
-                assertFalse(awaitItem())
-                mutableOnboardingFeatureFlow.update { true }
-                assertTrue(awaitItem())
-            }
-        }
-
     @Suppress("MaxLineLength")
     @Test
     fun `if there are any login ciphers available for the active user should not show add login coach marks`() =
@@ -376,18 +364,6 @@ class FirstTimeActionManagerTest {
             assertFalse(awaitItem())
         }
     }
-
-    @Test
-    fun `shouldShowGeneratorCoachMarkFlow updates when onboarding feature value changes`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            firstTimeActionManager.shouldShowGeneratorCoachMarkFlow.test {
-                assertFalse(awaitItem())
-                mutableOnboardingFeatureFlow.update { true }
-                // Take the value from disk.
-                assertTrue(awaitItem())
-            }
-        }
 
     @Suppress("MaxLineLength")
     @Test

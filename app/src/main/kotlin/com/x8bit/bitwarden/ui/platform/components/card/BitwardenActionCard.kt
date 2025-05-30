@@ -19,12 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.badge.NotificationBadge
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.badge.NotificationBadge
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.card.color.bitwardenCardColors
 
 /**
@@ -70,7 +71,7 @@ fun BitwardenActionCard(
             Spacer(Modifier.weight(1f))
             onDismissClick?.let {
                 BitwardenStandardIconButton(
-                    painter = rememberVectorPainter(id = R.drawable.ic_close),
+                    painter = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                     contentDescription = stringResource(id = R.string.close),
                     onClick = it,
                 )

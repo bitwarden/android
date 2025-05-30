@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
@@ -66,10 +67,10 @@ fun ImportLoginsInstructionStep(
         )
         Spacer(Modifier.height(24.dp))
         Text(
-            text = R.string.need_help_check_out_import_help
-                .toAnnotatedString {
-                    onHelpClick()
-                },
+            text = annotatedStringResource(
+                id = R.string.need_help_check_out_import_help,
+                onAnnotationClick = { onHelpClick() },
+            ),
             style = BitwardenTheme.typography.bodySmall,
             color = BitwardenTheme.colorScheme.text.secondary,
             modifier = Modifier.standardHorizontalMargin(),

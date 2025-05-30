@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 
 /**
  * A composable function to display a row of actions.
@@ -41,12 +41,12 @@ private fun BitwardenRowOfIconButtons_preview() {
     BitwardenTheme {
         BitwardenRowOfActions {
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_question_circle),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
                 contentDescription = "Icon 1",
                 modifier = Modifier.size(24.dp),
             )
             Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_question_circle),
+                painter = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
                 contentDescription = "Icon 2",
                 modifier = Modifier.size(24.dp),
             )

@@ -19,10 +19,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance.RegistrationEvent
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
@@ -93,11 +91,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
             dispatcherManager = FakeDispatcherManager(),
         )
-    private val mutableFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
-    }
     private val mutableGeneratorResultFlow = bufferedMutableSharedFlow<GeneratorResult>()
     private val mockCompleteRegistrationCircumstance =
         mockk<RegistrationEvent.CompleteRegistration>()
@@ -596,13 +589,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `feature flag state update is captured in ViewModel state`() {
-        mutableFeatureFlagFlow.value = true
-        val viewModel = createCompleteRegistrationViewModel()
-        assertTrue(viewModel.stateFlow.value.onboardingEnabled)
-    }
-
-    @Test
     fun `CreateAccountClick with password below 12 chars should show password length dialog`() =
         runTest {
             val input = "abcdefghikl"
@@ -679,13 +665,12 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             every { toCompleteRegistrationArgs() } returns CompleteRegistrationArgs(
                 emailAddress = completeRegistrationState?.userEmail ?: EMAIL,
                 verificationToken = completeRegistrationState?.emailVerificationToken ?: TOKEN,
-                fromEmail = completeRegistrationState?.fromEmail ?: false,
+                fromEmail = completeRegistrationState?.fromEmail == true,
             )
         },
         authRepository = mockAuthRepository,
         environmentRepository = fakeEnvironmentRepository,
         specialCircumstanceManager = specialCircumstanceManager,
-        featureFlagManager = featureFlagManager,
         generatorRepository = generatorRepository,
     )
 
@@ -704,7 +689,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
         private val VALID_INPUT_STATE = CompleteRegistrationState(
@@ -717,7 +701,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             isCheckDataBreachesToggled = false,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.GOOD,
-            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }

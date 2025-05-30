@@ -9,7 +9,6 @@
 
     <!-- Debug Menu -->
     <string name="email_verification">Email Verification</string>
-    <string name="onboarding_flow">Onboarding Flow</string>
     <string name="import_logins_flow">Import Logins Flow</string>
     <string name="feature_flags">Feature Flags:</string>
     <string name="debug_menu">Debug Menu</string>

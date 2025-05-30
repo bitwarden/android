@@ -3,8 +3,6 @@ package com.bitwarden.network.service
 import com.bitwarden.network.api.AuthenticatedOrganizationApi
 import com.bitwarden.network.api.UnauthenticatedOrganizationApi
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsRequestJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationResetPasswordEnrollRequestJson
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsRequest
@@ -30,16 +28,6 @@ internal class OrganizationServiceImpl(
             body = OrganizationResetPasswordEnrollRequestJson(
                 passwordHash = passwordHash,
                 resetPasswordKey = resetPasswordKey,
-            ),
-        )
-        .toResult()
-
-    override suspend fun getOrganizationDomainSsoDetails(
-        email: String,
-    ): Result<OrganizationDomainSsoDetailsResponseJson> = unauthenticatedOrganizationApi
-        .getClaimedDomainOrganizationDetails(
-            body = OrganizationDomainSsoDetailsRequestJson(
-                email = email,
             ),
         )
         .toResult()

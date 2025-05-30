@@ -642,7 +642,10 @@
     <string name="send_link">קישור סֵנְד</string>
     <string name="search_sends">חפש סֵנְדים</string>
     <string name="edit_send">ערוך סֵנְד</string>
-    <string name="add_send">סֵנְד חדש</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">האם אתה בטוח שברצונך למחוק סֵנְד זה?</string>
     <string name="send_deleted">הסֵנְד נמחק</string>
     <string name="send_updated">סֵנְד נשמר</string>
@@ -990,11 +993,9 @@
     <string name="user_verification_direction">אימות משתמש</string>
     <string name="create_account_on">צור חשבון ב־</string>
     <string name="create_account_on_with_colon">צור חשבון ב:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">עקוב אחר ההוראות בדוא\"ל שנשלח אל <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> כדי להמשיך ליצור את החשבון שלך.</string>
     <string name="we_sent_an_email_to">שלחנו דוא\"ל אל <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">על ידי המשך, אתה מסכים ל<annotation link="termsOfService">תנאי השירות</annotation> ו<annotation link="privacyPolicy">מדיניות הפרטיות</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">על ידי הפעלת מתג זה, אתה מסכים ל<annotation link="termsOfService">תנאי השירות</annotation> ו<annotation link="privacyPolicy">מדיניות הפרטיות</annotation></string>
-    <string name="set_password">הגדר סיסמה</string>
     <string name="unsubscribe">בטל הרשמה</string>
     <string name="check_your_email">בדוק את הדוא\"ל שלך</string>
     <string name="open_email_app">פתח יישום דוא\"ל</string>
@@ -1260,7 +1261,7 @@
     <string name="log_deleted">Log deleted</string>
     <string name="app_settings">App settings</string>
     <string name="replace_existing_certificate">Replace existing certificate?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>

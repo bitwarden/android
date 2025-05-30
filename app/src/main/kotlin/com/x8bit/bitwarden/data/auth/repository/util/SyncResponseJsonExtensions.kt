@@ -24,6 +24,7 @@ fun SyncResponseJson.Profile.Organization.toOrganization(): Organization =
         shouldManageResetPassword = this.permissions.shouldManageResetPassword,
         keyConnectorUrl = this.keyConnectorUrl,
         userIsClaimedByOrganization = this.userIsClaimedByOrganization,
+        limitItemDeletion = this.limitItemDeletion,
     )
 
 /**
