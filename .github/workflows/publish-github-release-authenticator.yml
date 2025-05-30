@@ -1,0 +1,21 @@
+name: Publish Authenticator GitHub Release as newest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 1-5'
+
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish-release-authenticator:
+    name: Publish Authenticator Release
+    uses: ./.github/workflows/_publish-github-release.yml
+    with:
+      release_name: "Authenticator"
+      workflow_name: "publish-github-release-authenticator.yml"
+      credentials_filename: "authenticator_play_store-creds.json"
+      check_release_command: >
+        bundle exec fastlane android getLatestAuthenticatorVersion serviceCredentialsFile:$CREDENTIALS_PATH
+    secrets: inherit
