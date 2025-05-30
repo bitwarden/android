@@ -251,7 +251,8 @@ private fun ViewStateContent(
             cardInsets = PaddingValues(top = 16.dp, bottom = 6.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .testTag(tag = "ViewSendCopyButton"),
         )
         BitwardenOutlinedButton(
             label = stringResource(id = R.string.share),
@@ -261,7 +262,8 @@ private fun ViewStateContent(
             cardInsets = PaddingValues(top = 6.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .testTag(tag = "ViewSendShareButton"),
         )
 
         Spacer(modifier = Modifier.height(height = 16.dp))
@@ -279,6 +281,7 @@ private fun ViewStateContent(
             onValueChange = {},
             readOnly = true,
             cardStyle = CardStyle.Full,
+            textFieldTestTag = "ViewSendNameField",
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -290,7 +293,8 @@ private fun ViewStateContent(
                     fileType = sendType,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .standardHorizontalMargin(),
+                        .standardHorizontalMargin()
+                        .testTag("ViewSendFileNameText"),
                 )
             }
 
@@ -311,6 +315,7 @@ private fun ViewStateContent(
             onValueChange = {},
             readOnly = true,
             cardStyle = CardStyle.Full,
+            textFieldTestTag = "ViewSendDeletionDateField",
             modifier = Modifier
                 .fillMaxWidth()
                 .standardHorizontalMargin(),
@@ -322,7 +327,8 @@ private fun ViewStateContent(
             onDeleteClick = onDeleteClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .standardHorizontalMargin(),
+                .standardHorizontalMargin()
+                .testTag("ViewSendDeleteButton"),
         )
         Spacer(modifier = Modifier.height(height = 88.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
@@ -367,8 +373,7 @@ private fun ShareLinkSection(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .cardStyle(
+        modifier = modifier.cardStyle(
                 cardStyle = CardStyle.Top(dividerPadding = 0.dp),
                 paddingHorizontal = 16.dp,
                 paddingVertical = 12.dp,
@@ -389,7 +394,9 @@ private fun ShareLinkSection(
             color = BitwardenTheme.colorScheme.text.secondary,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(tag = "ViewSendShareLinkText"),
         )
     }
 }
@@ -413,13 +420,16 @@ private fun FileSendContent(
             text = fileType.fileName,
             color = BitwardenTheme.colorScheme.text.primary,
             style = BitwardenTheme.typography.bodyLarge,
-            modifier = Modifier.weight(weight = 1f),
+            modifier = Modifier
+                .weight(weight = 1f)
+                .testTag("ViewSendFileNameText"),
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = fileType.fileSize,
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodyLarge,
+            modifier = Modifier.testTag("ViewSendFileSizeText"),
         )
     }
 }
@@ -435,6 +445,7 @@ private fun TextSendContent(
         onValueChange = {},
         readOnly = true,
         cardStyle = CardStyle.Full,
+        textFieldTestTag = "ViewSendContentText",
         modifier = modifier,
     )
 }
@@ -469,8 +480,7 @@ private fun ColumnScope.AdditionalOptions(
                 BitwardenStepper(
                     label = stringResource(id = R.string.maximum_access_count),
                     value = it,
-                    supportingText = R.string.current_access_count
-                        .asText(state.currentAccessCount)
+                    supportingText = R.string.current_access_count.asText(state.currentAccessCount)
                         .invoke(),
                     onValueChange = {},
                     isDecrementEnabled = false,
@@ -478,7 +488,7 @@ private fun ColumnScope.AdditionalOptions(
                     range = 0..Int.MAX_VALUE,
                     cardStyle = CardStyle.Full,
                     modifier = Modifier
-                        .testTag(tag = "SendMaxAccessCount")
+                        .testTag(tag = "ViewSendMaxAccessCount")
                         .fillMaxWidth()
                         .standardHorizontalMargin(),
                 )
