@@ -22,10 +22,6 @@ class FlagKeyTest {
             "import-logins-flow",
         )
         assertEquals(
-            FlagKey.VerifiedSsoDomainEndpoint.keyName,
-            "pm-12337-refactor-sso-details-endpoint",
-        )
-        assertEquals(
             FlagKey.CredentialExchangeProtocolImport.keyName,
             "cxp-import-mobile",
         )
@@ -82,7 +78,6 @@ class FlagKeyTest {
                 FlagKey.AuthenticatorSync,
                 FlagKey.EmailVerification,
                 FlagKey.ImportLoginsFlow,
-                FlagKey.VerifiedSsoDomainEndpoint,
                 FlagKey.CredentialExchangeProtocolImport,
                 FlagKey.CredentialExchangeProtocolExport,
                 FlagKey.SingleTapPasskeyCreation,

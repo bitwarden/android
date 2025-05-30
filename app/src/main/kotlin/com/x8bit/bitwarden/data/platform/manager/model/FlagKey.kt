@@ -24,7 +24,6 @@ sealed class FlagKey<out T : Any> {
                 AuthenticatorSync,
                 EmailVerification,
                 ImportLoginsFlow,
-                VerifiedSsoDomainEndpoint,
                 CredentialExchangeProtocolImport,
                 CredentialExchangeProtocolExport,
                 MutualTls,
@@ -78,14 +77,6 @@ sealed class FlagKey<out T : Any> {
      */
     data object ImportLoginsFlow : FlagKey<Boolean>() {
         override val keyName: String = "import-logins-flow"
-        override val defaultValue: Boolean = false
-    }
-
-    /**
-     * Data object holding the feature flag key for the new verified SSO domain endpoint feature.
-     */
-    data object VerifiedSsoDomainEndpoint : FlagKey<Boolean>() {
-        override val keyName: String = "pm-12337-refactor-sso-details-endpoint"
         override val defaultValue: Boolean = false
     }
 

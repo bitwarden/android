@@ -846,7 +846,6 @@ Do you want to switch to this account?</string>
     <string name="password_found_in_a_data_breach_alert_description">Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</string>
     <string name="weak_and_exposed_master_password">Weak and Exposed Master Password</string>
     <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</string>
-    <string name="organization_sso_identifier_required">Organization SSO identifier required.</string>
     <string name="add_the_key_to_an_existing_or_new_item">Add the key to an existing or new item</string>
     <string name="there_are_no_items_in_your_vault_that_match_x">There are no items in your vault that match \"%1$s\"</string>
     <string name="search_for_an_item_or_add_a_new_item">Search for an item or add a new item</string>
@@ -1120,7 +1119,6 @@ Do you want to switch to this account?</string>
     <string name="got_it">Got it</string>
     <string name="no_logins_were_imported">No logins were imported</string>
     <string name="import_error">Import error</string>
-    <string name="verified_sso_domain_verified">Verified SSO Domain Endpoint</string>
     <string name="logins_imported">Logins imported</string>
     <string name="remember_to_delete_your_imported_password_file_from_your_computer">Remember to delete your imported password file from your computer</string>
     <string name="type_ssh_key">SSH key</string>

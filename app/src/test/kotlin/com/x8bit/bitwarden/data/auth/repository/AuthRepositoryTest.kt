@@ -28,7 +28,6 @@ import com.bitwarden.network.model.IdentityTokenAuthModel
 import com.bitwarden.network.model.KdfTypeJson
 import com.bitwarden.network.model.KeyConnectorMasterKeyResponseJson
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.OrganizationType
 import com.bitwarden.network.model.PasswordHintResponseJson
@@ -87,7 +86,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
@@ -5658,39 +5656,6 @@ class AuthRepositoryTest {
 
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
         assertFalse(repository.showWelcomeCarousel)
-    }
-
-    @Test
-    fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
-        val email = "test@gmail.com"
-        val throwable = Throwable("Fail!")
-        coEvery {
-            organizationService.getOrganizationDomainSsoDetails(email)
-        } returns throwable.asFailure()
-        val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(OrganizationDomainSsoDetailsResult.Failure(error = throwable), result)
-    }
-
-    @Test
-    fun `getOrganizationDomainSsoDetails Success should return Success`() = runTest {
-        val email = "test@gmail.com"
-        coEvery {
-            organizationService.getOrganizationDomainSsoDetails(email)
-        } returns OrganizationDomainSsoDetailsResponseJson(
-            isSsoAvailable = true,
-            organizationIdentifier = "Test Org",
-            verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-        )
-            .asSuccess()
-        val result = repository.getOrganizationDomainSsoDetails(email)
-        assertEquals(
-            OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = true,
-                organizationIdentifier = "Test Org",
-                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-            ),
-            result,
-        )
     }
 
     @Test

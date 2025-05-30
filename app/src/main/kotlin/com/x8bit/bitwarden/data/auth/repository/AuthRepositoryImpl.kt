@@ -65,7 +65,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.LeaveOrganizationResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.LogoutReason
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -1198,23 +1197,6 @@ class AuthRepositoryImpl(
     override fun setWebAuthResult(webAuthResult: WebAuthResult) {
         webAuthResultChannel.trySend(webAuthResult)
     }
-
-    override suspend fun getOrganizationDomainSsoDetails(
-        email: String,
-    ): OrganizationDomainSsoDetailsResult = organizationService
-        .getOrganizationDomainSsoDetails(
-            email = email,
-        )
-        .fold(
-            onSuccess = {
-                OrganizationDomainSsoDetailsResult.Success(
-                    isSsoAvailable = it.isSsoAvailable,
-                    organizationIdentifier = it.organizationIdentifier,
-                    verifiedDate = it.verifiedDate,
-                )
-            },
-            onFailure = { OrganizationDomainSsoDetailsResult.Failure(error = it) },
-        )
 
     override suspend fun getVerifiedOrganizationDomainSsoDetails(
         email: String,
