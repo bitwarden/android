@@ -415,7 +415,7 @@ platform :android do
     supply_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "Internal"
+      track: "Staged for Production"
       track_promote_to: "production",  # production is case sensitive
       skip_upload_apk: true,
       skip_upload_aab: true,
