@@ -21,12 +21,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkActionText
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkScope
 import com.x8bit.bitwarden.ui.platform.components.coachmark.model.CoachMarkHighlightShape
@@ -369,7 +370,7 @@ private fun TotpRow(
         actions = {
             totpKey?.let {
                 BitwardenStandardIconButton(
-                    vectorIconRes = R.drawable.ic_clear,
+                    vectorIconRes = BitwardenDrawable.ic_clear,
                     contentDescription = stringResource(id = R.string.delete),
                     onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                 )

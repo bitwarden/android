@@ -960,11 +960,12 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         updateCommonContent { currentCommonContentState ->
             currentCommonContentState.copy(
+                selectedOwnerId = currentCommonContentState.selectedOwner?.id,
                 availableOwners = currentCommonContentState
                     .availableOwners
                     .toUpdatedOwners(
                         selectedCollectionId = action.collection.id,
-                        selectedOwnerId = currentCommonContentState.selectedOwnerId,
+                        selectedOwnerId = currentCommonContentState.selectedOwner?.id,
                     ),
             )
         }
@@ -1754,9 +1755,21 @@ class VaultAddEditViewModel @Inject constructor(
                     ) {
                         cipherView.permissions?.delete == true
                     } else {
+                        val needsManagePermission = cipherView
+                            ?.organizationId
+                            ?.let { orgId ->
+                                currentAccount
+                                    .organizations
+                                    .firstOrNull { it.id == orgId }
+                                    ?.limitItemDeletion
+                            }
+
                         internalVaultData
                             .collectionViewList
-                            .hasDeletePermissionInAtLeastOneCollection(cipherView?.collectionIds)
+                            .hasDeletePermissionInAtLeastOneCollection(
+                                collectionIds = cipherView?.collectionIds,
+                                needsManagePermission = needsManagePermission == true,
+                            )
                     }
 
                     val canAssignToCollections = internalVaultData

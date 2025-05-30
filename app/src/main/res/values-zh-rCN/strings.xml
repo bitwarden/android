@@ -620,9 +620,9 @@
     <string name="deletion_date_info">此 Send 将在指定的日期和时间后被永久删除。</string>
     <string name="pending_delete">待删除</string>
     <string name="expired">已过期</string>
-    <string name="expires_at">%s 后过期</string>
+    <string name="expires_at">%s 过期</string>
     <string name="expires_tomorrow">明天过期</string>
-    <string name="expires_on">%s 后过期</string>
+    <string name="expires_on">%s 过期</string>
     <string name="stops_logging_on">%1$s %2$s 后停止记录</string>
     <string name="maximum_access_count">最大访问次数</string>
     <string name="maximum_access_count_info">设置后，当达到最大访问次数时用户将不再能够访问此 Send。</string>
@@ -642,7 +642,10 @@
     <string name="send_link">Send 链接</string>
     <string name="search_sends">搜索 Send</string>
     <string name="edit_send">编辑 Send</string>
-    <string name="add_send">新增 Send</string>
+    <string name="edit_file_send">编辑文件 Send</string>
+    <string name="edit_text_send">编辑文本 Send</string>
+    <string name="add_file_send">新增文件 Send</string>
+    <string name="add_text_send">新增文本 Send</string>
     <string name="are_you_sure_delete_send">确定要删除此 Send 吗？</string>
     <string name="send_deleted">Send 已删除</string>
     <string name="send_updated">Send 已保存</string>
@@ -990,11 +993,9 @@
     <string name="user_verification_direction">用户验证</string>
     <string name="create_account_on">创建账户至</string>
     <string name="create_account_on_with_colon">创建账户至：</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">按照发送到 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 的电子邮件中的说明继续创建您的账户。</string>
     <string name="we_sent_an_email_to">我们向 <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> 发送了一封电子邮件。</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">若继续，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">激活此开关，表示您同意 <annotation link="termsOfService">服务条款</annotation> 和 <annotation link="privacyPolicy">隐私政策</annotation></string>
-    <string name="set_password">设置密码</string>
     <string name="unsubscribe">取消订阅</string>
     <string name="check_your_email">检查您的电子邮箱</string>
     <string name="open_email_app">打开电子邮箱 App</string>
@@ -1231,7 +1232,8 @@
     <string name="no_logs_recorded">没有日志被记录</string>
     <string name="experiencing_an_issue">遇到问题了吗？</string>
     <string name="enable_temporary_logging_to_collect_and_inspect_logs_locally">启用临时日志记录，以在本地收集和检查日志。启用后，可能会记录应用程序状态和网络调用，但绝不会记录敏感的密码库信息。</string>
-    <string name="to_get_started_set_a_logging_duration">要开始使用，请设置日志记录持续时间。日志记录将在该时间段后自动关闭，方便您在复现问题时捕获相关活动。</string>
+    <string name="to_get_started_set_a_logging_duration">要开始使用，请设置日志记录持续时间，以便您在复现问题时捕获相关活动。
+日志记录将在该时间段后自动停用。</string>
     <string name="logs_will_be_automatically_deleted_after_30_days">日志将在 30 天后自动删除。只有当您共享它时，Bitwarden 才能访问您的日志数据。</string>
     <string name="for_details_on_what_is_and_isnt_logged">要了解哪些内容会被记录、哪些不会被记录，请访问\n<annotation link="helpCenter">Bitwarden 帮助中心</annotation>。</string>
     <string name="logging_duration">日志记录持续时间</string>
@@ -1260,12 +1262,12 @@
     <string name="log_deleted">日志已删除</string>
     <string name="app_settings">App 设置</string>
     <string name="replace_existing_certificate">替换现有证书吗？</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已经存在。您想要替换它吗？\n替换证书可能会影响与当前使用该证书的任何环境的连接。</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">别名为「%s」的证书已经存在。您要替换它吗？\n替换该证书可能会影响您与当前使用该证书的任何环境的连接。</string>
     <string name="replace_certificate">替换证书</string>
     <string name="unable_to_read_certificate">无法读取证书。</string>
     <string name="cannot_delete_your_account">无法删除您的账户</string>
     <string name="cannot_delete_your_account_explanation">此操作无法完成，因为您的账户归组织所有。请联系您的组织管理员获取详细信息。</string>
-    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户将很快被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
+    <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">此账户即将被删除。请在 %1$s 前登录以继续使用 Bitwarden。</string>
     <string name="view_file_send">查看文件 Send</string>
     <string name="view_text_send">查看文本 Send</string>
     <string name="delete_send">删除 Send</string>

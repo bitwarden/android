@@ -111,7 +111,7 @@
     <string name="edit_item">Изменение элемента</string>
     <string name="edit_login">Изменить логин</string>
     <string name="edit_card">Редактировать карту</string>
-    <string name="edit_identity">Редактировать личность</string>
+    <string name="edit_identity">Редактировать личную информацию</string>
     <string name="edit_note">Редактировать заметку</string>
     <string name="edit_passkey">Редактировать passkey</string>
     <string name="enable_automatic_syncing">Разрешить автоматическую синхронизацию</string>
@@ -165,8 +165,8 @@
     <string name="no_cards">В вашем хранилище нет карт.</string>
     <string name="new_card">Новая карта</string>
     <string name="no_logins">В вашем хранилище нет логинов.</string>
-    <string name="no_identities">В вашем хранилище нет личностей.</string>
-    <string name="new_identity">Новая личность</string>
+    <string name="no_identities">В вашем хранилище нет личной информации.</string>
+    <string name="new_identity">Новая личная информация</string>
     <string name="no_notes">В вашем хранилище нет заметок.</string>
     <string name="new_note">Новая заметка</string>
     <string name="new_passkey">Новый passkey</string>
@@ -217,7 +217,7 @@
     <string name="view_item">Просмотр элемента</string>
     <string name="view_login">Просмотр логина</string>
     <string name="view_card">Просмотр карты</string>
-    <string name="view_identity">Просмотр личности</string>
+    <string name="view_identity">Просмотр личной информации</string>
     <string name="view_note">Просмотр заметки</string>
     <string name="view_passkey">Просмотр passkey</string>
     <string name="web_vault">Веб-хранилище Bitwarden</string>
@@ -317,7 +317,7 @@
     <string name="number">Номер</string>
     <string name="security_code">Код безопасности</string>
     <string name="type_card">Карта</string>
-    <string name="type_identity">Личность</string>
+    <string name="type_identity">Личная информация</string>
     <string name="type_login">Логин</string>
     <string name="type_secure_note">Защищенная заметка</string>
     <string name="address1">Строка адреса 1</string>
@@ -426,7 +426,7 @@
     <string name="bitwarden_autofill_alert2">Самый простой способ добавлять новые логины в хранилище - использовать расширение автозаполнения паролей Bitwarden. Дополнительные сведения об использовании расширения автозаполнения паролей Bitwarden находятся в разделе \'Настройки\'.</string>
     <string name="invalid_email">Неверный адрес email.</string>
     <string name="cards">Карты</string>
-    <string name="identities">Личные данные</string>
+    <string name="identities">Личная информация</string>
     <string name="identification">Идентификация</string>
     <string name="logins">Логины</string>
     <string name="secure_notes">Защищенные заметки</string>
@@ -642,7 +642,10 @@
     <string name="send_link">Ссылка на Send</string>
     <string name="search_sends">Поиск Send’ов</string>
     <string name="edit_send">Изменить Send</string>
-    <string name="add_send">Новая Send</string>
+    <string name="edit_file_send">Изменить файловую Send</string>
+    <string name="edit_text_send">Изменить тестовую Send</string>
+    <string name="add_file_send">Новая файловая Send</string>
+    <string name="add_text_send">Новая текстовая Send</string>
     <string name="are_you_sure_delete_send">Вы действительно хотите удалить эту Send?</string>
     <string name="send_deleted">Send удалена</string>
     <string name="send_updated">Send сохранена</string>
@@ -992,11 +995,9 @@
     <string name="user_verification_direction">Верификация пользователя</string>
     <string name="create_account_on">Создать аккаунт на</string>
     <string name="create_account_on_with_colon">Создать аккаунт на:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следуйте инструкциям из письма, отправленного <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, чтобы продолжить создание аккаунта.</string>
     <string name="we_sent_an_email_to">Мы отправили письмо <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Продолжая, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">При активации этого переключателя, вы принимаете <annotation link="termsOfService">Условия предоставления услуг</annotation> и <annotation link="privacyPolicy">Политику конфиденциальности</annotation></string>
-    <string name="set_password">Задать пароль</string>
     <string name="unsubscribe">Отписаться</string>
     <string name="check_your_email">Проверьте свою почту</string>
     <string name="open_email_app">Открыть приложение электронной почты</string>
@@ -1007,7 +1008,7 @@
     <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований. <annotation link="unsubscribe">Отписаться</annotation> можно в любое время.</string>
     <string name="get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time">Получайте советы, объявления и исследования от Bitwarden в свой почтовый ящик. Отписаться можно в любое время.</string>
     <string name="security_prioritized">Безопасность, приоритет</string>
-    <string name="welcome_message_1">Сохраняйте логины, карты и личные данные в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
+    <string name="welcome_message_1">Сохраняйте логины, карты и личную информацию в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
     <string name="welcome_message_2">Настройте биометрическую разблокировку и автозаполнение, чтобы входить в свои аккаунты, не набирая ни одной буквы.</string>
     <string name="quick_and_easy_login">Быстрая и простая авторизация</string>
     <string name="level_up_your_logins">Сделайте авторизацию еще проще</string>

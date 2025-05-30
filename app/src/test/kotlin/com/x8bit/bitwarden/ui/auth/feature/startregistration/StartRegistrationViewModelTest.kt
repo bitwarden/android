@@ -10,8 +10,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
@@ -33,7 +31,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -43,12 +40,6 @@ import org.junit.jupiter.api.Test
 
 @Suppress("LargeClass")
 class StartRegistrationViewModelTest : BaseViewModelTest() {
-    private val mutableFeatureFlagFlow = MutableStateFlow(false)
-    private val featureFlagManager = mockk<FeatureFlagManager>(relaxed = true) {
-        every { getFeatureFlag(FlagKey.OnboardingFlow) } returns false
-        every { getFeatureFlagFlow(FlagKey.OnboardingFlow) } returns mutableFeatureFlagFlow
-    }
-
     /**
      * Saved state handle that has valid inputs. Useful for tests that want to test things
      * after the user has entered all valid inputs.
@@ -73,12 +64,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct`() {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
 
@@ -91,26 +77,19 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
-            showNewOnboardingUi = false,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = handle,
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
         )
         assertEquals(savedState, viewModel.stateFlow.value)
     }
 
     @Test
     fun `ContinueClick with blank email should show email required`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         val input = "a"
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
@@ -129,12 +108,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ContinueClick with invalid email should show invalid email`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         val input = " "
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
@@ -169,7 +143,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = validInputHandle,
             authRepository = repo,
             environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
         )
         viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
@@ -204,7 +177,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = validInputHandle,
             authRepository = repo,
             environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
         )
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
@@ -250,7 +222,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 savedStateHandle = validInputHandle,
                 authRepository = repo,
                 environmentRepository = fakeEnvironmentRepository,
-                featureFlagManager = featureFlagManager,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
@@ -288,7 +259,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 savedStateHandle = validInputHandle,
                 authRepository = repo,
                 environmentRepository = fakeEnvironmentRepository,
-                featureFlagManager = featureFlagManager,
             )
             viewModel.eventFlow.test {
                 viewModel.trySendAction(ContinueClick)
@@ -303,12 +273,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(CloseClick)
             assertEquals(NavigateBack, awaitItem())
@@ -317,12 +282,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `PrivacyPolicyClick should emit NavigatePrivacyPolicy`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(PrivacyPolicyClick)
             assertEquals(NavigateToPrivacyPolicy, awaitItem())
@@ -331,12 +291,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `TermsClick should emit NavigateToTerms`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(TermsClick)
             assertEquals(NavigateToTerms, awaitItem())
@@ -345,12 +300,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `UnsubscribeMarketingEmailsClick should emit NavigateToUnsubscribe`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(UnsubscribeMarketingEmailsClick)
             assertEquals(NavigateToUnsubscribe, awaitItem())
@@ -360,12 +310,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `EnvironmentTypeSelect should update value of selected region for US or EU`() = runTest {
         val inputEnvironmentType = Environment.Type.EU
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.stateFlow.test {
             awaitItem()
             viewModel.trySendAction(
@@ -383,12 +328,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `EnvironmentTypeSelect should emit NavigateToEnvironment for self-hosted`() = runTest {
         val inputEnvironmentType = Environment.Type.SELF_HOSTED
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 EnvironmentTypeSelect(
@@ -404,12 +344,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `EmailInputChange update email`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(
@@ -424,12 +359,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `NameInputChange update name`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.trySendAction(NameInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(nameInput = "input"), awaitItem())
@@ -438,12 +368,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ReceiveMarketingEmailsToggle update isReceiveMarketingEmailsToggled`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
         viewModel.trySendAction(ReceiveMarketingEmailsToggle(false))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(isReceiveMarketingEmailsToggled = false), awaitItem())
@@ -452,12 +377,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `ServerGeologyHelpClickAction should emit NavigateToServerSelectionInfo`() = runTest {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
+        val viewModel = createStartRegistrationViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
@@ -465,20 +385,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Test
-    fun `OnboardingFeatureFlagUpdated should update showNewOnboardingUi in state`() {
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = SavedStateHandle(),
-            authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository,
-            featureFlagManager = featureFlagManager,
-        )
-        mutableFeatureFlagFlow.value = true
-        assertEquals(
-            DEFAULT_STATE.copy(showNewOnboardingUi = true),
-            viewModel.stateFlow.value,
-        )
-    }
+    fun createStartRegistrationViewModel(): StartRegistrationViewModel = StartRegistrationViewModel(
+        savedStateHandle = SavedStateHandle(),
+        authRepository = mockAuthRepository,
+        environmentRepository = fakeEnvironmentRepository,
+    )
 
     companion object {
         private const val EMAIL = "test@test.com"
@@ -490,7 +401,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
-            showNewOnboardingUi = false,
         )
         private val VALID_INPUT_STATE = StartRegistrationState(
             emailInput = EMAIL,
@@ -499,7 +409,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = true,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
-            showNewOnboardingUi = false,
         )
     }
 }

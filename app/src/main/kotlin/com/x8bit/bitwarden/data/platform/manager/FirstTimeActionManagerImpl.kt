@@ -160,13 +160,6 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .getShouldShowAddLoginCoachMarkFlow()
             .map { it != false }
             .mapFalseIfAnyLoginCiphersAvailable()
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
-            ) { shouldShow, featureIsEnabled ->
-                // If the feature flag is off always return true so observers know
-                // the card has not been shown.
-                shouldShow && featureIsEnabled
-            }
             .distinctUntilChanged()
 
     override val shouldShowGeneratorCoachMarkFlow: Flow<Boolean>
@@ -174,13 +167,6 @@ class FirstTimeActionManagerImpl @Inject constructor(
             .getShouldShowGeneratorCoachMarkFlow()
             .map { it != false }
             .mapFalseIfAnyLoginCiphersAvailable()
-            .combine(
-                featureFlagManager.getFeatureFlagFlow(FlagKey.OnboardingFlow),
-            ) { shouldShow, featureFlagEnabled ->
-                // If the feature flag is off always return true so observers know
-                // the card has not been shown.
-                shouldShow && featureFlagEnabled
-            }
             .distinctUntilChanged()
 
     /**

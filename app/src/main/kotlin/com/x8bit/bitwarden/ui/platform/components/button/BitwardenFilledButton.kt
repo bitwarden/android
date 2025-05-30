@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
-import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledButtonColors
 
 /**
@@ -85,7 +85,7 @@ private fun BitwardenFilledButton_preview() {
         BitwardenFilledButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = true,
         )
         BitwardenFilledButton(
@@ -97,7 +97,7 @@ private fun BitwardenFilledButton_preview() {
         BitwardenFilledButton(
             label = "Label",
             onClick = {},
-            icon = rememberVectorPainter(id = R.drawable.ic_question_circle),
+            icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = false,
         )
     }

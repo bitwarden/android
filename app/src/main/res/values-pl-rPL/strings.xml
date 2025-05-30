@@ -642,7 +642,10 @@ Skanowanie nastąpi automatycznie.</string>
     <string name="send_link">Link wysyłki</string>
     <string name="search_sends">Szukaj w wysyłkach</string>
     <string name="edit_send">Edytuj wysyłkę</string>
-    <string name="add_send">Nowa wysyłka</string>
+    <string name="edit_file_send">Edytuj wysłany plik</string>
+    <string name="edit_text_send">Edytuj wysłany tekst</string>
+    <string name="add_file_send">Nowa wysyłka pliku</string>
+    <string name="add_text_send">Nowa wysyłka tekstu</string>
     <string name="are_you_sure_delete_send">Czy na pewno chcesz usunąć tę wysyłkę?</string>
     <string name="send_deleted">Wysyłka została usunięta</string>
     <string name="send_updated">Wysyłka została zapisana</string>
@@ -990,11 +993,9 @@ Czy chcesz przełączyć się na to konto?</string>
     <string name="user_verification_direction">Weryfikacja użytkownika</string>
     <string name="create_account_on">Utwórz konto na</string>
     <string name="create_account_on_with_colon">Utwórz konto na:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Postępuj zgodnie z instrukcjami zawartymi w wiadomości e-mail wysłanej na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, aby kontynuować tworzenie konta.</string>
     <string name="we_sent_an_email_to">Wysłaliśmy e-mail do <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Kontynuując, akceptujesz <annotation link="termsOfService">Warunki korzystania z usługi</annotation> i <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Aktywując ten przełącznik, zgadzasz się na <annotation link="termsOfService">Warunki korzystania z usługi</annotation> oraz <annotation link="privacyPolicy">Politykę prywatności</annotation></string>
-    <string name="set_password">Ustaw hasło</string>
     <string name="unsubscribe">Anuluj subskrypcję</string>
     <string name="check_your_email">Sprawdź swoją pocztę e-mail</string>
     <string name="open_email_app">Otwórz aplikację poczty e-mail</string>

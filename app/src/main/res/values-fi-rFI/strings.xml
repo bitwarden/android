@@ -642,7 +642,10 @@ Koodi skannataan automaattisesti.</string>
     <string name="send_link">Send-linkki</string>
     <string name="search_sends">Etsi Sendeistä</string>
     <string name="edit_send">Muokkaa Sendiä</string>
-    <string name="add_send">Uusi Send</string>
+    <string name="edit_file_send">Edit file Send</string>
+    <string name="edit_text_send">Edit text Send</string>
+    <string name="add_file_send">New file Send</string>
+    <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Haluatko varmasti poistaa Sendin?</string>
     <string name="send_deleted">Send poistettiin</string>
     <string name="send_updated">Send tallennettiin</string>
@@ -990,11 +993,9 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="user_verification_direction">Käyttäjän vahvistus</string>
     <string name="create_account_on">Luo tili palvelimelle</string>
     <string name="create_account_on_with_colon">Luo tili palvelimelle:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Jatka tilisi luomista seuraamalla osoitteeseen %1$s lähetetyn viestin ohjeita.</string>
     <string name="we_sent_an_email_to">Lähetimme viestin osoitteeseen %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Jatkamalla hyväksyt Käyttöehdot ja Tietosuojakäytännön</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">By activating this switch, you agree to the <annotation link="termsOfService">Terms of Service</annotation> and <annotation link="privacyPolicy">Privacy Policy</annotation></string>
-    <string name="set_password">Aseta salasana</string>
     <string name="unsubscribe">Lopeta tilaus</string>
     <string name="check_your_email">Tarkasta sähköpostisi</string>
     <string name="open_email_app">Avaa sähköpostisovellus</string>
@@ -1260,17 +1261,17 @@ Haluatko vaihtaa tähän tiliin?</string>
     <string name="log_deleted">Loki on poistettu</string>
     <string name="app_settings">Sovelluksen asetukset</string>
     <string name="replace_existing_certificate">Replace existing certificate?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>
     <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">This account will soon be deleted. Log in at %1$s to continue using Bitwarden.</string>
-    <string name="view_file_send">View file Send</string>
-    <string name="view_text_send">View text Send</string>
-    <string name="delete_send">Delete send</string>
+    <string name="view_file_send">Näytä tiedosto-Send</string>
+    <string name="view_text_send">Näytä teksti-Send</string>
+    <string name="delete_send">Poista Send</string>
     <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
-    <string name="dynamic_colors">Dynamic colors</string>
+    <string name="dynamic_colors">Dynaamiset värit</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
 </resources>

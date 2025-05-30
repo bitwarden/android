@@ -641,7 +641,10 @@
     <string name="send_link">Send hivatkozás</string>
     <string name="search_sends">Send elemek keresése</string>
     <string name="edit_send">Send szerkesztése</string>
-    <string name="add_send">Send hozzáadása</string>
+    <string name="edit_file_send">Send fájl szerkesztése</string>
+    <string name="edit_text_send">Send szöveg szerkesztése</string>
+    <string name="add_file_send">Új fájl Send elem</string>
+    <string name="add_text_send">Új szöveges Send elem</string>
     <string name="are_you_sure_delete_send">Biztosan törlésre kerüljön ez a Send elem?</string>
     <string name="send_deleted">A Send elem törlésre került.</string>
     <string name="send_updated">A Send elem frissítésre került.</string>
@@ -989,11 +992,9 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="user_verification_direction">Felhasználó ellenőrzés</string>
     <string name="create_account_on">Fiók létrehozása:</string>
     <string name="create_account_on_with_colon">Fiók létrehozása:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Kövessük %1$s címre küldött emailben található utasításokat a fiók létrehozásának folytatásához.</string>
     <string name="we_sent_an_email_to">Egy email került kiküldésre: %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">A folytatással elfogadjuk a Használati feltételeket és az Adatvédelmi szabályokat</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">A kapcsoló aktiválásával elfogadjuk az <annotation link="termsOfService">Általános Szerződési Feltételeket</annotation> és az <annotation link="privacyPolicy">Adatvédelmi irányelveket</annotation>.</string>
-    <string name="set_password">Jelszó beállítása</string>
     <string name="unsubscribe">Leiratkozás</string>
     <string name="check_your_email">Email cím postaláda ellenőrzése</string>
     <string name="open_email_app">Email alkalmazás megnyitása</string>
@@ -1262,8 +1263,8 @@ Szeretnénk átváltani erre a fiókra?</string>
     <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Már létezik egy tanúsítvány ilyen álnévvel: \"%s\". Szeretnénk lecserélni?\nA tanúsítvány cseréje hatással lehet a jelenleg azt használó környezetekhez fűződő kapcsolatra.</string>
     <string name="replace_certificate">Tanúsítvány csere</string>
     <string name="unable_to_read_certificate">Nem sikerült beolvasni a tanúsítványt.</string>
-    <string name="cannot_delete_your_account">Cannot delete your account</string>
-    <string name="cannot_delete_your_account_explanation">This action cannot be completed because your account is owned by an organization. Contact your organization administrator for additional details.</string>
+    <string name="cannot_delete_your_account">Saját fiókját nem törölheti</string>
+    <string name="cannot_delete_your_account_explanation">Ez a művelet nem végezhető el, mert a fiókja egy szervezethez tartozik. További részletekért vegye fel a kapcsolatot az adminisztrátorral.</string>
     <string name="this_account_will_soon_be_deleted_log_in_at_x_to_continue_using_bitwarden">Ez a fiók hamarosan törlésre kerül. A Bitwarden használatának folytatásához jelentkezzünk be: %1$s.</string>
     <string name="view_file_send">Send fájl megtekintése</string>
     <string name="view_text_send">Szöveges Send elem megtekintése</string>

@@ -12,15 +12,12 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.NetworkConnection
 import com.x8bit.bitwarden.data.platform.manager.util.FakeNetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -41,7 +38,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.time.ZonedDateTime
 
 @Suppress("LargeClass")
 class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
@@ -53,27 +49,23 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         every { ssoCallbackResultFlow } returns mutableSsoCallbackResultFlow
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { rememberedOrgIdentifier } returns null
+        every { rememberedOrgIdentifier = "Bitwarden" } just runs
         coEvery {
-            getOrganizationDomainSsoDetails(any())
-        } just awaits
+            getVerifiedOrganizationDomainSsoDetails(any())
+        } returns VerifiedOrganizationDomainSsoDetailsResult.Success(emptyList())
+        coEvery { prevalidateSso(any()) } returns PrevalidateSsoResult.Success(token = "mockToken")
     }
 
     private val environmentRepository: EnvironmentRepository = FakeEnvironmentRepository()
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
 
-    private val featureFlagManager = mockk<FeatureFlagManager> {
-        every {
-            getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
-        } returns false
-    }
-
     @BeforeEach
     fun setUp() {
+        setupMockUri()
         mockkStatic(
             SavedStateHandle::toEnterpriseSignOnArgs,
             ::generateUriForSso,
-            Uri::parse,
         )
     }
 
@@ -99,6 +91,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         val expectedState = DEFAULT_STATE.copy(
             orgIdentifierInput = "test",
         )
+        every {
+            authRepository.rememberedOrgIdentifier
+        } returns "test"
         val viewModel = createViewModel(expectedState)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
@@ -125,6 +120,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val error = Throwable("Fail!")
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
 
+            every {
+                authRepository.rememberedOrgIdentifier
+            } returns organizationId
             coEvery {
                 authRepository.prevalidateSso(organizationId)
             } returns PrevalidateSsoResult.Failure(error = error)
@@ -160,9 +158,12 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `LogInClick with valid organization and successful prevalidation should show a loading dialog, hide a loading dialog, and then emit NavigateToSsoLogin`() =
         runTest {
-            val organizationId = "Test"
+            val organizationId = "Bitwarden"
             val state = DEFAULT_STATE.copy(orgIdentifierInput = organizationId)
 
+            every {
+                authRepository.rememberedOrgIdentifier
+            } returns organizationId
             coEvery {
                 authRepository.prevalidateSso(organizationId)
             } returns PrevalidateSsoResult.Success(token = "token")
@@ -274,6 +275,10 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `DialogDismiss should clear the active dialog when DialogState is Loading`() {
+        // Just hang on this request; login is tested elsewhere
+        coEvery {
+            authRepository.getVerifiedOrganizationDomainSsoDetails(any())
+        } just awaits
         val viewModel = createViewModel(
             dismissInitialDialog = false,
         )
@@ -762,10 +767,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.Success
-
-            coEvery {
-                authRepository.rememberedOrgIdentifier = "Bitwarden"
-            } just runs
+            every {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
 
             val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
             val viewModel = createViewModel(
@@ -819,7 +823,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.CaptchaRequired("captcha")
-
+            every {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
             val uri: Uri = mockk()
             every {
                 generateUriForCaptcha(captchaId = "captcha")
@@ -876,7 +882,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.TwoFactorRequired
-
+            every {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
             val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
             val viewModel = createViewModel(
                 initialState = initialState,
@@ -1011,10 +1019,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         coEvery {
             authRepository.login(any(), any(), any(), any(), any(), any())
         } returns LoginResult.Success
-
-        coEvery {
-            authRepository.rememberedOrgIdentifier = "Bitwarden"
-        } just runs
+        every {
+            authRepository.rememberedOrgIdentifier
+        } returns "Bitwarden"
 
         val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
         val viewModel = createViewModel(
@@ -1055,8 +1062,8 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `OrganizationDomainSsoDetails failure should make a request, hide the dialog, and update the org input based on the remembered org`() =
         runTest {
             coEvery {
-                authRepository.getOrganizationDomainSsoDetails(any())
-            } returns OrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
+                authRepository.getVerifiedOrganizationDomainSsoDetails(any())
+            } returns VerifiedOrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
 
             coEvery {
                 authRepository.rememberedOrgIdentifier
@@ -1069,7 +1076,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             coVerify(exactly = 1) {
-                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.getVerifiedOrganizationDomainSsoDetails(DEFAULT_EMAIL)
                 authRepository.rememberedOrgIdentifier
             }
         }
@@ -1078,15 +1085,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `OrganizationDomainSsoDetails success with no SSO available should make a request, hide the dialog, and update the org input based on the remembered org`() =
         runTest {
-            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = false,
-                organizationIdentifier = "Bitwarden without SSO",
-                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
-            )
-
             coEvery {
-                authRepository.getOrganizationDomainSsoDetails(any())
-            } returns orgDetails
+                authRepository.getVerifiedOrganizationDomainSsoDetails(any())
+            } returns VerifiedOrganizationDomainSsoDetailsResult.Success(emptyList())
 
             coEvery {
                 authRepository.rememberedOrgIdentifier
@@ -1099,37 +1100,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             coVerify(exactly = 1) {
-                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
-                authRepository.rememberedOrgIdentifier
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `OrganizationDomainSsoDetails success with no verified date available should make a request, hide the dialog, and update the org input based on the remembered org`() =
-        runTest {
-            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = true,
-                organizationIdentifier = "Bitwarden without SSO",
-                verifiedDate = null,
-            )
-
-            coEvery {
-                authRepository.getOrganizationDomainSsoDetails(any())
-            } returns orgDetails
-
-            coEvery {
-                authRepository.rememberedOrgIdentifier
-            } returns "Bitwarden"
-
-            val viewModel = createViewModel(dismissInitialDialog = false)
-            assertEquals(
-                DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
-                viewModel.stateFlow.value,
-            )
-
-            coVerify(exactly = 1) {
-                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.getVerifiedOrganizationDomainSsoDetails(DEFAULT_EMAIL)
                 authRepository.rememberedOrgIdentifier
             }
         }
@@ -1138,14 +1109,19 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `OrganizationDomainSsoDetails success with blank identifier should make a request, show the error dialog, and update the org input based on the remembered org`() =
         runTest {
-            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = true,
-                organizationIdentifier = "",
-                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+            val orgDetails = VerifiedOrganizationDomainSsoDetailsResult.Success(
+                verifiedOrganizationDomainSsoDetails = listOf(
+                    VerifiedOrganizationDomainSsoDetailsResponse
+                        .VerifiedOrganizationDomainSsoDetail(
+                            organizationIdentifier = "",
+                            organizationName = "",
+                            domainName = "",
+                        ),
+                ),
             )
 
             coEvery {
-                authRepository.getOrganizationDomainSsoDetails(any())
+                authRepository.getVerifiedOrganizationDomainSsoDetails(any())
             } returns orgDetails
 
             coEvery {
@@ -1157,16 +1133,17 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.organization_sso_identifier_required.asText(),
+                        message = R.string.validation_field_required.asText(
+                            R.string.org_identifier.asText(),
+                        ),
                     ),
-                    orgIdentifierInput = "Bitwarden",
+                    orgIdentifierInput = "",
                 ),
                 viewModel.stateFlow.value,
             )
 
             coVerify(exactly = 1) {
-                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
-                authRepository.rememberedOrgIdentifier
+                authRepository.getVerifiedOrganizationDomainSsoDetails(DEFAULT_EMAIL)
             }
         }
 
@@ -1174,14 +1151,19 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `OrganizationDomainSsoDetails success with valid organization should make a request then attempt to login`() =
         runTest {
-            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-                isSsoAvailable = true,
-                organizationIdentifier = "Bitwarden with SSO",
-                verifiedDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+            val orgDetails = VerifiedOrganizationDomainSsoDetailsResult.Success(
+                verifiedOrganizationDomainSsoDetails = listOf(
+                    VerifiedOrganizationDomainSsoDetailsResponse
+                        .VerifiedOrganizationDomainSsoDetail(
+                            organizationIdentifier = "Bitwarden with SSO",
+                            organizationName = "Bitwarden",
+                            domainName = "bitwarden.com",
+                        ),
+                ),
             )
 
             coEvery {
-                authRepository.getOrganizationDomainSsoDetails(any())
+                authRepository.getVerifiedOrganizationDomainSsoDetails(any())
             } returns orgDetails
 
             // Just hang on this request; login is tested elsewhere
@@ -1201,7 +1183,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             )
 
             coVerify(exactly = 1) {
-                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.getVerifiedOrganizationDomainSsoDetails(DEFAULT_EMAIL)
             }
         }
 
@@ -1222,10 +1204,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.getVerifiedOrganizationDomainSsoDetails(any())
             } returns orgDetails
-
-            coEvery {
-                featureFlagManager.getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
-            } returns true
 
             // Just hang on this request; login is tested elsewhere
             coEvery {
@@ -1260,10 +1238,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 authRepository.getVerifiedOrganizationDomainSsoDetails(any())
             } returns orgDetails
 
-            coEvery {
-                featureFlagManager.getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
-            } returns true
-
             val viewModel = createViewModel(dismissInitialDialog = false)
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -1285,10 +1259,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.getVerifiedOrganizationDomainSsoDetails(any())
             } returns VerifiedOrganizationDomainSsoDetailsResult.Failure(error = Throwable("Fail!"))
-
-            coEvery {
-                featureFlagManager.getFeatureFlag(FlagKey.VerifiedSsoDomainEndpoint)
-            } returns true
 
             coEvery {
                 authRepository.rememberedOrgIdentifier
@@ -1315,10 +1285,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             coEvery {
                 authRepository.continueKeyConnectorLogin()
             } returns LoginResult.Success
-
             coEvery {
-                authRepository.rememberedOrgIdentifier = "Bitwarden"
-            } just runs
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
 
             val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
             val viewModel = createViewModel(
@@ -1418,7 +1387,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     ): EnterpriseSignOnViewModel = EnterpriseSignOnViewModel(
         authRepository = authRepository,
         environmentRepository = environmentRepository,
-        featureFlagManager = featureFlagManager,
         generatorRepository = generatorRepository,
         networkConnectionManager = FakeNetworkConnectionManager(
             isNetworkConnected = isNetworkConnected,
@@ -1433,6 +1401,13 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 it.trySendAction(EnterpriseSignOnAction.DialogDismiss)
             }
         }
+
+    private fun setupMockUri() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.bitwarden.com"
+    }
 
     companion object {
         private val DEFAULT_STATE = EnterpriseSignOnState(

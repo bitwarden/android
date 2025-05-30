@@ -642,7 +642,10 @@
     <string name="send_link">Изпращане на връзката</string>
     <string name="search_sends">Търсене в изпратените</string>
     <string name="edit_send">Редактиране на изпращане</string>
-    <string name="add_send">Добавяне на изпращане</string>
+    <string name="edit_file_send">Редактиране на файловото Изпращане</string>
+    <string name="edit_text_send">Редактиране на текстовото Изпращане</string>
+    <string name="add_file_send">Ново файлово Изпращане</string>
+    <string name="add_text_send">Ново текстово Изпращане</string>
     <string name="are_you_sure_delete_send">Сигурни ли сте, че искате да изтриете това изпращане?</string>
     <string name="send_deleted">Изпратеното е изтрито.</string>
     <string name="send_updated">Изпратеното е редактирано.</string>
@@ -990,11 +993,9 @@
     <string name="user_verification_direction">Потвърждение на потребителя</string>
     <string name="create_account_on">Създаване на регистрация в</string>
     <string name="create_account_on_with_colon">Създаване на регистрация в:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Следвайте инструкциите в е-писмото изпратено до %1$s, за да продължите с регистрацията.</string>
     <string name="we_sent_an_email_to">Изпратихме е-писмо до %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ако продължите, Вие се съгласявате с Условията за ползване и Политиката за поверителност</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Активирайки това, Вие се съгласявате с <annotation link="termsOfService">Условията за ползване</annotation> и <annotation link="privacyPolicy">Политиката за поверителност</annotation></string>
-    <string name="set_password">Задайте парола</string>
     <string name="unsubscribe">Отписване</string>
     <string name="check_your_email">Проверете е-пощата си</string>
     <string name="open_email_app">Отваряне на приложението за е-поща</string>

@@ -627,7 +627,7 @@ Načtení proběhne automaticky.</string>
     <string name="maximum_access_count">Maximální počet přístupů</string>
     <string name="maximum_access_count_info">Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</string>
     <string name="maximum_access_count_reached">Dosažen maximální počet přístupů</string>
-    <string name="current_access_count">Aktuální počet přístupů</string>
+    <string name="current_access_count">Aktuální počet přístupů: %s</string>
     <string name="new_password">Nové heslo</string>
     <string name="password_info">Vyžadovat totot heslo pro přístup k tomuto Send.</string>
     <string name="remove_password">Odebrat heslo</string>
@@ -642,7 +642,10 @@ Načtení proběhne automaticky.</string>
     <string name="send_link">Odkaz tohoto Send</string>
     <string name="search_sends">Prohledat Sends</string>
     <string name="edit_send">Upravit Send</string>
-    <string name="add_send">Nový Send</string>
+    <string name="edit_file_send">Upravit soubor ze Send</string>
+    <string name="edit_text_send">Upravit text ze Send</string>
+    <string name="add_file_send">Odeslat Send se soubory</string>
+    <string name="add_text_send">Odeslat textový Send</string>
     <string name="are_you_sure_delete_send">Opravdu chcete smazat tento Send?</string>
     <string name="send_deleted">Send byl smazán</string>
     <string name="send_updated">Send byl uložen</string>
@@ -989,11 +992,9 @@ Chcete se přepnout na tento účet?</string>
     <string name="user_verification_direction">Ověření uživatele</string>
     <string name="create_account_on">Vytvořit účet na</string>
     <string name="create_account_on_with_colon">Vytvořit účet na:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Postupujte podle instrukcí zaslaných na e-mail <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>, abyste mohli pokračovat ve vytváření účtu.</string>
     <string name="we_sent_an_email_to">Poslali jsme e-mail na <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Pokračováním souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Zapnutím tohoto spínače souhlasíte s <annotation link="termsOfService">Podmínkami služby</annotation> a <annotation link="privacyPolicy">Zásadami ochrany osobních údajů</annotation></string>
-    <string name="set_password">Nastavit heslo</string>
     <string name="unsubscribe">Odhlásit odběr</string>
     <string name="check_your_email">Zkontrolujte Váš e-mail</string>
     <string name="open_email_app">Otevřít e-mailovou aplikaci</string>

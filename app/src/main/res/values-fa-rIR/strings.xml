@@ -268,7 +268,7 @@
     <string name="yubi_key_title">کلید امنیتی YubiKey</string>
     <string name="add_new_attachment">افزودن پیوست جدید</string>
     <string name="attachments">پیوست‌ها</string>
-    <string name="unable_to_download_file">نمی‌توان پرونده را دانلود کرد.</string>
+    <string name="unable_to_download_file">نمی‌توان پرونده را بارگیری کرد.</string>
     <string name="unable_to_open_file">دستگاهتان قادر به باز کردن این نوع از پرونده نیست.</string>
     <string name="downloading">در حال بارگیری...</string>
     <string name="attachment_large_warning">حجم این پیوست %1$s است. آیا مایل به بارگیری این پرونده در دستگاهتان هستید؟</string>
@@ -298,9 +298,9 @@
     <string name="encryption_key_migration_required_description_long">انتقال کلید رمزگذاری مورد نیاز است. لطفاً از طریق گاوصندوق وب وارد شوید تا کلید رمزگذاری خود را به روز کنید.</string>
     <string name="learn_more">بیشتر بدانید</string>
     <string name="api_url">نشانی اینترنتی سرور API</string>
-    <string name="client_certificate_mtls">گواهی مشتری (mTLS)</string>
-    <string name="certificate_used_for_client_authentication">گواهی استفاده شده برای احراز هویت مشتری.</string>
-    <string name="use_system_certificate">استفاده از گواهی سیستم</string>
+    <string name="client_certificate_mtls">گواهی‌نامه مشتری (mTLS)</string>
+    <string name="certificate_used_for_client_authentication">گواهی‌نامه استفاده شده برای احراز هویت مشتری.</string>
+    <string name="use_system_certificate">استفاده از گواهی‌نامه سیستم</string>
     <string name="custom_environment">محیط سفارشی</string>
     <string name="custom_environment_footer">برای کاربران پیشرفته. شما می‌توانید نشانی اینترنتی پایه هر سرویس را مستقلاً تعیین کنید.</string>
     <string name="environment_saved">نشانی‌های اینترنتی محیط ذخیره شد.</string>
@@ -643,7 +643,10 @@
     <string name="send_link">ارسال پیوند</string>
     <string name="search_sends">جستجوی ارسال‌ها</string>
     <string name="edit_send">ویرایش ارسال</string>
-    <string name="add_send">ارسال جدید</string>
+    <string name="edit_file_send">ویرایش پرونده ارسال</string>
+    <string name="edit_text_send">ویرایش متن ارسال</string>
+    <string name="add_file_send">پرونده جدید ارسال</string>
+    <string name="add_text_send">متن جدید ارسال</string>
     <string name="are_you_sure_delete_send">آیا مطمئن هستید که می‌خواهید این ارسال را حذف کنید؟</string>
     <string name="send_deleted">ارسال حذف شد.</string>
     <string name="send_updated">ارسال ذخیره شد</string>
@@ -660,7 +663,7 @@
     <string name="about_send">درباره ارسال</string>
     <string name="hide_email">نشانی ایمیلم را از گیرندگان مخفی کن</string>
     <string name="send_options_policy_in_effect">یک یا چند سیاست سازمان بر گزینه‌های ارسال شما تأثیر می‌گذارد.</string>
-    <string name="send_file_premium_required">حساب‌های کاربری رایگان فقط می‌توانند متن را به اشتراک بگذارند. برای استفاده از قابلیت ارسال فایل‌ها، به عضویت پریمیوم نیاز دارید.</string>
+    <string name="send_file_premium_required">حساب‌های کاربری رایگان فقط می‌توانند متن را به اشتراک بگذارند. برای استفاده از قابلیت ارسال پرونده‌ها، به عضویت پریمیوم نیاز دارید.</string>
     <string name="send_file_email_verification_required">برای استفاده از پرونده‌ها با \"ارسال\" باید ایمیل خود را تأیید کنید.</string>
     <string name="password_prompt">درخواست مجدد کلمه عبور اصلی</string>
     <string name="password_confirmation">تأیید کلمه عبور اصلی</string>
@@ -857,29 +860,29 @@
     <string name="update_weak_master_password_warning">کلمه عبور اصلی شما با یک یا چند سیاست سازمان‌تان مطابقت ندارد. برای دسترسی به گاوصندوق، باید همین حالا کلمه عبور اصلی خود را به‌روزرسانی کنید. در صورت ادامه، شما از نشست فعلی خود خارج می‌شوید و باید دوباره وارد سیستم شوید. نشست فعال در دستگاه های دیگر ممکن است تا یک ساعت همچنان فعال باقی بمانند.</string>
     <string name="current_master_password_required">کلمه عبور اصلی فعلی (الزامی)</string>
     <string name="logged_in">وارد شده!</string>
-    <string name="approve_with_my_other_device">تایید با دستگاه دیگرم</string>
-    <string name="request_admin_approval">درخواست تایید مدیر</string>
-    <string name="approve_with_master_password">تایید با کلمه عبور اصلی</string>
-    <string name="turn_off_using_public_device">اگر از دستگاه عمومی استفاده میکنید خاموش کنید</string>
+    <string name="approve_with_my_other_device">تأیید با دستگاه دیگرم</string>
+    <string name="request_admin_approval">درخواست تأیید مدیر</string>
+    <string name="approve_with_master_password">تأیید با کلمه عبور اصلی</string>
+    <string name="turn_off_using_public_device">اگر از دستگاه عمومی استفاده می‌کنید خاموش کنید</string>
     <string name="remember_this_device">این دستگاه را به خاطر بسپار</string>
     <string name="passkey">کلید عبور</string>
     <string name="passkeys">کلیدهای عبور</string>
-    <string name="application">درخواست</string>
+    <string name="application">اپلیکیشن</string>
     <string name="you_cannot_edit_passkey_application_because_it_would_invalidate_the_passkey">شما نمی‌توانید برنامه کلید عبور را ویرایش کنید زیرا باعث بی اعتباری کلید عبور می‌شود</string>
     <string name="passkey_will_not_be_copied">کلید عبور کپی نمی‌شود</string>
     <string name="the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item">کلید عبور در مورد شبیه سازی شده کپی نمی‌شود. آیا می‌خواهید به شبیه سازی این مورد ادامه دهید؟</string>
     <string name="copy_application">درخواست را کپی کنید</string>
     <string name="available_for_two_step_login">برای ورود دو مرحله ای موجود است</string>
     <string name="master_password_re_prompt_help">راهنمای درخواست مجدد کلمه عبور اصلی</string>
-    <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">بازگشایی ممکن است به دلیل حافظه ناکافی انجام نشود. برای انجام تنظیمات حافظه KDF خود را کاهش دهید یا از بازگشایی زیست‌سنجی استفاده کنید.</string>
+    <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">باز کردن قفل ممکن است به دلیل حافظه ناکافی انجام نشود. برای انجام تنظیمات حافظه KDF خود را کاهش دهید یا از باز کردن قفل بیومتریک استفاده کنید.</string>
     <string name="invalid_api_key">کلید API نامعتبر</string>
     <string name="invalid_api_token">توکن API نامعتبر</string>
-    <string name="admin_approval_requested">تایید مدیر در خواست شد</string>
+    <string name="admin_approval_requested">تأیید مدیر درخواست شد</string>
     <string name="your_request_has_been_sent_to_your_admin">درخواست شما به مدیرتان فرستاده شد.</string>
-    <string name="you_will_be_notified_once_approved">به محض تایید مطلع خواهید شد.</string>
+    <string name="you_will_be_notified_once_approved">به محض تأیید مطلع خواهید شد.</string>
     <string name="trouble_logging_in">در ورود مشکلی دارید؟</string>
     <string name="logging_in_as_x">ورود به عنوان %1$s</string>
-    <string name="vault_timeout_action_changed_to_log_out">اقدام پایان زمان گاوصندوق به خروج تغییر کرد</string>
+    <string name="vault_timeout_action_changed_to_log_out">اقدام پس از پایان زمان گاوصندوق به خروج تغییر کرد</string>
     <string name="block_auto_fill">پر کردن خودکار را مسدود کنید</string>
     <string name="auto_fill_will_not_be_offered_for_these_ur_is">پر کردن خودکار برای این نشانی‌های اینترنتی ارائه نمی‌شود.</string>
     <string name="new_blocked_uri">نشانی اینترنتی مسدود شده جدید</string>
@@ -928,7 +931,7 @@
     <string name="continue_to_device_settings">به تنظیمات دستگاه ادامه دهید؟</string>
     <string name="two_step_login_description_long">با راه‌اندازی ورود دو مرحله‌ای در برنامه وب Bitwarden، حساب کاربری خود را ایمن‌تر کنید.</string>
     <string name="change_master_password_description_long">می‌توانید کلمه عبور اصلی خود را در برنامه وب Bitwarden تغییر دهید.</string>
-    <string name="you_can_import_data_to_your_vault_on_x">می‌توانید داده‌ها را در %1$s به گاوصندوق خود وارد کنید.</string>
+    <string name="you_can_import_data_to_your_vault_on_x">می‌توانید داده‌ها را در %1$s به گاوصندوق خود درون ریزی کنید.</string>
     <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">درباره نحوه استفاده از Bitwarden در مرکز راهنمایی بیشتر بیاموزید.</string>
     <string name="contact_support_description_long">چیزی را که به دنبالش هستید پیدا نمی‌کنید؟ با پشتیبانی Bitwarden در bitwarden.com تماس بگیرید.</string>
     <string name="privacy_policy_description_long">سیاست حفظ حریم خصوصی ما را در bitwarden.com بررسی کنید.</string>
@@ -940,8 +943,8 @@
     <string name="too_many_attempts">تلاش‌ها بیش از حد مجاز بود</string>
     <string name="account_logged_out_biometric_exceeded">حساب کاربری از سیستم خارج شد.</string>
     <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">مجوزهای سازمان شما به‌روزرسانی شد، باید یک کلمه عبور اصلی تنظیم کنید.</string>
-    <string name="your_organization_requires_you_to_set_a_master_password">سازمان شما از شما می‌خواهد که یک کلمه عبور اصلی تنظیم کنید.</string>
-    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">یک گزینه بازگشایی برای پایان زمان مجاز تنظیم کنید.</string>
+    <string name="your_organization_requires_you_to_set_a_master_password">سازمانتان از شما می‌خواهد که یک کلمه عبور اصلی تنظیم کنید.</string>
+    <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">یک گزینه باز کردن قفل برای پایان زمان مجاز راه‌اندازی کنید.</string>
     <string name="choose_a_login_to_save_this_passkey_to">یک ورود برای ذخیره این کلید عبور انتخاب کنید</string>
     <string name="save_passkey_as_new_login">کلید عبور را به عنوان ورود جدید ذخیره کن</string>
     <string name="save_passkey">ذخیره کلید عبور</string>
@@ -952,8 +955,8 @@
     <string name="duo_two_step_login_is_required_for_your_account">ورود دو مرحله ای Duo برای حساب کاربری شما لازم است.</string>
     <string name="follow_the_steps_from_duo_to_finish_logging_in">مراحل Duo را دنبال کنید تا وارد سیستم شوید.</string>
     <string name="launch_duo">اجرای Duo</string>
-    <string name="verification_required_by_x">تایید لازم است توسط %1$s</string>
-    <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">تأیید برای این اقدام لازم است. برای ادامه، یک روش باز کردن قفل را در Bitwarden تنظیم کنید.</string>
+    <string name="verification_required_by_x">تأیید لازم است توسط %1$s</string>
+    <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">تأیید برای این اقدام لازم است. برای ادامه، یک روش باز کردن قفل را در Bitwarden راه‌اندازی کنید.</string>
     <string name="error_creating_passkey">خطا در ایجاد کلید عبور</string>
     <string name="error_reading_passkey">خطا در خواندن کلید عبور</string>
     <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">مشکلی در ایجاد کلمه عبور برای %1$s وجود داشت. بعداً دوباره امتحان کنید.</string>
@@ -961,7 +964,7 @@
     <string name="verifying_identity_ellipsis">در حال تأیید هویت...</string>
     <string name="passwords">کلمه‌های عبور</string>
     <string name="unknown_account">حساب کاربری نامشخص</string>
-    <string name="set_up_autofill">راه‌اندازی تکمیل خودکار</string>
+    <string name="set_up_autofill">راه‌اندازی پر کردن خودکار</string>
     <string name="get_instant_access_to_your_passwords_and_passkeys">به کلمات و کلید‌های عبورتان دسترسی سریع داشته باشید!</string>
     <string name="set_up_auto_fill_description_long">برای راه‌اندازی پر کردن خودکار کلمه عبور و مدیریت کلید عبور، Bitwarden را به عنوان ارائه‌دهنده ترجیحی خود در تنظیمات iOS تنظیم کنید.</string>
     <string name="first_dot_go_to_your_device_settings_passwords_password_options">۱. به تنظیمات دستگاه خود بروید &gt; کلمه‌های عبور &gt; گزینه‌های کلمه عبور</string>
@@ -991,11 +994,9 @@
     <string name="user_verification_direction">تأیید کردن کاربر</string>
     <string name="create_account_on">حساب کاربری ایجاد کنید در</string>
     <string name="create_account_on_with_colon">حساب کاربری ایجاد کنید در:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">دستورالعمل‌های موجود در ایمیل ارسال‌شده به <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> را دنبال کنید تا ساخت حساب کاربری خود را انجام دهید.</string>
     <string name="we_sent_an_email_to">ما یک ایمیل ارسال کردیم به <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">با ادامه، شما با <annotation link="termsOfService">شرایط خدمات</annotation> و <annotation link="privacyPolicy">سیاست حفظ حریم خصوصی</annotation> موافقت می‌کنید</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">با فعال کردن این سوئیچ، شما با <annotation link="termsOfService">شرایط خدمات</annotation> و <annotation link="privacyPolicy">سیاست حفظ حریم خصوصی</annotation> موافقت می‌کنید</string>
-    <string name="set_password">تنظیم کلمه عبور</string>
     <string name="unsubscribe">لغو اشتراک</string>
     <string name="check_your_email">ایمیل خود را چک کنید</string>
     <string name="open_email_app">برنامه‌ی ایمیل را باز کنید</string>
@@ -1026,13 +1027,13 @@
     <string name="try_it_out">آن را امتحان کنید</string>
     <string name="account_setup">راه‌اندازی حساب کاربری</string>
     <string name="set_up_unlock">راه‌اندازی باز کردن قفل</string>
-    <string name="set_up_later">بعداً تنظیم شود</string>
-    <string name="set_up_unlock_later">باز کردن قفل بعداً تنظیم شود؟</string>
+    <string name="set_up_later">بعداً راه‌اندازی شود</string>
+    <string name="set_up_unlock_later">باز کردن قفل بعداً راه‌اندازی شود؟</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">می‌توانید هر زمان برای تکمیل این مرحله از بخش امنیت حساب کاربری در تنظیمات بازگردید.</string>
     <string name="confirm">تأیید</string>
     <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">راه‌اندازی بیومتریک یا انتخاب کد PIN برای دسترسی سریع به گاوصندوق و پر کردن خودکار ورودهای شما.</string>
     <string name="never_lose_access_to_your_vault">دسترسی به گاوصندوق خود را هرگز از دست ندهید</string>
-    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">بهترین راه برای اطمینان از اینکه همیشه به گاوصندوق خود دسترسی دارید، این است که از همان ابتدا اقدامات امنیتی لازم را تنظیم کنید.</string>
+    <string name="the_best_way_to_make_sure_you_can_always_access_your_vault">بهترین راه برای اطمینان از اینکه همیشه به گاوصندوق خود دسترسی دارید، این است که از همان ابتدا اقدامات امنیتی لازم را راه‌اندازی کنید.</string>
     <string name="one_of_the_best_ways_to_create_a_secure_and_memorable_password">یکی از بهترین روش‌ها برای ساخت یک کلمه عبور امن و قابل یادآوری، استفاده از یک عبارت عبور است. \nدر ادامه نحوه انجام آن آمده است:</string>
     <string name="create_a_hint">ایجاد یک یادآور</string>
     <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">یادآور شما هنگام درخواست از طریق ایمیل برایتان ارسال خواهد شد.</string>
@@ -1057,7 +1058,7 @@
     <string name="expired_link">پیوند منقضی شد</string>
     <string name="please_restart_registration_or_try_logging_in">لطفاً ثبت‌نام را دوباره آغاز کنید یا سعی کنید وارد حساب کاربری خود شوید. ممکن است از قبل حساب کاربری داشته باشید.</string>
     <string name="restart_registration">ثبت‌نام را دوباره آغاز کنید</string>
-    <string name="authenticator_sync">همگام‌سازی احراز هویت</string>
+    <string name="authenticator_sync">همگام‌سازی احراز کننده هویت</string>
     <string name="allow_bitwarden_authenticator_syncing">اجازه دهید همگام‌سازی احراز هویت انجام شود</string>
     <string name="there_was_an_issue_validating_the_registration_token">در تأیید توکن ثبت‌نام مشکلی پیش آمده است.</string>
     <string name="turn_on_autofill">پر کردن خودکار را فعال کنید</string>
@@ -1075,40 +1076,40 @@
     <string name="save_and_protect_your_data">داده‌های خود را ذخیره و از آن‌ها محافظت کنید</string>
     <string name="the_vault_protects_more_than_just_passwords">گاوصندوق تنها کلمات عبور را محافظت نمی‌کند. ورودهای امن، شناسه‌ها، کارت‌ها و یادداشت‌ها را نیز به صورت امن در اینجا ذخیره کنید.</string>
     <string name="new_login">ورود جدید</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">فایل‌ها و داده‌های خود را به‌صورت امن با هر کسی، در هر پلتفرمی به اشتراک بگذارید. اطلاعات شما در حین اشتراک‌گذاری به‌طور کامل رمزگذاری انتها به انتها باقی خواهد ماند و میزان افشا محدود می‌شود.</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">پرونده‌ها و داده‌های خود را به‌صورت امن با هر کسی، در هر پلتفرمی به اشتراک بگذارید. اطلاعات شما در حین اشتراک‌گذاری به‌طور کامل رمزگذاری انتها به انتها باقی خواهد ماند و میزان افشا محدود می‌شود.</string>
     <string name="send_sensitive_information_safely">اطلاعات حساس را به‌صورت ایمن ارسال کنید</string>
-    <string name="import_saved_logins">ورودهای ذخیره‌شده را وارد کنید</string>
-    <string name="use_a_computer_to_import_logins">از یک کامپیوتر برای وارد کردن ورودهای ذخیره‌شده از یک مدیر کلمه عبور موجود استفاده کنید</string>
+    <string name="import_saved_logins">ورودهای ذخیره‌شده را درون ریزی کنید</string>
+    <string name="use_a_computer_to_import_logins">از یک رایانه برای درون ریزی ورودهای ذخیره‌شده از یک مدیر کلمه عبور موجود استفاده کنید</string>
     <string name="you_can_return_to_complete_this_step_anytime_from_settings">می‌توانید هر زمان برای تکمیل این مرحله به بخش تنظیمات گاوصندوق مراجعه کنید.</string>
-    <string name="import_logins_later">ورودها را بعداً وارد کنید</string>
-    <string name="import_logins_later_dialog_title">ورودها را بعداً وارد می‌کنید؟</string>
-    <string name="do_you_have_a_computer_available">آیا به یک کامپیوتر دسترسی دارید؟</string>
-    <string name="the_following_instructions_will_guide_you_through_importing_logins">دستورالعمل‌های زیر شما را در وارد کردن ورودها از رایانه دسکتاپ یا لپ‌تاپ راهنمایی می‌کنند</string>
-    <string name="import_logins">وارد کردن ورودها</string>
-    <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">از طریق کامپیوتر خود، این دستورالعمل‌ها را دنبال کنید تا کلمات عبور ذخیره‌شده را از مرورگر یا مدیر کلمه عبور دیگری صادر کنید. سپس آن‌ها را به‌صورت ایمن به Bitwarden وارد نمایید.</string>
+    <string name="import_logins_later">ورودها را بعداً درون ریزی کنید</string>
+    <string name="import_logins_later_dialog_title">ورودها را بعداً درون ریزی می‌کنید؟</string>
+    <string name="do_you_have_a_computer_available">آیا به یک رایانه دسترسی دارید؟</string>
+    <string name="the_following_instructions_will_guide_you_through_importing_logins">دستورالعمل‌های زیر شما را در درون ریزی ورودها از رایانه دسکتاپ یا لپ‌تاپ راهنمایی می‌کنند</string>
+    <string name="import_logins">درون ریزی ورودها</string>
+    <string name="from_your_computer_follow_these_instructions_to_export_saved_passwords">از طریق رایانه خود، این دستورالعمل‌ها را دنبال کنید تا کلمات عبور ذخیره‌شده را از مرورگر یا مدیر کلمه عبور دیگری برون ریزی کنید. سپس آن‌ها را به‌صورت ایمن به Bitwarden درون ریزی نمایید.</string>
     <string name="give_your_vault_a_head_start">به گاوصندوق خود یک شروع قدرتمند بدهید</string>
-    <string name="class_3_biometrics_description">باز کردن با بیومتریک نیاز به احراز هویت بیومتریک قوی دارد و ممکن است با تمام گزینه‌های بیومتریک موجود در این دستگاه سازگار نباشد.</string>
-    <string name="class_2_biometrics_description">باز کردن با بیومتریک نیاز به احراز هویت بیومتریک قوی دارد و با گزینه‌های بیومتریک موجود در این دستگاه سازگار نیست.</string>
-    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">روی کامپیوتر خود، <annotation emphasis="bold">وارد مرورگر فعلی یا مدیر کلمه عبور خود شوید.</annotation></string>
+    <string name="class_3_biometrics_description">باز کردن قفل با بیومتریک نیاز به احراز هویت بیومتریک قوی دارد و ممکن است با تمام گزینه‌های بیومتریک موجود در این دستگاه سازگار نباشد.</string>
+    <string name="class_2_biometrics_description">باز کردن قفل با بیومتریک نیاز به احراز هویت بیومتریک قوی دارد و با گزینه‌های بیومتریک موجود در این دستگاه سازگار نیست.</string>
+    <string name="on_your_computer_log_in_to_your_current_browser_or_password_manager">روی رایانه خود، <annotation emphasis="bold">وارد مرورگر فعلی یا مدیر کلمه عبور خود شوید.</annotation></string>
     <string name="export_your_passwords_this_option_is_usually_found_in_your_settings"><annotation emphasis="bold">کلمات عبور خود را برون ریزی کنید.</annotation> این گزینه معمولاً در بخش تنظیمات یافت می‌شود.</string>
-    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">گزینه «وارد کردن داده‌ها» </annotation> را در اپلیکیشن تحت وب انتخاب کنید، سپس برای اتمام همگام‌سازی روی انجام شد در پایین کلیک کنید.</string>
+    <string name="select_import_data_in_the_web_app_then_done_to_finish_syncing"><annotation emphasis="bold">گزینه «درون ریزی داده‌ها» </annotation> را در اپلیکیشن تحت وب انتخاب کنید، سپس برای اتمام همگام‌سازی روی انجام شد در پایین کلیک کنید.</string>
     <string name="step_1_of_3">مرحلهٔ ۱ از ۳</string>
     <string name="export_your_saved_logins">ورودهای ذخیره‌شده را برون ریزی کنید</string>
-    <string name="delete_this_file_after_import_is_complete">پس از پایان وارد کردن، این فایل را حذف خواهید کرد.</string>
-    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">روی کامپیوتر خود، یک تب جدید در مرورگر باز کنید و <annotation emphasis="bold">به <annotation arg="0">%1$s</annotation></annotation> بروید</string>
+    <string name="delete_this_file_after_import_is_complete">پس از اتمام درون ریزی، این پرونده را حذف خواهید کرد.</string>
+    <string name="on_your_computer_open_a_new_browser_tab_and_go_to_vault_bitwarden_com">روی رایانه خود، یک تب جدید در مرورگر باز کنید و <annotation emphasis="bold">به <annotation arg="0">%1$s</annotation></annotation> بروید</string>
     <string name="log_in_to_the_bitwarden_web_app">به اپلیکیشن وب Bitwarden وارد شوید.</string>
     <string name="step_2_of_3">مرحلهٔ ۲ از ۳</string>
     <string name="log_in_to_bitwarden">وارد Bitwarden شوید</string>
     <string name="step_3_of_3">مرحلهٔ ۳ از ۳</string>
-    <string name="import_logins_to_bitwarden">ورودها را به Bitwarden وارد کنید</string>
-    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">در ناوبری Bitwarden، <annotation emphasis="bold">گزینه ابزارها </annotation> را پیدا کرده و <annotation emphasis="bold">وارد کردن داده‌ها</annotation> را انتخاب کنید</string>
-    <string name="fill_out_the_form_and_import_your_saved_password_file">فرم را پر کرده و <annotation emphasis="bold">فایل کلمه عبور ذخیره شده خود را وارد کنید.</annotation></string>
-    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">برای امنیت خود، حتماً <annotation emphasis="bold">فایل کلمه عبور ذخیره شده خود را حذف کنید.</annotation></string>
+    <string name="import_logins_to_bitwarden">ورودها را به Bitwarden درون ریزی کنید</string>
+    <string name="in_the_bitwarden_navigation_find_the_tools_option_and_select_import_data">در ناوبری Bitwarden، <annotation emphasis="bold">گزینه ابزارها </annotation> را پیدا کرده و <annotation emphasis="bold">درون ریزی داده‌ها</annotation> را انتخاب کنید</string>
+    <string name="fill_out_the_form_and_import_your_saved_password_file">فرم را پر کرده و <annotation emphasis="bold">پرونده کلمه عبور ذخیره شده خود را درون ریزی کنید.</annotation></string>
+    <string name="for_your_security_be_sure_to_delete_your_saved_password_file">برای امنیت خود، حتماً <annotation emphasis="bold">پرونده کلمه عبور ذخیره شده خود را حذف کنید.</annotation></string>
     <string name="need_help_check_out_import_help">نیاز به کمک دارید؟ به <annotation link="importHelp">راهنمای درون ریزی </annotation> مراجعه کنید.</string>
-    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">پرونده برون ریزی شده را ذخیره کنید</annotation> در مکانی روی کامپیوترتان که به‌راحتی بتوانید آن را پیدا کنید.</string>
+    <string name="save_the_exported_file_somewhere_on_your_computer_you_can_find_easily"><annotation emphasis="bold">پرونده برون ریزی شده را ذخیره کنید</annotation> در مکانی روی رایانه‌تان که به‌راحتی بتوانید آن را پیدا کنید.</string>
     <string name="this_is_not_a_recognized_bitwarden_server_you_may_need_to_check_with_your_provider_or_update_your_server">این یک سرور معتبر Bitwarden نیست. ممکن است لازم باشد با ارائه‌دهنده خود بررسی کنید یا سرور را به‌روزرسانی نمایید.</string>
     <string name="syncing_logins_loading_message">همگام‌سازی ورودها...</string>
-    <string name="download_the_browser_extension">افزونه مرورگر را دانلود کنید</string>
+    <string name="download_the_browser_extension">افزونه مرورگر را بارگیری کنید</string>
     <string name="go_to_bitwarden_com_download_to_integrate_bitwarden_into_browser">به نشانی bitwarden.com/download بروید تا Bitwarden را در مرورگر مورد علاقه‌تان یکپارچه‌سازی کنید و تجربه‌ای روان داشته باشید.</string>
     <string name="use_the_web_app">از برنامه وب استفاده کنید</string>
     <string name="log_in_at_bitwarden_com_to_easily_manage_your_account">در bitwarden.com وارد شوید تا به‌راحتی حساب کاربری خود را مدیریت کرده و تنظیمات را به‌روزرسانی کنید.</string>
@@ -1122,7 +1123,7 @@
     <string name="import_error">خطای درون ریزی</string>
     <string name="verified_sso_domain_verified">نقطه پایانی دامنه SSO تأیید شده</string>
     <string name="logins_imported">ورودها درون ریزی شد</string>
-    <string name="remember_to_delete_your_imported_password_file_from_your_computer">فراموش نکنید پرونده کلمات عبور درون ریزی شده را از کامپیوتر خود حذف کنید</string>
+    <string name="remember_to_delete_your_imported_password_file_from_your_computer">فراموش نکنید پرونده کلمات عبور درون ریزی شده را از رایانه خود حذف کنید</string>
     <string name="type_ssh_key">کلید SSH</string>
     <string name="public_key">کلید عمومی</string>
     <string name="private_key">کلید خصوصی</string>
@@ -1136,7 +1137,7 @@
     <string name="done_text">انجام شد</string>
     <string name="page_number_x_of_y">%1$s از %2$s</string>
     <string name="copy_identity_name">کپی نام هویت</string>
-    <string name="copy_company">کپی سازمان</string>
+    <string name="copy_company">کپی شرکت</string>
     <string name="copy_ssn">کپی شماره کد ملی</string>
     <string name="copy_passport_number">کپی شماره گذرنامه</string>
     <string name="copy_license_number">کپی شماره گواهینامه</string>
@@ -1153,7 +1154,7 @@
     <string name="combine_those_words_together">آن کلمات را کنار هم قرار دهید و ترکیب کنید</string>
     <string name="put_the_words_together_in_any_order_to_form_your_passphrase">کلمات را به هر ترتیبی کنار هم بگذارید تا عبارت عبور خود را بسازید. <annotation emphasis="bold">می‌توانید از خط فاصله، فاصله یا به‌صورت یک کلمه بلند استفاده کنید</annotation>— انتخاب با شماست!</string>
     <string name="make_it_yours">آن را به سبک خودتان بسازید</string>
-    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">یک عدد یا نماد اضافه کنید</annotation> تا عبارت عبور شما قوی‌تر شود. حالا یک عبارت عبور منحصربه‌فرد، امن و به‌خاطرسپردنی دارید!</string>
+    <string name="add_a_number_or_symbol_to_make_it_even_stronger"><annotation emphasis="bold">یک عدد یا نماد اضافه کنید</annotation> تا عبارت عبور شما قوی‌تر شود. حالا یک عبارت عبور منحصربه‌فرد، امن و به‌خاطر سپردنی دارید!</string>
     <string name="need_some_inspiration">"نیاز به کمی الهام دارید؟"</string>
     <string name="check_out_the_passphrase_generator">"از تولیدکننده عبارت عبور دیدن کنید"</string>
     <string name="copied_to_clipboard">کپی در حافظهٔ موقت.</string>
@@ -1193,8 +1194,8 @@
     <string name="error_loading_certificate">خطا در بارگذاری گواهی‌نامه</string>
     <string name="certificate_alias">نام مستعار گواهی‌نامه</string>
     <string name="import_certificate">وارد کردن گواهی‌نامه</string>
-    <string name="choose_system_certificate">انتخاب گواهی سیستم</string>
-    <string name="certificate_installed">گواهی نصب شد</string>
+    <string name="choose_system_certificate">انتخاب گواهی‌نامه سیستم</string>
+    <string name="certificate_installed">گواهی‌نامه نصب شد</string>
     <string name="certificate_installation_failed">نصب گواهی‌نامه با خطا مواجه شد</string>
     <string name="certificate_selection_failed">انتخاب گواهی‌نامه با خطا مواجه شد</string>
     <string name="unsupported_certificate_type">نوع گواهی‌نامه پشتیبانی نمی‌شود</string>
@@ -1217,17 +1218,17 @@
     <string name="self_host_server_url">نشانی اینترنتی سرور خود میزبان</string>
     <string name="use_chrome_autofill_integration">استفاده از قابلیت پر کردن خودکار کروم</string>
     <string name="use_chrome_beta_autofill_integration">استفاده از قابلیت پرکردن خودکار کروم (نسخه بتا)</string>
-    <string name="improves_login_filling_for_supported_websites_on_chrome">پر کردن خودکار ورود به حساب برای وب‌سایت‌های پشتیبانی‌شده در کروم را بهبود می‌بخشد. پس از فعال‌سازی، به تنظیمات کروم هدایت می‌شوید تا پر کردن خودکار از سوی شخص ثالث را فعال کنید.</string>
+    <string name="improves_login_filling_for_supported_websites_on_chrome">پر کردن خودکار ورود به حساب برای وب‌سایت‌های پشتیبانی شده در کروم را بهبود می‌بخشد. پس از فعال‌سازی، به تنظیمات کروم هدایت می‌شوید تا پر کردن خودکار از سوی شخص ثالث را فعال کنید.</string>
     <string name="show_more">نمایش بیشتر</string>
     <string name="no_folder">بدون پوشه</string>
     <string name="show_less">نمایش کمتر</string>
     <string name="add_field">افزودن فیلد</string>
     <string name="x_ellipses">%s...</string>
     <string name="share_error_details">اشتراک‌گذاری جزئیات خطا</string>
-    <string name="flight_recorder">ضبط‌کننده پرواز</string>
-    <string name="flight_recorder_help">راهنمای ضبط‌کننده پرواز</string>
+    <string name="flight_recorder">ضبط‌ کننده پرواز</string>
+    <string name="flight_recorder_help">راهنمای ضبط‌ کننده پرواز</string>
     <string name="view_recorded_logs">مشاهده گزارش‌های ضبط شده</string>
-    <string name="enable_flight_recorder_title">فعال‌سازی ضبط‌کننده پرواز</string>
+    <string name="enable_flight_recorder_title">فعال‌سازی ضبط‌ کننده پرواز</string>
     <string name="recorded_logs_title">گزارش‌های ضبط شده</string>
     <string name="no_logs_recorded">هیچ گزارشی ضبط نشده است</string>
     <string name="experiencing_an_issue">مشکلی پیش آمده؟</string>
@@ -1244,9 +1245,9 @@
     <string name="share_all">هم‌رسانی همه</string>
     <string name="unable_to_share">امکان اشتراک‌گذاری وجود ندارد</string>
     <string name="please_try_again_or_select_a_different_log">لطفاً دوباره تلاش کنید یا گزارش دیگری را انتخاب کنید.</string>
-    <string name="the_log_file_you_are_trying_to_share_has_been_removed">پرونده گزارش که می‌خواهید به اشتراک بگذارید حذف شده است.</string>
+    <string name="the_log_file_you_are_trying_to_share_has_been_removed">پرونده گزارشی که می‌خواهید به اشتراک بگذارید حذف شده است.</string>
     <string name="delete_log">حذف گزارش</string>
-    <string name="do_you_really_want_to_delete_this_log">آیا واقعاً می خواهید این گزارش را حذف کنید؟</string>
+    <string name="do_you_really_want_to_delete_this_log">آیا واقعاً می‌خواهید این گزارش را حذف کنید؟</string>
     <string name="delete_logs">حذف گزارش‌ها</string>
     <string name="do_you_really_want_to_delete_all_recorded_logs">آیا واقعاً می‌خواهید تمام گزارش‌های ثبت‌شده را حذف کنید؟</string>
     <string name="confirm_key_connector_domain">تأیید دامنه رابط کلید</string>
@@ -1254,14 +1255,14 @@
     <string name="key_connector_organization">سازمان:</string>
     <string name="password_no_longer_required_confirm_domain">برای اعضای سازمان زیر، کلمه عبور اصلی دیگر لازم نیست. لطفاً دامنه زیر را با مدیر سازمان خود تأیید کنید.</string>
     <string name="please_confirm_domain_with_admin">لطفاً دامنه زیر را با مدیر سازمان خود تأیید کنید.\n\nدامنه رابط کلید:\n%1$s</string>
-    <string name="flight_recorder_banner_title">ضبط‌کننده پرواز روشن است</string>
-    <string name="flight_recorder_banner_message">ضبط‌کننده پرواز تا %1$s در %2$s فعال خواهد بود. برای غیرفعال کردن آن اکنون به تنظیمات بازگردید.</string>
+    <string name="flight_recorder_banner_title">ضبط‌ کننده پرواز روشن است</string>
+    <string name="flight_recorder_banner_message">ضبط‌ کننده پرواز تا %1$s در %2$s فعال خواهد بود. برای غیرفعال کردن آن اکنون به تنظیمات بازگردید.</string>
     <string name="go_to_settings">رفتن به تنظیمات</string>
     <string name="all_logs_deleted">تمامی لاگ‌ها حذف شدند</string>
-    <string name="log_deleted">لاگ حذف شد</string>
+    <string name="log_deleted">گزارش‌ حذف شد</string>
     <string name="app_settings">تنظیمات برنامه</string>
     <string name="replace_existing_certificate">آیا می‌خواهید گواهی‌نامه موجود را جایگزین کنید؟</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">گواهی با این نام مستعار \"%s\" از قبل وجود دارد. آیا می‌خواهید آن را جایگزین کنید؟\nتعویض گواهی ممکن است بر اتصال شما به محیط هایی که در حال حاضر از آن استفاده می‌کند تأثیر بگذارد.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">یک گواهی‌نامه با این نام مستعار \"%s\" از قبل وجود دارد. آیا می‌خواهید آن را جایگزین کنید؟\nتعویض گواهی ممکن است بر اتصال شما به محیط هایی که در حال حاضر از آن استفاده می‌کند تأثیر بگذارد.</string>
     <string name="replace_certificate">جایگزینی گواهی‌نامه</string>
     <string name="unable_to_read_certificate">ناتوانی در خواندن گواهی‌نامه.</string>
     <string name="cannot_delete_your_account">قادر به حذف حساب کاربری شما نیستیم</string>
@@ -1270,7 +1271,7 @@
     <string name="view_file_send">مشاهده پرونده جدید</string>
     <string name="view_text_send">مشاهده متن ارسال</string>
     <string name="delete_send">حذف ارسال</string>
-    <string name="missing_send_resync_your_vault">گزینه «ارسال» برای همگام‌سازی مجدد گاوصندوق شما مفقود است</string>
+    <string name="missing_send_resync_your_vault">گزینه ارسال برای همگام‌سازی مجدد گاوصندوق شما مفقود است</string>
     <string name="dynamic_colors">رنگ‌های پویا</string>
     <string name="dynamic_colors_description">رنگ‌های پویا را بر اساس کاغذ دیواری خود اعمال کنید</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">رنگ‌های پویا از رنگ‌های سیستم استفاده می‌کنند و ممکن است تمام دستورالعمل‌های دسترسی را رعایت نکنند.</string>
