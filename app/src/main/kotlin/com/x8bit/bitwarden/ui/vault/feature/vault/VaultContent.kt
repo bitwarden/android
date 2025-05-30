@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -17,6 +21,7 @@ import com.bitwarden.ui.platform.base.util.toListItemCardStyle
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -34,9 +39,34 @@ private const val TRASH_TYPES_COUNT: Int = 1
 fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
-    onOverflowOptionClick: (action: ListingItemOverflowAction.VaultAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // Handles the master password prompt for the row click
+    var masterPasswordRepromptItem by remember {
+        mutableStateOf<VaultState.ViewState.VaultItem?>(value = null)
+    }
+    masterPasswordRepromptItem?.let { action ->
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = { password ->
+                masterPasswordRepromptItem = null
+                vaultHandlers.masterPasswordRepromptSubmit(action, password)
+            },
+            onDismissRequest = { masterPasswordRepromptItem = null },
+        )
+    }
+    // Handles the master password prompt for the overflow clicks
+    var overflowMasterPasswordRepromptAction by remember {
+        mutableStateOf<ListingItemOverflowAction.VaultAction?>(value = null)
+    }
+    overflowMasterPasswordRepromptAction?.let { action ->
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = { password ->
+                overflowMasterPasswordRepromptAction = null
+                vaultHandlers.overflowMasterPasswordRepromptSubmit(action, password)
+            },
+            onDismissRequest = { overflowMasterPasswordRepromptAction = null },
+        )
+    }
     LazyColumn(
         modifier = modifier,
     ) {
@@ -93,13 +123,19 @@ fun VaultContent(
                     trailingLabelIcons = favoriteItem.extraIconList,
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
-                    onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
+                    onClick = {
+                        if (favoriteItem.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptItem = favoriteItem
+                        } else {
+                            vaultHandlers.vaultItemClick(favoriteItem)
+                        }
+                    },
                     overflowOptions = favoriteItem.overflowOptions.toImmutableList(),
                     onOverflowOptionClick = { action ->
                         if (favoriteItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
                         ) {
-                            onOverflowOptionClick(action)
+                            overflowMasterPasswordRepromptAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }
@@ -267,13 +303,19 @@ fun VaultContent(
                     trailingLabelIcons = noFolderItem.extraIconList,
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
-                    onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
+                    onClick = {
+                        if (noFolderItem.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptItem = noFolderItem
+                        } else {
+                            vaultHandlers.vaultItemClick(noFolderItem)
+                        }
+                    },
                     overflowOptions = noFolderItem.overflowOptions.toImmutableList(),
                     onOverflowOptionClick = { action ->
                         if (noFolderItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
                         ) {
-                            onOverflowOptionClick(action)
+                            overflowMasterPasswordRepromptAction = action
                         } else {
                             vaultHandlers.overflowOptionClick(action)
                         }

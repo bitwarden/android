@@ -141,7 +141,6 @@ fun VaultData.toViewState(
                 isFido2Creation = createCredentialRequestData != null,
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
-                isTotp = totpData != null,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -341,7 +340,6 @@ private fun List<CipherView>.toDisplayItemList(
     isFido2Creation: Boolean,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
-    isTotp: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -355,7 +353,6 @@ private fun List<CipherView>.toDisplayItemList(
                     fido2CredentialAutofillView.cipherId == it.id
                 },
             isPremiumUser = isPremiumUser,
-            isTotp = isTotp,
         )
     }
 
@@ -379,7 +376,6 @@ private fun CipherView.toDisplayItem(
     isFido2Creation: Boolean,
     fido2CredentialAutofillView: Fido2CredentialAutofillView?,
     isPremiumUser: Boolean,
-    isTotp: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -407,7 +403,6 @@ private fun CipherView.toDisplayItem(
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isCredentialCreation = isFido2Creation,
-        isTotp = isTotp,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = this.type),
@@ -481,7 +476,6 @@ private fun SendView.toDisplayItem(
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
         isCredentialCreation = false,
-        isTotp = false,
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = this.type),
     )
 

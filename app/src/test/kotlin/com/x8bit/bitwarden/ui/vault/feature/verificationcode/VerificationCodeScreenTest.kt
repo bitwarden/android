@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -263,12 +264,12 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `clicking on a display item should send ItemClick action`() {
+    fun `clicking on a display item without hideAuthCode should send ItemClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VerificationCodeState.ViewState.Content(
                     verificationCodeDisplayItems = listOf(
-                        createDisplayItem(number = 1),
+                        createDisplayItem(number = 1, hideAuthCode = false),
                     ),
                 ),
             )
@@ -282,6 +283,104 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
         verify {
             viewModel.trySendAction(VerificationCodeAction.ItemClick("1"))
         }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item with hideAuthCode should prompt for password before dismissing the dialog upon cancel`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VerificationCodeState.ViewState.Content(
+                    verificationCodeDisplayItems = listOf(
+                        createDisplayItem(number = 1, hideAuthCode = true),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Label 1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify(exactly = 0) {
+            viewModel.trySendAction(action = any())
+        }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking on a display item with hideAuthCode should prompt for password before sending MasterPasswordSubmit upon submit`() {
+        composeTestRule.assertNoDialogExists()
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VerificationCodeState.ViewState.Content(
+                    verificationCodeDisplayItems = listOf(
+                        createDisplayItem(number = 1, hideAuthCode = true),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Label 1")
+            .assertIsDisplayed()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password confirmation")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(
+                text = "This action is protected, to continue please re-enter your master " +
+                    "password to verify your identity.",
+            )
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performTextInput(text = "password1234")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                action = VerificationCodeAction.MasterPasswordSubmit(
+                    cipherId = "1",
+                    password = "password1234",
+                ),
+            )
+        }
+        composeTestRule.assertNoDialogExists()
     }
 
     @Test
@@ -371,6 +470,27 @@ class VerificationCodeScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithText(loadingMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `error dialog should be displayed according to state`() {
+        val errorMessage = "error"
+        composeTestRule.assertNoDialogExists()
+        composeTestRule.onNodeWithText(text = errorMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VerificationCodeState.DialogState.Error(
+                    title = null,
+                    message = errorMessage.asText(),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = errorMessage)
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }

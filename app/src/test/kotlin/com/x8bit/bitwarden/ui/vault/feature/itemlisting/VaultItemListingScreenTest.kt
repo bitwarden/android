@@ -1121,7 +1121,6 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createDisplayItem(number = 1).copy(
-                            isTotp = true,
                             shouldShowMasterPasswordReprompt = true,
                         ),
                     ),
@@ -2373,7 +2372,6 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = false,
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
@@ -2400,6 +2398,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = true,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
     )

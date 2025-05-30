@@ -197,7 +197,7 @@ fun List<LoginUriView>?.toLoginIconData(
 /**
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
-@Suppress("MagicNumber", "LongMethod")
+@Suppress("MagicNumber", "LongMethod", "CyclomaticComplexMethod")
 private fun CipherView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
@@ -220,7 +220,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
@@ -231,7 +232,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
@@ -246,7 +248,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
@@ -263,7 +266,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
 
         CipherType.SSH_KEY -> VaultState.ViewState.VaultItem.SshKey(
@@ -286,7 +290,8 @@ private fun CipherView.toVaultItemOrNull(
                 isPremiumUser = isPremiumUser,
             ),
             extraIconList = toLabelIcons(),
-            shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+            shouldShowMasterPasswordReprompt = hasMasterPassword &&
+                reprompt == CipherRepromptType.PASSWORD,
         )
     }
 }

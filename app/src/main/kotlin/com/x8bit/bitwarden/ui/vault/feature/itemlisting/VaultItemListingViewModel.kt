@@ -1468,13 +1468,8 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
 
-            is MasterPasswordRepromptData.Totp -> {
-                sendEvent(
-                    VaultItemListingEvent.NavigateToEditCipher(
-                        cipherId = data.cipherId,
-                        cipherType = VaultItemCipherType.LOGIN,
-                    ),
-                )
+            is MasterPasswordRepromptData.ViewItem -> {
+                trySendAction(VaultItemListingsAction.ItemClick(id = data.id, type = data.itemType))
             }
         }
     }
@@ -2340,7 +2335,6 @@ data class VaultItemListingState(
         val optionsTestTag: String,
         val isAutofill: Boolean,
         val isCredentialCreation: Boolean,
-        val isTotp: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
         val itemType: ItemType,
     ) {
@@ -2988,28 +2982,26 @@ sealed class VaultItemListingsAction {
 /**
  * Data tracking the type of request that triggered a master password reprompt.
  */
-sealed class MasterPasswordRepromptData : Parcelable {
+sealed class MasterPasswordRepromptData {
     /**
      * Autofill was selected.
      */
-    @Parcelize
     data class Autofill(
-        val cipherId: String,
-    ) : MasterPasswordRepromptData()
-
-    /**
-     * Totp was selected.
-     */
-    @Parcelize
-    data class Totp(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
 
     /**
      * A cipher overflow menu item action was selected.
      */
-    @Parcelize
     data class OverflowItem(
         val action: ListingItemOverflowAction.VaultAction,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * An item was selected to be viewed.
+     */
+    data class ViewItem(
+        val id: String,
+        val itemType: VaultItemListingState.DisplayItem.ItemType,
     ) : MasterPasswordRepromptData()
 }

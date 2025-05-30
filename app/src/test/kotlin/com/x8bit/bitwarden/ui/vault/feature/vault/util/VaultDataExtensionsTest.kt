@@ -994,6 +994,7 @@ private fun createMockSshKeyVaultItem(number: Int): VaultState.ViewState.VaultIt
             ListingItemOverflowAction.VaultAction.ViewClick(
                 cipherId = "mockId-$number",
                 cipherType = CipherType.SSH_KEY,
+                requiresPasswordReprompt = true,
             ),
             ListingItemOverflowAction.VaultAction.EditClick(
                 cipherId = "mockId-$number",
