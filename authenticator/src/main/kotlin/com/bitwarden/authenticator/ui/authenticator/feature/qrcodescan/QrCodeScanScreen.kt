@@ -1,6 +1,5 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
-import android.content.res.Configuration
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
@@ -21,7 +20,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -47,10 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -65,8 +60,11 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogStat
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.theme.LocalNonMaterialColors
-import com.bitwarden.authenticator.ui.platform.theme.clickableSpanStyle
+import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
+import com.bitwarden.ui.platform.base.util.spanStyleOf
+import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.util.asText
 import java.util.concurrent.Executors
@@ -88,14 +86,11 @@ fun QrCodeScanScreen(
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
     }
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val orientation = LocalConfiguration.current.orientation
-    val context = LocalContext.current
-
     val onEnterCodeManuallyClick = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick) }
     }
-
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is QrCodeScanEvent.ShowToast -> {
@@ -113,6 +108,19 @@ fun QrCodeScanScreen(
             }
         }
     }
+
+    QrCodeScanDialogs(
+        dialogState = state.dialog,
+        onSaveHereClick = remember(viewModel) {
+            { viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it)) }
+        },
+        onTakeMeToBitwardenClick = remember(viewModel) {
+            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it)) }
+        },
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss) }
+        },
+    )
 
     BitwardenScaffold(
         modifier = Modifier.fillMaxSize(),
@@ -136,52 +144,46 @@ fun QrCodeScanScreen(
             modifier = Modifier.padding(innerPadding),
         )
 
-        when (orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                LandscapeQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
+        if (LocalConfiguration.current.isPortrait) {
+            PortraitQRCodeContent(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                modifier = Modifier.padding(paddingValues = innerPadding),
+            )
+        } else {
+            LandscapeQRCodeContent(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                modifier = Modifier.padding(paddingValues = innerPadding),
+            )
+        }
+    }
+}
 
-            else -> {
-                PortraitQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
+@Composable
+private fun QrCodeScanDialogs(
+    dialogState: QrCodeScanState.DialogState?,
+    onSaveHereClick: (Boolean) -> Unit,
+    onTakeMeToBitwardenClick: (Boolean) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        QrCodeScanState.DialogState.ChooseSaveLocation -> {
+            ChooseSaveLocationDialog(
+                onSaveHereClick = onSaveHereClick,
+                onTakeMeToBitwardenClick = onTakeMeToBitwardenClick,
+            )
         }
 
-        when (state.dialog) {
-            QrCodeScanState.DialogState.ChooseSaveLocation -> {
-                ChooseSaveLocationDialog(
-                    onSaveHereClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(QrCodeScanAction.SaveLocallyClick(it))
-                        }
-                    },
-                    onTakeMeToBitwardenClick = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenClick(it))
-                        }
-                    },
-                )
-            }
-
-            QrCodeScanState.DialogState.SaveToBitwardenError -> BitwardenBasicDialog(
+        QrCodeScanState.DialogState.SaveToBitwardenError -> {
+            BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
                     title = R.string.something_went_wrong.asText(),
                     message = R.string.please_try_again.asText(),
                 ),
-                onDismissRequest = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(QrCodeScanAction.SaveToBitwardenErrorDismiss)
-                    }
-                },
+                onDismissRequest = onDismissRequest,
             )
-
-            null -> Unit
         }
+
+        null -> Unit
     }
 }
 
@@ -206,7 +208,7 @@ private fun PortraitQRCodeContent(
                 .weight(1f)
                 .fillMaxSize()
                 .background(color = Color.Black.copy(alpha = .4f))
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
@@ -219,6 +221,7 @@ private fun PortraitQRCodeContent(
 
             BottomClickableText(
                 onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                modifier = Modifier.padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -246,8 +249,7 @@ private fun LandscapeQRCodeContent(
                 .weight(1f)
                 .fillMaxSize()
                 .background(color = Color.Black.copy(alpha = .4f))
-                .padding(horizontal = 16.dp)
-                .navigationBarsPadding()
+                .standardHorizontalMargin()
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
@@ -260,6 +262,7 @@ private fun LandscapeQRCodeContent(
             BottomClickableText(
                 onEnterCodeManuallyClick = onEnterCodeManuallyClick,
             )
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -300,7 +303,7 @@ private fun CameraPreview(
 
     val preview = Preview.Builder()
         .build()
-        .apply { setSurfaceProvider(previewView.surfaceProvider) }
+        .apply { surfaceProvider = previewView.surfaceProvider }
 
     // Unbind from the camera provider when we leave the screen.
     DisposableEffect(Unit) {
@@ -330,7 +333,7 @@ private fun CameraPreview(
                 preview,
                 imageAnalyzer,
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             cameraErrorReceive()
         }
     }
@@ -443,61 +446,32 @@ private fun BottomClickableText(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val cannotScanText = stringResource(id = R.string.cannot_scan_qr_code)
     val enterKeyText = stringResource(id = R.string.enter_key_manually)
-    val clickableStyle = clickableSpanStyle()
-    val manualTextColor = LocalNonMaterialColors.current.qrCodeClickableText
-
-    val customTitleLineBreak = LineBreak(
-        strategy = LineBreak.Strategy.Balanced,
-        strictness = LineBreak.Strictness.Strict,
-        wordBreak = LineBreak.WordBreak.Phrase,
-    )
-
-    val annotatedString = remember {
-        buildAnnotatedString {
-            withStyle(style = clickableStyle.copy(color = Color.White)) {
-                pushStringAnnotation(
-                    tag = cannotScanText,
-                    annotation = cannotScanText,
-                )
-                append(cannotScanText)
-            }
-
-            append("  ")
-
-            withStyle(style = clickableStyle.copy(color = manualTextColor)) {
-                pushStringAnnotation(tag = enterKeyText, annotation = enterKeyText)
-                append(enterKeyText)
-            }
-        }
-    }
-
-    ClickableText(
-        text = annotatedString,
-        style = MaterialTheme.typography.bodyMedium.copy(
-            textAlign = TextAlign.Center,
-            lineBreak = customTitleLineBreak,
-        ),
-        onClick = { offset ->
-            annotatedString
-                .getStringAnnotations(
-                    tag = enterKeyText,
-                    start = offset,
-                    end = offset,
-                )
-                .firstOrNull()
-                ?.let { onEnterCodeManuallyClick.invoke() }
-        },
-        modifier = modifier
-            .semantics {
-                CustomAccessibilityAction(
-                    label = enterKeyText,
-                    action = {
-                        onEnterCodeManuallyClick.invoke()
-                        true
-                    },
-                )
+    Text(
+        text = annotatedStringResource(
+            id = R.string.cannot_scan_qr_code_enter_key_manually,
+            linkHighlightStyle = spanStyleOf(
+                color = LocalNonMaterialColors.current.qrCodeClickableText,
+                textStyle = MaterialTheme.typography.bodyMedium,
+            ),
+            style = spanStyleOf(
+                color = Color.White,
+                textStyle = MaterialTheme.typography.bodyMedium,
+            ),
+            onAnnotationClick = {
+                when (it) {
+                    "enterKeyManually" -> onEnterCodeManuallyClick()
+                }
             },
+        ),
+        modifier = modifier.semantics {
+            CustomAccessibilityAction(
+                label = enterKeyText,
+                action = {
+                    onEnterCodeManuallyClick()
+                    true
+                },
+            )
+        },
     )
 }

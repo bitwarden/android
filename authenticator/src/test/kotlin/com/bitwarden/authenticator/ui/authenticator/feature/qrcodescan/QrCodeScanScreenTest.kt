@@ -28,7 +28,7 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<QrCodeScanEvent>()
 
-    val viewModel: QrCodeScanViewModel = mockk {
+    private val viewModel: QrCodeScanViewModel = mockk {
         every { stateFlow } returns mutableStateFlow
         every { eventFlow } returns mutableEventFlow
         every { trySendAction(any()) } just runs
@@ -52,6 +52,12 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
     fun `on NavigateBack event receive should call navigate back`() {
         mutableEventFlow.tryEmit(QrCodeScanEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on NavigateToManualCodeEntry event receive should call navigate to manual code entry`() {
+        mutableEventFlow.tryEmit(QrCodeScanEvent.NavigateToManualCodeEntry)
+        assertTrue(onNavigateToManualCodeEntryScreenCalled)
     }
 
     @Test
