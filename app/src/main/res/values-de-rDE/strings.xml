@@ -992,11 +992,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="user_verification_direction">Benutzer-Verifizierung</string>
     <string name="create_account_on">Konto erstellt am</string>
     <string name="create_account_on_with_colon">Konto erstellt am:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Folge den Anweisungen in der an %1$s gesendeten E-Mail, um mit der Erstellung deines Kontos fortzufahren.</string>
     <string name="we_sent_an_email_to">Wir haben eine E-Mail an %1$s gesendet.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Wenn du fortfährst, stimmst du den Nutzungsbedingungen und der Datenschutzvereinbarung zu</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Durch Aktivieren dieses Schalters stimmst du den <annotation link="termsOfService">Nutzungsbedingungen</annotation> und <annotation link="privacyPolicy">Datenschutzbestimmungen</annotation> zu</string>
-    <string name="set_password">Passwort festlegen</string>
     <string name="unsubscribe">Deabonnieren</string>
     <string name="check_your_email">Überprüfe deine E-Mails</string>
     <string name="open_email_app">E-Mail-App öffnen</string>
@@ -1074,9 +1072,9 @@ Möchtest du zu diesem Konto wechseln?</string>
     <string name="new_master_password_hint">Neuer Hinweis zum Master-Passwort</string>
     <string name="get_started">Loslegen</string>
     <string name="save_and_protect_your_data">Speicher und schütze deine Daten</string>
-    <string name="the_vault_protects_more_than_just_passwords">Der Tresor schützt mehr als nur Passwörter. Speicher hier sicher Zugangsdaten, Ausweise, Karten und Notizen.</string>
+    <string name="the_vault_protects_more_than_just_passwords">Der Tresor schützt mehr als nur Passwörter. Speicher hier sicher Zugangsdaten, Identitäten, Karten und Notizen.</string>
     <string name="new_login">Neue Zugangsdaten</string>
-    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Teile Dateien und Daten sicher mit jedem auf jeder Plattform. Deine Informationen bleiben Ende-zu-Ende-Verschlüsselt, während die Verbreitung begrenzt wird.</string>
+    <string name="share_files_and_data_securely_with_anyone_on_any_platform">Teile Dateien und Daten sicher mit jedem auf jeder Plattform. Deine Informationen bleiben Ende-zu-Ende-verschlüsselt, während die Verbreitung begrenzt wird.</string>
     <string name="send_sensitive_information_safely">Sensible Informationen sicher versenden</string>
     <string name="import_saved_logins">Gespeicherte Zugangsdaten importieren</string>
     <string name="use_a_computer_to_import_logins">Verwende einen Computer, um Zugangsdaten von einem bestehenden Passwort-Manager zu importieren</string>

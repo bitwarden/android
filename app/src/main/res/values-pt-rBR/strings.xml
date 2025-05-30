@@ -642,10 +642,10 @@ A leitura será feita automaticamente.</string>
     <string name="send_link">Link do Send</string>
     <string name="search_sends">Pesquisar Sends</string>
     <string name="edit_send">Editar Send</string>
-    <string name="edit_file_send">Edit file Send</string>
-    <string name="edit_text_send">Edit text Send</string>
-    <string name="add_file_send">New file Send</string>
-    <string name="add_text_send">New text Send</string>
+    <string name="edit_file_send">Editar Envio de arquivo</string>
+    <string name="edit_text_send">Editar Envio de texto</string>
+    <string name="add_file_send">Novo Envio de arquivo</string>
+    <string name="add_text_send">Novo Envio de texto</string>
     <string name="are_you_sure_delete_send">Você tem certeza que deseja excluir este Send?</string>
     <string name="send_deleted">Send excluído</string>
     <string name="send_updated">Send atualizado</string>
@@ -993,11 +993,9 @@ Você deseja mudar para esta conta?</string>
     <string name="user_verification_direction">Verificação de usuário</string>
     <string name="create_account_on">Criar conta em</string>
     <string name="create_account_on_with_colon">Criar conta em:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções no e-mail enviado para %1$s para continuar a criar sua conta.</string>
     <string name="we_sent_an_email_to">Enviamos um e-mail para %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, você concorda com os Termos de Serviço e Política de Privacidade</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar esse botão, você concorda com os <annotation link="termsOfService">Termos de Serviço</annotation> e a <annotation link="privacyPolicy">Política de Privacidade</annotation></string>
-    <string name="set_password">Definir senha</string>
     <string name="unsubscribe">Cancelar inscrição</string>
     <string name="check_your_email">Verifique seu e-mail</string>
     <string name="open_email_app">Abrir app de email</string>
@@ -1272,7 +1270,7 @@ Você deseja mudar para esta conta?</string>
     <string name="view_file_send">Ver Envio de arquivo</string>
     <string name="view_text_send">Ver Envio de texto</string>
     <string name="delete_send">Excluir Envio</string>
-    <string name="missing_send_resync_your_vault">Missing Send re-sync your vault</string>
+    <string name="missing_send_resync_your_vault">Envio ausente, sincronize seu cofre</string>
     <string name="dynamic_colors">Cores dinâmicas</string>
     <string name="dynamic_colors_description">Aplicar cores dinâmicas com base no seu papel de parede</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">As cores dinâmicas usam as cores do sistema e podem não atender todas as diretrizes de acessibilidade.</string>

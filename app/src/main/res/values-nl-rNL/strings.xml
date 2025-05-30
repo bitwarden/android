@@ -993,11 +993,9 @@ Wilt u naar dit account wisselen?</string>
     <string name="user_verification_direction">Gebruikersverificatie</string>
     <string name="create_account_on">Account maken bij</string>
     <string name="create_account_on_with_colon">Account maken bij:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Volg de instructies in het e-mailbericht wat is verzonden naar %1$s om door te gaan met het aanmaken van je account.</string>
     <string name="we_sent_an_email_to">We hebben een e-mail gestuurd naar %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Door verder te gaan, gaat je akkoord met de Algemene voorwaarden en het Privacybeleid</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Het het inschakelen ga je akkoord met de <annotation link="termsOfService">Algemene voorwaarden</annotation> en het <annotation link="privacyPolicy">Privacybeleid</annotation></string>
-    <string name="set_password">Wachtwoord instellen</string>
     <string name="unsubscribe">Afmelden</string>
     <string name="check_your_email">Check je e-mail</string>
     <string name="open_email_app">E-mail-app openen</string>
