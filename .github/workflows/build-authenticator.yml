@@ -32,6 +32,7 @@ env:
 permissions:
   contents: read
   packages: read
+  id-token: write
 
 jobs:
   build:
@@ -112,10 +113,20 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
-      - name: Log in to Azure
-        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+      - name: Azure Login
+        id: azure-login
+        uses: bitwarden/gh-actions/azure-login@main
         with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get KV secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "BWA_AAB_KEYSTORE_STORE_PASSWORD,BWA_AAB_KEYSTORE_KEY_PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -213,18 +224,18 @@ jobs:
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ secrets.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
           keyAlias:authenticatorupload \
-          keyPassword:'${{ secrets.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ secrets.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-secrets.outputs.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
           keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ secrets.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-secrets.outputs.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
