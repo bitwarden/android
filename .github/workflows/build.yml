@@ -217,7 +217,7 @@ jobs:
       - name: Generate release Play Store bundle
         if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
         env:
-          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD_KEYSTORE_PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreRelease \
           storeFile:app_upload-keystore.jks \
@@ -228,8 +228,8 @@ jobs:
       - name: Generate beta Play Store bundle
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
         env:
-          UPLOAD_BETA_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_BETA_KEYSTORE_PASSWORD }}
-          UPLOAD_BETA_KEY_PASSWORD: ${{ secrets.UPLOAD_BETA_KEY_PASSWORD }}
+          UPLOAD_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD_BETA_KEYSTORE_PASSWORD }}
+          UPLOAD_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.UPLOAD_BETA_KEY_PASSWORD }}
         run: |
           bundle exec fastlane bundlePlayStoreBeta \
           storeFile:app_beta_upload-keystore.jks \
@@ -240,7 +240,7 @@ jobs:
       - name: Generate release Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+          PLAY_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY_KEYSTORE_PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreReleaseApk \
           storeFile:app_play-keystore.jks \
@@ -251,8 +251,8 @@ jobs:
       - name: Generate beta Play Store APK
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
         env:
-          PLAY_BETA_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
-          PLAY_BETA_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+          PLAY_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY_BETA_KEYSTORE_PASSWORD }}
+          PLAY_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.PLAY_BETA_KEY_PASSWORD }}
         run: |
           bundle exec fastlane assemblePlayStoreBetaApk \
           storeFile:app_beta_play-keystore.jks \
@@ -519,7 +519,7 @@ jobs:
           echo "Version Number: $VERSION_CODE" >> $GITHUB_STEP_SUMMARY
       - name: Generate F-Droid artifacts
         env:
-          FDROID_STORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
+          FDROID_STORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID_KEYSTORE_PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidReleaseApk \
           storeFile:app_fdroid-keystore.jks \
@@ -529,8 +529,8 @@ jobs:
 
       - name: Generate F-Droid Beta Artifacts
         env:
-          FDROID_BETA_KEYSTORE_PASSWORD: ${{ secrets.FDROID_BETA_KEYSTORE_PASSWORD }}
-          FDROID_BETA_KEY_PASSWORD: ${{ secrets.FDROID_BETA_KEY_PASSWORD }}
+          FDROID_BETA_KEYSTORE_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID_BETA_KEYSTORE_PASSWORD }}
+          FDROID_BETA_KEY_PASSWORD: ${{ steps.get-kv-secrets.outputs.FDROID_BETA_KEY_PASSWORD }}
         run: |
           bundle exec fastlane assembleFDroidBetaApk \
           storeFile:app_beta_fdroid-keystore.jks \
