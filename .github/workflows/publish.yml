@@ -27,6 +27,16 @@ on:
         description: "Change notes to be included with this release."
         type: string
         required: true
+      track-from:
+        description: "Track to promote from."
+        type: string
+        required: true
+        default: "internal"
+      track-target:
+        description: "Track to promote to."
+        type: string
+        required: true
+        default: "Closed testing - Fastlane Automation Testing Source"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -96,6 +106,8 @@ jobs:
             VERSION_CODE: ${{ inputs.version-code }}
             ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
             PRODUCT: ${{ inputs.product }}
+            TRACK_FROM: ${{ inputs.track-from }}
+            TRACK_TARGET: ${{ inputs.track-target }}
           run: |
             if [ "$PRODUCT" = "Password Manager" ]; then
               PACKAGE_NAME="com.x8bit.bitwarden"
@@ -116,4 +128,6 @@ jobs:
               versionCode:"$VERSION_CODE" \
               rolloutPercentage:$decimal \
               packageName:"$PACKAGE_NAME"\
-              releaseNotes:"$RELEASE_NOTES"
+              releaseNotes:"$RELEASE_NOTES"\
+              track:"$TRACK_FROM"\
+              trackPromoteTo:"$TRACK_TARGET"
