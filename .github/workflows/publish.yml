@@ -52,6 +52,15 @@ jobs:
       name: Promote build to Production in Play Store
 
       steps:
+        - name: Display Options
+          run: |
+            echo "product: ${{ inputs.product }}"
+            echo "version-code: ${{ inputs.version-code }}"
+            echo "rollout-percentage: ${{ inputs.rollout-percentage }}"
+            echo "release-notes: ${{ inputs.release-notes }}"
+            echo "track-from: ${{ inputs.track-from }}"
+            echo "track-target: ${{ inputs.track-target }}"
+
         - name: Check out repo
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
@@ -94,7 +103,7 @@ jobs:
 
         - name: Format Release Notes
           run: |
-            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
+            FORMATTED_MESSAGE="$( "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
