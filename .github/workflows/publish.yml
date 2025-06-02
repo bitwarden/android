@@ -1,6 +1,6 @@
 
 name: Publish
-
+run-name: "Testing promoting ${{ inputs.product }} ${{ inputs.version-code }} to closed testing"
 on:
   workflow_dispatch:
     inputs:
