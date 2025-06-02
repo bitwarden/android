@@ -109,7 +109,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -194,7 +194,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
         mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAutofillSettings)
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()

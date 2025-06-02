@@ -118,7 +118,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -147,7 +147,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText(text = "Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {

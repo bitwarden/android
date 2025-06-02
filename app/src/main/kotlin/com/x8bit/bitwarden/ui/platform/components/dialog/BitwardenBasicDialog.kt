@@ -44,7 +44,7 @@ fun BitwardenBasicDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.ok),
+                label = stringResource(id = R.string.okay),
                 onClick = onDismissRequest,
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
             )

@@ -20,7 +20,7 @@ fun BitwardenOverwritePasskeyConfirmationDialog(
     BitwardenTwoButtonDialog(
         title = stringResource(id = R.string.overwrite_passkey),
         message = stringResource(id = R.string.this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey),
-        confirmButtonText = stringResource(id = R.string.ok),
+        confirmButtonText = stringResource(id = R.string.okay),
         dismissButtonText = stringResource(id = R.string.cancel),
         onConfirmClick = onConfirmClick,
         onDismissClick = onDismissRequest,

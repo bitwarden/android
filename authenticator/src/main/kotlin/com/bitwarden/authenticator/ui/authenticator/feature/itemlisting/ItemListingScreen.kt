@@ -327,7 +327,7 @@ private fun ItemListingDialogs(
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = {
                     onConfirmDeleteClick(dialog.itemId)

@@ -176,7 +176,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()

@@ -287,7 +287,7 @@ private fun LoginApprovalDialogs(
         is LoginApprovalState.DialogState.ChangeAccount -> BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.log_in_requested),
             message = state.message(),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = onConfirmChangeAccount,
             onDismissClick = onDismissChangeAccount,

@@ -122,7 +122,7 @@ fun BitwardenDateSelectButton(
             onDismissRequest = { shouldShowDialog = false },
             confirmButton = {
                 BitwardenTextButton(
-                    label = stringResource(id = R.string.ok),
+                    label = stringResource(id = R.string.okay),
                     onClick = {
                         onDateSelect(
                             ZonedDateTime

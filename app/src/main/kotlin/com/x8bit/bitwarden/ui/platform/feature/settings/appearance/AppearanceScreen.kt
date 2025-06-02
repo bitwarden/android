@@ -156,7 +156,7 @@ private fun AppearanceDialogs(
                 message = stringResource(
                     id = R.string.dynamic_colors_may_not_adhere_to_accessibility_guidelines,
                 ),
-                confirmButtonText = stringResource(R.string.ok),
+                confirmButtonText = stringResource(R.string.okay),
                 dismissButtonText = stringResource(R.string.cancel),
                 onConfirmClick = onConfirmEnableDynamicColorsClick,
                 onDismissClick = onDismissDialog,

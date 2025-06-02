@@ -401,7 +401,7 @@ class LandingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -417,7 +417,7 @@ class LandingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(LandingAction.DialogDismiss) }

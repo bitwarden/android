@@ -7,7 +7,7 @@
     <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
     <string name="internet_connection_required_title">Internet connection required</string>
     <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
-    <string name="ok">OK</string>
+    <string name="okay">Okay</string>
     <string name="syncing">Syncing</string>
     <string name="copy">Copy</string>
     <string name="edit_item">Edit</string>
