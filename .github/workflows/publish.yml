@@ -36,7 +36,7 @@ on:
         description: "Track to promote to."
         type: string
         required: true
-        default: "Closed testing - Fastlane Automation Testing Source"
+        default: "Fastlane Automation Testing Source"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
