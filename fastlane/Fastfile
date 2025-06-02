@@ -265,18 +265,16 @@ platform :android do
     releaseNotes
   end
 
-  desc "Get latest published version"
-  lane :getLatestVersion do |options|
-
+  desc "Get latest published version for a given package name and Play Store track"
+  lane :getLatestPlayStoreVersion do |options|
       release_name = google_play_track_release_names(
-        package_name: "com.x8bit.bitwarden",
-        track: "production",
-        json_key: options[:serviceCredentialsFile]
+        package_name: options[:package_name],
+        track: options[:track],
       )
 
-      newest_version = release_name.first.to_s.strip
-
-      sh("echo STORE_VERSION=#{newest_version} >> $GITHUB_ENV")
+      latest_version = release_name.first.to_s.strip
+      UI.message("Latest version for #{options[:package_name]} on #{options[:track]} is #{latest_version}")
+      sh("echo STORE_VERSION=#{latest_version} >> $GITHUB_ENV")
   end
 
   # Authenticator
@@ -397,18 +395,5 @@ platform :android do
       aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
       mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
-  end
-
-  desc "Get latest Authenticator published version"
-  lane :getLatestAuthenticatorVersion do |options|
-      release_name = google_play_track_release_names(
-        package_name: "com.bitwarden.authenticator",
-        track: "production",
-        json_key: options[:serviceCredentialsFile]
-      )
-
-      newest_version = release_name.first.to_s.strip
-
-      sh("echo STORE_VERSION=#{newest_version} >> $GITHUB_ENV")
   end
 end

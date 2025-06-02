@@ -18,5 +18,5 @@ jobs:
       workflow_name: "publish-github-release-passoword-manager.yml"
       credentials_filename: "play_creds.json"
       check_release_command: >
-        bundle exec fastlane android getLatestVersion serviceCredentialsFile:$CREDENTIALS_PATH
+        bundle exec fastlane android getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production
     secrets: inherit
