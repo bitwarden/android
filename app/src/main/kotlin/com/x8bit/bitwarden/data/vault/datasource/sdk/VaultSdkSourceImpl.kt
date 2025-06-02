@@ -25,6 +25,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
@@ -269,7 +270,7 @@ class VaultSdkSourceImpl(
     override suspend fun encryptCipher(
         userId: String,
         cipherView: CipherView,
-    ): Result<Cipher> =
+    ): Result<EncryptionContext> =
         runCatchingWithLogs {
             getClient(userId = userId)
                 .vault()
@@ -389,7 +390,7 @@ class VaultSdkSourceImpl(
     override suspend fun decryptFile(
         userId: String,
         cipher: Cipher,
-        attachment: Attachment,
+        attachmentView: AttachmentView,
         encryptedFilePath: String,
         decryptedFilePath: String,
     ): Result<Unit> =
@@ -399,7 +400,7 @@ class VaultSdkSourceImpl(
                 .attachments()
                 .decryptFile(
                     cipher = cipher,
-                    attachment = attachment,
+                    attachment = attachmentView,
                     encryptedFilePath = encryptedFilePath,
                     decryptedFilePath = decryptedFilePath,
                 )

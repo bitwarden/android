@@ -181,6 +181,7 @@ class VaultLockManagerImpl(
                             email = email,
                             privateKey = privateKey,
                             method = initUserCryptoMethod,
+                            userId = userId,
                         ),
                     )
                     .flatMap { result ->

@@ -43,6 +43,7 @@ fun createMockCipher(
     shouldOrganizationUseTotp: Boolean = false,
     shouldViewPassword: Boolean = false,
     key: String? = "mockKey-$number",
+    encryptedFor: String? = "mockEncryptedFor-$number",
 ): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         id = id,
@@ -70,6 +71,7 @@ fun createMockCipher(
         shouldOrganizationUseTotp = shouldOrganizationUseTotp,
         shouldViewPassword = shouldViewPassword,
         key = key,
+        encryptedFor = encryptedFor,
     )
 
 /**

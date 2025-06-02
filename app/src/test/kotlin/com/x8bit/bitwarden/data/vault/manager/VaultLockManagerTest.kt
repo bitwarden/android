@@ -741,6 +741,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
                     privateKey = privateKey,
@@ -764,6 +765,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = USER_ID,
                 request = InitUserCryptoRequest(
+                    userId = USER_ID,
                     kdfParams = MOCK_PROFILE.toSdkParams(),
                     email = MOCK_PROFILE.email,
                     privateKey = privateKey,
@@ -894,6 +896,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -958,6 +961,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -990,6 +994,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1065,6 +1070,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1098,6 +1104,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1143,6 +1150,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1169,6 +1177,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1221,6 +1230,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1254,6 +1264,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1298,6 +1309,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1324,6 +1336,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1375,6 +1388,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1407,6 +1421,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1465,6 +1480,7 @@ class VaultLockManagerTest {
                 vaultSdkSource.initializeCrypto(
                     userId = USER_ID,
                     request = InitUserCryptoRequest(
+                        userId = USER_ID,
                         kdfParams = kdf,
                         email = email,
                         privateKey = privateKey,
@@ -1589,6 +1605,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,
@@ -1634,6 +1651,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,
@@ -1668,6 +1686,7 @@ class VaultLockManagerTest {
             vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = InitUserCryptoRequest(
+                    userId = userId,
                     kdfParams = kdf,
                     email = email,
                     privateKey = privateKey,

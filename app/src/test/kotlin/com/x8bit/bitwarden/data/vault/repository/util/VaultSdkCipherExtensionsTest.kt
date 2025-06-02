@@ -21,6 +21,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.FieldType
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCard
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
@@ -53,7 +54,9 @@ class VaultSdkCipherExtensionsTest {
     fun `toEncryptedNetworkCipherResponse should convert an Sdk Cipher to a cipher`() {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
 
-        val result = sdkCipher.toEncryptedNetworkCipherResponse()
+        val result = sdkCipher.toEncryptedNetworkCipherResponse(
+            encryptedFor = "mockEncryptedFor-1",
+        )
 
         assertEquals(
             createMockCipher(
@@ -67,7 +70,9 @@ class VaultSdkCipherExtensionsTest {
     @Test
     fun `toEncryptedNetworkCipher should convert an Sdk Cipher to a Network Cipher`() {
         val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
-        val syncCipher = sdkCipher.toEncryptedNetworkCipher()
+        val syncCipher = sdkCipher.toEncryptedNetworkCipher(
+            encryptedFor = "mockEncryptedFor-1",
+        )
         assertEquals(
             createMockCipherJsonRequest(
                 number = 1,
@@ -341,6 +346,32 @@ class VaultSdkCipherExtensionsTest {
         assertEquals(
             expected,
             list.sortAlphabetically(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `EncryptionContext toEncryptedNetworkCipher should convert an EncryptionContext to a Network Cipher`() {
+        val encryptionContext = createMockEncryptionContext(number = 1)
+        assertEquals(
+            createMockCipherJsonRequest(
+                number = 1,
+                login = createMockLogin(number = 1, uri = null),
+            ),
+            encryptionContext.toEncryptedNetworkCipher(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `EncryptionContext toEncryptedNetworkCipherResponse should convert an EncryptionContext to a cipher`() {
+        val encryptionContext = createMockEncryptionContext(number = 1)
+        assertEquals(
+            createMockCipher(
+                number = 1,
+                login = createMockLogin(number = 1, uri = null),
+            ),
+            encryptionContext.toEncryptedNetworkCipherResponse(),
         )
     }
 }
