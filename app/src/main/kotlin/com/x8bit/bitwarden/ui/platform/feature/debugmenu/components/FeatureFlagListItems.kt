@@ -36,7 +36,6 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.MutualTls,
     FlagKey.SingleTapPasskeyCreation,
     FlagKey.SingleTapPasskeyAuthentication,
-    FlagKey.SingleTapPasswordAuthentication,
     FlagKey.AnonAddySelfHostAlias,
     FlagKey.SimpleLoginSelfHostAlias,
     FlagKey.ChromeAutofill,
@@ -98,7 +97,6 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.SingleTapPasskeyAuthentication -> {
         stringResource(R.string.single_tap_passkey_authentication)
     }
-    FlagKey.SingleTapPasswordAuthentication -> TODO()
 
     FlagKey.AnonAddySelfHostAlias -> stringResource(R.string.anon_addy_self_hosted_aliases)
     FlagKey.SimpleLoginSelfHostAlias -> stringResource(R.string.simple_login_self_hosted_aliases)
