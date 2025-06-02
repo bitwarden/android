@@ -142,6 +142,7 @@ class CredentialEntryBuilderImpl(
                         ),
                     beginGetPasswordOption = option,
                 )
+                .setDisplayName(cipherView.name)
                 .setIcon(
                     getCredentialEntryIcon(
                         isPasskey = true,
