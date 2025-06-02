@@ -1,6 +1,6 @@
 
 name: Publish
-run-name: "Testing promoting ${{ inputs.product }} ${{ inputs.version-code }} to closed testing"
+run-name: "Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}"
 on:
   workflow_dispatch:
     inputs:
