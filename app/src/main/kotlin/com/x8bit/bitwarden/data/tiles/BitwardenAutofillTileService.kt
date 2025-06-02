@@ -64,6 +64,6 @@ class BitwardenAutofillTileService : TileService() {
         AlertDialog.Builder(this)
             .setMessage(R.string.autofill_tile_accessibility_required)
             .setCancelable(true)
-            .setPositiveButton(R.string.ok) { dialog, _ -> dialog.cancel() }
+            .setPositiveButton(R.string.okay) { dialog, _ -> dialog.cancel() }
             .create()
 }

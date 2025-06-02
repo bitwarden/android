@@ -343,7 +343,7 @@ private fun VaultSettings(
         dialogTitle = stringResource(R.string.data_backup_title),
         dialogMessage = stringResource(R.string.data_backup_message),
         dialogConfirmButtonText = stringResource(R.string.learn_more),
-        dialogDismissButtonText = stringResource(R.string.ok),
+        dialogDismissButtonText = stringResource(R.string.okay),
     )
     if (shouldShowSyncWithBitwardenApp) {
         Spacer(modifier = Modifier.height(8.dp))

@@ -67,7 +67,7 @@ fun BitwardenTimePickerDialog(
         confirmButton = {
             BitwardenTextButton(
                 modifier = Modifier.testTag(tag = "AcceptAlertButton"),
-                label = stringResource(id = R.string.ok),
+                label = stringResource(id = R.string.okay),
                 onClick = { onTimeSelect(timePickerState.hour, timePickerState.minute) },
             )
         },

@@ -543,7 +543,7 @@ private fun SessionTimeoutRow(
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.warning),
             message = stringResource(id = R.string.never_lock_warning),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
                 shouldShowNeverTimeoutConfirmationDialog = false

@@ -798,7 +798,7 @@ class SendScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
 

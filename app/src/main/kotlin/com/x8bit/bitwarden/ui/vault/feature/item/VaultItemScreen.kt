@@ -296,7 +296,7 @@ private fun VaultItemDialogs(
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmDeleteClick,
                 onDismissClick = onDismissRequest,
@@ -319,7 +319,7 @@ private fun VaultItemDialogs(
         VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
             message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = onConfirmRestoreAction,
             onDismissClick = onDismissRequest,

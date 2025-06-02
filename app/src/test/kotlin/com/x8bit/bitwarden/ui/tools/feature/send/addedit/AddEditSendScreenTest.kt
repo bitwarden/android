@@ -783,7 +783,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
     }
