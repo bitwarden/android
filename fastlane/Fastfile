@@ -13,6 +13,9 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require_relative 'patches/supply_custom_promote_config'
+require_relative 'patches/supply_custom_promote'
+
 default_platform(:android)
 
 platform :android do
@@ -417,6 +420,7 @@ platform :android do
       version_code: options[:versionCode],
       track: options[:track],
       track_promote_to: options[:trackPromoteTo],
+      skip_release_verification: true,
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false
