@@ -413,10 +413,16 @@ platform :android do
       track_promote_to: "Fastlane Automation Testing Target",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
-      skip_upload_metadata: false,
-      track_promote_release_status: "inProgress",
-      # track_promote_release_status: "draft",
-      rollout: options[:rolloutPercentage]
-    )
+      skip_upload_metadata: false
+    }
+
+    if options[:rolloutPercentage].to_f < 1
+      supply_options[:track_promote_release_status] = "inProgress"
+      supply_options[:rollout] = options[:rolloutPercentage]
+    else
+      supply_options[:track_promote_release_status] = "completed"
+    end
+
+    supply(supply_options)
   end
 end
