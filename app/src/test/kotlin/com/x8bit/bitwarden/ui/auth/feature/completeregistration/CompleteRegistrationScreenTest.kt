@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.robolectric.annotation.Config
 
 class CompleteRegistrationScreenTest : BitwardenComposeTest() {
 
@@ -73,32 +72,6 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `determine if using the old ui by title text`() {
-        composeTestRule
-            .onNodeWithText("Set password")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNode(hasText("Create account") and !hasClickAction())
-            .assertDoesNotExist()
-    }
-
-    @Test
-    fun `call to action with valid input click should send CreateAccountClick action`() {
-        mutableStateFlow.update {
-            it.copy(
-                passwordInput = "password1234",
-                confirmPasswordInput = "password1234",
-            )
-        }
-        composeTestRule
-            .onNode(hasText("Create account") and hasClickAction())
-            .assertIsEnabled()
-            .performClick()
-        verify { viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick) }
-    }
-
-    @Test
     fun `close click should send CloseClick action`() {
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(BackClick) }
@@ -127,20 +100,21 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `password input change should send PasswordInputChange action`() {
-        composeTestRule.onNodeWithText("Master password").performTextInput(TEST_INPUT)
+        composeTestRule.onNodeWithText("Master password (required)").performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(PasswordInputChange(TEST_INPUT)) }
     }
 
     @Test
     fun `confirm password input change should send ConfirmPasswordInputChange action`() {
-        composeTestRule.onNodeWithText("Re-type master password").performTextInput(TEST_INPUT)
+        composeTestRule.onNodeWithText("Re-type master password (required)")
+            .performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(ConfirmPasswordInputChange(TEST_INPUT)) }
     }
 
     @Test
     fun `password hint input change should send PasswordHintChange action`() {
         composeTestRule
-            .onNodeWithText("Master password hint (optional)")
+            .onNodeWithText("Master password hint")
             .performTextInput(TEST_INPUT)
         verify { viewModel.trySendAction(PasswordHintChange(TEST_INPUT)) }
     }
@@ -202,27 +176,42 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
     @Test
     fun `password strength should change as state changes`() {
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_1)
+            DEFAULT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
+                passwordInput = "123123123123",
+            )
         }
         composeTestRule.onNodeWithText("Weak").performScrollTo().assertIsDisplayed()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_2)
+            DEFAULT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.WEAK_2,
+                passwordInput = "123123123123",
+            )
         }
         composeTestRule.onNodeWithText("Weak").assertIsDisplayed()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.WEAK_3)
+            DEFAULT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.WEAK_3,
+                passwordInput = "123123123123",
+            )
         }
         composeTestRule.onNodeWithText("Weak").assertIsDisplayed()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.GOOD)
+            DEFAULT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.GOOD,
+                passwordInput = "123123123123",
+            )
         }
         composeTestRule.onNodeWithText("Good").assertIsDisplayed()
 
         mutableStateFlow.update {
-            DEFAULT_STATE.copy(passwordStrengthState = PasswordStrengthState.STRONG)
+            DEFAULT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.STRONG,
+                passwordInput = "123123123123",
+            )
         }
         composeTestRule.onNodeWithText("Strong").assertIsDisplayed()
     }
@@ -281,7 +270,7 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
 
     // New Onboarding UI tests
     @Test
-    fun `determine if using the new ui by title text`() = testWithFeatureFlagOn {
+    fun `determine if using the new ui by title text`() {
         composeTestRule
             .onNode(hasText("Create account") and !hasClickAction())
             .assertIsDisplayed()
@@ -292,106 +281,58 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `call to action state should update with input based on if both fields are populated`() =
-        testWithFeatureFlagOn {
-            mutableStateFlow.update {
-                it.copy(
-                    passwordInput = "",
-                    confirmPasswordInput = "password1234",
-                )
-            }
-            composeTestRule
-                .onNodeWithText("Next")
-                .assertIsNotEnabled()
-                .performScrollTo()
-                .performClick()
-            verify(exactly = 0) {
-                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-            }
-
-            mutableStateFlow.update {
-                it.copy(
-                    passwordInput = "password1234",
-                    confirmPasswordInput = "password1234",
-                )
-            }
-
-            composeTestRule
-                .onNodeWithText("Next")
-                .assertIsEnabled()
-                .performScrollTo()
-                .performClick()
-            verify(exactly = 1) {
-                viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
-            }
-        }
-
-    @Test
-    fun `Click on action card should send MakePasswordStrongClick action`() =
-        testWithFeatureFlagOn {
-            composeTestRule
-                .onNodeWithText("Learn more")
-                .performScrollTo()
-                .performClick()
-
-            verify { viewModel.trySendAction(CompleteRegistrationAction.MakePasswordStrongClick) }
-        }
-
-    @Test
-    fun `Click on prevent account lockout should send LearnToPreventLockoutClick action`() =
-        testWithFeatureFlagOn {
-            composeTestRule
-                .onNodeWithText("Learn about other ways to prevent account lockout")
-                .performScrollTo()
-                .performClick()
-
-            verify {
-                viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
-            }
-        }
-
-    @Test
-    fun `Header should be displayed in portrait mode`() = testWithFeatureFlagOn {
-        composeTestRule
-            .onNodeWithText("Choose your master password")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Choose a unique and strong password to keep your information safe.")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    @Config(qualifiers = "land")
-    @Test
-    fun `Header should be displayed in landscape mode`() = testWithFeatureFlagOn {
-        composeTestRule
-            .onNodeWithText("Choose your master password")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("Choose a unique and strong password to keep your information safe.")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    private fun testWithFeatureFlagOn(test: () -> Unit) {
-        turnFeatureFlagOn()
-        test()
-        turnFeatureFlagOff()
-    }
-
-    private fun turnFeatureFlagOn() {
+    fun `call to action state should update with input based on if both fields are populated`() {
         mutableStateFlow.update {
-            it.copy(onboardingEnabled = true)
+            it.copy(
+                passwordInput = "",
+                confirmPasswordInput = "password1234",
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Next")
+            .assertIsNotEnabled()
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 0) {
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
+        }
+
+        mutableStateFlow.update {
+            it.copy(
+                passwordInput = "password1234",
+                confirmPasswordInput = "password1234",
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Next")
+            .assertIsEnabled()
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(CompleteRegistrationAction.CallToActionClick)
         }
     }
 
-    private fun turnFeatureFlagOff() {
-        mutableStateFlow.update {
-            it.copy(onboardingEnabled = false)
+    @Test
+    fun `Click on action card should send MakePasswordStrongClick action`() {
+        composeTestRule
+            .onNodeWithText("Learn more")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(CompleteRegistrationAction.MakePasswordStrongClick) }
+    }
+
+    @Test
+    fun `Click on prevent account lockout should send LearnToPreventLockoutClick action`() {
+        composeTestRule
+            .onNodeWithText("Learn about other ways to prevent account lockout")
+            .performScrollTo()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(CompleteRegistrationAction.LearnToPreventLockoutClick)
         }
     }
 
@@ -409,7 +350,6 @@ class CompleteRegistrationScreenTest : BitwardenComposeTest() {
             isCheckDataBreachesToggled = true,
             dialog = null,
             passwordStrengthState = PasswordStrengthState.NONE,
-            onboardingEnabled = false,
             minimumPasswordLength = 12,
         )
     }

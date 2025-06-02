@@ -993,11 +993,9 @@ Vai pārslēgties uz šo kontu?</string>
     <string name="user_verification_direction">Lietotāja apliecināšana</string>
     <string name="create_account_on">Izveidot kontu</string>
     <string name="create_account_on_with_colon">Izveidot kontu:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Jāseko uz e-pasta adresi %1$s nosūtītajām norādēm, lai turpinātu sava konta izveidošanu.</string>
     <string name="we_sent_an_email_to">Mēs nosūtījām e-pasta ziņojumu uz %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Turpinot Tu piekrīti pakalpojuma izmantošanas nosacījumiem un privātuma politikai</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ar šī slēdža ieslēgšanu tiek piekrists <annotation link="termsOfService">Pakalpojuma izmantošanas nosacījumiem</annotation> un <annotation link="privacyPolicy">Privātuma politikai</annotation></string>
-    <string name="set_password">Iestatīt paroli</string>
     <string name="unsubscribe">Atteikt abonēšanu</string>
     <string name="check_your_email">Jāpārbauda e-pasts</string>
     <string name="open_email_app">Atvērt e-pasta lietotni</string>

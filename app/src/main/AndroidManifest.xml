@@ -48,6 +48,7 @@
         tools:targetApi="36">
         <activity
             android:name=".MainActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="@integer/launchModeAPIlevel"
             android:theme="@style/LaunchTheme"

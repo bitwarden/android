@@ -1,7 +1,6 @@
 package com.bitwarden.network.service
 
 import com.bitwarden.network.model.OrganizationAutoEnrollStatusResponseJson
-import com.bitwarden.network.model.OrganizationDomainSsoDetailsResponseJson
 import com.bitwarden.network.model.OrganizationKeysResponseJson
 import com.bitwarden.network.model.VerifiedOrganizationDomainSsoDetailsResponse
 
@@ -18,13 +17,6 @@ interface OrganizationService {
         passwordHash: String?,
         resetPasswordKey: String,
     ): Result<Unit>
-
-    /**
-     * Request claimed organization domain information for an [email] needed for SSO requests.
-     */
-    suspend fun getOrganizationDomainSsoDetails(
-        email: String,
-    ): Result<OrganizationDomainSsoDetailsResponseJson>
 
     /**
      * Gets info regarding whether this organization enforces reset password auto enrollment.

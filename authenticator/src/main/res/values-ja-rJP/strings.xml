@@ -126,11 +126,13 @@
     <string name="download_bitwarden_card_message">すべてのログイン情報を格納し、認証アプリに認証コードを直接同期します。</string>
     <string name="download_now">今すぐダウンロード</string>
     <string name="sync_with_bitwarden_app">Bitwarden アプリと同期</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Bitwarden アプリからコードを同期できません。両方のアプリが最新であることを確認してください。既存のコードには Bitwarden アプリでアクセスできます。</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden アプリと同期</string>
     <string name="go_to_settings">設定に移動</string>
     <string name="sync_with_bitwarden_action_card_message">ここにすべての認証コードを表示するためには、認証アプリの同期を許可してください。</string>
+    <string name="take_me_to_app_settings">アプリの設定に移動</string>
     <string name="something_went_wrong">何らかのエラーが発生しました</string>
     <string name="please_try_again">もう一度お試しください</string>
     <string name="move_to_bitwarden">Bitwarden へ移動</string>
@@ -148,8 +150,8 @@
     <string name="add_code_locally">コードをローカルに追加</string>
     <string name="local_codes">ローカルのコード</string>
     <string name="required_information_missing">必須の情報がありません</string>
-    <string name="required_information_missing_message">"Required info is missing (e.g., ‘services’ or ‘secret’). Check your file and try again. Visit bitwarden.com/help for support"</string>
-    <string name="file_could_not_be_processed">"File Could Not Be Processed"</string>
-    <string name="file_could_not_be_processed_message">"File could not be processed. Ensure it’s valid JSON and try again. Need help? Visit bitwarden.com/help"</string>
-    <string name="get_help">Get Help</string>
+    <string name="required_information_missing_message">"必須の情報がありません（例：「サービス」または「シークレット」）。ファイルを確認して再度お試しください。サポートが必要な場合は bitwarden.com/help をご覧ください"</string>
+    <string name="file_could_not_be_processed">"ファイルを処理できませんでした"</string>
+    <string name="file_could_not_be_processed_message">"ファイルを処理できませんでした。有効な JSON であることを確認し、再度お試しください。ヘルプが必要な場合は bitwarden.com/help をご覧ください"</string>
+    <string name="get_help">ヘルプを参照する</string>
 </resources>

@@ -992,11 +992,9 @@ Pretende mudar para esta conta?</string>
     <string name="user_verification_direction">Verificação do utilizador</string>
     <string name="create_account_on">Criar conta em</string>
     <string name="create_account_on_with_colon">Criar conta em:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Siga as instruções do e-mail enviado para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> para continuar a criar a sua conta.</string>
     <string name="we_sent_an_email_to">Enviámos um e-mail para <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Ao continuar, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Ao ativar este interruptor, concorda com os <annotation link="termsOfService">Termos de utilização</annotation> e <annotation link="privacyPolicy">Política de privacidade</annotation></string>
-    <string name="set_password">Definir palavra-passe</string>
     <string name="unsubscribe">Anular subscrição</string>
     <string name="check_your_email">Verifique o seu e-mail</string>
     <string name="open_email_app">Abrir a app de e-mail</string>
@@ -1263,7 +1261,7 @@ Pretende mudar para esta conta?</string>
     <string name="log_deleted">Registo eliminado</string>
     <string name="app_settings">Definições da app</string>
     <string name="replace_existing_certificate">Substituir o certificado existente?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Já existe um certificado com este pseudónimo \"%s\". Deseja substituí-lo? \nSubstituir o certificado pode afetar a sua ligação a quaisquer ambientes que o utilizem atualmente.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">Já existe um certificado com o pseudónimo \"%s\". Deseja substituí-lo? \nSubstituir o certificado pode afetar a sua ligação a quaisquer ambientes que o utilizem atualmente.</string>
     <string name="replace_certificate">Substituir o certificado</string>
     <string name="unable_to_read_certificate">Não é possível ler o certificado.</string>
     <string name="cannot_delete_your_account">Não é possível eliminar a sua conta</string>

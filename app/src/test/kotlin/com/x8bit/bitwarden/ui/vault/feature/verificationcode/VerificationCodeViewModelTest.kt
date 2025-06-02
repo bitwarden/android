@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.model.Environment
@@ -13,6 +14,7 @@ import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -22,6 +24,8 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.util.createVerificationCodeItem
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -128,6 +132,86 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             assertEquals(VerificationCodeEvent.NavigateToVaultItem(id = "mock"), awaitItem())
         }
     }
+
+    @Test
+    fun `MasterPasswordSubmit should validate the password and display an error on failure`() {
+        val viewModel = createViewModel()
+        val password = "password_1234"
+        val throwable = Throwable("Error!")
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Error(error = throwable)
+        viewModel.trySendAction(
+            action = VerificationCodeAction.MasterPasswordSubmit(
+                cipherId = "cipher_id",
+                password = password,
+            ),
+        )
+        assertEquals(
+            viewModel.stateFlow.value,
+            initialState.copy(
+                dialogState = VerificationCodeState.DialogState.Error(
+                    title = null,
+                    message = R.string.generic_error_message.asText(),
+                    throwable = throwable,
+                ),
+            ),
+        )
+        coVerify(exactly = 1) {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordSubmit should validate the password and display an error on invalid password`() {
+        val viewModel = createViewModel()
+        val password = "password_1234"
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Success(isValid = false)
+        viewModel.trySendAction(
+            action = VerificationCodeAction.MasterPasswordSubmit(
+                cipherId = "cipher_id",
+                password = password,
+            ),
+        )
+        assertEquals(
+            viewModel.stateFlow.value,
+            initialState.copy(
+                dialogState = VerificationCodeState.DialogState.Error(
+                    title = null,
+                    message = R.string.invalid_master_password.asText(),
+                ),
+            ),
+        )
+        coVerify(exactly = 1) {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Test
+    fun `MasterPasswordSubmit should validate the password and emit NavigateToVaultItem`() =
+        runTest {
+            val viewModel = createViewModel()
+            val password = "password_1234"
+            val cipherId = "cipher_id"
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    action = VerificationCodeAction.MasterPasswordSubmit(
+                        cipherId = cipherId,
+                        password = password,
+                    ),
+                )
+                assertEquals(VerificationCodeEvent.NavigateToVaultItem(id = cipherId), awaitItem())
+            }
+            coVerify(exactly = 1) {
+                authRepository.validatePassword(password = password)
+            }
+        }
 
     @Test
     fun `LockClick should call lockVaultForCurrentUser`() {
@@ -481,6 +565,22 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `DismissDialog should clear the dialog state`() = runTest {
+        val defaultState = initialState.copy(
+            dialogState = VerificationCodeState.DialogState.Error(
+                title = null,
+                message = "Test".asText(),
+            ),
+        )
+        val viewModel = createViewModel(state = defaultState)
+        viewModel.stateFlow.test {
+            assertEquals(defaultState, awaitItem())
+            viewModel.trySendAction(VerificationCodeAction.DismissDialog)
+            assertEquals(initialState, awaitItem())
+        }
+    }
+
     private fun setupMockUri() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
@@ -488,8 +588,13 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         every { uriMock.host } returns "www.mockuri.com"
     }
 
-    private fun createViewModel(): VerificationCodeViewModel =
+    private fun createViewModel(
+        state: VerificationCodeState? = null,
+    ): VerificationCodeViewModel =
         VerificationCodeViewModel(
+            savedStateHandle = SavedStateHandle().apply {
+                set(key = "state", value = state)
+            },
             clipboardManager = clipboardManager,
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,

@@ -94,9 +94,9 @@ sealed class ListingItemOverflowAction : Parcelable {
         data class ViewClick(
             val cipherId: String,
             val cipherType: CipherType,
+            override val requiresPasswordReprompt: Boolean,
         ) : VaultAction() {
             override val title: Text get() = R.string.view.asText()
-            override val requiresPasswordReprompt: Boolean get() = false
         }
 
         /**

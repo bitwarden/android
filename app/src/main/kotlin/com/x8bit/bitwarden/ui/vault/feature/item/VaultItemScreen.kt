@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -126,16 +125,6 @@ fun VaultItemScreen(
         dialog = state.dialog,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
-        },
-        onSubmitMasterPassword = remember(viewModel) {
-            { masterPassword, action ->
-                viewModel.trySendAction(
-                    VaultItemAction.Common.MasterPasswordSubmit(
-                        masterPassword = masterPassword,
-                        action = action,
-                    ),
-                )
-            }
         },
         onConfirmDeleteClick = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
@@ -288,7 +277,6 @@ private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
-    onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
 ) {
@@ -303,13 +291,6 @@ private fun VaultItemDialogs(
         is VaultItemState.DialogState.Loading -> BitwardenLoadingDialog(
             text = dialog.message(),
         )
-
-        is VaultItemState.DialogState.MasterPasswordDialog -> {
-            BitwardenMasterPasswordDialog(
-                onConfirmClick = { onSubmitMasterPassword(it, dialog.action) },
-                onDismissRequest = onDismissRequest,
-            )
-        }
 
         is VaultItemState.DialogState.DeleteConfirmationPrompt -> {
             BitwardenTwoButtonDialog(

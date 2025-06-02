@@ -63,7 +63,7 @@
     <string name="dark">Escuro</string>
     <string name="light">Claro</string>
     <string name="language">Idioma</string>
-    <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a aplicação para ver as alterações</string>
+    <string name="language_change_x_description">O idioma foi alterado para %1$s. Por favor, reinicie a app para ver as alterações</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Proteja as suas contas com o Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Obtenha códigos de verificação para todas as suas contas que suportam a verificação de dois passos.</string>
     <string name="use_your_device_camera_to_scan_codes">Utilize a câmara do seu dispositivo para ler códigos</string>
@@ -126,11 +126,13 @@
     <string name="download_bitwarden_card_message">Armazene todas as suas credenciais e sincronize os códigos de verificação diretamente com a app Authenticator.</string>
     <string name="download_now">Descarregar agora</string>
     <string name="sync_with_bitwarden_app">Sincronizar com a app Bitwarden</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Esta funcionalidade ainda não está disponível para utilizadores auto-hospedados. <annotation link="learnMore">Saiba mais</annotation></string>
     <string name="shared_codes_error">Não é possível sincronizar códigos da app Bitwarden. Certifique-se de que ambas as aplicações estão atualizadas. Ainda pode aceder aos seus códigos existentes na app Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Sincronizar com a app Bitwarden</string>
     <string name="go_to_settings">Ir para as definições</string>
-    <string name="sync_with_bitwarden_action_card_message">Permita a sincronização da app Authenticator nas definições para ver todos os seus códigos de verificação aqui.</string>
+    <string name="sync_with_bitwarden_action_card_message">Para ver todos os seus códigos de verificação, terá de permitir a sincronização em todas as suas contas.</string>
+    <string name="take_me_to_app_settings">Ir às definições da aplicação</string>
     <string name="something_went_wrong">Alguma coisa correu mal</string>
     <string name="please_try_again">Por favor, tente novamente</string>
     <string name="move_to_bitwarden">Mover para o Bitwarden</string>

@@ -12,14 +12,12 @@ import kotlinx.collections.immutable.persistentListOf
 /**
  * Create a mock [VaultItemListingState.DisplayItem] with a given [number].
  */
-@Suppress("LongParameterList")
 fun createMockDisplayItemForCipher(
     number: Int,
     cipherType: CipherType = CipherType.LOGIN,
     subtitle: String? = "mockUsername-$number",
     secondSubtitleTestTag: String? = null,
     requiresPasswordReprompt: Boolean = true,
-    isTotp: Boolean = false,
 ): VaultItemListingState.DisplayItem =
     when (cipherType) {
         CipherType.LOGIN -> {
@@ -51,6 +49,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -77,7 +76,6 @@ fun createMockDisplayItemForCipher(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
-                isTotp = isTotp,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -108,6 +106,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -123,7 +122,6 @@ fun createMockDisplayItemForCipher(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -154,6 +152,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -175,7 +174,6 @@ fun createMockDisplayItemForCipher(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -206,6 +204,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -218,7 +217,6 @@ fun createMockDisplayItemForCipher(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -249,6 +247,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-$number",
                         cipherType = cipherType,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
@@ -261,7 +260,6 @@ fun createMockDisplayItemForCipher(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SshKeyCipherIcon",
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = cipherType),
             )
         }
@@ -321,7 +319,6 @@ fun createMockDisplayItemForSend(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }
@@ -371,7 +368,6 @@ fun createMockDisplayItemForSend(
                 isCredentialCreation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
-                isTotp = false,
                 itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = sendType),
             )
         }

@@ -650,8 +650,11 @@ class SearchViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(
                     SearchAction.MasterPasswordRepromptSubmit(
                         password = password,
-                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(
+                        masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
                             cipherId = cipherId,
+                            itemType = SearchState.DisplayItem.ItemType.Vault(
+                                type = CipherType.LOGIN,
+                            ),
                         ),
                     ),
                 )
@@ -1103,6 +1106,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = cipherId,
                         cipherType = CipherType.LOGIN,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -1140,7 +1144,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1243,7 +1246,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isTotp = false,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1356,7 +1358,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1472,7 +1473,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = false,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1637,7 +1637,6 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isAutofill = true,
                 hasMasterPassword = true,
                 isPremiumUser = true,
-                isTotp = false,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(

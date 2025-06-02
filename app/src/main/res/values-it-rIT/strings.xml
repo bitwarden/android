@@ -993,11 +993,9 @@ Vuoi passare a questo account?</string>
     <string name="user_verification_direction">Verifica dell\'utente</string>
     <string name="create_account_on">Crea account su</string>
     <string name="create_account_on_with_colon">Crea account su:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Segui le istruzioni contenute nell\'email inviata a %1$s per proseguire con la creazione del tuo account.</string>
     <string name="we_sent_an_email_to">Abbiamo inviato una email a %1$s.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Continuando, accetti i Termini di servizio e l\'Informativa sulla privacy.</string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Attivando questo switch, accetti i <annotation link="termsOfService">Termini di Servizio</annotation> e <annotation link="privacyPolicy">Politica di riservatezza</annotation></string>
-    <string name="set_password">Imposta la password</string>
     <string name="unsubscribe">Annulla iscrizione</string>
     <string name="check_your_email">Controlla la casella di posta</string>
     <string name="open_email_app">Apri l\'app email</string>

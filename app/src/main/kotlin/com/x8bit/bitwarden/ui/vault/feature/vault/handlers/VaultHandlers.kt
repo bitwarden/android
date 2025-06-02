@@ -36,7 +36,11 @@ data class VaultHandlers(
     val tryAgainClick: () -> Unit,
     val dialogDismiss: () -> Unit,
     val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
-    val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
+    val overflowMasterPasswordRepromptSubmit: (
+        ListingItemOverflowAction.VaultAction,
+        String,
+    ) -> Unit,
+    val masterPasswordRepromptSubmit: (VaultState.ViewState.VaultItem, String) -> Unit,
     val dismissImportActionCard: () -> Unit,
     val importActionCardClick: () -> Unit,
     val flightRecorderGoToSettingsClick: () -> Unit,
@@ -93,10 +97,18 @@ data class VaultHandlers(
                 overflowOptionClick = {
                     viewModel.trySendAction(VaultAction.OverflowOptionClick(it))
                 },
-                masterPasswordRepromptSubmit = { action, password ->
+                overflowMasterPasswordRepromptSubmit = { action, password ->
+                    viewModel.trySendAction(
+                        VaultAction.OverflowMasterPasswordRepromptSubmit(
+                            overflowAction = action,
+                            password = password,
+                        ),
+                    )
+                },
+                masterPasswordRepromptSubmit = { item, password ->
                     viewModel.trySendAction(
                         VaultAction.MasterPasswordRepromptSubmit(
-                            overflowAction = action,
+                            item = item,
                             password = password,
                         ),
                     )

@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
@@ -37,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -77,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         // OS, but we need to ensure we properly set the values when upgrading from older versions
         // that handle this differently or when the activity restarts.
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
+        setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
             val navController = rememberBitwardenNavController(name = "MainActivity")
             SetupEventsEffect(navController = navController)

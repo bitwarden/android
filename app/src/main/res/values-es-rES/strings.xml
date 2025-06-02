@@ -994,11 +994,9 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="user_verification_direction">User verification</string>
     <string name="create_account_on">Crea una cuenta en</string>
     <string name="create_account_on_with_colon">Crea una cuenta en:</string>
-    <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Sigue las instrucciones del correo electrónico enviado a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation> para continuar creando tu cuenta.</string>
     <string name="we_sent_an_email_to">Hemos enviado un correo electrónico a <annotation emphasis="bold"><annotation arg="0">%1$s</annotation></annotation>.</string>
     <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">Al continuar, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
     <string name="by_activating_this_switch_you_agree_to_the_terms_of_service_and_privacy_policy">Al activar este interruptor, aceptas los <annotation link="termsOfService">Términos de Servicio</annotation> y la <annotation link="privacyPolicy">Política de Privacidad</annotation></string>
-    <string name="set_password">Establecer contraseña</string>
     <string name="unsubscribe">Unsubscribe</string>
     <string name="check_your_email">Comprueba tu correo electrónico</string>
     <string name="open_email_app">Abrir aplicación de correo electrónico</string>
@@ -1264,7 +1262,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
     <string name="log_deleted">Log deleted</string>
     <string name="app_settings">App settings</string>
     <string name="replace_existing_certificate">Replace existing certificate?</string>
-    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with this alias \"%s\" already exists. Do you want to replace it?\nReplace the certificate may impact your connection to any environments currently using it.</string>
+    <string name="a_certificate_with_the_alias_x_already_exists_do_you_want_to_replace_it">A certificate with the alias \"%s\" already exists. Do you want to replace it?\nReplacing the certificate may impact your connection to any environments currently using it.</string>
     <string name="replace_certificate">Replace certificate</string>
     <string name="unable_to_read_certificate">Unable to read certificate.</string>
     <string name="cannot_delete_your_account">Cannot delete your account</string>

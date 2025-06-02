@@ -28,6 +28,7 @@
         tools:targetApi="36">
         <activity
             android:name="com.bitwarden.authenticator.MainActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="@integer/launchModeAPILevel"
             android:theme="@style/LaunchTheme"
