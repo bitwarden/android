@@ -97,6 +97,31 @@ jobs:
               ;;
           esac
 
+      - name: Get version info from run logs
+        id: get_version_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+        run: |
+          workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
+
+          version_number_with_trailing_dot=$(grep -m 1 "Setting version code to" <<< "$workflow_log" | sed 's/.*Setting version code to //')
+          version_number=${version_number_with_trailing_dot%.} # remove trailing dot
+
+          version_name_with_trailing_dot=$(grep -m 1 "Setting version name to" <<< "$workflow_log" | sed 's/.*Setting version name to //')
+          version_name=${version_name_with_trailing_dot%.} # remove trailing dot
+
+          if [ -z "$version_number" ] || [ -z "$version_name" ]; then
+            echo "::error::Could not find version information in workflow logs"
+            exit 1
+          fi
+
+          echo "✅ Found version number: $version_number"
+          echo "✅ Found version name: $version_name"
+
+          echo "version_number=$version_number" >> $GITHUB_OUTPUT
+          echo "version_name=$version_name" >> $GITHUB_OUTPUT
+
       - name: Download artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,8 +139,8 @@ jobs:
         id: create_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          _VERSION_NAME: ${{ inputs.version-name }}
-          _VERSION_NUMBER: ${{ inputs.version-number }}
+          _VERSION_NAME: ${{ steps.get_version_info.outputs.version_name }}
+          _VERSION_NUMBER: ${{ steps.get_version_info.outputs.version_number }}
           _PRERELEASE: ${{ inputs.prerelease }}
           _DRAFT: ${{ inputs.draft }}
           _MAKE_LATEST: ${{ inputs.make-latest }}
@@ -145,10 +170,9 @@ jobs:
           RELEASE_ID: ${{ steps.create_release.outputs.id }}
           RELEASE_URL: ${{ steps.create_release.outputs.url }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          _VERSION_NAME: ${{ inputs.version-name }}
+          _VERSION_NAME: ${{ steps.get_version_info.outputs.version_name }}
         run: |
           # Get current release body
-          #current_body=$(gh api /repos/${{ github.repository }}/releases/$RELEASE_ID --jq .body)
           echo "Getting current release body. Tag: v$_VERSION_NAME"
           current_body=$(gh release view "v$_VERSION_NAME" --json body --jq .body)
 
