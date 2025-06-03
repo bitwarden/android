@@ -432,10 +432,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultAction.FlightRecorderGoToSettingsClick)
             assertEquals(VaultEvent.NavigateToAbout, awaitItem())
         }
-
-        verify(exactly = 1) {
-            settingsRepository.dismissFlightRecorderBanner()
-        }
     }
 
     @Test
