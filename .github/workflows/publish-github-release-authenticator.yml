@@ -17,5 +17,5 @@ jobs:
       workflow_name: "publish-github-release-authenticator.yml"
       credentials_filename: "authenticator_play_store-creds.json"
       check_release_command: >
-        bundle exec fastlane android getLatestAuthenticatorVersion serviceCredentialsFile:$CREDENTIALS_PATH
+        bundle exec fastlane android getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production
     secrets: inherit

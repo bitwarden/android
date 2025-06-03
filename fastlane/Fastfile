@@ -265,18 +265,26 @@ platform :android do
     releaseNotes
   end
 
-  desc "Get latest published version"
-  lane :getLatestVersion do |options|
-
+  desc "Get latest published version for a given package name and Play Store track"
+  lane :getLatestPlayStoreVersion do |options|
       release_name = google_play_track_release_names(
-        package_name: "com.x8bit.bitwarden",
+        package_name: options[:package_name],
+        track: options[:track],
+      )
+
+      version_code = google_play_track_version_codes(
+        package_name: "com.bitwarden.authenticator",
         track: "production",
         json_key: options[:serviceCredentialsFile]
       )
 
-      newest_version = release_name.first.to_s.strip
+      latest_version = release_name.first.to_s.strip
+      UI.message("Latest version for #{options[:package_name]} on #{options[:track]} is #{latest_version}")
+      sh("echo STORE_VERSION=#{latest_version} >> $GITHUB_ENV")
 
-      sh("echo STORE_VERSION=#{newest_version} >> $GITHUB_ENV")
+      newest_version_code = version_code.first.to_s.strip
+      UI.message("Latest version code for #{options[:package_name]} on #{options[:track]} is #{newest_version_code}")
+      sh("echo STORE_BUILD_NUMBER=#{newest_version_code} >> $GITHUB_ENV")
   end
 
   # Authenticator
@@ -397,26 +405,5 @@ platform :android do
       aab: "authenticator/build/outputs/bundle/release/com.bitwarden.authenticator.aab",
       mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
-  end
-
-  desc "Get latest Authenticator published version"
-  lane :getLatestAuthenticatorVersion do |options|
-      release_name = google_play_track_release_names(
-        package_name: "com.bitwarden.authenticator",
-        track: "production",
-        json_key: options[:serviceCredentialsFile]
-      )
-
-      version_code = google_play_track_version_codes(
-        package_name: "com.bitwarden.authenticator",
-        track: "production",
-        json_key: options[:serviceCredentialsFile]
-      )
-
-      newest_version = release_name.first.to_s.strip
-      newest_version_code = version_code.first.to_s.strip
-
-      sh("echo STORE_VERSION=#{newest_version} >> $GITHUB_ENV")
-      sh("echo STORE_BUILD_NUMBER=#{newest_version_code} >> $GITHUB_ENV")
   end
 end
