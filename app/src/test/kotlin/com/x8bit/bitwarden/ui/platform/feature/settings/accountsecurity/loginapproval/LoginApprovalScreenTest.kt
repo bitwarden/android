@@ -97,7 +97,7 @@ class LoginApprovalScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `on error dialog dismiss click should send ErrorDialogDismiss`() = runTest {
-        val title = "An error has occurred."
+        val title = "An error has occurred"
         val message = "We were unable to process your request."
         mutableStateFlow.tryEmit(
             DEFAULT_STATE.copy(

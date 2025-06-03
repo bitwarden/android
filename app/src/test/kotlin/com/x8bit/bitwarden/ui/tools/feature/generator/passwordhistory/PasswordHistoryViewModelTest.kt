@@ -70,7 +70,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     @Test
     fun `when repository emits Error state the state updates correctly`() = runTest {
         fakeGeneratorRepository.emitPasswordHistoryState(
-            state = LocalDataState.Error(Exception("An error has occurred.")),
+            state = LocalDataState.Error(Exception("An error has occurred")),
         )
         val viewModel = createViewModel()
 

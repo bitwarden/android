@@ -97,7 +97,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("An error has occurred.")
+            .onNodeWithText(text = "An error has occurred")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

@@ -61,7 +61,7 @@ private fun BitwardenBasicDialog_preview() {
     AuthenticatorTheme {
         BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                title = "An error has occurred.".asText(),
+                title = "An error has occurred".asText(),
                 message = "Username or password is incorrect. Try again.".asText(),
             ),
             onDismissRequest = {},
