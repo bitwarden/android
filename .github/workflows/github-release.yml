@@ -83,7 +83,7 @@ jobs:
           echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
 
           case "$workflow_name" in
-            *"Password Manager"*)
+            *"Password Manager"* | "Build")
               echo "releasing_bwpm=true" >> $GITHUB_OUTPUT
               echo "app_name=Password Manager" >> $GITHUB_OUTPUT
               ;;
@@ -92,7 +92,7 @@ jobs:
               echo "app_name=Authenticator" >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "::error::Unknown app in workflow name: $workflow_name" >> $GITHUB_STEP_SUMMARY
+              echo "::error::Unknown app in workflow name: $workflow_name"
               exit 1
               ;;
           esac
