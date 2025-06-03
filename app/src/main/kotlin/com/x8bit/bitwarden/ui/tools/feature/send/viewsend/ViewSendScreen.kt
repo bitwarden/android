@@ -48,6 +48,7 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -159,6 +160,9 @@ fun ViewSendScreen(
             onCopyClick = remember(viewModel) {
                 { viewModel.trySendAction(ViewSendAction.CopyClick) }
             },
+            onCopyNotesClick = remember(viewModel) {
+                { viewModel.trySendAction(ViewSendAction.CopyNotesClick) }
+            },
             onDeleteClick = remember(viewModel) {
                 { viewModel.trySendAction(ViewSendAction.DeleteClick) }
             },
@@ -196,6 +200,7 @@ private fun ViewSendDialogs(
 private fun ViewSendScreenContent(
     state: ViewSendState,
     onCopyClick: () -> Unit,
+    onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -205,6 +210,7 @@ private fun ViewSendScreenContent(
             ViewStateContent(
                 state = viewState,
                 onCopyClick = onCopyClick,
+                onCopyNotesClick = onCopyNotesClick,
                 onDeleteClick = onDeleteClick,
                 onShareClick = onShareClick,
                 modifier = modifier,
@@ -229,6 +235,7 @@ private fun ViewSendScreenContent(
 private fun ViewStateContent(
     state: ViewSendState.ViewState.Content,
     onCopyClick: () -> Unit,
+    onCopyNotesClick: () -> Unit,
     onDeleteClick: () -> Unit,
     onShareClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -320,7 +327,10 @@ private fun ViewStateContent(
                 .standardHorizontalMargin(),
         )
 
-        AdditionalOptions(state = state)
+        AdditionalOptions(
+            state = state,
+            onCopyNotesClick = onCopyNotesClick,
+        )
 
         DeleteButton(
             onDeleteClick = onDeleteClick,
@@ -454,6 +464,7 @@ private fun TextSendContent(
 @Composable
 private fun ColumnScope.AdditionalOptions(
     state: ViewSendState.ViewState.Content,
+    onCopyNotesClick: () -> Unit,
 ) {
     if (state.maxAccessCount == null && state.notes == null) {
         Spacer(modifier = Modifier.height(height = 16.dp))
@@ -503,6 +514,14 @@ private fun ColumnScope.AdditionalOptions(
                     label = stringResource(id = R.string.private_notes),
                     readOnly = true,
                     value = it,
+                    actions = {
+                        BitwardenStandardIconButton(
+                            vectorIconRes = R.drawable.ic_copy,
+                            contentDescription = stringResource(id = R.string.copy_notes),
+                            onClick = onCopyNotesClick,
+                            modifier = Modifier.testTag(tag = "ViewSendNotesCopyButton"),
+                        )
+                    },
                     singleLine = false,
                     onValueChange = {},
                     cardStyle = CardStyle.Full,
