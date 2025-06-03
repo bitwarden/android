@@ -74,7 +74,7 @@ jobs:
               fi
               ;;
             *)
-              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE" >> $GITHUB_STEP_SUMMARY
+              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE"
               exit 1
               ;;
           esac
@@ -92,7 +92,7 @@ jobs:
               echo "app_name=Authenticator" >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "::error::Unknown app in workflow name: $workflow_name"
+              echo "::error::Unknown workflow name: $workflow_name"
               exit 1
               ;;
           esac
