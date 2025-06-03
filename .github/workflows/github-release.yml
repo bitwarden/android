@@ -74,7 +74,7 @@ jobs:
               fi
               ;;
             *)
-              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE"
+              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE" >> $GITHUB_STEP_SUMMARY
               exit 1
               ;;
           esac
