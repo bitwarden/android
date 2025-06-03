@@ -11,7 +11,7 @@ permissions:
 jobs:
   publish-release-authenticator:
     name: Publish Authenticator Release
-    uses: ./.github/workflows/_publish-github-release.yml
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@main
     with:
       release_name: "Authenticator"
       workflow_name: "publish-github-release-authenticator.yml"
