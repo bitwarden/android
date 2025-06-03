@@ -278,13 +278,13 @@ platform :android do
         json_key: options[:serviceCredentialsFile]
       )
 
-      latest_version = release_name.first.to_s.strip
+      latest_version_name = release_name.first.to_s.strip
       UI.message("Latest version for #{options[:package_name]} on #{options[:track]} is #{latest_version}")
-      sh("echo STORE_VERSION=#{latest_version} >> $GITHUB_ENV")
+      sh("echo STORE_VERSION_NAME=#{latest_version_name} >> $GITHUB_ENV")
 
-      newest_version_code = version_code.first.to_s.strip
+      latest_version_number = version_code.first.to_s.strip
       UI.message("Latest version code for #{options[:package_name]} on #{options[:track]} is #{newest_version_code}")
-      sh("echo STORE_BUILD_NUMBER=#{newest_version_code} >> $GITHUB_ENV")
+      sh("echo STORE_VERSION_NUMBER=#{latest_version_number} >> $GITHUB_ENV")
   end
 
   # Authenticator
