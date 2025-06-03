@@ -29,7 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
@@ -181,7 +181,7 @@ private fun ImportScreenContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        BitwardenFilledTonalButton(
+        AuthenticatorFilledTonalButton(
             label = stringResource(id = R.string.import_vault),
             onClick = onImportClick,
             modifier = Modifier
