@@ -20,15 +20,15 @@ import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.AuthClient
 import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.CiphersClient
 import com.bitwarden.sdk.Client
-import com.bitwarden.sdk.ClientCiphers
 import com.bitwarden.sdk.ClientFido2
 import com.bitwarden.sdk.ClientFido2Authenticator
 import com.bitwarden.sdk.ClientFido2Client
-import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.CryptoClient
 import com.bitwarden.sdk.ExporterClient
 import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.sdk.PasswordHistoryClient
 import com.bitwarden.sdk.PlatformClient
 import com.bitwarden.sdk.SendClient
 import com.bitwarden.sdk.VaultClient
@@ -41,6 +41,7 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.EncryptionContext
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
@@ -83,12 +84,12 @@ class VaultSdkSourceTest {
     private val clientPlatform = mockk<PlatformClient> {
         every { fido2() } returns clientFido2
     }
-    private val clientPasswordHistory = mockk<ClientPasswordHistory>()
+    private val passwordHistoryClient = mockk<PasswordHistoryClient>()
     private val clientSends = mockk<SendClient>()
-    private val clientCiphers = mockk<ClientCiphers>()
+    private val ciphersClient = mockk<CiphersClient>()
     private val clientVault = mockk<VaultClient> {
-        every { ciphers() } returns clientCiphers
-        every { passwordHistory() } returns clientPasswordHistory
+        every { ciphers() } returns ciphersClient
+        every { passwordHistory() } returns passwordHistoryClient
     }
     private val clientExporters = mockk<ExporterClient> {
         coEvery { exportVault(any(), any(), any()) }
@@ -615,8 +616,10 @@ class VaultSdkSourceTest {
     fun `decryptCipher should call SDK and return a Result with correct data`() = runBlocking {
         val userId = "userId"
         val mockCipher = mockk<CipherView>()
-        val expectedResult = mockk<Cipher>()
-        coEvery { clientCiphers.encrypt(cipherView = mockCipher) } returns expectedResult
+        val expectedResult = mockk<EncryptionContext> {
+            every { cipher } returns createMockSdkCipher(number = 1)
+        }
+        coEvery { ciphersClient.encrypt(cipherView = mockCipher) } returns expectedResult
         val result = vaultSdkSource.encryptCipher(
             userId = userId,
             cipherView = mockCipher,
@@ -626,7 +629,7 @@ class VaultSdkSourceTest {
             result,
         )
         coVerify {
-            clientCiphers.encrypt(cipherView = mockCipher)
+            ciphersClient.encrypt(cipherView = mockCipher)
             sdkClientManager.getOrCreateClient(userId = userId)
         }
     }
@@ -636,7 +639,7 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val mockCipher = mockk<Cipher>()
         val expectedResult = mockk<CipherView>()
-        coEvery { clientCiphers.decrypt(cipher = mockCipher) } returns expectedResult
+        coEvery { ciphersClient.decrypt(cipher = mockCipher) } returns expectedResult
         val result = vaultSdkSource.decryptCipher(
             userId = userId,
             cipher = mockCipher,
@@ -646,7 +649,7 @@ class VaultSdkSourceTest {
             result,
         )
         coVerify {
-            clientCiphers.decrypt(cipher = mockCipher)
+            ciphersClient.decrypt(cipher = mockCipher)
             sdkClientManager.getOrCreateClient(userId = userId)
         }
     }
@@ -657,7 +660,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockCiphers = mockk<List<Cipher>>()
             val expectedResult = mockk<List<CipherListView>>()
-            coEvery { clientCiphers.decryptList(ciphers = mockCiphers) } returns expectedResult
+            coEvery { ciphersClient.decryptList(ciphers = mockCiphers) } returns expectedResult
             val result = vaultSdkSource.decryptCipherListCollection(
                 userId = userId,
                 cipherList = mockCiphers,
@@ -667,7 +670,7 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientCiphers.decryptList(ciphers = mockCiphers)
+                ciphersClient.decryptList(ciphers = mockCiphers)
                 sdkClientManager.getOrCreateClient(userId = userId)
             }
         }
@@ -679,8 +682,8 @@ class VaultSdkSourceTest {
         val mockCipher2 = mockk<Cipher>()
         val cipherView1 = mockk<CipherView>()
         val cipherView2 = mockk<CipherView>()
-        coEvery { clientCiphers.decrypt(cipher = mockCipher1) } returns cipherView1
-        coEvery { clientCiphers.decrypt(cipher = mockCipher2) } returns cipherView2
+        coEvery { ciphersClient.decrypt(cipher = mockCipher1) } returns cipherView1
+        coEvery { ciphersClient.decrypt(cipher = mockCipher2) } returns cipherView2
         val result = vaultSdkSource.decryptCipherList(
             userId = userId,
             cipherList = listOf(mockCipher1, mockCipher2),
@@ -690,8 +693,8 @@ class VaultSdkSourceTest {
             result,
         )
         coVerify(exactly = 1) {
-            clientCiphers.decrypt(cipher = mockCipher1)
-            clientCiphers.decrypt(cipher = mockCipher2)
+            ciphersClient.decrypt(cipher = mockCipher1)
+            ciphersClient.decrypt(cipher = mockCipher2)
             // It's important that we only fetch the client once
             sdkClientManager.getOrCreateClient(userId = userId)
             client.vault()
@@ -936,12 +939,12 @@ class VaultSdkSourceTest {
     fun `File decrypt should call SDK and return a Result with correct data`() = runBlocking {
         val userId = "userId"
         val mockCipher = mockk<Cipher>()
-        val mockAttachment = mockk<Attachment>()
+        val mockAttachmentView = mockk<AttachmentView>()
         val expectedResult = Unit
         coEvery {
             clientVault.attachments().decryptFile(
                 cipher = mockCipher,
-                attachment = mockAttachment,
+                attachment = mockAttachmentView,
                 encryptedFilePath = "encrypted_path",
                 decryptedFilePath = "decrypted_path",
             )
@@ -949,7 +952,7 @@ class VaultSdkSourceTest {
         val result = vaultSdkSource.decryptFile(
             userId = userId,
             cipher = mockCipher,
-            attachment = mockAttachment,
+            attachmentView = mockAttachmentView,
             encryptedFilePath = "encrypted_path",
             decryptedFilePath = "decrypted_path",
         )
@@ -960,7 +963,7 @@ class VaultSdkSourceTest {
         coVerify {
             clientVault.attachments().decryptFile(
                 cipher = mockCipher,
-                attachment = mockAttachment,
+                attachment = mockAttachmentView,
                 encryptedFilePath = "encrypted_path",
                 decryptedFilePath = "decrypted_path",
             )
@@ -975,7 +978,7 @@ class VaultSdkSourceTest {
             val mockPasswordHistoryView = mockk<PasswordHistoryView>()
             val expectedResult = mockk<PasswordHistory>()
             coEvery {
-                clientPasswordHistory.encrypt(
+                passwordHistoryClient.encrypt(
                     passwordHistory = mockPasswordHistoryView,
                 )
             } returns expectedResult
@@ -987,7 +990,7 @@ class VaultSdkSourceTest {
 
             assertEquals(expectedResult.asSuccess(), result)
             coVerify {
-                clientPasswordHistory.encrypt(
+                passwordHistoryClient.encrypt(
                     passwordHistory = mockPasswordHistoryView,
                 )
             }
@@ -1001,7 +1004,7 @@ class VaultSdkSourceTest {
             val mockPasswordHistoryList = mockk<List<PasswordHistory>>()
             val expectedResult = mockk<List<PasswordHistoryView>>()
             coEvery {
-                clientPasswordHistory.decryptList(
+                passwordHistoryClient.decryptList(
                     list = mockPasswordHistoryList,
                 )
             } returns expectedResult
@@ -1013,7 +1016,7 @@ class VaultSdkSourceTest {
 
             assertEquals(expectedResult.asSuccess(), result)
             coVerify {
-                clientPasswordHistory.decryptList(
+                passwordHistoryClient.decryptList(
                     list = mockPasswordHistoryList,
                 )
             }
@@ -1051,7 +1054,7 @@ class VaultSdkSourceTest {
         val mockCipher = mockk<CipherView>()
         val expectedResult = mockk<CipherView>()
         coEvery {
-            clientCiphers.moveToOrganization(cipher = mockCipher, organizationId = organizationId)
+            ciphersClient.moveToOrganization(cipher = mockCipher, organizationId = organizationId)
         } returns expectedResult
 
         val result = vaultSdkSource.moveToOrganization(

@@ -3,9 +3,9 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -91,11 +91,12 @@ class Fido2CredentialStoreImpl(
     /**
      * Save the provided [cred] to the users vault.
      */
-    override suspend fun saveCredential(cred: Cipher) {
-        val userId = getActiveUserIdOrThrow()
-
+    override suspend fun saveCredential(cred: EncryptionContext) {
         vaultSdkSource
-            .decryptCipher(userId, cred)
+            .decryptCipher(
+                userId = cred.encryptedFor,
+                cipher = cred.cipher,
+            )
             .map { decryptedCipherView ->
                 decryptedCipherView.id
                     ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
