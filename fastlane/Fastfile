@@ -273,9 +273,8 @@ platform :android do
       )
 
       version_code = google_play_track_version_codes(
-        package_name: "com.bitwarden.authenticator",
-        track: "production",
-        json_key: options[:serviceCredentialsFile]
+        package_name: options[:package_name],
+        track: options[:track],
       )
 
       latest_version_name = release_name.first.to_s.strip
