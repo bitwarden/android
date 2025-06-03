@@ -107,7 +107,7 @@ fun BitwardenBasicDialog(
 private fun BitwardenBasicDialog_preview() {
     BitwardenTheme {
         BitwardenBasicDialog(
-            title = "An error has occurred.",
+            title = "An error has occurred",
             message = "Username or password is incorrect. Try again.",
             onDismissRequest = {},
         )

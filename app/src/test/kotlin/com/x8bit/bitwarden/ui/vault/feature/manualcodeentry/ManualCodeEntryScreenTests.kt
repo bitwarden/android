@@ -147,7 +147,7 @@ class ManualCodeEntryScreenTests : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "An error has occurred.")
+            .onAllNodesWithText(text = "An error has occurred")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
