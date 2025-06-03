@@ -407,8 +407,16 @@ platform :android do
         json_key: options[:serviceCredentialsFile]
       )
 
+      version_code = google_play_track_version_codes(
+        package_name: "com.bitwarden.authenticator",
+        track: "production",
+        json_key: options[:serviceCredentialsFile]
+      )
+
       newest_version = release_name.first.to_s.strip
+      newest_version_code = version_code.first.to_s.strip
 
       sh("echo STORE_VERSION=#{newest_version} >> $GITHUB_ENV")
+      sh("echo STORE_BUILD_NUMBER=#{newest_version_code} >> $GITHUB_ENV")
   end
 end
