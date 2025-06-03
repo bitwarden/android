@@ -14,11 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import kotlinx.coroutines.launch
 
@@ -67,7 +68,7 @@ fun BitwardenModalBottomSheet(
                 BitwardenTopAppBar(
                     title = sheetTitle,
                     navigationIcon = NavigationIcon(
-                        navigationIcon = rememberVectorPainter(R.drawable.ic_close),
+                        navigationIcon = rememberVectorPainter(BitwardenDrawable.ic_close),
                         onNavigationIconClick = animatedOnDismiss,
                         navigationIconContentDescription = stringResource(R.string.close),
                     ),

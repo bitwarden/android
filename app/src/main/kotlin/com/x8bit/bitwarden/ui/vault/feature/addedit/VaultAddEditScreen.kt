@@ -41,16 +41,17 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.bottomsheet.BitwardenModalBottomSheet
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.coachmark.CoachMarkContainer
@@ -294,7 +295,7 @@ fun VaultAddEditScreen(
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.delete),
             message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
                 pendingDeleteCipher = false
@@ -325,7 +326,7 @@ fun VaultAddEditScreen(
                 BitwardenTopAppBar(
                     title = state.screenDisplayName(),
                     navigationIcon = NavigationIcon(
-                        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                        navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                         navigationIconContentDescription = stringResource(id = R.string.close),
                         onNavigationIconClick = remember(viewModel) {
                             { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }
@@ -342,6 +343,7 @@ fun VaultAddEditScreen(
                             modifier = Modifier.testTag("SaveButton"),
                         )
                         BitwardenOverflowActionItem(
+                            contentDescription = stringResource(R.string.more),
                             menuItemDataList = persistentListOfNotNull(
                                 OverflowMenuItemData(
                                     text = stringResource(id = R.string.attachments),

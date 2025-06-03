@@ -13,7 +13,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -23,18 +25,20 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -91,7 +95,10 @@ fun VerificationCodeScreen(
         }
     }
 
-    VerificationCodeDialogs(dialogState = state.dialogState)
+    VerificationCodeDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = verificationCodeHandler.dismissDialog,
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -111,6 +118,7 @@ fun VerificationCodeScreen(
                         onClick = verificationCodeHandler.searchIconClick,
                     )
                     BitwardenOverflowActionItem(
+                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.sync),
@@ -132,7 +140,9 @@ fun VerificationCodeScreen(
                 VerificationCodeContent(
                     items = viewState.verificationCodeDisplayItems.toImmutableList(),
                     onCopyClick = verificationCodeHandler.copyClick,
-                    itemClick = verificationCodeHandler.itemClick,
+                    onItemClick = verificationCodeHandler.itemClick,
+                    onMasterPasswordRepromptSubmit = verificationCodeHandler
+                        .masterPasswordRepromptSubmit,
                     modifier = Modifier.fillMaxSize(),
                 )
             }
@@ -155,11 +165,23 @@ fun VerificationCodeScreen(
 @Composable
 private fun VerificationCodeDialogs(
     dialogState: VerificationCodeState.DialogState?,
+    onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
-        is VerificationCodeState.DialogState.Loading -> BitwardenLoadingDialog(
-            text = dialogState.message(),
-        )
+        is VerificationCodeState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                title = dialogState.title?.invoke(),
+                message = dialogState.message(),
+                throwable = dialogState.throwable,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VerificationCodeState.DialogState.Loading -> {
+            BitwardenLoadingDialog(
+                text = dialogState.message(),
+            )
+        }
 
         null -> Unit
     }
@@ -168,10 +190,21 @@ private fun VerificationCodeDialogs(
 @Composable
 private fun VerificationCodeContent(
     items: ImmutableList<VerificationCodeDisplayItem>,
-    itemClick: (id: String) -> Unit,
+    onItemClick: (id: String) -> Unit,
+    onMasterPasswordRepromptSubmit: (id: String, password: String) -> Unit,
     onCopyClick: (text: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var masterPasswordRepromptId by remember { mutableStateOf<String?>(value = null) }
+    masterPasswordRepromptId?.let { id ->
+        BitwardenMasterPasswordDialog(
+            onConfirmClick = { password ->
+                onMasterPasswordRepromptSubmit(id, password)
+                masterPasswordRepromptId = null
+            },
+            onDismissRequest = { masterPasswordRepromptId = null },
+        )
+    }
     LazyColumn(
         modifier = modifier,
     ) {
@@ -199,7 +232,11 @@ private fun VerificationCodeContent(
                 hideAuthCode = it.hideAuthCode,
                 onCopyClick = { onCopyClick(it.authCode) },
                 onItemClick = {
-                    itemClick(it.id)
+                    if (it.hideAuthCode) {
+                        masterPasswordRepromptId = it.id
+                    } else {
+                        onItemClick(it.id)
+                    }
                 },
                 cardStyle = items.toListItemCardStyle(index = index, dividerPadding = 56.dp),
                 modifier = Modifier

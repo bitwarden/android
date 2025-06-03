@@ -96,6 +96,20 @@ class ViewSendViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on CopyNotesClick should call setText on ClipboardManger`() {
+        val viewModel = createViewModel()
+        val sendView = createMockSendView(number = 1)
+        every {
+            sendView.toViewSendViewStateContent(baseWebSendUrl = any(), clock = FIXED_CLOCK)
+        } returns DEFAULT_CONTENT_VIEW_STATE
+        mutableSendStateFlow.value = DataState.Loaded(data = sendView)
+        viewModel.trySendAction(ViewSendAction.CopyNotesClick)
+        verify(exactly = 1) {
+            clipboardManager.setText(text = "notes")
+        }
+    }
+
+    @Test
     fun `on DeleteClick with failure should display error dialog`() = runTest {
         val initialState = DEFAULT_STATE.copy(viewState = DEFAULT_CONTENT_VIEW_STATE)
         val sendView = createMockSendView(number = 1)

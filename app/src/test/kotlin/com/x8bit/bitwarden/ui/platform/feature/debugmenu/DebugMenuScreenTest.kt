@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.debugmenu
 
 import androidx.compose.ui.test.assertIsEnabled
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -130,14 +129,7 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `restart onboarding should send action when enabled and clicked`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = persistentMapOf(
-                    FlagKey.OnboardingFlow to true,
-                ),
-            ),
-        )
+    fun `restart onboarding should send action when clicked`() {
         composeTestRule
             .onNodeWithText("Restart Onboarding", ignoreCase = true)
             .performScrollTo()
@@ -145,25 +137,6 @@ class DebugMenuScreenTest : BitwardenComposeTest() {
             .performClick()
 
         verify(exactly = 1) { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
-    }
-
-    @Test
-    fun `restart onboarding should not send action when not enabled`() {
-        mutableStateFlow.tryEmit(
-            DebugMenuState(
-                featureFlags = persistentMapOf(
-                    FlagKey.OnboardingFlow to false,
-                ),
-            ),
-        )
-
-        composeTestRule
-            .onNodeWithText("Restart Onboarding", ignoreCase = true)
-            .performScrollTo()
-            .assertIsNotEnabled()
-            .performClick()
-
-        verify(exactly = 0) { viewModel.trySendAction(DebugMenuAction.RestartOnboarding) }
     }
 
     @Test

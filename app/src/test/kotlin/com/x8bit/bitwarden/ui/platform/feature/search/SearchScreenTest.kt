@@ -401,11 +401,11 @@ class SearchScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `clicking on totp when reprompt is required should show master password dialog`() {
+    fun `clicking on item when reprompt is required should show master password dialog`() {
         mutableStateFlow.value = DEFAULT_STATE.copy(
             viewState = SearchState.ViewState.Content(
                 displayItems = listOf(
-                    createMockDisplayItemForCipher(number = 1, isTotp = true).copy(
+                    createMockDisplayItemForCipher(number = 1).copy(
                         shouldDisplayMasterPasswordReprompt = true,
                     ),
                 ),
@@ -626,6 +626,7 @@ class SearchScreenTest : BitwardenComposeTest() {
                     overflowAction = ListingItemOverflowAction.VaultAction.ViewClick(
                         cipherId = "mockId-1",
                         cipherType = CipherType.LOGIN,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )

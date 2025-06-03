@@ -66,6 +66,7 @@ class ViewSendViewModel @Inject constructor(
         when (action) {
             ViewSendAction.CloseClick -> handleCloseClick()
             ViewSendAction.CopyClick -> handleCopyClick()
+            ViewSendAction.CopyNotesClick -> handleCopyNotesClick()
             ViewSendAction.DeleteClick -> handleDeleteClick()
             ViewSendAction.DialogDismiss -> handleDialogDismiss()
             ViewSendAction.EditClick -> handleEditClick()
@@ -87,6 +88,10 @@ class ViewSendViewModel @Inject constructor(
 
     private fun handleCopyClick() {
         onContent { clipboardManager.setText(text = it.shareLink) }
+    }
+
+    private fun handleCopyNotesClick() {
+        onContent { clipboardManager.setText(text = it.notes.orEmpty()) }
     }
 
     private fun handleDeleteClick() {
@@ -355,6 +360,11 @@ sealed class ViewSendAction {
      * The user has clicked the copy button.
      */
     data object CopyClick : ViewSendAction()
+
+    /**
+     * The user has clicked the copy notes button.
+     */
+    data object CopyNotesClick : ViewSendAction()
 
     /**
      * The user has clicked the delete button.

@@ -49,7 +49,7 @@ import java.time.ZonedDateTime
 class AddEditSendScreenTest : BitwardenComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateUpToRootCalled = false
+    private var onNavigateUpToSearchOrRootCalled = false
 
     private val exitManager: ExitManager = mockk(relaxed = true) {
         every { exitApplication() } just runs
@@ -75,7 +75,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             AddEditSendScreen(
                 viewModel = viewModel,
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateUpToRoot = { onNavigateUpToRootCalled = true },
+                onNavigateUpToSearchOrRoot = { onNavigateUpToSearchOrRootCalled = true },
             )
         }
     }
@@ -87,9 +87,9 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on NavigateToRoot should call onNavigateUpToRoot`() {
-        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateToRoot)
-        assertTrue(onNavigateUpToRootCalled)
+    fun `on NavigateUpToSearchOrRoot should call onNavigateUpToSearchOrRootCalled`() {
+        mutableEventFlow.tryEmit(AddEditSendEvent.NavigateUpToSearchOrRoot)
+        assertTrue(onNavigateUpToSearchOrRootCalled)
     }
 
     @Test
@@ -783,7 +783,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
     }

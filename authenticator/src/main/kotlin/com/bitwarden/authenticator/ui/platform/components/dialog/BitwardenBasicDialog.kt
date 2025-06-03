@@ -32,7 +32,7 @@ fun BitwardenBasicDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
                 BitwardenTextButton(
-                    label = stringResource(id = R.string.ok),
+                    label = stringResource(id = R.string.okay),
                     onClick = onDismissRequest,
                 )
             },
@@ -61,7 +61,7 @@ private fun BitwardenBasicDialog_preview() {
     AuthenticatorTheme {
         BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                title = "An error has occurred.".asText(),
+                title = "An error has occurred".asText(),
                 message = "Username or password is incorrect. Try again.".asText(),
             ),
             onDismissRequest = {},

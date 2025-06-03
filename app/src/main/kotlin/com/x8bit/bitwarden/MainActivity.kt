@@ -11,15 +11,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.core.os.LocaleListCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.bitwarden.ui.platform.util.setupEdgeToEdge
 import com.x8bit.bitwarden.data.autofill.accessibility.manager.AccessibilityCompletionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
@@ -35,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.feature.rootnav.rootNavDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.util.appLanguage
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
@@ -62,66 +66,29 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var debugLaunchManager: DebugMenuLaunchManager
 
-    @Suppress("LongMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         var shouldShowSplashScreen = true
         installSplashScreen().setKeepOnScreenCondition { shouldShowSplashScreen }
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            mainViewModel.trySendAction(
-                MainAction.ReceiveFirstIntent(
-                    intent = intent,
-                ),
-            )
+            mainViewModel.trySendAction(MainAction.ReceiveFirstIntent(intent = intent))
         }
 
         // Within the app the theme will change dynamically and will be managed by the
         // OS, but we need to ensure we properly set the values when upgrading from older versions
         // that handle this differently or when the activity restarts.
         AppCompatDelegate.setDefaultNightMode(settingsRepository.appTheme.osValue)
+        setupEdgeToEdge(appThemeFlow = mainViewModel.stateFlow.map { it.theme })
         setContent {
-            val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             val navController = rememberBitwardenNavController(name = "MainActivity")
-            EventsEffect(viewModel = mainViewModel) { event ->
-                when (event) {
-                    is MainEvent.CompleteAccessibilityAutofill -> {
-                        handleCompleteAccessibilityAutofill(event)
-                    }
-
-                    is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
-                    MainEvent.Recreate -> handleRecreate()
-                    MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
-                    is MainEvent.ShowToast -> {
-                        Toast
-                            .makeText(
-                                baseContext,
-                                event.message.invoke(resources),
-                                Toast.LENGTH_SHORT,
-                            )
-                            .show()
-                    }
-
-                    is MainEvent.UpdateAppLocale -> {
-                        AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(event.localeName),
-                        )
-                    }
-
-                    is MainEvent.UpdateAppTheme -> {
-                        AppCompatDelegate.setDefaultNightMode(event.osTheme)
-                    }
-                }
-            }
+            SetupEventsEffect(navController = navController)
+            val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
             updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider(featureFlagsState = state.featureFlagsState) {
                 ObserveScreenDataEffect(
                     onDataUpdate = remember(mainViewModel) {
-                        {
-                            mainViewModel.trySendAction(
-                                MainAction.ResumeScreenDataReceived(it),
-                            )
-                        }
+                        { mainViewModel.trySendAction(MainAction.ResumeScreenDataReceived(it)) }
                     },
                 )
                 BitwardenTheme(
@@ -148,11 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        mainViewModel.trySendAction(
-            action = MainAction.ReceiveNewIntent(
-                intent = intent,
-            ),
-        )
+        mainViewModel.trySendAction(action = MainAction.ReceiveNewIntent(intent = intent))
     }
 
     override fun onResume() {
@@ -198,6 +161,34 @@ class MainActivity : AppCompatActivity() {
         .actionOnInputEvent(event = event, action = ::sendOpenDebugMenuEvent)
         .takeIf { it }
         ?: super.dispatchKeyEvent(event)
+
+    @Composable
+    private fun SetupEventsEffect(navController: NavController) {
+        EventsEffect(viewModel = mainViewModel) { event ->
+            when (event) {
+                is MainEvent.CompleteAccessibilityAutofill -> {
+                    handleCompleteAccessibilityAutofill(event)
+                }
+
+                is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
+                MainEvent.Recreate -> handleRecreate()
+                MainEvent.NavigateToDebugMenu -> navController.navigateToDebugMenuScreen()
+                is MainEvent.ShowToast -> {
+                    Toast
+                        .makeText(baseContext, event.message.invoke(resources), Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                is MainEvent.UpdateAppLocale -> {
+                    AppCompatDelegate.setApplicationLocales(
+                        LocaleListCompat.forLanguageTags(event.localeName),
+                    )
+                }
+
+                is MainEvent.UpdateAppTheme -> AppCompatDelegate.setDefaultNightMode(event.osTheme)
+            }
+        }
+    }
 
     private fun sendOpenDebugMenuEvent() {
         mainViewModel.trySendAction(MainAction.OpenDebugMenu)

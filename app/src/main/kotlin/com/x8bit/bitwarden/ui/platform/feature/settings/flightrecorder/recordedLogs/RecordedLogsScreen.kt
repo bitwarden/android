@@ -35,13 +35,14 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
+import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.bitwarden.ui.platform.resource.BitwardenDrawable
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenEmptyContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -95,7 +96,7 @@ fun RecordedLogsScreen(
         topBar = {
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.recorded_logs_title),
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = BitwardenDrawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(RecordedLogsAction.BackClick) }
@@ -168,6 +169,7 @@ private fun RecordedLogsOverflowMenu(
         )
     }
     BitwardenOverflowActionItem(
+        contentDescription = stringResource(R.string.more),
         modifier = modifier,
         menuItemDataList = persistentListOf(
             OverflowMenuItemData(
@@ -309,6 +311,7 @@ private fun LogRow(
         }
         Spacer(modifier = Modifier.width(width = 12.dp))
         BitwardenOverflowActionItem(
+            contentDescription = stringResource(R.string.more),
             menuItemDataList = persistentListOf(
                 OverflowMenuItemData(
                     text = stringResource(id = R.string.share),

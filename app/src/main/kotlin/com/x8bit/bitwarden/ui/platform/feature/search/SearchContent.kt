@@ -121,10 +121,13 @@ fun SearchContent(
                 supportingLabelTestTag = it.subtitleTestTag,
                 optionsTestTag = it.overflowTestTag,
                 onClick = {
-                    if (it.isTotp && it.shouldDisplayMasterPasswordReprompt) {
-                        masterPasswordRepromptData = MasterPasswordRepromptData.Totp(it.id)
-                    } else if (it.autofillSelectionOptions.isNotEmpty()) {
+                    if (it.autofillSelectionOptions.isNotEmpty()) {
                         autofillSelectionOptionsItem = it
+                    } else if (it.shouldDisplayMasterPasswordReprompt) {
+                        masterPasswordRepromptData = MasterPasswordRepromptData.ViewItem(
+                            cipherId = it.id,
+                            itemType = it.itemType,
+                        )
                     } else {
                         searchHandlers.onItemClick(it.id, it.itemType)
                     }

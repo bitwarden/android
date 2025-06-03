@@ -126,11 +126,13 @@
     <string name="download_bitwarden_card_message">Uložte všechny Vaše přihlašovací údaje a synchronizujte ověřovací kódy přímo s ověřovací aplikací.</string>
     <string name="download_now">Stáhnout nyní</string>
     <string name="sync_with_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Tato funkce zatím není dostupná pro vlastní hostované uživatele. <annotation link="learnMore">Další informace</annotation></string>
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
     <string name="go_to_settings">Přejít do nastavení</string>
-    <string name="sync_with_bitwarden_action_card_message">V nastavení povolte synchronizaci aplikace Authenticator a zobrazte zde všechny své ověřovací kódy.</string>
+    <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
+    <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>
     <string name="something_went_wrong">Něco se pokazilo</string>
     <string name="please_try_again">Zkuste to znovu</string>
     <string name="move_to_bitwarden">Přesunout do Bitwardenu</string>

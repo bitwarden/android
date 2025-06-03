@@ -97,7 +97,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("An error has occurred.")
+            .onNodeWithText(text = "An error has occurred")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
@@ -108,7 +108,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
@@ -121,7 +121,7 @@ class EnvironmentScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(EnvironmentAction.DialogDismiss) }

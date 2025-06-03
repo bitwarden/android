@@ -10,8 +10,8 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.spanStyleOf
-import com.bitwarden.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -31,14 +31,16 @@ fun BitwardenHyperTextLink(
     color: Color = BitwardenTheme.colorScheme.text.secondary,
 ) {
     Text(
-        text = annotatedResId.toAnnotatedString(
+        text = annotatedStringResource(
+            id = annotatedResId,
             args = args,
             style = spanStyleOf(color = color, textStyle = style),
-        ) { key ->
-            when (key) {
-                annotationKey -> onClick()
-            }
-        },
+            onAnnotationClick = { key ->
+                when (key) {
+                    annotationKey -> onClick()
+                }
+            },
+        ),
         style = style,
         color = color,
         textAlign = TextAlign.Center,

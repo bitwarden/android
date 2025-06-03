@@ -191,7 +191,7 @@ class FolderAddEditScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText("An error has occurred.")
+            .onNodeWithText(text = "An error has occurred")
             .assert(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

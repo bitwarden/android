@@ -643,11 +643,11 @@ class SearchViewModel @Inject constructor(
                 )
             }
 
-            is MasterPasswordRepromptData.Totp -> {
+            is MasterPasswordRepromptData.ViewItem -> {
                 trySendAction(
                     action = SearchAction.ItemClick(
                         itemId = data.cipherId,
-                        itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                        itemType = data.itemType,
                     ),
                 )
             }
@@ -761,7 +761,6 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
-                                isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
                             )
                     }
@@ -909,7 +908,6 @@ data class SearchState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
-        val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
         val itemType: ItemType,
     ) : Parcelable {
@@ -1297,18 +1295,19 @@ sealed class MasterPasswordRepromptData : Parcelable {
     ) : MasterPasswordRepromptData()
 
     /**
-     * Autofill was selected.
-     */
-    @Parcelize
-    data class Totp(
-        val cipherId: String,
-    ) : MasterPasswordRepromptData()
-
-    /**
      * A cipher overflow menu item action was selected.
      */
     @Parcelize
     data class OverflowItem(
         val action: ListingItemOverflowAction.VaultAction,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Item was selected to be viewed.
+     */
+    @Parcelize
+    data class ViewItem(
+        val cipherId: String,
+        val itemType: SearchState.DisplayItem.ItemType,
     ) : MasterPasswordRepromptData()
 }

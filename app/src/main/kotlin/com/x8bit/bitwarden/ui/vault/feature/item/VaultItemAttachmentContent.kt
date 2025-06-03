@@ -94,7 +94,7 @@ fun AttachmentItemContent(
             onDismissRequest = { shouldShowPremiumWarningDialog = false },
             confirmButton = {
                 BitwardenTextButton(
-                    label = stringResource(R.string.ok),
+                    label = stringResource(R.string.okay),
                     onClick = { shouldShowPremiumWarningDialog = false },
                 )
             },

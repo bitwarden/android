@@ -126,11 +126,13 @@
     <string name="download_bitwarden_card_message">Tüm giriş bilgilerinizi saklayın ve doğrulama kodlarını doğrudan Authenticator uygulaması ile senkronize edin.</string>
     <string name="download_now">Şimdi indir</string>
     <string name="sync_with_bitwarden_app">Bitwarden uygulaması ile senkronize et</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">Bu özellik, kendi kendine barındırılan kullanıcılar için henüz mevcut değil. <annotation link="learnMore">Daha fazla bilgi edinin</annotation></string>
     <string name="shared_codes_error">Bitwarden uygulamasından kodlar senkronize edilemiyor. Her iki uygulamanın da güncel olduğundan emin olun. Bitwarden uygulamasında mevcut kodlarınıza hala erişebilirsiniz.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Bitwarden uygulaması ile senkronize et</string>
     <string name="go_to_settings">Ayarlara git</string>
     <string name="sync_with_bitwarden_action_card_message">Tüm doğrulama kodlarınızı burada görüntülemek için ayarlardan Authenticator uygulaması senkronizasyonuna izin verin.</string>
+    <string name="take_me_to_app_settings">Beni uygulama ayarlarına götür</string>
     <string name="something_went_wrong">Bir sorun oluştu</string>
     <string name="please_try_again">Lütfen tekrar deneyin</string>
     <string name="move_to_bitwarden">Bitwarden\'a taşı</string>

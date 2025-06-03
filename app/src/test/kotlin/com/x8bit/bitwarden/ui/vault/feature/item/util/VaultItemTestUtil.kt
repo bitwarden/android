@@ -172,7 +172,6 @@ fun createCommonContent(
             lastUpdated = "1/1/70 12:16 AM",
             notes = null,
             customFields = emptyList(),
-            requiresReprompt = true,
             requiresCloneConfirmation = false,
             attachments = emptyList(),
             canDelete = true,
@@ -226,7 +225,6 @@ fun createCommonContent(
                 )
                     .toCustomField(null),
             ),
-            requiresReprompt = true,
             requiresCloneConfirmation = true,
             attachments = listOf(
                 VaultItemState.ViewState.Content.Common.AttachmentItem(
