@@ -45,6 +45,7 @@ import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.annotatedStringResource
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
+import com.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
@@ -55,7 +56,6 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
