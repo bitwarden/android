@@ -200,6 +200,7 @@ Scanning will happen automatically.</string>
     <string name="no_attachments">There are no attachments.</string>
     <string name="file_source">File Source</string>
     <string name="max_file_size">Maximum file size is 100 MB.</string>
+    <string name="required_max_file_size">Required. Maximum file size is 100 MB.</string>
     <string name="learn_more">Learn more</string>
     <string name="api_url">API server URL</string>
     <string name="client_certificate_mtls">Client certificate (mTLS)</string>

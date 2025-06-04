@@ -289,7 +289,7 @@ private fun ColumnScope.FileTypeContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         Text(
-            text = stringResource(id = R.string.max_file_size),
+            text = stringResource(id = R.string.required_max_file_size),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
             modifier = Modifier
@@ -336,7 +336,7 @@ private fun ColumnScope.FileTypeContent(
         )
         Spacer(modifier = Modifier.height(height = 8.dp))
         Text(
-            text = stringResource(id = R.string.max_file_size),
+            text = stringResource(id = R.string.required_max_file_size),
             color = BitwardenTheme.colorScheme.text.secondary,
             style = BitwardenTheme.typography.bodySmall,
             modifier = Modifier
