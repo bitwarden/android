@@ -7,6 +7,7 @@ on:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
+        default: "15423880555"
 env:
     ARTIFACTS_PATH: artifacts
 
@@ -144,6 +145,7 @@ jobs:
           echo "url=$release_url" >> $GITHUB_OUTPUT
 
       - name: Update Release Description
+        id: update_release_description
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
@@ -157,7 +159,37 @@ jobs:
           updated_body="${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          gh release edit "$_TAG_NAME" --notes "$updated_body"
+          new_release_url=$(gh release edit "$_TAG_NAME" --notes "$updated_body")
+
+          # draft release links change after editing
+          echo "release_url=$new_release_url" >> $GITHUB_OUTPUT
 
           echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
-          echo "$RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          echo "$new_release_url" >> $GITHUB_STEP_SUMMARY
+
+      - name: Add Release Summary
+        env:
+          _RELEASE_TAG: ${{ steps.get_release_info.outputs.tag_name }}
+          _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
+          _RELEASE_BRANCH: ${{ steps.get_release_branch.outputs.release_branch }}
+          _RELEASE_URL: ${{ steps.update_release_description.outputs.release_url }}
+        run: |
+          echo "# :fish_cake: Release ready at:" >> $GITHUB_STEP_SUMMARY
+          echo "$_RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$_VERSION_NAME" == "0.0.0" || "$_VERSION_NUMBER" == "0" ]]; then
+            echo "> [!CAUTION]" >> $GITHUB_STEP_SUMMARY
+            echo "> Version name or number wasn't previously found and a default value was used. You'll need to manually update the release Title, Tag and Description, specifically, the "Full Changelog" link." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo ":clipboard: Confirm that the defined GitHub Release options are correct:"  >> $GITHUB_STEP_SUMMARY
+          echo " * :bookmark: New tag name: \`$_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :palm_tree: Target branch: \`$_RELEASE_BRANCH\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch" >> $GITHUB_STEP_SUMMARY
+          echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
+          echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." >> $GITHUB_STEP_SUMMARY
