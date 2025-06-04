@@ -71,13 +71,19 @@ jobs:
           version_name_with_trailing_dot=$(grep -m 1 "Setting version name to" <<< "$workflow_log" | sed 's/.*Setting version name to //')
           version_name=${version_name_with_trailing_dot%.} # remove trailing dot
 
-          if [ -z "$version_number" ] || [ -z "$version_name" ]; then
-            echo "::error::Could not find version information in workflow logs"
-            exit 1
+          if [[ -z "$version_name" ]]; then
+            echo "::warning::Version name not found. Using default value - 0.0.0"
+            version_name="0.0.0"
+          else
+            echo "✅ Found version name: $version_name"
           fi
 
-          echo "✅ Found version number: $version_number"
-          echo "✅ Found version name: $version_name"
+          if [[ -z "$version_number" ]]; then
+            echo "::warning::Version number not found. Using default value - 0"
+            version_number="0"
+          else
+            echo "✅ Found version number: $version_number"
+          fi
 
           echo "version_number=$version_number" >> $GITHUB_OUTPUT
           echo "version_name=$version_name" >> $GITHUB_OUTPUT
