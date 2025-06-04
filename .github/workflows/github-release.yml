@@ -135,10 +135,6 @@ jobs:
           updated_body="${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          # Update release
-          # gh api --method PATCH /repos/${{ github.repository }}/releases/$RELEASE_ID \
-          #   -f body="$updated_body"
-
           gh release edit "v$_VERSION_NAME" --notes "$updated_body"
 
           echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
