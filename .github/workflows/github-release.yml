@@ -85,9 +85,11 @@ jobs:
           case "$APP_NAME" in
             "Password Manager")
               tag_name="v$version_name-bwpm"
+              app_name_suffix="bwpm"
               ;;
             "Authenticator")
               tag_name="v$version_name-bwa"
+              app_name_suffix="bwa"
               ;;
             *)
               echo "::error::Unknown app name: $APP_NAME"
@@ -98,7 +100,7 @@ jobs:
           echo "🔖 Tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
-          last_release_tag=$(git tag -l --sort=-authordate | head -n 1)
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$app_name_suffix" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
 
