@@ -401,7 +401,7 @@ class AddEditSendViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 dialogState = AddEditSendState.DialogState.Error(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.validation_field_required.asText(R.string.file.asText()),
+                    message = R.string.you_must_attach_a_file_to_save_this_send.asText(),
                 ),
             ),
             viewModel.stateFlow.value,

@@ -64,6 +64,7 @@
     <string name="website_uri">Website (URI)</string>
     <string name="username">Username</string>
     <string name="validation_field_required">The %1$s field is required.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
     <string name="value_has_been_copied">%1$s copied</string>
     <string name="verify_master_password">Verify master password</string>
     <string name="verify_pin">Verify PIN</string>
