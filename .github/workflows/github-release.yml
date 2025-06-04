@@ -7,13 +7,6 @@ on:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
-      branch-protection-type:
-        description: 'Branch protection type'
-        type: choice
-        options:
-          - Branch Name
-          - GitHub API
-        default: Branch Name
 env:
     ARTIFACTS_PATH: artifacts
 
@@ -35,31 +28,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          BRANCH_PROTECTION_TYPE: ${{ inputs.branch-protection-type }}
         run: |
           workflow_data=$(gh run view $ARTIFACT_RUN_ID --json headBranch,workflowName)
           release_branch=$(echo "$workflow_data" | jq -r .headBranch)
           workflow_name=$(echo "$workflow_data" | jq -r .workflowName)
 
-          case "$BRANCH_PROTECTION_TYPE" in
-            "Branch Name")
-              if [[ "$release_branch" != "main" && ! "$release_branch" =~ ^release/ ]]; then
-                echo "::error::Branch '$release_branch' is not 'main' or a release branch starting with 'release/'. Releases must be created from protected branches."
-                exit 1
-              fi
-              ;;
-            "GitHub API")
-              #NOTE requires token with "administration:read" scope
-              if ! gh api "repos/${{ github.repository }}/branches/$release_branch/protection" | grep -q "required_status_checks"; then
-                echo "::error::Branch '$release_branch' is not protected. Releases must be created from protected branches. If that's not correct, confirm if the github token user has the 'administration:read' scope."
-                exit 1
-              fi
-              ;;
-            *)
-              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE"
-              exit 1
-              ;;
-          esac
+          # branch protection check
+          if [[ "$release_branch" != "main" && ! "$release_branch" =~ ^release/ ]]; then
+            echo "::error::Branch '$release_branch' is not 'main' or a release branch starting with 'release/'. Releases must be created from protected branches."
+            exit 1
+          fi
 
           echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
           echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
