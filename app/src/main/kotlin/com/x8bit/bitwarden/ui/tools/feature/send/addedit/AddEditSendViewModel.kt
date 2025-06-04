@@ -760,11 +760,7 @@ data class AddEditSendState(
                 val expirationDate: ZonedDateTime?,
                 val sendUrl: String?,
                 val hasPassword: Boolean,
-            ) : Parcelable {
-                val dateFormatPattern: String get() = "M/d/yyyy"
-
-                val timeFormatPattern: String get() = "hh:mm a"
-            }
+            ) : Parcelable
 
             /**
              * Models what type the user is trying to send.
