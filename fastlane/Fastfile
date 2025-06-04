@@ -392,8 +392,8 @@ platform :android do
   lane :updateReleaseNotes do |options|
     changelog = options[:releaseNotes]
     version_code = options[:versionCode]
-    changelog = "\"#{changelog}\"".undump # Replaces literal \n and \t with actual newlines and tabs
-    UI.message("Changelog: #{changelog}")
+    # changelog = "\"#{changelog}\"".undump # Replaces literal \n and \t with actual newlines and tabs
+    # UI.message("Changelog: #{changelog}")
 
     auth_locales = ["en-US"]
     pw_manager_locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
