@@ -7,7 +7,8 @@ import requests
 
 def extract_text_from_content(content):
     if isinstance(content, list):
-        return '\n'.join(extract_text_from_content(item) for item in content)
+        texts = [extract_text_from_content(item) for item in content]
+        return '\n'.join(text for text in texts if text.strip())
 
     if isinstance(content, dict):
         if content.get('type') == 'text':
@@ -15,11 +16,10 @@ def extract_text_from_content(content):
         elif content.get('type') == 'paragraph':
             return extract_text_from_content(content.get('content', []))
         elif content.get('type') == 'bulletList':
-            bullet_points = extract_text_from_content(content.get('content', []))
-            return bullet_points
+            return extract_text_from_content(content.get('content', []))
         elif content.get('type') == 'listItem':
             item_text = extract_text_from_content(content.get('content', []))
-            return f"• {item_text.strip()}"
+            return f"* {item_text.strip()}"
 
     return ''
 
@@ -32,7 +32,7 @@ def parse_release_notes(response_json):
             return ''
 
         release_notes = extract_text_from_content(release_notes_field.get('content', []))
-        return release_notes.strip()
+        return release_notes
 
     except Exception as e:
         print(f"Error parsing release notes: {str(e)}", file=sys.stderr)
@@ -64,7 +64,11 @@ def main():
         sys.exit(1)
 
     release_notes = parse_release_notes(response.json())
-    print(release_notes)
+
+    if release_notes:
+        print(release_notes)
+        with open("product_release_notes.txt", "w") as f:
+            f.write(release_notes)
 
 if __name__ == "__main__":
     main()

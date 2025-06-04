@@ -7,6 +7,11 @@ on:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
+      release-ticket-id:
+        description: 'Release Ticket ID - e.g. RELEASE-1762'
+        required: true
+        type: string
+
 env:
     ARTIFACTS_PATH: artifacts
 
@@ -121,6 +126,20 @@ jobs:
             find $ARTIFACTS_PATH -type f
           fi
 
+      - name: Get product release notes
+        id: get_release_notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _RELEASE_TICKET_ID: ${{ inputs.release-ticket-id }}
+          _JIRA_API_EMAIL: ${{ secrets.JIRA_API_EMAIL }}
+          _JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          echo "Getting product release notes"
+          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
+          echo "✅ Product release notes:\n$product_release_notes"
+
       - name: Create Release
         id: create_release
         env:
@@ -161,8 +180,13 @@ jobs:
           echo "Getting current release body. Tag: $_TAG_NAME"
           current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
 
-          # Append build source to the end
-          updated_body="${current_body}
+          product_release_notes=$(cat product_release_notes.txt)
+
+          # Update release description with product release notes and builds source
+          updated_body="# Overview
+          ${product_release_notes}
+
+          ${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
           new_release_url=$(gh release edit "$_TAG_NAME" --notes "$updated_body")
