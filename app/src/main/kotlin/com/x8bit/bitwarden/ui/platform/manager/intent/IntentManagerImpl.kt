@@ -85,7 +85,7 @@ const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_un
 @OmitFromCoverage
 class IntentManagerImpl(
     private val context: Context,
-    private val clock: Clock = Clock.systemDefaultZone(),
+    private val clock: Clock,
 ) : IntentManager {
     override fun startActivity(intent: Intent) {
         try {

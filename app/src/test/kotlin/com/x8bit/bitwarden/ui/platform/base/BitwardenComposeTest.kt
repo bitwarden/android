@@ -16,6 +16,9 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
 import com.x8bit.bitwarden.ui.platform.model.FeatureFlagsState
 import io.mockk.mockk
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 abstract class BitwardenComposeTest : BaseComposeTest() {
 
@@ -32,6 +35,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
         appResumeStateManager: AppResumeStateManager = mockk(),
         appReviewManager: AppReviewManager = mockk(),
         biometricsManager: BiometricsManager = mockk(),
+        clock: Clock = Clock.fixed(Instant.parse("2023-10-27T12:00:00Z"), ZoneOffset.UTC),
         exitManager: ExitManager = mockk(),
         intentManager: IntentManager = mockk(),
         credentialProviderCompletionManager: CredentialProviderCompletionManager = mockk(),
@@ -46,6 +50,7 @@ abstract class BitwardenComposeTest : BaseComposeTest() {
                 appResumeStateManager = appResumeStateManager,
                 appReviewManager = appReviewManager,
                 biometricsManager = biometricsManager,
+                clock = clock,
                 exitManager = exitManager,
                 intentManager = intentManager,
                 credentialProviderCompletionManager = credentialProviderCompletionManager,
