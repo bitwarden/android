@@ -55,11 +55,12 @@ jobs:
               ;;
           esac
 
-      - name: Get version info from run logs
-        id: get_version_info
+      - name: Get version info from run logs and set tag name
+        id: get_release_info
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
         run: |
           workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
 
@@ -80,6 +81,22 @@ jobs:
           echo "version_number=$version_number" >> $GITHUB_OUTPUT
           echo "version_name=$version_name" >> $GITHUB_OUTPUT
 
+          case "$APP_NAME" in
+            "Password Manager")
+              tag_name="v$version_name-bwpm"
+              ;;
+            "Authenticator")
+              tag_name="v$version_name-bwa"
+              ;;
+            *)
+              echo "::error::Unknown app name: $APP_NAME"
+              exit 1
+              ;;
+          esac
+
+          echo "🔖 Tag name: $tag_name"
+          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+
       - name: Download artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,13 +114,14 @@ jobs:
         id: create_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          _VERSION_NAME: ${{ steps.get_version_info.outputs.version_name }}
-          _VERSION_NUMBER: ${{ steps.get_version_info.outputs.version_number }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
           _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
           _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
+          _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
         run: |
           echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
-          release_url=$(gh release create "v$_VERSION_NAME" \
+          release_url=$(gh release create "$_TAG_NAME" \
             --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
@@ -113,7 +131,7 @@ jobs:
           echo "✅ Release created: $release_url"
 
           # Get release info for outputs
-          release_data=$(gh release view "v$_VERSION_NAME" --json id)
+          release_data=$(gh release view "$_TAG_NAME" --json id)
           release_id=$(echo "$release_data" | jq -r .id)
 
           echo "id=$release_id" >> $GITHUB_OUTPUT
@@ -125,17 +143,18 @@ jobs:
           RELEASE_ID: ${{ steps.create_release.outputs.id }}
           RELEASE_URL: ${{ steps.create_release.outputs.url }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          _VERSION_NAME: ${{ steps.get_version_info.outputs.version_name }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
         run: |
           # Get current release body
-          echo "Getting current release body. Tag: v$_VERSION_NAME"
-          current_body=$(gh release view "v$_VERSION_NAME" --json body --jq .body)
+          echo "Getting current release body. Tag: $_TAG_NAME"
+          current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
 
           # Append build source to the end
           updated_body="${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          gh release edit "v$_VERSION_NAME" --notes "$updated_body"
+          gh release edit "$_TAG_NAME" --notes "$updated_body"
 
           echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
           echo "$RELEASE_URL" >> $GITHUB_STEP_SUMMARY
