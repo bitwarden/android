@@ -84,11 +84,9 @@ jobs:
 
           case "$APP_NAME" in
             "Password Manager")
-              tag_name="v$version_name-bwpm"
               app_name_suffix="bwpm"
               ;;
             "Authenticator")
-              tag_name="v$version_name-bwa"
               app_name_suffix="bwa"
               ;;
             *)
@@ -97,6 +95,7 @@ jobs:
               ;;
           esac
 
+          tag_name="v$version_name-$app_name_suffix" # e.g. v2025.6.0-bwpm
           echo "🔖 Tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
