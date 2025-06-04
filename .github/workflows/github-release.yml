@@ -146,13 +146,10 @@ jobs:
       - name: Update Release Description
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create_release.outputs.id }}
-          RELEASE_URL: ${{ steps.create_release.outputs.url }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
         run: |
-          # Get current release body
           echo "Getting current release body. Tag: $_TAG_NAME"
           current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
 
