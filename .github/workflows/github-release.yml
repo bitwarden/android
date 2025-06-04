@@ -55,7 +55,7 @@ jobs:
               ;;
           esac
 
-      - name: Get version info from run logs and set tag name
+      - name: Get version info from run logs and set release tag name
         id: get_release_info
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -97,6 +97,10 @@ jobs:
           echo "🔖 Tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
+          last_release_tag=$(git tag -l --sort=-authordate | head -n 1)
+          echo "🔖 Last release tag: $last_release_tag"
+          echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
+
       - name: Download artifacts
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,17 +118,19 @@ jobs:
         id: create_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
           _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
-          _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
           _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
+          _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
         run: |
           echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
           release_url=$(gh release create "$_TAG_NAME" \
             --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
             --target "$_TARGET_COMMIT" \
             --generate-notes \
+            --notes-start-tag "$_LAST_RELEASE_TAG" \
             --draft \
             $ARTIFACTS_PATH/*/*)
 
