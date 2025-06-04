@@ -44,6 +44,9 @@ jobs:
           upload_sources: true
           upload_translations: false
 
+      - name: Azure Logout
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Upload sources for Authenticator
         uses: crowdin/github-action@b8012bd5491b8aa8578b73ab5b5f5e7c94aaa6e2 # v2.7.0
         env:

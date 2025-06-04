@@ -170,6 +170,9 @@ jobs:
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
+      - name: AZ Logout
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Verify Play Store credentials
         if: ${{ inputs.publish-to-play-store }}
         run: |
