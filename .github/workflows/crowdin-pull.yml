@@ -37,6 +37,13 @@ jobs:
           tenant_id: ${{ secrets.AZURE_TENANT_ID }}
           client_id: ${{ secrets.AZURE_CLIENT_ID }}
 
+      - name: Get KV secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-org-bitwarden
+          secrets: "BW_GHAPP_ID,BW_GHAPP_KEY"
+
       - name: Retrieve secrets
         id: retrieve-secrets
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
@@ -51,8 +58,8 @@ jobs:
         uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
         id: app-token
         with:
-          app-id: ${{ secrets.BW_GHAPP_ID }}
-          private-key: ${{ secrets.BW_GHAPP_KEY }}
+          app-id: ${{ steps.get-kv-secrets.outputs.BW_GHAPP_ID }}
+          private-key: ${{ steps.get-kv-secrets.outputs.BW_GHAPP_KEY }}
 
       - name: Download translations for ${{ matrix.name }}
         uses: crowdin/github-action@b8012bd5491b8aa8578b73ab5b5f5e7c94aaa6e2 # v2.7.0
