@@ -3,29 +3,10 @@ name: Create GitHub Release
 on:
   workflow_dispatch:
     inputs:
-      version-name:
-        description: 'Version Name - E.g. "2024.11.1"'
-        required: true
-        type: string
-      version-number:
-        description: 'Version Number - E.g. "123456"'
-        required: true
-        type: string
       artifact-run-id:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
-      draft:
-        description: 'Create as draft release'
-        type: boolean
-        default: true
-      prerelease:
-        description: 'Mark as pre-release'
-        type: boolean
-        default: true
-      make-latest:
-        description: 'Set as the latest release'
-        type: boolean
       branch-protection-type:
         description: 'Branch protection type'
         type: choice
@@ -35,6 +16,7 @@ on:
         default: Branch Name
 env:
     ARTIFACTS_PATH: artifacts
+
 jobs:
   create-release:
     name: Create GitHub Release
@@ -84,11 +66,9 @@ jobs:
 
           case "$workflow_name" in
             *"Password Manager"* | "Build")
-              echo "releasing_bwpm=true" >> $GITHUB_OUTPUT
               echo "app_name=Password Manager" >> $GITHUB_OUTPUT
               ;;
             *"Authenticator"*)
-              echo "releasing_bwa=true" >> $GITHUB_OUTPUT
               echo "app_name=Authenticator" >> $GITHUB_OUTPUT
               ;;
             *)
@@ -141,9 +121,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           _VERSION_NAME: ${{ steps.get_version_info.outputs.version_name }}
           _VERSION_NUMBER: ${{ steps.get_version_info.outputs.version_number }}
-          _PRERELEASE: ${{ inputs.prerelease }}
-          _DRAFT: ${{ inputs.draft }}
-          _MAKE_LATEST: ${{ inputs.make-latest }}
           _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
           _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
         run: |
