@@ -164,9 +164,6 @@ jobs:
           # draft release links change after editing
           echo "release_url=$new_release_url" >> $GITHUB_OUTPUT
 
-          echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
-          echo "$new_release_url" >> $GITHUB_STEP_SUMMARY
-
       - name: Add Release Summary
         env:
           _RELEASE_TAG: ${{ steps.get_release_info.outputs.tag_name }}
