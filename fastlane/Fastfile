@@ -267,14 +267,29 @@ platform :android do
 
   desc "Get latest published version for a given package name and Play Store track"
   lane :getLatestPlayStoreVersion do |options|
+    package_name = options[:package_name]
+    track = options[:track]
+    # Hardcoding paths for now, it will simplify transitioning to the new build .env files
+    case package_name
+    when "com.x8bit.bitwarden", "com.x8bit.bitwarden.beta"
+      json_key = "secrets/play_creds.json"
+    when "com.bitwarden.authenticator"
+      json_key = "secrets/authenticator_play_store-creds.json"
+    else
+      UI.important "Unexpected package name: #{package_name}, using default play store json key"
+      json_key = "secrets/play_creds.json"
+    end
+
       release_name = google_play_track_release_names(
-        package_name: options[:package_name],
-        track: options[:track],
+        package_name: package_name,
+        track: track,
+        json_key: json_key,
       )
 
       version_code = google_play_track_version_codes(
-        package_name: options[:package_name],
-        track: options[:track],
+        package_name: package_name,
+        track: track,
+        json_key: json_key,
       )
 
       latest_version_name = release_name.first.to_s.strip
