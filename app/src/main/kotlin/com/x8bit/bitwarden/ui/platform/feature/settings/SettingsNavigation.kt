@@ -27,7 +27,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.other.navigateToOther
 import com.x8bit.bitwarden.ui.platform.feature.settings.other.otherDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.navigateToVaultSettings
 import com.x8bit.bitwarden.ui.platform.feature.settings.vault.vaultSettingsDestination
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.platform.util.toObjectRoute
 import kotlinx.serialization.Serializable
 
@@ -95,7 +94,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute.Standard,

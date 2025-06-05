@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class SnackbarRelay {
-    VAULT_SETTINGS_RELAY,
-    MY_VAULT_RELAY,
+    LOGINS_IMPORTED,
+    SEND_DELETED,
 }

@@ -113,9 +113,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
-            onNavigateToImportLogins = {
-                navController.navigateToImportLoginsScreen(snackbarRelay = it)
-            },
+            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
