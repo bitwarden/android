@@ -433,7 +433,7 @@ platform :android do
       supply_options[:track_promote_release_status] = "inProgress"
       supply_options[:rollout] = options[:rolloutPercentage]
     else
-      supply_options[:track_promote_release_status] = "completed"
+      supply_options[:track_promote_release_status] = "complete"
     end
 
     supply(supply_options)
