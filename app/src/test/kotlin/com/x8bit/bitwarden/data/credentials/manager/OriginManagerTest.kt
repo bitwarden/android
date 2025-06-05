@@ -8,6 +8,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.network.model.DigitalAssetLinkCheckResponseJson
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -40,6 +41,7 @@ class OriginManagerTest {
             every { hasMultipleSigners() } returns false
         }
     }
+    private val mockPrivilegedAppRepository = mockk<PrivilegedAppRepository>()
     private val mockMessageDigest = mockk<MessageDigest> {
         every { digest(any()) } returns DEFAULT_APP_SIGNATURE.toByteArray()
     }
@@ -47,6 +49,7 @@ class OriginManagerTest {
     private val fido2OriginManager = OriginManagerImpl(
         assetManager = mockAssetManager,
         digitalAssetLinkService = mockDigitalAssetLinkService,
+        privilegedAppRepository = mockPrivilegedAppRepository,
     )
 
     @BeforeEach
@@ -112,7 +115,7 @@ class OriginManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validateOrigin should return ApplicationNotFound when calling app is Privileged but not in either allow list`() =
+    fun `validateOrigin should return Success when calling app is Privileged and is in the User Trust list`() =
         runTest {
             coEvery {
                 mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
@@ -120,6 +123,37 @@ class OriginManagerTest {
             coEvery {
                 mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
             } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            } returns DEFAULT_ALLOW_LIST
+
+            val result = fido2OriginManager.validateOrigin(
+                callingAppInfo = mockPrivilegedAppInfo,
+            )
+            coVerify(exactly = 1) {
+                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            }
+            assertEquals(
+                ValidateOriginResult.Success(DEFAULT_ORIGIN),
+                result,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validateOrigin should return ApplicationNotFound when calling app is Privileged but not present in an allow list`() =
+        runTest {
+            coEvery {
+                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+            } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+            } returns FAIL_ALLOW_LIST.asSuccess()
+            coEvery {
+                mockPrivilegedAppRepository.getUserTrustedAllowListJson()
+            } returns FAIL_ALLOW_LIST
 
             val result = fido2OriginManager.validateOrigin(
                 callingAppInfo = mockPrivilegedAppInfo,
@@ -192,25 +226,6 @@ class OriginManagerTest {
             assertEquals(
                 ValidateOriginResult.Error.AssetLinkNotFound,
                 fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
-            )
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `validateOrigin should return Unknown error when calling app is Privileged and allow list file read fails`() =
-        runTest {
-            coEvery {
-                mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
-            } returns IllegalStateException().asFailure()
-            coEvery {
-                mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
-            } returns IllegalStateException().asFailure()
-
-            assertEquals(
-                ValidateOriginResult.Error.Unknown,
-                fido2OriginManager.validateOrigin(
-                    callingAppInfo = mockPrivilegedAppInfo,
-                ),
             )
         }
 }

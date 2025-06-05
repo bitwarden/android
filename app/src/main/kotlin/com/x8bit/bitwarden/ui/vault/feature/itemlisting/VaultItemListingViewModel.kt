@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.ProviderCreateCredentialRequest
 import androidx.credentials.provider.ProviderGetCredentialRequest
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -58,6 +60,7 @@ import com.x8bit.bitwarden.data.platform.manager.util.toGetCredentialsRequestOrN
 import com.x8bit.bitwarden.data.platform.manager.util.toTotpDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
@@ -119,6 +122,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
+    private val privilegedAppRepository: PrivilegedAppRepository,
     private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val cipherMatchingManager: CipherMatchingManager,
@@ -290,10 +294,15 @@ class VaultItemListingViewModel @Inject constructor(
                 handleUserVerificationNotSupported(action)
             }
 
-            is VaultItemListingsAction.Internal -> handleInternalAction(action)
             is VaultItemListingsAction.ItemTypeToAddSelected -> {
                 handleItemTypeToAddSelected(action)
             }
+
+            is VaultItemListingsAction.TrustPrivilegedAppClick -> {
+                handleTrustPrivilegedAppClick(action)
+            }
+
+            is VaultItemListingsAction.Internal -> handleInternalAction(action)
         }
     }
 
@@ -636,6 +645,112 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    private fun handleTrustPrivilegedAppClick(
+        action: VaultItemListingsAction.TrustPrivilegedAppClick,
+    ) {
+        clearDialogState()
+        state.createCredentialRequest
+            ?.let { trustPrivilegedAppAndWaitForCreationResult(request = it) }
+            ?: state.getCredentialsRequest
+                ?.let { trustPrivilegedAppAndGetCredentials(request = it) }
+            ?: state.fido2CredentialAssertionRequest
+                ?.let {
+                    trustPrivilegedAppAndAuthenticateCredential(
+                        request = it,
+                        selectedCipherId = action.selectedCipherId,
+                    )
+                }
+    }
+
+    private fun trustPrivilegedAppAndWaitForCreationResult(request: CreateCredentialRequest) {
+        val signature = request.callingAppInfo.getSignatureFingerprintAsHexString()
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
+                )
+                return
+            }
+        viewModelScope.launch {
+            trustPrivilegedApp(
+                packageName = request.callingAppInfo.packageName,
+                signature = signature,
+            )
+            // Wait for the user to complete the credential creation flow.
+        }
+    }
+
+    private fun trustPrivilegedAppAndGetCredentials(request: GetCredentialsRequest) {
+        val callingAppInfo = request.callingAppInfo
+        val signature = callingAppInfo?.getSignatureFingerprintAsHexString()
+        if (callingAppInfo == null || signature.isNullOrEmpty()) {
+            showCredentialManagerErrorDialog(
+                R.string.passkey_operation_failed_because_the_request_is_invalid
+                    .asText(),
+            )
+            return
+        }
+        viewModelScope.launch {
+            trustPrivilegedApp(
+                packageName = callingAppInfo.packageName,
+                signature = signature,
+            )
+            sendAction(
+                VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
+                    userId = request.userId,
+                    result = bitwardenCredentialManager.getCredentialEntries(
+                        getCredentialsRequest = request,
+                    ),
+                ),
+            )
+        }
+    }
+
+    private fun trustPrivilegedAppAndAuthenticateCredential(
+        request: Fido2CredentialAssertionRequest,
+        selectedCipherId: String?,
+    ) {
+        val signature = request
+            .callingAppInfo
+            .getSignatureFingerprintAsHexString()
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_the_request_is_invalid
+                        .asText(),
+                )
+                return
+            }
+        val selectedCipherView = selectedCipherId
+            ?.let { getCipherViewOrNull(it) }
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_no_item_was_selected
+                        .asText(),
+                )
+                return
+            }
+        viewModelScope.launch {
+            trustPrivilegedApp(
+                packageName = request.callingAppInfo.packageName,
+                signature = signature,
+            )
+            authenticateFido2Credential(
+                request = request.providerRequest,
+                cipherView = selectedCipherView,
+            )
+        }
+    }
+
+    private suspend fun trustPrivilegedApp(
+        packageName: String,
+        signature: String,
+    ) {
+        privilegedAppRepository.addTrustedPrivilegedApp(
+            packageName = packageName,
+            signature = signature,
+        )
+    }
+
     private fun handleAddVaultItemClick() {
         when (val itemListingType = state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Collection -> {
@@ -930,7 +1045,11 @@ class VaultItemListingViewModel @Inject constructor(
 
             when (validateOriginResult) {
                 is ValidateOriginResult.Error -> {
-                    handleOriginValidationFail(validateOriginResult)
+                    handleOriginValidationFail(
+                        error = validateOriginResult,
+                        callingAppInfo = request.callingAppInfo,
+                        selectedCipherId = cipherView.id,
+                    )
                 }
 
                 is ValidateOriginResult.Success -> {
@@ -1670,7 +1789,11 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             when (validateOriginResult) {
                 is ValidateOriginResult.Error -> {
-                    handleOriginValidationFail(validateOriginResult)
+                    handleOriginValidationFail(
+                        error = validateOriginResult,
+                        callingAppInfo = action.request.callingAppInfo,
+                        selectedCipherId = null,
+                    )
                 }
 
                 is ValidateOriginResult.Success -> {
@@ -1741,20 +1864,41 @@ class VaultItemListingViewModel @Inject constructor(
                 }
 
                 is ValidateOriginResult.Error -> {
-                    handleOriginValidationFail(validateOriginResult)
+                    handleOriginValidationFail(
+                        error = validateOriginResult,
+                        callingAppInfo = callingAppInfo,
+                        selectedCipherId = null,
+                    )
                     return@launch
                 }
             }
         }
     }
 
-    private fun handleOriginValidationFail(error: ValidateOriginResult.Error) {
+    private fun handleOriginValidationFail(
+        error: ValidateOriginResult.Error,
+        callingAppInfo: CallingAppInfo,
+        selectedCipherId: String?,
+    ) {
         mutableStateFlow.update {
             it.copy(
-                dialogState = VaultItemListingState.DialogState.CredentialManagerOperationFail(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = error.messageResourceId.asText(),
-                ),
+                dialogState = when (error) {
+                    is ValidateOriginResult.Error.PrivilegedAppNotAllowed -> {
+                        @Suppress("MaxLineLength")
+                        VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                            message = R.string.passkey_operation_failed_because_browser_x_is_not_trusted
+                                .asText(callingAppInfo.packageName),
+                            selectedCipherId = selectedCipherId,
+                        )
+                    }
+
+                    else -> {
+                        VaultItemListingState.DialogState.CredentialManagerOperationFail(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = error.messageResourceId.asText(),
+                        )
+                    }
+                },
             )
         }
     }
@@ -2239,6 +2383,16 @@ data class VaultItemListingState(
         @Parcelize
         data class VaultItemTypeSelection(
             val excludedOptions: ImmutableList<CreateVaultItemType>,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog to prompting the user to trust a privileged app for Credential
+         * Manager operations.
+         */
+        @Parcelize
+        data class TrustPrivilegedAddPrompt(
+            val message: Text,
+            val selectedCipherId: String?,
         ) : DialogState()
     }
 
@@ -2858,6 +3012,14 @@ sealed class VaultItemListingsAction {
      */
     data class ItemTypeToAddSelected(
         val itemType: CreateVaultItemType,
+    ) : VaultItemListingsAction()
+
+    /**
+     * The user has chosen to trust the calling application for performing Credential Manager
+     * operations.
+     */
+    data class TrustPrivilegedAppClick(
+        val selectedCipherId: String?,
     ) : VaultItemListingsAction()
 
     /**
