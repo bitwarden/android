@@ -1,17 +1,18 @@
-package com.x8bit.bitwarden.ui.platform.components.button
+package com.bitwarden.ui.platform.components.button
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.tooling.preview.Preview
+import com.bitwarden.ui.platform.components.button.color.bitwardenOutlinedButtonColors
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.platform.resource.BitwardenDrawable
-import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledErrorButtonColors
+import com.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
- * Represents a Bitwarden-styled filled [Button] for error scenarios.
+ * Represents a Bitwarden-styled filled [OutlinedButton] for error states.
  *
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
@@ -20,46 +21,50 @@ import com.x8bit.bitwarden.ui.platform.components.button.color.bitwardenFilledEr
  * @param isEnabled Whether or not the button is enabled.
  */
 @Composable
-fun BitwardenFilledErrorButton(
+fun BitwardenOutlinedErrorButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: Painter? = null,
     isEnabled: Boolean = true,
 ) {
-    BitwardenFilledButton(
+    BitwardenOutlinedButton(
         label = label,
         onClick = onClick,
         icon = icon,
         modifier = modifier,
         isEnabled = isEnabled,
-        colors = bitwardenFilledErrorButtonColors(),
+        colors = bitwardenOutlinedButtonColors(
+            contentColor = BitwardenTheme.colorScheme.status.error,
+            outlineColor = BitwardenTheme.colorScheme.status.error,
+            outlineColorDisabled = BitwardenTheme.colorScheme.status.error.copy(alpha = 0.12f),
+        ),
     )
 }
 
 @Preview
 @Composable
-private fun BitwardenErrorButton_preview() {
+private fun BBitwardenOutlinedErrorButton_preview() {
     Column {
-        BitwardenFilledErrorButton(
+        BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
             icon = null,
             isEnabled = true,
         )
-        BitwardenFilledErrorButton(
+        BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),
             isEnabled = true,
         )
-        BitwardenFilledErrorButton(
+        BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
             icon = null,
             isEnabled = false,
         )
-        BitwardenFilledErrorButton(
+        BitwardenOutlinedErrorButton(
             label = "Label",
             onClick = {},
             icon = rememberVectorPainter(id = BitwardenDrawable.ic_question_circle),

@@ -1,9 +1,9 @@
 package com.bitwarden.authenticator.ui.platform.components.button
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
- * Represents a Bitwarden-styled filled [Button].
+ * Represents a Bitwarden Authenticator-styled filled [OutlinedButton].
  *
  * @param label The label for the button.
  * @param onClick The callback when the button is clicked.
@@ -20,21 +20,22 @@ import androidx.compose.ui.unit.dp
  * @param isEnabled Whether or not the button is enabled.
  */
 @Composable
-fun BitwardenFilledButton(
+fun AuthenticatorOutlinedButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
-    Button(
+    OutlinedButton(
         onClick = onClick,
-        modifier = modifier.semantics(mergeDescendants = true) {},
+        modifier = modifier
+            .semantics(mergeDescendants = true) { },
         enabled = isEnabled,
         contentPadding = PaddingValues(
             vertical = 10.dp,
             horizontal = 24.dp,
         ),
-        colors = ButtonDefaults.buttonColors(),
+        colors = ButtonDefaults.outlinedButtonColors(),
     ) {
         Text(
             text = label,
@@ -45,8 +46,8 @@ fun BitwardenFilledButton(
 
 @Preview
 @Composable
-private fun BitwardenFilledButton_preview_isEnabled() {
-    BitwardenFilledButton(
+private fun AuthenticatorOutlinedButton_preview_isEnabled() {
+    AuthenticatorOutlinedButton(
         label = "Label",
         onClick = {},
         isEnabled = true,
@@ -55,8 +56,8 @@ private fun BitwardenFilledButton_preview_isEnabled() {
 
 @Preview
 @Composable
-private fun BitwardenFilledButton_preview_isNotEnabled() {
-    BitwardenFilledButton(
+private fun AuthenticatorOutlinedButton_preview_isNotEnabled() {
+    AuthenticatorOutlinedButton(
         label = "Label",
         onClick = {},
         isEnabled = false,

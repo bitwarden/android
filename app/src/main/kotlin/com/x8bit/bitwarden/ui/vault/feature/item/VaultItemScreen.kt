@@ -34,7 +34,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -126,16 +125,6 @@ fun VaultItemScreen(
         dialog = state.dialog,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick) }
-        },
-        onSubmitMasterPassword = remember(viewModel) {
-            { masterPassword, action ->
-                viewModel.trySendAction(
-                    VaultItemAction.Common.MasterPasswordSubmit(
-                        masterPassword = masterPassword,
-                        action = action,
-                    ),
-                )
-            }
         },
         onConfirmDeleteClick = remember(viewModel) {
             { viewModel.trySendAction(VaultItemAction.Common.ConfirmDeleteClick) }
@@ -288,7 +277,6 @@ private fun VaultItemDialogs(
     dialog: VaultItemState.DialogState?,
     onDismissRequest: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
-    onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
     onConfirmRestoreAction: () -> Unit,
 ) {
@@ -304,18 +292,11 @@ private fun VaultItemDialogs(
             text = dialog.message(),
         )
 
-        is VaultItemState.DialogState.MasterPasswordDialog -> {
-            BitwardenMasterPasswordDialog(
-                onConfirmClick = { onSubmitMasterPassword(it, dialog.action) },
-                onDismissRequest = onDismissRequest,
-            )
-        }
-
         is VaultItemState.DialogState.DeleteConfirmationPrompt -> {
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message.invoke(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmDeleteClick,
                 onDismissClick = onDismissRequest,
@@ -338,7 +319,7 @@ private fun VaultItemDialogs(
         VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
             message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = onConfirmRestoreAction,
             onDismissClick = onDismissRequest,

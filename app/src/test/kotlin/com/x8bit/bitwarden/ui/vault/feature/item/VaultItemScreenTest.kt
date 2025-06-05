@@ -25,7 +25,6 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performSemanticsAction
-import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.util.asText
@@ -198,7 +197,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -220,53 +219,6 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .onNodeWithText("Loading")
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
-    }
-
-    @Test
-    fun `MasterPassword dialog should be displayed according to state`() {
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Master password confirmation").assertDoesNotExist()
-
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                    action = PasswordRepromptAction.DeleteClick,
-                ),
-            )
-        }
-
-        composeTestRule
-            .onNodeWithText("Master password confirmation")
-            .assertIsDisplayed()
-            .assert(hasAnyAncestor(isDialog()))
-    }
-
-    @Test
-    fun `Ok click on master password dialog should emit DismissDialogClick`() {
-        val enteredPassword = "pass1234"
-        val passwordRepromptAction = PasswordRepromptAction.EditClick
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                    action = passwordRepromptAction,
-                ),
-            )
-        }
-
-        composeTestRule.onNodeWithText("Master password").performTextInput(enteredPassword)
-        composeTestRule
-            .onAllNodesWithText("Submit")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultItemAction.Common.MasterPasswordSubmit(
-                    masterPassword = enteredPassword,
-                    action = passwordRepromptAction,
-                ),
-            )
-        }
     }
 
     @Test
@@ -650,7 +602,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1106,7 +1058,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -1198,7 +1150,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1241,7 +1193,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1280,7 +1232,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
@@ -3193,7 +3145,6 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
                 value = true,
             ),
         ),
-        requiresReprompt = true,
         requiresCloneConfirmation = false,
         attachments = listOf(
             VaultItemState.ViewState.Content.Common.AttachmentItem(
@@ -3291,7 +3242,6 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         lastUpdated = "12/31/69 06:16 PM",
         notes = null,
         customFields = emptyList(),
-        requiresReprompt = true,
         requiresCloneConfirmation = false,
         attachments = emptyList(),
         canDelete = true,

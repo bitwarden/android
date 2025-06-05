@@ -132,7 +132,7 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Delete button click should Display delete confirmation dialog`() {
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -143,9 +143,9 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `oon delete confirmation dialog yes click should send DeleteClick`() {
+    fun `on delete confirmation dialog yes click should send DeleteClick`() {
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -301,6 +301,22 @@ class ViewSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Private notes")
             .performScrollTo()
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on copy notes click should send CopyNotesClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Additional options")
+            .performScrollTo()
+            .performClick()
+
+        // Overscroll to the delete button in order to avoid clicking the FAB
+        composeTestRule.onNodeWithText(text = "Delete Send").performScrollTo()
+        composeTestRule.onNodeWithContentDescription(label = "Copy note").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(ViewSendAction.CopyNotesClick)
+        }
     }
 
     @Test

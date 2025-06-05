@@ -76,7 +76,7 @@ class LoginWithDeviceScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .assert(hasAnyAncestor(isDialog()))
             .performClick()
         verify {

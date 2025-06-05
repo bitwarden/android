@@ -419,7 +419,8 @@ private const val CIPHER_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
-  }
+  },
+  "encryptedFor": "mockEncryptedFor-1"
 }
 """
 

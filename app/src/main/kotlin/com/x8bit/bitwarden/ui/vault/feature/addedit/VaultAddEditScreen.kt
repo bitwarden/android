@@ -295,7 +295,7 @@ fun VaultAddEditScreen(
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.delete),
             message = stringResource(id = R.string.do_you_really_want_to_soft_delete_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
+            confirmButtonText = stringResource(id = R.string.okay),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
                 pendingDeleteCipher = false

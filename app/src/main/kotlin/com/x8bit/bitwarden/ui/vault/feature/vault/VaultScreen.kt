@@ -48,7 +48,6 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
-import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
@@ -69,7 +68,6 @@ import com.x8bit.bitwarden.ui.vault.components.VaultItemSelectionDialog
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditArgs
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemArgs
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -243,21 +241,6 @@ private fun VaultScreenScaffold(
         )
     }
 
-    var masterPasswordRepromptAction by remember {
-        mutableStateOf<ListingItemOverflowAction.VaultAction?>(null)
-    }
-    masterPasswordRepromptAction?.let { action ->
-        BitwardenMasterPasswordDialog(
-            onConfirmClick = { password ->
-                masterPasswordRepromptAction = null
-                vaultHandlers.masterPasswordRepromptSubmit(action, password)
-            },
-            onDismissRequest = {
-                masterPasswordRepromptAction = null
-            },
-        )
-    }
-
     BitwardenScaffold(
         topBar = {
             BitwardenMediumTopAppBar(
@@ -373,7 +356,6 @@ private fun VaultScreenScaffold(
                 is VaultState.ViewState.Content -> VaultContent(
                     state = viewState,
                     vaultHandlers = vaultHandlers,
-                    onOverflowOptionClick = { masterPasswordRepromptAction = it },
                     modifier = Modifier.fillMaxSize(),
                 )
 

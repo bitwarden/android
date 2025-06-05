@@ -58,7 +58,7 @@ fun BitwardenTextEntryDialog(
         },
         confirmButton = {
             BitwardenTextButton(
-                label = stringResource(id = R.string.ok),
+                label = stringResource(id = R.string.okay),
                 onClick = { onConfirmClick(text) },
                 modifier = Modifier.testTag("AcceptAlertButton"),
             )

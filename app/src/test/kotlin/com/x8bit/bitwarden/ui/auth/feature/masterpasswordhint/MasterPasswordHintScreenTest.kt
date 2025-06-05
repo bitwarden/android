@@ -93,7 +93,7 @@ class MasterPasswordHintScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify { viewModel.trySendAction(MasterPasswordHintAction.DismissDialog) }
