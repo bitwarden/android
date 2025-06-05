@@ -297,13 +297,6 @@ platform :android do
 
     UI.message("version_name: #{latest_version_name}")
     UI.message("version_number: #{latest_version_number}")
-
-    # UI.message("Latest version for #{options[:package_name]} on #{options[:track]} is #{latest_version_name}")
-    # sh("echo STORE_VERSION_NAME=#{latest_version_name} >> $GITHUB_ENV")
-
-    # latest_version_number = version_code.first.to_s.strip
-    # UI.message("Latest version code for #{options[:package_name]} on #{options[:track]} is #{newest_version_code}")
-    # sh("echo STORE_VERSION_NUMBER=#{latest_version_number} >> $GITHUB_ENV")
   end
 
   # Authenticator
