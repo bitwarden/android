@@ -1,4 +1,3 @@
-
 name: Publish
 
 on:
@@ -15,18 +14,12 @@ on:
         required: true
         type: number
       rollout-percentage:
-        description: "Percentage of users who will receive this version update."
+        description: "Starting percentage of users who will receive this version update."
         required: true
-        type: choice
-        options:
-          - 10%
-          - 30%
-          - 50%
-          - 100%
+        type: number
       release-notes:
         description: "Change notes to be included with this release."
         type: string
-        required: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -55,6 +48,15 @@ jobs:
             gem install bundler:2.2.27
             bundle config path vendor/bundle
             bundle install --jobs 4 --retry 3
+        # - name: Check
+        #   run: bundle exec fastlane check
+
+        # - name: Upload test reports on failure
+        #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        #   if: failure()
+        #   with:
+        #     name: test-reports
+        #     path: app/build/reports/tests/
 
         - name: Log in to Azure
           uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -68,7 +70,6 @@ jobs:
           run: |
             mkdir -p ${{ github.workspace }}/secrets
             mkdir -p ${{ github.workspace }}/app/src/standardRelease
-
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
@@ -81,14 +82,12 @@ jobs:
             --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
             --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
-
         - name: Format Release Notes
           run: |
             FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
             echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
             echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
-
         - name: Promote Play Store version to production
           env:
             PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
@@ -105,15 +104,11 @@ jobs:
               echo "Unsupported product: $PRODUCT"
               exit 1
             fi
-
-            decimal=$(echo "scale=2; ${ROLLOUT_PERCENTAGE/\%/} / 100" | bc)
-
             bundle exec fastlane updateReleaseNotes \
               releaseNotes:"$RELEASE_NOTES" \
               versionCode:"$VERSION_CODE"
-
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
-              rolloutPercentage:$decimal \
+              rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
               packageName:"$PACKAGE_NAME"\
               releaseNotes:"$RELEASE_NOTES"
