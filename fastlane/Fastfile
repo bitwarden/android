@@ -384,4 +384,40 @@ platform :android do
       mapping: "authenticator/build/outputs/mapping/release/mapping.txt",
     )
   end
+
+  desc "Retrieve build from Github releases"
+    lane :retrieveBuildFromGithub do |options|
+
+  
+    version_codes = Actions.lane_context[SharedValues::GOOGLE_PLAY_TRACK_VERSION_CODES]
+    UI.message("Version codes in beta track: #{version_codes}")
+  end
+
+  desc "Update release notes for all locales."
+  lane :updateReleaseNotes do |options|
+    changelog = options[:releaseNotes]
+    version_code = options[:versionCode]
+    locales = ["en-US"]
+    locales.each do |locale|
+      dir = "metadata/android/#{locale}/changelogs"
+      FileUtils.mkdir_p(dir)
+      File.write("#{dir}/#{version_code}.txt", changelog)
+    end
+  end
+
+  desc "Promote to production."
+  lane :promoteToProduction do |options|
+    supply(
+      package_name: options[:packageName],
+      version_code: options[:versionCode],
+      track: "Staged for Production",               # The current track
+      track_promote_to: "Fastlane Automation Testing Target",  # Target track
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_metadata: false,
+      track_promote_release_status: "inProgress",
+      # track_promote_release_status: "draft",
+      rollout: options[:rolloutPercentage]
+    )
+  end
 end
