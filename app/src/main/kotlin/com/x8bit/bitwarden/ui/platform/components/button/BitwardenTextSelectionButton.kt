@@ -62,6 +62,7 @@ fun BitwardenTextSelectionButton(
 ) {
     Column(
         modifier = modifier
+            .defaultMinSize(minHeight = 60.dp)
             .clearAndSetSemantics {
                 role = semanticRole
                 contentDescription = supportingText
