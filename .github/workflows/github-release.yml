@@ -138,7 +138,16 @@ jobs:
         run: |
           echo "Getting product release notes"
           product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
-          echo "✅ Product release notes:\n$product_release_notes"
+
+          if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
+            echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
+            product_release_notes="<insert product release notes here>"
+          else
+            echo "✅ Product release notes:"
+            echo "$product_release_notes"
+          fi
+
+          echo "$product_release_notes" > product_release_notes.txt
 
       - name: Create Release
         id: create_release

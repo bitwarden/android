@@ -64,11 +64,7 @@ def main():
         sys.exit(1)
 
     release_notes = parse_release_notes(response.json())
-
-    if release_notes:
-        print(release_notes)
-        with open("product_release_notes.txt", "w") as f:
-            f.write(release_notes)
+    print(release_notes)
 
 if __name__ == "__main__":
     main()
