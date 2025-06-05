@@ -61,9 +61,9 @@ import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.Ve
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.appbar.action.AuthenticatorSearchActionItem
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.card.BitwardenActionCard
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
@@ -327,7 +327,7 @@ private fun ItemListingDialogs(
             BitwardenTwoButtonDialog(
                 title = stringResource(id = R.string.delete),
                 message = dialog.message(),
-                confirmButtonText = stringResource(id = R.string.ok),
+                confirmButtonText = stringResource(id = R.string.okay),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = {
                     onConfirmDeleteClick(dialog.itemId)
@@ -699,7 +699,7 @@ fun EmptyItemListingContent(
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
-                BitwardenFilledTonalButton(
+                AuthenticatorFilledTonalButton(
                     modifier = Modifier
                         .semantics { testTag = "AddCodeButton" }
                         .fillMaxWidth(),
@@ -797,14 +797,14 @@ private fun SyncWithBitwardenActionCard(
                 .fillMaxWidth(),
         )
         Spacer(Modifier.height(height = 16.dp))
-        BitwardenFilledButton(
+        AuthenticatorFilledButton(
             label = stringResource(id = R.string.take_me_to_app_settings),
             onClick = onAppSettingsClick,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
-        BitwardenTextButton(
+        AuthenticatorTextButton(
             label = stringResource(id = R.string.learn_more),
             onClick = onLearnMoreClick,
             modifier = Modifier

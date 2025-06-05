@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 
 /**
- * A filled tonal button for the Bitwarden UI with a customized appearance.
+ * A filled tonal button for the Bitwarden Authenticator UI with a customized appearance.
  *
  * This button uses the `secondaryContainer` color from the current [MaterialTheme.colorScheme]
  * for its background and the `onSecondaryContainer` color for its label text.
@@ -25,7 +25,7 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * or behavior. This can be used to apply padding, layout, and other Modifiers.
  */
 @Composable
-fun BitwardenFilledTonalButton(
+fun AuthenticatorFilledTonalButton(
     label: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -50,9 +50,9 @@ fun BitwardenFilledTonalButton(
 
 @Preview(showBackground = true)
 @Composable
-private fun BitwardenFilledTonalButton_preview() {
+private fun AuthenticatorFilledTonalButton_preview() {
     AuthenticatorTheme {
-        BitwardenFilledTonalButton(
+        AuthenticatorFilledTonalButton(
             label = "Sample Text",
             onClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),

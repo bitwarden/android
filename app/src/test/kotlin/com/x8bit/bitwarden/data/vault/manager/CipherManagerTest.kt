@@ -19,6 +19,7 @@ import com.bitwarden.network.service.CiphersService
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.EncryptionContext
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -29,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAttachmentView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockEncryptionContext
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
@@ -156,7 +158,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.createCipher(
                     body = createMockCipherJsonRequest(
@@ -183,7 +188,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipher(
@@ -250,7 +258,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.createCipherInOrganization(
                     body = CreateCipherInOrganizationJsonRequest(
@@ -283,7 +294,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipherInOrganization(
@@ -364,7 +378,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
@@ -396,7 +413,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
@@ -439,7 +459,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.updateCipher(
@@ -529,11 +552,11 @@ class CipherManagerTest {
             val userId = MOCK_USER_STATE.activeUserId
             val cipherId = "mockId-1"
             val cipherView = createMockCipherView(number = 1)
-            val cipher = createMockSdkCipher(number = 1)
+            val encryptionContext = createMockEncryptionContext(number = 1)
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
-            } returns cipher.asSuccess()
+            } returns encryptionContext.asSuccess()
             coEvery {
                 ciphersService.softDeleteCipher(cipherId = cipherId)
             } returns error.asFailure()
@@ -553,26 +576,32 @@ class CipherManagerTest {
             val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
             val userId = "mockId-1"
             val cipherId = "mockId-1"
-            val cipher = createMockSdkCipher(number = 1, clock = clock)
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
             val cipherView = createMockCipherView(number = 1)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
-            } returns cipher.asSuccess()
+            } returns encryptionContext.asSuccess()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
                     cipherView = cipherView.copy(deletedDate = fixedInstant),
                 )
-            } returns cipher.asSuccess()
+            } returns encryptionContext.asSuccess()
             coEvery {
-                vaultSdkSource.decryptCipher(userId = userId, cipher = cipher)
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = encryptionContext.cipher,
+                )
             } returns cipherView.asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
                 )
             } just runs
 
@@ -591,16 +620,19 @@ class CipherManagerTest {
             val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
             val userId = "mockId-1"
             val cipherId = "mockId-1"
-            val cipher = createMockSdkCipher(number = 1, clock = clock)
+            val encryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            )
             val cipherView = createMockCipherView(number = 1).copy(key = null)
             val networkCipher = createMockCipher(number = 1).copy(key = null)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
-            } returns cipher.asSuccess()
+            } returns encryptionContext.asSuccess()
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = cipher.toEncryptedNetworkCipher(),
+                    body = encryptionContext.toEncryptedNetworkCipher(),
                 )
             } returns UpdateCipherResponseJson.Success(networkCipher).asSuccess()
             coEvery {
@@ -617,16 +649,16 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = cipherView.copy(deletedDate = fixedInstant),
                 )
-            } returns cipher.asSuccess()
+            } returns encryptionContext.asSuccess()
             coEvery {
-                vaultSdkSource.decryptCipher(userId = userId, cipher = cipher)
+                vaultSdkSource.decryptCipher(userId = userId, cipher = encryptionContext.cipher)
             } returns cipherView.asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                    cipher = encryptionContext.toEncryptedNetworkCipherResponse(),
                 )
             } just runs
 
@@ -639,7 +671,7 @@ class CipherManagerTest {
             coVerify(exactly = 1) {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
-                    body = cipher.toEncryptedNetworkCipher(),
+                    body = encryptionContext.toEncryptedNetworkCipher(),
                 )
                 vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
             }
@@ -692,7 +724,11 @@ class CipherManagerTest {
         runTest {
             mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
             every {
-                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
+                createMockEncryptionContext(
+                    number = 1,
+                    cipher = createMockSdkCipher(number = 1, clock = clock),
+                )
+                    .toEncryptedNetworkCipherResponse()
             } returns createMockCipher(number = 1)
             val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
@@ -703,7 +739,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1).copy(attachments = emptyList()),
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 ciphersService.deleteCipherAttachment(
@@ -820,7 +859,10 @@ class CipherManagerTest {
             } returns mockCipherView.asSuccess()
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -864,6 +906,10 @@ class CipherManagerTest {
             val mockCipher = createMockSdkCipher(number = 1).copy(
                 attachments = listOf(mockAttachment),
             )
+            val mockEncryptionContext = createMockEncryptionContext(
+                number = 1,
+                cipher = mockCipher,
+            )
             val attachment = createMockAttachment(number = 1)
             val encryptedFile = File("path/to/encrypted/file")
             val decryptedFile = File("path/to/encrypted/file_decrypted")
@@ -874,7 +920,7 @@ class CipherManagerTest {
             // Handle mocks for migration
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = initialCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 vaultSdkSource.decryptCipher(userId = userId, cipher = mockCipher)
             } returns initialCipherView.asSuccess()
@@ -888,7 +934,7 @@ class CipherManagerTest {
                 vaultSdkSource.decryptFile(
                     userId = userId,
                     cipher = mockCipher,
-                    attachment = mockAttachment,
+                    attachmentView = mockAttachmentView,
                     encryptedFilePath = encryptedFile.path,
                     decryptedFilePath = decryptedFile.path,
                 )
@@ -950,11 +996,11 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = mockCipherView.copy(attachments = emptyList()),
                 )
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = mockCipher.toEncryptedNetworkCipherResponse(),
+                    cipher = mockCipher.toEncryptedNetworkCipherResponse("mockEncryptedFor-1"),
                 )
             } just runs
             // Done with mocks for migration
@@ -968,7 +1014,10 @@ class CipherManagerTest {
             } returns mockCipherView.asSuccess()
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -1015,7 +1064,10 @@ class CipherManagerTest {
             } returns mockCipherView.asSuccess()
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             val error = Throwable("Fail")
             coEvery {
                 ciphersService.shareCipher(
@@ -1102,7 +1154,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -1135,7 +1190,10 @@ class CipherManagerTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns createMockEncryptionContext(
+                number = 1,
+                cipher = createMockSdkCipher(number = 1, clock = clock),
+            ).asSuccess()
             val error = Throwable("Fail")
             coEvery {
                 ciphersService.updateCipherCollections(
@@ -1251,6 +1309,7 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFile = File.createTempFile("mockFile", "temp")
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
@@ -1263,7 +1322,7 @@ class CipherManagerTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns mockFile.asSuccess()
@@ -1298,12 +1357,13 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns error.asFailure()
@@ -1329,6 +1389,7 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1342,7 +1403,7 @@ class CipherManagerTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns mockFile.asSuccess()
@@ -1387,6 +1448,7 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1401,7 +1463,7 @@ class CipherManagerTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns mockFile.asSuccess()
@@ -1452,6 +1514,7 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1470,7 +1533,7 @@ class CipherManagerTest {
             val error = Throwable("Fail")
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns mockFile.asSuccess()
@@ -1530,6 +1593,7 @@ class CipherManagerTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1547,7 +1611,7 @@ class CipherManagerTest {
             )
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-            } returns mockCipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             coEvery {
                 fileManager.writeUriToCache(fileUri = mockUri)
             } returns mockFile.asSuccess()
@@ -1605,6 +1669,7 @@ class CipherManagerTest {
         val mockUri = setupMockUri(url = "www.test.com")
         val mockCipherView = createMockCipherView(number = 1)
         val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+        val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
         val mockFileName = "mockFileName-1"
         val mockFileSize = "1"
         val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1622,7 +1687,7 @@ class CipherManagerTest {
         )
         coEvery {
             vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-        } returns mockCipher.asSuccess()
+        } returns mockEncryptionContext.asSuccess()
         coEvery {
             fileManager.writeUriToCache(fileUri = mockUri)
         } returns mockFile.asSuccess()
@@ -1682,6 +1747,7 @@ class CipherManagerTest {
         val mockUri = setupMockUri(url = "www.test.com")
         val mockCipherView = createMockCipherView(number = 1)
         val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+        val mockEncryptionContext = createMockEncryptionContext(number = 1, cipher = mockCipher)
         val mockFileName = "mockFileName-1"
         val mockFileSize = "1"
         val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -1695,7 +1761,7 @@ class CipherManagerTest {
         val mockAttachmentJsonResponse = createMockAttachmentResponse(number = 1)
         coEvery {
             vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
-        } returns mockCipher.asSuccess()
+        } returns mockEncryptionContext.asSuccess()
         coEvery {
             fileManager.writeUriToCache(fileUri = mockUri)
         } returns mockFile.asSuccess()
@@ -1743,18 +1809,22 @@ class CipherManagerTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         val attachmentId = "mockId-1"
-        val cipher = mockk<Cipher> {
+        val mockCipher = mockk<Cipher> {
             every { key } returns "key"
             every { attachments } returns emptyList()
             every { id } returns "mockId-1"
         }
-        val cipherView = createMockCipherView(number = 1)
+        val mockEncryptionContext = mockk<EncryptionContext> {
+            every { encryptedFor } returns "mockEncryptedFor-1"
+            every { cipher } returns mockCipher
+        }
+        val cipherView = createMockCipherView(number = 1, attachments = emptyList())
         coEvery {
             vaultSdkSource.encryptCipher(
                 userId = MOCK_USER_STATE.activeUserId,
                 cipherView = cipherView,
             )
-        } returns cipher.asSuccess()
+        } returns mockEncryptionContext.asSuccess()
 
         assertEquals(
             DownloadAttachmentResult.Failure(IllegalStateException()),
@@ -1784,10 +1854,14 @@ class CipherManagerTest {
             val attachment = mockk<Attachment> {
                 every { id } returns attachmentId
             }
-            val cipher = mockk<Cipher> {
+            val mockCipher = mockk<Cipher> {
                 every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
+            }
+            val mockEncryptionContext = mockk<EncryptionContext> {
+                every { encryptedFor } returns "mockEncryptedFor-1"
+                every { cipher } returns mockCipher
             }
             val cipherView = createMockCipherView(number = 1)
             coEvery {
@@ -1795,7 +1869,7 @@ class CipherManagerTest {
                     userId = MOCK_USER_STATE.activeUserId,
                     cipherView = cipherView,
                 )
-            } returns cipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
             val error = Throwable()
 
             coEvery {
@@ -1830,10 +1904,14 @@ class CipherManagerTest {
         val attachment = mockk<Attachment> {
             every { id } returns attachmentId
         }
-        val cipher = mockk<Cipher> {
+        val mockCipher = mockk<Cipher> {
             every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
+        }
+        val mockEncryptionContext = mockk<EncryptionContext> {
+            every { encryptedFor } returns "mockEncryptedFor-1"
+            every { cipher } returns mockCipher
         }
         val cipherView = createMockCipherView(number = 1)
         coEvery {
@@ -1841,7 +1919,7 @@ class CipherManagerTest {
                 userId = MOCK_USER_STATE.activeUserId,
                 cipherView = cipherView,
             )
-        } returns cipher.asSuccess()
+        } returns mockEncryptionContext.asSuccess()
 
         val response = mockk<SyncResponseJson.Cipher.Attachment> {
             every { url } returns null
@@ -1878,10 +1956,14 @@ class CipherManagerTest {
         val attachment = mockk<Attachment> {
             every { id } returns attachmentId
         }
-        val cipher = mockk<Cipher> {
+        val mockCipher = mockk<Cipher> {
             every { key } returns "key"
             every { attachments } returns listOf(attachment)
             every { id } returns "mockId-1"
+        }
+        val mockEncryptionContext = mockk<EncryptionContext> {
+            every { encryptedFor } returns "mockEncryptedFor-1"
+            every { cipher } returns mockCipher
         }
 
         val cipherView = createMockCipherView(number = 1)
@@ -1890,7 +1972,7 @@ class CipherManagerTest {
                 userId = MOCK_USER_STATE.activeUserId,
                 cipherView = cipherView,
             )
-        } returns cipher.asSuccess()
+        } returns mockEncryptionContext.asSuccess()
 
         val response = mockk<SyncResponseJson.Cipher.Attachment> {
             every { url } returns "https://bitwarden.com"
@@ -1932,18 +2014,23 @@ class CipherManagerTest {
             val attachment = mockk<Attachment> {
                 every { id } returns attachmentId
             }
-            val cipher = mockk<Cipher> {
+            val mockCipher = mockk<Cipher> {
                 every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
-            val cipherView = createMockCipherView(number = 1)
+            val mockEncryptionContext = mockk<EncryptionContext> {
+                every { encryptedFor } returns "mockEncryptedFor-1"
+                every { cipher } returns mockCipher
+            }
+            val attachmentView = createMockAttachmentView(number = 1)
+            val cipherView = createMockCipherView(number = 1, attachments = listOf(attachmentView))
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipherView = cipherView,
                 )
-            } returns cipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
 
             val response = mockk<SyncResponseJson.Cipher.Attachment> {
                 every { url } returns "https://bitwarden.com"
@@ -1963,8 +2050,8 @@ class CipherManagerTest {
             coEvery {
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipher = cipher,
-                    attachment = attachment,
+                    cipher = mockCipher,
+                    attachmentView = attachmentView,
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )
@@ -1990,8 +2077,8 @@ class CipherManagerTest {
                 fileManager.downloadFileToCache("https://bitwarden.com")
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipher = cipher,
-                    attachment = attachment,
+                    cipher = mockCipher,
+                    attachmentView = attachmentView,
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )
@@ -2008,18 +2095,25 @@ class CipherManagerTest {
             val attachment = mockk<Attachment> {
                 every { id } returns attachmentId
             }
-            val cipher = mockk<Cipher> {
+            val mockCipher = mockk<Cipher> {
                 every { key } returns "key"
                 every { attachments } returns listOf(attachment)
                 every { id } returns "mockId-1"
             }
-            val cipherView = createMockCipherView(number = 1)
+            val mockEncryptionContext = mockk<EncryptionContext> {
+                every { encryptedFor } returns "mockEncryptedFor-1"
+                every { cipher } returns mockCipher
+            }
+            val attachmentView = mockk<AttachmentView> {
+                every { id } returns attachmentId
+            }
+            val cipherView = createMockCipherView(number = 1, attachments = listOf(attachmentView))
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = MOCK_USER_STATE.activeUserId,
                     cipherView = cipherView,
                 )
-            } returns cipher.asSuccess()
+            } returns mockEncryptionContext.asSuccess()
 
             val response = mockk<SyncResponseJson.Cipher.Attachment> {
                 every { url } returns "https://bitwarden.com"
@@ -2039,8 +2133,8 @@ class CipherManagerTest {
             coEvery {
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipher = cipher,
-                    attachment = attachment,
+                    cipher = mockCipher,
+                    attachmentView = attachmentView,
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )
@@ -2068,8 +2162,8 @@ class CipherManagerTest {
                 fileManager.downloadFileToCache(url = "https://bitwarden.com")
                 vaultSdkSource.decryptFile(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipher = cipher,
-                    attachment = attachment,
+                    cipher = mockCipher,
+                    attachmentView = attachmentView,
                     encryptedFilePath = "path/to/encrypted/file",
                     decryptedFilePath = "path/to/encrypted/file_decrypted",
                 )

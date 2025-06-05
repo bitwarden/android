@@ -574,7 +574,7 @@ class VaultUnlockScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {

@@ -56,6 +56,7 @@ fun createMockCipherView(
         clock = clock,
         fido2Credentials = fido2Credentials,
     ),
+    attachments: List<AttachmentView> = listOf(createMockAttachmentView(number = number)),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -74,7 +75,7 @@ fun createMockCipherView(
             null
         },
         revisionDate = clock.instant(),
-        attachments = listOf(createMockAttachmentView(number = number)),
+        attachments = attachments,
         card = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
         fields = listOf(createMockFieldView(number = number)),
         identity = createMockIdentityView(number = number).takeIf {

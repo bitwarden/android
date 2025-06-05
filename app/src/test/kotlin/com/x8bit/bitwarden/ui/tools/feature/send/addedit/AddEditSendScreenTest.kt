@@ -284,7 +284,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -301,7 +301,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
         )
 
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -783,7 +783,7 @@ class AddEditSendScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
         verify { viewModel.trySendAction(AddEditSendAction.DismissDialogClick) }
     }

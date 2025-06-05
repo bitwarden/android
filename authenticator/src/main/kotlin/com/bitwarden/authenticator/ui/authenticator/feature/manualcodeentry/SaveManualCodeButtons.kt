@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenOutlinedButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorOutlinedButton
 
 /**
  * Displays save buttons for saving a manually entered code.
@@ -28,7 +28,7 @@ fun SaveManualCodeButtons(
 ) {
     when (state) {
         ManualCodeEntryState.ButtonState.LocalOnly -> {
-            BitwardenFilledTonalButton(
+            AuthenticatorFilledTonalButton(
                 label = stringResource(id = R.string.add_code),
                 onClick = onSaveLocallyClick,
                 modifier = modifier.testTag(tag = "AddCodeButton"),
@@ -37,12 +37,12 @@ fun SaveManualCodeButtons(
 
         ManualCodeEntryState.ButtonState.SaveLocallyPrimary -> {
             Column(modifier = modifier) {
-                BitwardenFilledButton(
+                AuthenticatorFilledButton(
                     label = stringResource(id = R.string.save_here),
                     onClick = onSaveLocallyClick,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                BitwardenOutlinedButton(
+                AuthenticatorOutlinedButton(
                     label = stringResource(R.string.save_to_bitwarden),
                     onClick = onSaveToBitwardenClick,
                     modifier = Modifier.fillMaxWidth(),
@@ -52,12 +52,12 @@ fun SaveManualCodeButtons(
 
         ManualCodeEntryState.ButtonState.SaveToBitwardenPrimary -> {
             Column(modifier = modifier) {
-                BitwardenFilledButton(
+                AuthenticatorFilledButton(
                     label = stringResource(id = R.string.save_to_bitwarden),
                     onClick = onSaveToBitwardenClick,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                BitwardenOutlinedButton(
+                AuthenticatorOutlinedButton(
                     label = stringResource(R.string.save_here),
                     onClick = onSaveLocallyClick,
                     modifier = Modifier.fillMaxWidth(),

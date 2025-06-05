@@ -23,7 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
 import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
 import com.bitwarden.authenticator.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
@@ -121,7 +121,7 @@ private fun FeatureFlagContent(
             BitwardenHorizontalDivider()
         }
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenFilledButton(
+        AuthenticatorFilledButton(
             label = stringResource(R.string.reset_values),
             onClick = onResetValues,
             modifier = Modifier

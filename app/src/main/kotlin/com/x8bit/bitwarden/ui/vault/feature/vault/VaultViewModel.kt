@@ -228,7 +228,6 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun handleFlightRecorderGoToSettingsClick() {
-        settingsRepository.dismissFlightRecorderBanner()
         sendEvent(VaultEvent.NavigateToAbout)
     }
 

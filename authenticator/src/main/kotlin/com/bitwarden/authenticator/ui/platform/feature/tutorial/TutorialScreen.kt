@@ -42,8 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.util.isPortrait
 import com.bitwarden.ui.platform.base.util.EventsEffect
@@ -155,7 +155,7 @@ private fun TutorialScreenContent(
                 .height(44.dp),
         )
 
-        BitwardenFilledTonalButton(
+        AuthenticatorFilledTonalButton(
             label = state.actionButtonText,
             onClick = { continueClick(state.index) },
             modifier = Modifier
@@ -163,7 +163,7 @@ private fun TutorialScreenContent(
                 .fillMaxWidth(),
         )
 
-        BitwardenTextButton(
+        AuthenticatorTextButton(
             isEnabled = !state.isLastPage,
             label = stringResource(id = R.string.skip),
             onClick = skipClick,

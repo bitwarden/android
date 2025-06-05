@@ -124,7 +124,7 @@ class QrCodeScanScreenTest : AuthenticatorComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
         composeTestRule
-            .onNodeWithText("OK")
+            .onNodeWithText(text = "Okay")
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
             .performClick()

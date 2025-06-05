@@ -197,7 +197,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -602,7 +602,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -1058,7 +1058,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithText("Ok")
+            .onNodeWithText(text = "Okay")
             .performClick()
 
         verify {
@@ -1150,7 +1150,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1193,7 +1193,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
 
@@ -1232,7 +1232,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
