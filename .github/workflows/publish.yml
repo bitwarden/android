@@ -30,12 +30,12 @@ on:
         description: "Track to promote from."
         type: string
         required: true
-        default: "internal"
+        default: "Staged for Production"
       track-target:
         description: "Track to promote to."
         type: string
         required: true
-        default: "Closed testing - Fastlane Automation Testing Source"
+        default: "Fastlane Automation Testing Target"
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -128,6 +128,7 @@ jobs:
             bundle exec fastlane updateReleaseNotes \
               releaseNotes:"$RELEASE_NOTES" \
               versionCode:"$VERSION_CODE"
+
             bundle exec fastlane promoteToProduction \
               versionCode:"$VERSION_CODE" \
               rolloutPercentage:"$decimal" \

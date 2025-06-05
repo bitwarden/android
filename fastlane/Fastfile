@@ -418,7 +418,7 @@ platform :android do
 
   desc "Promote to production."
   lane :promoteToProduction do |options|
-    supply(
+    supply_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
       track: options[:track],
@@ -427,7 +427,7 @@ platform :android do
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false
-    )
+    }
 
     if options[:rolloutPercentage].to_f < 1
       supply_options[:track_promote_release_status] = "inProgress"
