@@ -410,8 +410,8 @@ platform :android do
     supply(
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "Staged for Production",               # The current track
-      track_promote_to: "production",  # Target track
+      track: "Internal",               # The current track
+      track_promote_to: "Fastlane Automation Testing Target",  # Target track
       skip_upload_apk: true,
       skip_upload_aab: true,
       skip_upload_metadata: false,
