@@ -1,0 +1,114 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      product:
+        description: "Which app is being released."
+        type: choice
+        options:
+          - Password Manager
+          - Authenticator
+      version-code:
+        description: "Build number to promote to production."
+        required: true
+        type: number
+      rollout-percentage:
+        description: "Starting percentage of users who will receive this version update."
+        required: true
+        type: number
+      release-notes:
+        description: "Change notes to be included with this release."
+        type: string
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+    promote:
+      runs-on: ubuntu-24.04
+      name: Promote build to Production in Play Store
+
+      steps:
+        - name: Check out repo
+          uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+        - name: Configure Ruby
+          uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+          with:
+            bundler-cache: true
+
+        - name: Install Fastlane
+          run: |
+            gem install bundler:2.2.27
+            bundle config path vendor/bundle
+            bundle install --jobs 4 --retry 3
+        # - name: Check
+        #   run: bundle exec fastlane check
+
+        # - name: Upload test reports on failure
+        #   uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        #   if: failure()
+        #   with:
+        #     name: test-reports
+        #     path: app/build/reports/tests/
+
+        - name: Log in to Azure
+          uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+          with:
+            creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+        - name: Retrieve secrets
+          env:
+            ACCOUNT_NAME: bitwardenci
+            CONTAINER_NAME: mobile
+          run: |
+            mkdir -p ${{ github.workspace }}/secrets
+            mkdir -p ${{ github.workspace }}/app/src/standardRelease
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name app_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_upload-keystore.jks --output none
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name app_beta_play-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_play-keystore.jks --output none
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+            --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+        - name: Format Release Notes
+          run: |
+            FORMATTED_MESSAGE="$(echo "${{ inputs.release-notes }}" | sed 's/  /\n/g')"
+            echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+            echo "$FORMATTED_MESSAGE" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+        - name: Promote Play Store version to production
+          env:
+            PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
+            PLAY_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+            VERSION_CODE: ${{ inputs.version-code }}
+            ROLLOUT_PERCENTAGE: ${{ inputs.rollout-percentage }}
+            PRODUCT: ${{ inputs.product }}
+          run: |
+            if [ "$PRODUCT" = "Password Manager" ]; then
+              PACKAGE_NAME="com.x8bit.bitwarden"
+            elif [ "$PRODUCT" = "Authenticator" ]; then
+              PACKAGE_NAME="com.bitwarden.authenticator"
+            else
+              echo "Unsupported product: $PRODUCT"
+              exit 1
+            fi
+            bundle exec fastlane updateReleaseNotes \
+              releaseNotes:"$RELEASE_NOTES" \
+              versionCode:"$VERSION_CODE"
+            bundle exec fastlane promoteToProduction \
+              versionCode:"$VERSION_CODE" \
+              rolloutPercentage:"$ROLLOUT_PERCENTAGE" \
+              packageName:"$PACKAGE_NAME"\
+              releaseNotes:"$RELEASE_NOTES"
