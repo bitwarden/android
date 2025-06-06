@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.SendState
 import java.time.Clock
 

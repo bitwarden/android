@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.core.data.util
 
 import java.time.Clock
 import java.time.ZoneId
