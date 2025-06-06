@@ -10,89 +10,89 @@ permissions:
   actions: read
 
 jobs:
-  test-fastlane:
-    name: Test Fastlane
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+  # test-fastlane:
+  #   name: Test Fastlane
+  #   runs-on: ubuntu-24.04
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
-        with:
-          bundler-cache: true
+  #     - name: Configure Ruby
+  #       uses: ruby/setup-ruby@ca041f971d66735f3e5ff1e21cc13e2d51e7e535 # v1.233.0
+  #       with:
+  #         bundler-cache: true
 
-      - name: Install Fastlane
-        run: |
-          gem install bundler:2.2.27
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
+  #     - name: Install Fastlane
+  #       run: |
+  #         gem install bundler:2.2.27
+  #         bundle config path vendor/bundle
+  #         bundle install --jobs 4 --retry 3
 
-      - name: Log in to Azure
-        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
-        with:
-          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+  #     - name: Log in to Azure
+  #       uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+  #       with:
+  #         creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-      - name: Retrieve secrets
-        env:
-          ACCOUNT_NAME: bitwardenci
-          CONTAINER_NAME: mobile
-        run: |
-          mkdir -p ${{ github.workspace }}/secrets
+  #     - name: Retrieve secrets
+  #       env:
+  #         ACCOUNT_NAME: bitwardenci
+  #         CONTAINER_NAME: mobile
+  #       run: |
+  #         mkdir -p ${{ github.workspace }}/secrets
 
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
-          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
+  #         az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+  #         --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+  #         az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+  #         --name authenticator_play_store-creds.json --file ${{ github.workspace }}/secrets/authenticator_play_store-creds.json --output none
 
-      - name: Test Fastlane
-        run: |
-          OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production)
-          version_name=$(echo "$OUTPUT" | grep 'version_name: ' | cut -d' ' -f3)
-          version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
+  #     - name: Test Fastlane
+  #       run: |
+  #         OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production)
+  #         version_name=$(echo "$OUTPUT" | grep 'version_name: ' | cut -d' ' -f3)
+  #         version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
 
-          echo "Retrieved BWPM Prod version info:"
-          echo
-          echo "version_name: $version_name"
-          echo "version_number: $version_number"
+  #         echo "Retrieved BWPM Prod version info:"
+  #         echo
+  #         echo "version_name: $version_name"
+  #         echo "version_number: $version_number"
 
-          OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden.beta track:internal)
-          version_name=$(echo "$OUTPUT" | grep 'version_name: ' | cut -d' ' -f3)
-          version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
+  #         OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden.beta track:internal)
+  #         version_name=$(echo "$OUTPUT" | grep 'version_name: ' | cut -d' ' -f3)
+  #         version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
 
-          echo "Retrieved BWPM Betaversion info:"
-          echo
-          echo "version_name: $version_name"
-          echo "version_number: $version_number"
+  #         echo "Retrieved BWPM Betaversion info:"
+  #         echo
+  #         echo "version_name: $version_name"
+  #         echo "version_number: $version_number"
 
-          OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production)
-          version_name=$(echo "$OUTPUT" | grep 'version_name: ' | sed 's/.*version_name: //')
-          version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
+  #         OUTPUT=$(bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production)
+  #         version_name=$(echo "$OUTPUT" | grep 'version_name: ' | sed 's/.*version_name: //')
+  #         version_number=$(echo "$OUTPUT" | grep 'version_number: ' | cut -d' ' -f3)
 
-          echo "Retrieved BWA version info:"
-          echo
-          echo "version_name: $version_name"
-          echo "version_number: $version_number"
+  #         echo "Retrieved BWA version info:"
+  #         echo
+  #         echo "version_name: $version_name"
+  #         echo "version_number: $version_number"
 
 
-  # publish-release-password-manager:
-  #   name: Publish Password Manager Release
-  #   uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
-  #   with:
-  #     release_name: "Password Manager"
-  #     workflow_name: "publish-github-release.yml"
-  #     credentials_filename: "play_creds.json"
-  #     check_release_command: >
-  #       bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production
-  #   secrets: inherit
+  publish-release-password-manager:
+    name: Publish Password Manager Release
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
+    with:
+      release_name: "Password Manager"
+      workflow_name: "publish-github-release.yml"
+      credentials_filename: "play_creds.json"
+      check_release_command: >
+        bundle exec fastlane getLatestPlayStoreVersion package_name:com.x8bit.bitwarden track:production
+    secrets: inherit
 
-  # publish-release-authenticator:
-  #   name: Publish Authenticator Release
-  #   uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
-  #   with:
-  #     release_name: "Authenticator"
-  #     workflow_name: "publish-github-release.yml"
-  #     credentials_filename: "authenticator_play_store-creds.json"
-  #     check_release_command: >
-  #       bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production
-  #   secrets: inherit
+  publish-release-authenticator:
+    name: Publish Authenticator Release
+    uses: bitwarden/gh-actions/.github/workflows/_publish-mobile-github-release.yml@BRE-769-Use-Fastlane-to-keep-github-releases-in-sync-with-mobile-deploy-versions
+    with:
+      release_name: "Authenticator"
+      workflow_name: "publish-github-release.yml"
+      credentials_filename: "authenticator_play_store-creds.json"
+      check_release_command: >
+        bundle exec fastlane getLatestPlayStoreVersion package_name:com.bitwarden.authenticator track:production
+    secrets: inherit
