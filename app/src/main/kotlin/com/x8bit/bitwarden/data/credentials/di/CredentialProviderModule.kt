@@ -89,11 +89,13 @@ object CredentialProviderModule {
         assetManager: AssetManager,
         digitalAssetLinkService: DigitalAssetLinkService,
         privilegedAppRepository: PrivilegedAppRepository,
+        featureFlagManager: FeatureFlagManager,
     ): OriginManager =
         OriginManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
             privilegedAppRepository = privilegedAppRepository,
+            featureFlagManager = featureFlagManager,
         )
 
     @Provides

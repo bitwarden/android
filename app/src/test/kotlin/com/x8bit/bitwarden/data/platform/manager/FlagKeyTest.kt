@@ -69,6 +69,10 @@ class FlagKeyTest {
             FlagKey.PreAuthSettings.keyName,
             "enable-pm-prelogin-settings",
         )
+        assertEquals(
+            FlagKey.UserManagedPrivilegedApps.keyName,
+            "pm-18970-user-managed-privileged-apps",
+        )
     }
 
     @Test
@@ -90,6 +94,7 @@ class FlagKeyTest {
                 FlagKey.FlightRecorder,
                 FlagKey.RestrictCipherItemDeletion,
                 FlagKey.PreAuthSettings,
+                FlagKey.UserManagedPrivilegedApps,
             ).all {
                 !it.defaultValue
             },
