@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.util
 
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -7,7 +8,6 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDat
 import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.util.formatBytes
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.Instant

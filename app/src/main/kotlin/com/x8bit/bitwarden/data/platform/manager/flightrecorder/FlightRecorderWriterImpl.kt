@@ -3,11 +3,11 @@ package com.x8bit.bitwarden.data.platform.manager.flightrecorder
 import android.os.Build
 import android.util.Log
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.data.manager.DispatcherManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDataSet
 import com.x8bit.bitwarden.data.vault.manager.FileManager
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.BufferedWriter

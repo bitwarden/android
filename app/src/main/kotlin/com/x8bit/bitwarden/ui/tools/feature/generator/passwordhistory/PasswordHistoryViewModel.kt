@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory.PasswordHistoryState.GeneratedPassword
 import dagger.hilt.android.lifecycle.HiltViewModel

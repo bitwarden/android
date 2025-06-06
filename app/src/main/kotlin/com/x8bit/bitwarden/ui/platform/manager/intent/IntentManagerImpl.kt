@@ -24,13 +24,13 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.credentials.CredentialManager
 import com.bitwarden.annotation.OmitFromCoverage
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.io.File
 import java.time.Clock
 

@@ -2,6 +2,7 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -15,7 +16,6 @@ import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.TotpData

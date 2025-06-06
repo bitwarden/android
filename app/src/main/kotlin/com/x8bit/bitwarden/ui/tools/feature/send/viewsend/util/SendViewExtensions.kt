@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util
 
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendState
 import java.time.Clock

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -10,7 +11,6 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
