@@ -10,7 +10,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
 /**
- * Models a FIDO 2 request to retrieve FIDO credentials parsed from the launching intent.
+ * Models a [CredentialManager] request to retrieve credentials parsed from the launching intent.
  *
  * @param userId The ID of the user's vault to search.
  * @param requestData Provider request data in the form of a [Bundle].

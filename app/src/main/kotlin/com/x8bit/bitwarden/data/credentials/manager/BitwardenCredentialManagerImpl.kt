@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.credentials.manager
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.provider.BeginGetPasswordOption
 import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.CallingAppInfo
 import androidx.credentials.provider.CredentialEntry
@@ -18,8 +19,11 @@ import com.bitwarden.fido.Origin
 import com.bitwarden.fido.UnverifiedAssetLink
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.ui.platform.base.util.prefixHttpsIfNecessaryOrNull
+import com.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithPasswordCredentials
 import com.x8bit.bitwarden.data.credentials.builder.CredentialEntryBuilder
 import com.x8bit.bitwarden.data.credentials.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
@@ -50,6 +54,7 @@ import timber.log.Timber
 class BitwardenCredentialManagerImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val fido2CredentialStore: Fido2CredentialStore,
+    private val autofillCipherProvider: AutofillCipherProvider,
     private val credentialEntryBuilder: CredentialEntryBuilder,
     private val json: Json,
     private val vaultRepository: VaultRepository,
@@ -180,17 +185,28 @@ class BitwardenCredentialManagerImpl(
                     else -> emptyList()
                 }
             }
-            .filter { it.isActiveWithFido2Credentials }
+            .filter { it.isActiveWithFido2Credentials || it.isActiveWithPasswordCredentials }
             .ifEmpty {
                 return@withContext emptyList<CredentialEntry>().asSuccess()
             }
 
-        getCredentialsRequest
+        val passwordCredentialResult = getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
+            getCredentialsRequest
+                .beginGetPasswordOptions
+                .toPasswordCredentialEntries(
+                    userId = getCredentialsRequest.userId,
+                    packageName = packageName,
+                )
+        } ?: emptyList()
+
+        return@withContext getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
-                cipherViewsWithPublicKeyCredentials = cipherViews,
+                cipherViewsWithPublicKeyCredentials = cipherViews
+                    .filter { it.isActiveWithFido2Credentials },
             )
+            .map { it + passwordCredentialResult }
             .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
     }
 
@@ -202,6 +218,8 @@ class BitwardenCredentialManagerImpl(
         userId: String,
         cipherViewsWithPublicKeyCredentials: List<CipherView>,
     ): Result<List<CredentialEntry>> {
+        if (this.isEmpty()) return emptyList<CredentialEntry>().asSuccess()
+
         val relyingPartyIds = this
             .mapNotNull { getPasskeyAssertionOptionsOrNull(it.requestJson)?.relyingPartyId }
             .distinct()
@@ -320,6 +338,23 @@ class BitwardenCredentialManagerImpl(
                 Fido2RegisterCredentialResult.Error.InternalError
             },
         )
+
+    private suspend fun List<BeginGetPasswordOption>.toPasswordCredentialEntries(
+        userId: String,
+        packageName: String,
+    ): List<CredentialEntry> {
+        val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
+            packageName.toAndroidAppUriString()
+        )
+
+        return credentialEntryBuilder
+            .buildPasswordCredentialEntries(
+                userId = userId,
+                passwordCredentialAutofillViews = ciphers,
+                beginGetPasswordCredentialOptions = this,
+                isUserVerified = isUserVerified,
+            )
+    }
 
     private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
         getPasskeyAssertionOptionsOrNull(requestJson)
