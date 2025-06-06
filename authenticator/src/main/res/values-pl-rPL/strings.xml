@@ -8,7 +8,7 @@
     <string name="generic_error_message">Nie mogliśmy przetworzyć żądania. Spróbuj ponownie lub skontaktuj się z nami.</string>
     <string name="internet_connection_required_title">Połączenie z Internetem jest wymagane</string>
     <string name="internet_connection_required_message">Połącz się z internetem zanim przejdziesz dalej.</string>
-    <string name="ok">OK</string>
+    <string name="okay">OK</string>
     <string name="syncing">Synchronizuję</string>
     <string name="copy">Kopiuj</string>
     <string name="edit_item">Edytuj</string>
@@ -17,15 +17,11 @@
     <string name="name">Nazwa</string>
     <string name="add_item_rotation">Dodaj Obrót Produktu</string>
     <string name="scan_a_qr_code">Zeskanuj kod QR</string>
-    <string name="enter_a_setup_key">Wprowadź klucz konfiguracyjny</string>
     <string name="scan_qr_code">Zeskanuj kod QR</string>
     <string name="point_your_camera_at_the_qr_code">Skieruj aparat w stronę kodu QR.</string>
     <string name="cannot_scan_qr_code">Nie można zeskanować kodu QR.</string>
     <string name="enter_key_manually">Wprowadź klucz ręcznie</string>
     <string name="cannot_add_authenticator_key">Nie możesz dodać klucza uwierzytelniającego?</string>
-    <string name="once_the_key_is_successfully_entered">Po poprawnym wprowadzeniu klucza\nwybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</string>
-    <string name="add_totp">Dodaj TOTP</string>
-    <string name="authenticator_key_scanner">Klucz uwierzytelniający</string>
     <string name="no_thanks">Nie, dziękuję</string>
     <string name="settings">Ustawienia</string>
     <string name="enable_camera_permission_to_use_the_scanner">Włącz uprawnienia aparatu do korzystania ze skanera</string>
@@ -62,7 +58,6 @@
     <string name="theme">Motyw</string>
     <string name="dark">Ciemny</string>
     <string name="light">Jasny</string>
-    <string name="language">Język</string>
     <string name="language_change_x_description">Język został zmieniony na %1$s. Uruchom aplikację ponownie, aby zobaczyć zmiany</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Zabezpiecz swoje konta za pomocą Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Uzyskaj kody weryfikacyjne dla wszystkich swoich kont, które obsługują dwuetapową weryfikację.</string>
@@ -70,10 +65,7 @@
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Zeskanuj kod QR w ustawieniach weryfikacji dwuetapowej dla każdego konta.</string>
     <string name="sign_in_using_unique_codes">Zaloguj się za pomocą unikalnych kodów</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Gdy używasz dwuetapowej weryfikacji, wprowadzisz nazwę użytkownika, hasło oraz kod wygenerowany w tej aplikacji.</string>
-    <string name="continue_button">Kontynuuj</string>
     <string name="skip">Pomiń</string>
-    <string name="get_started">Pierwsze kroki</string>
-    <string name="unique_codes">Unikalne kody</string>
     <string name="help">Pomoc</string>
     <string name="launch_tutorial">Uruchom samouczek</string>
     <string name="value_has_been_copied">Skopiowano %1$s</string>
@@ -113,7 +105,6 @@
     <string name="import_vault">Importuj</string>
     <string name="import_success">Import sejfu zakończony powodzeniem</string>
     <string name="key_is_invalid">Klucz jest nieprawidłowy.</string>
-    <string name="favorite_tooltip">Zapisz jako ulubione</string>
     <string name="favorite">Ulubione</string>
     <string name="favorites">Ulubione</string>
     <string name="backup">Kopia zapasowa</string>
@@ -130,7 +121,6 @@
     <string name="shared_codes_error">Nie można zsynchronizować kodów z aplikacji Bitwarden. Upewnij się, że obie aplikacje są aktualne. Nadal możesz uzyskać dostęp do istniejących kodów w aplikacji Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Synchronizuj z aplikacją Bitwarden</string>
-    <string name="go_to_settings">Przejdź do ustawień</string>
     <string name="sync_with_bitwarden_action_card_message">Zezwalaj aplikacji Authenticator na synchronizację w ustawieniach aby wyświetlić tutaj wszystkie Twoje kody weryfikacyjne.</string>
     <string name="take_me_to_app_settings">Przejdź do ustawień aplikacji</string>
     <string name="something_went_wrong">Coś poszło nie tak</string>
@@ -146,8 +136,6 @@
     <string name="choose_save_location_message">Zapisz ten klucz uwierzytelniający tutaj lub dodaj go do logowania w aplikacji Bitwarden.</string>
     <string name="save_option_as_default">Zapisz opcję jako domyślną</string>
     <string name="account_synced_from_bitwarden_app">Konto zsynchronizowane z aplikacji Bitwarden</string>
-    <string name="add_code_to_bitwarden">Dodaj kod do Bitwarden</string>
-    <string name="add_code_locally">Dodaj kod lokalnie</string>
     <string name="local_codes">Kody lokalne</string>
     <string name="required_information_missing">Brakujące wymagane informacje</string>
     <string name="required_information_missing_message">"Brakuje wymaganych informacji (np. ‘services’ lub ‘secret’). Sprawdź swój plik i spróbuj ponownie. Odwiedź bitwarden.com/help by uzyskać pomoc"</string>
