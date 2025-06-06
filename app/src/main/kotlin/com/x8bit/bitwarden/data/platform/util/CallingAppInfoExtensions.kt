@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.util
 import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import timber.log.Timber
 import java.security.MessageDigest
 
 /**
@@ -24,23 +25,28 @@ fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
 fun CallingAppInfo.validatePrivilegedApp(allowList: String): ValidateOriginResult {
 
     if (!allowList.contains("\"package_name\": \"$packageName\"")) {
+        Timber.e("Allow List is missing the package name: PrivilegedAppNotAllowed")
         return ValidateOriginResult.Error.PrivilegedAppNotAllowed
     }
 
     return try {
         val origin = getOrigin(allowList)
         if (origin.isNullOrEmpty()) {
+            Timber.e("The Origin was null or empty: PasskeyNotSupportedForApp")
             ValidateOriginResult.Error.PasskeyNotSupportedForApp
         } else {
+            Timber.e("Validate Privileged App Success")
             ValidateOriginResult.Success(origin)
         }
-    } catch (_: IllegalStateException) {
+    } catch (ise: IllegalStateException) {
         // We know the package name is in the allow list so we can infer that this exception is
         // thrown because no matching signature is found.
+        Timber.e(ise, "No matching signature: PrivilegedAppSignatureNotFound")
         ValidateOriginResult.Error.PrivilegedAppSignatureNotFound
-    } catch (_: IllegalArgumentException) {
+    } catch (iae: IllegalArgumentException) {
         // The allow list is not formatted correctly so we notify the user passkeys are not
         // supported for this application
+        Timber.e(iae, "The Privileged Allow List was invalid: PasskeyNotSupportedForApp")
         ValidateOriginResult.Error.PasskeyNotSupportedForApp
     }
 }

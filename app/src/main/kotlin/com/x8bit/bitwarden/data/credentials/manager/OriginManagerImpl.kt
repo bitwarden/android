@@ -44,12 +44,15 @@ class OriginManagerImpl(
             .fold(
                 onSuccess = {
                     if (it.linked) {
+                        Timber.e("Success")
                         ValidateOriginResult.Success(null)
                     } else {
+                        Timber.e("Calling application is not linked per v1/assetlinks:check API")
                         ValidateOriginResult.Error.PasskeyNotSupportedForApp
                     }
                 },
                 onFailure = {
+                    Timber.e("AssetLinkNotFound")
                     ValidateOriginResult.Error.AssetLinkNotFound
                 },
             )
