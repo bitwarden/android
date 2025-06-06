@@ -29,6 +29,7 @@ import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.ui.util.Text
+import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.credentials.manager.CredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
@@ -40,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -223,7 +225,7 @@ fun VaultItemListingScreen(
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
         },
-        onDismissFido2ErrorDialog = remember(viewModel) {
+        onDismissCredentialManagerErrorDialog = remember(viewModel) {
             { errorMessage ->
                 viewModel.trySendAction(
                     VaultItemListingsAction
@@ -307,6 +309,13 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onTrustPrivilegedAppClick = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.TrustPrivilegedAppClick(it),
+                )
+            }
+        },
     )
 
     val vaultItemListingHandlers = remember(viewModel) {
@@ -326,7 +335,7 @@ fun VaultItemListingScreen(
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
     onDismissRequest: () -> Unit,
-    onDismissFido2ErrorDialog: (Text) -> Unit,
+    onDismissCredentialManagerErrorDialog: (Text) -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
     onRetryFido2PasswordVerification: (cipherId: String) -> Unit,
@@ -336,6 +345,7 @@ private fun VaultItemListingDialogs(
     onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
     onVaultItemTypeSelected: (CreateVaultItemType) -> Unit,
+    onTrustPrivilegedAppClick: (selectedCipherId: String?) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -352,7 +362,7 @@ private fun VaultItemListingDialogs(
         is VaultItemListingState.DialogState.CredentialManagerOperationFail -> BitwardenBasicDialog(
             title = dialogState.title(),
             message = dialogState.message(),
-            onDismissRequest = { onDismissFido2ErrorDialog(dialogState.message) },
+            onDismissRequest = { onDismissCredentialManagerErrorDialog(dialogState.message) },
         )
 
         is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
@@ -431,6 +441,30 @@ private fun VaultItemListingDialogs(
                 onDismissRequest = onDismissRequest,
                 onOptionSelected = onVaultItemTypeSelected,
                 excludedOptions = dialogState.excludedOptions,
+            )
+        }
+
+        is VaultItemListingState.DialogState.TrustPrivilegedAddPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(R.string.an_error_has_occurred),
+                message = dialogState.message.invoke(),
+                confirmButtonText = stringResource(R.string.trust),
+                dismissButtonText = stringResource(R.string.cancel),
+                onConfirmClick = {
+                    onTrustPrivilegedAppClick(dialogState.selectedCipherId)
+                },
+                onDismissClick = {
+                    onDismissCredentialManagerErrorDialog(
+                        R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                            .asText(),
+                    )
+                },
+                onDismissRequest = {
+                    onDismissCredentialManagerErrorDialog(
+                        R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                            .asText(),
+                    )
+                },
             )
         }
 

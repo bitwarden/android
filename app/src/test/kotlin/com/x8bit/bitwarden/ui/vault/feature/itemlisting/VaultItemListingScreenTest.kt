@@ -2264,6 +2264,63 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Trust is selected in TrustPrivilegedAppPrompt dialog TrustPrivilegedApp action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Trust")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.TrustPrivilegedAppClick(null))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Cancel is selected in TrustPrivilegedAppPrompt dialog DismissCredentialManagerErrorDialogClick action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
+                    message = R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                        .asText(),
+                ),
+            )
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
