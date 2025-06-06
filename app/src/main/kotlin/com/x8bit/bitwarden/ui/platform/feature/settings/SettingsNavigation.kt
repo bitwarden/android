@@ -95,6 +95,7 @@ fun NavGraphBuilder.settingsGraph(
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
+    onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     navigation<SettingsGraphRoute>(
         startDestination = SettingsRoute.Standard,
@@ -130,6 +131,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
             onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
+            onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedApps,
         )
         otherDestination(
             isPreAuth = false,

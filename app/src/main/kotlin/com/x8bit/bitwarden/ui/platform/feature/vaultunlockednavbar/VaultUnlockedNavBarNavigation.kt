@@ -1,8 +1,10 @@
+@file:OmitFromCoverage
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.bitwarden.annotation.OmitFromCoverage
 import com.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
@@ -47,6 +49,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
     onNavigateToRecordedLogs: () -> Unit,
     onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderName: String?) -> Unit,
+    onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     composableWithStayTransitions<VaultUnlockedNavbarRoute> {
         VaultUnlockedNavBarScreen(
@@ -68,6 +71,7 @@ fun NavGraphBuilder.vaultUnlockedNavBarDestination(
             onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
             onNavigateToFlightRecorder = onNavigateToFlightRecorder,
             onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+            onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
         )
     }
 }
