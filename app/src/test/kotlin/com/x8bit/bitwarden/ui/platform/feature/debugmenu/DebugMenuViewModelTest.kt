@@ -159,6 +159,7 @@ private val DEFAULT_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.FlightRecorder to true,
     FlagKey.RestrictCipherItemDeletion to true,
     FlagKey.PreAuthSettings to true,
+    FlagKey.UserManagedPrivilegedApps to true,
 )
 
 private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf(
@@ -177,6 +178,7 @@ private val UPDATED_MAP_VALUE: ImmutableMap<FlagKey<Any>, Any> = persistentMapOf
     FlagKey.FlightRecorder to false,
     FlagKey.RestrictCipherItemDeletion to false,
     FlagKey.PreAuthSettings to false,
+    FlagKey.UserManagedPrivilegedApps to false,
 )
 
 private val DEFAULT_STATE = DebugMenuState(
