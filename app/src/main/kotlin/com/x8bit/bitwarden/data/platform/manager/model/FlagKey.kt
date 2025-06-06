@@ -36,6 +36,7 @@ sealed class FlagKey<out T : Any> {
                 FlightRecorder,
                 RestrictCipherItemDeletion,
                 PreAuthSettings,
+                UserManagedPrivilegedApps,
             )
         }
     }
@@ -169,6 +170,14 @@ sealed class FlagKey<out T : Any> {
      */
     data object PreAuthSettings : FlagKey<Boolean>() {
         override val keyName: String = "enable-pm-prelogin-settings"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the feature flag key to enabled user-managed privileged apps.
+     */
+    data object UserManagedPrivilegedApps : FlagKey<Boolean>() {
+        override val keyName: String = "pm-18970-user-managed-privileged-apps"
         override val defaultValue: Boolean = false
     }
 

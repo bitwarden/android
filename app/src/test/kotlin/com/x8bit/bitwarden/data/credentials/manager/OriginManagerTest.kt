@@ -10,6 +10,8 @@ import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -42,6 +44,9 @@ class OriginManagerTest {
         }
     }
     private val mockPrivilegedAppRepository = mockk<PrivilegedAppRepository>()
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
+        every { getFeatureFlag(FlagKey.UserManagedPrivilegedApps) } returns true
+    }
     private val mockMessageDigest = mockk<MessageDigest> {
         every { digest(any()) } returns DEFAULT_APP_SIGNATURE.toByteArray()
     }
@@ -50,6 +55,7 @@ class OriginManagerTest {
         assetManager = mockAssetManager,
         digitalAssetLinkService = mockDigitalAssetLinkService,
         privilegedAppRepository = mockPrivilegedAppRepository,
+        featureFlagManager = mockFeatureFlagManager,
     )
 
     @BeforeEach
@@ -228,6 +234,32 @@ class OriginManagerTest {
                 fido2OriginManager.validateOrigin(callingAppInfo = mockNonPrivilegedAppInfo),
             )
         }
+
+    @Test
+    fun `validateOrigin should ignore user trust list when feature flag is disabled`() = runTest {
+        every {
+            mockFeatureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        } returns false
+        coEvery {
+            mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+        } returns FAIL_ALLOW_LIST.asSuccess()
+        coEvery {
+            mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+        } returns FAIL_ALLOW_LIST.asSuccess()
+
+        val result = fido2OriginManager.validateOrigin(
+            callingAppInfo = mockPrivilegedAppInfo,
+        )
+        assertEquals(
+            ValidateOriginResult.Error.PrivilegedAppNotAllowed,
+            result,
+        )
+        coVerify(exactly = 1) {
+            mockAssetManager.readAsset(GOOGLE_ALLOW_LIST_FILENAME)
+            mockAssetManager.readAsset(COMMUNITY_ALLOW_LIST_FILENAME)
+        }
+        coVerify(exactly = 0) { mockPrivilegedAppRepository.getUserTrustedAllowListJson() }
+    }
 }
 
 private const val DEFAULT_PACKAGE_NAME = "com.x8bit.bitwarden"
