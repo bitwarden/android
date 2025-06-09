@@ -7,6 +7,11 @@ on:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
+      release-ticket-id:
+        description: 'Release Ticket ID - e.g. RELEASE-1762'
+        required: true
+        type: string
+
 env:
     ARTIFACTS_PATH: artifacts
 
@@ -45,9 +50,11 @@ jobs:
           case "$workflow_name" in
             *"Password Manager"* | "Build")
               echo "app_name=Password Manager" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwpm" >> $GITHUB_OUTPUT
               ;;
             *"Authenticator"*)
               echo "app_name=Authenticator" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwa" >> $GITHUB_OUTPUT
               ;;
             *)
               echo "::error::Unknown workflow name: $workflow_name"
@@ -60,7 +67,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
         run: |
           workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
 
@@ -87,24 +94,11 @@ jobs:
           echo "version_number=$version_number" >> $GITHUB_OUTPUT
           echo "version_name=$version_name" >> $GITHUB_OUTPUT
 
-          case "$APP_NAME" in
-            "Password Manager")
-              app_name_suffix="bwpm"
-              ;;
-            "Authenticator")
-              app_name_suffix="bwa"
-              ;;
-            *)
-              echo "::error::Unknown app name: $APP_NAME"
-              exit 1
-              ;;
-          esac
-
-          tag_name="v$version_name-$app_name_suffix" # e.g. v2025.6.0-bwpm
+          tag_name="v$version_name-$_APP_NAME_SUFFIX" # e.g. v2025.6.0-bwpm
           echo "🔖 New tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
-          last_release_tag=$(git tag -l --sort=-authordate | grep "$app_name_suffix" | head -n 1)
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$APP_NAME_SUFFIX" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
 
@@ -120,6 +114,29 @@ jobs:
             echo "Downloaded files:"
             find $ARTIFACTS_PATH -type f
           fi
+
+      - name: Get product release notes
+        id: get_release_notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _RELEASE_TICKET_ID: ${{ inputs.release-ticket-id }}
+          _JIRA_API_EMAIL: ${{ secrets.JIRA_API_EMAIL }}
+          _JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+        run: |
+          echo "Getting product release notes"
+          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
+
+          if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
+            echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
+            product_release_notes="<insert product release notes here>"
+          else
+            echo "✅ Product release notes:"
+            echo "$product_release_notes"
+          fi
+
+          echo "$product_release_notes" > product_release_notes.txt
 
       - name: Create Release
         id: create_release
@@ -161,8 +178,13 @@ jobs:
           echo "Getting current release body. Tag: $_TAG_NAME"
           current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
 
-          # Append build source to the end
-          updated_body="${current_body}
+          product_release_notes=$(cat product_release_notes.txt)
+
+          # Update release description with product release notes and builds source
+          updated_body="# Overview
+          ${product_release_notes}
+
+          ${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
           new_release_url=$(gh release edit "$_TAG_NAME" --notes "$updated_body")
