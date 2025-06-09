@@ -4,7 +4,7 @@ package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
 import com.bitwarden.core.data.repository.util.SpecialCharWithPrecedenceComparator
-import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.ui.platform.base.util.removeDiacritics
@@ -27,8 +27,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Updates a [SearchTypeData] with the given data if necessary.
@@ -353,7 +352,11 @@ private fun SendView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "SendNameLabel",
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitle = deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {

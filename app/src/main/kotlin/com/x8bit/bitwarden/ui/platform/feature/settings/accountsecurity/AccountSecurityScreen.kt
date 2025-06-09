@@ -572,13 +572,11 @@ private fun SessionCustomTimeoutRow(
         cardStyle = CardStyle.Middle(),
         modifier = modifier,
     ) {
-        val formattedTime = LocalTime
-            .ofSecondOfDay(
-                vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong(),
-            )
-            .toFormattedPattern("HH:mm")
+
         Text(
-            text = formattedTime,
+            text = LocalTime
+                .ofSecondOfDay(vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong())
+                .toFormattedPattern(pattern = "HH:mm"),
             style = BitwardenTheme.typography.labelSmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )

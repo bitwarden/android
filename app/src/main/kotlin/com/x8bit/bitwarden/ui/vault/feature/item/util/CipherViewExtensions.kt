@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
-import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.data.util.toFormattedTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
@@ -27,11 +29,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
 import java.time.Clock
+import java.time.format.FormatStyle
 import java.util.Locale
-
-private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
-private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
-private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 
 /**
  * Transforms [VaultData] into [VaultItemState.ViewState].
@@ -62,8 +61,9 @@ fun CipherView.toViewState(
                         ?.find { it.id == fieldView.hashCode().toString() },
                 )
             },
-            lastUpdated = revisionDate.toFormattedPattern(
-                pattern = LAST_UPDATED_DATE_TIME_PATTERN,
+            lastUpdated = revisionDate.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
                 clock = clock,
             ),
             notes = notes,
@@ -124,8 +124,9 @@ fun CipherView.toViewState(
                     uris = loginValues.uris.orEmpty().map { it.toUriData() },
                     passwordRevisionDate = loginValues
                         .passwordRevisionDate
-                        ?.toFormattedPattern(
-                            pattern = LAST_UPDATED_DATE_TIME_PATTERN,
+                        ?.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         ),
                     isPremiumUser = isPremiumUser,
@@ -248,12 +249,12 @@ private fun LoginUriView.toUriData() =
 private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
     this?.let {
         R.string.created_xy.asText(
-            creationDate.toFormattedPattern(
-                pattern = FIDO2_CREDENTIAL_CREATION_DATE_PATTERN,
+            creationDate.toFormattedDateStyle(
+                dateStyle = FormatStyle.SHORT,
                 clock = clock,
             ),
-            creationDate.toFormattedPattern(
-                pattern = FIDO2_CREDENTIAL_CREATION_TIME_PATTERN,
+            creationDate.toFormattedTimeStyle(
+                timeStyle = FormatStyle.SHORT,
                 clock = clock,
             ),
         )

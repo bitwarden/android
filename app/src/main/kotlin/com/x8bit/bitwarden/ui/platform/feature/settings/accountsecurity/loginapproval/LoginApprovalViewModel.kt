@@ -5,7 +5,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -214,8 +215,9 @@ class LoginApprovalViewModel @Inject constructor(
                         email = email,
                         fingerprint = result.authRequest.fingerprint,
                         ipAddress = result.authRequest.ipAddress,
-                        time = result.authRequest.creationDate.toFormattedPattern(
-                            pattern = "M/d/yy hh:mm a",
+                        time = result.authRequest.creationDate.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
                             clock = clock,
                         ),
                     ),

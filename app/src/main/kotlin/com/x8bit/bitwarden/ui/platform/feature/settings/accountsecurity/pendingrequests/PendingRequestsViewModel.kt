@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pending
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -144,8 +145,9 @@ class PendingRequestsViewModel @Inject constructor(
                         PendingRequestsState.ViewState.Content.PendingLoginRequest(
                             fingerprintPhrase = request.fingerprint,
                             platform = request.platform,
-                            timestamp = request.creationDate.toFormattedPattern(
-                                pattern = "M/d/yy hh:mm a",
+                            timestamp = request.creationDate.toFormattedDateTimeStyle(
+                                dateStyle = FormatStyle.SHORT,
+                                timeStyle = FormatStyle.SHORT,
                                 clock = clock,
                             ),
                         )
