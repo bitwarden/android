@@ -15,41 +15,7 @@ uv pip install -r pyproject.toml
 ## Usage
 
 ```bash
-./jira-get-release-notes.py RELEASE-1762
-```
-
-## Configuration
-
-The script requires a Jira API token.
-
-
-
-## Installation
-
-1. Install the required Python package:
-```bash
-pip3 install requests
-```
-
-2. Make the script executable:
-```bash
-chmod +x get-jira-release-notes.py
-```
-
-## Usage
-
-```bash
-./get-jira-release-notes.py <JIRA-ISSUE-ID>
-```
-
-Or using Python interpreter:
-```bash
-python3 get-jira-release-notes.py <JIRA-ISSUE-ID>
-```
-
-### Example
-```bash
-./get-jira-release-notes.py RELEASE-1762
+./jira_release_notes.py RELEASE-1762 example@example.com T0k3n123
 ```
 
 # Output Format
