@@ -57,6 +57,11 @@ class VerificationCodeViewModel @Inject constructor(
             viewState = VerificationCodeState.ViewState.Loading,
             dialogState = null,
             isRefreshing = false,
+            hasMasterPassword = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.hasMasterPassword == true,
         )
     },
 ) {
@@ -83,11 +88,8 @@ class VerificationCodeViewModel @Inject constructor(
                     listDataState
                 }
             }
-            .onEach {
-                sendAction(
-                    VerificationCodeAction.Internal.AuthCodesReceive(it),
-                )
-            }
+            .map { VerificationCodeAction.Internal.AuthCodesReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -363,7 +365,7 @@ class VerificationCodeViewModel @Inject constructor(
                             VerificationCodeDisplayItem(
                                 id = item.id,
                                 authCode = item.code,
-                                hideAuthCode = item.hasPasswordReprompt,
+                                hideAuthCode = item.hasPasswordReprompt && state.hasMasterPassword,
                                 label = item.name,
                                 supportingLabel = item.username,
                                 periodSeconds = item.periodSeconds,
@@ -412,6 +414,7 @@ data class VerificationCodeState(
     val dialogState: DialogState?,
     val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
+    val hasMasterPassword: Boolean,
 ) : Parcelable {
 
     /**

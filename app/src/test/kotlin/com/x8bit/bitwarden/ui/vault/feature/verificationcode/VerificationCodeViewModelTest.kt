@@ -64,6 +64,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
     private val mockUserAccount: UserState.Account = mockk {
         every { isPremium } returns true
+        every { hasMasterPassword } returns true
     }
 
     private val mockUserState: UserState = mockk {
@@ -602,7 +603,6 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
         )
 
-    @Suppress("MaxLineLength")
     private fun createVerificationCodeState(
         viewState: VerificationCodeState.ViewState = VerificationCodeState.ViewState.Loading,
     ) = VerificationCodeState(
@@ -613,6 +613,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         dialogState = null,
         isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
         isRefreshing = false,
+        hasMasterPassword = true,
     )
 
     private fun createDisplayItemList() = listOf(
