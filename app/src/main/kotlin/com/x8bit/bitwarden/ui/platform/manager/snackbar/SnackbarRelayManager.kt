@@ -16,7 +16,10 @@ interface SnackbarRelayManager {
 
     /**
      * Called from a consumer to receive snackbar data from a producer, the consumer must specify
-     * the [relay] to receive the data from.
+     * the [relay] or [relays] to receive the data from.
      */
-    fun getSnackbarDataFlow(relay: SnackbarRelay): Flow<BitwardenSnackbarData>
+    fun getSnackbarDataFlow(
+        relay: SnackbarRelay,
+        vararg relays: SnackbarRelay,
+    ): Flow<BitwardenSnackbarData>
 }
