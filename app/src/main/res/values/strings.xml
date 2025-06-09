@@ -547,6 +547,8 @@ select Add TOTP to store the key safely</string>
     <string name="device_type">Device type</string>
     <string name="ip_address">IP address</string>
     <string name="time">Time</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">Confirm login</string>
     <string name="deny_log_in">Deny login</string>
     <string name="log_in_denied">Login denied</string>
