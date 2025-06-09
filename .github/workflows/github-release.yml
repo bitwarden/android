@@ -50,9 +50,11 @@ jobs:
           case "$workflow_name" in
             *"Password Manager"* | "Build")
               echo "app_name=Password Manager" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwpm" >> $GITHUB_OUTPUT
               ;;
             *"Authenticator"*)
               echo "app_name=Authenticator" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwa" >> $GITHUB_OUTPUT
               ;;
             *)
               echo "::error::Unknown workflow name: $workflow_name"
@@ -65,7 +67,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
         run: |
           workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
 
@@ -92,24 +94,11 @@ jobs:
           echo "version_number=$version_number" >> $GITHUB_OUTPUT
           echo "version_name=$version_name" >> $GITHUB_OUTPUT
 
-          case "$APP_NAME" in
-            "Password Manager")
-              app_name_suffix="bwpm"
-              ;;
-            "Authenticator")
-              app_name_suffix="bwa"
-              ;;
-            *)
-              echo "::error::Unknown app name: $APP_NAME"
-              exit 1
-              ;;
-          esac
-
-          tag_name="v$version_name-$app_name_suffix" # e.g. v2025.6.0-bwpm
+          tag_name="v$version_name-$_APP_NAME_SUFFIX" # e.g. v2025.6.0-bwpm
           echo "🔖 New tag name: $tag_name"
           echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
 
-          last_release_tag=$(git tag -l --sort=-authordate | grep "$app_name_suffix" | head -n 1)
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$APP_NAME_SUFFIX" | head -n 1)
           echo "🔖 Last release tag: $last_release_tag"
           echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
 
