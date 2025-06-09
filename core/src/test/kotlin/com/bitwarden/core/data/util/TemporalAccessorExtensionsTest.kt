@@ -4,33 +4,254 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
-import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
+import java.util.Locale
 
 class TemporalAccessorExtensionsTest {
 
     @Test
-    fun `toFormattedPattern should return correctly formatted string with timezone`() {
+    fun `toFormattedPattern should return correctly formatted string`() {
         val instant = Instant.parse("2023-12-10T15:30:00Z")
-        val pattern = "MM/dd/yyyy hh:mm a"
-        val zone = ZoneId.of("UTC")
-        val expectedFormattedString = "12/10/2023 03:30 PM"
-        val formattedString = instant.toFormattedPattern(pattern, zone)
 
-        assertEquals(expectedFormattedString, formattedString)
+        assertEquals(
+            "12/10/2023 03:30 PM",
+            instant.toFormattedPattern(
+                pattern = "MM/dd/yyyy hh:mm a",
+                clock = FIXED_CLOCK,
+            ),
+        )
     }
 
     @Test
-    fun `toFormattedPattern should return correctly formatted string with clock`() {
+    fun `toFormattedDateStyle should return correctly formatted string with with locale`() {
         val instant = Instant.parse("2023-12-10T15:30:00Z")
-        val pattern = "MM/dd/yyyy hh:mm a"
-        val clock: Clock = Clock.fixed(
-            Instant.parse("2023-10-27T12:00:00Z"),
-            ZoneOffset.UTC,
-        )
-        val expectedFormattedString = "12/10/2023 03:30 PM"
-        val formattedString = instant.toFormattedPattern(pattern, clock)
 
-        assertEquals(expectedFormattedString, formattedString)
+        // US locale
+        assertEquals(
+            "12/10/23",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.SHORT,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Dec 10, 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.MEDIUM,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "December 10, 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.LONG,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Sunday, December 10, 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.FULL,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+
+        // UK locale
+        assertEquals(
+            "10/12/2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.SHORT,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "10 Dec 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.MEDIUM,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "10 December 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.LONG,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Sunday, 10 December 2023",
+            instant.toFormattedDateStyle(
+                dateStyle = FormatStyle.FULL,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+    }
+
+    @Test
+    fun `toFormattedTimeStyle should return correctly formatted string with with locale`() {
+        val instant = Instant.parse("2023-12-10T15:30:00Z")
+
+        // US locale
+        assertEquals(
+            "3:30 PM",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.SHORT,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "3:30:00 PM",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.MEDIUM,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "3:30:00 PM Z",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.LONG,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "3:30:00 PM Z",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.FULL,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+
+        // UK locale
+        assertEquals(
+            "15:30",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.SHORT,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "15:30:00",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.MEDIUM,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "15:30:00 Z",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.LONG,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "15:30:00 Z",
+            instant.toFormattedTimeStyle(
+                timeStyle = FormatStyle.FULL,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+    }
+
+    @Test
+    fun `toFormattedDateTimeStyle should return correctly formatted string with with locale`() {
+        val instant = Instant.parse("2023-12-10T15:30:00Z")
+
+        // US locale
+        assertEquals(
+            "12/10/23, 3:30 PM",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Dec 10, 2023, 3:30:00 PM",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.MEDIUM,
+                timeStyle = FormatStyle.MEDIUM,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "December 10, 2023 at 3:30:00 PM Z",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.LONG,
+                timeStyle = FormatStyle.LONG,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Sunday, December 10, 2023 at 3:30:00 PM Z",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.FULL,
+                timeStyle = FormatStyle.FULL,
+                locale = Locale.US,
+                clock = FIXED_CLOCK,
+            ),
+        )
+
+        // UK locale
+        assertEquals(
+            "10/12/2023, 15:30",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.SHORT,
+                timeStyle = FormatStyle.SHORT,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "10 Dec 2023, 15:30:00",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.MEDIUM,
+                timeStyle = FormatStyle.MEDIUM,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "10 December 2023 at 15:30:00 Z",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.LONG,
+                timeStyle = FormatStyle.LONG,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
+        assertEquals(
+            "Sunday, 10 December 2023 at 15:30:00 Z",
+            instant.toFormattedDateTimeStyle(
+                dateStyle = FormatStyle.FULL,
+                timeStyle = FormatStyle.FULL,
+                locale = Locale.UK,
+                clock = FIXED_CLOCK,
+            ),
+        )
     }
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)

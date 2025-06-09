@@ -169,7 +169,7 @@ fun createCommonContent(
     if (isEmpty) {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            lastUpdated = "1/1/70 12:16 AM",
+            lastUpdated = "1/1/70, 12:16 AM",
             notes = null,
             customFields = emptyList(),
             requiresCloneConfirmation = false,
@@ -186,7 +186,7 @@ fun createCommonContent(
     } else {
         VaultItemState.ViewState.Content.Common(
             name = "mockName",
-            lastUpdated = "1/1/70 12:16 AM",
+            lastUpdated = "1/1/70, 12:16 AM",
             notes = "Lots of notes",
             customFields = listOf(
                 FieldView(
@@ -267,7 +267,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
                 ),
             )
         },
-        passwordRevisionDate = "1/1/70 12:16 AM".takeUnless { isEmpty },
+        passwordRevisionDate = "1/1/70, 12:16 AM".takeUnless { isEmpty },
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,

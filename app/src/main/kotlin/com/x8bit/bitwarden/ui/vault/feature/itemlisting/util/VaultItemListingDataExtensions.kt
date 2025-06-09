@@ -3,7 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
-import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -35,8 +35,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Determines a predicate to filter a list of [CipherView] based on the
@@ -461,7 +460,11 @@ private fun SendView.toDisplayItem(
         titleTestTag = "SendNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitle = deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {

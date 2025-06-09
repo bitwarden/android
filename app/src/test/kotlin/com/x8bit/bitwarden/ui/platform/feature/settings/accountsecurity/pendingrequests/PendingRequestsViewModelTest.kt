@@ -56,7 +56,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     @Test
     fun `getPendingResults success with content should update state with some requests filtered`() {
         val dateTimeFormatter = DateTimeFormatter
-            .ofPattern("M/d/yy hh:mm a")
+            .ofPattern("M/d/yy, hh:mm a")
             .withZone(fixedClock.zone)
         val nowZonedDateTime = ZonedDateTime.now(fixedClock)
         val requestList = listOf(
@@ -284,15 +284,11 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("LongMethod")
     @Test
     fun `on LifecycleResume should update state`() = runTest {
-        val dateTimeFormatter = DateTimeFormatter
-            .ofPattern("M/d/yy hh:mm a")
-            .withZone(fixedClock.zone)
-        val nowZonedDateTime = ZonedDateTime.now()
-        val fiveMinZonedDateTime = ZonedDateTime.now().minusMinutes(5)
-        val sixMinZonedDateTime = ZonedDateTime.now().minusMinutes(6)
+        val nowZonedDateTime = ZonedDateTime.now(fixedClock)
+        val fiveMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(5)
+        val sixMinZonedDateTime = ZonedDateTime.now(fixedClock).minusMinutes(6)
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -353,12 +349,12 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "pantry-overdue-survive-sleep-jab",
                         platform = "Android",
-                        timestamp = nowZonedDateTime.format(dateTimeFormatter),
+                        timestamp = "10/27/23, 12:00 PM",
                     ),
                     PendingRequestsState.ViewState.Content.PendingLoginRequest(
                         fingerprintPhrase = "erupt-anew-matchbook-disk-student",
                         platform = "iOS",
-                        timestamp = fiveMinZonedDateTime.format(dateTimeFormatter),
+                        timestamp = "10/27/23, 11:55 AM",
                     ),
                 ),
             ),
