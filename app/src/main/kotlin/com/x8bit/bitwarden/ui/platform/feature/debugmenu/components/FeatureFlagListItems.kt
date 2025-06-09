@@ -41,6 +41,7 @@ fun <T : Any> FlagKey<T>.ListItemContent(
     FlagKey.FlightRecorder,
     FlagKey.RestrictCipherItemDeletion,
     FlagKey.PreAuthSettings,
+    FlagKey.UserManagedPrivilegedApps,
         -> {
         @Suppress("UNCHECKED_CAST")
         BooleanFlagItem(
@@ -101,4 +102,7 @@ private fun <T : Any> FlagKey<T>.getDisplayLabel(): String = when (this) {
     FlagKey.FlightRecorder -> stringResource(R.string.enable_flight_recorder)
     FlagKey.RestrictCipherItemDeletion -> stringResource(R.string.restrict_item_deletion)
     FlagKey.PreAuthSettings -> stringResource(R.string.enable_pre_auth_settings)
+    FlagKey.UserManagedPrivilegedApps -> {
+        stringResource(R.string.user_trusted_privileged_app_management)
+    }
 }

@@ -5,6 +5,8 @@ import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import timber.log.Timber
@@ -20,6 +22,7 @@ class OriginManagerImpl(
     private val assetManager: AssetManager,
     private val digitalAssetLinkService: DigitalAssetLinkService,
     private val privilegedAppRepository: PrivilegedAppRepository,
+    private val featureFlagManager: FeatureFlagManager,
 ) : OriginManager {
 
     override suspend fun validateOrigin(
@@ -61,9 +64,12 @@ class OriginManagerImpl(
         callingAppInfo: CallingAppInfo,
     ): ValidateOriginResult =
         validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
-            .takeUnless { it is ValidateOriginResult.Error }
+            .takeUnless { it is ValidateOriginResult.Error.PrivilegedAppNotAllowed }
             ?: validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
-                .takeUnless { it is ValidateOriginResult.Error }
+                .takeUnless {
+                    it is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
+                        featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+                }
             ?: validatePrivilegedAppSignatureWithUserTrustList(callingAppInfo)
 
     private suspend fun validatePrivilegedAppSignatureWithGoogleList(
