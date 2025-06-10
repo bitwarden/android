@@ -126,7 +126,7 @@ jobs:
         uses: bitwarden/gh-actions/get-keyvault-secrets@main
         with:
           keyvault: gh-android
-          secrets: "BWA_AAB_KEYSTORE_STORE_PASSWORD,BWA_AAB_KEYSTORE_KEY_PASSWORD"
+          secrets: "BWA-AAB-KEYSTORE-STORE-PASSWORD,BWA-AAB-KEYSTORE-KEY-PASSWORD"
 
       - name: Retrieve secrets
         env:
@@ -227,18 +227,18 @@ jobs:
         run: |
           bundle exec fastlane bundleAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
-          storePassword:'${{ steps.get-kv-secrets.outputs.BWA_AAB_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:authenticatorupload \
-          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA_AAB_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-kv-secrets.outputs.BWA-AAB-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Generate release Play Store APK
         if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildAuthenticatorRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
-          storePassword:'${{ steps.get-secrets.outputs.BWA_APK_KEYSTORE_STORE_PASSWORD }}' \
+          storePassword:'${{ steps.get-secrets.outputs.BWA-APK-KEYSTORE-STORE-PASSWORD }}' \
           keyAlias:bitwardenauthenticator \
-          keyPassword:'${{ steps.get-secrets.outputs.BWA_APK_KEYSTORE_KEY_PASSWORD }}'
+          keyPassword:'${{ steps.get-secrets.outputs.BWA-APK-KEYSTORE-KEY-PASSWORD }}'
 
       - name: Upload release Play Store .aab artifact
         if: ${{ matrix.variant == 'aab' }}
