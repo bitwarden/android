@@ -54,6 +54,10 @@ testng = "7.11.0"
 timber = "5.0.1"
 turbine = "1.2.0"
 zxing = "3.5.3"
+uiautomator = "2.3.0"
+espressoCore = "3.6.1"
+junitKtx = "1.2.1"
+uiTestJunit4Android = "1.8.2"
 
 [libraries]
 # Format: <maintainer>-<artifact-name>
@@ -126,6 +130,10 @@ square-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 testng = { group = "org.testng", name = "testng", version.ref = "testng" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
+androidx-ui-test-junit4-android = { group = "androidx.compose.ui", name = "ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
