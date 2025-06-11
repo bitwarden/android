@@ -38,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -82,6 +84,7 @@ fun SendScreen(
         AppResumeScreenData.SendScreen
     }
 
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
@@ -115,6 +118,8 @@ fun SendScreen(
             is SendEvent.ShowShareSheet -> {
                 intentManager.shareText(event.url)
             }
+
+            is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
 
             is SendEvent.ShowToast -> {
                 Toast
@@ -197,6 +202,7 @@ fun SendScreen(
             }
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         val modifier = Modifier
             .fillMaxSize()

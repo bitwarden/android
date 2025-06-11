@@ -72,9 +72,12 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.GetCredentialsResult
 import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialResult
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
@@ -132,6 +135,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -186,6 +190,12 @@ class VaultItemListingViewModel @Inject constructor(
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
             .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.any()) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .map { VaultItemListingsAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -1403,6 +1413,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive -> {
                 handleGetCredentialEntriesResultReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.SnackbarDataReceived -> {
+                handleSnackbarDataReceived(action)
+            }
         }
     }
 
@@ -2036,6 +2050,12 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
+    }
+
+    private fun handleSnackbarDataReceived(
+        action: VaultItemListingsAction.Internal.SnackbarDataReceived,
+    ) {
+        sendEvent(VaultItemListingEvent.ShowSnackbar(action.data))
     }
 
     private fun updateStateWithVaultData(vaultData: VaultData, clearDialogState: Boolean) {
@@ -2770,6 +2790,13 @@ sealed class VaultItemListingEvent {
     data class ShowToast(val text: Text) : VaultItemListingEvent()
 
     /**
+     * Show a snackbar to the user.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : VaultItemListingEvent(), BackgroundEvent
+
+    /**
      * Complete the current FIDO 2 credential registration process.
      *
      * @property result The result of FIDO 2 credential registration.
@@ -3137,6 +3164,13 @@ sealed class VaultItemListingsAction {
         data class GetCredentialEntriesResultReceive(
             val userId: String,
             val result: Result<List<CredentialEntry>>,
+        ) : Internal()
+
+        /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
         ) : Internal()
     }
 }

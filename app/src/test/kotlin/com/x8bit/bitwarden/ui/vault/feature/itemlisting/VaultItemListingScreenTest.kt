@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialR
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -366,6 +367,16 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             exitManager.exitApplication()
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar event should display the snackbar`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(VaultItemListingEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test
