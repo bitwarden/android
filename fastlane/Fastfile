@@ -13,6 +13,9 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+require_relative 'patches/supply_custom_promote_config'
+require_relative 'patches/supply_custom_promote'
+
 default_platform(:android)
 
 platform :android do
@@ -396,7 +399,14 @@ platform :android do
   lane :updateReleaseNotes do |options|
     changelog = options[:releaseNotes]
     version_code = options[:versionCode]
-    locales = ["en-US"]
+
+    auth_locales = ["en-US"]
+    pw_manager_locales = ["ca", "cs-CZ", "da-DK", "de-DE", "en-US", "es-ES", "et", "fr-FR", "hr", "hu-HU", "id", "it-IT", "iw-IL", "ja-JP", "nl-NL", "pl-PL", "pt-BR", "pt-PT", "ro", "ru-RU", "sk", "sv-SE", "tr-TR", "uk", "vi", "zh-CN", "zh-TW"]
+    if options[:packageName] == "com.bitwarden.authenticator"
+      locales = auth_locales
+    else
+      locales = pw_manager_locales
+    end
     locales.each do |locale|
       dir = "metadata/android/#{locale}/changelogs"
       FileUtils.mkdir_p(dir)
@@ -406,21 +416,28 @@ platform :android do
 
   desc "Promote to production."
   lane :promoteToProduction do |options|
-    supply(
+    supply_options = {
       package_name: options[:packageName],
       version_code: options[:versionCode],
-      track: "Staged for Production",               # The current track
-      track_promote_to: "Fastlane Automation Testing Target",  # Target track
+      version_name: options[:versionName],
+      track: options[:track],
+      track_promote_to: options[:trackPromoteTo],
+      skip_release_verification: true,
       skip_upload_apk: true,
       skip_upload_aab: true,
-      skip_upload_metadata: false
     }
+
+    if options[:releaseNotes].nil? or options[:releaseNotes].to_s.empty?
+      supply_options[:skip_upload_metadata] = true
+    else
+      supply_options[:skip_upload_metadata] = false
+    end
 
     if options[:rolloutPercentage].to_f < 1
       supply_options[:track_promote_release_status] = "inProgress"
       supply_options[:rollout] = options[:rolloutPercentage]
     else
-      supply_options[:track_promote_release_status] = "completed"
+      supply_options[:release_status] = "completed"
     end
 
     supply(supply_options)
