@@ -36,7 +36,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenHiddenPasswordF
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
-import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
 
@@ -361,7 +360,7 @@ private fun TotpRow(
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextField(
+    BitwardenPasswordField(
         label = stringResource(id = R.string.authenticator_key),
         value = totpKey.orEmpty(),
         onValueChange = {},
@@ -381,10 +380,6 @@ private fun TotpRow(
                 )
             }
         },
-        tooltip = TooltipData(
-            onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
-            contentDescription = stringResource(id = R.string.authenticator_key_help),
-        ),
         supportingContentPadding = PaddingValues(),
         supportingContent = {
             BitwardenClickableText(
@@ -400,7 +395,7 @@ private fun TotpRow(
                     .testTag("SetupTotpButton"),
             )
         },
-        textFieldTestTag = "LoginTotpEntry",
+        passwordFieldTestTag = "LoginTotpEntry",
         cardStyle = CardStyle.Full,
         modifier = modifier
             .fillMaxWidth()
