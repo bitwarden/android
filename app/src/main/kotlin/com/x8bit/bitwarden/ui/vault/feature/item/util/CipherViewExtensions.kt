@@ -61,10 +61,19 @@ fun CipherView.toViewState(
                         ?.find { it.id == fieldView.hashCode().toString() },
                 )
             },
-            lastUpdated = revisionDate.toFormattedDateTimeStyle(
-                dateStyle = FormatStyle.SHORT,
-                timeStyle = FormatStyle.SHORT,
-                clock = clock,
+            created = R.string.created.asText(
+                creationDate.toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                ),
+            ),
+            lastUpdated = R.string.last_edited.asText(
+                revisionDate.toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                ),
             ),
             notes = notes,
             requiresCloneConfirmation = login?.fido2Credentials?.any() ?: false,
@@ -125,10 +134,11 @@ fun CipherView.toViewState(
                     passwordRevisionDate = loginValues
                         .passwordRevisionDate
                         ?.toFormattedDateTimeStyle(
-                            dateStyle = FormatStyle.SHORT,
+                            dateStyle = FormatStyle.MEDIUM,
                             timeStyle = FormatStyle.SHORT,
                             clock = clock,
-                        ),
+                        )
+                        ?.let { R.string.password_last_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
