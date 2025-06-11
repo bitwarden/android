@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 import com.bitwarden.authenticator.ui.platform.components.util.maxDialogHeight
 
 /**
@@ -110,7 +110,7 @@ fun BitwardenSelectionDialog(
                         .background(MaterialTheme.colorScheme.outlineVariant),
                 )
             }
-            BitwardenTextButton(
+            AuthenticatorTextButton(
                 modifier = Modifier.padding(24.dp),
                 label = dismissLabel,
                 onClick = onDismissActionClick,

@@ -22,17 +22,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.manager.model.FlagKey
-import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.appbar.NavigationIcon
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledButton
+import com.bitwarden.authenticator.ui.platform.components.appbar.AuthenticatorTopAppBar
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorFilledButton
 import com.bitwarden.authenticator.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.feature.debugmenu.components.ListItemContent
 import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
+import com.bitwarden.ui.platform.components.appbar.NavigationIcon
+import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Top level screen for the debug menu.
@@ -57,7 +57,7 @@ fun DebugMenuScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            BitwardenTopAppBar(
+            AuthenticatorTopAppBar(
                 title = stringResource(R.string.debug_menu),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
@@ -121,7 +121,7 @@ private fun FeatureFlagContent(
             BitwardenHorizontalDivider()
         }
         Spacer(modifier = Modifier.height(12.dp))
-        BitwardenFilledButton(
+        AuthenticatorFilledButton(
             label = stringResource(R.string.reset_values),
             onClick = onResetValues,
             modifier = Modifier

@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.collections.immutable)
 
     // For now we are restricted to running Compose tests for debug builds only
     debugImplementation(libs.androidx.compose.ui.test.manifest)
@@ -72,6 +73,7 @@ dependencies {
     testImplementation(libs.junit.vintage)
     testImplementation(libs.mockk.mockk)
     testImplementation(libs.robolectric.robolectric)
+    testImplementation(libs.androidx.compose.ui.test)
 
     testFixturesImplementation(libs.androidx.activity.compose)
     testFixturesImplementation(libs.androidx.compose.ui.test)
@@ -93,5 +95,6 @@ tasks {
         maxParallelForks = Runtime.getRuntime().availableProcessors()
         @Suppress("UselessCallOnNotNull")
         jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
+        android.sourceSets["main"].res.srcDirs("src/test/res")
     }
 }

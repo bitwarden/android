@@ -7,7 +7,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportVaultFormat
 import com.bitwarden.authenticator.ui.platform.util.fileExtension
-import com.bitwarden.authenticator.ui.platform.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -69,7 +69,6 @@ class ExportViewModel @Inject constructor(
     }
 
     private fun handleConfirmExportClick() {
-
         val date = clock.instant().toFormattedPattern(
             pattern = "yyyyMMddHHmmss",
             clock = clock,

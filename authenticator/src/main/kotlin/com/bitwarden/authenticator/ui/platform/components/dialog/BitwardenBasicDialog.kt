@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
+import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
-import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -31,8 +31,8 @@ fun BitwardenBasicDialog(
         AlertDialog(
             onDismissRequest = onDismissRequest,
             confirmButton = {
-                BitwardenTextButton(
-                    label = stringResource(id = R.string.ok),
+                AuthenticatorTextButton(
+                    label = stringResource(id = R.string.okay),
                     onClick = onDismissRequest,
                 )
             },
@@ -61,7 +61,7 @@ private fun BitwardenBasicDialog_preview() {
     AuthenticatorTheme {
         BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
-                title = "An error has occurred.".asText(),
+                title = "An error has occurred".asText(),
                 message = "Username or password is incorrect. Try again.".asText(),
             ),
             onDismissRequest = {},
