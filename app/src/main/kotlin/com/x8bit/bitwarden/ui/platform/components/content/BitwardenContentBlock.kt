@@ -12,15 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -71,28 +65,18 @@ private fun BitwardenContentBlock(
     @DrawableRes iconVectorResource: Int? = null,
     backgroundColor: Color = BitwardenTheme.colorScheme.background.secondary,
 ) {
-    var dividerStartPadding by remember { mutableStateOf(0.dp) }
-    val localDensity = LocalDensity.current
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(backgroundColor)
             .bottomDivider(
                 enabled = showDivider,
-                paddingStart = dividerStartPadding,
+                paddingStart = iconVectorResource?.let { 48.dp } ?: 0.dp,
             )
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier
-                .onGloballyPositioned {
-                    dividerStartPadding = with(localDensity) {
-                        it.size.width.toDp()
-                    }
-                },
-        ) {
+        Row {
             iconVectorResource
                 ?.let {
                     Spacer(Modifier.width(12.dp))
