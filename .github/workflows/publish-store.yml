@@ -1,4 +1,4 @@
-name: Publish
+name: Publish to Google Play
 run-name: "Promoting ${{ inputs.product }} ${{ inputs.version-code }} from ${{ inputs.track-from }} to ${{ inputs.track-target }}"
 on:
   workflow_dispatch:
