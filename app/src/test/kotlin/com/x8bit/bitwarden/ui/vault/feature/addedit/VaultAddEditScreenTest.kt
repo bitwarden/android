@@ -985,7 +985,20 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
 
         composeTestRule
             .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
             .assertTextEquals("Authenticator key", "TestCode")
+            .assertIsEnabled()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = "NewTestCode") }
@@ -998,6 +1011,42 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = null) }
         }
+    }
+
+    @Test
+    fun `in ItemType_Login state totp control should display the text provided by the state`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) { copy(totp = "TestCode") }
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
+            .assertTextEquals("Authenticator key", "TestCode")
+            .assertIsEnabled()
+
+        composeTestRule
+            .onNodeWithText("Authenticator key")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Hide"))
+            .assertExists()
+            .performClick()
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Authenticator key")
+            .assertTextEquals("Authenticator key", "••••••••")
     }
 
     @Suppress("MaxLineLength")
@@ -1174,19 +1223,6 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
         composeTestRule.assertScrollableNodeDoesNotExist("Delete")
         composeTestRule.assertScrollableNodeDoesNotExist("Copy TOTP")
         composeTestRule.assertScrollableNodeDoesNotExist("Camera")
-    }
-
-    @Test
-    fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
-        composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
-            .performClick()
-
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
-            )
-        }
     }
 
     @Test
