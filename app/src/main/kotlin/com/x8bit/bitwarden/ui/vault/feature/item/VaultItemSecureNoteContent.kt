@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.item
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.base.util.toListItemCardStyle
@@ -153,27 +151,34 @@ fun VaultItemSecureNoteContent(
             }
         }
 
-        item(key = "lastUpdated") {
+        item(key = "created") {
             Spacer(modifier = Modifier.height(height = 16.dp))
-            Row(
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp)
-                    .semantics(mergeDescendants = true) { }
-                    .animateItem(),
-            ) {
-                Text(
-                    text = "${stringResource(id = R.string.date_updated)}: ",
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                )
-                Text(
-                    text = commonState.lastUpdated,
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.primary,
-                )
-            }
+                    .animateItem()
+                    .testTag("SecureNoteItemCreated"),
+            )
+        }
+
+        item(key = "lastUpdated") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.lastUpdated(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("SecureNoteItemLastUpdated"),
+            )
         }
 
         commonState.passwordHistoryCount?.let { passwordHistoryCount ->
