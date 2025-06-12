@@ -13,19 +13,22 @@ import retrofit2.http.Query
 internal interface DigitalAssetLinkApi {
 
     /**
-     * Checks if the given [relation] exists in a digital asset link file.
+     * Checks if the given [relations] are declared in the digital asset link file for the given
+     * [sourceWebSite] for the given [targetPackageName] with a [targetCertificateFingerprint].
+     *
+     * @param sourceWebSite The host of the source digital asset links file.
+     * @param targetPackageName The package name of the target application.
+     * @param targetCertificateFingerprint The certificate fingerprint of the target application.
      */
     @GET("v1/assetlinks:check")
     suspend fun checkDigitalAssetLinksRelations(
-        @Query("source.androidApp.packageName")
-        sourcePackageName: String,
-        @Query("source.androidApp.certificate.sha256Fingerprint")
-        sourceCertificateFingerprint: String,
+        @Query("source.web.site")
+        sourceWebSite: String,
         @Query("target.androidApp.packageName")
         targetPackageName: String,
         @Query("target.androidApp.certificate.sha256Fingerprint")
         targetCertificateFingerprint: String,
         @Query("relation")
-        relation: String,
+        relations: List<String>,
     ): NetworkResult<DigitalAssetLinkCheckResponseJson>
 }

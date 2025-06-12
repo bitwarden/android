@@ -7,12 +7,17 @@ import com.bitwarden.network.model.DigitalAssetLinkCheckResponseJson
  */
 interface DigitalAssetLinkService {
     /**
-     * Checks if the given [packageName] with a given [certificateFingerprint] has the given
-     * [relation].
+     * Checks if the given [relations] are declared in the digital asset link file for the given
+     * [sourceWebSite] for the given [targetPackageName] with a [targetCertificateFingerprint].
+     *
+     * @param sourceWebSite The host of the source digital asset links file.
+     * @param targetPackageName The package name of the target application.
+     * @param targetCertificateFingerprint The certificate fingerprint of the target application.
      */
     suspend fun checkDigitalAssetLinksRelations(
-        packageName: String,
-        certificateFingerprint: String,
-        relation: String,
+        sourceWebSite: String,
+        targetPackageName: String,
+        targetCertificateFingerprint: String,
+        relations: List<String>,
     ): Result<DigitalAssetLinkCheckResponseJson>
 }

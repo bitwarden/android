@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManager
 import com.x8bit.bitwarden.data.credentials.manager.BitwardenCredentialManagerImpl
 import com.x8bit.bitwarden.data.credentials.manager.OriginManager
 import com.x8bit.bitwarden.data.credentials.manager.OriginManagerImpl
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParserImpl
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessor
 import com.x8bit.bitwarden.data.credentials.processor.CredentialProviderProcessorImpl
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
@@ -121,4 +123,10 @@ object CredentialProviderModule {
         privilegedAppDiskSource = privilegedAppDiskSource,
         json = json,
     )
+
+    @Provides
+    @Singleton
+    fun provideRelyingPartyParser(
+        json: Json,
+    ): RelyingPartyParser = RelyingPartyParserImpl(json)
 }
