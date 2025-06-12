@@ -63,6 +63,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -106,6 +107,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -130,6 +132,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.MyVault,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -152,6 +155,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -185,6 +189,7 @@ class VaultDataExtensionsTest {
                 organizationName = "Mock Organization 1",
             ),
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -218,6 +223,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -238,6 +244,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -261,6 +268,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -285,6 +293,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -301,6 +310,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -322,6 +332,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -338,6 +349,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -359,6 +371,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -375,6 +388,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -398,6 +412,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -414,6 +429,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -621,6 +637,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -637,6 +654,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -660,6 +678,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -676,6 +695,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 0,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -702,6 +722,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -724,6 +745,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 100,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -751,6 +773,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -784,6 +807,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -817,6 +841,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -865,6 +890,123 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 itemTypesCount = 5,
                 sshKeyItemsCount = 0,
+                showCardGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should excluded card vault items and adjust type count for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to true if there are remaining cards`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = "another_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 4,
+                    organizationId = null,
+                    cipherType = CipherType.CARD,
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = null,
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 2,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                favoriteItems = listOf(),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 0,
+                itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should excluded card vault items for ciphers with orgId in restrictItemTypesPolicyOrgIds and set showCardGroup to false if there are no remaining cards`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(
+                    number = 1,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.LOGIN,
+                ),
+                createMockCipherView(
+                    number = 2,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD,
+                ),
+                createMockCipherView(
+                    number = 3,
+                    organizationId = "restrict_item_type_policy_id",
+                    cipherType = CipherType.CARD
+                ),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = null,
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                sshKeyItemsCount = 0,
+                favoriteItems = listOf(),
+                collectionItems = listOf(),
+                folderItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+                itemTypesCount = CipherType.entries.size,
+                showCardGroup = false,
             ),
             actual,
         )
@@ -889,6 +1031,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -907,6 +1050,7 @@ class VaultDataExtensionsTest {
                 totpItemsCount = 1,
                 // Verify item types count includes all CipherTypes when showSshKeys is true.
                 itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
             ),
             actual,
         )
@@ -946,6 +1090,7 @@ class VaultDataExtensionsTest {
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
             hasMasterPassword = true,
+            restrictItemTypesPolicyOrgIds = null,
         )
 
         assertEquals(
@@ -977,6 +1122,7 @@ class VaultDataExtensionsTest {
                 trashItemsCount = 0,
                 totpItemsCount = 0,
                 itemTypesCount = CipherType.entries.size,
+                showCardGroup = true,
             ),
             actual,
         )
