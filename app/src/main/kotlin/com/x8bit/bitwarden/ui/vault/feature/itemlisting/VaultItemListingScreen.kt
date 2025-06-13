@@ -45,6 +45,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialo
 import com.x8bit.bitwarden.ui.platform.components.model.BitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHostState
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalCredentialProviderCompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
@@ -105,6 +108,7 @@ fun VaultItemListingScreen(
             { viewModel.trySendAction(VaultItemListingsAction.RefreshPull) }
         },
     )
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is VaultItemListingEvent.NavigateBack -> onNavigateBack()
@@ -217,6 +221,8 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateToAddFolder -> {
                 onNavigateToAddFolder(event.parentFolderName)
             }
+
+            is VaultItemListingEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
         }
     }
 
@@ -325,6 +331,7 @@ fun VaultItemListingScreen(
     BackHandler(onBack = vaultItemListingHandlers.backClick)
     VaultItemListingScaffold(
         state = state,
+        snackbarHostState = snackbarHostState,
         pullToRefreshState = pullToRefreshState,
         vaultItemListingHandlers = vaultItemListingHandlers,
     )
@@ -478,6 +485,7 @@ private fun VaultItemListingDialogs(
 private fun VaultItemListingScaffold(
     state: VaultItemListingState,
     pullToRefreshState: BitwardenPullToRefreshState,
+    snackbarHostState: BitwardenSnackbarHostState,
     vaultItemListingHandlers: VaultItemListingHandlers,
 ) {
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
@@ -553,6 +561,7 @@ private fun VaultItemListingScaffold(
             )
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         when (state.viewState) {
             is VaultItemListingState.ViewState.Content -> {

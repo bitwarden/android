@@ -9,8 +9,10 @@ import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofill
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutoFillData
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
 import com.x8bit.bitwarden.data.platform.manager.model.FirstTimeState
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -65,6 +67,16 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { isAccessibilityEnabledStateFlow } returns mutableIsAccessibilityEnabledStateFlow
         every { isAutofillEnabledStateFlow } returns mutableIsAutofillEnabledStateFlow
         every { disableAutofill() } just runs
+    }
+
+    private val mutableUserManagedPrivilegedAppsEnabledFlow = MutableStateFlow(false)
+    private val mockFeatureFlagManager = mockk<FeatureFlagManager> {
+        every {
+            getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+        } returns mutableUserManagedPrivilegedAppsEnabledFlow.value
+        every {
+            getFeatureFlagFlow(FlagKey.UserManagedPrivilegedApps)
+        } returns mutableUserManagedPrivilegedAppsEnabledFlow
     }
 
     @BeforeEach
@@ -413,6 +425,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when AboutPrivilegedAppsClick action is handled the correct NavigateToAboutPrivilegedAppsScreen event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToAboutPrivilegedAppsScreen,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
@@ -421,6 +447,7 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         firstTimeActionManager = firstTimeActionManager,
         chromeThirdPartyAutofillEnabledManager = chromeThirdPartyAutofillEnabledManager,
+        featureFlagManager = mockFeatureFlagManager,
     )
 }
 
@@ -436,6 +463,7 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
     chromeAutofillSettingsOptions = persistentListOf(),
+    isUserManagedPrivilegedAppsEnabled = false,
 )
 
 private val DEFAULT_CHROME_AUTOFILL_DATA = ChromeThirdPartyAutoFillData(
