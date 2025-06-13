@@ -974,7 +974,7 @@ class VaultDataExtensionsTest {
                 createMockCipherView(
                     number = 3,
                     organizationId = "restrict_item_type_policy_id",
-                    cipherType = CipherType.CARD
+                    cipherType = CipherType.CARD,
                 ),
             ),
             collectionViewList = listOf(),

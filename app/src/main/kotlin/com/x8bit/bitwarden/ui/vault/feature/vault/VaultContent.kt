@@ -35,7 +35,7 @@ private const val TRASH_TYPES_COUNT: Int = 1
  * Content view for the [VaultScreen].
  */
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultContent(
     state: VaultState.ViewState.Content,
     vaultHandlers: VaultHandlers,
@@ -182,20 +182,22 @@ fun VaultContent(
             )
         }
 
-        item {
-            BitwardenGroupItem(
-                startIcon = rememberVectorPainter(id = R.drawable.ic_payment_card),
-                startIconTestTag = "CardCipherIcon",
-                label = stringResource(id = R.string.type_card),
-                supportingLabel = state.cardItemsCount.toString(),
-                onClick = vaultHandlers.cardGroupClick,
-                showDivider = false,
-                cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("CardFilter")
-                    .standardHorizontalMargin(),
-            )
+        if (state.showCardGroup) {
+            item {
+                BitwardenGroupItem(
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_payment_card),
+                    startIconTestTag = "CardCipherIcon",
+                    label = stringResource(id = R.string.type_card),
+                    supportingLabel = state.cardItemsCount.toString(),
+                    onClick = vaultHandlers.cardGroupClick,
+                    showDivider = false,
+                    cardStyle = CardStyle.Middle(dividerPadding = 56.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("CardFilter")
+                        .standardHorizontalMargin(),
+                )
+            }
         }
 
         item {

@@ -1243,6 +1243,7 @@ class VaultItemListingDataExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toViewState should properly filter cards when cipher have organizationId in restrictItemTypesPolicyOrgIds`() {
         mockkStatic(CipherView::subtitle)
@@ -1267,12 +1268,12 @@ class VaultItemListingDataExtensionsTest {
                 createMockCipherView(
                     number = 3,
                     organizationId = null,
-                    cipherType = CipherType.CARD
+                    cipherType = CipherType.CARD,
                 ),
                 createMockCipherView(
                     number = 4,
                     organizationId = "another_id",
-                    cipherType = CipherType.CARD
+                    cipherType = CipherType.CARD,
                 ),
             ),
 
