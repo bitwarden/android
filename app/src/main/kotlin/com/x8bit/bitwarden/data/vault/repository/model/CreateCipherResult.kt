@@ -11,7 +11,8 @@ sealed class CreateCipherResult {
     data object Success : CreateCipherResult()
 
     /**
-     * Generic error while creating cipher.
+     * Generic error while creating cipher. The optional [errorMessage] may be displayed directly in
+     * the UI when present.
      */
-    data class Error(val error: Throwable) : CreateCipherResult()
+    data class Error(val errorMessage: String?, val error: Throwable?) : CreateCipherResult()
 }

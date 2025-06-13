@@ -8,6 +8,7 @@ import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.FileUploadType
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
@@ -36,16 +37,38 @@ internal class CiphersServiceImpl(
     private val json: Json,
     private val clock: Clock,
 ) : CiphersService {
-    override suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher> =
+    override suspend fun createCipher(
+        body: CipherJsonRequest,
+    ): Result<CreateCipherResponseJson> =
         ciphersApi
             .createCipher(body = body)
             .toResult()
+            .map { CreateCipherResponseJson.Success(it) }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<CreateCipherResponseJson.Invalid>(
+                        code = NetworkErrorCode.BAD_REQUEST,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     override suspend fun createCipherInOrganization(
         body: CreateCipherInOrganizationJsonRequest,
-    ): Result<SyncResponseJson.Cipher> = ciphersApi
+    ): Result<CreateCipherResponseJson> = ciphersApi
         .createCipherInOrganization(body = body)
         .toResult()
+        .map { CreateCipherResponseJson.Success(it) }
+        .recoverCatching { throwable ->
+            throwable
+                .toBitwardenError()
+                .parseErrorBodyOrNull<CreateCipherResponseJson.Invalid>(
+                    code = NetworkErrorCode.BAD_REQUEST,
+                    json = json,
+                )
+                ?: throw throwable
+        }
 
     override suspend fun createAttachment(
         cipherId: String,

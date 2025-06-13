@@ -5,6 +5,7 @@ import com.bitwarden.network.model.AttachmentJsonRequest
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CipherJsonRequest
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ImportCiphersJsonRequest
 import com.bitwarden.network.model.ImportCiphersResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
@@ -21,14 +22,14 @@ interface CiphersService {
     /**
      * Attempt to create a cipher.
      */
-    suspend fun createCipher(body: CipherJsonRequest): Result<SyncResponseJson.Cipher>
+    suspend fun createCipher(body: CipherJsonRequest): Result<CreateCipherResponseJson>
 
     /**
      * Attempt to create a cipher that belongs to an organization.
      */
     suspend fun createCipherInOrganization(
         body: CreateCipherInOrganizationJsonRequest,
-    ): Result<SyncResponseJson.Cipher>
+    ): Result<CreateCipherResponseJson>
 
     /**
      * Attempt to upload an attachment file.
