@@ -1278,6 +1278,30 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `AddVaultItemClick inside a collection should show item selection dialog state`() {
+        val viewModel = createVaultItemListingViewModel(
+            savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+            ),
+        )
+        viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+        assertEquals(
+            createVaultItemListingState(
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                    collectionId = "id",
+                ),
+                dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                    excludedOptions = persistentListOf(
+                        CreateVaultItemType.SSH_KEY,
+                        CreateVaultItemType.FOLDER,
+                    ),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `AddVaultItemClick inside a folder should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
@@ -1304,6 +1328,45 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 createVaultItemListingState(
                     itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
                         folderId = "id",
+                    ),
+                    dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
+                        excludedOptions = persistentListOf(
+                            CreateVaultItemType.CARD,
+                            CreateVaultItemType.FOLDER,
+                            CreateVaultItemType.SSH_KEY,
+                        ),
+                    ),
+                ).copy(restrictItemTypesPolicyOrgIds = listOf("Test Organization")),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `AddVaultItemClick inside a collection should hide card item selection dialog state when RESTRICT_ITEM_TYPES policy is enabled`() =
+        runTest {
+            mutableRemoveCardPolicyFeatureFlow.value = true
+            val viewModel = createVaultItemListingViewModel(
+                savedStateHandle = createSavedStateHandleWithVaultItemListingType(
+                    vaultItemListingType = VaultItemListingType.Collection(collectionId = "id"),
+                ),
+            )
+            mutableActivePoliciesFlow.emit(
+                listOf(
+                    SyncResponseJson.Policy(
+                        organizationId = "Test Organization",
+                        id = "testId",
+                        type = PolicyTypeJson.RESTRICT_ITEM_TYPES,
+                        isEnabled = true,
+                        data = null,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
+            assertEquals(
+                createVaultItemListingState(
+                    itemListingType = VaultItemListingState.ItemListingType.Vault.Collection(
+                        collectionId = "id",
                     ),
                     dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
                         excludedOptions = persistentListOf(
