@@ -7,6 +7,7 @@ import com.bitwarden.core.data.util.asSuccess
 import com.bitwarden.core.data.util.flatMap
 import com.bitwarden.network.model.AttachmentJsonResponse
 import com.bitwarden.network.model.CreateCipherInOrganizationJsonRequest
+import com.bitwarden.network.model.CreateCipherResponseJson
 import com.bitwarden.network.model.ShareCipherJsonRequest
 import com.bitwarden.network.model.UpdateCipherCollectionsJsonRequest
 import com.bitwarden.network.model.UpdateCipherResponseJson
@@ -52,19 +53,33 @@ class CipherManagerImpl(
 
     override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
         val userId = activeUserId
-            ?: return CreateCipherResult.Error(error = NoActiveUserException())
+            ?: return CreateCipherResult.Error(
+                error = NoActiveUserException(),
+                errorMessage = null,
+            )
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
                 cipherView = cipherView,
             )
             .flatMap { ciphersService.createCipher(body = it.toEncryptedNetworkCipher()) }
-            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
+            .map { response ->
+                when (response) {
+                    is CreateCipherResponseJson.Invalid -> {
+                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                    }
+
+                    is CreateCipherResponseJson.Success -> {
+                        vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
+                        CreateCipherResult.Success
+                    }
+                }
+            }
             .fold(
-                onFailure = { CreateCipherResult.Error(error = it) },
+                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
-                    CreateCipherResult.Success
+                    it
                 },
             )
     }
@@ -74,7 +89,7 @@ class CipherManagerImpl(
         collectionIds: List<String>,
     ): CreateCipherResult {
         val userId = activeUserId
-            ?: return CreateCipherResult.Error(error = NoActiveUserException())
+            ?: return CreateCipherResult.Error(errorMessage = null, error = NoActiveUserException())
         return vaultSdkSource
             .encryptCipher(
                 userId = userId,
@@ -88,17 +103,26 @@ class CipherManagerImpl(
                     ),
                 )
             }
-            .onSuccess {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = it.copy(collectionIds = collectionIds),
-                )
+            .map { response ->
+                when (response) {
+                    is CreateCipherResponseJson.Invalid -> {
+                        CreateCipherResult.Error(errorMessage = response.message, error = null)
+                    }
+
+                    is CreateCipherResponseJson.Success -> {
+                        vaultDiskSource.saveCipher(
+                            userId = userId,
+                            cipher = response.cipher.copy(collectionIds = collectionIds),
+                        )
+                        CreateCipherResult.Success
+                    }
+                }
             }
             .fold(
-                onFailure = { CreateCipherResult.Error(error = it) },
+                onFailure = { CreateCipherResult.Error(errorMessage = null, error = it) },
                 onSuccess = {
                     reviewPromptManager.registerAddCipherAction()
-                    CreateCipherResult.Success
+                    it
                 },
             )
     }
