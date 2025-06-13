@@ -361,19 +361,14 @@ private fun TotpRow(
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val authenticatorKeyLabel = stringResource(id = R.string.authenticator_key)
-    val commonModifier = modifier
-        .fillMaxWidth()
-        .focusProperties { canFocus = false }
-
-    if (totpKey != null) {
-        BitwardenPasswordField(
-            label = authenticatorKeyLabel,
-            value = totpKey,
-            onValueChange = {},
-            readOnly = true,
-            singleLine = true,
-            actions = {
+    BitwardenPasswordField(
+        label = stringResource(id = R.string.authenticator_key),
+        value = totpKey.orEmpty(),
+        onValueChange = {},
+        readOnly = true,
+        singleLine = true,
+        actions = {
+            totpKey?.let {
                 BitwardenStandardIconButton(
                     vectorIconRes = BitwardenDrawable.ic_clear,
                     contentDescription = stringResource(id = R.string.delete),
@@ -384,57 +379,33 @@ private fun TotpRow(
                     contentDescription = stringResource(id = R.string.copy_totp),
                     onClick = { loginItemTypeHandlers.onCopyTotpKeyClick(totpKey) },
                 )
-            },
-            supportingContentPadding = PaddingValues(),
-            supportingContent = {
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.set_up_authenticator_key),
-                    onClick = onTotpSetupClick,
-                    leadingIcon = painterResource(id = R.drawable.ic_camera_small),
-                    style = BitwardenTheme.typography.labelMedium,
-                    innerPadding = PaddingValues(all = 16.dp),
-                    isEnabled = canViewTotp,
-                    cornerSize = 0.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("SetupTotpButton"),
-                )
-            },
-            passwordFieldTestTag = "LoginTotpEntry",
-            cardStyle = CardStyle.Full,
-            modifier = commonModifier,
-        )
-    } else {
-        BitwardenTextField(
-            label = authenticatorKeyLabel,
-            value = "",
-            onValueChange = {},
-            readOnly = true,
-            singleLine = true,
-            tooltip = TooltipData(
-                onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
-                contentDescription = stringResource(id = R.string.authenticator_key_help),
-            ),
-            supportingContentPadding = PaddingValues(),
-            supportingContent = {
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.set_up_authenticator_key),
-                    onClick = onTotpSetupClick,
-                    leadingIcon = painterResource(id = R.drawable.ic_camera_small),
-                    style = BitwardenTheme.typography.labelMedium,
-                    innerPadding = PaddingValues(all = 16.dp),
-                    isEnabled = canViewTotp, // Control if setup can be initiated
-                    cornerSize = 0.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag("SetupTotpButton"),
-                )
-            },
-            textFieldTestTag = "LoginTotpEntry",
-            cardStyle = CardStyle.Full,
-            modifier = commonModifier,
-        )
-    }
+            }
+        },
+        tooltip = TooltipData(
+            onClick = loginItemTypeHandlers.onAuthenticatorHelpToolTipClick,
+            contentDescription = stringResource(id = R.string.authenticator_key_help),
+        ),
+        supportingContentPadding = PaddingValues(),
+        supportingContent = {
+            BitwardenClickableText(
+                label = stringResource(id = R.string.set_up_authenticator_key),
+                onClick = onTotpSetupClick,
+                leadingIcon = painterResource(id = R.drawable.ic_camera_small),
+                style = BitwardenTheme.typography.labelMedium,
+                innerPadding = PaddingValues(all = 16.dp),
+                isEnabled = canViewTotp,
+                cornerSize = 0.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("SetupTotpButton"),
+            )
+        },
+        passwordFieldTestTag = "LoginTotpEntry",
+        cardStyle = CardStyle.Full,
+        modifier = modifier
+            .fillMaxWidth()
+            .focusProperties { canFocus = false },
+    )
 }
 
 @Composable
