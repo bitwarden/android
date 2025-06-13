@@ -185,7 +185,7 @@ class VaultViewModel @Inject constructor(
             .combine(
                 featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
             ) { policies, enabledFlag ->
-                if (enabledFlag) {
+                if (enabledFlag && policies.isNotEmpty()) {
                     policies.map { it.organizationId }
                 } else {
                     null

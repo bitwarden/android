@@ -410,7 +410,7 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             val viewModel = createViewModel()
             assertEquals(
-                DEFAULT_STATE.copy(restrictItemTypesPolicyOrgIds = emptyList()),
+                DEFAULT_STATE,
                 viewModel.stateFlow.value,
             )
             mutableActivePoliciesFlow.emit(
