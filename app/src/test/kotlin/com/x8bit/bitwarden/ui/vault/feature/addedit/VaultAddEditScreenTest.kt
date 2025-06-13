@@ -1203,6 +1203,28 @@ class VaultAddEditScreenTest : BitwardenComposeTest() {
             .assertIsNotEnabled()
     }
 
+    @Test
+    fun `Clicking the Authenticator key tooltip sends AuthenticatorHelpToolTipClick action`() {
+        mutableStateFlow.update { currentState ->
+            updateLoginType(currentState) {
+                copy(
+                    canViewPassword = false,
+                    totp = null,
+                )
+            }
+        }
+
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Authenticator key help")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.AuthenticatorHelpToolTipClick,
+            )
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state the TOTP text field should be visible but disabled and the associated icon buttons should be invisible based on state`() {
