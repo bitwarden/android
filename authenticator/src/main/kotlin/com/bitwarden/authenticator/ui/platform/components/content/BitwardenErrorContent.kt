@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
+import com.bitwarden.authenticator.ui.platform.components.button.AuthenticatorTextButton
 
 /**
  * A Bitwarden-themed, re-usable error state.
@@ -46,7 +46,7 @@ fun BitwardenErrorContent(
         )
         onTryAgainClick?.let {
             Spacer(modifier = Modifier.height(16.dp))
-            BitwardenTextButton(
+            AuthenticatorTextButton(
                 label = stringResource(id = R.string.try_again),
                 onClick = it,
                 modifier = Modifier.padding(horizontal = 16.dp),

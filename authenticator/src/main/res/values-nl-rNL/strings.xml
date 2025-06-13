@@ -8,7 +8,7 @@
     <string name="generic_error_message">We hebben je verzoek niet kunnen verwerken. Probeer het opnieuw of neem contact met ons op.</string>
     <string name="internet_connection_required_title">Internetverbinding vereist</string>
     <string name="internet_connection_required_message">Maak verbinding met internet voordat je verder gaat.</string>
-    <string name="ok">Oké</string>
+    <string name="okay">Okay</string>
     <string name="syncing">Synchroniseren</string>
     <string name="copy">Kopiëren</string>
     <string name="edit_item">Bewerken</string>
@@ -17,16 +17,11 @@
     <string name="name">Naam</string>
     <string name="add_item_rotation">Item rotatie toevoegen</string>
     <string name="scan_a_qr_code">Scan een QR-code</string>
-    <string name="enter_a_setup_key">Een installatiesleutel invoeren</string>
     <string name="scan_qr_code">QR-code scannen</string>
     <string name="point_your_camera_at_the_qr_code">Richt je camera op de QR code.</string>
     <string name="cannot_scan_qr_code">Kan QR-code niet scannen.</string>
     <string name="enter_key_manually">Sleutel handmatig invoeren</string>
     <string name="cannot_add_authenticator_key">Kan authenticatorsleutel niet toevoegen?</string>
-    <string name="once_the_key_is_successfully_entered">Nadat de sleutel succesvol is ingevoerd,
-selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
-    <string name="add_totp">TOTP toevoegen</string>
-    <string name="authenticator_key_scanner">Authenticatorsleutel</string>
     <string name="no_thanks">Nee, bedankt</string>
     <string name="settings">Instellingen</string>
     <string name="enable_camera_permission_to_use_the_scanner">Camera-toestemming inschakelen om de scanner te gebruiken</string>
@@ -63,7 +58,6 @@ selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="theme">Thema</string>
     <string name="dark">Donker</string>
     <string name="light">Licht</string>
-    <string name="language">Taal</string>
     <string name="language_change_x_description">De taal is gewijzigd in %1$s. Start de app opnieuw op om de wijziging te zien</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Beveilig je accounts met Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Ontvang verificatiecodes voor al je accounts die tweestapsverificatie ondersteunen.</string>
@@ -71,10 +65,7 @@ selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan de QR-code in je instellingen voor tweestapsverificatie voor elk account.</string>
     <string name="sign_in_using_unique_codes">Inloggen met unieke codes</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Als je tweestapsverificatie gebruikt, voer je je gebruikersnaam en wachtwoord in en een code die in deze app wordt gegenereerd.</string>
-    <string name="continue_button">Doorgaan</string>
     <string name="skip">Overslaan</string>
-    <string name="get_started">Aan de slag</string>
-    <string name="unique_codes">Unieke codes</string>
     <string name="help">Help</string>
     <string name="launch_tutorial">Tutorial starten</string>
     <string name="value_has_been_copied">%1$s gekopieerd</string>
@@ -114,7 +105,6 @@ selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="import_vault">Importeren</string>
     <string name="import_success">Kluis succesvol geïmporteerd</string>
     <string name="key_is_invalid">Sleutel is ongeldig.</string>
-    <string name="favorite_tooltip">Opslaan als favoriet</string>
     <string name="favorite">Favoriet</string>
     <string name="favorites">Favorieten</string>
     <string name="backup">Back-up</string>
@@ -127,11 +117,12 @@ selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="download_bitwarden_card_message">Sla al je logins op en synchroniseer verificatiecodes direct met de Authenticator app.</string>
     <string name="download_now">Nu downloaden</string>
     <string name="sync_with_bitwarden_app">Synchroniseren met Bitwarden app</string>
+    <string name="this_feature_is_not_not_yet_available_for_self_hosted_users">This feature is not yet available for self-hosted users. <annotation link="learnMore">Learn more</annotation></string>
     <string name="shared_codes_error">Kan geen codes synchroniseren vanuit de Bitwarden app. Zorg ervoor dat beide apps up-to-date zijn. Je hebt nog steeds toegang tot je bestaande codes in de Bitwarden app.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Synchroniseren met de Bitwarden app</string>
-    <string name="go_to_settings">Ga naar instellingen</string>
     <string name="sync_with_bitwarden_action_card_message">Authenticator app synchronisatie toestaan in instellingen om hier al je verificatiecodes te bekijken.</string>
+    <string name="take_me_to_app_settings">Breng me naar de app-instellingen</string>
     <string name="something_went_wrong">Er ging iets mis</string>
     <string name="please_try_again">Probeer opnieuw</string>
     <string name="move_to_bitwarden">Verplaatsen naar Bitwarden</string>
@@ -145,8 +136,6 @@ selecteer TOTP toevoegen om de sleutel veilig op te slaan</string>
     <string name="choose_save_location_message">Sla deze authenticatorsleutel hier op of voeg hem toe aan een login in je Bitwarden app.</string>
     <string name="save_option_as_default">Opslaan optie als standaard</string>
     <string name="account_synced_from_bitwarden_app">Account gesynchroniseerd vanuit Bitwarden app</string>
-    <string name="add_code_to_bitwarden">Code toevoegen aan Bitwarden</string>
-    <string name="add_code_locally">Lokaal code toevoegen</string>
     <string name="local_codes">Lokale codes</string>
     <string name="required_information_missing">Verplichte informatie ontbreekt</string>
     <string name="required_information_missing_message">"Vereiste informatie ontbreekt (bijv. 'services' of 'secret'). Controleer je bestand en probeer het opnieuw. Bezoek bitwarden.com/help voor ondersteuning"</string>

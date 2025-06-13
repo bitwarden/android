@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -20,7 +21,6 @@ import com.x8bit.bitwarden.data.credentials.model.CreateCredentialRequest
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
@@ -35,8 +35,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import com.x8bit.bitwarden.ui.vault.model.TotpData
 import java.time.Clock
-
-private const val DELETION_DATE_PATTERN: String = "MMM d, uuuu, hh:mm a"
+import java.time.format.FormatStyle
 
 /**
  * Determines a predicate to filter a list of [CipherView] based on the
@@ -141,7 +140,6 @@ fun VaultData.toViewState(
                 isFido2Creation = createCredentialRequestData != null,
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
                 isPremiumUser = isPremiumUser,
-                isTotp = totpData != null,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -341,7 +339,6 @@ private fun List<CipherView>.toDisplayItemList(
     isFido2Creation: Boolean,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
     isPremiumUser: Boolean,
-    isTotp: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -355,7 +352,6 @@ private fun List<CipherView>.toDisplayItemList(
                     fido2CredentialAutofillView.cipherId == it.id
                 },
             isPremiumUser = isPremiumUser,
-            isTotp = isTotp,
         )
     }
 
@@ -379,7 +375,6 @@ private fun CipherView.toDisplayItem(
     isFido2Creation: Boolean,
     fido2CredentialAutofillView: Fido2CredentialAutofillView?,
     isPremiumUser: Boolean,
-    isTotp: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -407,7 +402,6 @@ private fun CipherView.toDisplayItem(
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isCredentialCreation = isFido2Creation,
-        isTotp = isTotp,
         shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
             hasMasterPassword,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = this.type),
@@ -466,7 +460,11 @@ private fun SendView.toDisplayItem(
         titleTestTag = "SendNameLabel",
         secondSubtitle = null,
         secondSubtitleTestTag = null,
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitle = deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
@@ -481,7 +479,6 @@ private fun SendView.toDisplayItem(
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
         isCredentialCreation = false,
-        isTotp = false,
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = this.type),
     )
 

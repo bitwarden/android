@@ -10,7 +10,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.manager.chrome.ChromeThirdPartyAutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeReleaseChannel
 import com.x8bit.bitwarden.data.autofill.model.chrome.ChromeThirdPartyAutofillStatus
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.FirstTimeActionManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
@@ -38,6 +40,7 @@ class AutoFillViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val settingsRepository: SettingsRepository,
     private val firstTimeActionManager: FirstTimeActionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<AutoFillState, AutoFillEvent, AutoFillAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -60,6 +63,8 @@ class AutoFillViewModel @Inject constructor(
                 chromeAutofillSettingsOptions = chromeThirdPartyAutofillEnabledManager
                     .chromeThirdPartyAutofillStatus
                     .toChromeAutoFillSettingsOptions(),
+                isUserManagedPrivilegedAppsEnabled =
+                    featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps),
             )
         },
 ) {
@@ -97,6 +102,11 @@ class AutoFillViewModel @Inject constructor(
             .map { AutoFillAction.Internal.ChromeAutofillStatusReceive(status = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        featureFlagManager.getFeatureFlagFlow(FlagKey.UserManagedPrivilegedApps)
+            .map { AutoFillAction.Internal.UserManagedPrivilegedAppsEnableUpdateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: AutoFillAction) = when (action) {
@@ -113,6 +123,7 @@ class AutoFillViewModel @Inject constructor(
         AutoFillAction.AutofillActionCardCtaClick -> handleAutofillActionCardCtaClick()
         AutoFillAction.DismissShowAutofillActionCard -> handleDismissShowAutofillActionCard()
         is AutoFillAction.ChromeAutofillSelected -> handleChromeAutofillSelected(action)
+        AutoFillAction.AboutPrivilegedAppsClick -> handleAboutPrivilegedAppsClick()
     }
 
     private fun handleInternalAction(action: AutoFillAction.Internal) {
@@ -132,6 +143,24 @@ class AutoFillViewModel @Inject constructor(
             is AutoFillAction.Internal.ChromeAutofillStatusReceive -> {
                 handleChromeAutofillStatusReceive(action)
             }
+
+            is AutoFillAction.Internal.UserManagedPrivilegedAppsEnableUpdateReceive -> {
+                handleUserManagedPrivilegedAppsEnableUpdateReceive(action)
+            }
+        }
+    }
+
+    private fun handleAboutPrivilegedAppsClick() {
+        sendEvent(AutoFillEvent.NavigateToAboutPrivilegedAppsScreen)
+    }
+
+    private fun handleUserManagedPrivilegedAppsEnableUpdateReceive(
+        action: AutoFillAction.Internal.UserManagedPrivilegedAppsEnableUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                isUserManagedPrivilegedAppsEnabled = action.isUserManagedPrivilegedAppsEnabled,
+            )
         }
     }
 
@@ -254,6 +283,7 @@ data class AutoFillState(
     val showAutofillActionCard: Boolean,
     val activeUserId: String,
     val chromeAutofillSettingsOptions: ImmutableList<ChromeAutofillSettingsOption>,
+    val isUserManagedPrivilegedAppsEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -324,6 +354,11 @@ sealed class AutoFillEvent {
      * Navigates to the setup autofill screen.
      */
     data object NavigateToSetupAutofill : AutoFillEvent()
+
+    /**
+     * Navigate to the about privileged apps screen.
+     */
+    data object NavigateToAboutPrivilegedAppsScreen : AutoFillEvent()
 }
 
 /**
@@ -401,6 +436,11 @@ sealed class AutoFillAction {
     data class ChromeAutofillSelected(val releaseChannel: ChromeReleaseChannel) : AutoFillAction()
 
     /**
+     * User has clicked the about privileged apps help link.
+     */
+    data object AboutPrivilegedAppsClick : AutoFillAction()
+
+    /**
      * Internal actions.
      */
     sealed class Internal : AutoFillAction() {
@@ -428,6 +468,13 @@ sealed class AutoFillAction {
          */
         data class ChromeAutofillStatusReceive(
             val status: ChromeThirdPartyAutofillStatus,
+        ) : Internal()
+
+        /**
+         * The user managed privileged apps feature flag has been updated.
+         */
+        data class UserManagedPrivilegedAppsEnableUpdateReceive(
+            val isUserManagedPrivilegedAppsEnabled: Boolean,
         ) : Internal()
     }
 }

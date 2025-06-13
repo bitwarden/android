@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend
 
-import android.widget.Toast
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
@@ -16,6 +15,7 @@ import com.bitwarden.ui.util.asText
 import com.bitwarden.ui.util.assertNoDialogExists
 import com.bitwarden.ui.util.isProgressBar
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.ModeType
@@ -23,13 +23,10 @@ import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -52,7 +49,6 @@ class ViewSendScreenTest : BitwardenComposeTest() {
 
     @Before
     fun setup() {
-        mockkStatic(Toast::class)
         setContent(
             intentManager = intentManager,
         ) {
@@ -62,11 +58,6 @@ class ViewSendScreenTest : BitwardenComposeTest() {
                 onNavigateToAddEditSend = { onNavigateToAddEditRoute = it },
             )
         }
-    }
-
-    @After
-    fun tearDown() {
-        unmockkStatic(Toast::class)
     }
 
     @Test
@@ -106,16 +97,13 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `on ShowToast event should call onNavigateToEdit`() {
+    fun `on ShowSnackbar event should display the snackbar`() {
         val message = "message"
-        val toast = mockk<Toast> {
-            every { show() } just runs
-        }
-        every { Toast.makeText(any(), message, Toast.LENGTH_SHORT) } returns toast
-        mutableEventFlow.tryEmit(ViewSendEvent.ShowToast(message = message.asText()))
-        verify(exactly = 1) {
-            toast.show()
-        }
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(ViewSendEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -132,7 +120,7 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     @Test
     fun `on Delete button click should Display delete confirmation dialog`() {
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -143,9 +131,9 @@ class ViewSendScreenTest : BitwardenComposeTest() {
     }
 
     @Test
-    fun `oon delete confirmation dialog yes click should send DeleteClick`() {
+    fun `on delete confirmation dialog yes click should send DeleteClick`() {
         composeTestRule
-            .onNodeWithText(text = "Delete send")
+            .onNodeWithText(text = "Delete Send")
             .performScrollTo()
             .performClick()
 
@@ -301,6 +289,22 @@ class ViewSendScreenTest : BitwardenComposeTest() {
             .onNodeWithText(text = "Private notes")
             .performScrollTo()
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun `on copy notes click should send CopyNotesClick`() {
+        composeTestRule
+            .onNodeWithText(text = "Additional options")
+            .performScrollTo()
+            .performClick()
+
+        // Overscroll to the delete button in order to avoid clicking the FAB
+        composeTestRule.onNodeWithText(text = "Delete Send").performScrollTo()
+        composeTestRule.onNodeWithContentDescription(label = "Copy note").performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(ViewSendAction.CopyNotesClick)
+        }
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseIconUrl
@@ -11,6 +12,7 @@ import com.bitwarden.ui.util.concat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -25,8 +27,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * Handles [VerificationCodeAction],
@@ -35,13 +40,15 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VerificationCodeViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    savedStateHandle: SavedStateHandle,
+    private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
 ) : BaseViewModel<VerificationCodeState, VerificationCodeEvent, VerificationCodeAction>(
-    initialState = run {
+    // We load the state from the savedStateHandle for testing purposes.
+    initialState = savedStateHandle[KEY_STATE] ?: run {
         VerificationCodeState(
             baseIconUrl = environmentRepository.environment.environmentUrlData.baseIconUrl,
             isIconLoadingDisabled = settingsRepository.isIconLoadingDisabled,
@@ -50,6 +57,11 @@ class VerificationCodeViewModel @Inject constructor(
             viewState = VerificationCodeState.ViewState.Loading,
             dialogState = null,
             isRefreshing = false,
+            hasMasterPassword = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.hasMasterPassword == true,
         )
     },
 ) {
@@ -76,11 +88,8 @@ class VerificationCodeViewModel @Inject constructor(
                     listDataState
                 }
             }
-            .onEach {
-                sendAction(
-                    VerificationCodeAction.Internal.AuthCodesReceive(it),
-                )
-            }
+            .map { VerificationCodeAction.Internal.AuthCodesReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -88,7 +97,9 @@ class VerificationCodeViewModel @Inject constructor(
         when (action) {
             is VerificationCodeAction.BackClick -> handleBackClick()
             is VerificationCodeAction.CopyClick -> handleCopyClick(action)
+            is VerificationCodeAction.DismissDialog -> handleDismissDialog()
             is VerificationCodeAction.ItemClick -> handleItemClick(action)
+            is VerificationCodeAction.MasterPasswordSubmit -> handleMasterPasswordSubmit(action)
             is VerificationCodeAction.LockClick -> handleLockClick()
             is VerificationCodeAction.RefreshClick -> handleRefreshClick()
             is VerificationCodeAction.RefreshPull -> handleRefreshPull()
@@ -112,10 +123,26 @@ class VerificationCodeViewModel @Inject constructor(
         )
     }
 
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+    }
+
     private fun handleItemClick(action: VerificationCodeAction.ItemClick) {
         sendEvent(
             VerificationCodeEvent.NavigateToVaultItem(action.id),
         )
+    }
+
+    private fun handleMasterPasswordSubmit(action: VerificationCodeAction.MasterPasswordSubmit) {
+        viewModelScope.launch {
+            val result = authRepository.validatePassword(action.password)
+            sendAction(
+                VerificationCodeAction.Internal.ValidatePasswordResultReceive(
+                    result = result,
+                    cipherId = action.cipherId,
+                ),
+            )
+        }
     }
 
     private fun handleLockClick() {
@@ -152,14 +179,54 @@ class VerificationCodeViewModel @Inject constructor(
 
     private fun handleInternalAction(action: VerificationCodeAction.Internal) {
         when (action) {
-            is VerificationCodeAction.Internal.IconLoadingSettingReceive ->
+            is VerificationCodeAction.Internal.IconLoadingSettingReceive -> {
                 handleIconsSettingReceived(action)
+            }
 
-            is VerificationCodeAction.Internal.PullToRefreshEnableReceive ->
+            is VerificationCodeAction.Internal.PullToRefreshEnableReceive -> {
                 handlePullToRefreshEnableReceive(action)
+            }
 
-            is VerificationCodeAction.Internal.AuthCodesReceive ->
+            is VerificationCodeAction.Internal.AuthCodesReceive -> {
                 handleAuthCodeReceive(action)
+            }
+
+            is VerificationCodeAction.Internal.ValidatePasswordResultReceive -> {
+                handleValidatePasswordResultReceive(action)
+            }
+        }
+    }
+
+    private fun handleValidatePasswordResultReceive(
+        action: VerificationCodeAction.Internal.ValidatePasswordResultReceive,
+    ) {
+        when (val result = action.result) {
+            is ValidatePasswordResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = VerificationCodeState.DialogState.Error(
+                            title = null,
+                            message = R.string.generic_error_message.asText(),
+                            throwable = result.error,
+                        ),
+                    )
+                }
+            }
+
+            is ValidatePasswordResult.Success -> {
+                if (result.isValid) {
+                    trySendAction(VerificationCodeAction.ItemClick(id = action.cipherId))
+                } else {
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialogState = VerificationCodeState.DialogState.Error(
+                                title = null,
+                                message = R.string.invalid_master_password.asText(),
+                            ),
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -298,7 +365,7 @@ class VerificationCodeViewModel @Inject constructor(
                             VerificationCodeDisplayItem(
                                 id = item.id,
                                 authCode = item.code,
-                                hideAuthCode = item.hasPasswordReprompt,
+                                hideAuthCode = item.hasPasswordReprompt && state.hasMasterPassword,
                                 label = item.name,
                                 supportingLabel = item.username,
                                 periodSeconds = item.periodSeconds,
@@ -347,6 +414,7 @@ data class VerificationCodeState(
     val dialogState: DialogState?,
     val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
+    val hasMasterPassword: Boolean,
 ) : Parcelable {
 
     /**
@@ -359,6 +427,15 @@ data class VerificationCodeState(
      * Represents the current state of any dialogs on the screen.
      */
     sealed class DialogState : Parcelable {
+        /**
+         * Represents an error dialog with the given [title] and [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+            val throwable: Throwable? = null,
+        ) : DialogState()
 
         /**
          * Represents a loading dialog with the given [message].
@@ -458,6 +535,11 @@ sealed class VerificationCodeAction {
     data object BackClick : VerificationCodeAction()
 
     /**
+     * User has dismissed the dialog.
+     */
+    data object DismissDialog : VerificationCodeAction()
+
+    /**
      * User has clicked the copy button.
      */
     data class CopyClick(val text: String) : VerificationCodeAction()
@@ -468,6 +550,14 @@ sealed class VerificationCodeAction {
      * @property id the id of the item to navigate to.
      */
     data class ItemClick(val id: String) : VerificationCodeAction()
+
+    /**
+     * Validates the master password before viewing the cipher.
+     */
+    data class MasterPasswordSubmit(
+        val cipherId: String,
+        val password: String,
+    ) : VerificationCodeAction()
 
     /**
      * User has clicked the lock button.
@@ -518,6 +608,14 @@ sealed class VerificationCodeAction {
          */
         data class AuthCodesReceive(
             val verificationCodeData: DataState<List<VerificationCodeItem>>,
+        ) : Internal()
+
+        /**
+         * The password validation data was received.
+         */
+        data class ValidatePasswordResultReceive(
+            val result: ValidatePasswordResult,
+            val cipherId: String,
         ) : Internal()
     }
 }

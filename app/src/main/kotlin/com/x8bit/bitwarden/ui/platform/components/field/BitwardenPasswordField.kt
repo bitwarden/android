@@ -1,15 +1,19 @@
 package com.x8bit.bitwarden.ui.platform.components.field
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
@@ -23,9 +27,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalTextToolbar
@@ -42,14 +48,15 @@ import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
 import com.bitwarden.ui.platform.base.util.tabNavigation
 import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
+import com.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
-import com.x8bit.bitwarden.ui.platform.components.field.color.bitwardenTextFieldColors
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenCutCopyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.field.toolbar.BitwardenEmptyTextToolbar
 import com.x8bit.bitwarden.ui.platform.components.model.TextToolbarType
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 
@@ -66,6 +73,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTrans
  * @param supportingContent An optional supporting content that will appear below the text input.
  * @param supportingContentPadding The padding to be placed on the [supportingContent].
  * @param modifier Modifier for the composable.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -95,6 +103,7 @@ fun BitwardenPasswordField(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     showPasswordTestTag: String? = null,
@@ -142,10 +151,36 @@ fun BitwardenPasswordField(
                 .tabNavigation()
                 .focusRequester(focusRequester = focusRequester),
         ) {
+            var focused by remember { mutableStateOf(value = false) }
             TextField(
                 colors = bitwardenTextFieldColors(),
                 textStyle = BitwardenTheme.typography.sensitiveInfoSmall,
-                label = label?.let { { Text(text = it) } },
+                label = label?.let {
+                    {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = it)
+                            tooltip?.let {
+                                val targetSize = if (textFieldValue.text.isEmpty() || focused) {
+                                    16.dp
+                                } else {
+                                    12.dp
+                                }
+                                val size by animateDpAsState(
+                                    targetValue = targetSize,
+                                    label = "${it.contentDescription}_animation",
+                                )
+                                Spacer(modifier = Modifier.width(width = 8.dp))
+                                BitwardenStandardIconButton(
+                                    vectorIconRes = R.drawable.ic_question_circle_small,
+                                    contentDescription = it.contentDescription,
+                                    onClick = it.onClick,
+                                    contentColor = BitwardenTheme.colorScheme.icon.secondary,
+                                    modifier = Modifier.size(size),
+                                )
+                            }
+                        }
+                    }
+                },
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValueState = it
@@ -189,7 +224,8 @@ fun BitwardenPasswordField(
                 },
                 modifier = Modifier
                     .nullableTestTag(tag = passwordFieldTestTag)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .onFocusChanged { focusState -> focused = focusState.isFocused },
             )
             supportingContent
                 ?.let { content ->
@@ -226,6 +262,7 @@ fun BitwardenPasswordField(
  * @param showPasswordChange Lambda that is called when user request show/hide be toggled.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -254,6 +291,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     supportingText: String? = null,
@@ -275,6 +313,7 @@ fun BitwardenPasswordField(
         showPasswordTestTag = showPasswordTestTag,
         onValueChange = onValueChange,
         modifier = modifier,
+        tooltip = tooltip,
         readOnly = readOnly,
         singleLine = singleLine,
         supportingContent = supportingText?.let {
@@ -308,6 +347,7 @@ fun BitwardenPasswordField(
  * @param value Current next on the text field.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param initialShowPassword The initial state of the show/hide password control. A value of
  * `false` (the default) indicates that that password should begin in the hidden state.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
@@ -338,6 +378,7 @@ fun BitwardenPasswordField(
     supportingContent: @Composable (ColumnScope.() -> Unit)?,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     initialShowPassword: Boolean = false,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
@@ -361,6 +402,7 @@ fun BitwardenPasswordField(
         showPasswordTestTag = showPasswordTestTag,
         onValueChange = onValueChange,
         modifier = modifier,
+        tooltip = tooltip,
         readOnly = readOnly,
         singleLine = singleLine,
         supportingContent = supportingContent,
@@ -385,6 +427,7 @@ fun BitwardenPasswordField(
  * @param value Current next on the text field.
  * @param onValueChange Callback that is triggered when the password changes.
  * @param modifier Modifier for the composable.
+ * @param tooltip the optional tooltip to be displayed in the label.
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
@@ -412,6 +455,7 @@ fun BitwardenPasswordField(
     onValueChange: (String) -> Unit,
     cardStyle: CardStyle,
     modifier: Modifier = Modifier,
+    tooltip: TooltipData? = null,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     supportingText: String? = null,
@@ -433,6 +477,7 @@ fun BitwardenPasswordField(
         showPassword = showPassword,
         showPasswordChange = { showPassword = !showPassword },
         onValueChange = onValueChange,
+        tooltip = tooltip,
         readOnly = readOnly,
         singleLine = singleLine,
         supportingText = supportingText,

@@ -315,7 +315,8 @@ private const val SYNC_SUCCESS_JSON = """
         "publicKey": "mockPublicKey-1",
         "privateKey": "mockPrivateKey-1",
         "keyFingerprint": "mockKeyFingerprint-1"
-      }
+      },
+      "encryptedFor": "mockEncryptedFor-1"
     }
   ],
   "domains": {

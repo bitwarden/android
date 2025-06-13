@@ -467,7 +467,8 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "publicKey": "mockPublicKey-1",
       "privateKey": "mockPrivateKey-1",
       "keyFingerprint": "mockKeyFingerprint-1"
-    }
+    },
+    "encryptedFor": "mockEncryptedFor-1"
   }
 }
 """
@@ -594,7 +595,8 @@ private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
     "publicKey": "mockPublicKey-1",
     "privateKey": "mockPrivateKey-1",
     "keyFingerprint": "mockKeyFingerprint-1"
-  }
+  },
+  "encryptedFor": "mockEncryptedFor-1"
 }
 """
 

@@ -180,7 +180,7 @@ class AppearanceScreenTest : BitwardenComposeTest() {
         mutableStateFlow.update {
             it.copy(dialogState = AppearanceState.DialogState.EnableDynamicColors)
         }
-        composeTestRule.onAllNodesWithText("Ok")
+        composeTestRule.onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(AppearanceAction.ConfirmEnableDynamicColorsClick) }

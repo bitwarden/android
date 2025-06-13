@@ -9,6 +9,7 @@ import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
 import com.bitwarden.send.SendType
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -39,12 +40,15 @@ import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toSearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.util.toViewState
 import com.x8bit.bitwarden.ui.platform.feature.search.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -81,6 +85,7 @@ class SearchViewModel @Inject constructor(
     private val accessibilitySelectionManager: AccessibilitySelectionManager,
     private val autofillSelectionManager: AutofillSelectionManager,
     private val organizationEventManager: OrganizationEventManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
     environmentRepo: EnvironmentRepository,
@@ -133,6 +138,11 @@ class SearchViewModel @Inject constructor(
         vaultRepo
             .vaultDataStateFlow
             .map { SearchAction.Internal.VaultDataReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .map { SearchAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -473,6 +483,8 @@ class SearchViewModel @Inject constructor(
                 handleRemovePasswordSendResultReceive(action)
             }
 
+            is SearchAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
+
             is SearchAction.Internal.UpdateCipherResultReceive -> {
                 handleUpdateCipherResultReceive(action)
             }
@@ -552,6 +564,10 @@ class SearchViewModel @Inject constructor(
                 sendEvent(SearchEvent.ShowToast(R.string.send_password_removed.asText()))
             }
         }
+    }
+
+    private fun handleSnackbarDataReceived(action: SearchAction.Internal.SnackbarDataReceived) {
+        sendEvent(SearchEvent.ShowSnackbar(action.data))
     }
 
     private fun handleUpdateCipherResultReceive(
@@ -643,11 +659,11 @@ class SearchViewModel @Inject constructor(
                 )
             }
 
-            is MasterPasswordRepromptData.Totp -> {
+            is MasterPasswordRepromptData.ViewItem -> {
                 trySendAction(
                     action = SearchAction.ItemClick(
                         itemId = data.cipherId,
-                        itemType = SearchState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
+                        itemType = data.itemType,
                     ),
                 )
             }
@@ -761,7 +777,6 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
-                                isTotp = state.isTotp,
                                 isPremiumUser = state.isPremium,
                             )
                     }
@@ -909,7 +924,6 @@ data class SearchState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
-        val isTotp: Boolean,
         val shouldDisplayMasterPasswordReprompt: Boolean,
         val itemType: ItemType,
     ) : Parcelable {
@@ -1187,6 +1201,13 @@ sealed class SearchAction {
         ) : Internal()
 
         /**
+         * Indicates that snackbar data has been received.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
+        ) : Internal()
+
+        /**
          * Indicates a result for updating a cipher during the autofill-and-save process.
          */
         data class UpdateCipherResultReceive(
@@ -1268,6 +1289,13 @@ sealed class SearchEvent {
     ) : SearchEvent()
 
     /**
+     * Show a snackbar to the user.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : SearchEvent(), BackgroundEvent
+
+    /**
      * Show a toast with the given [message].
      */
     data class ShowToast(
@@ -1297,18 +1325,19 @@ sealed class MasterPasswordRepromptData : Parcelable {
     ) : MasterPasswordRepromptData()
 
     /**
-     * Autofill was selected.
-     */
-    @Parcelize
-    data class Totp(
-        val cipherId: String,
-    ) : MasterPasswordRepromptData()
-
-    /**
      * A cipher overflow menu item action was selected.
      */
     @Parcelize
     data class OverflowItem(
         val action: ListingItemOverflowAction.VaultAction,
+    ) : MasterPasswordRepromptData()
+
+    /**
+     * Item was selected to be viewed.
+     */
+    @Parcelize
+    data class ViewItem(
+        val cipherId: String,
+        val itemType: SearchState.DisplayItem.ItemType,
     ) : MasterPasswordRepromptData()
 }

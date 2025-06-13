@@ -10,4 +10,4 @@ import java.util.Locale
 val Locale.appLanguage: AppLanguage?
     get() = AppLanguage
         .entries
-        .find { it.localeName?.lowercase(this) == this.language.lowercase(this) }
+        .find { it.localeName?.lowercase(this) == this.toLanguageTag().lowercase(this) }

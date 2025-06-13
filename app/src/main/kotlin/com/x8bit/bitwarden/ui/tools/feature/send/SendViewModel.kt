@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.data.repository.model.DataState
 import com.bitwarden.data.repository.util.baseWebSendUrl
 import com.bitwarden.network.model.PolicyTypeJson
+import com.bitwarden.ui.platform.base.BackgroundEvent
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -23,6 +24,9 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemScreen
@@ -49,6 +53,7 @@ class SendViewModel @Inject constructor(
     authRepo: AuthRepository,
     settingsRepo: SettingsRepository,
     policyManager: PolicyManager,
+    snackbarRelayManager: SnackbarRelayManager,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
     private val vaultRepo: VaultRepository,
@@ -87,6 +92,11 @@ class SendViewModel @Inject constructor(
         authRepo
             .userStateFlow
             .map { SendAction.Internal.UserStateReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+        snackbarRelayManager
+            .getSnackbarDataFlow(SnackbarRelay.SEND_DELETED, SnackbarRelay.SEND_UPDATED)
+            .map { SendAction.Internal.SnackbarDataReceived(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -132,6 +142,7 @@ class SendViewModel @Inject constructor(
         }
 
         is SendAction.Internal.UserStateReceive -> handleUserStateReceive(action)
+        is SendAction.Internal.SnackbarDataReceived -> handleSnackbarDataReceived(action)
     }
 
     private fun handleInternetConnectionErrorReceived() {
@@ -150,6 +161,10 @@ class SendViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(isPremiumUser = action.userState?.activeAccount?.isPremium == true)
         }
+    }
+
+    private fun handleSnackbarDataReceived(action: SendAction.Internal.SnackbarDataReceived) {
+        sendEvent(SendEvent.ShowSnackbar(action.data))
     }
 
     private fun handlePullToRefreshEnableReceive(
@@ -702,6 +717,13 @@ sealed class SendAction {
         ) : Internal()
 
         /**
+         * Indicates that snackbar data has been received from a relay to be displayed.
+         */
+        data class SnackbarDataReceived(
+            val data: BitwardenSnackbarData,
+        ) : Internal()
+
+        /**
          * Indicates what the current [userState] is.
          */
         data class UserStateReceive(
@@ -780,6 +802,13 @@ sealed class SendEvent {
      * Show a share sheet with the given content.
      */
     data class ShowShareSheet(val url: String) : SendEvent()
+
+    /**
+     * Show a snackbar to the user.
+     */
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : SendEvent(), BackgroundEvent
 
     /**
      * Show a toast to the user.

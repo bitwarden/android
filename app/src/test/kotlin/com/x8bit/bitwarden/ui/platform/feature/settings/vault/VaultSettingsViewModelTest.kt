@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import app.cash.turbine.test
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
@@ -10,7 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -38,7 +39,12 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         every { storeShowImportLoginsSettingsBadge(any()) } just runs
     }
 
-    private val snackbarRelayManager = SnackbarRelayManagerImpl()
+    private val mutableSnackbarSharedFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
+    private val snackbarRelayManager = mockk<SnackbarRelayManager> {
+        every {
+            getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+        } returns mutableSnackbarSharedFlow
+    }
 
     @Test
     fun `BackClick should emit NavigateBack`() = runTest {
@@ -147,10 +153,7 @@ class VaultSettingsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
         viewModel.eventFlow.test {
-            snackbarRelayManager.sendSnackbarData(
-                data = expectedSnackbarData,
-                relay = SnackbarRelay.VAULT_SETTINGS_RELAY,
-            )
+            mutableSnackbarSharedFlow.tryEmit(expectedSnackbarData)
             assertEquals(VaultSettingsEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }

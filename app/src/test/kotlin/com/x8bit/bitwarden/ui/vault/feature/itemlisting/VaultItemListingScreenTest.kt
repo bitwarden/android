@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.credentials.manager.model.RegisterFido2CredentialR
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -366,6 +367,16 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             exitManager.exitApplication()
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar event should display the snackbar`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(VaultItemListingEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test
@@ -1121,7 +1132,6 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createDisplayItem(number = 1).copy(
-                            isTotp = true,
                             shouldShowMasterPasswordReprompt = true,
                         ),
                     ),
@@ -1745,7 +1755,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1840,7 +1850,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1915,7 +1925,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify {
@@ -1943,7 +1953,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2188,7 +2198,7 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
 
@@ -2261,6 +2271,63 @@ class VaultItemListingScreenTest : BitwardenComposeTest() {
             viewModel.trySendAction(
                 VaultItemListingsAction.ItemTypeToAddSelected(
                     CreateVaultItemType.CARD,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Trust is selected in TrustPrivilegedAppPrompt dialog TrustPrivilegedApp action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Trust")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultItemListingsAction.TrustPrivilegedAppClick(null))
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when Cancel is selected in TrustPrivilegedAppPrompt dialog DismissCredentialManagerErrorDialogClick action is sent`() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.TrustPrivilegedAddPrompt(
+                    message = "message".asText(),
+                    selectedCipherId = null,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissCredentialManagerErrorDialogClick(
+                    message = R.string.passkey_operation_failed_because_the_browser_is_not_trusted
+                        .asText(),
                 ),
             )
         }
@@ -2373,7 +2440,6 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = false,
         itemType = VaultItemListingState.DisplayItem.ItemType.Sends(type = SendType.TEXT),
     )
 
@@ -2400,6 +2466,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         isCredentialCreation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
-        isTotp = true,
         itemType = VaultItemListingState.DisplayItem.ItemType.Vault(type = CipherType.LOGIN),
     )

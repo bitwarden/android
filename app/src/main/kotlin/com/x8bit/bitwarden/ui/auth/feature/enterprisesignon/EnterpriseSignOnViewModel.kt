@@ -12,7 +12,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
-import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifiedOrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -20,8 +19,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.SSO_URI
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForSso
-import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
-import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
@@ -48,7 +45,6 @@ private const val RANDOM_STRING_LENGTH = 64
 class EnterpriseSignOnViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val featureFlagManager: FeatureFlagManager,
     private val generatorRepository: GeneratorRepository,
     private val networkConnectionManager: NetworkConnectionManager,
     private val savedStateHandle: SavedStateHandle,
@@ -112,10 +108,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
 
             is EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure -> {
                 handleOnSsoPrevalidationFailure(action)
-            }
-
-            is EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive -> {
-                handleOnOrganizationDomainSsoDetailsReceive(action)
             }
 
             is EnterpriseSignOnAction.Internal.OnSsoCallbackResult -> {
@@ -249,15 +241,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
         )
     }
 
-    private fun handleOnOrganizationDomainSsoDetailsFailure() {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = null,
-                orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
-            )
-        }
-    }
-
     private fun handleOnVerifiedOrganizationDomainSsoDetailsReceive(
         action: EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive,
     ) {
@@ -300,53 +283,6 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 orgIdentifierInput = organizationIdentifier,
             )
         }
-
-        // If the email address is associated with a claimed organization we can proceed to the
-        // prevalidation step.
-        prevalidateSso()
-    }
-
-    private fun handleOnOrganizationDomainSsoDetailsReceive(
-        action: EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive,
-    ) {
-        when (val orgDetails = action.organizationDomainSsoDetailsResult) {
-            is OrganizationDomainSsoDetailsResult.Failure -> {
-                handleOnOrganizationDomainSsoDetailsFailure()
-            }
-
-            is OrganizationDomainSsoDetailsResult.Success -> {
-                handleOnOrganizationDomainSsoDetailsSuccess(orgDetails)
-            }
-        }
-    }
-
-    private fun handleOnOrganizationDomainSsoDetailsSuccess(
-        orgDetails: OrganizationDomainSsoDetailsResult.Success,
-    ) {
-        if (!orgDetails.isSsoAvailable || orgDetails.verifiedDate == null) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = null,
-                    orgIdentifierInput = authRepository.rememberedOrgIdentifier ?: "",
-                )
-            }
-            return
-        }
-
-        if (orgDetails.organizationIdentifier.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = EnterpriseSignOnState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.organization_sso_identifier_required.asText(),
-                    ),
-                    orgIdentifierInput = authRepository.rememberedOrgIdentifier.orEmpty(),
-                )
-            }
-            return
-        }
-
-        mutableStateFlow.update { it.copy(orgIdentifierInput = orgDetails.organizationIdentifier) }
 
         // If the email address is associated with a claimed organization we can proceed to the
         // prevalidation step.
@@ -474,23 +410,14 @@ class EnterpriseSignOnViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            if (featureFlagManager.getFeatureFlag(key = FlagKey.VerifiedSsoDomainEndpoint)) {
-                val result = authRepository.getVerifiedOrganizationDomainSsoDetails(
-                    email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
-                )
-                sendAction(
-                    EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive(
-                        result,
-                    ),
-                )
-            } else {
-                val result = authRepository.getOrganizationDomainSsoDetails(
-                    email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
-                )
-                sendAction(
-                    EnterpriseSignOnAction.Internal.OnOrganizationDomainSsoDetailsReceive(result),
-                )
-            }
+            val result = authRepository.getVerifiedOrganizationDomainSsoDetails(
+                email = savedStateHandle.toEnterpriseSignOnArgs().emailAddress,
+            )
+            sendAction(
+                EnterpriseSignOnAction.Internal.OnVerifiedOrganizationDomainSsoDetailsReceive(
+                    result,
+                ),
+            )
         }
     }
 
@@ -711,13 +638,6 @@ sealed class EnterpriseSignOnAction {
         data class OnSsoPrevalidationFailure(
             val message: String?,
             val error: Throwable?,
-        ) : Internal()
-
-        /**
-         * A result was received when requesting an [OrganizationDomainSsoDetailsResult].
-         */
-        data class OnOrganizationDomainSsoDetailsReceive(
-            val organizationDomainSsoDetailsResult: OrganizationDomainSsoDetailsResult,
         ) : Internal()
 
         /**

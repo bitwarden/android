@@ -20,16 +20,16 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.ui.platform.base.util.EventsEffect
+import com.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
+import com.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
+import com.bitwarden.ui.platform.components.appbar.model.OverflowMenuItemData
 import com.bitwarden.ui.platform.components.fab.BitwardenFloatingActionButton
 import com.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.model.AppResumeScreenData
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.data.platform.manager.util.RegisterScreenDataOnLifecycleEffect
-import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflowActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenSearchActionItem
-import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -38,6 +38,8 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.rememberBitwardenPullToRefreshState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
+import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalAppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
@@ -82,6 +84,7 @@ fun SendScreen(
         AppResumeScreenData.SendScreen
     }
 
+    val snackbarHostState = rememberBitwardenSnackbarHostState()
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             is SendEvent.NavigateToSearch -> onNavigateToSearchSend(SearchType.Sends.All)
@@ -115,6 +118,8 @@ fun SendScreen(
             is SendEvent.ShowShareSheet -> {
                 intentManager.shareText(event.url)
             }
+
+            is SendEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.data)
 
             is SendEvent.ShowToast -> {
                 Toast
@@ -155,6 +160,7 @@ fun SendScreen(
                         },
                     )
                     BitwardenOverflowActionItem(
+                        contentDescription = stringResource(R.string.more),
                         menuItemDataList = persistentListOf(
                             OverflowMenuItemData(
                                 text = stringResource(id = R.string.sync),
@@ -196,6 +202,7 @@ fun SendScreen(
             }
         },
         pullToRefreshState = pullToRefreshState,
+        snackbarHost = { BitwardenSnackbarHost(bitwardenHostState = snackbarHostState) },
     ) {
         val modifier = Modifier
             .fillMaxSize()

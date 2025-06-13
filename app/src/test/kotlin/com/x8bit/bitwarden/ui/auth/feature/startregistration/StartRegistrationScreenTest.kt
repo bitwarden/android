@@ -155,7 +155,7 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
             )
         }
         composeTestRule
-            .onAllNodesWithText("Ok")
+            .onAllNodesWithText(text = "Okay")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
         verify { viewModel.trySendAction(StartRegistrationAction.ErrorDialogDismiss) }
@@ -176,21 +176,12 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
 
     @Test
     fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = true)
         composeTestRule
             .onNodeWithContentDescription("Help with server geolocations.")
             .performScrollTo()
             .performClick()
 
         verify { viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick) }
-    }
-
-    @Test
-    fun `server tool tip should not exist if not in new onboarding ui`() {
-        mutableStateFlow.value = DEFAULT_STATE.copy(showNewOnboardingUi = false)
-        composeTestRule
-            .onNodeWithContentDescription("Help with server geolocations.")
-            .assertDoesNotExist()
     }
 
     @Test
@@ -284,7 +275,6 @@ class StartRegistrationScreenTest : BitwardenComposeTest() {
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
             dialog = null,
-            showNewOnboardingUi = false,
         )
     }
 }

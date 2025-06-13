@@ -3,7 +3,10 @@ package com.x8bit.bitwarden.data.credentials.manager
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import timber.log.Timber
@@ -18,6 +21,8 @@ private const val DELEGATE_PERMISSION_HANDLE_ALL_URLS = "delegate_permission/com
 class OriginManagerImpl(
     private val assetManager: AssetManager,
     private val digitalAssetLinkService: DigitalAssetLinkService,
+    private val privilegedAppRepository: PrivilegedAppRepository,
+    private val featureFlagManager: FeatureFlagManager,
 ) : OriginManager {
 
     override suspend fun validateOrigin(
@@ -57,23 +62,15 @@ class OriginManagerImpl(
 
     private suspend fun validatePrivilegedAppOrigin(
         callingAppInfo: CallingAppInfo,
-    ): ValidateOriginResult {
-        val googleAllowListResult =
-            validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
-        return when (googleAllowListResult) {
-            is ValidateOriginResult.Success -> {
-                // Application was found and successfully validated against the Google allow list so
-                // we can return the result as the final validation result.
-                googleAllowListResult
-            }
-
-            is ValidateOriginResult.Error -> {
-                // Check the community allow list if the Google allow list failed, and return the
-                // result as the final validation result.
-                validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
-            }
-        }
-    }
+    ): ValidateOriginResult =
+        validatePrivilegedAppSignatureWithGoogleList(callingAppInfo)
+            .takeUnless { it is ValidateOriginResult.Error.PrivilegedAppNotAllowed }
+            ?: validatePrivilegedAppSignatureWithCommunityList(callingAppInfo)
+                .takeUnless {
+                    it is ValidateOriginResult.Error.PrivilegedAppNotAllowed &&
+                        featureFlagManager.getFeatureFlag(FlagKey.UserManagedPrivilegedApps)
+                }
+            ?: validatePrivilegedAppSignatureWithUserTrustList(callingAppInfo)
 
     private suspend fun validatePrivilegedAppSignatureWithGoogleList(
         callingAppInfo: CallingAppInfo,
@@ -85,11 +82,16 @@ class OriginManagerImpl(
 
     private suspend fun validatePrivilegedAppSignatureWithCommunityList(
         callingAppInfo: CallingAppInfo,
-    ): ValidateOriginResult =
-        validatePrivilegedAppSignatureWithAllowList(
-            callingAppInfo = callingAppInfo,
-            fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
-        )
+    ): ValidateOriginResult = validatePrivilegedAppSignatureWithAllowList(
+        callingAppInfo = callingAppInfo,
+        fileName = COMMUNITY_ALLOW_LIST_FILE_NAME,
+    )
+
+    private suspend fun validatePrivilegedAppSignatureWithUserTrustList(
+        callingAppInfo: CallingAppInfo,
+    ): ValidateOriginResult = callingAppInfo.validatePrivilegedApp(
+        allowList = privilegedAppRepository.getUserTrustedAllowListJson(),
+    )
 
     private suspend fun validatePrivilegedAppSignatureWithAllowList(
         callingAppInfo: CallingAppInfo,

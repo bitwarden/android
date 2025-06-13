@@ -31,7 +31,6 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraphRoot
 import com.x8bit.bitwarden.ui.platform.feature.settings.settingsGraph
 import com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar.model.VaultUnlockedNavBarTab
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.tools.feature.generator.generatorGraph
 import com.x8bit.bitwarden.ui.tools.feature.generator.navigateToGeneratorGraph
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.AddEditSendRoute
@@ -71,8 +70,9 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
@@ -147,6 +147,7 @@ fun VaultUnlockedNavBarScreen(
         onNavigateToAddFolderScreen = onNavigateToAddFolderScreen,
         onNavigateToFlightRecorder = onNavigateToFlightRecorder,
         onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+        onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
     )
 }
 
@@ -178,8 +179,9 @@ private fun VaultUnlockedNavBarScaffold(
     onNavigateToSetupAutoFillScreen: () -> Unit,
     onNavigateToFlightRecorder: () -> Unit,
     onNavigateToRecordedLogs: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     onNavigateToAddFolderScreen: (selectedFolderId: String?) -> Unit,
+    onNavigateToAboutPrivilegedApps: () -> Unit,
 ) {
     var shouldDimNavBar by rememberSaveable { mutableStateOf(value = false) }
 
@@ -259,6 +261,7 @@ private fun VaultUnlockedNavBarScaffold(
                 onNavigateToImportLogins = onNavigateToImportLogins,
                 onNavigateToFlightRecorder = onNavigateToFlightRecorder,
                 onNavigateToRecordedLogs = onNavigateToRecordedLogs,
+                onNavigateToAboutPrivilegedApps = onNavigateToAboutPrivilegedApps,
             )
         }
     }
