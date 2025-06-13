@@ -1552,6 +1552,36 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `card section should be visible based on state`() {
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    cardItemsCount = 1,
+                    showCardGroup = true,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Card")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { state ->
+            state.copy(
+                viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                    cardItemsCount = 0,
+                    showCardGroup = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Card")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
     fun `card item count should update according to state`() {
         val rowText = "Card"
         mutableStateFlow.update {
@@ -1857,7 +1887,9 @@ class VaultScreenTest : BitwardenComposeTest() {
     @Test
     fun `SelectVaultAddItemType dialog state show vault item type selection dialog`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
+                persistentListOf(CreateVaultItemType.SSH_KEY),
+            ))
         }
 
         composeTestRule
@@ -1871,9 +1903,47 @@ class VaultScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `SelectVaultAddItemType dialog state hide vault item type selection if excluded`() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
+                persistentListOf(
+                    CreateVaultItemType.SSH_KEY,
+                    CreateVaultItemType.CARD,
+                ),
+            ))
+        }
+
+        composeTestRule
+            .onNode(isDialog())
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Type")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("SSH key")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onAllNodesWithText("Card")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `when option is selected in SelectVaultAddItemType dialog add item action is sent`() {
         mutableStateFlow.update {
-            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType)
+            it.copy(dialog = VaultState.DialogState.SelectVaultAddItemType(
+                persistentListOf(CreateVaultItemType.SSH_KEY),
+            ))
         }
 
         composeTestRule
@@ -1998,6 +2068,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     isRefreshing = false,
     showImportActionCard = false,
     flightRecorderSnackBar = null,
+    restrictItemTypesPolicyOrgIds = null,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
@@ -2013,4 +2084,5 @@ private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultStat
     totpItemsCount = 0,
     itemTypesCount = 4,
     sshKeyItemsCount = 0,
+    showCardGroup = true,
 )

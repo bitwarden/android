@@ -89,6 +89,12 @@ enum class PolicyTypeJson {
     REMOVE_UNLOCK_WITH_PIN,
 
     /**
+     * Restricts the types of items that can be shown in the vault.
+     */
+    @SerialName("15")
+    RESTRICT_ITEM_TYPES,
+
+    /**
      * Represents an unknown policy type.
      *
      * This is used for forward compatibility to handle new policy types that the client doesn't yet
