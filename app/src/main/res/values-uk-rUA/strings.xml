@@ -50,7 +50,7 @@
     <string name="no">Ні</string>
     <string name="notes">Нотатки</string>
     <string name="private_notes">Особисті нотатки</string>
-    <string name="okay">Okay</string>
+    <string name="okay">Гаразд</string>
     <string name="password">Пароль</string>
     <string name="save">Зберегти</string>
     <string name="move">Перемістити</string>
@@ -64,7 +64,7 @@
     <string name="website_uri">Вебсайт (URI)</string>
     <string name="username">Ім\'я користувача</string>
     <string name="validation_field_required">Поле %1$s є обов\'язковим.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">Необхідно додати файл, щоб зберегти це відправлення.</string>
     <string name="value_has_been_copied">%1$s скопійовано</string>
     <string name="verify_master_password">Перевірити головний пароль</string>
     <string name="verify_pin">Перевірка PIN</string>
@@ -201,7 +201,7 @@
     <string name="no_attachments">Немає вкладень.</string>
     <string name="file_source">Джерело файлу</string>
     <string name="max_file_size">Максимальний розмір файлу 100 МБ.</string>
-    <string name="required_max_file_size">Required. Maximum file size is 100 MB.</string>
+    <string name="required_max_file_size">Обов\'язково. Максимальний розмір файлу 100 МБ.</string>
     <string name="learn_more">Докладніше</string>
     <string name="api_url">URL-адреса сервера API</string>
     <string name="client_certificate_mtls">Сертифікат клієнта (mTLS)</string>
@@ -296,8 +296,9 @@
     <string name="autofill_and_save">Заповнити і зберегти</string>
     <string name="organization">Організація</string>
     <string name="try_again">Спробуйте знову</string>
-    <string name="date_password_updated">Пароль оновлено</string>
-    <string name="date_updated">Оновлено</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Неправильна адреса е-пошти.</string>
     <string name="cards">Картки</string>
     <string name="identities">Особисті дані</string>
@@ -466,6 +467,7 @@
     <string name="add_text_send">Нове текстове відправлення</string>
     <string name="are_you_sure_delete_send">Ви дійсно хочете видалити це відправлення?</string>
     <string name="send_deleted">Відправлення видалено</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">1 день</string>
     <string name="two_days">2 дні</string>
     <string name="three_days">3 дні</string>
@@ -547,6 +549,8 @@
     <string name="device_type">Тип пристрою</string>
     <string name="ip_address">IP-адреса</string>
     <string name="time">Час</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">Підтвердити вхід</string>
     <string name="deny_log_in">Заборонити вхід</string>
     <string name="log_in_denied">Вхід заборонено</string>
@@ -965,4 +969,17 @@
     <string name="dynamic_colors">Динамічні кольори</string>
     <string name="dynamic_colors_description">Застосувати динамічні кольори на основі ваших шпалер</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Для динамічних кольорів використовуються системні кольори, які можуть не відповідати всім рекомендаціям щодо доступності.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер (%1$s) не є довіреним. Виберіть \"Довіряти\", щоб додати %1$s до списку довірених програм або \"Скасувати\"\ для скасування операції.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Не вдалося виконати операцію з ключем доступу, оскільки браузер не є довіреним.</string>
+    <string name="trust">Довіряти</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
 </resources>

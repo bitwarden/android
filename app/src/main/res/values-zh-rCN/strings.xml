@@ -50,7 +50,7 @@
     <string name="no">否</string>
     <string name="notes">备注</string>
     <string name="private_notes">私密备注</string>
-    <string name="okay">可以</string>
+    <string name="okay">确定</string>
     <string name="password">密码</string>
     <string name="save">保存</string>
     <string name="move">移动</string>
@@ -64,7 +64,7 @@
     <string name="website_uri">网站 (URI)</string>
     <string name="username">用户名</string>
     <string name="validation_field_required">必须填写 %1$s 字段。</string>
-    <string name="you_must_attach_a_file_to_save_this_send">要保存此 Send，您必须附加一个文件。</string>
+    <string name="you_must_attach_a_file_to_save_this_send">必须附加一个文件才能保存此 Send。</string>
     <string name="value_has_been_copied">%1$s 已复制</string>
     <string name="verify_master_password">验证主密码</string>
     <string name="verify_pin">验证 PIN 码</string>
@@ -296,8 +296,9 @@
     <string name="autofill_and_save">自动填充并保存</string>
     <string name="organization">组织</string>
     <string name="try_again">重试</string>
-    <string name="date_password_updated">密码更新于</string>
-    <string name="date_updated">更新于</string>
+    <string name="created">创建于：%1$s</string>
+    <string name="password_last_updated">密码最后更新于：%1$s</string>
+    <string name="last_edited">最后编辑于：%1$s</string>
     <string name="invalid_email">无效的电子邮箱地址。</string>
     <string name="cards">支付卡</string>
     <string name="identities">身份</string>
@@ -466,6 +467,7 @@
     <string name="add_text_send">新增文本 Send</string>
     <string name="are_you_sure_delete_send">确定要删除此 Send 吗？</string>
     <string name="send_deleted">Send 已删除</string>
+    <string name="send_updated">Send 已更新</string>
     <string name="one_day">1 天</string>
     <string name="two_days">2 天</string>
     <string name="three_days">3 天</string>
@@ -547,6 +549,8 @@
     <string name="device_type">设备类型</string>
     <string name="ip_address">IP 地址</string>
     <string name="time">时间</string>
+    <string name="select_time">选择时间</string>
+    <string name="switch_input_mode">切换输入模式</string>
     <string name="confirm_log_in">确认登录</string>
     <string name="deny_log_in">拒绝登录</string>
     <string name="log_in_denied">登录被拒绝</string>
@@ -964,4 +968,17 @@
     <string name="dynamic_colors">动态颜色</string>
     <string name="dynamic_colors_description">基于您的壁纸应用动态颜色</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">动态颜色使用系统颜色，可能无法满足所有无障碍指南要求。</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">由于浏览器 (%1$s) 未被信任，通行密钥操作失败。选择「信任」将 %1$s 添加到受信任的应用程序列表，或选择「取消」中止操作。</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">由于浏览器未被信任，通行密钥操作失败。</string>
+    <string name="trust">信任</string>
+    <string name="trusted_by_you_learn_more">这些是 Bitwarden 默认不信任的应用程序或浏览器，但是您信任其执行通行密钥操作。</string>
+    <string name="trusted_by_community_learn_more">这些应用程序虽未上架 Google Play Store，但经社区成员使用并报告为安全后，Bitwarden 信任其执行通行密钥操作。</string>
+    <string name="trusted_by_google_learn_more">这些是 Google 认定为安全且可在 Google Play Store 中获取的应用程序。</string>
+    <string name="trusted_by_you">被您信任</string>
+    <string name="trusted_by_the_community">被社区信任</string>
+    <string name="trusted_by_google">被 Google 信任</string>
+    <string name="privileged_apps_description">为保护用户免遭钓鱼攻击，默认情况下，Bitwarden 仅允许使用被 Google 或 Bitwarden 社区信任的网页浏览器完成通行密钥操作。</string>
+    <string name="about_privileged_applications">关于特权 App</string>
+    <string name="learn_more_about_privileged_apps">进一步了解特权 App</string>
+    <string name="privileged_apps">特权 App</string>
 </resources>
