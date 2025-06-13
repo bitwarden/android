@@ -149,6 +149,18 @@ interface IntentManager {
     ): PendingIntent
 
     /**
+     * Creates a pending intent to use when providing
+     * [androidx.credentials.provider.CredentialEntry] instances for Password credential filling.
+     */
+    fun createPasswordGetCredentialPendingIntent(
+        action: String,
+        userId: String,
+        cipherId: String?,
+        isUserVerified: Boolean,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
      * Open the default email app on device.
      */
     fun startDefaultEmailApplication()
