@@ -85,5 +85,6 @@ class VaultStateExtensionsTest {
             totpItemsCount = 1,
             itemTypesCount = 4,
             sshKeyItemsCount = 0,
+            showCardGroup = true,
         )
 }
