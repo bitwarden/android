@@ -296,8 +296,9 @@ Načtení proběhne automaticky.</string>
     <string name="autofill_and_save">Automaticky vyplnit a uložit</string>
     <string name="organization">Organizace</string>
     <string name="try_again">Zkusit znovu</string>
-    <string name="date_password_updated">Heslo bylo aktualizováno</string>
-    <string name="date_updated">Aktualizováno</string>
+    <string name="created">Vytvořeno: %1$s</string>
+    <string name="password_last_updated">Poslední aktualizace hesla: %1$s</string>
+    <string name="last_edited">Naposledy upraveno: %1$s</string>
     <string name="invalid_email">Neplatná e-mailová adresa.</string>
     <string name="cards">Karty</string>
     <string name="identities">Identity</string>
@@ -466,6 +467,7 @@ Načtení proběhne automaticky.</string>
     <string name="add_text_send">Odeslat textový Send</string>
     <string name="are_you_sure_delete_send">Opravdu chcete smazat tento Send?</string>
     <string name="send_deleted">Send byl smazán</string>
+    <string name="send_updated">Send aktualizován</string>
     <string name="one_day">1 den</string>
     <string name="two_days">2 dny</string>
     <string name="three_days">3 dny</string>
@@ -546,6 +548,8 @@ Načtení proběhne automaticky.</string>
     <string name="device_type">Typ zařízení</string>
     <string name="ip_address">IP adresa</string>
     <string name="time">Čas</string>
+    <string name="select_time">Vybrat čas</string>
+    <string name="switch_input_mode">Přepnout režim vstupu</string>
     <string name="confirm_log_in">Potvrdit přihlášení</string>
     <string name="deny_log_in">Zamítnout přihlášení</string>
     <string name="log_in_denied">Přihlášení zamítnuto</string>
@@ -964,4 +968,17 @@ při opakování problémů.</string>
     <string name="dynamic_colors">Dynamické barvy</string>
     <string name="dynamic_colors_description">Použít dynamické barvy na základě Vaší tapety</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamické barvy používají barvy systému a nemusí splňovat všechny pokyny pro přístupnost.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč (%1$s) není důvěryhodný. Vyberte \"Důvěřovat\" pro přidání %1$s do seznamu důvěryhodných aplikací nebo \"Zrušit\" pro zrušení operace.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Operace přístupového klíče se nezdařila, protože prohlížeč není důvěryhodný.</string>
+    <string name="trust">Důvěřovat</string>
+    <string name="trusted_by_you_learn_more">Toto jsou aplikace nebo prohlížeče, kterým Bitwarden ve výchozím nastavení nedůvěřuje, ale Vy důvěřujete tomu, že může provádět operace s přístupovými klíči.</string>
+    <string name="trusted_by_community_learn_more">Jedná se o aplikace, které nejsou zahrnuty v Obchodě Google Play, ale Bitwarden jim věří, že budou provádět operace s přístupovými klíči poté, co je členové komunity použijí a nahlásí jako bezpečné.</string>
+    <string name="trusted_by_google_learn_more">Tyto aplikace považuje Google za bezpečné a jsou k dispozici v Obchodě Google Play.</string>
+    <string name="trusted_by_you">Důvěryhodné pro Vás</string>
+    <string name="trusted_by_the_community">Důvěryhodné pro komunitu</string>
+    <string name="trusted_by_google">Důvěryhodné pro Google</string>
+    <string name="privileged_apps_description">Aby byli uživatelé chráněni před pokusy o phishing, Bitwarden ve výchozím nastavení provádí operace s přístupovými klíči jen prostřednictvím webových prohlížečů, kterým důvěřuje Google nebo komunita Bitwardenu.</string>
+    <string name="about_privileged_applications">O privilegovaných aplikacích</string>
+    <string name="learn_more_about_privileged_apps">Další informace o privilegovaných aplikacích</string>
+    <string name="privileged_apps">Privilegované aplikace</string>
 </resources>

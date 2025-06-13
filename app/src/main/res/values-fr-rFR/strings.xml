@@ -296,8 +296,9 @@ La numérisation se fera automatiquement.</string>
     <string name="autofill_and_save">Saisir automatiquement et sauvegarder</string>
     <string name="organization">Organisation</string>
     <string name="try_again">Réessayer</string>
-    <string name="date_password_updated">Mot de passe mis à jour</string>
-    <string name="date_updated">Mis à jour</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Adresse électronique invalide.</string>
     <string name="cards">Cartes</string>
     <string name="identities">Identités</string>
@@ -466,6 +467,7 @@ La numérisation se fera automatiquement.</string>
     <string name="add_text_send">New text Send</string>
     <string name="are_you_sure_delete_send">Êtes-vous sûr de vouloir supprimer ce Send ?</string>
     <string name="send_deleted">Send supprimé</string>
+    <string name="send_updated">Send updated</string>
     <string name="one_day">1 jour</string>
     <string name="two_days">2 jours</string>
     <string name="three_days">3 jours</string>
@@ -547,6 +549,8 @@ sélectionnez « Ajouter un TOTP » pour stocker la clé en toute sécurité</
     <string name="device_type">Type d\'appareil</string>
     <string name="ip_address">Adresse IP</string>
     <string name="time">Heure</string>
+    <string name="select_time">Select time</string>
+    <string name="switch_input_mode">Switch input mode</string>
     <string name="confirm_log_in">Confirmer la connexion</string>
     <string name="deny_log_in">Refuser la connexion</string>
     <string name="log_in_denied">Connexion refusée</string>
@@ -963,4 +967,17 @@ Voulez-vous basculer vers ce compte ?</string>
     <string name="dynamic_colors">Dynamic colors</string>
     <string name="dynamic_colors_description">Apply dynamic colors based on your wallpaper</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Dynamic colors uses the system colors and may not meet all accessibility guidelines.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Passkey operation failed because browser (%1$s) is not trusted. Select \"Trust\" to add %1$s to the list of trusted applications or \"Cancel\"\ to abort the operation.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Passkey operation failed because the browser is not trusted.</string>
+    <string name="trust">Trust</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
 </resources>
