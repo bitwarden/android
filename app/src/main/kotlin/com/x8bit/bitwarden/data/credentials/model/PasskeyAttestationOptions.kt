@@ -73,7 +73,7 @@ data class PasskeyAttestationOptions(
         @SerialName("type")
         val type: String,
         @SerialName("alg")
-        val alg: Long,
+        val alg: Double,
     )
 
     /**
