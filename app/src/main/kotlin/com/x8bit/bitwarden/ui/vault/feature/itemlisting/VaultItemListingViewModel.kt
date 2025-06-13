@@ -44,6 +44,7 @@ import com.x8bit.bitwarden.data.credentials.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.credentials.model.GetCredentialsRequest
 import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
+import com.x8bit.bitwarden.data.credentials.parser.RelyingPartyParser
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -136,6 +137,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
     private val snackbarRelayManager: SnackbarRelayManager,
+    private val relyingPartyParser: RelyingPartyParser,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -1028,6 +1030,7 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
+    @Suppress("LongMethod")
     private fun authenticateFido2Credential(
         request: ProviderGetCredentialRequest,
         cipherView: CipherView,
@@ -1048,10 +1051,20 @@ class VaultItemListingViewModel @Inject constructor(
                 )
                 return
             }
+        val relyingPartyId = relyingPartyParser.parse(option)
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                        .asText(),
+                )
+                return
+            }
         viewModelScope.launch {
-
             val validateOriginResult = originManager
-                .validateOrigin(callingAppInfo = request.callingAppInfo)
+                .validateOrigin(
+                    relyingPartyId = relyingPartyId,
+                    callingAppInfo = request.callingAppInfo,
+                )
 
             when (validateOriginResult) {
                 is ValidateOriginResult.Error -> {
@@ -1796,9 +1809,20 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleRegisterFido2CredentialRequestReceive(
         action: VaultItemListingsAction.Internal.CreateCredentialRequestReceive,
     ) {
+        val relyingPartyId = action.request.providerRequest
+            .getCreatePasskeyCredentialRequestOrNull()
+            ?.let { relyingPartyParser.parse(it) }
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                        .asText(),
+                )
+                return
+            }
         viewModelScope.launch {
             val validateOriginResult = originManager
                 .validateOrigin(
+                    relyingPartyId = relyingPartyId,
                     callingAppInfo = action.request.callingAppInfo,
                 )
             when (validateOriginResult) {
@@ -1861,8 +1885,22 @@ class VaultItemListingViewModel @Inject constructor(
                 return
             }
 
+        val relyingPartyId = request
+            .beginGetPublicKeyCredentialOptions
+            .mapNotNull { relyingPartyParser.parse(it) }
+            .distinct()
+            .firstOrNull()
+            ?: run {
+                showCredentialManagerErrorDialog(
+                    R.string.passkey_operation_failed_because_relying_party_cannot_be_identified
+                        .asText(),
+                )
+                return
+            }
+
         viewModelScope.launch {
             val validateOriginResult = originManager.validateOrigin(
+                relyingPartyId = relyingPartyId,
                 callingAppInfo = callingAppInfo,
             )
             when (validateOriginResult) {
