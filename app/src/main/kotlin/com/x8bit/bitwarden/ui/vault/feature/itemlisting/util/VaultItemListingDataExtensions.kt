@@ -216,13 +216,12 @@ fun VaultData.toViewState(
                 }
                     .asText()
             }
-        val shouldShowAddButton = when (itemListingType) {
-            VaultItemListingState.ItemListingType.Vault.Trash,
-            VaultItemListingState.ItemListingType.Vault.SshKey,
-                -> false
 
-            else -> true
-        }
+        val restrictItemTypePolicyEnabled = restrictItemTypesPolicyOrgIds.isNotEmpty() &&
+            itemListingType == VaultItemListingState.ItemListingType.Vault.Card
+
+        val shouldShowAddButton = !restrictItemTypePolicyEnabled && itemListingType.hasFab
+
         VaultItemListingState.ViewState.NoItems(
             header = totpData
                 ?.let { R.string.no_items_for_vault.asText(it.issuer ?: it.accountName ?: "--") },

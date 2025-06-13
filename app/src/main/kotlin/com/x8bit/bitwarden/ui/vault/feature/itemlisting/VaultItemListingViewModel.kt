@@ -2292,8 +2292,14 @@ data class VaultItemListingState(
      * Whether or not the add FAB should be shown.
      */
     val hasAddItemFabButton: Boolean
-        get() = itemListingType.hasFab ||
-            (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+        get() = if ((viewState is ViewState.NoItems &&
+                restrictItemTypesPolicyOrgIds.isNotEmpty() &&
+                itemListingType == VaultItemListingState.ItemListingType.Vault.Card)) {
+                    false
+                } else {
+                    itemListingType.hasFab ||
+                (viewState is ViewState.NoItems && viewState.shouldShowAddButton)
+                }
 
     /**
      * Whether or not this represents a listing screen for autofill.
