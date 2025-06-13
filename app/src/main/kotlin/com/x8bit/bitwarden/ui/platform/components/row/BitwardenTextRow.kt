@@ -4,20 +4,28 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bitwarden.ui.platform.base.util.cardStyle
 import com.bitwarden.ui.platform.base.util.nullableTestTag
+import com.bitwarden.ui.platform.components.button.BitwardenStandardIconButton
 import com.bitwarden.ui.platform.components.model.CardStyle
 import com.bitwarden.ui.platform.theme.BitwardenTheme
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
+import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
 
 /**
  * Represents a clickable row of text and can contains an optional [content] that appears to the
@@ -33,8 +41,10 @@ import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDiv
  * and it's contents will be dimmed.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
+ * @param tooltip The data required to display a tooltip.
  * @param content The content of the [BitwardenTextRow].
  */
+@Suppress("LongMethod")
 @Composable
 fun BitwardenTextRow(
     text: String,
@@ -45,6 +55,7 @@ fun BitwardenTextRow(
     textTestTag: String? = null,
     isEnabled: Boolean = true,
     withDivider: Boolean = false,
+    tooltip: TooltipData? = null,
     content: (@Composable () -> Unit)? = null,
 ) {
     Box(
@@ -69,16 +80,19 @@ fun BitwardenTextRow(
                     .padding(end = 16.dp)
                     .weight(1f),
             ) {
-                Text(
-                    text = text,
-                    style = BitwardenTheme.typography.bodyLarge,
-                    color = if (isEnabled) {
-                        BitwardenTheme.colorScheme.text.primary
-                    } else {
-                        BitwardenTheme.colorScheme.filledButton.foregroundDisabled
-                    },
-                    modifier = Modifier.nullableTestTag(tag = textTestTag),
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = text,
+                        style = BitwardenTheme.typography.bodyLarge,
+                        color = if (isEnabled) {
+                            BitwardenTheme.colorScheme.text.primary
+                        } else {
+                            BitwardenTheme.colorScheme.filledButton.foregroundDisabled
+                        },
+                        modifier = Modifier.nullableTestTag(tag = textTestTag),
+                    )
+                    tooltip?.let { ToolTip(tooltip = it) }
+                }
                 description?.let {
                     Text(
                         text = it,
@@ -97,4 +111,52 @@ fun BitwardenTextRow(
             BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
         }
     }
+}
+
+@Composable
+private fun RowScope.ToolTip(
+    tooltip: TooltipData,
+) {
+    Spacer(modifier = Modifier.width(width = 8.dp))
+    BitwardenStandardIconButton(
+        vectorIconRes = R.drawable.ic_question_circle_small,
+        contentDescription = tooltip.contentDescription,
+        onClick = tooltip.onClick,
+        contentColor = BitwardenTheme.colorScheme.icon.secondary,
+        modifier = Modifier
+            .testTag(tag = "TextRowTooltip"),
+    )
+}
+
+@Preview
+@Composable
+private fun BitwardenTextRowWithTooltipAndContent_Preview() {
+    BitwardenTextRow(
+        text = "Sample Text",
+        onClick = {},
+        cardStyle = CardStyle.Full,
+        description = "This is a sample description.",
+        textTestTag = "sampleTestTag",
+        isEnabled = true,
+        withDivider = false,
+        tooltip = TooltipData(
+            contentDescription = "Tooltip Description",
+            onClick = {},
+        ),
+    )
+}
+
+@Preview
+@Composable
+private fun BitwardenTextRowWithDividerDisabled_Preview() {
+    BitwardenTextRow(
+        text = "Sample Text Disabled",
+        onClick = {},
+        cardStyle = CardStyle.Top(),
+        description = "This is a sample disabled description.",
+        textTestTag = "sampleDisabledTestTag",
+        isEnabled = false,
+        withDivider = true,
+        tooltip = null,
+    )
 }

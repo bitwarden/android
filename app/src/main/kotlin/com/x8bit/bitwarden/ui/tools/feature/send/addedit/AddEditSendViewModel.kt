@@ -27,7 +27,10 @@ import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
+import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelayManager
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.model.AddEditSendType
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.shouldFinishOnComplete
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.util.toSendName
@@ -70,6 +73,7 @@ class AddEditSendViewModel @Inject constructor(
     private val vaultRepo: VaultRepository,
     private val policyManager: PolicyManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val snackbarRelayManager: SnackbarRelayManager,
 ) : BaseViewModel<AddEditSendState, AddEditSendEvent, AddEditSendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
@@ -250,6 +254,10 @@ class AddEditSendViewModel @Inject constructor(
                         message = result.sendView.toSendUrl(state.baseWebSendUrl),
                     ),
                 )
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.send_updated.asText()),
+                    relay = SnackbarRelay.SEND_UPDATED,
+                )
             }
         }
     }
@@ -273,7 +281,10 @@ class AddEditSendViewModel @Inject constructor(
             is DeleteSendResult.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 navigateBack(isDeleted = true)
-                sendEvent(AddEditSendEvent.ShowToast(message = R.string.send_deleted.asText()))
+                snackbarRelayManager.sendSnackbarData(
+                    data = BitwardenSnackbarData(message = R.string.send_deleted.asText()),
+                    relay = SnackbarRelay.SEND_DELETED,
+                )
             }
         }
     }
@@ -301,7 +312,11 @@ class AddEditSendViewModel @Inject constructor(
                 updateCommonContent { it.copy(hasPassword = false) }
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
-                    AddEditSendEvent.ShowToast(message = R.string.send_password_removed.asText()),
+                    AddEditSendEvent.ShowSnackbar(
+                        data = BitwardenSnackbarData(
+                            message = R.string.send_password_removed.asText(),
+                        ),
+                    ),
                 )
             }
         }
@@ -845,9 +860,11 @@ sealed class AddEditSendEvent {
     ) : BackgroundEvent, AddEditSendEvent()
 
     /**
-     * Show Toast.
+     * Show a snackbar.
      */
-    data class ShowToast(val message: Text) : AddEditSendEvent()
+    data class ShowSnackbar(
+        val data: BitwardenSnackbarData,
+    ) : AddEditSendEvent()
 }
 
 /**

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.launch
@@ -34,9 +35,14 @@ class SnackbarRelayManagerImpl(
         }
     }
 
-    override fun getSnackbarDataFlow(relay: SnackbarRelay): Flow<BitwardenSnackbarData> =
-        snackbarSharedFlow
-            .generateFlowFor(relay = relay)
+    override fun getSnackbarDataFlow(
+        relay: SnackbarRelay,
+        vararg relays: SnackbarRelay,
+    ): Flow<BitwardenSnackbarData> =
+        merge(
+            snackbarSharedFlow.generateFlowFor(relay = relay),
+            *relays.map { snackbarSharedFlow.generateFlowFor(relay = it) }.toTypedArray(),
+        )
             .map { it.data }
 }
 

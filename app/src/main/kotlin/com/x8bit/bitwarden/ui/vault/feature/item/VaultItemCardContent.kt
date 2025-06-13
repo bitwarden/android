@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,7 +29,6 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenHyperTextLink
 import com.x8bit.bitwarden.ui.vault.feature.item.component.CustomField
-import com.x8bit.bitwarden.ui.vault.feature.item.component.VaultItemUpdateText
 import com.x8bit.bitwarden.ui.vault.feature.item.component.itemHeader
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
@@ -303,16 +303,33 @@ fun VaultItemCardContent(
             }
         }
 
-        item(key = "lastUpdated") {
+        item(key = "created") {
             Spacer(modifier = Modifier.height(height = 16.dp))
-            VaultItemUpdateText(
-                header = "${stringResource(id = R.string.date_updated)}: ",
-                text = commonState.lastUpdated,
+            Text(
+                text = commonState.created(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
                 modifier = Modifier
                     .fillMaxWidth()
                     .standardHorizontalMargin()
                     .padding(horizontal = 12.dp)
-                    .animateItem(),
+                    .animateItem()
+                    .testTag("CardItemCreated"),
+            )
+        }
+
+        item(key = "lastUpdated") {
+            Spacer(modifier = Modifier.height(height = 4.dp))
+            Text(
+                text = commonState.lastUpdated(),
+                style = BitwardenTheme.typography.bodySmall,
+                color = BitwardenTheme.colorScheme.text.secondary,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .standardHorizontalMargin()
+                    .padding(horizontal = 12.dp)
+                    .animateItem()
+                    .testTag("CardItemLastUpdated"),
             )
         }
 
