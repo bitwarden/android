@@ -46,7 +46,10 @@ class CipherViewExtensionsTest {
                     requiresPasswordReprompt = false,
                     cipherId = id,
                 ),
-                ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
+                ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                    totpCode = totpCode,
+                    requiresPasswordReprompt = false,
+                ),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
             result,
@@ -298,7 +301,10 @@ class CipherViewExtensionsTest {
                     cipherType = CipherType.SECURE_NOTE,
                     requiresPasswordReprompt = true,
                 ),
-                ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                    notes = notes,
+                    requiresPasswordReprompt = true,
+                ),
             ),
             result,
         )
