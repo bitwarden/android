@@ -46,11 +46,13 @@ import com.x8bit.bitwarden.data.credentials.model.UserVerificationRequirement
 import com.x8bit.bitwarden.data.credentials.model.ValidateOriginResult
 import com.x8bit.bitwarden.data.credentials.repository.PrivilegedAppRepository
 import com.x8bit.bitwarden.data.credentials.util.getCreatePasskeyCredentialRequestOrNull
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
@@ -75,7 +77,6 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.search.util.filterAndOrganize
-import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendItemType
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.components.model.CreateVaultItemType
@@ -89,6 +90,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSendItemType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
+import com.x8bit.bitwarden.ui.vault.feature.vault.VaultAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -98,7 +100,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.util.toVaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -107,6 +111,7 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import javax.inject.Inject
+import kotlin.collections.map
 
 /**
  * Manages [VaultItemListingState], handles [VaultItemListingsAction],
@@ -132,6 +137,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val bitwardenCredentialManager: BitwardenCredentialManager,
     private val organizationEventManager: OrganizationEventManager,
     private val networkConnectionManager: NetworkConnectionManager,
+    private val featureFlagManager: FeatureFlagManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -159,6 +165,7 @@ class VaultItemListingViewModel @Inject constructor(
             policyDisablesSend = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_SEND)
                 .any(),
+            restrictItemTypesPolicyOrgIds = emptyList(),
             autofillSelectionData = specialCircumstance?.toAutofillSelectionDataOrNull(),
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             totpData = specialCircumstance?.toTotpDataOrNull(),
@@ -186,6 +193,21 @@ class VaultItemListingViewModel @Inject constructor(
         policyManager
             .getActivePoliciesFlow(type = PolicyTypeJson.DISABLE_SEND)
             .map { VaultItemListingsAction.Internal.PolicyUpdateReceive(it.any()) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        policyManager
+            .getActivePoliciesFlow(type = PolicyTypeJson.RESTRICT_ITEM_TYPES)
+            .combine(
+                featureFlagManager.getFeatureFlagFlow(FlagKey.RemoveCardPolicy),
+            ) { policies, enabledFlag ->
+                if (enabledFlag) {
+                    policies.map { it.organizationId }
+                } else {
+                    emptyList()
+                }
+            }
+            .map { VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -751,16 +773,29 @@ class VaultItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun createVaultItemTypeSelectionExcludedOptions(): ImmutableList<CreateVaultItemType> {
+        // If policy is enable for any organization, exclude the card option
+        return if (!state.restrictItemTypesPolicyOrgIds.isEmpty()) {
+            persistentListOf(
+                CreateVaultItemType.CARD,
+                CreateVaultItemType.FOLDER,
+                CreateVaultItemType.SSH_KEY,
+            )
+        } else {
+            persistentListOf(
+                CreateVaultItemType.SSH_KEY,
+                CreateVaultItemType.FOLDER,
+            )
+        }
+    }
+
     private fun handleAddVaultItemClick() {
         when (val itemListingType = state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault.Collection -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                            excludedOptions = persistentListOfNotNull(
-                                CreateVaultItemType.SSH_KEY,
-                                CreateVaultItemType.FOLDER,
-                            ),
+                            excludedOptions = createVaultItemTypeSelectionExcludedOptions(),
                         ),
                     )
                 }
@@ -770,10 +805,7 @@ class VaultItemListingViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = VaultItemListingState.DialogState.VaultItemTypeSelection(
-                            excludedOptions = persistentListOfNotNull(
-                                CreateVaultItemType.SSH_KEY,
-                                CreateVaultItemType.FOLDER,
-                            ),
+                            excludedOptions = createVaultItemTypeSelectionExcludedOptions(),
                         ),
                     )
                 }
@@ -1403,6 +1435,22 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive -> {
                 handleGetCredentialEntriesResultReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive -> {
+                handleRestrictItemTypesPolicyUpdateReceive(action)
+            }
+        }
+    }
+
+    private fun handleRestrictItemTypesPolicyUpdateReceive(
+        action: VaultItemListingsAction.Internal.RestrictItemTypesPolicyUpdateReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(restrictItemTypesPolicyOrgIds = action.restrictItemTypesPolicyOrdIds)
+        }
+
+        vaultRepository.vaultDataStateFlow.value.data?.let { vaultData ->
+            updateStateWithVaultData(vaultData, clearDialogState = false)
         }
     }
 
@@ -2063,6 +2111,7 @@ class VaultItemListingViewModel @Inject constructor(
                                 .fido2CredentialAutofillViewList,
                             totpData = state.totpData,
                             isPremiumUser = state.isPremium,
+                            restrictItemTypesPolicyOrgIds = state.restrictItemTypesPolicyOrgIds,
                         )
                     }
 
@@ -2207,6 +2256,7 @@ data class VaultItemListingState(
     val isIconLoadingDisabled: Boolean,
     val dialogState: DialogState?,
     val policyDisablesSend: Boolean,
+    val restrictItemTypesPolicyOrgIds: List<String>,
     // Internal
     private val isPullToRefreshSettingEnabled: Boolean,
     val totpData: TotpData? = null,
@@ -3095,6 +3145,13 @@ sealed class VaultItemListingsAction {
          */
         data class PolicyUpdateReceive(
             val policyDisablesSend: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that a restrict item types policy update has been received.
+         */
+        data class RestrictItemTypesPolicyUpdateReceive(
+            val restrictItemTypesPolicyOrdIds: List<String>,
         ) : Internal()
 
         /**

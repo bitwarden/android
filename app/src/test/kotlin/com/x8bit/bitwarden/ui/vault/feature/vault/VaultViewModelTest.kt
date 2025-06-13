@@ -167,9 +167,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         every {
             getFeatureFlagFlow(FlagKey.RemoveCardPolicy)
         } returns mutableRemoveCardPolicyFeatureFlow
-        every {
-            getFeatureFlag(FlagKey.RemoveCardPolicy)
-        } returns false
     }
     private val reviewPromptManager: ReviewPromptManager = mockk()
 
