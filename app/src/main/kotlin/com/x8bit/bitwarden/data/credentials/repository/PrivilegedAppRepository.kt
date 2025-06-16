@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.data.credentials.repository
 
+import com.bitwarden.core.data.repository.model.DataState
 import com.x8bit.bitwarden.data.credentials.model.PrivilegedAppAllowListJson
-import kotlinx.coroutines.flow.Flow
+import com.x8bit.bitwarden.data.credentials.repository.model.PrivilegedAppData
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Repository for managing privileged apps trusted by the user.
@@ -9,14 +11,39 @@ import kotlinx.coroutines.flow.Flow
 interface PrivilegedAppRepository {
 
     /**
+     * Flow that represents the trusted privileged apps data.
+     */
+    val trustedAppDataStateFlow: StateFlow<DataState<PrivilegedAppData>>
+
+    /**
      * Flow of the user's trusted privileged apps.
      */
-    val userTrustedPrivilegedAppsFlow: Flow<PrivilegedAppAllowListJson>
+    val userTrustedAppsFlow: StateFlow<DataState<PrivilegedAppAllowListJson>>
+
+    /**
+     * Flow of the Google's trusted privileged apps.
+     */
+    val googleTrustedPrivilegedAppsFlow: StateFlow<DataState<PrivilegedAppAllowListJson>>
+
+    /**
+     * Flow of the community's trusted privileged apps.
+     */
+    val communityTrustedAppsFlow: StateFlow<DataState<PrivilegedAppAllowListJson>>
 
     /**
      * List the user's trusted privileged apps.
      */
-    suspend fun getAllUserTrustedPrivilegedApps(): PrivilegedAppAllowListJson
+    suspend fun getUserTrustedPrivilegedAppsOrNull(): PrivilegedAppAllowListJson?
+
+    /**
+     * List Google's trusted privileged apps.
+     */
+    suspend fun getGoogleTrustedPrivilegedAppsOrNull(): PrivilegedAppAllowListJson?
+
+    /**
+     * List community's trusted privileged apps.
+     */
+    suspend fun getCommunityTrustedPrivilegedAppsOrNull(): PrivilegedAppAllowListJson?
 
     /**
      * Returns true if the given [packageName] and [signature] are trusted.

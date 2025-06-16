@@ -19,6 +19,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.autoFillDestina
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.blockAutoFillDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.blockautofill.navigateToBlockAutoFillScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.navigateToAutoFill
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.navigateToPrivilegedAppsList
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.list.privilegedAppsListDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.navigateToFlightRecorder
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.navigateToRecordedLogs
@@ -132,6 +134,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToBlockAutoFillScreen = { navController.navigateToBlockAutoFillScreen() },
             onNavigateToSetupAutofill = onNavigateToSetupAutoFillScreen,
             onNavigateToAboutPrivilegedAppsScreen = onNavigateToAboutPrivilegedApps,
+            onNavigateToPrivilegedAppsList = { navController.navigateToPrivilegedAppsList() },
         )
         otherDestination(
             isPreAuth = false,
@@ -144,6 +147,7 @@ fun NavGraphBuilder.settingsGraph(
             onNavigateToImportLogins = onNavigateToImportLogins,
         )
         blockAutoFillDestination(onNavigateBack = { navController.popBackStack() })
+        privilegedAppsListDestination(onNavigateBack = { navController.popBackStack() })
     }
 }
 
