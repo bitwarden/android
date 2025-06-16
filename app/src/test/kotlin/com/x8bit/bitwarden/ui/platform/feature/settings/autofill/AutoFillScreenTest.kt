@@ -40,6 +40,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
     private var onNavigateToAboutPrivilegedAppsScreenCalled = false
+    private var onNavigateToPrivilegedAppsListCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -65,6 +66,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
                 onNavigateToAboutPrivilegedAppsScreen = {
                     onNavigateToAboutPrivilegedAppsScreenCalled = true
+                },
+                onNavigateToPrivilegedAppsList = {
+                    onNavigateToPrivilegedAppsListCalled = true
                 },
                 viewModel = viewModel,
             )
@@ -625,6 +629,24 @@ class AutoFillScreenTest : BitwardenComposeTest() {
 
         verify {
             viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
+        }
+    }
+
+    @Test
+    fun `on NavigateToPrivilegedAppsList should call onNavigateToPrivilegedAppsList`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToPrivilegedAppsListScreen)
+        assertTrue(onNavigateToPrivilegedAppsListCalled)
+    }
+
+    @Test
+    fun `privileged apps row click should send PrivilegedAppsClick`() {
+        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
+        composeTestRule
+            .onNodeWithText("Privileged apps")
+            .performScrollTo()
+            .performClick()
+        verify {
+            viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
         }
     }
 }

@@ -1,11 +1,10 @@
-package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps
+package com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
-import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.AboutPrivilegedAppsScreen
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test

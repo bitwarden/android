@@ -441,6 +441,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when PrivilegedAppsClick action is handled the correct NavigateToPrivilegedAppsListScreen event is sent`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(AutoFillAction.PrivilegedAppsClick)
+                assertEquals(
+                    AutoFillEvent.NavigateToPrivilegedAppsListScreen,
+                    awaitItem(),
+                )
+            }
+        }
+
     private fun createViewModel(
         state: AutoFillState? = DEFAULT_STATE,
     ): AutoFillViewModel = AutoFillViewModel(
