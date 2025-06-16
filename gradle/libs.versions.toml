@@ -26,9 +26,9 @@ androidXAppCompat = "1.7.0"
 androdixAutofill = "1.1.0"
 androidxWork = "2.10.1"
 bitwardenSdk = "1.0.0-20250602.132903-199"
-crashlytics = "3.0.3"
+crashlytics = "3.0.4"
 detekt = "1.23.8"
-firebaseBom = "33.14.0"
+firebaseBom = "33.15.0"
 glide = "1.0.0-beta01"
 googleGuava = "33.4.8-jre"
 googleProtoBufJava = "4.31.1"
@@ -95,8 +95,8 @@ bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "
 detekt-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-detekt-rules = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
-google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
-google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging" }
+google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
