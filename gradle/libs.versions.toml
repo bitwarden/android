@@ -10,7 +10,9 @@ minSdkBwa = "28"
 # Dependency Versions
 androidGradlePlugin = "8.10.1"
 androidxActivity = "1.10.1"
-androidXBiometrics = "1.2.0-alpha05"
+androidxAppCompat = "1.7.1"
+androdixAutofill = "1.3.0"
+androidxBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.8.0"
 androidxCamera = "1.4.2"
 androidxComposeBom = "2025.05.01"
@@ -20,10 +22,8 @@ androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.9.0"
 androidxNavigation = "2.9.0"
 androidxRoom = "2.7.1"
-androidXSecurityCrypto = "1.1.0-alpha06"
+androidxSecurityCrypto = "1.1.0-alpha06"
 androidxSplash = "1.1.0-rc01"
-androidXAppCompat = "1.7.1"
-androdixAutofill = "1.3.0"
 androidxWork = "2.10.1"
 bitwardenSdk = "1.0.0-20250602.132903-199"
 crashlytics = "3.0.4"
@@ -58,9 +58,9 @@ zxing = "3.5.3"
 [libraries]
 # Format: <maintainer>-<artifact-name>
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidXAppCompat" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-autofill = { group = "androidx.autofill", name = "autofill", version.ref = "androdixAutofill" }
-androidx-biometrics = { group = "androidx.biometric", name = "biometric", version.ref = "androidXBiometrics" }
+androidx-biometrics = { group = "androidx.biometric", name = "biometric", version.ref = "androidxBiometrics" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidxBrowser" }
 androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "androidxCamera" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamera" }
@@ -87,7 +87,7 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidxRoom" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "androidxRoom" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidxRoom" }
-androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidXSecurityCrypto" }
+androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidxSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android-temp", version.ref = "bitwardenSdk" }
