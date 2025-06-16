@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      id-token: write
 
     steps:
       - name: Check out repository
@@ -115,6 +116,24 @@ jobs:
             find $ARTIFACTS_PATH -type f
           fi
 
+      - name: Azure Login
+        id: azure-login
+        uses: bitwarden/gh-actions/azure-login@main
+        with:
+          subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          tenant_id: ${{ secrets.AZURE_TENANT_ID }}
+          client_id: ${{ secrets.AZURE_CLIENT_ID }}
+
+      - name: Get KV secrets
+        id: get-kv-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: gh-android
+          secrets: "JIRA-API-EMAIL,JIRA-API-TOKEN"
+
+      - name: Azure Logout
+        uses: bitwarden/gh-actions/azure-logout@main
+
       - name: Get product release notes
         id: get_release_notes
         env:
@@ -122,8 +141,8 @@ jobs:
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
           _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
           _RELEASE_TICKET_ID: ${{ inputs.release-ticket-id }}
-          _JIRA_API_EMAIL: ${{ secrets.JIRA_API_EMAIL }}
-          _JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+          _JIRA_API_EMAIL: ${{ steps.get-kv-secrets.outputs.JIRA-API-EMAIL }}
+          _JIRA_API_TOKEN: ${{ steps.get-kv-secrets.outputs.JIRA-API-TOKEN }}
         run: |
           echo "Getting product release notes"
           product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
