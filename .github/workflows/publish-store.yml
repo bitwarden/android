@@ -55,14 +55,14 @@ jobs:
       name: Promote build to Production in Play Store
 
       steps:
-        - name: Display Options
+        - name: Log inputs to job summary
           run: |
-            echo "product: ${{ inputs.product }}"
-            echo "version-code: ${{ inputs.version-code }}"
-            echo "rollout-percentage: ${{ inputs.rollout-percentage }}"
-            echo "release-notes: ${{ inputs.release-notes }}"
-            echo "track-from: ${{ inputs.track-from }}"
-            echo "track-target: ${{ inputs.track-target }}"
+            echo "<details><summary>Job Inputs</summary>" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo '${{ toJson(inputs) }}' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "</details>" >> $GITHUB_STEP_SUMMARY
 
         - name: Check out repo
           uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
