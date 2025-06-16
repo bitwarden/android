@@ -1312,4 +1312,47 @@ class VaultItemListingDataExtensionsTest {
             actual,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should set properly shouldShowAddButton false when restrictItemTypesPolicyOrgIds has values, vault type is card and there is an empty vault state`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val vaultData = VaultData(
+            cipherViewList = listOf(),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+            fido2CredentialAutofillViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Card,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = null,
+            createCredentialRequestData = null,
+            fido2CredentialAutofillViews = null,
+            totpData = null,
+            isPremiumUser = true,
+            restrictItemTypesPolicyOrgIds = listOf("restrict_item_type_policy_id"),
+        )
+
+        // Card type
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_cards.asText(),
+                shouldShowAddButton = false,
+                buttonText = R.string.new_card.asText(),
+            ),
+            actual,
+        )
+    }
 }
