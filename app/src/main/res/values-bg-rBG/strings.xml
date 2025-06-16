@@ -64,7 +64,7 @@
     <string name="website_uri">Уеб сайт (адрес)</string>
     <string name="username">Потребителско име</string>
     <string name="validation_field_required">Полето %1$s е задължително.</string>
-    <string name="you_must_attach_a_file_to_save_this_send">You must attach a file to save this send.</string>
+    <string name="you_must_attach_a_file_to_save_this_send">Трябва да прикачите файл, за да запазите това Изпращане.</string>
     <string name="value_has_been_copied">%1$s беше копирано.</string>
     <string name="verify_master_password">Потвърждаване на главната парола</string>
     <string name="verify_pin">Потвърждаване на ПИН</string>
@@ -296,8 +296,9 @@
     <string name="autofill_and_save">Дописване и обновяване</string>
     <string name="organization">Организация</string>
     <string name="try_again">Нов опит</string>
-    <string name="date_password_updated">Обновена парола</string>
-    <string name="date_updated">Обновено</string>
+    <string name="created">Created: %1$s</string>
+    <string name="password_last_updated">Password last updated: %1$s</string>
+    <string name="last_edited">Last edited: %1$s</string>
     <string name="invalid_email">Грешен адрес на е-поща.</string>
     <string name="cards">Карти</string>
     <string name="identities">Самоличности</string>
@@ -466,6 +467,7 @@
     <string name="add_text_send">Ново текстово Изпращане</string>
     <string name="are_you_sure_delete_send">Сигурни ли сте, че искате да изтриете това изпращане?</string>
     <string name="send_deleted">Изпратеното е изтрито.</string>
+    <string name="send_updated">Изпратеното е редактирано</string>
     <string name="one_day">1 ден</string>
     <string name="two_days">2 дни</string>
     <string name="three_days">3 дни</string>
@@ -547,6 +549,8 @@
     <string name="device_type">Вид устройство</string>
     <string name="ip_address">IP адрес</string>
     <string name="time">Време</string>
+    <string name="select_time">Изберете време</string>
+    <string name="switch_input_mode">Превключване на режима на въвеждане</string>
     <string name="confirm_log_in">Потвърждаване на вписването</string>
     <string name="deny_log_in">Отказване на вписването</string>
     <string name="log_in_denied">Вписването е отказано</string>
@@ -965,4 +969,17 @@
     <string name="dynamic_colors">Динамични цветове</string>
     <string name="dynamic_colors_description">Прилагане на динамични цветове според фона</string>
     <string name="dynamic_colors_may_not_adhere_to_accessibility_guidelines">Динамичните цветове използват системните цветове и може да не отговарят на всички норми за улеснено ползване.</string>
+    <string name="passkey_operation_failed_because_browser_x_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът (%1$s) не е доверен. Изберете „Даване на доверие“, за да добавите %1$s към списъка с доверени приложения или „Отказ“, за да прекратите операцията.</string>
+    <string name="passkey_operation_failed_because_the_browser_is_not_trusted">Операцията със секретен ключ не беше успешна, тъй като браузърът не е доверен.</string>
+    <string name="trust">Даване на доверие</string>
+    <string name="trusted_by_you_learn_more">These are applications or browsers that Bitwarden does not trust by default, but YOU trust to perform passkey operations.</string>
+    <string name="trusted_by_community_learn_more">These are applications not included in the Google Play Store, but Bitwarden trusts to perform passkey operations after community members use and report them as safe.</string>
+    <string name="trusted_by_google_learn_more">These are applications Google considers safe and are available in Google\'s Play Store.</string>
+    <string name="trusted_by_you">Trusted by You</string>
+    <string name="trusted_by_the_community">Trusted by the Community</string>
+    <string name="trusted_by_google">Trusted by Google</string>
+    <string name="privileged_apps_description">To protect users from phishing attempts, by default, Bitwarden only completes passkey operations through web browsers trusted by Google or the Bitwarden community.</string>
+    <string name="about_privileged_applications">About privileged applications</string>
+    <string name="learn_more_about_privileged_apps">Learn more about privileged apps</string>
+    <string name="privileged_apps">Privileged apps</string>
 </resources>

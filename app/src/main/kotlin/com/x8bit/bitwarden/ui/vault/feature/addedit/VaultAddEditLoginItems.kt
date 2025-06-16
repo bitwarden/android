@@ -361,7 +361,7 @@ private fun TotpRow(
     onTotpSetupClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    BitwardenTextField(
+    BitwardenPasswordField(
         label = stringResource(id = R.string.authenticator_key),
         value = totpKey.orEmpty(),
         onValueChange = {},
@@ -400,7 +400,7 @@ private fun TotpRow(
                     .testTag("SetupTotpButton"),
             )
         },
-        textFieldTestTag = "LoginTotpEntry",
+        passwordFieldTestTag = "LoginTotpEntry",
         cardStyle = CardStyle.Full,
         modifier = modifier
             .fillMaxWidth()
