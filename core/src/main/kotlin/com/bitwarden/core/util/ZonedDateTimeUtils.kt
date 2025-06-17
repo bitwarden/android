@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.platform.util
+package com.bitwarden.core.util
 
 import java.time.Instant
 import java.time.ZoneOffset
