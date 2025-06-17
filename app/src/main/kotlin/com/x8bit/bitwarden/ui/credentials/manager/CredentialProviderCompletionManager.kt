@@ -21,7 +21,7 @@ interface CredentialProviderCompletionManager {
     fun completeFido2Assertion(result: AssertFido2CredentialResult)
 
     /**
-     * Complete the Password credential assertion process with the provided [result].
+     * Complete the Password credential retrieval process with the provided [result].
      */
     fun completePasswordGet(result: GetPasswordCredentialResult)
 

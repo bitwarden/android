@@ -3439,7 +3439,7 @@ sealed class MasterPasswordRepromptData {
     ) : MasterPasswordRepromptData()
 
     /**
-     * Password was selected.
+     * Cipher was selected in response to a ProviderGetCredentialRequest.
      */
     data class ProviderGetCredential(
         val cipherId: String,

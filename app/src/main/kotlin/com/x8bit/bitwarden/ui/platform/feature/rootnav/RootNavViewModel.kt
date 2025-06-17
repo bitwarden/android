@@ -328,7 +328,7 @@ sealed class RootNavState : Parcelable {
     ) : RootNavState()
 
     /**
-     * AApp should retrieve the requested credential from the provided user's vault.
+     * App should retrieve the requested credential from the provided user's vault.
      */
     @Parcelize
     data class VaultUnlockedForPasswordGet(

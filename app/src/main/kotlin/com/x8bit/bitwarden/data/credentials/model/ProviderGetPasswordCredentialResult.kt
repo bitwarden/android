@@ -17,5 +17,4 @@ sealed class ProviderGetPasswordCredentialResult {
      */
     data object Error : ProviderGetPasswordCredentialResult()
 
-
 }
