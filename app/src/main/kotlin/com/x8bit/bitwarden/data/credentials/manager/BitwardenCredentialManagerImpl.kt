@@ -200,15 +200,23 @@ class BitwardenCredentialManagerImpl(
                     )
             } ?: emptyList()
 
-        return@withContext getCredentialsRequest
+        val passkeyCredentialResult = getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
             .toPublicKeyCredentialEntries(
                 userId = getCredentialsRequest.userId,
                 cipherViewsWithPublicKeyCredentials = cipherViews
                     .filter { it.isActiveWithFido2Credentials },
             )
-            .map { it + passwordCredentialResult }
-            .onFailure { Timber.e(it, "Failed to get FIDO 2 credential entries.") }
+            .onFailure {
+                Timber.e(it, "Failed to get FIDO 2 credential entries.")
+
+            }
+
+        if (passkeyCredentialResult.isFailure && passwordCredentialResult.isNotEmpty()) {
+            Result.success(passwordCredentialResult)
+        } else {
+            passkeyCredentialResult.map { it + passwordCredentialResult }
+        }
     }
 
     private fun getPasskeyAssertionOptionsOrNull(
