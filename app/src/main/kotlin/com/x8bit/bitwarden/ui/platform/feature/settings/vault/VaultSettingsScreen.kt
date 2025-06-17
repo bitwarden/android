@@ -42,7 +42,6 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarHost
 import com.x8bit.bitwarden.ui.platform.components.snackbar.rememberBitwardenSnackbarHostState
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 
 /**
  * Displays the vault settings screen.
@@ -54,7 +53,7 @@ fun VaultSettingsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
     viewModel: VaultSettingsViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
 ) {
@@ -73,7 +72,7 @@ fun VaultSettingsScreen(
 
             is VaultSettingsEvent.NavigateToImportVault -> {
                 if (state.isNewImportLoginsFlowEnabled) {
-                    onNavigateToImportLogins(SnackbarRelay.VAULT_SETTINGS_RELAY)
+                    onNavigateToImportLogins()
                 } else {
                     intentManager.launchUri(event.url.toUri())
                 }

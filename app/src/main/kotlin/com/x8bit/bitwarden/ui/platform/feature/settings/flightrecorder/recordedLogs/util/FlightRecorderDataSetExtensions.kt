@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.util
 
+import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.core.data.util.toFormattedPattern
+import com.bitwarden.core.data.util.toFormattedTimeStyle
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
@@ -7,10 +10,10 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.model.FlightRecorderDat
 import com.x8bit.bitwarden.data.platform.util.fileOf
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.recordedLogs.RecordedLogsState
 import com.x8bit.bitwarden.ui.platform.util.formatBytes
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.collections.immutable.toImmutableList
 import java.time.Clock
 import java.time.Instant
+import java.time.format.FormatStyle
 import java.time.temporal.ChronoUnit
 
 /**
@@ -67,14 +70,20 @@ private fun FlightRecorderDataSet.FlightRecorderData.expiresIn(clock: Clock): Te
         R.string.expired.asText()
     } else if (now.isAfter(expirationTime.minus(1, ChronoUnit.DAYS))) {
         // We are within 24 hours of expiration, so show the specific time.
-        val expirationTime = expirationTime.toFormattedPattern(pattern = "h:mm a", clock = clock)
+        val expirationTime = expirationTime.toFormattedTimeStyle(
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        )
         R.string.expires_at.asText(expirationTime)
     } else if (dayBeforeExpiration.dayOfYear == now.atZone(clock.zone).dayOfYear) {
         // We expire tomorrow based on the day of year.
         R.string.expires_tomorrow.asText()
     } else {
         // Let them know the date it expires.
-        val expirationDate = expirationTime.toFormattedPattern(pattern = "M/d/yy", clock = clock)
+        val expirationDate = expirationTime.toFormattedDateStyle(
+            dateStyle = FormatStyle.SHORT,
+            clock = clock,
+        )
         R.string.expires_on.asText(expirationDate)
     }
 }

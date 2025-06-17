@@ -8,7 +8,7 @@
     <string name="generic_error_message">Nepodařilo se nám zpracovat Váš požadavek. Zkuste to znovu nebo nás kontaktujte.</string>
     <string name="internet_connection_required_title">Je vyžadováno připojení k internetu</string>
     <string name="internet_connection_required_message">Před pokračováním se připojte k internetu.</string>
-    <string name="ok">OK</string>
+    <string name="okay">OK</string>
     <string name="syncing">Synchronizování</string>
     <string name="copy">Kopírovat</string>
     <string name="edit_item">Upravit</string>
@@ -17,15 +17,11 @@
     <string name="name">Název</string>
     <string name="add_item_rotation">Přidat rotaci položky</string>
     <string name="scan_a_qr_code">Naskenovat QR kód</string>
-    <string name="enter_a_setup_key">Zadat nastavovací klíč</string>
-    <string name="scan_qr_code">Naskenovat QR kód</string>
+    <string name="scan_qr_code"><annotation link="scanQrCode">Naskenovat QR kód</annotation></string>
     <string name="point_your_camera_at_the_qr_code">Umístěte kameru na QR kód.</string>
-    <string name="cannot_scan_qr_code">Nelze naskenovat QR kód.</string>
+    <string name="cannot_scan_qr_code_enter_key_manually">Nelze naskenovat QR kód? <annotation link="enterKeyManually">Zadejte klíč ručně</annotation></string>
     <string name="enter_key_manually">Zadejte klíč ručně.</string>
     <string name="cannot_add_authenticator_key">Nelze přidat ověřovací klíč?</string>
-    <string name="once_the_key_is_successfully_entered">Jakmile je klíč úspěšně zadán,\nzvolte \"Přidat TOTP\" pro bezpečné uložení klíče</string>
-    <string name="add_totp">Přidat TOTP</string>
-    <string name="authenticator_key_scanner">Ověřovací klíč</string>
     <string name="no_thanks">Ne, děkuji</string>
     <string name="settings">Nastavení</string>
     <string name="enable_camera_permission_to_use_the_scanner">Pro použití skeneru musíte povolit přístup ke kameře</string>
@@ -62,7 +58,6 @@
     <string name="theme">Motiv</string>
     <string name="dark">Tmavý</string>
     <string name="light">Světlý</string>
-    <string name="language">Jazyk</string>
     <string name="language_change_x_description">Jazyk byl změněn na %1$s. Pro zobrazení změn restartujte aplikaci.</string>
     <string name="secure_your_accounts_with_bitwarden_authenticator">Zabezpečte své účty pomocí Autentikátoru Bitwarden</string>
     <string name="get_verification_codes_for_all_your_accounts">Získejte ověřovací kódy pro všechny své účty, které podporují dvoufázové ověření.</string>
@@ -70,13 +65,10 @@
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Naskenujte QR kód v nastavení dvoufázového ověření pro jakýkoli účet.</string>
     <string name="sign_in_using_unique_codes">Přihlašujte se pomocí jedinečných kódů</string>
     <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">Používáte-li dvoufázové ověření, zadejte své uživatelské jméno a heslo a kód vygenerovaný v této aplikaci.</string>
-    <string name="continue_button">Pokračovat</string>
     <string name="skip">Přeskočit</string>
-    <string name="get_started">Začínáme</string>
-    <string name="unique_codes">Unikátní kódy</string>
     <string name="help">Nápověda</string>
     <string name="launch_tutorial">Spustit tutoriál</string>
-    <string name="value_has_been_copied">%1$s zkopírována</string>
+    <string name="value_has_been_copied">%1$s: zkopírováno</string>
     <string name="delete_item">Smazat položku</string>
     <string name="item_deleted">Položka byla smazána</string>
     <string name="delete">Smazat</string>
@@ -113,7 +105,6 @@
     <string name="import_vault">Importovat</string>
     <string name="import_success">Import trezoru byl úspěšný</string>
     <string name="key_is_invalid">Klíč je neplatný.</string>
-    <string name="favorite_tooltip">Uložit jako oblíbené</string>
     <string name="favorite">Oblíbené</string>
     <string name="favorites">Oblíbené</string>
     <string name="backup">Záloha</string>
@@ -130,7 +121,6 @@
     <string name="shared_codes_error">Nelze synchronizovat kódy z aplikace Bitwarden. Zkontrolujte, zda jsou obě aplikace aktuální. Ke stávajícím kódům máte stále přístup v aplikaci Bitwarden.</string>
     <string name="shared_accounts_header">%1$s | %2$s</string>
     <string name="sync_with_the_bitwarden_app">Synchronizovat s aplikací Bitwarden</string>
-    <string name="go_to_settings">Přejít do nastavení</string>
     <string name="sync_with_bitwarden_action_card_message">Pokud chcete zobrazit všechny ověřovací kódy, budete muset povolit synchronizaci na všech Vašich účtech.</string>
     <string name="take_me_to_app_settings">Přejít do nastavení aplikace</string>
     <string name="something_went_wrong">Něco se pokazilo</string>
@@ -146,8 +136,6 @@
     <string name="choose_save_location_message">Uložte tento ověřovací klíč zde nebo ho přidejte do Vaší aplikace Bitwarden.</string>
     <string name="save_option_as_default">Uložit volbu jako výchozí</string>
     <string name="account_synced_from_bitwarden_app">Účet je synchronizován s aplikací Bitwarden</string>
-    <string name="add_code_to_bitwarden">Přidat kód do Bitwardenu</string>
-    <string name="add_code_locally">Přidat kód místně</string>
     <string name="local_codes">Místní kódy</string>
     <string name="required_information_missing">Chybí požadované informace</string>
     <string name="required_information_missing_message">"Chybí požadované informace (např. \"služby\" nebo \"tajné\"). Zkontrolujte soubor a zkuste to znovu. Navštivte bitwarden.com/help pro pomoc."</string>

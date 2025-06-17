@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.other
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModel
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -11,7 +12,6 @@ import com.x8bit.bitwarden.data.platform.manager.network.NetworkConnectionManage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
@@ -21,11 +21,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.time.Instant
+import java.time.format.FormatStyle
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
-
-private const val VAULT_LAST_SYNC_TIME_PATTERN: String = "M/d/yyyy h:mm a"
 
 /**
  * View model for the other screen.
@@ -46,7 +45,11 @@ class OtherViewModel @Inject constructor(
             clearClipboardFrequency = settingsRepo.clearClipboardFrequency,
             lastSyncTime = settingsRepo
                 .vaultLastSync
-                ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock)
+                ?.toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                )
                 .orEmpty(),
             dialogState = null,
         ),
@@ -137,7 +140,11 @@ class OtherViewModel @Inject constructor(
             it.copy(
                 lastSyncTime = action
                     .vaultLastSyncTime
-                    ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock)
+                    ?.toFormattedDateTimeStyle(
+                        dateStyle = FormatStyle.MEDIUM,
+                        timeStyle = FormatStyle.SHORT,
+                        clock = clock,
+                    )
                     .orEmpty(),
                 dialogState = null,
             )

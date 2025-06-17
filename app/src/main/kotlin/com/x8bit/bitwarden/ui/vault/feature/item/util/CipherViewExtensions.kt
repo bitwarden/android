@@ -1,6 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
+import com.bitwarden.core.data.util.toFormattedTimeStyle
 import com.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.bitwarden.ui.platform.base.util.orZeroWidthSpace
@@ -17,7 +20,6 @@ import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.model.VaultItemLocation
@@ -27,11 +29,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import kotlinx.collections.immutable.ImmutableList
 import java.time.Clock
+import java.time.format.FormatStyle
 import java.util.Locale
-
-private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
-private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
-private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 
 /**
  * Transforms [VaultData] into [VaultItemState.ViewState].
@@ -62,9 +61,19 @@ fun CipherView.toViewState(
                         ?.find { it.id == fieldView.hashCode().toString() },
                 )
             },
-            lastUpdated = revisionDate.toFormattedPattern(
-                pattern = LAST_UPDATED_DATE_TIME_PATTERN,
-                clock = clock,
+            created = R.string.created.asText(
+                creationDate.toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                ),
+            ),
+            lastUpdated = R.string.last_edited.asText(
+                revisionDate.toFormattedDateTimeStyle(
+                    dateStyle = FormatStyle.MEDIUM,
+                    timeStyle = FormatStyle.SHORT,
+                    clock = clock,
+                ),
             ),
             notes = notes,
             requiresCloneConfirmation = login?.fido2Credentials?.any() ?: false,
@@ -124,10 +133,12 @@ fun CipherView.toViewState(
                     uris = loginValues.uris.orEmpty().map { it.toUriData() },
                     passwordRevisionDate = loginValues
                         .passwordRevisionDate
-                        ?.toFormattedPattern(
-                            pattern = LAST_UPDATED_DATE_TIME_PATTERN,
+                        ?.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.MEDIUM,
+                            timeStyle = FormatStyle.SHORT,
                             clock = clock,
-                        ),
+                        )
+                        ?.let { R.string.password_last_updated.asText(it) },
                     isPremiumUser = isPremiumUser,
                     canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
@@ -248,12 +259,12 @@ private fun LoginUriView.toUriData() =
 private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
     this?.let {
         R.string.created_xy.asText(
-            creationDate.toFormattedPattern(
-                pattern = FIDO2_CREDENTIAL_CREATION_DATE_PATTERN,
+            creationDate.toFormattedDateStyle(
+                dateStyle = FormatStyle.SHORT,
                 clock = clock,
             ),
-            creationDate.toFormattedPattern(
-                pattern = FIDO2_CREDENTIAL_CREATION_TIME_PATTERN,
+            creationDate.toFormattedTimeStyle(
+                timeStyle = FormatStyle.SHORT,
                 clock = clock,
             ),
         )

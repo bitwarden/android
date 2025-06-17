@@ -43,7 +43,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.card.BitwardenInfoCalloutCard
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.divider.BitwardenHorizontalDivider
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenExpandingHeader
@@ -51,6 +50,8 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendCustomDateChooser
+import com.x8bit.bitwarden.ui.tools.feature.send.addedit.components.AddEditSendDeletionDateChooser
 import com.x8bit.bitwarden.ui.tools.feature.send.addedit.handlers.AddEditSendHandlers
 
 /**
@@ -138,48 +139,23 @@ fun AddEditSendContent(
 
         if (isAddMode) {
             AddEditSendDeletionDateChooser(
+                onDateSelect = addSendHandlers.onDeletionDateChange,
+                isEnabled = !policyDisablesSend,
                 modifier = Modifier
                     .testTag("SendDeletionOptionsPicker")
                     .fillMaxWidth()
                     .standardHorizontalMargin(),
-                dateFormatPattern = state.common.dateFormatPattern,
-                timeFormatPattern = state.common.timeFormatPattern,
-                currentZonedDateTime = state.common.deletionDate,
-                onDateSelect = addSendHandlers.onDeletionDateChange,
-                isEnabled = !policyDisablesSend,
             )
         } else {
-            Column(
+            AddEditSendCustomDateChooser(
+                originalSelection = state.common.deletionDate,
+                isEnabled = !policyDisablesSend,
+                onDateSelect = addSendHandlers.onDeletionDateChange,
                 modifier = Modifier
+                    .testTag("SendCustomDeletionDatePicker")
                     .fillMaxWidth()
-                    .standardHorizontalMargin()
-                    .defaultMinSize(minHeight = 60.dp)
-                    .cardStyle(cardStyle = CardStyle.Full, paddingVertical = 0.dp),
-            ) {
-                AddEditSendCustomDateChooser(
-                    modifier = Modifier
-                        .testTag("SendCustomDeletionDatePicker")
-                        .fillMaxWidth(),
-                    dateLabel = stringResource(id = R.string.deletion_date),
-                    timeLabel = stringResource(id = R.string.deletion_time),
-                    dateFormatPattern = state.common.dateFormatPattern,
-                    timeFormatPattern = state.common.timeFormatPattern,
-                    currentZonedDateTime = state.common.deletionDate,
-                    isEnabled = !policyDisablesSend,
-                    onDateSelect = { addSendHandlers.onDeletionDateChange(requireNotNull(it)) },
-                )
-                BitwardenHorizontalDivider(modifier = Modifier.padding(start = 16.dp))
-                Spacer(modifier = Modifier.height(height = 12.dp))
-                Text(
-                    text = stringResource(id = R.string.deletion_date_info),
-                    style = BitwardenTheme.typography.bodySmall,
-                    color = BitwardenTheme.colorScheme.text.secondary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                )
-                Spacer(modifier = Modifier.height(height = 12.dp))
-            }
+                    .standardHorizontalMargin(),
+            )
         }
 
         AddEditSendOptions(

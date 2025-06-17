@@ -28,10 +28,11 @@ class DigitalAssetLinkServiceTest : BaseServiceTest() {
             )
                 .asSuccess(),
             digitalAssetLinkService.checkDigitalAssetLinksRelations(
-                packageName = "com.x8bit.bitwarden",
-                certificateFingerprint =
+                sourceWebSite = "https://www.bitwarden.com",
+                targetPackageName = "com.x8bit.bitwarden",
+                targetCertificateFingerprint =
                     "00:01:02:03:04:05:06:07:08:09:0A:0B:0C:0D:0E:0F:10:11:12:13",
-                relation = "delegate_permission/common.handle_all_urls",
+                relations = listOf("delegate_permission/common.handle_all_urls"),
             ),
         )
     }
@@ -42,4 +43,5 @@ private val CHECK_DIGITAL_ASSET_LINKS_RELATIONS_SUCCESS_JSON = """
     "linked": true,
     "maxAge": "47.535162130s"
 }
-""".trimIndent()
+"""
+    .trimIndent()

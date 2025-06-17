@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.ui.platform.base.BaseViewModelTest
 import com.bitwarden.ui.util.Text
 import com.bitwarden.ui.util.asText
@@ -14,7 +15,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorPasswordHistoryMode
 import io.mockk.every
 import io.mockk.just
@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import java.time.format.FormatStyle
 
 class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
@@ -171,7 +172,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
                     passwords = listOf(
                         PasswordHistoryState.GeneratedPassword(
                             password = "mockPassword-1",
-                            date = "10/27/23 12:00 PM",
+                            date = "10/27/23, 12:00 PM",
                         ),
                     ),
                 ),
@@ -194,8 +195,9 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
                 passwords = listOf(
                     PasswordHistoryState.GeneratedPassword(
                         password = "password",
-                        date = passwordHistoryView.lastUsedDate.toFormattedPattern(
-                            pattern = "MM/dd/yy h:mm a",
+                        date = passwordHistoryView.lastUsedDate.toFormattedDateTimeStyle(
+                            dateStyle = FormatStyle.SHORT,
+                            timeStyle = FormatStyle.SHORT,
                             clock = fixedClock,
                         ),
                     ),

@@ -1,9 +1,12 @@
+@file:OmitFromCoverage
+
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlocked
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.bitwarden.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupAutoFillScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.navigateToSetupUnlockScreen
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.setupAutoFillDestination
@@ -19,6 +22,8 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapp
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.pendingRequestsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.aboutPrivilegedAppsDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.privilegedapps.about.navigateToAboutPrivilegedAppsScreen
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.exportVaultDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.navigateToExportVault
 import com.x8bit.bitwarden.ui.platform.feature.settings.flightrecorder.flightRecorderDestination
@@ -113,9 +118,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             },
             onNavigateToSetupUnlockScreen = { navController.navigateToSetupUnlockScreen() },
             onNavigateToSetupAutoFillScreen = { navController.navigateToSetupAutoFillScreen() },
-            onNavigateToImportLogins = {
-                navController.navigateToImportLoginsScreen(snackbarRelay = it)
-            },
+            onNavigateToImportLogins = { navController.navigateToImportLoginsScreen() },
             onNavigateToAddFolderScreen = {
                 navController.navigateToFolderAddEdit(
                     folderAddEditType = FolderAddEditType.AddItem,
@@ -126,6 +129,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 navController.navigateToFlightRecorder(isPreAuth = false)
             },
             onNavigateToRecordedLogs = { navController.navigateToRecordedLogs(isPreAuth = false) },
+            onNavigateToAboutPrivilegedApps = {
+                navController.navigateToAboutPrivilegedAppsScreen()
+            },
         )
         flightRecorderDestination(
             isPreAuth = false,
@@ -133,6 +139,9 @@ fun NavGraphBuilder.vaultUnlockedGraph(
         )
         recordedLogsDestination(
             isPreAuth = false,
+            onNavigateBack = { navController.popBackStack() },
+        )
+        aboutPrivilegedAppsDestination(
             onNavigateBack = { navController.popBackStack() },
         )
         deleteAccountDestination(

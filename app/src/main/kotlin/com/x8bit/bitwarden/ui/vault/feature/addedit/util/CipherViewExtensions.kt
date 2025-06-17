@@ -2,6 +2,8 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
+import com.bitwarden.core.data.util.toFormattedDateStyle
+import com.bitwarden.core.data.util.toFormattedTimeStyle
 import com.bitwarden.ui.util.asText
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
@@ -15,7 +17,6 @@ import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.TotpData
@@ -27,10 +28,8 @@ import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.time.Clock
+import java.time.format.FormatStyle
 import java.util.UUID
-
-private const val PASSKEY_CREATION_DATE_PATTERN: String = "M/d/yy"
-private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -332,6 +331,6 @@ private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
  * "M/d/yy, hh:mm a".
  */
 private fun Fido2Credential.getCreationDateTime(clock: Clock) = R.string.created_xy.asText(
-    creationDate.toFormattedPattern(pattern = PASSKEY_CREATION_DATE_PATTERN, clock = clock),
-    creationDate.toFormattedPattern(pattern = PASSKEY_CREATION_TIME_PATTERN, clock = clock),
+    creationDate.toFormattedDateStyle(dateStyle = FormatStyle.SHORT, clock = clock),
+    creationDate.toFormattedTimeStyle(timeStyle = FormatStyle.SHORT, clock = clock),
 )

@@ -38,7 +38,6 @@ import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.review.AppReviewManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
@@ -118,10 +117,7 @@ class VaultScreenTest : BitwardenComposeTest() {
                 onDimBottomNavBarRequest = { onDimBottomNavBarRequestCalled = true },
                 onNavigateToVerificationCodeScreen = { onNavigateToVerificationCodeScreen = true },
                 onNavigateToSearchVault = { onNavigateToSearchScreen = true },
-                onNavigateToImportLogins = {
-                    onNavigateToImportLoginsCalled = true
-                    assertEquals(SnackbarRelay.MY_VAULT_RELAY, it)
-                },
+                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
                 onNavigateToAddFolderScreen = { folderName ->
                     onNavigateToAddFolderCalled = true
                     onNavigateToAddFolderParentFolderName = folderName

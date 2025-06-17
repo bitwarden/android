@@ -4,7 +4,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.bitwarden.ui.platform.base.util.composableWithPushTransitions
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import kotlinx.serialization.Serializable
 
 /**
@@ -20,7 +19,7 @@ fun NavGraphBuilder.vaultSettingsDestination(
     onNavigateBack: () -> Unit,
     onNavigateToExportVault: () -> Unit,
     onNavigateToFolders: () -> Unit,
-    onNavigateToImportLogins: (SnackbarRelay) -> Unit,
+    onNavigateToImportLogins: () -> Unit,
 ) {
     composableWithPushTransitions<VaultSettingsRoute> {
         VaultSettingsScreen(

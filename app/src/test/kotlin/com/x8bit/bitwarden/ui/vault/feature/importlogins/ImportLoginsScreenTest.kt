@@ -23,7 +23,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.util.advanceTimeByAndRunCurrent
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -492,5 +491,4 @@ private val DEFAULT_STATE = ImportLoginsState(
     viewState = ImportLoginsState.ViewState.InitialContent,
     showBottomSheet = false,
     currentWebVaultUrl = "vault.bitwarden.com",
-    snackbarRelay = SnackbarRelay.MY_VAULT_RELAY,
 )

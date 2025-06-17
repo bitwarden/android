@@ -57,6 +57,11 @@ class VerificationCodeViewModel @Inject constructor(
             viewState = VerificationCodeState.ViewState.Loading,
             dialogState = null,
             isRefreshing = false,
+            hasMasterPassword = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.hasMasterPassword == true,
         )
     },
 ) {
@@ -83,11 +88,8 @@ class VerificationCodeViewModel @Inject constructor(
                     listDataState
                 }
             }
-            .onEach {
-                sendAction(
-                    VerificationCodeAction.Internal.AuthCodesReceive(it),
-                )
-            }
+            .map { VerificationCodeAction.Internal.AuthCodesReceive(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -280,10 +282,7 @@ class VerificationCodeViewModel @Inject constructor(
     ) {
         val data = verificationCodeData.data
         if (data != null) {
-            updateStateWithVerificationCodeData(
-                verificationCodeData = data,
-                clearDialogState = true,
-            )
+            updateStateWithVerificationCodeData(verificationCodeData = data)
         } else {
             mutableStateFlow.update { currentState ->
                 currentState.copy(
@@ -305,20 +304,14 @@ class VerificationCodeViewModel @Inject constructor(
     private fun vaultPendingReceive(
         verificationCodeData: DataState.Pending<List<VerificationCodeItem>>,
     ) {
-        updateStateWithVerificationCodeData(
-            verificationCodeData = verificationCodeData.data,
-            clearDialogState = false,
-        )
+        updateStateWithVerificationCodeData(verificationCodeData = verificationCodeData.data)
     }
 
     private fun vaultLoadedReceive(
         verificationCodeData:
         DataState.Loaded<List<VerificationCodeItem>>,
     ) {
-        updateStateWithVerificationCodeData(
-            verificationCodeData = verificationCodeData.data,
-            clearDialogState = true,
-        )
+        updateStateWithVerificationCodeData(verificationCodeData = verificationCodeData.data)
         mutableStateFlow.update { it.copy(isRefreshing = false) }
     }
 
@@ -329,10 +322,7 @@ class VerificationCodeViewModel @Inject constructor(
     private fun vaultErrorReceive(vaultData: DataState.Error<List<VerificationCodeItem>>) {
         val data = vaultData.data
         if (data != null) {
-            updateStateWithVerificationCodeData(
-                verificationCodeData = data,
-                clearDialogState = true,
-            )
+            updateStateWithVerificationCodeData(verificationCodeData = data)
         } else {
             mutableStateFlow.update {
                 it.copy(
@@ -348,7 +338,6 @@ class VerificationCodeViewModel @Inject constructor(
 
     private fun updateStateWithVerificationCodeData(
         verificationCodeData: List<VerificationCodeItem>,
-        clearDialogState: Boolean,
     ) {
         if (verificationCodeData.isEmpty()) {
             sendEvent(VerificationCodeEvent.NavigateBack)
@@ -363,7 +352,7 @@ class VerificationCodeViewModel @Inject constructor(
                             VerificationCodeDisplayItem(
                                 id = item.id,
                                 authCode = item.code,
-                                hideAuthCode = item.hasPasswordReprompt,
+                                hideAuthCode = item.hasPasswordReprompt && state.hasMasterPassword,
                                 label = item.name,
                                 supportingLabel = item.username,
                                 periodSeconds = item.periodSeconds,
@@ -376,7 +365,9 @@ class VerificationCodeViewModel @Inject constructor(
                             )
                         },
                 ),
-                dialogState = state.dialogState.takeUnless { clearDialogState },
+                dialogState = state.dialogState.takeUnless {
+                    it is VerificationCodeState.DialogState.Loading
+                },
             )
         }
     }
@@ -412,6 +403,7 @@ data class VerificationCodeState(
     val dialogState: DialogState?,
     val isPullToRefreshSettingEnabled: Boolean,
     val isRefreshing: Boolean,
+    val hasMasterPassword: Boolean,
 ) : Parcelable {
 
     /**

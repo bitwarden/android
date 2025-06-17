@@ -2515,7 +2515,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isLaunchable = true,
                     ),
                 ),
-                passwordRevisionDate = "12/31/69 06:16 PM",
+                passwordRevisionDate = R.string.password_last_updated.asText("12/31/69 06:16 PM"),
                 isPremiumUser = true,
                 totpCodeItemData = TotpCodeItemData(
                     totpCode = "otpauth://totp/Example:alice@google.com" +
@@ -2569,7 +2569,8 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             VaultItemState.ViewState.Content.Common(
                 name = "login cipher",
-                lastUpdated = "12/31/69 06:16 PM",
+                created = R.string.created.asText("Dec 1, 1969, 05:20 PM"),
+                lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
                 notes = "Lots of notes",
                 customFields = listOf(
                     VaultItemState.ViewState.Content.Common.Custom.TextField(

@@ -7,7 +7,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
 import androidx.compose.ui.test.filterToOne
@@ -490,22 +489,46 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     }
 
     @Test
+    fun `created should be displayed according to state`() {
+        EMPTY_VIEW_STATES
+            .forEach { typeState ->
+                mutableStateFlow.update { it.copy(viewState = typeState) }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(text = "Created: Dec 1, 1969, 05:20 PM")
+                    .assertIsDisplayed()
+
+                mutableStateFlow.update { currentState ->
+                    updateCommonContent(currentState) {
+                        copy(lastUpdated = R.string.created.asText("Feb 21, 1970, 1:30 AM"))
+                    }
+                }
+
+                composeTestRule
+                    .onNodeWithTextAfterScroll(text = "Created: Feb 21, 1970, 1:30 AM")
+                    .assertIsDisplayed()
+            }
+    }
+
+    @Test
     fun `lastUpdated should be displayed according to state`() {
         EMPTY_VIEW_STATES
             .forEach { typeState ->
                 mutableStateFlow.update { it.copy(viewState = typeState) }
 
                 composeTestRule
-                    .onNodeWithTextAfterScroll("Updated: ")
-                    .assertTextContains("12/31/69 06:16 PM")
+                    .onNodeWithTextAfterScroll(text = "Last edited: Dec 31, 1969, 06:16 PM")
+                    .assertIsDisplayed()
 
                 mutableStateFlow.update { currentState ->
-                    updateCommonContent(currentState) { copy(lastUpdated = "12/31/69 06:20 PM") }
+                    updateCommonContent(currentState) {
+                        copy(lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:20 PM"))
+                    }
                 }
 
                 composeTestRule
-                    .onNodeWithTextAfterScroll("Updated: ")
-                    .assertTextContains("12/31/69 06:20 PM")
+                    .onNodeWithTextAfterScroll(text = "Last edited: Dec 31, 1969, 06:20 PM")
+                    .assertIsDisplayed()
             }
     }
 
@@ -2365,15 +2388,17 @@ class VaultItemScreenTest : BitwardenComposeTest() {
     @Test
     fun `in login state, password updated should be displayed according to state`() {
         mutableStateFlow.update { it.copy(viewState = DEFAULT_LOGIN_VIEW_STATE) }
-        composeTestRule.onNodeWithTextAfterScroll("Password updated: ").assertIsDisplayed()
-        composeTestRule.onNodeWithTextAfterScroll("4/14/83 3:56 PM").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Password last updated: Apr 14, 1983 3:56 PM")
+            .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(passwordRevisionDate = null) }
         }
 
-        composeTestRule.assertScrollableNodeDoesNotExist("Password updated: ")
-        composeTestRule.assertScrollableNodeDoesNotExist("4/14/83 3:56 PM")
+        composeTestRule.assertScrollableNodeDoesNotExist(
+            text = "Password last updated: Apr 14, 1983 3:56 PM",
+        )
     }
     //endregion login
 
@@ -2916,7 +2941,7 @@ class VaultItemScreenTest : BitwardenComposeTest() {
         }
 
         // First scroll past the security code field to avoid clicking the fab
-        composeTestRule.onNodeWithTextAfterScroll("Updated: ")
+        composeTestRule.onNodeWithTextAfterScroll("Last edited: Dec 31, 1969, 06:16 PM")
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll("Copy security code")
             .performClick()
@@ -3123,7 +3148,8 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
-        lastUpdated = "12/31/69 06:16 PM",
+        created = R.string.created.asText(""),
+        lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = "Lots of notes",
         customFields = listOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
@@ -3186,7 +3212,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
                 isLaunchable = true,
             ),
         ),
-        passwordRevisionDate = "4/14/83 3:56 PM",
+        passwordRevisionDate = R.string.password_last_updated.asText("Apr 14, 1983 3:56 PM"),
         isPremiumUser = true,
         totpCodeItemData = TotpCodeItemData(
             periodSeconds = 30,
@@ -3239,7 +3265,8 @@ private val DEFAULT_SSH_KEY: VaultItemState.ViewState.Content.ItemType.SshKey =
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
         name = "cipher",
-        lastUpdated = "12/31/69 06:16 PM",
+        created = R.string.created.asText("Dec 1, 1969, 05:20 PM"),
+        lastUpdated = R.string.last_edited.asText("Dec 31, 1969, 06:16 PM"),
         notes = null,
         customFields = emptyList(),
         requiresCloneConfirmation = false,

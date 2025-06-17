@@ -81,10 +81,7 @@ fun BitwardenTimePickerDialog(
         inputToggleButton = {
             BitwardenStandardIconButton(
                 vectorIconRes = R.drawable.ic_keyboard,
-                contentDescription = stringResource(
-                    // TODO: Get our own string for this (BIT-1405)
-                    id = androidx.compose.material3.R.string.m3c_date_picker_switch_to_input_mode,
-                ),
+                contentDescription = stringResource(id = R.string.switch_input_mode),
                 onClick = { showTimeInput = !showTimeInput },
             )
         },
@@ -161,8 +158,7 @@ private fun TimePickerDialog(
                         .testTag("AlertTitleText")
                         .fillMaxWidth()
                         .padding(bottom = 20.dp),
-                    // TODO: This should be "Select time" but we don't have that string (BIT-1405)
-                    text = stringResource(id = R.string.time),
+                    text = stringResource(id = R.string.select_time),
                     color = BitwardenTheme.colorScheme.text.secondary,
                     style = BitwardenTheme.typography.labelMedium,
                 )

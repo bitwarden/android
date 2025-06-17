@@ -15,7 +15,6 @@ import com.bitwarden.ui.util.asText
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
 import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.snackbar.SnackbarRelay
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -23,7 +22,6 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -62,10 +60,7 @@ class VaultSettingsScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToExportVault = { onNavigateToExportVaultCalled = true },
                 onNavigateToFolders = { onNavigateToFoldersCalled = true },
-                onNavigateToImportLogins = {
-                    onNavigateToImportLoginsCalled = true
-                    assertEquals(SnackbarRelay.VAULT_SETTINGS_RELAY, it)
-                },
+                onNavigateToImportLogins = { onNavigateToImportLoginsCalled = true },
             )
         }
     }

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import app.cash.turbine.test
 import com.bitwarden.core.data.repository.model.DataState
+import com.bitwarden.core.data.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.data.repository.model.Environment
 import com.bitwarden.data.repository.util.baseIconUrl
 import com.bitwarden.network.model.OrganizationType
@@ -63,7 +64,6 @@ import io.mockk.verify
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
@@ -83,11 +83,11 @@ class VaultViewModelTest : BaseViewModelTest() {
         ZoneOffset.UTC,
     )
 
-    private val mutableSnackbarDataFlow = MutableStateFlow<BitwardenSnackbarData?>(null)
+    private val mutableSnackbarDataFlow = bufferedMutableSharedFlow<BitwardenSnackbarData>()
     private val snackbarRelayManager: SnackbarRelayManager = mockk {
-        every { getSnackbarDataFlow(SnackbarRelay.MY_VAULT_RELAY) } returns mutableSnackbarDataFlow
-            .filterNotNull()
-        every { clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY) } just runs
+        every {
+            getSnackbarDataFlow(SnackbarRelay.LOGINS_IMPORTED)
+        } returns mutableSnackbarDataFlow
     }
 
     private val clipboardManager: BitwardenClipboardManager = mockk {
@@ -1483,7 +1483,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
+                    ListingItemOverflowAction.VaultAction.CopyNoteClick(
+                        notes = notes,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1556,7 +1559,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -1581,7 +1587,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode),
+                    ListingItemOverflowAction.VaultAction.CopyTotpClick(
+                        totpCode = totpCode,
+                        requiresPasswordReprompt = false,
+                    ),
                 ),
             )
 
@@ -2050,8 +2059,8 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `when SnackbarRelay flow updates, snackbar is shown`() = runTest {
         val viewModel = createViewModel()
         val expectedSnackbarData = BitwardenSnackbarData(message = "test message".asText())
-        mutableSnackbarDataFlow.update { expectedSnackbarData }
         viewModel.eventFlow.test {
+            mutableSnackbarDataFlow.tryEmit(expectedSnackbarData)
             assertEquals(VaultEvent.ShowSnackbar(expectedSnackbarData), awaitItem())
         }
     }
@@ -2068,9 +2077,6 @@ class VaultViewModelTest : BaseViewModelTest() {
                     },
                 ),
             )
-            verify(exactly = 1) {
-                snackbarRelayManager.clearRelayBuffer(SnackbarRelay.MY_VAULT_RELAY)
-            }
         }
 
     @Suppress("MaxLineLength")

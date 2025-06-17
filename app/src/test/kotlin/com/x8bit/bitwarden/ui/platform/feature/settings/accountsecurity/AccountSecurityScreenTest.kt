@@ -927,7 +927,7 @@ class AccountSecurityScreenTest : BitwardenComposeTest() {
             .performClick()
 
         composeTestRule
-            .onAllNodesWithText("Time")
+            .onAllNodesWithText(text = "Select time")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
         composeTestRule

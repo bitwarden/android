@@ -3,38 +3,18 @@ name: Create GitHub Release
 on:
   workflow_dispatch:
     inputs:
-      version-name:
-        description: 'Version Name - E.g. "2024.11.1"'
-        required: true
-        type: string
-      version-number:
-        description: 'Version Number - E.g. "123456"'
-        required: true
-        type: string
       artifact-run-id:
         description: 'GitHub Action Run ID containing artifacts'
         required: true
         type: string
-      draft:
-        description: 'Create as draft release'
-        type: boolean
-        default: true
-      prerelease:
-        description: 'Mark as pre-release'
-        type: boolean
-        default: true
-      make-latest:
-        description: 'Set as the latest release'
-        type: boolean
-      branch-protection-type:
-        description: 'Branch protection type'
-        type: choice
-        options:
-          - Branch Name
-          - GitHub API
-        default: Branch Name
+      release-ticket-id:
+        description: 'Release Ticket ID - e.g. RELEASE-1762'
+        required: true
+        type: string
+
 env:
     ARTIFACTS_PATH: artifacts
+
 jobs:
   create-release:
     name: Create GitHub Release
@@ -53,31 +33,74 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
-          BRANCH_PROTECTION_TYPE: ${{ inputs.branch-protection-type }}
         run: |
-          release_branch=$(gh run view $ARTIFACT_RUN_ID --json headBranch -q .headBranch)
+          workflow_data=$(gh run view $ARTIFACT_RUN_ID --json headBranch,workflowName)
+          release_branch=$(echo "$workflow_data" | jq -r .headBranch)
+          workflow_name=$(echo "$workflow_data" | jq -r .workflowName)
 
-          case "$BRANCH_PROTECTION_TYPE" in
-            "Branch Name")
-              if [[ "$release_branch" != "main" && ! "$release_branch" =~ ^release/ ]]; then
-                echo "::error::Branch '$release_branch' is not 'main' or a release branch starting with 'release/'. Releases must be created from protected branches."
-                exit 1
-              fi
+          # branch protection check
+          if [[ "$release_branch" != "main" && ! "$release_branch" =~ ^release/ ]]; then
+            echo "::error::Branch '$release_branch' is not 'main' or a release branch starting with 'release/'. Releases must be created from protected branches."
+            exit 1
+          fi
+
+          echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
+          echo "workflow_name=$workflow_name" >> $GITHUB_OUTPUT
+
+          case "$workflow_name" in
+            *"Password Manager"* | "Build")
+              echo "app_name=Password Manager" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwpm" >> $GITHUB_OUTPUT
               ;;
-            "GitHub API")
-              #NOTE requires token with "administration:read" scope
-              if ! gh api "repos/${{ github.repository }}/branches/$release_branch/protection" | grep -q "required_status_checks"; then
-                echo "::error::Branch '$release_branch' is not protected. Releases must be created from protected branches. If that's not correct, confirm if the github token user has the 'administration:read' scope."
-                exit 1
-              fi
+            *"Authenticator"*)
+              echo "app_name=Authenticator" >> $GITHUB_OUTPUT
+              echo "app_name_suffix=bwa" >> $GITHUB_OUTPUT
               ;;
             *)
-              echo "::error::Unsupported branch protection type: $BRANCH_PROTECTION_TYPE"
+              echo "::error::Unknown workflow name: $workflow_name"
               exit 1
               ;;
           esac
 
-          echo "release_branch=$release_branch" >> $GITHUB_OUTPUT
+      - name: Get version info from run logs and set release tag name
+        id: get_release_info
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _APP_NAME_SUFFIX: ${{ steps.get_release_branch.outputs.app_name_suffix }}
+        run: |
+          workflow_log=$(gh run view $ARTIFACT_RUN_ID --log)
+
+          version_number_with_trailing_dot=$(grep -m 1 "Setting version code to" <<< "$workflow_log" | sed 's/.*Setting version code to //')
+          version_number=${version_number_with_trailing_dot%.} # remove trailing dot
+
+          version_name_with_trailing_dot=$(grep -m 1 "Setting version name to" <<< "$workflow_log" | sed 's/.*Setting version name to //')
+          version_name=${version_name_with_trailing_dot%.} # remove trailing dot
+
+          if [[ -z "$version_name" ]]; then
+            echo "::warning::Version name not found. Using default value - 0.0.0"
+            version_name="0.0.0"
+          else
+            echo "✅ Found version name: $version_name"
+          fi
+
+          if [[ -z "$version_number" ]]; then
+            echo "::warning::Version number not found. Using default value - 0"
+            version_number="0"
+          else
+            echo "✅ Found version number: $version_number"
+          fi
+
+          echo "version_number=$version_number" >> $GITHUB_OUTPUT
+          echo "version_name=$version_name" >> $GITHUB_OUTPUT
+
+          tag_name="v$version_name-$_APP_NAME_SUFFIX" # e.g. v2025.6.0-bwpm
+          echo "🔖 New tag name: $tag_name"
+          echo "tag_name=$tag_name" >> $GITHUB_OUTPUT
+
+          last_release_tag=$(git tag -l --sort=-authordate | grep "$APP_NAME_SUFFIX" | head -n 1)
+          echo "🔖 Last release tag: $last_release_tag"
+          echo "last_release_tag=$last_release_tag" >> $GITHUB_OUTPUT
 
       - name: Download artifacts
         env:
@@ -92,37 +115,106 @@ jobs:
             find $ARTIFACTS_PATH -type f
           fi
 
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
-        with:
-          tag_name: "v${{ inputs.version-name }}"
-          name: "${{ inputs.version-name }} (${{ inputs.version-number }})"
-          prerelease: ${{ inputs.prerelease }}
-          draft: ${{ inputs.draft }}
-          make_latest: ${{ inputs.make-latest }}
-          target_commitish: ${{ steps.get_release_branch.outputs.release_branch }}
-          generate_release_notes: true
-          files: |
-            artifacts/**/*
-
-      - name: Update Release Description
+      - name: Get product release notes
+        id: get_release_notes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_ID: ${{ steps.create_release.outputs.id }}
-          RELEASE_URL: ${{ steps.create_release.outputs.url }}
           ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _RELEASE_TICKET_ID: ${{ inputs.release-ticket-id }}
+          _JIRA_API_EMAIL: ${{ secrets.JIRA_API_EMAIL }}
+          _JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
         run: |
-          # Get current release body
-          current_body=$(gh api /repos/${{ github.repository }}/releases/$RELEASE_ID --jq .body)
+          echo "Getting product release notes"
+          product_release_notes=$(python3 .github/scripts/jira-get-release-notes/jira_release_notes.py $_RELEASE_TICKET_ID $_JIRA_API_EMAIL $_JIRA_API_TOKEN)
 
-          # Append build source to the end
-          updated_body="${current_body}
+          if [[ -z "$product_release_notes" || $product_release_notes == "Error checking"* ]]; then
+            echo "::warning::Failed to fetch release notes from Jira. Output: $product_release_notes"
+            product_release_notes="<insert product release notes here>"
+          else
+            echo "✅ Product release notes:"
+            echo "$product_release_notes"
+          fi
+
+          echo "$product_release_notes" > product_release_notes.txt
+
+      - name: Create Release
+        id: create_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          _APP_NAME: ${{ steps.get_release_branch.outputs.app_name }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
+          _TARGET_COMMIT: ${{ steps.get_release_branch.outputs.release_branch }}
+          _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
+          _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
+        run: |
+          echo "⌛️ Creating release for $_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER) on $_TARGET_COMMIT"
+          release_url=$(gh release create "$_TAG_NAME" \
+            --title "$_APP_NAME $_VERSION_NAME ($_VERSION_NUMBER)" \
+            --target "$_TARGET_COMMIT" \
+            --generate-notes \
+            --notes-start-tag "$_LAST_RELEASE_TAG" \
+            --draft \
+            $ARTIFACTS_PATH/*/*)
+
+          echo "✅ Release created: $release_url"
+
+          # Get release info for outputs
+          release_data=$(gh release view "$_TAG_NAME" --json id)
+          release_id=$(echo "$release_data" | jq -r .id)
+
+          echo "id=$release_id" >> $GITHUB_OUTPUT
+          echo "url=$release_url" >> $GITHUB_OUTPUT
+
+      - name: Update Release Description
+        id: update_release_description
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_RUN_ID: ${{ inputs.artifact-run-id }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _TAG_NAME: ${{ steps.get_release_info.outputs.tag_name }}
+        run: |
+          echo "Getting current release body. Tag: $_TAG_NAME"
+          current_body=$(gh release view "$_TAG_NAME" --json body --jq .body)
+
+          product_release_notes=$(cat product_release_notes.txt)
+
+          # Update release description with product release notes and builds source
+          updated_body="# Overview
+          ${product_release_notes}
+
+          ${current_body}
           **Builds Source:** https://github.com/${{ github.repository }}/actions/runs/$ARTIFACT_RUN_ID"
 
-          # Update release
-          gh api --method PATCH /repos/${{ github.repository }}/releases/$RELEASE_ID \
-            -f body="$updated_body"
+          new_release_url=$(gh release edit "$_TAG_NAME" --notes "$updated_body")
 
-          echo "# :rocket: Release ready at:" >> $GITHUB_STEP_SUMMARY
-          echo "$RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          # draft release links change after editing
+          echo "release_url=$new_release_url" >> $GITHUB_OUTPUT
+
+      - name: Add Release Summary
+        env:
+          _RELEASE_TAG: ${{ steps.get_release_info.outputs.tag_name }}
+          _LAST_RELEASE_TAG: ${{ steps.get_release_info.outputs.last_release_tag }}
+          _VERSION_NAME: ${{ steps.get_release_info.outputs.version_name }}
+          _VERSION_NUMBER: ${{ steps.get_release_info.outputs.version_number }}
+          _RELEASE_BRANCH: ${{ steps.get_release_branch.outputs.release_branch }}
+          _RELEASE_URL: ${{ steps.update_release_description.outputs.release_url }}
+        run: |
+          echo "# :fish_cake: Release ready at:" >> $GITHUB_STEP_SUMMARY
+          echo "$_RELEASE_URL" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "$_VERSION_NAME" == "0.0.0" || "$_VERSION_NUMBER" == "0" ]]; then
+            echo "> [!CAUTION]" >> $GITHUB_STEP_SUMMARY
+            echo "> Version name or number wasn't previously found and a default value was used. You'll need to manually update the release Title, Tag and Description, specifically, the "Full Changelog" link." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo ":clipboard: Confirm that the defined GitHub Release options are correct:"  >> $GITHUB_STEP_SUMMARY
+          echo " * :bookmark: New tag name: \`$_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :palm_tree: Target branch: \`$_RELEASE_BRANCH\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :ocean: Previous tag set in the description \"Full Changelog\" link: \`$_LAST_RELEASE_TAG\`" >> $GITHUB_STEP_SUMMARY
+          echo " * :white_check_mark: Description has automated release notes and they match the commits in the release branch" >> $GITHUB_STEP_SUMMARY
+          echo "> [!NOTE]" >> $GITHUB_STEP_SUMMARY
+          echo "> Commits directly pushed to branches without a Pull Request won't appear in the automated release notes." >> $GITHUB_STEP_SUMMARY

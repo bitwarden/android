@@ -39,6 +39,7 @@ class AutoFillScreenTest : BitwardenComposeTest() {
     private var onNavigateBackCalled = false
     private var onNavigateToBlockAutoFillScreenCalled = false
     private var onNavigateToSetupAutoFillScreenCalled = false
+    private var onNavigateToAboutPrivilegedAppsScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<AutoFillEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -62,6 +63,9 @@ class AutoFillScreenTest : BitwardenComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToBlockAutoFillScreen = { onNavigateToBlockAutoFillScreenCalled = true },
                 onNavigateToSetupAutofill = { onNavigateToSetupAutoFillScreenCalled = true },
+                onNavigateToAboutPrivilegedAppsScreen = {
+                    onNavigateToAboutPrivilegedAppsScreenCalled = true
+                },
                 viewModel = viewModel,
             )
         }
@@ -587,6 +591,42 @@ class AutoFillScreenTest : BitwardenComposeTest() {
             intentManager.startChromeAutofillSettingsActivity(ChromeReleaseChannel.STABLE)
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `NavigateToAboutPrivilegedAppsScreen event should call onNavigateToAboutPrivilegedAppsScreen`() {
+        mutableEventFlow.tryEmit(AutoFillEvent.NavigateToAboutPrivilegedAppsScreen)
+        assertTrue(onNavigateToAboutPrivilegedAppsScreenCalled)
+    }
+
+    @Test
+    fun `PrivilegedAppsRow should display based on state`() {
+        composeTestRule
+            .onNodeWithText("Privileged apps")
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(isUserManagedPrivilegedAppsEnabled = true)
+        }
+        composeTestRule
+            .onNodeWithText("Privileged apps")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `privileged app help link click should send AboutPrivilegedAppsClick`() {
+        mutableStateFlow.update { it.copy(isUserManagedPrivilegedAppsEnabled = true) }
+        composeTestRule
+            .onNodeWithContentDescription("Learn more about privileged apps")
+            .performScrollTo()
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(AutoFillAction.AboutPrivilegedAppsClick)
+        }
+    }
 }
 
 private val DEFAULT_STATE: AutoFillState = AutoFillState(
@@ -601,4 +641,5 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     showAutofillActionCard = false,
     activeUserId = "activeUserId",
     chromeAutofillSettingsOptions = persistentListOf(),
+    isUserManagedPrivilegedAppsEnabled = false,
 )

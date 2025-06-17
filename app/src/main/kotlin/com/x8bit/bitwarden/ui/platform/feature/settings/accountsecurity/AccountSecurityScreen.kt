@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bitwarden.core.data.util.toFormattedPattern
 import com.bitwarden.ui.platform.base.util.EventsEffect
 import com.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -69,7 +70,6 @@ import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.util.minutes
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalTime
 import javax.crypto.Cipher
@@ -572,13 +572,11 @@ private fun SessionCustomTimeoutRow(
         cardStyle = CardStyle.Middle(),
         modifier = modifier,
     ) {
-        val formattedTime = LocalTime
-            .ofSecondOfDay(
-                vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong(),
-            )
-            .toFormattedPattern("HH:mm")
+
         Text(
-            text = formattedTime,
+            text = LocalTime
+                .ofSecondOfDay(vaultTimeoutInMinutes * MINUTES_PER_HOUR.toLong())
+                .toFormattedPattern(pattern = "HH:mm"),
             style = BitwardenTheme.typography.labelSmall,
             color = BitwardenTheme.colorScheme.text.primary,
         )

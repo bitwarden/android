@@ -26,6 +26,7 @@ import com.bitwarden.ui.util.isProgressBar
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.platform.manager.util.AppResumeStateManager
 import com.x8bit.bitwarden.ui.platform.base.BitwardenComposeTest
+import com.x8bit.bitwarden.ui.platform.components.snackbar.BitwardenSnackbarData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.platform.feature.search.util.createMockDisplayItemForSend
@@ -149,6 +150,16 @@ class SearchScreenTest : BitwardenComposeTest() {
         verify(exactly = 1) {
             intentManager.launchUri(url.toUri())
         }
+    }
+
+    @Test
+    fun `on ShowSnackbar event should display the snackbar`() {
+        val message = "message"
+        val data = BitwardenSnackbarData(message = message.asText())
+        mutableEventFlow.tryEmit(SearchEvent.ShowSnackbar(data = data))
+        composeTestRule
+            .onNodeWithText(text = message)
+            .assertIsDisplayed()
     }
 
     @Test

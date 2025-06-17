@@ -1,13 +1,14 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.viewsend.util
 
+import com.bitwarden.core.data.util.toFormattedDateTimeStyle
 import com.bitwarden.send.SendFileView
 import com.bitwarden.send.SendTextView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toSendUrl
 import com.x8bit.bitwarden.ui.tools.feature.send.viewsend.ViewSendState
 import java.time.Clock
+import java.time.format.FormatStyle
 
 /**
  * Transforms the given [SendView] to a [ViewSendState.ViewState.Content].
@@ -23,9 +24,11 @@ fun SendView.toViewSendViewStateContent(
         },
         shareLink = this.toSendUrl(baseWebSendUrl = baseWebSendUrl),
         sendName = this.name,
-        deletionDate = this
-            .deletionDate
-            .toFormattedPattern(pattern = "d MMM, yyyy, h:mma", clock = clock),
+        deletionDate = this.deletionDate.toFormattedDateTimeStyle(
+            dateStyle = FormatStyle.MEDIUM,
+            timeStyle = FormatStyle.SHORT,
+            clock = clock,
+        ),
         maxAccessCount = this.maxAccessCount?.toInt(),
         currentAccessCount = this.accessCount.toInt(),
         notes = this.notes,
