@@ -52,7 +52,7 @@ class OriginManagerImpl(
                     if (it.linked) {
                         ValidateOriginResult.Success(null)
                     } else {
-                        ValidateOriginResult.Error.PasskeyNotSupportedForApp //TODO doesn't match anymore when passwords are supported
+                        ValidateOriginResult.Error.PasskeyNotSupportedForApp
                     }
                 },
                 onFailure = {

@@ -561,7 +561,6 @@ sealed class VaultUnlockEvent {
      * Completes the Password get credentials request with an error response.
      */
     data class PasswordGetCredentialsError(val message: Text) : VaultUnlockEvent()
-
 }
 
 /**
