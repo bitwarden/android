@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.util
+package com.bitwarden.core.util
 
 import kotlinx.collections.immutable.persistentListOf
 import org.junit.jupiter.api.Assertions.assertEquals
