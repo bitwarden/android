@@ -1915,6 +1915,25 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleProviderGetCredentialsRequest(
         request: GetCredentialsRequest,
     ) {
+        if (request.beginGetPublicKeyCredentialOptions.isNotEmpty()) {
+            handleProviderGetPublicKeyCredentialsRequestOriginValidation(request)
+        } else {
+            viewModelScope.launch {
+                sendAction(
+                    VaultItemListingsAction.Internal.GetCredentialEntriesResultReceive(
+                        userId = request.userId,
+                        result = bitwardenCredentialManager.getCredentialEntries(
+                            getCredentialsRequest = request,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleProviderGetPublicKeyCredentialsRequestOriginValidation(
+        request: GetCredentialsRequest,
+    ) {
         val callingAppInfo = request.callingAppInfo
             ?: run {
                 showCredentialManagerErrorDialog(
