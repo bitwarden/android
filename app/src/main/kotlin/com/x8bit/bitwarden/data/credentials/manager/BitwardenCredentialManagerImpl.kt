@@ -190,14 +190,15 @@ class BitwardenCredentialManagerImpl(
                 return@withContext emptyList<CredentialEntry>().asSuccess()
             }
 
-        val passwordCredentialResult = getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
-            getCredentialsRequest
-                .beginGetPasswordOptions
-                .toPasswordCredentialEntries(
-                    userId = getCredentialsRequest.userId,
-                    packageName = packageName,
-                )
-        } ?: emptyList()
+        val passwordCredentialResult =
+            getCredentialsRequest.callingAppInfo?.packageName?.let { packageName ->
+                getCredentialsRequest
+                    .beginGetPasswordOptions
+                    .toPasswordCredentialEntries(
+                        userId = getCredentialsRequest.userId,
+                        packageName = packageName,
+                    )
+            } ?: emptyList()
 
         return@withContext getCredentialsRequest
             .beginGetPublicKeyCredentialOptions
@@ -344,7 +345,7 @@ class BitwardenCredentialManagerImpl(
         packageName: String,
     ): List<CredentialEntry> {
         val ciphers = autofillCipherProvider.getLoginAutofillCiphers(
-            packageName.toAndroidAppUriString()
+            packageName.toAndroidAppUriString(),
         )
 
         return credentialEntryBuilder

@@ -418,9 +418,9 @@ class MainViewModel @Inject constructor(
             }
 
             providerGetPasswordRequest != null -> {
-                // Set the user's verification status when a new GetPassword request is received to force
-                // explicit verification if the user's vault is unlocked when the request is
-                // received.
+                // Set the user's verification status when a new GetPassword request is
+                // received to force explicit verification if the user's vault is
+                // unlocked when the request is received.
                 bitwardenCredentialManager.isUserVerified =
                     providerGetPasswordRequest.isUserPreVerified
 

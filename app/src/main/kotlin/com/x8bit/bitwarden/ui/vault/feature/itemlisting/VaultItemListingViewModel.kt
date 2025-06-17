@@ -1794,9 +1794,11 @@ class VaultItemListingViewModel @Inject constructor(
             ?: state.providerGetPasswordCredentialRequest
                 ?.let { request ->
                     trySendAction(
-                        VaultItemListingsAction.Internal.ProviderGetPasswordCredentialRequestReceive(
-                            data = request,
-                        ),
+                        VaultItemListingsAction
+                            .Internal
+                            .ProviderGetPasswordCredentialRequestReceive(
+                                data = request,
+                            ),
                     )
                 }
             ?: mutableStateFlow.update { it.copy(isRefreshing = false) }
@@ -2045,66 +2047,58 @@ class VaultItemListingViewModel @Inject constructor(
                 ),
             )
         }
-        val request = action.data
-        val ciphers = vaultRepository
+
+        val data = vaultRepository
             .ciphersStateFlow
             .value
             .data
             .orEmpty()
-            .filter { it.isActiveWithPasswordCredentials }
-        val selectedCipherId = request.cipherId
+
+        val selectedCipherId = action.data.cipherId
 
         if (selectedCipherId.isEmpty()) {
             showCredentialManagerErrorDialog(
-                //TODO text
+                // TODO text
                 R.string.passkey_operation_failed_because_no_item_was_selected.asText(),
             )
         } else {
-            val selectedCipher = ciphers
+            val selectedCipher = data.filter { it.isActiveWithPasswordCredentials }
                 .find { it.id == selectedCipherId }
                 ?: run {
                     showCredentialManagerErrorDialog(
-                        //TODO text
+                        // TODO text
                         R.string.passkey_operation_failed_because_the_selected_item_does_not_exist
                             .asText(),
                     )
                     return
                 }
 
-            if (state.hasMasterPassword &&
-                selectedCipher.reprompt == CipherRepromptType.PASSWORD
-            ) {
+            if (state.hasMasterPassword && selectedCipher.reprompt == CipherRepromptType.PASSWORD) {
                 repromptMasterPasswordForUserVerification(selectedCipherId)
             } else {
                 handlePasswordCredentialResult(selectedCipher)
             }
         }
 
-        vaultRepository
-            .ciphersStateFlow
-            .value
-            .data
-            .orEmpty()
-            .firstOrNull { it.id == action.data.cipherId }
-            ?.let { cipher ->
-                if (state.hasMasterPassword &&
-                    cipher.reprompt == CipherRepromptType.PASSWORD
-                ) {
-                    repromptMasterPasswordForProviderGetCredential(action.data.cipherId)
-                } else {
-                    sendEvent(
-                        VaultItemListingEvent
-                            .CompleteProviderGetPasswordCredentialRequest(
-                                result = cipher.login?.let {
-                                    GetPasswordCredentialResult.Success(it)
-                                } ?: GetPasswordCredentialResult.Error("".asText()) //TODO text
-                            ),
-                    )
-                }
+        data.firstOrNull { it.id == action.data.cipherId }?.let { cipher ->
+            if (state.hasMasterPassword &&
+                cipher.reprompt == CipherRepromptType.PASSWORD
+            ) {
+                repromptMasterPasswordForProviderGetCredential(action.data.cipherId)
+            } else {
+                sendEvent(
+                    VaultItemListingEvent
+                        .CompleteProviderGetPasswordCredentialRequest(
+                            result = cipher.login?.let {
+                                GetPasswordCredentialResult.Success(it)
+                            } ?: GetPasswordCredentialResult.Error("".asText()), // TODO text
+                        ),
+                )
             }
+        }
             ?: run {
                 showCredentialManagerErrorDialog(
-                    //TODO text
+                    // TODO text
                     R.string.passkey_operation_failed_because_no_item_was_selected.asText(),
                 )
             }
@@ -2183,7 +2177,7 @@ class VaultItemListingViewModel @Inject constructor(
                     )
                 } ?: VaultItemListingEvent.CompleteProviderGetPasswordCredentialRequest(
                     GetPasswordCredentialResult.Error(
-                        message = "".asText(), //TODO text
+                        message = "".asText(), // TODO text
                     ),
                 ),
             )
@@ -3029,7 +3023,6 @@ sealed class VaultItemListingEvent {
     data class CompleteProviderGetCredentialsRequest(
         val result: GetCredentialsResult,
     ) : BackgroundEvent, VaultItemListingEvent()
-
 }
 
 /**
@@ -3413,5 +3406,4 @@ sealed class MasterPasswordRepromptData {
     data class ProviderGetCredential(
         val cipherId: String,
     ) : MasterPasswordRepromptData()
-
 }

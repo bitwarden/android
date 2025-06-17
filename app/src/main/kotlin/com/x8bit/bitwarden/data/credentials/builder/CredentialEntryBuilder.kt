@@ -31,5 +31,4 @@ interface CredentialEntryBuilder {
         beginGetPasswordCredentialOptions: List<BeginGetPasswordOption>,
         isUserVerified: Boolean,
     ): List<PasswordCredentialEntry>
-
 }

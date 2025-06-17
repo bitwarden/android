@@ -73,7 +73,8 @@ const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
- * Key for the user verification performed during vault unlock while processing a Credential request.
+ * Key for the user verification performed during vault unlock while
+ * processing a Credential request.
  */
 const val EXTRA_KEY_UV_PERFORMED_DURING_UNLOCK: String = "uv_performed_during_unlock"
 
